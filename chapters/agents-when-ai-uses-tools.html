@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Agentic AI: when the model uses tools &mdash; AI Academy</title>
+<meta name="description" content="From chatbot to coworker: what changed and why agents are a big deal.">
+<meta property="og:title" content="Agentic AI: when the model uses tools">
+<meta property="og:description" content="An LLM that can browse, code, and call APIs isn't a chatbot anymore. It's something new.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+
+<article class="reader">
+  <a href="../index.html" class="back">&larr; All chapters</a>
+  <div class="meta-row">
+    <span class="tag">Agents</span><span>Chapter 05</span><span>&middot;</span><span>11 min read</span><span>&middot;</span><span>April 17, 2026</span>
+  </div>
+  <h1>Agentic AI: when AI uses tools</h1>
+  <p class="subtitle">An LLM that can browse the web, run code, and call APIs isn't a chatbot anymore. It's something qualitatively new &mdash; and everyone's still figuring out how to use it.</p>
+
+  <p>A plain LLM is a <em>text function</em>. You give it text, you get text back. Useful, but limited. It can't check the weather. It can't send an email. It can't read a file on your computer. It can't even check if its own answer is correct.</p>
+
+  <p>An <strong>agent</strong> is an LLM plus a set of tools it can choose to call. That small shift changes almost everything.</p>
+
+  <h2>The core mechanic</h2>
+  <p>You give the model a list of "tools" it can use &mdash; each one is essentially a function with a name, description, and parameters. Something like:</p>
+
+  <pre><code>Tools available:
+- search_web(query: string)
+- read_file(path: string)
+- send_email(to: string, subject: string, body: string)
+- run_python(code: string)</code></pre>
+
+  <p>Then the model, instead of just replying in text, can choose to emit a "tool call" &mdash; a structured request like "call search_web with query='weather in Bengaluru today'." Your system actually runs that function, feeds the result back to the model, and the loop continues.</p>
+
+  <p>The model is still just predicting tokens. But now some of those tokens cause real-world actions.</p>
+
+  <div class="callout">
+    <div class="ico">&#9881;</div>
+    <div><strong>The loop:</strong> user asks &rarr; model plans &rarr; model calls tool &rarr; tool runs &rarr; result goes back to model &rarr; model calls another tool or answers. This runs until the model decides it's done.</div>
+  </div>
+
+  <h2>Why it's a big deal</h2>
+  <p>A plain LLM can tell you, from training data, <em>how</em> to book a flight. An agent with a browser tool and an airline API can actually book the flight.</p>
+
+  <p>The difference isn't incremental. It's the difference between:</p>
+  <ul>
+    <li>A book on plumbing vs. a plumber</li>
+    <li>A recipe vs. a chef</li>
+    <li>A tutorial on React vs. an engineer who can just build you the app</li>
+  </ul>
+
+  <p>For two decades, software was something humans wrote and ran. Agents make it possible for software to be something a model writes and runs, while you watch.</p>
+
+  <h2>What can agents actually do today?</h2>
+  <p>Real, working, in-production examples as of 2026:</p>
+  <ul>
+    <li><strong>Coding:</strong> Claude Code and similar can read a codebase, write a feature, run the tests, debug failures, and commit the fix.</li>
+    <li><strong>Research:</strong> Given a question, browse many sources, synthesize, cite. (Like this very site's content pipeline.)</li>
+    <li><strong>Customer support:</strong> Look up the order, check the refund policy, issue the refund, email the customer.</li>
+    <li><strong>Data analysis:</strong> Query a database, run calculations in Python, build charts, write a narrative report.</li>
+    <li><strong>Ops automation:</strong> Read a ticket, determine the root cause, apply the fix, close the ticket.</li>
+  </ul>
+
+  <h2>Three things that make or break an agent</h2>
+
+  <h3>1. The tools you give it</h3>
+  <p>Bad tools &rarr; useless agent. Good tools are: well-named, narrowly scoped, return structured output, fail clearly. "search_web" is vaguer than "search_company_docs(query, department)". Specific tools produce specific, reliable behavior.</p>
+
+  <h3>2. The guardrails</h3>
+  <p>An agent with tools can do real damage. Delete files. Send emails. Spend money. Every production agent needs:</p>
+  <ul>
+    <li>Whitelist of allowed actions</li>
+    <li>Approval gates on anything irreversible</li>
+    <li>Logs of every tool call</li>
+    <li>Spending / time limits (they can loop forever if you let them)</li>
+  </ul>
+
+  <h3>3. The task decomposition</h3>
+  <p>Agents are good at short, bounded tasks. They degrade as tasks get longer. The trick is breaking a big goal into small steps and giving the agent clear exits. "Book me a flight" fails often. "Given these 3 valid flights, pick the cheapest and book it" succeeds reliably.</p>
+
+  <h2>The honest limitations</h2>
+  <p>Despite the hype, agents today fail at a lot. Real failure modes you'll hit:</p>
+  <ul>
+    <li><strong>Forgetting their own plan.</strong> On long tasks, the agent's early instructions drift out of context.</li>
+    <li><strong>Over-tooling.</strong> Given many tools, agents get confused about which to use.</li>
+    <li><strong>Prompt injection.</strong> If an agent reads a web page, and that page contains instructions, it may follow them. This is a real and unsolved security problem.</li>
+    <li><strong>Confident failure.</strong> They will claim success when they've failed. Always verify, never trust.</li>
+    <li><strong>Cost escalation.</strong> A buggy agent that loops can burn through $100 in API calls in minutes.</li>
+  </ul>
+
+  <h2>How to think about agents practically</h2>
+  <p>If you're building: <em>narrow</em> agents beat general ones, every time. A "reply to support ticket" agent with 3 tools is worlds more reliable than a "do anything" agent with 30. Start narrow. Expand slowly.</p>
+
+  <p>If you're using: the best agents today work with you, not instead of you. You're the verifier. The model does 80% of the boring part, you do the final 20% of judgment and quality control. That's where the productivity leap is.</p>
+
+  <blockquote>The 2020s AI promise wasn't "AI that replaces you." It was "AI that lets one of you do the work of five." That promise, narrowly scoped, is real.</blockquote>
+
+  <h2>Where to go from here</h2>
+  <p>You've now got the foundations. The field is moving fast &mdash; new chapters will show up on this site daily, auto-generated from what's happening in AI right now. Subscribe to keep up, share what's useful, and treat every claim (including mine) with healthy skepticism.</p>
+
+  <p>The best way to learn AI is to use it. Open Claude or ChatGPT, pick one real task in your life, and try everything in these five chapters on it. Come back tomorrow for more.</p>
+
+  <div class="share-bar">
+    <div class="label">Found this useful? Share it:</div>
+    <div class="share-buttons">
+      <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+      <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+      <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+      <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+    </div>
+  </div>
+
+  <div class="nav-next">
+    <a href="rag-vs-fine-tune-vs-prompt.html"><div class="dir">&larr; Previous</div><div class="title">RAG vs fine-tune vs prompt</div></a>
+    <a href="../index.html" class="next"><div class="dir">Up next &rarr;</div><div class="title">Back to all chapters</div></a>
+  </div>
+</article>
+
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

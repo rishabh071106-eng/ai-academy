@@ -1,0 +1,40 @@
+name: Daily chapter generator
+
+on:
+  schedule:
+    # Runs every day at 04:30 UTC (10:00 IST). Adjust as you like.
+    - cron: '30 4 * * *'
+  workflow_dispatch:  # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm install
+
+      - name: Generate today's chapter
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name  "ai-academy-bot"
+          git config user.email "bot@ai-academy.local"
+          git add chapters/ assets/chapters.json scripts/sources.json
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore: daily chapter $(date -u +%Y-%m-%d)"
+            git push
+          fi

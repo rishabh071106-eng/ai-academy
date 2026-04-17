@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Prompt engineering that actually works &mdash; AI Academy</title>
+<meta name="description" content="Five patterns used by pros, and the traps beginners fall into.">
+<meta property="og:title" content="Prompt engineering that actually works">
+<meta property="og:description" content="Five patterns used by pros, and the traps beginners fall into.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+
+<article class="reader">
+  <a href="../index.html" class="back">&larr; All chapters</a>
+  <div class="meta-row">
+    <span class="tag">Practical</span><span>Chapter 03</span><span>&middot;</span><span>8 min read</span><span>&middot;</span><span>April 15, 2026</span>
+  </div>
+  <h1>Prompt engineering that works</h1>
+  <p class="subtitle">Stop saying "please." Start giving structure, examples, and constraints. Here are the five patterns that reliably get better output.</p>
+
+  <p>Most people prompt LLMs the way they'd ask a coworker: vaguely, with a lot of assumed context. "Write me an email for this." "Summarize this." "Fix this code."</p>
+
+  <p>Then they're disappointed when the output is bland, generic, or wrong.</p>
+
+  <p>The fix isn't magic words. It's treating the prompt as a <em>specification</em>, not a wish.</p>
+
+  <h2>Pattern 1: Role + Task + Format</h2>
+  <p>The most reliable upgrade to any prompt is a three-part structure:</p>
+  <ol>
+    <li><strong>Role</strong>: who is the model being, right now?</li>
+    <li><strong>Task</strong>: what exactly should it do?</li>
+    <li><strong>Format</strong>: what does the output look like?</li>
+  </ol>
+
+  <p>Weak:</p>
+  <pre><code>Summarize this article.</code></pre>
+
+  <p>Strong:</p>
+  <pre><code>You are a senior journalist writing for busy executives.
+
+Summarize the article below in exactly 3 bullets.
+Each bullet must:
+- Start with a strong verb
+- Be under 20 words
+- End with the so-what for a business reader
+
+Article:
+{paste article}</code></pre>
+
+  <p>Same model, same article, dramatically different output.</p>
+
+  <h2>Pattern 2: Show, don't tell (few-shot examples)</h2>
+  <p>Telling the model your style is weak. Showing it is strong. Paste 2-3 examples of exactly the output you want, and it will pattern-match.</p>
+
+  <pre><code>Rewrite product descriptions in the brand voice.
+
+Example 1:
+Input: "Comfortable cotton t-shirt"
+Output: "The kind of soft you forget you're wearing."
+
+Example 2:
+Input: "Durable leather wallet"
+Output: "Built once. Carried forever."
+
+Now rewrite:
+Input: "Lightweight running shoes"
+Output:</code></pre>
+
+  <p>This single technique solves 70% of "the output doesn't sound right" problems.</p>
+
+  <h2>Pattern 3: Chain of thought</h2>
+  <p>Ask for reasoning before the answer. It's counterintuitive &mdash; shouldn't the model just give you the answer? &mdash; but getting the model to "think out loud" produces dramatically better results on anything involving logic, math, or multi-step decisions.</p>
+
+  <pre><code>Question: A bat and ball cost $1.10 total.
+The bat costs $1 more than the ball.
+How much does the ball cost?
+
+Think step by step, showing your work,
+then give a final answer on the last line.</code></pre>
+
+  <p>With no chain-of-thought, smaller models often say "10 cents" (wrong). With it, they catch the error.</p>
+
+  <div class="callout">
+    <div class="ico">&#128200;</div>
+    <div><strong>Why this works:</strong> remember from Chapter 2, the model predicts one token at a time. Each token it writes becomes context for the next one. If you force it to write out reasoning, it's literally giving itself more material to work with.</div>
+  </div>
+
+  <h2>Pattern 4: Give it a place to fail gracefully</h2>
+  <p>LLMs hallucinate when they don't know something. The fix: explicitly allow ignorance.</p>
+
+  <p>Weak:</p>
+  <pre><code>Who is the current CEO of XYZ Corp?</code></pre>
+
+  <p>Strong:</p>
+  <pre><code>Who is the current CEO of XYZ Corp?
+
+If you are not confident in your answer,
+or if this information may have changed
+after your training cutoff, say so explicitly
+and do not guess.</code></pre>
+
+  <p>Models are heavily trained to try to be helpful. That bias pushes them toward answering even when they shouldn't. An explicit permission slip to say "I don't know" counteracts it.</p>
+
+  <h2>Pattern 5: Structured output</h2>
+  <p>If you're going to feed the output into anything (another script, a database, a form), ask for structured output. JSON is a good default.</p>
+
+  <pre><code>Extract details from the meeting transcript.
+
+Respond in this exact JSON format:
+{
+  "attendees": [list of names],
+  "decisions": [list of decisions made],
+  "action_items": [
+    {"owner": "name", "task": "what", "due": "when"}
+  ],
+  "open_questions": [list]
+}
+
+Transcript:
+{paste}</code></pre>
+
+  <p>Modern models will follow this structure with near-perfect reliability. Now you have something you can parse and use programmatically.</p>
+
+  <h2>Five traps beginners fall into</h2>
+  <ol>
+    <li><strong>Politeness inflation.</strong> "Please could you kindly help me with..." adds tokens and no value. Be direct.</li>
+    <li><strong>Vague constraints.</strong> "Make it engaging" is unusable. "Use 2 sentences, active voice, one concrete statistic" is a spec.</li>
+    <li><strong>One mega-prompt for multi-step tasks.</strong> Break complex tasks into sequential prompts. Don't ask for a research report, an outline, and final writing in one shot.</li>
+    <li><strong>Treating the model like Google.</strong> Fact-lookup is what retrieval is for. Ask models to reason on material you provide, not recall trivia.</li>
+    <li><strong>Not iterating.</strong> Your first prompt is a draft. Test, see what's wrong, fix the instruction that caused the wrongness, retry. Prompting is debugging.</li>
+  </ol>
+
+  <h2>The meta-skill</h2>
+  <p>The deep skill isn't memorizing patterns. It's developing a feel for what the model is likely to screw up and pre-empting it in the prompt.</p>
+
+  <p>Think of prompting like leaving instructions for a very intelligent but extremely literal intern who will never ask a clarifying question. Everything you don't specify, they'll invent. So specify.</p>
+
+  <p>Next chapter: you've maxed out prompting. Now what? We compare RAG, fine-tuning, and plain old prompting &mdash; and when to use each.</p>
+
+  <div class="share-bar">
+    <div class="label">Found this useful? Share it:</div>
+    <div class="share-buttons">
+      <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+      <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+      <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+      <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+    </div>
+  </div>
+
+  <div class="nav-next">
+    <a href="how-llms-work-without-math.html"><div class="dir">&larr; Previous</div><div class="title">How LLMs actually work</div></a>
+    <a href="rag-vs-fine-tune-vs-prompt.html" class="next"><div class="dir">Next &rarr;</div><div class="title">RAG vs fine-tune vs prompt</div></a>
+  </div>
+</article>
+
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "chapters": [
+    {
+      "slug": "what-is-ai-really",
+      "number": "Chapter 01",
+      "title": "What is AI, really?",
+      "subtitle": "Cutting through the hype to understand what machines actually do.",
+      "excerpt": "Forget sci-fi. AI is pattern-matching at scale — and once you see it that way, the whole field clicks.",
+      "tag": "Foundations",
+      "readTime": "6 min",
+      "date": "2026-04-13"
+    },
+    {
+      "slug": "how-llms-work-without-math",
+      "number": "Chapter 02",
+      "title": "How LLMs actually work (without the math)",
+      "subtitle": "A plain-English walkthrough of what happens when you press Send in ChatGPT.",
+      "excerpt": "Tokens, weights, and attention — explained with everyday analogies, zero matrix equations.",
+      "tag": "LLMs",
+      "readTime": "9 min",
+      "date": "2026-04-14"
+    },
+    {
+      "slug": "prompt-engineering-that-works",
+      "number": "Chapter 03",
+      "title": "Prompt engineering that actually works",
+      "subtitle": "Five patterns used by pros — and the traps beginners fall into.",
+      "excerpt": "Stop saying 'please'. Start giving structure, examples, and constraints. Here's how.",
+      "tag": "Practical",
+      "readTime": "8 min",
+      "date": "2026-04-15"
+    },
+    {
+      "slug": "rag-vs-fine-tune-vs-prompt",
+      "number": "Chapter 04",
+      "title": "RAG vs fine-tuning vs just prompting",
+      "subtitle": "When to reach for which tool — a decision framework.",
+      "excerpt": "The three ways to make an LLM 'know' your data. Most people pick wrong.",
+      "tag": "Engineering",
+      "readTime": "10 min",
+      "date": "2026-04-16"
+    },
+    {
+      "slug": "agents-when-ai-uses-tools",
+      "number": "Chapter 05",
+      "title": "Agentic AI: when the model uses tools",
+      "subtitle": "From chatbot to coworker — what changed, and why it's a big deal.",
+      "excerpt": "An LLM that can browse, code, and call APIs isn't a chatbot anymore. It's something new.",
+      "tag": "Agents",
+      "readTime": "11 min",
+      "date": "2026-04-17"
+    }
+  ]
+}

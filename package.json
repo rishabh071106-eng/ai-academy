@@ -1,0 +1,13 @@
+{
+  "name": "ai-academy",
+  "version": "1.0.0",
+  "description": "Daily AI learning chapters, auto-generated.",
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "dev": "python3 -m http.server 8080"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0"
+  }
+}

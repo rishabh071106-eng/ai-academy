@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Academy &mdash; Learn AI, one chapter at a time</title>
+<meta name="description" content="Clear, no-fluff chapters on AI, machine learning, LLMs, and agents. Updated daily by our content pipeline.">
+<meta property="og:title" content="AI Academy &mdash; Learn AI, one chapter at a time">
+<meta property="og:description" content="Clear, no-fluff AI chapters. Updated daily.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="rss.xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span> AI Academy</a>
+    <div class="nav-links">
+      <a href="#chapters">Chapters</a>
+      <a href="#about">About</a>
+      <a href="#subscribe">Subscribe</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-badge"><span class="pulse"></span> New chapter every day</div>
+  <h1>Learn AI,<br>one chapter at a time.</h1>
+  <p class="lead">
+    Short, clear, no-nonsense lessons on how modern AI actually works &mdash; from language models to agents. No PhD required. No hype.
+  </p>
+  <div class="cta-row">
+    <a href="#chapters" class="btn btn-primary">Start Reading &rarr;</a>
+    <a href="#subscribe" class="btn btn-ghost">Get daily chapters</a>
+  </div>
+</header>
+
+<section class="stats container">
+  <div><strong id="statCount">5</strong> chapters published</div>
+  <div><strong>44 min</strong> of reading</div>
+  <div><strong>Daily</strong> new content</div>
+</section>
+
+<section id="chapters" class="container">
+  <div class="section-head">
+    <h2>The Curriculum</h2>
+    <p>Start from Chapter 01 or jump to what you need.</p>
+  </div>
+  <div class="chapters-grid" id="chaptersGrid"></div>
+</section>
+
+<section id="about" class="container" style="margin-top:5rem;padding:0 1.5rem">
+  <div class="section-head">
+    <h2>Why this site?</h2>
+    <p style="max-width:580px;margin:0 auto">Because AI is the most consequential technology of our lifetime, and most writing about it is either sales copy or math-heavy papers. This is the middle path &mdash; written for curious humans.</p>
+  </div>
+</section>
+
+<section id="subscribe" class="container" style="margin-top:4rem;padding:0 1.5rem">
+  <div style="max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center">
+    <h2 style="font-size:1.5rem;margin-bottom:0.5rem">Get tomorrow's chapter in your inbox</h2>
+    <p style="color:var(--muted);margin-bottom:1.5rem">One email a day. Zero spam. Unsubscribe any time.</p>
+    <!--
+      Replace YOUR_FORMSPREE_ID below with your Formspree form ID.
+      Sign up free at https://formspree.io, create a form, paste the ID (looks like 'xyzabcd').
+    -->
+    <form id="subForm" action="https://formspree.io/f/xaqaeven" method="POST">
+      <input type="email" name="email" required placeholder="you@example.com" style="width:100%;padding:0.85rem 1rem;border-radius:100px;border:1px solid var(--border);background:var(--card-2);color:var(--text);font-size:0.95rem;margin-bottom:0.75rem" />
+      <input type="hidden" name="_subject" value="New AI Academy subscriber">
+      <button class="btn btn-primary" style="width:100%" type="submit">Subscribe</button>
+      <div id="subMsg" style="color:#4ade80;font-size:0.85rem;margin-top:0.75rem"></div>
+    </form>
+    <script>
+      document.getElementById('subForm').addEventListener('submit', async (e) => {
+        const form = e.target;
+        if (form.action.includes('YOUR_FORMSPREE_ID')) {
+          e.preventDefault();
+          document.getElementById('subMsg').textContent = 'Form not configured yet. Edit index.html: replace YOUR_FORMSPREE_ID with your Formspree form ID.';
+          return;
+        }
+        e.preventDefault();
+        const data = new FormData(form);
+        const res = await fetch(form.action, { method:'POST', body:data, headers:{'Accept':'application/json'} });
+        if (res.ok) {
+          document.getElementById('subMsg').textContent = 'Thanks! You\u2019re subscribed.';
+          form.reset();
+        } else {
+          document.getElementById('subMsg').textContent = 'Something went wrong. Try again?';
+          document.getElementById('subMsg').style.color = '#ff6b6b';
+        }
+      });
+    </script>
+  </div>
+</section>
+
+<footer>
+  <div class="logo"><span class="logo-dot"></span> AI Academy</div>
+  <p>Auto-generated daily. Built with &hearts; and Claude.</p>
+</footer>
+
+<script>
+fetch('assets/chapters.json')
+  .then(r=>r.json())
+  .then(data=>{
+    const grid=document.getElementById('chaptersGrid');
+    document.getElementById('statCount').textContent=data.chapters.length;
+    const reversed=[...data.chapters].reverse(); // newest first
+    reversed.forEach(ch=>{
+      const card=document.createElement('a');
+      card.href=`chapters/${ch.slug}.html`;
+      card.className='chapter-card';
+      card.innerHTML=`
+        <div class="chapter-num">${ch.number}</div>
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-excerpt">${ch.excerpt}</div>
+        <div class="chapter-meta">
+          <span class="tag">${ch.tag}</span>
+          <span>${ch.readTime} &middot; ${ch.date}</span>
+        </div>`;
+      grid.appendChild(card);
+    });
+  });
+</script>
+
+</body>
+</html>

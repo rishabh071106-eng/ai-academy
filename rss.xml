@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>AI Academy</title>
+    <link>https://example.com</link>
+    <description>Learn AI, one chapter at a time. New chapter daily.</description>
+    <language>en-us</language>
+    <item>
+      <title><![CDATA[Agentic AI: when the model uses tools]]></title>
+      <link>https://example.com/chapters/agents-when-ai-uses-tools.html</link>
+      <guid>https://example.com/chapters/agents-when-ai-uses-tools.html</guid>
+      <pubDate>Fri, 17 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[An LLM that can browse, code, and call APIs isn't a chatbot anymore. It's something new.]]></description>
+      <category>Agents</category>
+    </item>
+    <item>
+      <title><![CDATA[RAG vs fine-tuning vs just prompting]]></title>
+      <link>https://example.com/chapters/rag-vs-fine-tune-vs-prompt.html</link>
+      <guid>https://example.com/chapters/rag-vs-fine-tune-vs-prompt.html</guid>
+      <pubDate>Thu, 16 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The three ways to make an LLM 'know' your data. Most people pick wrong.]]></description>
+      <category>Engineering</category>
+    </item>
+    <item>
+      <title><![CDATA[Prompt engineering that actually works]]></title>
+      <link>https://example.com/chapters/prompt-engineering-that-works.html</link>
+      <guid>https://example.com/chapters/prompt-engineering-that-works.html</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Stop saying 'please'. Start giving structure, examples, and constraints.]]></description>
+      <category>Practical</category>
+    </item>
+    <item>
+      <title><![CDATA[How LLMs actually work (without the math)]]></title>
+      <link>https://example.com/chapters/how-llms-work-without-math.html</link>
+      <guid>https://example.com/chapters/how-llms-work-without-math.html</guid>
+      <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Tokens, weights, and attention explained with everyday analogies.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[What is AI, really?]]></title>
+      <link>https://example.com/chapters/what-is-ai-really.html</link>
+      <guid>https://example.com/chapters/what-is-ai-really.html</guid>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Forget sci-fi. AI is pattern-matching at scale.]]></description>
+      <category>Foundations</category>
+    </item>
+  </channel>
+</rss>
