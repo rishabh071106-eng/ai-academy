@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vector Databases: Where AI Stores Its Memories &mdash; AI Academy</title>
+<meta name="description" content="Your LLM can't remember anything without one — here's how they actually work.">
+<meta property="og:title" content="Vector Databases: Where AI Stores Its Memories">
+<meta property="og:description" content="Your LLM can't remember anything without one — here's how they actually work.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Engineering</span><span>Chapter 06</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-23</span></div>
+<h1>Vector Databases: Where AI Stores Its Memories</h1>
+<p class="subtitle">Your LLM can't remember anything without one — here's how they actually work.</p>
+<h2>The problem regular databases can't solve</h2>
+<p>You already know how RAG works: you retrieve relevant documents, stuff them into a prompt, and let the LLM answer based on real data. But we glossed over a crucial step. How does the system <em>find</em> the relevant documents in the first place?</p>
+<p>A traditional database is great at exact lookups. "Show me every order from customer #4829." Done. But ask it "find me documents that are <em>about</em> the same topic as this paragraph," and it stares blankly. SQL doesn't understand meaning.</p>
+<p>This is the gap vector databases fill. They store data as mathematical representations of meaning, then find things that are <em>similar</em> rather than identical. It's the difference between searching for a word and searching for an idea.</p>
+
+<h2>Embeddings: turning meaning into coordinates</h2>
+<p>Before we talk about the database, we need to talk about what goes into it.</p>
+<p>An embedding model — a small neural network — takes a chunk of text (a sentence, a paragraph, a page) and converts it into a list of numbers called a <strong>vector</strong>. A typical vector might have 768 or 1,536 dimensions. Each number captures some aspect of the text's meaning, though no single dimension maps neatly to a human concept like "about dogs" or "written angrily."</p>
+<p>The key property: texts with similar meanings produce vectors that are close together in this high-dimensional space. "The cat sat on the mat" and "A kitten rested on the rug" end up near each other. "Quarterly earnings exceeded projections" lands somewhere far away.</p>
+
+<blockquote>A vector database doesn't store words. It stores <em>positions in meaning-space</em> — and finds the nearest neighbors when you ask a question.</blockquote>
+
+<p>When you query a vector database, your question gets embedded into the same space, and the database finds the stored vectors closest to it. That's the retrieval in Retrieval-Augmented Generation.</p>
+
+<h2>How "nearest neighbor" search actually works</h2>
+<p>Here's where it gets interesting — and where vector databases earn their keep.</p>
+<p>If you only had 100 documents, you could compare your query vector against every stored vector, calculate the distance for each, and pick the closest ones. Brute force. Simple. Fine.</p>
+<p>But what if you have 50 million documents? Comparing against all of them for every query would be painfully slow. Vector databases use clever indexing algorithms to avoid checking every single vector. The most common approaches:</p>
+<ul>
+<li><strong>HNSW (Hierarchical Navigable Small World):</strong> Builds a graph where similar vectors are linked. Searches hop through the graph, getting closer to the answer at each step. Fast, accurate, memory-hungry.</li>
+<li><strong>IVF (Inverted File Index):</strong> Clusters vectors into groups first, then only searches the most relevant clusters. Faster but can miss results in neighboring clusters.</li>
+<li><strong>Product Quantization:</strong> Compresses vectors to use less memory, trading some accuracy for dramatic space savings.</li>
+</ul>
+<p>Most vector databases combine these techniques. You're always navigating a three-way tradeoff: speed, accuracy, and memory usage. The art is in tuning that balance for your specific workload.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>The term for this tradeoff is <strong>approximate nearest neighbor (ANN)</strong> search. It's "approximate" on purpose — giving up a tiny bit of precision to go from minutes to milliseconds. In practice, the approximation is so good you rarely notice what's missing.</div></div>
+
+<h2>The landscape right now</h2>
+<p>A few years ago, vector search was a niche feature. Now there are purpose-built vector databases (Pinecone, Weaviate, Qdrant, Milvus, Chroma) and traditional databases bolting on vector support (PostgreSQL with pgvector, Elasticsearch, MongoDB). Even SQLite has vector extensions now.</p>
+<p>The purpose-built options tend to offer better performance and richer features for pure vector workloads — things like filtering by metadata <em>while</em> searching by similarity. The bolt-on options are appealing when you don't want to add another database to your stack.</p>
+<p>The Hugging Face ecosystem recently introduced the <a href="https://huggingface.co">Ettin Reranker Family</a>, which hints at where things are headed: retrieval isn't just about finding the nearest vectors anymore, it's about <em>re-ranking</em> those results with a smarter model that understands nuance better than raw distance calculations. Vector search gets you candidates; rerankers pick the winners.</p>
+
+<h2>When you actually need one (and when you don't)</h2>
+<p>Not every AI project needs a vector database. Here's a practical way to think about it:</p>
+<p><strong>You probably need one if:</strong> you're building RAG over more than a few hundred documents, you need semantic search ("find similar items"), or you're doing recommendation systems, image search, or anomaly detection at scale.</p>
+<p><strong>You probably don't if:</strong> your dataset fits in memory and a brute-force search takes under a second, you only need keyword matching, or you're fine-tuning a model instead of retrieving context at query time.</p>
+<p>A common beginner mistake is over-engineering. If you have 200 product descriptions, a simple in-memory list of vectors with NumPy distance calculations will work fine. You don't need a distributed vector database cluster. Start simple. Add infrastructure when latency or scale forces you to.</p>
+
+<h2>The mental model to take away</h2>
+<p>Think of a vector database as a librarian who has read every book in the building and organized them not by title or author, but by <em>what they're about</em>. When you walk in and describe what you're looking for — even vaguely — the librarian walks straight to the right shelf.</p>
+<p>That's it. No magic. Just geometry in very high dimensions, with some extremely clever shortcuts to make the math fast enough to be useful.</p>
+<p>Tomorrow, we'll look at how chunking strategies — the way you split documents before embedding them — can make or break your retrieval quality. Because it turns out, what you feed <em>into</em> the vector database matters just as much as the database itself.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="agents-when-ai-uses-tools.html" ><div class="dir">&larr; Previous</div><div class="title">Agentic AI: when the model uses tools</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

@@ -49,6 +49,16 @@
       "tag": "Agents",
       "readTime": "11 min",
       "date": "2026-04-17"
+    },
+    {
+      "slug": "vector-databases-where-ai-stores-its-memories",
+      "number": "Chapter 06",
+      "title": "Vector Databases: Where AI Stores Its Memories",
+      "subtitle": "Your LLM can't remember anything without one — here's how they actually work.",
+      "excerpt": "Vector databases turn meaning into math so AI can find what's relevant. Here's what they do, why they matter, and when you need one.",
+      "tag": "Engineering",
+      "readTime": "6 min",
+      "date": "2026-05-23"
     }
   ]
 }
