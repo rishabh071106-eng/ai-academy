@@ -27,7 +27,6 @@
     }
   ],
   "topicsQueue": [
-    "Evaluations: how to measure if your AI works",
     "Hallucinations: why LLMs make things up",
     "Context windows: what they are and why they matter",
     "Multimodal models: reading images, listening to speech",

@@ -59,6 +59,16 @@
       "tag": "Engineering",
       "readTime": "6 min",
       "date": "2026-05-23"
+    },
+    {
+      "slug": "evals-how-to-know-if-your-ai-actually-works",
+      "number": "Chapter 07",
+      "title": "Evals: How to Know If Your AI Actually Works",
+      "subtitle": "Building AI without evaluations is like driving without a speedometer — you'll get somewhere, but you won't know how fast or in what direction.",
+      "excerpt": "Everyone talks about building AI. Almost nobody talks about measuring it. Here's how evaluations work — and why they're the skill that separates toy demos from real systems.",
+      "tag": "Engineering",
+      "readTime": "6 min",
+      "date": "2026-05-24"
     }
   ]
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Evals: How to Know If Your AI Actually Works &mdash; AI Academy</title>
+<meta name="description" content="Building AI without evaluations is like driving without a speedometer — you'll get somewhere, but you won't know how fast or in what direction.">
+<meta property="og:title" content="Evals: How to Know If Your AI Actually Works">
+<meta property="og:description" content="Building AI without evaluations is like driving without a speedometer — you'll get somewhere, but you won't know how fast or in what direction.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Engineering</span><span>Chapter 07</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-24</span></div>
+<h1>Evals: How to Know If Your AI Actually Works</h1>
+<p class="subtitle">Building AI without evaluations is like driving without a speedometer — you'll get somewhere, but you won't know how fast or in what direction.</p>
+<h2>The Demo Trap</h2>
+<p>You've built something. You connected an LLM to your data using RAG, maybe added an agent loop, wrote some clever prompts. You tried five queries and they all looked great. Ship it?</p>
+<p>No. You're in the demo trap — that seductive moment where a handful of cherry-picked examples convince you everything works. It's the AI equivalent of testing a bridge by walking across it once.</p>
+<p>Evaluations ("evals" if you want to sound like you belong in a Slack channel full of ML engineers) are how you systematically measure whether your AI system does what you claim it does. They're unsexy. They're tedious to build. And they are, without exaggeration, the most important thing separating a weekend project from a production system.</p>
+
+<h2>What Exactly Are You Measuring?</h2>
+<p>This sounds obvious until you try to answer it. "Does it work?" is not a metric. You need to get specific. Here are the dimensions that matter for most LLM-based systems:</p>
+<ul>
+<li><strong>Correctness:</strong> Did the model give a factually right answer?</li>
+<li><strong>Relevance:</strong> Did it actually address the question asked?</li>
+<li><strong>Faithfulness:</strong> If it used retrieved documents (RAG), did it stick to what those documents say, or did it hallucinate extra claims?</li>
+<li><strong>Harmlessness:</strong> Did it avoid saying something toxic, biased, or dangerous?</li>
+<li><strong>Format compliance:</strong> Did it return valid JSON, stay within a word limit, follow instructions?</li>
+</ul>
+<p>Different applications weight these differently. A customer support bot mostly needs relevance and faithfulness. A medical summarizer needs correctness above all else. A creative writing assistant might care about none of these and instead measure something fuzzier like "interestingness."</p>
+<p>The first step of evals is always: decide what matters, write it down, and refuse to let anyone change the subject until you've done so.</p>
+
+<h2>Three Ways to Actually Score Outputs</h2>
+<h3>1. Human evaluation</h3>
+<p>The gold standard, and the most painful. You pay humans (or bribe coworkers) to read AI outputs and rate them. This is slow, expensive, and subject to all the biases humans carry around. But for subjective qualities — tone, helpfulness, whether something "sounds right" — there's no substitute.</p>
+<p>The trick is making it structured. Don't ask "Is this good?" Ask "Does this answer contain information not present in the source document? Yes or No." Specific rubrics turn squishy opinions into usable data.</p>
+
+<h3>2. Automated metrics</h3>
+<p>For tasks with known correct answers, you can score automatically. If your system extracts dates from contracts, you can check whether the extracted date matches the actual date. Precision, recall, F1, exact match — these classic metrics work beautifully when you have ground truth to compare against.</p>
+<p>The problem: most interesting LLM tasks don't have a single correct answer. "Summarize this document" has a thousand valid outputs. Automated metrics like BLEU and ROUGE tried to handle this by comparing word overlap with reference texts, but they correlate poorly with human judgment. They're still used, but treat them as rough signals, not verdicts.</p>
+
+<h3>3. LLM-as-judge</h3>
+<p>Here's the meta move: use one LLM to evaluate another LLM's output. You give a powerful model (say, GPT-4 or Claude) a rubric and ask it to score responses. This is faster than human eval and more nuanced than automated metrics.</p>
+<p>It works surprisingly well — with caveats. LLM judges tend to prefer longer answers, favor their own style, and can be inconsistent across runs. The recent Hugging Face work on rerankers (like their new <a href="#">Ettin Reranker</a> family) reflects this broader trend: using models to judge, score, and rank other models' outputs is becoming its own subfield.</p>
+
+<blockquote><p>An eval suite is a living argument about what "good" means for your specific system. It forces you to be honest about what you're building and whether you've built it.</p></blockquote>
+
+<h2>Building Your Eval Set</h2>
+<p>You need test cases. A lot of them. Here's how to think about constructing an eval dataset:</p>
+<p><strong>Start with real failures.</strong> Every time your system produces a bad output during development, save the input. These adversarial cases are gold. They represent the actual distribution of hard problems your system will face.</p>
+<p><strong>Cover the edges.</strong> Include the weird stuff: empty inputs, extremely long documents, ambiguous questions, questions in the wrong language, inputs that try to jailbreak your prompt. Your system will see all of these in production.</p>
+<p><strong>Label carefully.</strong> Each test case needs an expected outcome, or at least a rubric for what "good" looks like. This labeling is boring work. It is also the work. Garbage labels produce garbage evals, which produce false confidence, which produces systems that break in production.</p>
+<p>A reasonable starting point is 100-200 labeled examples covering your core use cases and known edge cases. Expand as you learn more about where the system struggles.</p>
+
+<h2>Evals as a Living Practice</h2>
+<p>The biggest mistake teams make is treating evals as a one-time gate — something you run before launch and then forget. In practice, evals need to run continuously.</p>
+<p>Why? Because everything changes. You update a prompt and correctness improves but format compliance drops. You swap in a new model and latency halves but faithfulness degrades. You refresh your RAG index and suddenly the system retrieves different documents. Without evals running on every change, you're flying blind.</p>
+<p>The best teams build eval pipelines into their CI/CD process. Every pull request that touches the AI system triggers an eval run. Regressions block the merge. This sounds like overkill until the first time it catches a prompt change that silently broke 15% of your outputs.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>Import AI's recent edition on <strong>automating AI research</strong> highlights that even frontier labs building the most powerful models rely on massive eval suites to detect regressions. OpenAI, Anthropic, and Google all maintain thousands of eval tasks. If they can't skip evals, neither can you.</div></div>
+
+<p>One more thing: evals are how you make decisions. Should you use GPT-4o or Claude Sonnet? Run your evals on both and compare. Should you use RAG or fine-tuning? Your evals will tell you which approach actually performs better on <em>your</em> data, for <em>your</em> task. Opinions are cheap. Eval numbers are expensive to produce and therefore worth something.</p>
+<p>Tomorrow you'll build something with AI. Today, figure out how you'll know if it works.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="vector-databases-where-ai-stores-its-memories.html" ><div class="dir">&larr; Previous</div><div class="title">Vector Databases: Where AI Stores Its Memories</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
