@@ -69,6 +69,16 @@
       "tag": "Engineering",
       "readTime": "6 min",
       "date": "2026-05-24"
+    },
+    {
+      "slug": "hallucinations-why-llms-make-things-up",
+      "number": "Chapter 08",
+      "title": "Hallucinations: Why LLMs Make Things Up",
+      "subtitle": "They're not lying to you. They're doing exactly what they were built to do — and that's the problem.",
+      "excerpt": "LLMs don't retrieve facts. They predict plausible text. Understanding this distinction is the key to using them wisely.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-05-25"
     }
   ]
 }

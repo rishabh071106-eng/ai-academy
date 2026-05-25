@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hallucinations: Why LLMs Make Things Up &mdash; AI Academy</title>
+<meta name="description" content="They're not lying to you. They're doing exactly what they were built to do — and that's the problem.">
+<meta property="og:title" content="Hallucinations: Why LLMs Make Things Up">
+<meta property="og:description" content="They're not lying to you. They're doing exactly what they were built to do — and that's the problem.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">LLMs</span><span>Chapter 08</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-25</span></div>
+<h1>Hallucinations: Why LLMs Make Things Up</h1>
+<p class="subtitle">They're not lying to you. They're doing exactly what they were built to do — and that's the problem.</p>
+<h2>The confident nonsense problem</h2>
+<p>Ask an LLM for the name of a Supreme Court case supporting a legal argument, and it might hand you <em>Henderson v. Collier, 2019</em> — complete with a docket number, a convincing summary, and a citation format so clean your paralegal would nod approvingly. The only problem: the case doesn't exist. Never did.</p>
+<p>This isn't a bug in some early prototype. It happens with every major model, from GPT-4 to Claude to Gemini, and it will keep happening for structural reasons that no amount of scaling has fully solved. The AI community calls these outputs <strong>hallucinations</strong>, a term borrowed loosely from psychology. It's not a great metaphor — a hallucinating person perceives something that isn't there, while an LLM generates something that isn't true — but the name stuck.</p>
+<p>If you've read the earlier chapters on how LLMs work, you already know these models predict the next token based on statistical patterns learned from training data. That foundation is exactly where hallucinations come from.</p>
+
+<h2>Prediction machines, not knowledge bases</h2>
+<p>Here's the core insight most people miss: an LLM doesn't <em>look things up</em>. It doesn't have an internal encyclopedia it consults before answering. It has billions of parameter weights that encode patterns about how language fits together. When you ask it a factual question, it doesn't search for the fact — it generates text that <em>looks like</em> a correct answer based on everything it absorbed during training.</p>
+
+<blockquote>An LLM doesn't know things the way you know your phone number. It knows things the way you know what a plausible phone number looks like. Sometimes those overlap. Sometimes they don't.</blockquote>
+
+<p>This means the model treats "What year did the Treaty of Westphalia end the Thirty Years' War?" and "Write me a fake historical treaty that sounds real" with essentially the same machinery. The difference in output quality depends on how strongly the training data reinforced the correct pattern — not on any fact-checking process.</p>
+<p>There are a few specific ways this goes wrong:</p>
+<ul>
+<li><strong>Sparse training signal.</strong> The model saw the correct fact only a few times, so the pattern is weak. Ask about a niche historical event, and the model interpolates — plausibly but incorrectly.</li>
+<li><strong>Competing patterns.</strong> The training data contains conflicting information. The model averages across contradictions and produces something confidently muddled.</li>
+<li><strong>Distributional pressure.</strong> The model is trained to always produce fluent, complete-sounding text. Saying "I don't know" was rarely the next token in its training corpus. So it fills the gap with something that sounds right.</li>
+<li><strong>Compositional errors.</strong> The model knows Fact A and Fact B individually but combines them in a way that produces Fact C, which is wrong. It can tell you about Marie Curie and about the Nobel Peace Prize separately, then cheerfully tell you she won it.</li>
+</ul>
+
+<h2>Why more data and bigger models help — but don't fix it</h2>
+<p>You might think: train on more data, make the model bigger, problem solved. And to be fair, scaling has helped. GPT-4 hallucinates less than GPT-3.5. Each generation gets better at the most common factual queries. But the fundamental architecture hasn't changed. The model is still a next-token predictor operating over compressed statistical representations of language.</p>
+<p>Think of it this way: if you memorize a thousand history textbooks, you'll get most history questions right. But you'll still occasionally confuse two similar battles, blend two monarchs together, or invent a date that "feels" correct. Now imagine you have no ability to distinguish between remembering something and guessing something. That's roughly where LLMs live.</p>
+<p>Researchers have tried several mitigation strategies, and you've already encountered the most prominent one: <strong>retrieval-augmented generation (RAG)</strong>. By giving the model actual source documents to reference at inference time, you ground its output in real text rather than relying purely on parametric memory. This helps enormously for factual tasks. But it doesn't eliminate hallucinations — the model can still misinterpret, selectively quote, or ignore the retrieved documents when its internal patterns pull strongly enough in another direction.</p>
+<p>Other approaches include training models to express uncertainty ("I'm not sure, but..."), using reinforcement learning from human feedback (RLHF) to penalize fabrication, and building tool-use pipelines where the model calls a search engine or database instead of answering from memory. Each helps. None is a silver bullet.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>A recent Import AI newsletter discussed "AI Stuxnet" scenarios and alignment challenges — a reminder that hallucinations aren't just an accuracy nuisance. In agentic systems that take real-world actions, a hallucinated "fact" can become a hallucinated <em>decision</em>. The stakes compound quickly when the AI isn't just writing text but executing plans.</div></div>
+
+<h2>The confidence problem</h2>
+<p>If hallucinations came with a warning label — a stammer, a hedge, a flashing red font — they'd be manageable. But they don't. LLMs deliver fabricated content with the same smooth, authoritative tone they use for things they "know" cold. This is arguably worse than getting things wrong. It's getting things wrong while sounding completely sure.</p>
+<p>Why the uniform confidence? Because the model was trained on well-written, assertive text. Wikipedia articles don't say "maybe the capital of France is Paris." Textbooks don't hedge. The training data is overwhelmingly confident, so the model is overwhelmingly confident — regardless of whether its output is accurate.</p>
+<p>RLHF has partially addressed this. Modern models do sometimes say "I'm not certain" or "I don't have information about that." But calibration remains poor. When a model says it's 90% sure, that number is more vibes than statistics. You can't currently trust an LLM's self-reported confidence as a reliable signal of accuracy.</p>
+
+<h2>Living with hallucinations</h2>
+<p>So what do you actually do with this knowledge?</p>
+<p>First, <strong>adjust your trust based on the task</strong>. Using an LLM to brainstorm ideas, draft prose, explain concepts, or write code scaffolding? Hallucination risk is low-impact — you'll catch errors naturally. Using it to cite sources, report numbers, summarize legal documents, or make medical claims? Verify everything. The model doesn't know when it's wrong, so you need to be the one who checks.</p>
+<p>Second, <strong>use grounding techniques</strong>. RAG, tool use, and explicit instructions to cite sources all reduce hallucination rates. They don't eliminate them, but they shift the odds meaningfully.</p>
+<p>Third, <strong>watch for the telltale signs</strong>: overly specific details that weren't in your source material, suspiciously perfect quotes, citations with plausible-but-unverifiable formatting, and smooth pivots from accurate information to invented extensions of that information.</p>
+<p>Hallucinations aren't going away anytime soon. They're woven into the architecture. The models that come next — perhaps diffusion-based language models like the ones Hugging Face recently highlighted from Nemotron-Labs — may approach generation differently enough to change the dynamics. But for now, the tool you're using is a magnificent pattern-completion engine that doesn't know what truth is. Use it like one.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="evals-how-to-know-if-your-ai-actually-works.html" ><div class="dir">&larr; Previous</div><div class="title">Evals: How to Know If Your AI Actually Works</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
