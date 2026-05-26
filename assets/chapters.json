@@ -79,6 +79,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-05-25"
+    },
+    {
+      "slug": "context-windows-your-ai-s-short-term-memory",
+      "number": "Chapter 09",
+      "title": "Context Windows: Your AI's Short-Term Memory",
+      "subtitle": "Why every model has a hard limit on what it can think about at once — and what that means for you.",
+      "excerpt": "Every AI model has a ceiling on how much text it can process at once. Understanding context windows changes how you use these tools.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-05-26"
     }
   ]
 }

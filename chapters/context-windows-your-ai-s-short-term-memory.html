@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Context Windows: Your AI's Short-Term Memory &mdash; AI Academy</title>
+<meta name="description" content="Why every model has a hard limit on what it can think about at once — and what that means for you.">
+<meta property="og:title" content="Context Windows: Your AI's Short-Term Memory">
+<meta property="og:description" content="Why every model has a hard limit on what it can think about at once — and what that means for you.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">LLMs</span><span>Chapter 09</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-26</span></div>
+<h1>Context Windows: Your AI's Short-Term Memory</h1>
+<p class="subtitle">Why every model has a hard limit on what it can think about at once — and what that means for you.</p>
+<h2>The invisible wall</h2>
+<p>You've probably hit it before. You're deep into a long conversation with an LLM, pasting in documents, refining your request, and then the model starts forgetting things you told it ten messages ago. It contradicts itself. It ignores your instructions from the top of the thread. It feels like talking to someone with amnesia.</p>
+<p>You just ran into the context window.</p>
+<p>A context window is the total amount of text — input <em>and</em> output combined — that a model can hold in its working memory at one time. Think of it like a desk. Everything the model needs to reason about has to fit on the desk. When the desk fills up, things start falling off the edge.</p>
+
+<h2>How it actually works</h2>
+<p>You already know from our LLM chapter that these models process text as tokens — chunks that roughly correspond to ¾ of a word in English. A context window is measured in tokens. GPT-3 shipped with a 4,096-token window. Today's frontier models commonly offer 128,000 tokens or more. Google's Gemini 1.5 Pro pushed to 1 million tokens, and at I/O 2026, Google continued expanding what its models can handle in a single pass.</p>
+<p>Here's what matters: everything goes into that window. Your system prompt. The conversation history. Any documents you pasted in via RAG. The model's own replies. All of it competes for the same finite space.</p>
+<p>When you send a message to an LLM, the API isn't maintaining a persistent memory of your chat. It replays the entire conversation from scratch each time. Message 1, response 1, message 2, response 2 — all of it gets packed into the context window and sent as a single prompt. This is why long conversations get expensive fast and why models eventually "forget." They didn't forget. The early messages got trimmed to make room.</p>
+
+<blockquote><p>A context window isn't memory. It's attention span. The model doesn't remember your conversation — it re-reads the whole thing every time it responds.</p></blockquote>
+
+<h2>Bigger isn't automatically better</h2>
+<p>You might assume a million-token context window solves everything. Just throw in your entire codebase, your company wiki, and War and Peace for good measure. Not so fast.</p>
+<p>Three problems scale with window size:</p>
+<ol>
+<li><strong>Cost.</strong> Most API pricing is per-token. A 100K-token prompt costs roughly 25× more than a 4K-token prompt. Every single reply recalculates against the full context.</li>
+<li><strong>Speed.</strong> More tokens means more computation. Latency goes up, sometimes dramatically. That snappy chatbot turns sluggish when it's chewing through a novel-length input.</li>
+<li><strong>The "lost in the middle" problem.</strong> Research consistently shows that LLMs pay more attention to the beginning and end of their context window than to the middle. Bury a critical fact on page 30 of a 50-page input, and the model is measurably more likely to miss it than if you'd put it at the top or bottom.</li>
+</ol>
+<p>This last point is the sneaky one. A model with a 200K-token window can technically <em>hold</em> a 200-page document. That doesn't mean it can reliably <em>reason</em> over every part of it with equal skill. Capacity and comprehension are different things.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>The "needle in a haystack" test hides a single fact inside a massive context and checks if the model finds it. Most frontier models now pass this test, but performance still degrades on tasks requiring <em>synthesis</em> across many scattered details — the kind of reasoning you actually need in practice.</div></div>
+
+<h2>Practical strategies that actually help</h2>
+<p>If you've read the RAG vs. fine-tuning chapter, you already know one answer: don't stuff everything into the context window. Retrieve only what's relevant. But there's more to it than that.</p>
+<p><strong>Front-load the important stuff.</strong> Put your most critical instructions and key facts at the very beginning of your prompt, and repeat the most essential ones near the end if you have room. The model's attention is strongest at the edges.</p>
+<p><strong>Summarize aggressively.</strong> In long-running agent workflows — the kind we covered in the agentic AI chapter — smart systems periodically compress earlier conversation history into summaries. You lose some detail, but you keep the model oriented.</p>
+<p><strong>Be intentional about what's on the desk.</strong> Every token in your context window is a slot that could hold something useful. Pasting in an entire 40-page PDF when you only need section 3 is like covering your desk with junk mail and then wondering why you can't find your keys.</p>
+<p><strong>Watch the token count.</strong> Most APIs return usage stats. Track them. If you're building an application, set alerts before you hit the limit so you can degrade gracefully — summarize, trim, or notify the user — instead of silently losing context.</p>
+
+<h2>Where this is heading</h2>
+<p>The trend line is obvious: context windows keep getting larger. But the more interesting developments are about making models <em>smarter</em> within whatever window they have. Techniques like improved positional encoding and sparse attention help models handle longer contexts without the old "lost in the middle" degradation. Meanwhile, work on efficient architectures — including recent research into diffusion-based language models from groups like NVIDIA's Nemotron Labs — suggests we may eventually break out of the standard token-by-token generation paradigm altogether, which would change the economics of large contexts.</p>
+<p>For now, the context window is one of the most important practical constraints in working with LLMs. It shapes how you design prompts, build RAG pipelines, architect agents, and manage costs. The models aren't getting smarter in a vacuum — they're getting smarter within a box. Understanding the box is half the battle.</p>
+<p>Tomorrow: we'll look at tokenization itself — why "ChatGPT" is three tokens, why your model can't spell, and what that means for everything we've discussed so far.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="hallucinations-why-llms-make-things-up.html" ><div class="dir">&larr; Previous</div><div class="title">Hallucinations: Why LLMs Make Things Up</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
