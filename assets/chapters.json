@@ -89,6 +89,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-05-26"
+    },
+    {
+      "slug": "when-ai-learned-to-see-and-hear",
+      "number": "Chapter 10",
+      "title": "When AI Learned to See and Hear",
+      "subtitle": "Multimodal models don't just read text — they process images, audio, and video in a single system.",
+      "excerpt": "Text-only AI was just the beginning. Multimodal models see photos, hear speech, and reason across all of it at once. Here's how they work.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-05-27"
     }
   ]
 }
