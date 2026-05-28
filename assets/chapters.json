@@ -99,6 +99,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-05-27"
+    },
+    {
+      "slug": "open-source-vs-closed-source-models-in-2026",
+      "number": "Chapter 11",
+      "title": "Open-Source vs Closed-Source Models in 2026",
+      "subtitle": "The gap is narrower than ever — but the real story is more complicated than \"open is winning.\"",
+      "excerpt": "Open-source models have closed the quality gap. But the battle has shifted to new terrain: agents, tooling, and who controls the stack.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-05-28"
     }
   ]
 }
