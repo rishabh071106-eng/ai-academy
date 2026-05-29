@@ -109,6 +109,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-05-28"
+    },
+    {
+      "slug": "function-calling-how-ai-learned-to-use-tools",
+      "number": "Chapter 12",
+      "title": "Function Calling: How AI Learned to Use Tools",
+      "subtitle": "The mechanism that turns a chatbot into something that can actually do things in the real world.",
+      "excerpt": "LLMs can't check your calendar or book a flight—unless you give them tools. Here's exactly how function calling works under the hood.",
+      "tag": "Agents",
+      "readTime": "6 min",
+      "date": "2026-05-29"
     }
   ]
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Function Calling: How AI Learned to Use Tools &mdash; AI Academy</title>
+<meta name="description" content="The mechanism that turns a chatbot into something that can actually do things in the real world.">
+<meta property="og:title" content="Function Calling: How AI Learned to Use Tools">
+<meta property="og:description" content="The mechanism that turns a chatbot into something that can actually do things in the real world.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Agents</span><span>Chapter 12</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-29</span></div>
+<h1>Function Calling: How AI Learned to Use Tools</h1>
+<p class="subtitle">The mechanism that turns a chatbot into something that can actually do things in the real world.</p>
+<p>You already know that agentic AI is about models that take actions, not just produce text. But we glossed over the core mechanism that makes action possible. How does a language model—a thing that predicts the next token—actually <em>call</em> an API, query a database, or send an email?</p><p>The answer is function calling, sometimes called tool use. It's less glamorous than it sounds, and more clever than you'd expect.</p><h2>The Fundamental Problem</h2><p>An LLM generates text. That's it. It cannot execute code, make HTTP requests, or touch a database. It lives in a padded room made of tokens.</p><p>So when you ask ChatGPT to check the weather, the model doesn't somehow reach out to a weather service. Instead, it outputs a very specific, structured piece of text that <em>describes</em> which function it wants to call and what arguments to pass. Then a separate piece of software—the orchestration layer—reads that structured output, actually calls the weather API, and feeds the result back to the model for a final, human-friendly response.</p><blockquote>Function calling is the model raising its hand and saying, "I'd like someone to run this function with these parameters." It never runs anything itself.</blockquote><p>This distinction matters. The model is still just predicting tokens. But it's been trained (or prompted) to predict tokens in a very particular format when it recognizes that a tool would help.</p><h2>How It Works, Step by Step</h2><p>Let's trace a concrete example. You send a message: <em>"What's the weather in Tokyo right now?"</em></p><p><strong>Step 1: Tool definitions go in.</strong> Before your message reaches the model, the system includes a list of available tools in the prompt—usually as a JSON schema. Something like:</p><pre><code>{
+  "name": "get_weather",
+  "description": "Returns current weather for a city",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "city": { "type": "string" },
+      "units": { "type": "string", "enum": ["celsius", "fahrenheit"] }
+    },
+    "required": ["city"]
+  }
+}</code></pre><p>The model now knows a tool called <code>get_weather</code> exists, what it does, and exactly what arguments it accepts.</p><p><strong>Step 2: The model decides to call a tool.</strong> Instead of generating a natural language answer (which would be a hallucinated guess), the model outputs structured JSON:</p><pre><code>{
+  "function_call": {
+    "name": "get_weather",
+    "arguments": { "city": "Tokyo", "units": "celsius" }
+  }
+}</code></pre><p>This is the key moment. The model chose the right tool and extracted the right arguments from your casual, human question. No code was executed—just structured text.</p><p><strong>Step 3: The orchestrator executes the call.</strong> Your application code sees this structured output, calls the actual weather API, and gets back real data: <code>{"temp": 22, "condition": "partly cloudy"}</code>.</p><p><strong>Step 4: The result goes back to the model.</strong> The orchestrator injects the API response into the conversation as a new message, and the model generates its final reply: <em>"It's 22°C and partly cloudy in Tokyo right now."</em></p><p>Four steps. Two round trips to the model. One actual API call in between. That's the whole trick.</p><h2>Why This Is Harder Than It Looks</h2><p>The elegance of the pattern hides real engineering challenges.</p><p><strong>Choosing the right tool.</strong> Give a model three tools and it performs well. Give it thirty and it starts making questionable choices—picking a similar-sounding function, hallucinating parameters, or calling tools when it shouldn't. This is why tool descriptions are a form of prompt engineering. Vague descriptions lead to vague decisions.</p><p><strong>Argument extraction.</strong> The model has to parse your natural language into typed, structured arguments. "What's the weather in Tokyo" is easy. "How about there?" when you mentioned Tokyo three messages ago? That requires the model to resolve context across the conversation—something it's surprisingly good at, but not perfect.</p><p><strong>Chaining calls.</strong> Real tasks rarely need one tool. Booking a trip might require searching flights, checking your calendar, comparing prices, and then making a reservation. Each call's output feeds into the next call's input. This is where function calling becomes agentic—the model is planning a multi-step sequence. And this is also where things can go sideways, because errors compound.</p><p><strong>Parallel calls.</strong> Sometimes you need to call multiple tools at once—weather in Tokyo <em>and</em> the current exchange rate. Modern function calling APIs (OpenAI, Google Gemini, Anthropic) now support parallel tool calls in a single model response, which cuts latency significantly.</p><h2>The Ecosystem Is Converging</h2><p>A year ago, every provider had a different approach. OpenAI had its function calling API, Anthropic had tool use with a slightly different schema, and open-source models were largely fending for themselves. That's changing.</p><p>There's now rough consensus on the pattern: you define tools with JSON Schema, the model outputs structured calls, and you handle execution. The Hugging Face team recently published a piece on <a href="#">getting agent terminology right</a>—distinguishing "harness" from "scaffold"—which reflects how the community is maturing past the hype into precise engineering vocabulary.</p><div class="callout"><div class="ico">&#128161;</div><div><strong>Fun fact:</strong> The term "function calling" is slightly misleading. The model never calls a function. A more accurate name would be "function <em>requesting</em>"—but that ship has sailed.</div></div><p>For open-source models, tool use capability increasingly comes from fine-tuning on datasets of tool-use conversations. Models like Llama and Mistral variants now ship with tool-use training baked in, so you don't have to rely on fragile prompt hacks to get structured output.</p><h2>What This Means for You</h2><p>If you're building anything with AI that touches the real world—fetching data, triggering workflows, modifying records—function calling is the interface layer you need to understand. It's not optional plumbing. It's the bridge between language and action.</p><p>A few practical principles worth remembering:</p><ul><li><strong>Fewer tools, better results.</strong> Don't give the model a Swiss Army knife with 50 blades. Curate a focused set of tools for each task.</li><li><strong>Descriptions are critical.</strong> The model picks tools based on their descriptions, not their implementation. Write them like you're explaining the tool to a smart colleague.</li><li><strong>Validate everything.</strong> The model's output is a <em>suggestion</em>. Your code should validate arguments, handle errors, and never blindly trust the model's choices—especially for destructive operations.</li><li><strong>Think about the loop.</strong> The power isn't in a single call. It's in the feedback loop: model decides, tool executes, result returns, model continues. Design your system around that cycle.</li></ul><p>Function calling is one of those ideas that seems almost too simple when you first see it. A language model outputs JSON instead of prose, and suddenly it can interact with the world. But that simplicity is the point. By keeping the model's role narrow—decide <em>what</em> to call, not <em>how</em> to execute it—you get a system that's composable, auditable, and much easier to reason about than letting an AI loose with a code interpreter and a prayer.</p><p>Tomorrow, we'll look at how to actually structure these multi-step tool chains without everything falling apart. Spoiler: it involves a lot of error handling.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="open-source-vs-closed-source-models-in-2026.html" ><div class="dir">&larr; Previous</div><div class="title">Open-Source vs Closed-Source Models in 2026</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
