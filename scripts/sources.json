@@ -27,7 +27,6 @@
     }
   ],
   "topicsQueue": [
-    "Embeddings as semantic search",
     "Cost of running LLMs in production",
     "Safety and alignment: the current state",
     "Small language models and on-device AI",

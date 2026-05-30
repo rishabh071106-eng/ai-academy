@@ -119,6 +119,16 @@
       "tag": "Agents",
       "readTime": "6 min",
       "date": "2026-05-29"
+    },
+    {
+      "slug": "embeddings-how-machines-actually-understand-meaning",
+      "number": "Chapter 13",
+      "title": "Embeddings: How Machines Actually Understand Meaning",
+      "subtitle": "Forget keyword matching — embeddings let AI search by what you mean, not what you typed.",
+      "excerpt": "Embeddings turn words into coordinates in meaning-space. That simple idea powers the most useful AI search systems being built today.",
+      "tag": "Theory",
+      "readTime": "6 min",
+      "date": "2026-05-30"
     }
   ]
 }

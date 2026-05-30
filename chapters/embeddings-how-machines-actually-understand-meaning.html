@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Embeddings: How Machines Actually Understand Meaning &mdash; AI Academy</title>
+<meta name="description" content="Forget keyword matching — embeddings let AI search by what you mean, not what you typed.">
+<meta property="og:title" content="Embeddings: How Machines Actually Understand Meaning">
+<meta property="og:description" content="Forget keyword matching — embeddings let AI search by what you mean, not what you typed.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Theory</span><span>Chapter 13</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-30</span></div>
+<h1>Embeddings: How Machines Actually Understand Meaning</h1>
+<p class="subtitle">Forget keyword matching — embeddings let AI search by what you mean, not what you typed.</p>
+<h2>The Problem With Ctrl+F</h2>
+<p>You know this frustration. You search your company's knowledge base for "employee vacation policy" and get zero results — because the document is titled "PTO Guidelines." You used the wrong words. The meaning was identical. The machine didn't care.</p>
+<p>Traditional search is string matching with extra steps. Even fancy versions (stemming, synonyms, TF-IDF scoring) are still fundamentally asking: <em>do these characters appear in that document?</em></p>
+<p>Embeddings flip the question entirely. Instead of matching words, they match <em>meaning</em>. And once you see how they work, you'll understand a quiet piece of infrastructure behind almost every AI application you've read about in this series — including RAG, which we covered a few chapters back.</p>
+
+<h2>Turning Words Into Coordinates</h2>
+<p>An embedding is a list of numbers — a vector — that represents where a piece of text sits in "meaning space." A sentence, a paragraph, an entire document: each gets compressed into something like 768 or 1,536 floating-point numbers.</p>
+<p>Think of it like GPS coordinates, but instead of two dimensions (latitude and longitude), you have hundreds. Each dimension captures some fuzzy aspect of meaning. No single number means "this text is about food" or "this text is angry." But taken together, the full vector places the text at a precise location in a high-dimensional space where <strong>similar meanings cluster together</strong>.</p>
+<p>So "employee vacation policy" and "PTO guidelines" end up near each other. "How to bake sourdough" ends up very far away from both. The distance between two vectors — typically measured by cosine similarity — becomes a proxy for semantic relatedness.</p>
+
+<blockquote>An embedding doesn't store what a text says word by word. It stores <em>roughly what it's about and how it feels</em> — compressed into a point in space. Search becomes: find the nearest points.</blockquote>
+
+<h2>How Embedding Models Are Made</h2>
+<p>You don't hand-craft these vectors. A neural network learns them. The training process is clever: show the model millions of pairs of texts that are related (a question and its answer, a paragraph and its summary) and train it so that related pairs produce vectors close together, while unrelated pairs drift apart.</p>
+<p>The result is a model — separate from the LLMs you already know — whose only job is to take text in and push a vector out. OpenAI has one. Cohere has one. There are excellent open-source options on Hugging Face. Google just showed off new Gemini capabilities at I/O 2026, and embeddings remain a foundational part of their AI stack even as the flashy demos focus on multimodal generation.</p>
+<p>These models are small and fast compared to a full LLM. Encoding a sentence takes milliseconds. That speed matters, because you're going to encode a <em>lot</em> of text.</p>
+
+<h2>The Pipeline: From Documents to Answers</h2>
+<p>Here's how semantic search actually works in practice:</p>
+<ol>
+<li><strong>Chunk your documents.</strong> Break them into passages — maybe 200-500 tokens each. Too big and the meaning gets diluted. Too small and you lose context.</li>
+<li><strong>Embed each chunk.</strong> Run every passage through the embedding model. Store the resulting vectors in a vector database (Pinecone, Weaviate, Chroma, pgvector — there are many).</li>
+<li><strong>Embed the query.</strong> When a user searches, run their question through the <em>same</em> model to get a query vector.</li>
+<li><strong>Find nearest neighbors.</strong> The vector database returns the chunks whose vectors are closest to the query vector.</li>
+<li><strong>Return or feed to an LLM.</strong> You can show the results directly, or — and this is where it connects to RAG — stuff those top chunks into an LLM's prompt as context for generating an answer.</li>
+</ol>
+<p>That's the whole thing. Step 2 is a one-time cost (plus updates when documents change). Steps 3-5 happen in real time, usually in under a second.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div><strong>Fun fact:</strong> The math for finding nearest neighbors in high-dimensional space is genuinely hard. Vector databases use approximate algorithms (like HNSW) that trade a tiny bit of accuracy for massive speed gains. You might miss the 7th-best result. You'll almost always get the top 3. For search, that tradeoff is excellent.</div></div>
+
+<h2>Where This Breaks (and What Helps)</h2>
+<p>Embeddings aren't magic. They have real failure modes worth knowing about.</p>
+<p><strong>Ambiguity gets flattened.</strong> The word "bank" in "river bank" and "bank account" produces different embeddings in context — modern models handle this well. But subtle distinctions can still collapse. A passage <em>criticizing</em> a policy and a passage <em>endorsing</em> the same policy might land suspiciously close together, because they're about the same topic.</p>
+<p><strong>Length mismatch matters.</strong> Embedding a five-word query and comparing it to a 300-word passage is asking the model to do a slightly awkward comparison. Some models (like Cohere's or the E5 family) are specifically trained to handle asymmetric queries and documents. Others struggle.</p>
+<p><strong>Domain specificity.</strong> A general-purpose embedding model trained on web text may not understand that "PT" in a medical context means "physical therapy" not "personal training." Fine-tuning an embedding model on your domain data — which is cheaper and faster than fine-tuning an LLM — can dramatically improve results.</p>
+<p>The best production systems often combine semantic search with traditional keyword search (a technique called <strong>hybrid search</strong>) and then use a small reranking model to sort the merged results. Belt, suspenders, and a well-placed safety pin.</p>
+
+<h2>Why This Is the Infrastructure Layer</h2>
+<p>If you've been following this series, you might notice embeddings quietly sitting beneath several topics we've already covered. RAG? It's built on embedding-based retrieval. Agentic AI? Agents use vector search to pull relevant context before acting. Even fine-tuning decisions start by asking: can we just retrieve the right information instead?</p>
+<p>Embeddings aren't glamorous. Nobody puts "powered by cosine similarity" on their landing page. But they've become one of the most practical, most deployed pieces of the modern AI stack — the layer that connects your messy, specific, private data to the general intelligence of a language model.</p>
+<p>Next time you type a natural-language question into any AI-powered search box and it <em>just works</em>, despite you using none of the "right" keywords — now you know what's happening underneath. Your words became coordinates. The nearest neighbors came back. And the distance between your question and its answer turned out to be surprisingly small.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="function-calling-how-ai-learned-to-use-tools.html" ><div class="dir">&larr; Previous</div><div class="title">Function Calling: How AI Learned to Use Tools</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
