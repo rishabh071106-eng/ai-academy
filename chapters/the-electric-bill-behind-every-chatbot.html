@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Electric Bill Behind Every Chatbot &mdash; AI Academy</title>
+<meta name="description" content="Running LLMs in production costs more than you think — and the math is changing fast.">
+<meta property="og:title" content="The Electric Bill Behind Every Chatbot">
+<meta property="og:description" content="Running LLMs in production costs more than you think — and the math is changing fast.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Engineering</span><span>Chapter 14</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-05-31</span></div>
+<h1>The Electric Bill Behind Every Chatbot</h1>
+<p class="subtitle">Running LLMs in production costs more than you think — and the math is changing fast.</p>
+<p>When you type a question into ChatGPT or ask a coding assistant to refactor your function, a GPU somewhere draws power, performs trillions of multiplications, and sends you back some tokens. That takes about two to thirty seconds. It also costs money — sometimes a fraction of a cent, sometimes considerably more.</p>
+<p>If you're building a product that wraps an LLM, that cost isn't academic. It's the line item that determines whether your startup makes money or quietly bleeds out. Let's look at what actually drives it.</p>
+
+<h2>The Two Numbers That Matter: Tokens In, Tokens Out</h2>
+<p>API providers like OpenAI, Google, and Anthropic charge per token — roughly three-quarters of a word. They quote two prices: one for input tokens (what you send) and one for output tokens (what the model generates). Output tokens almost always cost more, typically 2–4× the input price, because generating each one requires a full forward pass through the model.</p>
+<p>Here's a concrete example. As of mid-2025, OpenAI's GPT-4.1 charges about $2 per million input tokens and $8 per million output tokens. Claude 3.5 Sonnet is in a similar ballpark. That sounds cheap until you do the multiplication.</p>
+<p>Say you're running a customer support bot that handles 50,000 conversations per day. Each conversation averages 2,000 input tokens (system prompt plus conversation history) and 500 output tokens. That's 100 million input tokens and 25 million output tokens daily. At GPT-4.1 prices, you're spending roughly $400 a day — about $12,000 a month — just on inference. And that's a mid-tier model. Use something larger or reason-heavy, and the bill climbs fast.</p>
+
+<h2>Self-Hosting: Freedom Isn't Free Either</h2>
+<p>Some teams skip the API and host open-weight models themselves. You grab a model from Hugging Face, rent some GPUs, and run your own inference server. No per-token fees. Total control. Sounds great.</p>
+<p>The reality is more complicated. A 70-billion-parameter model needs at least two high-end GPUs (think NVIDIA A100 or H100) just to load into memory. Renting a single H100 on a major cloud provider runs $2–3 per hour. Two of them, running 24/7, costs around $4,000–5,000 per month before you've served a single request.</p>
+<p>Then you need engineers to manage the infrastructure, handle scaling, deal with cold starts, and keep the thing from falling over at 3 AM. The per-token cost can be lower than API pricing — especially at high volume — but you're trading variable cost for fixed cost plus operational complexity.</p>
+<blockquote>The real cost of running an LLM isn't just compute. It's compute multiplied by every architectural decision that inflates your token count — long system prompts, bloated context windows, and chains of reasoning you didn't actually need.</blockquote>
+
+<h2>Where the Money Actually Goes</h2>
+<p>If you peel back the invoice, a few things dominate the bill:</p>
+<ul>
+<li><strong>System prompts.</strong> That carefully crafted 1,500-token system prompt gets sent with every single request. At 50,000 requests per day, that's 75 million tokens doing nothing but repeating your instructions.</li>
+<li><strong>Conversation history.</strong> Multi-turn conversations grow linearly. By turn ten, you're sending thousands of tokens of prior context each time. Some apps hit the context window ceiling and still keep paying for every token in it.</li>
+<li><strong>Retrieval context.</strong> If you're doing RAG (which, given yesterday's chapter, you probably are), every retrieved chunk adds to your input tokens. Retrieve five passages of 300 tokens each, and you've just added 1,500 tokens per request.</li>
+<li><strong>Reasoning overhead.</strong> Models with chain-of-thought or "thinking" modes (like o1-style reasoning) generate internal tokens you often don't even see in the response. You still pay for them.</li>
+<li><strong>Retries and fallbacks.</strong> Guardrails, moderation checks, and retry logic can double or triple your effective token usage.</li>
+</ul>
+
+<h2>How Teams Cut the Bill</h2>
+<p>The most effective cost lever isn't haggling over per-token pricing. It's reducing token volume. Here are the main strategies production teams actually use:</p>
+<p><strong>Prompt caching.</strong> Both OpenAI and Anthropic now offer cached input pricing — if the prefix of your prompt matches a recent request, you pay a fraction of the normal input cost. This is a huge win for apps with static system prompts.</p>
+<p><strong>Model routing.</strong> Not every query needs your most expensive model. A well-designed system sends simple questions ("What are your store hours?") to a small, cheap model and reserves the big model for hard problems. This alone can cut costs 50–70%.</p>
+<p><strong>Smaller models, period.</strong> The gap between large and small models has narrowed dramatically. A well-tuned 8B-parameter model can often match a 70B model on a specific task — at a fraction of the cost. Fine-tuning a small model for your use case is frequently cheaper than prompting a giant one.</p>
+<p><strong>Aggressive context management.</strong> Summarize old conversation turns instead of passing the full history. Trim your RAG retrievals. Shorten your system prompt. Every token you don't send is a token you don't pay for.</p>
+<p><strong>Batching.</strong> If your workload tolerates slight delays, batching multiple requests together improves GPU utilization and lowers cost per token. OpenAI's batch API, for instance, offers a 50% discount for non-real-time work.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>A recent benchmark from IBM and Artificial Analysis found that frontier models score below 50% on enterprise IT tasks — meaning companies are sometimes paying top-dollar inference costs for models that can't reliably do the job. Matching the right model to the right task isn't just a cost optimization. It's a correctness one.</div></div>
+
+<h2>The Price Curve Is Your Friend (For Now)</h2>
+<p>Here's the good news: inference costs have fallen roughly 10× in the past two years and show no sign of stopping. Competition between providers, hardware improvements (NVIDIA's Blackwell architecture, AMD's MI300X, Google's TPU v6), and software optimizations like quantization and speculative decoding keep pushing prices down.</p>
+<p>In early 2023, GPT-4-level intelligence cost roughly $60 per million output tokens. Today, you can get comparable quality for $3–8. By next year, it'll likely be cheaper still.</p>
+<p>But falling per-token prices have a sneaky counterpart: usage grows to fill the budget. As models get cheaper, teams use them in more places — longer prompts, more agentic loops, more requests. The unit cost drops, but the total bill often stays flat or even increases.</p>
+<p>If you're building on LLMs, treat inference cost the way you'd treat database query costs a decade ago: measure everything, set budgets per feature, and design your architecture with the meter running in the back of your mind. The models are getting cheaper. Your appetite for using them is getting more expensive faster.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="embeddings-how-machines-actually-understand-meaning.html" ><div class="dir">&larr; Previous</div><div class="title">Embeddings: How Machines Actually Understand Meaning</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

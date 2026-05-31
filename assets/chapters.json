@@ -129,6 +129,16 @@
       "tag": "Theory",
       "readTime": "6 min",
       "date": "2026-05-30"
+    },
+    {
+      "slug": "the-electric-bill-behind-every-chatbot",
+      "number": "Chapter 14",
+      "title": "The Electric Bill Behind Every Chatbot",
+      "subtitle": "Running LLMs in production costs more than you think — and the math is changing fast.",
+      "excerpt": "Every AI response has a price tag. Here's what actually drives the cost of running LLMs in production and how companies try to shrink it.",
+      "tag": "Engineering",
+      "readTime": "6 min",
+      "date": "2026-05-31"
     }
   ]
 }
