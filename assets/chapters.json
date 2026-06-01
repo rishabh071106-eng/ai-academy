@@ -139,6 +139,16 @@
       "tag": "Engineering",
       "readTime": "6 min",
       "date": "2026-05-31"
+    },
+    {
+      "slug": "safety-and-alignment-where-we-actually-stand",
+      "number": "Chapter 15",
+      "title": "Safety and Alignment: Where We Actually Stand",
+      "subtitle": "The field trying to make sure powerful AI does what we mean, not just what we say.",
+      "excerpt": "AI alignment isn't theoretical anymore—it's an engineering discipline with real progress and real gaps. Here's an honest snapshot of the current state.",
+      "tag": "Safety",
+      "readTime": "7 min",
+      "date": "2026-06-01"
     }
   ]
 }

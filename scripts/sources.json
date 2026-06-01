@@ -27,7 +27,6 @@
     }
   ],
   "topicsQueue": [
-    "Safety and alignment: the current state",
     "Small language models and on-device AI",
     "Reasoning models: thinking before answering",
     "How training actually works (forward pass, backward pass)",
