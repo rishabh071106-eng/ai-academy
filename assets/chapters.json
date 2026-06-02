@@ -149,6 +149,16 @@
       "tag": "Safety",
       "readTime": "7 min",
       "date": "2026-06-01"
+    },
+    {
+      "slug": "the-case-for-smaller-smarter-models",
+      "number": "Chapter 16",
+      "title": "The Case for Smaller, Smarter Models",
+      "subtitle": "Why the most important AI models of 2025 might be the ones that fit in your pocket.",
+      "excerpt": "Bigger isn't always better. Small language models are bringing real AI capabilities to phones, laptops, and robots — no cloud required.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-06-02"
     }
   ]
 }
