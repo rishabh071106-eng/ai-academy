@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reasoning Models: Thinking Before Answering &mdash; AI Academy</title>
+<meta name="description" content="Why the newest AI models pause to reason — and why that changes everything about what they can do.">
+<meta property="og:title" content="Reasoning Models: Thinking Before Answering">
+<meta property="og:description" content="Why the newest AI models pause to reason — and why that changes everything about what they can do.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">LLMs</span><span>Chapter 17</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-06-03</span></div>
+<h1>Reasoning Models: Thinking Before Answering</h1>
+<p class="subtitle">Why the newest AI models pause to reason — and why that changes everything about what they can do.</p>
+<h2>The blurting problem</h2>
+<p>You know how standard LLMs work: you send a prompt, and the model generates tokens left to right, each one predicted from everything before it. It's impressively fluent. It's also, in a very real sense, thinking out loud. The model commits to its first word before it has any plan for the last one.</p>
+<p>This works fine for summarizing an email or writing a poem. It works terribly for problems where the first step depends on knowing the tenth step — math proofs, multi-constraint logic puzzles, code that has to satisfy six requirements at once.</p>
+<p>Reasoning models fix this by doing something deceptively simple: they think before they answer.</p>
+
+<h2>What "thinking" actually means here</h2>
+<p>When people say a model "reasons," they don't mean it's suddenly conscious. They mean the model generates a long internal chain of thought — sometimes called a "thinking trace" — before producing its final answer. You've likely seen this if you've used OpenAI's o1 or o3 models, or Anthropic's Claude in extended thinking mode, or Google's Gemini with its reasoning capabilities.</p>
+<p>Mechanically, here's what happens:</p>
+<ol>
+<li>You send a prompt.</li>
+<li>The model generates a (sometimes very long) internal monologue — exploring approaches, catching its own mistakes, backtracking, trying alternatives.</li>
+<li>Only after this thinking phase does the model produce the response you actually see.</li>
+</ol>
+<p>That internal monologue isn't a separate system or a database lookup. It's the same transformer generating tokens. The trick is that the model has been trained — through reinforcement learning — to produce these intermediate reasoning tokens, and to use them productively.</p>
+
+<blockquote><p>A reasoning model doesn't have better intuition than a standard LLM. It has the ability to check its intuitions before committing to them.</p></blockquote>
+
+<p>Think of it like the difference between a chess player who moves instantly on gut feel and one who silently considers three candidate moves before touching a piece. Same brain, very different results in complex positions.</p>
+
+<h2>How they learn to reason</h2>
+<p>The key ingredient is reinforcement learning (RL), usually applied after the standard pre-training phase you already know about. The process roughly works like this:</p>
+<p>The model is given problems with verifiable correct answers — math questions, coding challenges, logic puzzles. It generates chains of thought and final answers. When the final answer is correct, the chain of thought that led there gets reinforced. When it's wrong, it doesn't. Over millions of examples, the model learns reasoning patterns that actually help: breaking problems into sub-problems, double-checking arithmetic, considering edge cases.</p>
+<p>What's fascinating is that nobody hand-writes the reasoning strategies. The model discovers them. Researchers at OpenAI, Google, and elsewhere have reported models spontaneously learning to verify their work, try multiple approaches, and even allocate more thinking time to harder problems. The model learns <em>when</em> to think hard, not just <em>how</em>.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>Some reasoning models use tens of thousands of thinking tokens on a single hard math problem — far more text in the hidden reasoning than in the visible answer. You're paying for all those tokens, which is why reasoning model API calls can be significantly more expensive.</div></div>
+
+<h2>Where they shine (and where they don't)</h2>
+<p>Reasoning models dominate on tasks with clear right answers and multiple logical steps. Math competitions, complex code generation, scientific problem-solving, intricate planning — these are their home turf. On benchmarks like AIME (competition math) and SWE-bench (real-world software engineering), reasoning models blew past their predecessors.</p>
+<p>But they're not universally better. For simple factual questions, casual conversation, or creative writing, a reasoning model is overkill — slower and more expensive without meaningfully better output. It's like hiring a structural engineer to hang a picture frame.</p>
+<p>There's also an interesting failure mode: reasoning models can <em>overthink</em>. They sometimes talk themselves out of a correct first instinct, or spin up elaborate justifications for a wrong answer. The internal monologue can become a hall of mirrors. Researchers are actively working on this, training models to recognize when a problem is simple enough to just answer directly.</p>
+
+<h2>Why this matters for what comes next</h2>
+<p>Reasoning models represent a genuine architectural shift in how we use LLMs. For the agentic AI systems we discussed previously, this is a big deal. An agent that can reason through a plan before executing it — anticipating obstacles, checking constraints, revising its approach — is fundamentally more capable than one that just generates the next plausible action.</p>
+<p>NVIDIA's just-announced Cosmos 3 model, for instance, is explicitly designed for "physical AI reasoning and action" — applying this think-then-act pattern to robotics and real-world interaction. The pattern is spreading beyond text.</p>
+<p>There's also a philosophical shift worth noting. For years, scaling laws said: make the model bigger, train on more data, get better results. Reasoning models suggest a different lever — <em>test-time compute</em>. Instead of only spending resources during training, you spend them when the model is actually answering your question. A smaller model that thinks for 30 seconds can outperform a larger model that answers instantly.</p>
+<p>This changes the economics. It means you can choose: fast and cheap for easy tasks, slow and expensive for hard ones. Some APIs already let you set a "thinking budget" — a cap on how many reasoning tokens the model can use. It's a new knob to turn, and it gives you real control over the quality-cost tradeoff.</p>
+
+<h2>The practical takeaway</h2>
+<p>If you're using AI for anything that requires genuine multi-step logic — analyzing a contract, debugging code, planning a complex project — try a reasoning model and compare the results to a standard one. The difference on hard problems can be dramatic.</p>
+<p>But don't default to reasoning models for everything. They're slower, pricier, and for simple tasks, they add latency without adding value. The smartest approach right now is the boring one: match the model to the problem.</p>
+<p>Tomorrow's AI systems will likely do this matching automatically — routing easy questions to fast models and hard ones to deep reasoners. For now, that routing decision is yours. At least you know what the options are.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="the-case-for-smaller-smarter-models.html" ><div class="dir">&larr; Previous</div><div class="title">The Case for Smaller, Smarter Models</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

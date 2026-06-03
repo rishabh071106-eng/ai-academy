@@ -159,6 +159,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-06-02"
+    },
+    {
+      "slug": "reasoning-models-thinking-before-answering",
+      "number": "Chapter 17",
+      "title": "Reasoning Models: Thinking Before Answering",
+      "subtitle": "Why the newest AI models pause to reason — and why that changes everything about what they can do.",
+      "excerpt": "Standard LLMs blurt out answers. Reasoning models think first. Here's how that inner monologue works and why it matters.",
+      "tag": "LLMs",
+      "readTime": "6 min",
+      "date": "2026-06-03"
     }
   ]
 }

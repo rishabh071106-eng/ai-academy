@@ -27,7 +27,6 @@
     }
   ],
   "topicsQueue": [
-    "Reasoning models: thinking before answering",
     "How training actually works (forward pass, backward pass)",
     "Tokenization quirks every developer hits",
     "Reinforcement learning from human feedback (RLHF)"
