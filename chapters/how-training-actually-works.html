@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>How Training Actually Works &mdash; AI Academy</title>
+<meta name="description" content="Forward pass, backward pass, and the surprisingly simple math that teaches a neural network to think.">
+<meta property="og:title" content="How Training Actually Works">
+<meta property="og:description" content="Forward pass, backward pass, and the surprisingly simple math that teaches a neural network to think.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Theory</span><span>Chapter 18</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-06-04</span></div>
+<h1>How Training Actually Works</h1>
+<p class="subtitle">Forward pass, backward pass, and the surprisingly simple math that teaches a neural network to think.</p>
+<h2>A guess, a grade, and a correction</h2>
+<p>Training a neural network is, at its core, a three-step loop:</p>
+<ol>
+<li>Make a guess (forward pass).</li>
+<li>Measure how wrong the guess was (loss calculation).</li>
+<li>Adjust the knobs so the next guess is less wrong (backward pass).</li>
+</ol>
+<p>That's it. Everything else — the GPU clusters, the billions of dollars, the 405-billion-parameter models — is just doing this loop an almost incomprehensible number of times. Let's walk through each step as if we could slow the machine down and watch.</p>
+
+<h2>The forward pass: data flows in, a prediction falls out</h2>
+<p>Imagine a network with a job: predict the next word in a sentence. You feed it "The cat sat on the" and you want it to produce "mat" (or at least rank "mat" highly).</p>
+<p>During the forward pass, your input tokens travel through the network layer by layer. Each layer is basically a pile of numbers — called <strong>weights</strong> — and each layer does a specific mathematical operation: multiply the input by the weights, add a bias, apply a nonlinear function (the "activation"), and hand the result to the next layer.</p>
+<p>Think of it like a Rube Goldberg machine. Data enters on the left, gets multiplied, squished, combined, and transformed at each stage, until something pops out the right side: a probability distribution over every possible next word.</p>
+<p>The network might say: 62% chance the next word is "mat," 8% chance it's "floor," 3% chance it's "refrigerator." That distribution <em>is</em> the forward pass's output.</p>
+<p>Here's the important part: on an untrained network, those weights are essentially random. So the first forward pass is garbage. The network might put 0.001% on "mat" and 4% on "elephant." The whole point of training is to fix that.</p>
+
+<h2>The loss function: putting a number on wrongness</h2>
+<p>After the forward pass, we need a single number that captures "how bad was that prediction?" This is the <strong>loss</strong>.</p>
+<p>For language models, the standard choice is <strong>cross-entropy loss</strong>. Without getting into the math, it essentially says: you told me the right answer was "mat," and you only gave "mat" a 0.001% probability, so your loss is <em>very high</em>. If you'd given "mat" 99% probability, your loss would be nearly zero.</p>
+<p>The loss is a score. Lower is better. The entire training process is a campaign to drive this number down.</p>
+
+<blockquote>A neural network doesn't "understand" anything during training. It just tries, over and over, to make a number smaller. Understanding — or something that looks remarkably like it — emerges as a side effect.</blockquote>
+
+<h2>The backward pass: blame flows back through the network</h2>
+<p>This is where the real magic lives — and where most explanations lose people. But the intuition is surprisingly graspable.</p>
+<p>We have a loss. We want to make it smaller. The loss depends on the network's weights. So the question becomes: <em>which weights contributed most to the error, and in which direction should we nudge them?</em></p>
+<p>The backward pass answers this using an algorithm called <strong>backpropagation</strong>, which is just the chain rule from calculus applied systematically. If you've forgotten the chain rule, here's the gist: if A affects B and B affects C, you can figure out how A affects C by multiplying those two relationships together.</p>
+<p>The network works the same way. The loss depends on the output layer's weights. The output layer's values depend on the layer before it. That layer depends on the one before <em>it</em>. Backpropagation starts at the loss and works backward, layer by layer, computing a <strong>gradient</strong> for every single weight — a tiny arrow that says "move this weight <em>this much</em> in <em>this direction</em> to reduce the loss."</p>
+<p>In a model like GPT-4, that means computing gradients for hundreds of billions of weights. Every. Single. Training step.</p>
+<p>Once we have the gradients, we apply them. Each weight gets nudged by a small fraction of its gradient (scaled by the <strong>learning rate</strong>, a hyperparameter that controls how aggressive the updates are). Too large a learning rate and the model overshoots, bouncing around wildly. Too small and training takes forever — or gets stuck.</p>
+
+<h2>Putting it together: one step, a trillion times</h2>
+<p>One forward pass, one loss calculation, one backward pass, one weight update. That's a single training step. Modern LLMs do this millions of times, each time on a different <strong>batch</strong> of training data — a random sample of, say, a few thousand text passages.</p>
+<p>Over those millions of steps, the weights gradually organize themselves into patterns that capture grammar, facts, reasoning heuristics, and all the other capabilities that impress (and occasionally alarm) us. No one explicitly programs "understand sarcasm" or "solve algebra." The forward-backward loop, applied at staggering scale, discovers those behaviors because they reduce the loss.</p>
+<p>This is also why scale matters so much. More parameters mean more knobs to adjust, which means the network can fit more subtle patterns. More data means the gradients carry richer information. More compute means more steps through the loop. The scaling laws that dominate AI research right now — including <a href="https://importai.substack.com">recent work on scaling laws for protein-folding models</a> — are essentially studying how these three ingredients trade off against each other.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div><strong>Fun fact:</strong> Backpropagation was described in various forms in the 1960s and 70s, but it didn't become the standard training algorithm for neural networks until a landmark 1986 paper by Rumelhart, Hinton, and Williams. The math hadn't changed — computers just finally got fast enough to make it useful.</div></div>
+
+<h2>Why this matters for everything else you've read</h2>
+<p>Knowing the forward-backward loop reframes a lot of concepts you've already encountered:</p>
+<ul>
+<li><strong>Fine-tuning</strong> (from our RAG vs. fine-tune chapter) is just resuming this loop on new, specialized data — starting from weights that are already good, rather than random.</li>
+<li><strong>Prompt engineering</strong> works because the forward pass is deterministic given fixed weights and input — change the input, change the output, no retraining required.</li>
+<li><strong>Overfitting</strong> happens when the backward pass over-optimizes for the training data, reducing the loss on examples the model has seen while getting worse on new ones.</li>
+</ul>
+<p>The forward and backward passes are the heartbeat of every neural network. Everything else — attention mechanisms, transformer architectures, RLHF, mixture-of-experts routing — is just a more sophisticated version of what happens <em>inside</em> each pass. But the loop itself? Guess, grade, adjust. That hasn't changed in nearly 40 years.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="reasoning-models-thinking-before-answering.html" ><div class="dir">&larr; Previous</div><div class="title">Reasoning Models: Thinking Before Answering</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>

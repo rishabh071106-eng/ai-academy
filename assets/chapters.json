@@ -169,6 +169,16 @@
       "tag": "LLMs",
       "readTime": "6 min",
       "date": "2026-06-03"
+    },
+    {
+      "slug": "how-training-actually-works",
+      "number": "Chapter 18",
+      "title": "How Training Actually Works",
+      "subtitle": "Forward pass, backward pass, and the surprisingly simple math that teaches a neural network to think.",
+      "excerpt": "You know LLMs learn from data. But how, mechanically? Two passes through the network explain almost everything.",
+      "tag": "Theory",
+      "readTime": "6 min",
+      "date": "2026-06-04"
     }
   ]
 }
