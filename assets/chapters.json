@@ -179,6 +179,16 @@
       "tag": "Theory",
       "readTime": "6 min",
       "date": "2026-06-04"
+    },
+    {
+      "slug": "tokenization-quirks-every-developer-hits",
+      "number": "Chapter 19",
+      "title": "Tokenization Quirks Every Developer Hits",
+      "subtitle": "Why your model can't spell 'strawberry,' and other mysteries of how text becomes numbers.",
+      "excerpt": "Tokenization is the invisible first step in every LLM interaction. Its quirks explain some of AI's strangest failures—and knowing them makes you better.",
+      "tag": "Engineering",
+      "readTime": "6 min",
+      "date": "2026-06-05"
     }
   ]
 }

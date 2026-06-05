@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tokenization Quirks Every Developer Hits &mdash; AI Academy</title>
+<meta name="description" content="Why your model can't spell 'strawberry,' and other mysteries of how text becomes numbers.">
+<meta property="og:title" content="Tokenization Quirks Every Developer Hits">
+<meta property="og:description" content="Why your model can't spell 'strawberry,' and other mysteries of how text becomes numbers.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="../rss.xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<article class="reader">
+<a href="../index.html" class="back">&larr; All chapters</a>
+<div class="meta-row"><span class="tag">Engineering</span><span>Chapter 19</span><span>&middot;</span><span>6 min read</span><span>&middot;</span><span>2026-06-05</span></div>
+<h1>Tokenization Quirks Every Developer Hits</h1>
+<p class="subtitle">Why your model can't spell 'strawberry,' and other mysteries of how text becomes numbers.</p>
+<h2>The Invisible Translation Layer</h2>
+<p>You already know that LLMs don't read words. They read tokens—chunks of text converted to numbers. You've probably nodded along to that explanation and moved on. But the <em>specific way</em> text gets carved into tokens explains a surprising number of the weird behaviors you've encountered: bad math, mangled spelling, inconsistent pricing across languages, and prompts that mysteriously blow your context window.</p>
+<p>Tokenization isn't glamorous. It's plumbing. But like actual plumbing, you don't think about it until something starts leaking.</p>
+
+<h2>How "Strawberry" Breaks Your Model</h2>
+<p>Ask GPT-4 how many r's are in "strawberry" and it famously struggles. This isn't because the model is bad at counting. It's because the model never sees individual letters. A BPE (Byte-Pair Encoding) tokenizer might split "strawberry" into something like <code>["str", "aw", "berry"]</code>. The model sees three tokens, none of which cleanly isolate the letter "r." It's trying to count characters inside opaque chunks it treats as atomic units.</p>
+<p>This is the fundamental quirk: <strong>the unit of meaning for the model is the token, not the character and not the word.</strong> Anything that requires character-level reasoning—anagrams, spelling checks, simple regex-like tasks—forces the model to work against its own perception.</p>
+
+<blockquote>Asking an LLM to count letters in a word is like asking you to count the number of times the letter "e" appears in a paragraph—but the paragraph is written in Morse code. You <em>can</em> do it. It's just not what the representation was optimized for.</blockquote>
+
+<h2>The Quirks That Actually Bite You</h2>
+<p>Here are the tokenization surprises that trip up developers in practice, not just in party tricks:</p>
+<h3>1. Whitespace is part of the token</h3>
+<p>Most tokenizers attach leading whitespace to the following token. The token for " hello" (with a space) is different from "hello" (without). This means your few-shot examples can behave differently depending on whether you left a trailing space in your prompt. I've seen developers debug prompt regressions for hours before realizing they'd reformatted their template and introduced an extra newline.</p>
+
+<h3>2. Numbers are tokenized inconsistently</h3>
+<p>The number "12345" might become <code>["123", "45"]</code> or <code>["1", "234", "5"]</code> depending on what appeared in the training data. This is one reason LLMs are shaky at arithmetic—the digit boundaries don't align with token boundaries. The number 380 and the number 3800 might share a token prefix, making them seem "closer" to the model than 380 and 381.</p>
+
+<h3>3. Non-English languages burn more tokens</h3>
+<p>BPE vocabularies are built from training data, which skews heavily English. A sentence in Japanese or Hindi can use 2-4x more tokens than its English equivalent. This isn't just an efficiency problem—it means your context window effectively shrinks for non-English users, and API costs go up per semantic unit. If you're building a multilingual product and budgeting by token count, you're implicitly giving English-speaking users more capability per dollar.</p>
+
+<h3>4. Code tokens aren't what you think</h3>
+<p>Indentation in Python gets its own tokens. A four-space indent and a tab are different tokens. Common variable names like <code>self</code> or <code>index</code> are single tokens, but your custom variable <code>mySpecialCounter</code> might split into three or four. This means the model "understands" standard coding conventions more fluently than your project's idiosyncratic naming—which is actually a reasonable argument for conventional naming in AI-assisted development.</p>
+
+<div class="callout"><div class="ico">&#128161;</div><div>You can see exactly how any text tokenizes using OpenAI's <a href="https://platform.openai.com/tokenizer">online tokenizer tool</a> or Hugging Face's <code>tokenizers</code> library. Spending ten minutes pasting your actual prompts into one of these tools is worth more than reading five articles about tokenization (including this one).</div></div>
+
+<h2>What You Can Actually Do About It</h2>
+<p>You can't change how a model tokenizes. But you can work with the grain instead of against it:</p>
+<p><strong>For counting and character-level tasks,</strong> ask the model to first spell out the word letter by letter. Forcing it to generate <code>s-t-r-a-w-b-e-r-r-y</code> gives it individual tokens for each character, turning an impossible task into a straightforward one. This is a chain-of-thought trick, but it works specifically because it changes the token-level representation.</p>
+<p><strong>For cost and context management,</strong> count tokens, not words. The rule of thumb "one token ≈ ¾ of a word" is fine for English prose and dangerously wrong for code, structured data, or non-Latin scripts. Use <code>tiktoken</code> or your model's actual tokenizer to count precisely.</p>
+<p><strong>For prompt stability,</strong> be consistent with formatting. Same whitespace, same delimiters, same casing. Token boundaries shift with seemingly trivial formatting changes, and those shifts can cascade into different model behavior. If you're versioning your prompts (and you should be), treat whitespace changes as meaningful diffs.</p>
+<p><strong>For multilingual applications,</strong> test token counts across all your supported languages early. I've seen teams discover mid-launch that their carefully tuned system prompt plus user input exceeded the context window—but only in Korean.</p>
+
+<h2>The Bigger Picture</h2>
+<p>Tokenization is one of those areas where the research community knows it's a compromise. BPE was borrowed from data compression in the 1990s and adapted for neural networks. It works well enough that it's become the default, but "well enough" papers over real limitations. There's active work on tokenizer-free models that operate on raw bytes, and on tokenizers with much larger vocabularies that handle multilingual text more equitably.</p>
+<p>Hugging Face recently announced work on designing their <a href="https://huggingface.co">CLI as an agent-optimized interface</a>—a reminder that as we build more agentic systems, these low-level details compound. An agent that chains multiple LLM calls together amplifies every tokenization quirk across each step. A subtle whitespace issue in one call's output becomes a different token sequence in the next call's input.</p>
+<p>For now, the practical takeaway is simple: the model doesn't see what you see. It sees tokens. And once you internalize that—really internalize it, not just nod along—a lot of previously mysterious LLM behavior starts making perfect sense.</p>
+<div class="share-bar">
+  <div class="label">Found this useful? Share it:</div>
+  <div class="share-buttons">
+    <button class="share-btn" onclick="shareTo('twitter')">&#128038; X/Twitter</button>
+    <button class="share-btn" onclick="shareTo('linkedin')">&#128100; LinkedIn</button>
+    <button class="share-btn" onclick="shareTo('whatsapp')">&#128172; WhatsApp</button>
+    <button class="share-btn" id="copyBtn" onclick="copyLink()">&#128279; Copy link</button>
+  </div>
+</div>
+<div class="nav-next">
+  <a href="how-training-actually-works.html" ><div class="dir">&larr; Previous</div><div class="title">How Training Actually Works</div></a>
+  <a href="../index.html" class="next"><div class="dir">Next &rarr;</div><div class="title">Back to all chapters</div></a>
+</div>
+</article>
+<footer><div class="logo"><span class="logo-dot"></span> AI Academy</div><p>&copy; 2026 AI Academy. New chapters daily.</p></footer>
+<script>
+const pageUrl=encodeURIComponent(window.location.href);
+const pageTitle=encodeURIComponent(document.title);
+function shareTo(net){const urls={twitter:`https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`,linkedin:`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,whatsapp:`https://wa.me/?text=${pageTitle}%20${pageUrl}`};window.open(urls[net],'_blank','width=600,height=500');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.getElementById('copyBtn');b.innerHTML='&check; Copied!';b.classList.add('copied');setTimeout(()=>{b.innerHTML='&#128279; Copy link';b.classList.remove('copied')},1800);});}
+</script>
+</body>
+</html>
