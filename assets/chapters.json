@@ -189,6 +189,16 @@
       "tag": "Engineering",
       "readTime": "6 min",
       "date": "2026-06-05"
+    },
+    {
+      "slug": "rlhf-teaching-ai-with-a-thumbs-up",
+      "number": "Chapter 20",
+      "title": "RLHF: Teaching AI with a Thumbs Up",
+      "subtitle": "How human preferences became the secret ingredient that turned raw language models into useful assistants.",
+      "excerpt": "Language models can write anything—including toxic nonsense. RLHF is the training technique that taught them what humans actually want.",
+      "tag": "Safety",
+      "readTime": "6 min",
+      "date": "2026-06-06"
     }
   ]
 }
