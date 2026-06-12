@@ -1,0 +1,61 @@
+# Job agent configuration.
+
+# Model that powers discovery, scoring, tailoring, and form-filling.
+# claude-fable-5 = most capable (requires 30-day data retention on your org).
+# claude-opus-4-8 = cheaper alternative; change here if cost matters.
+model: claude-fable-5
+
+search:
+  # Titles the agent hunts for. Used in web queries and prefiltering.
+  target_titles:
+    - Director of Product
+    - Director, Product Management
+    - VP Product
+    - Vice President, Product
+    - Head of Product
+    - VP of Product Management
+    - Director of AI Product
+    - Head of AI Product
+  # Cheap regex prefilter applied to titles before spending tokens on scoring.
+  title_pattern: '(?i)\b(director|vice\s*president|vp|head|chief)\b.{0,40}\b(product|ai|platform)\b|\b(product|ai)\b.{0,40}\b(director|vice\s*president|vp|head)\b'
+  locations:
+    - Bengaluru
+    - Chennai
+    - India
+    - Remote
+  open_to_relocation: true
+  # Web-search discovery queries (run via Claude's server-side web search).
+  web_queries:
+    - '"Director of Product" OR "VP Product" AI fintech (Bengaluru OR India OR remote) site:boards.greenhouse.io OR site:jobs.lever.co OR site:jobs.ashbyhq.com'
+    - '"Head of Product" OR "Director Product Management" (B2B SaaS OR platform OR AI) India remote apply'
+    - '"VP Product" OR "Director of Product" banking OR lending OR fintech posted this week'
+
+# Direct ATS boards to watch (fastest + most reliable source — fill these in
+# with companies you care about; board token is the slug in their careers URL).
+companies:
+  greenhouse: []   # e.g. ["stripe", "razorpay"]  -> boards.greenhouse.io/<token>
+  lever: []        # e.g. ["postman"]             -> jobs.lever.co/<org>
+  ashby: []        # e.g. ["linear"]              -> jobs.ashbyhq.com/<org>
+
+# Companies the agent must NEVER apply to (matched fuzzily against company
+# name AND checked semantically during scoring, including roles posted by
+# staffing agencies on behalf of these companies).
+blocklist:
+  - JPMorgan Chase
+  - JP Morgan
+  - J.P. Morgan
+  - JPMC
+  - Chase Bank
+  - Wells Fargo
+
+policy:
+  min_fit_score: 70          # 0-100; below this the job is skipped
+  max_applications_per_run: 5
+  auto_submit: true          # false = fill forms, screenshot, queue for your review
+  dry_run: false             # true = do everything except open the browser
+  # Applications the agent cannot complete automatically (CAPTCHA, login walls,
+  # unanswerable required questions) are always queued to applications/review/.
+
+paths:
+  state_db: state/jobs.db
+  applications_dir: applications

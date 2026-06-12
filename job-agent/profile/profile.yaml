@@ -1,0 +1,44 @@
+# Canonical facts about the candidate. The agent uses these verbatim for
+# application form fields and screening questions. Keep this file accurate —
+# the agent is instructed to NEVER invent facts not present here or in
+# resume_master.md.
+
+name: Rishabh Sharma
+first_name: Rishabh
+last_name: Sharma
+email: rishabh071106@gmail.com
+phone: "+91 7087750777"
+linkedin: https://www.linkedin.com/in/rishabhsharmaiimk
+website: https://brodoit.com
+location: Bengaluru, Karnataka, India
+
+current_title: Vice President — Product Management
+current_company: JP Morgan Chase & Co.
+years_experience: 15
+
+education:
+  - "M.Tech, Artificial Intelligence — IIT Bhilai (ongoing)"
+  - "Executive MBA — IIM Kozhikode"
+  - "B.Tech, Electronics & Communication — Jaypee University of Information Technology"
+
+# Answers the agent may use for common screening questions.
+screening:
+  work_authorization:
+    india: "Indian citizen — authorized to work without sponsorship"
+    us: "Would require visa sponsorship"
+    uk: "Would require visa sponsorship"
+    other: "Would require sponsorship / open to relocation support"
+  willing_to_relocate: "Yes — open to Chennai and international relocation"
+  open_to_remote: "Yes"
+  notice_period: "90 days, negotiable"   # TODO: confirm/update
+  compensation: "leave blank if optional; otherwise answer 'Negotiable / as per company band'"
+  start_date: "Per notice period"
+  gender: "prefer not to disclose unless required"
+  veteran_status: "Not applicable (non-US)"
+  disability: "prefer not to disclose unless required"
+  race_ethnicity: "prefer not to disclose unless required"
+  how_did_you_hear: "Company careers page"
+
+# Hard rule: never answer a screening question with invented information.
+# If a required question cannot be answered from this file or the resume,
+# the application must be routed to the review queue instead of submitted.
