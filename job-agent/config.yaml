@@ -37,6 +37,36 @@ companies:
   lever: []        # e.g. ["postman"]             -> jobs.lever.co/<org>
   ashby: []        # e.g. ["linear"]              -> jobs.ashbyhq.com/<org>
 
+# Job portals (require one-time login: python -m src.login naukri|linkedin —
+# sessions are saved locally in state/browser/; passwords are never stored).
+naukri:
+  enabled: true
+  keywords:
+    - vp product
+    - director product management
+    - head of product
+    - director ai product
+  locations:
+    - bengaluru
+    - chennai
+    - india
+
+linkedin:
+  enabled: true
+  keywords:
+    - VP Product
+    - Director of Product
+    - Head of Product AI
+  location: India
+  max_results_per_query: 15
+  # Easy Apply mode:
+  #   review (default) — agent finds + scores + prepares; YOU click submit.
+  #   auto             — agent completes Easy Apply itself. ⚠️ LinkedIn detects
+  #                      automation and can restrict accounts; enable only if
+  #                      you accept that risk. External-apply jobs found via
+  #                      LinkedIn are always fully automated (off-platform).
+  easy_apply: review
+
 # Companies the agent must NEVER apply to (matched fuzzily against company
 # name AND checked semantically during scoring, including roles posted by
 # staffing agencies on behalf of these companies).

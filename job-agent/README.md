@@ -44,6 +44,26 @@ discover ──> prefilter ──> score ──> tailor ──> apply ──> re
 Everything else (Greenhouse, Lever, Ashby standard forms — a large share of
 senior product roles) is submitted automatically.
 
+## LinkedIn & Naukri
+
+The agent uses your accounts **without ever storing your passwords**: you log
+in once in a browser window it opens (OTP/2FA work normally), and the session
+is saved locally to `state/browser/` (git-ignored) and reused headlessly.
+
+```bash
+python -m src.login naukri      # log in once, press Enter when done
+python -m src.login linkedin
+```
+
+| Portal | What's automated | Notes |
+|---|---|---|
+| **Naukri** | Search + one-click apply + chatbot screening questions | Applies use the resume on your **Naukri profile** — keep it current. Unanswerable questions → review queue. |
+| **LinkedIn** | Search + scoring. External-apply jobs ("Apply on company website") are fully auto-applied. | **Easy Apply defaults to review mode** — the agent prepares everything and you click submit. Flip `linkedin.easy_apply: auto` in config to automate it, but know that LinkedIn detects automation and can restrict accounts; for a VP-level candidate your LinkedIn profile is worth protecting. |
+
+Portal sessions live on whatever machine you logged in from — so run the agent
+on your laptop or a VPS for Naukri/LinkedIn. The GitHub Actions schedule covers
+only the session-free sources (ATS boards + web search).
+
 ## Setup
 
 ```bash

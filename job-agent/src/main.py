@@ -11,13 +11,14 @@ import argparse
 import time
 import traceback
 
+from . import linkedin, naukri
 from .applier import apply_to_job
 from .config import load_config
 from .discover import discover, fetch_description
 from .llm import LLM, RefusalError
 from .score import score_job
 from .state import State
-from .tailor import build_application_package
+from .tailor import build_application_package, slugify
 
 
 def run_once(dry_run_override: bool | None = None) -> None:
@@ -30,7 +31,7 @@ def run_once(dry_run_override: bool | None = None) -> None:
     min_score = int(policy.get("min_fit_score", 70))
 
     print("== discovery ==")
-    jobs = discover(cfg, llm)
+    jobs = discover(cfg, llm) + naukri.discover(cfg) + linkedin.discover(cfg)
     print(f"found {len(jobs)} postings")
 
     applied = 0
@@ -54,7 +55,20 @@ def run_once(dry_run_override: bool | None = None) -> None:
 
         print(f"\n-- {job.title} @ {job.company} ({job.source})")
         try:
-            fetch_description(job)
+            if job.source == "naukri":
+                naukri.enrich(job)
+            elif job.source == "linkedin":
+                linkedin.enrich(job)
+            else:
+                fetch_description(job)
+
+            # Company name may only be known after enrichment — re-check.
+            if cfg.blocklist.matches(job.company):
+                state.record(job.url, "blocked", job.company, job.title, job.source,
+                             notes="blocklisted company")
+                print(f"   BLOCKED after enrichment: {job.company}")
+                continue
+
             verdict = score_job(job, cfg, llm)
             print(f"   fit={verdict['fit_score']} decision={verdict['decision']} "
                   f"emphasis={verdict['emphasis']}")
@@ -69,7 +83,16 @@ def run_once(dry_run_override: bool | None = None) -> None:
                              verdict["fit_score"], verdict["reasons"])
                 continue
 
-            pkg_dir = build_application_package(job, verdict["emphasis"], cfg, llm)
+            if job.source == "naukri":
+                # Naukri one-click applies use your Naukri profile resume —
+                # no per-job tailoring possible, so skip that cost.
+                pkg_dir = cfg.path("applications_dir", "applications") / \
+                    f"{slugify(job.company or 'naukri')}--{slugify(job.title)}"
+                pkg_dir.mkdir(parents=True, exist_ok=True)
+                (pkg_dir / "job.txt").write_text(
+                    f"{job.title} @ {job.company}\n{job.url}\n\n{job.description[:4000]}")
+            else:
+                pkg_dir = build_application_package(job, verdict["emphasis"], cfg, llm)
             state.record(job.url, "tailored", job.company, job.title, job.source,
                          verdict["fit_score"])
             print(f"   package: {pkg_dir}")
@@ -78,7 +101,12 @@ def run_once(dry_run_override: bool | None = None) -> None:
                 print("   dry-run: skipping submission")
                 continue
 
-            result = apply_to_job(job, pkg_dir, cfg, llm)
+            if job.source == "naukri":
+                result = naukri.apply_to_job(job, pkg_dir, cfg, llm)
+            elif job.source == "linkedin":
+                result = linkedin.apply_to_job(job, pkg_dir, cfg, llm)
+            else:
+                result = apply_to_job(job, pkg_dir, cfg, llm)
             state.record(job.url, result.status, job.company, job.title, job.source,
                          verdict["fit_score"], result.detail)
             print(f"   {result.status.upper()}: {result.detail}")
