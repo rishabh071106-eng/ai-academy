@@ -1,0 +1,225 @@
+<section class="page chapter" id="ch09" data-toc-num="9" data-toc-part="p3" data-id-anchor="ch09" data-toc-title="Neural Networks: A Brain of Tiny Switches">
+
+  <div class="chapter-opener">
+    <div class="kicker grape">Class Nine</div>
+    <h1 class="chapter-title">Neural Networks</h1>
+    <p class="chapter-tagline">How to build a brain out of thousands of tiny, simple switches — none of them clever, all of them working together.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="The class lined up in rows, passing signals forward like a neural network, with Professor Hoot watching">
+        <ellipse cx="180" cy="208" rx="160" ry="9" fill="#000" opacity=".06"/>
+        <!-- connecting signal lines -->
+        <g stroke="#cdbf9c" stroke-width="3">
+          <line x1="70" y1="70" x2="170" y2="60"/><line x1="70" y1="70" x2="170" y2="130"/>
+          <line x1="70" y1="150" x2="170" y2="60"/><line x1="70" y1="150" x2="170" y2="130"/>
+          <line x1="170" y1="60" x2="280" y2="100"/><line x1="170" y1="130" x2="280" y2="100"/>
+        </g>
+        <!-- input row animals -->
+        <circle cx="70" cy="70" r="22" fill="#9fc1e0"/><circle cx="64" cy="66" r="3.5" fill="#2A2622"/><circle cx="78" cy="66" r="3.5" fill="#2A2622"/><path d="M62 78 q8 6 16 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="70" cy="150" r="22" fill="#a9764a"/><circle cx="64" cy="146" r="3.5" fill="#2A2622"/><circle cx="78" cy="146" r="3.5" fill="#2A2622"/><path d="M62 158 q8 6 16 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- hidden row animals -->
+        <circle cx="170" cy="60" r="22" fill="#cdc7c1"/><circle cx="164" cy="56" r="3.5" fill="#2A2622"/><circle cx="178" cy="56" r="3.5" fill="#2A2622"/><path d="M162 68 q8 6 16 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="170" cy="130" r="22" fill="#E76FA1"/><circle cx="164" cy="126" r="3.5" fill="#2A2622"/><circle cx="178" cy="126" r="3.5" fill="#2A2622"/><path d="M162 138 q8 6 16 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- output animal, "firing" -->
+        <circle cx="288" cy="100" r="26" fill="#F2B705"/><circle cx="281" cy="95" r="4" fill="#2A2622"/><circle cx="297" cy="95" r="4" fill="#2A2622"/><path d="M280 108 q9 8 18 0" stroke="#2A2622" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="288" y="58" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="16" fill="#E5533C">CAT!</text>
+        <!-- Professor Hoot in corner -->
+        <g transform="translate(326,168)"><circle cx="0" cy="0" r="16" fill="#9b6a3c"/><circle cx="-5" cy="-3" r="5" fill="#fff"/><circle cx="6" cy="-3" r="5" fill="#fff"/><circle cx="-5" cy="-3" r="2.5" fill="#2A2622"/><circle cx="6" cy="-3" r="2.5" fill="#2A2622"/><path d="M0 2 l4 5 -8 0z" fill="#F2B705"/></g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Professor Hoot pushed all the desks against the wall and clapped his wings.
+    “Today,” he announced, “we are not going to <em>read</em> about a brain. We are
+    going to <em>become</em> one. Everybody up. Line up in rows.”</p>
+
+    <p>The class shuffled into three neat rows facing the chalkboard. Bolt was in the
+    front. Pip and Mango were in the middle. Coco stood alone at the very back.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Each of you is now a tiny part of a brain.
+    We call one of these tiny parts a <strong>neuron</strong>. And here is the most
+    important rule of the whole day: your job is <em>incredibly dumb</em>.”</p>
+
+    <p class="says"><b>Mango:</b> “Dumb? I came here to get <em>smarter</em>!”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Patience. Here is your one and only job.
+    Listen to the numbers that get shouted at you. Add them up. If the total is big
+    enough to be exciting — <strong>shout</strong> to the row behind you. If it's too
+    small, stay quiet. That's it. That's everything you do.”</p>
+
+    <p>Bolt frowned. “That doesn't sound like thinking at all.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “One of you, alone, can barely do anything.
+    But watch what <em>rows</em> of you can do together.”</p>
+
+    <p>The Professor wrote a secret drawing on a card — a scribbly creature with
+    whiskers and pointy ears. Then he fed numbers about the drawing to the front row:
+    <em>“Pointy ears: a 9! Whiskers: an 8! A long flat beak: a 0!”</em></p>
+
+    <p>Bolt heard “pointy ears: 9” and a couple of other numbers. He added them up.
+    The total felt exciting. So Bolt shouted a big number to the middle row. Next to
+    him, an animal who only heard small, boring numbers stayed perfectly quiet.</p>
+
+    <p>The middle row didn't see the drawing at all. They only heard how loudly the
+    front row was shouting. Pip listened — lots of front-row animals were yelling
+    “ears!” and “whiskers!” at once. <em>That</em> felt exciting. So Pip shouted to
+    the back.</p>
+
+    <p>Finally Coco, all alone at the back, added up everything she heard from the
+    middle row. The total was huge. She took a breath and yelled the answer the whole
+    network had been building toward:</p>
+
+    <p class="says"><b>Coco:</b> “It's a CAT!”</p>
+
+    <p>The Professor flipped the card around. It was a cat. The room erupted.</p>
+
+    <h2>Nobody in the room knew it was a cat</h2>
+
+    <p>Here's the spooky part, and the Professor made sure everyone caught it. Bolt
+    never knew it was a cat — he only knew “pointy ears: 9.” Pip never knew either —
+    she only knew “the front row is yelling a lot.” Not one single animal understood
+    the whole picture.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “And yet <em>together</em> you recognized a
+    cat. Each of you did one tiny multiply-add-and-shout. Stacked into rows, those
+    dumb little steps added up to something genuinely clever. That, class, is a
+    <strong>neural network</strong> — a brain built out of math.”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>A real <strong>neuron</strong> takes in several numbers — its <em>inputs</em>.
+    But it doesn't treat them all the same. Each input is multiplied by a
+    <strong>weight</strong>, a number that says <em>how much this input matters</em>.
+    A big weight means “pay close attention to this one.” A weight near zero means
+    “ignore it.” The neuron multiplies every input by its weight, then adds all those
+    products into one total.</p>
+    <p>Then comes the decision. The total is passed through a tiny step called an
+    <strong>activation</strong>, which decides how strongly the neuron should
+    “fire.” A common one is simple: if the total is above a threshold, fire; if not,
+    stay quiet — exactly like the animals shouting or staying silent.</p>
+    <p>One neuron is almost useless. The power comes from stacking them into
+    <strong>layers</strong>. The <em>input layer</em> takes the raw facts (the pixels
+    of a drawing). One or more <em>hidden layers</em> in the middle combine those
+    facts into bigger ideas (“this looks like an ear,” “this looks like a whisker”).
+    The <em>output layer</em> gives the final answer (“cat” or “not cat”). Signals
+    flow <strong>forward</strong>, row by row, from input to output.</p>
+    <p>So where is the network's “knowledge”? It lives entirely in the
+    <strong>weights</strong> — those millions of little numbers. Learning means
+    <em>adjusting the weights</em> until the answers come out right. (How a network
+    tunes its own weights is the whole story of the next class.) And
+    <strong>deep learning</strong>? That fancy phrase just means a network with
+    <em>many</em> hidden layers stacked deep.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A feed-forward neural network with three input nodes, a hidden layer, and one output node, connected by weight lines">
+      <!-- weight lines: input -> hidden -->
+      <g stroke="#cdbf9c" stroke-width="2.5">
+        <line x1="70" y1="60" x2="200" y2="70"/><line x1="70" y1="60" x2="200" y2="130"/><line x1="70" y1="60" x2="200" y2="190"/>
+        <line x1="70" y1="130" x2="200" y2="70"/><line x1="70" y1="130" x2="200" y2="130"/><line x1="70" y1="130" x2="200" y2="190"/>
+        <line x1="70" y1="200" x2="200" y2="70"/><line x1="70" y1="200" x2="200" y2="130"/><line x1="70" y1="200" x2="200" y2="190"/>
+      </g>
+      <!-- weight lines: hidden -> output -->
+      <g stroke="#7C5CBF" stroke-width="2.5">
+        <line x1="200" y1="70" x2="340" y2="130"/><line x1="200" y1="130" x2="340" y2="130"/><line x1="200" y1="190" x2="340" y2="130"/>
+      </g>
+      <!-- input layer -->
+      <circle cx="70" cy="60" r="18" fill="#2E7FC2"/><circle cx="70" cy="130" r="18" fill="#2E7FC2"/><circle cx="70" cy="200" r="18" fill="#2E7FC2"/>
+      <!-- hidden layer -->
+      <circle cx="200" cy="70" r="18" fill="#3FA34D"/><circle cx="200" cy="130" r="18" fill="#3FA34D"/><circle cx="200" cy="190" r="18" fill="#3FA34D"/>
+      <!-- output -->
+      <circle cx="340" cy="130" r="22" fill="#F2B705"/>
+      <text x="340" y="135" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2A2622">cat?</text>
+      <!-- layer labels -->
+      <text x="70" y="240" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2E7FC2">input layer</text>
+      <text x="200" y="240" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#3FA34D">hidden layer</text>
+      <text x="340" y="172" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#B8870B">output</text>
+      <!-- annotation on one neuron -->
+      <text x="262" y="40" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="11.5" fill="#2A2622">inputs × weights → add → fire?</text>
+      <line x1="218" y1="62" x2="248" y2="44" stroke="#E5533C" stroke-width="1.5"/>
+    </svg>
+    <figcaption>Signals flow left to right. Every line is a weight — and all the network's knowledge lives in those numbers.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Mango raised a hand. “So if I want the network to recognize a <em>dog</em>
+    instead of a cat… I just change the numbers on the lines?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Exactly right. Same animals, same rows, same
+    dumb little jobs. You only change the <strong>weights</strong> — which signals get
+    shouted loudly and which get hushed. Get the weights right and the very same
+    network can spot a dog, read your handwriting, or steer a car.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Be a Human Network</div>
+    <p>You need a handful of friends and a little open space. Line them up in two or
+    three <strong>rows</strong>, all facing the same way.</p>
+    <ol>
+      <li>Give each person in the <strong>front row</strong> a secret number on a card.
+      Tell them the rule: <em>“If your number is bigger than 5, raise your hand.”</em>
+      That's their activation.</li>
+      <li>Each person in the <strong>next row</strong> can't see the cards — they can
+      only <em>count the raised hands</em> in front of them. Their rule:
+      <em>“If you can count 2 or more raised hands, you raise yours too.”</em></li>
+      <li>Add one more row with the rule <em>“Raise your hand if anyone in front of
+      you did.”</em> The <strong>last person</strong> raising a hand is the network's
+      final decision.</li>
+    </ol>
+    <p>Now change one front-row card and run it again. Watch a single tiny change
+    <strong>ripple</strong> forward through the rows to flip the final answer. You just
+    ran a feed-forward neural network made of people.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>A neural network is <em>not</em> a real brain, and it is <strong>not
+    conscious</strong>. It doesn't feel, want, or understand anything. Under all the
+    excitement it is just a big stack of the same dull step over and over:
+    multiply, add, and decide whether to fire. When Coco shouted “CAT!” she had no
+    idea what a cat is — she only had a very large number.</p>
+    <p>And don't be fooled by any single neuron. One on its own can barely tell big
+    numbers from small ones. <strong>All</strong> the cleverness comes from <em>many</em>
+    of them, wired together in layers.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Neuron</dt>
+      <dd>One tiny unit in the network. It takes several numbers in, multiplies each
+      by a weight, adds them up, and decides how strongly to fire.</dd>
+      <dt>Weight</dt>
+      <dd>A number on each connection that says how much an input matters. All of the
+      network's knowledge is stored in its weights.</dd>
+      <dt>Layer</dt>
+      <dd>A row of neurons. Networks stack an input layer, one or more hidden layers,
+      and an output layer; signals flow forward through them.</dd>
+      <dt>Activation</dt>
+      <dd>The little step that decides how strongly a neuron fires once its inputs are
+      added up — like “shout if the total is exciting enough.”</dd>
+      <dt>Deep learning</dt>
+      <dd>Simply a neural network with many hidden layers stacked deep. More layers
+      let it learn more complicated patterns.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>Thousands of tiny, dumb switches — each just adding numbers and deciding whether
+    to fire — can together do something genuinely smart.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A <strong>neuron</strong> does one simple job: weigh its inputs, add them up, and decide whether to fire.</li>
+      <li>Neurons are stacked in <strong>layers</strong>, and signals flow forward from input to output.</li>
+      <li>All the network's knowledge lives in its <strong>weights</strong> — the numbers on the connections.</li>
+      <li>It's not a real brain and not conscious — just a huge pile of multiply-add-and-decide steps working together.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: a fresh network's weights are pure guesswork. So how does it get good? It practices — millions of times. <em>How a Network Learns: Practice Makes Better.</em> →</p>
+  </div>
+
+</section>

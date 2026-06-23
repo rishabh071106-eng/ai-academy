@@ -1,0 +1,218 @@
+<section class="page chapter" id="ch12" data-toc-num="12" data-toc-part="p3" data-id-anchor="ch12" data-toc-title="Memory & Sequences: Remembering What Came Before">
+
+  <div class="chapter-opener">
+    <div class="kicker sky">Class Twelve</div>
+    <h1 class="chapter-title">Memory &amp; Sequences</h1>
+    <p class="chapter-tagline">Remembering what came before — how an AI predicts what comes next when the <em>order</em> matters.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Coco the parrot singing a tune while Professor Hoot plays notes that stop on a question mark">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- a staff line of notes leading to a question -->
+        <line x1="40" y1="120" x2="300" y2="120" stroke="#cdbf9c" stroke-width="3"/>
+        <!-- notes in order -->
+        <circle cx="70" cy="120" r="10" fill="#3FA34D"/><line x1="80" y1="120" x2="80" y2="90" stroke="#3FA34D" stroke-width="3"/>
+        <circle cx="120" cy="108" r="10" fill="#2E7FC2"/><line x1="130" y1="108" x2="130" y2="78" stroke="#2E7FC2" stroke-width="3"/>
+        <circle cx="170" cy="120" r="10" fill="#F2B705"/><line x1="180" y1="120" x2="180" y2="90" stroke="#F2B705" stroke-width="3"/>
+        <circle cx="220" cy="100" r="10" fill="#E76FA1"/><line x1="230" y1="100" x2="230" y2="70" stroke="#E76FA1" stroke-width="3"/>
+        <!-- the missing next note -->
+        <circle cx="280" cy="112" r="14" fill="#fff" stroke="#7C5CBF" stroke-width="3"/>
+        <text x="280" y="118" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="16" fill="#7C5CBF">?</text>
+        <!-- Coco the parrot -->
+        <path d="M312 150 C296 150 292 174 295 192 C298 208 312 210 314 210 C316 210 330 208 333 192 C336 174 332 150 316 150Z" fill="#E5533C"/>
+        <path d="M314 162 C305 162 302 178 305 190 C308 200 314 202 314 202 C314 202 320 200 323 190 C326 178 323 162 314 162Z" fill="#F2B705"/>
+        <circle cx="309" cy="170" r="6" fill="#fff"/><circle cx="319" cy="170" r="6" fill="#fff"/>
+        <circle cx="309" cy="171" r="3" fill="#2A2622"/><circle cx="319" cy="171" r="3" fill="#2A2622"/>
+        <path d="M310 178 q4 5 8 0 q0 6 -4 6 q-4 0 -4 -6Z" fill="#2A2622"/>
+        <text x="40" y="50" font-family="Fredoka, sans-serif" font-size="20">🎵</text>
+        <text x="150" y="42" font-family="Fredoka, sans-serif" font-size="16">🎶</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Coco the parrot could not sit still when there was music in the room. The moment
+    Professor Hoot tapped out a tune on the old classroom piano, her head began to bob
+    and her feathers fluffed up with joy. Coco <em>loved</em> songs — and, more than
+    that, she remembered them. Hum half a melody anywhere in the forest and Coco would
+    finish it for you.</p>
+
+    <p>So Professor Hoot decided to set her a little test. He played four soft notes —
+    <em>low, high, low, higher</em> — and then, right in the middle of the fifth, he
+    stopped. His wing froze above the keys.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Coco. What's the next note?”</p>
+
+    <p>Coco didn't even hesitate. She sang it — a bright, rising note — and it was
+    exactly right. Tess the tortoise blinked, slowly, the way Tess does.</p>
+
+    <p class="says"><b>Tess:</b> “How did you <em>know</em>? He never played that note.”</p>
+
+    <p class="says"><b>Coco:</b> “I didn't know it. I <em>guessed</em> it — from the notes
+    that came <strong>before</strong>. The song was climbing. So the next note climbs too.”</p>
+
+    <p>Professor Hoot ruffled with delight. He pressed the same five keys again, but this
+    time in a jumbled order. It sounded like a sneeze. Nobody's head bobbed.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Same notes, Coco. Why isn't it the same song?”</p>
+
+    <p class="says"><b>Coco:</b> “Because the <strong>order</strong> changed! A song isn't
+    just a bag of notes. It's notes <em>in a line</em>. Mix up the line and you've got a
+    different song — or no song at all.”</p>
+
+    <h2>The world is full of lines</h2>
+
+    <p>Here is the big secret Coco understood in her feathery little heart: lots of things
+    in the world come as <strong>sequences</strong> — ordered lines where the position of
+    each item matters. A song is a sequence of notes. A sentence is a sequence of words.
+    The weather is a sequence of days. Your morning is a sequence of steps (socks usually
+    go on <em>before</em> shoes).</p>
+
+    <p>And to guess what comes <em>next</em> in any of these, you have to remember what came
+    <em>before</em>. You need <strong>memory</strong>. Coco's gift for holding a sequence
+    in her head is the very same trick that taught machines to finish our sentences and
+    write little tunes of their own.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>A <strong>sequence</strong> is an ordered list where the <em>position</em> of each
+    item matters: <code>cat</code> and <code>act</code> use the same letters, but they are
+    not the same word. To predict the next item, a machine reads the sequence
+    <strong>one item at a time</strong>, left to right.</p>
+    <p>The clever part is that, as it reads, it keeps a little pocket of
+    <strong>memory</strong> — engineers call it the <em>state</em>. The state is a short
+    summary of everything the machine has seen so far. At each step it does two things at
+    once: it uses <em>state + the new item</em> to <strong>predict</strong> the next item,
+    and it <strong>updates</strong> its state to fold the new item in. Then it loops. Read,
+    remember, predict. Read, remember, predict.</p>
+    <p>Because it loops back on itself this way, this kind of model is called a
+    <strong>Recurrent Neural Network</strong>, or RNN. (Remember the
+    <em>neural network</em> from an earlier class? An RNN is one of those, wired so a piece
+    of its output feeds back in as memory.) For years, RNNs were how computers handled
+    language and music — reading a sentence word by word and guessing the next word, just
+    like Coco guessing the next note.</p>
+    <p>But the memory is small, and it <strong>fades</strong>. Each new item nudges the old
+    summary aside, so something from <em>way</em> back at the start of a long sequence can
+    slip away before the machine reaches the end. Fixing that fading memory is exactly what
+    the next big idea — <em>attention</em> — was invented to do.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A chain of memory boxes, each reading one word and passing a memory arrow to the next, ending in a prediction">
+      <!-- memory arrows between boxes -->
+      <g stroke="#7C5CBF" stroke-width="3" fill="none">
+        <line x1="98" y1="80" x2="128" y2="80"/>
+        <line x1="216" y1="80" x2="246" y2="80"/>
+        <line x1="334" y1="80" x2="364" y2="80"/>
+      </g>
+      <g fill="#7C5CBF">
+        <polygon points="128,80 120,75 120,85"/>
+        <polygon points="246,80 238,75 238,85"/>
+        <polygon points="364,80 356,75 356,85"/>
+      </g>
+      <text x="62" y="58" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#7C5CBF">memory</text>
+      <text x="180" y="58" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#7C5CBF">memory</text>
+      <text x="298" y="58" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#7C5CBF">memory</text>
+
+      <!-- three reading boxes -->
+      <rect x="34" y="64" width="64" height="48" rx="12" fill="#2E7FC2"/>
+      <rect x="152" y="64" width="64" height="48" rx="12" fill="#2E7FC2"/>
+      <rect x="270" y="64" width="64" height="48" rx="12" fill="#2E7FC2"/>
+      <text x="66" y="94" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">read</text>
+      <text x="184" y="94" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">read</text>
+      <text x="302" y="94" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">read</text>
+
+      <!-- words fed in from below -->
+      <g stroke="#cdbf9c" stroke-width="3">
+        <line x1="66" y1="150" x2="66" y2="112"/>
+        <line x1="184" y1="150" x2="184" y2="112"/>
+        <line x1="302" y1="150" x2="302" y2="112"/>
+      </g>
+      <rect x="38" y="150" width="56" height="30" rx="8" fill="#F2B705"/>
+      <rect x="156" y="150" width="56" height="30" rx="8" fill="#F2B705"/>
+      <rect x="274" y="150" width="56" height="30" rx="8" fill="#F2B705"/>
+      <text x="66" y="170" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Once</text>
+      <text x="184" y="170" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">upon</text>
+      <text x="302" y="170" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">a</text>
+
+      <!-- final prediction -->
+      <rect x="364" y="58" width="56" height="60" rx="14" fill="#3FA34D"/>
+      <text x="392" y="82" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#fff">predict</text>
+      <text x="392" y="100" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">“time”</text>
+
+      <text x="210" y="220" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Each box reads a word, passes its memory along, and the last box guesses what's next.</text>
+    </svg>
+    <figcaption>The memory arrow (purple) carries a summary of every word so far. That's how the machine knows “Once upon a …” should be followed by “time.”</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Notice what the chain is doing. The first box reads <em>Once</em> and remembers it.
+    The second box reads <em>upon</em> but also gets the memory of <em>Once</em>. The third
+    reads <em>a</em> with the memory of <em>Once upon</em> tucked inside. By the time we
+    reach the end, the machine isn't staring at a single lonely word — it's holding the
+    whole little story so far. That's why it can confidently sing out “time.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: The Story Chain</div>
+    <p>This is a memory game you can play with one friend or a whole table of them.</p>
+    <ol>
+      <li>Start a sentence with two or three words, out loud: <em>“Once upon a …”</em>
+      The next player must add <strong>exactly one</strong> word that fits.</li>
+      <li>Keep going around. Each new player has to remember the <em>whole</em> sentence in
+      order before adding their word. No writing it down!</li>
+      <li>When someone forgets the order, or adds a word that doesn't fit what came before,
+      the chain breaks and the round ends.</li>
+    </ol>
+    <p>Try a number version too: <strong>2, 4, 6, 8, ?</strong> — what comes next? Or
+    <strong>red, orange, yellow, ?</strong> To answer, you used your <em>memory</em> of the
+    earlier items to spot the pattern. You just <em>were</em> a sequence model. And notice
+    how much harder it gets to remember the start once the sentence runs very long…</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Small memory <strong>forgets the beginning</strong>. Read this: “The
+    <strong>parrot</strong> who lived in the tall green tree by the river that the
+    woodpeckers loved … <em>sang</em>.” By the end you may have lost track of who was doing
+    the singing! Simple RNNs have the same trouble: with only a little state, each new word
+    crowds out the older ones, so facts from long ago fade before they're needed. This real
+    weakness is exactly why smarter methods came next.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Sequence</dt>
+      <dd>An ordered list of items where the <em>position</em> matters — a song, a sentence,
+      a row of days. Shuffle the order and you change the meaning.</dd>
+      <dt>Memory (state)</dt>
+      <dd>A little pocket of information a model keeps as it reads, summarizing everything
+      it has seen so far so it can use the past to guess the future.</dd>
+      <dt>Recurrent Neural Network (RNN)</dt>
+      <dd>A neural network that reads a sequence one item at a time and feeds part of its
+      output back in as memory — looping so the past flows forward.</dd>
+      <dt>Prediction</dt>
+      <dd>The model's best guess at the next item in the sequence, made from its memory plus
+      the item it just read.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>To guess what comes <em>next</em>, a machine has to remember what came
+    <em>before</em> — and keep that memory in order.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A <strong>sequence</strong> is an ordered line of items, and the order changes the meaning.</li>
+      <li>A sequence model reads one item at a time, keeping a small <strong>memory</strong> of what it has seen.</li>
+      <li>It uses that memory to <strong>predict</strong> the next item — these loop-back models are called <strong>RNNs</strong>.</li>
+      <li>Their memory <strong>fades</strong>, so long-ago things get forgotten — a problem waiting to be fixed.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Welcome to Part Four. Next class: when a machine remembers <em>everything</em> you said, it can finally talk back — <strong>Language Models: How AI Learned to Talk</strong>. →</p>
+  </div>
+
+</section>

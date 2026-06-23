@@ -1,0 +1,172 @@
+<section class="page chapter" id="ch13" data-toc-num="13" data-toc-part="p4" data-id-anchor="ch13" data-toc-title="Language Models: How AI Learned to Talk">
+
+  <div class="chapter-opener">
+    <div class="kicker grape">Class Thirteen</div>
+    <h1 class="chapter-title">Language Models</h1>
+    <p class="chapter-tagline">How a chatbot writes a sentence — by playing the world's biggest guess-the-next-word game.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Coco the parrot finishing a sentence by guessing the next word from a list of choices">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- speech start -->
+        <rect x="26" y="84" width="150" height="44" rx="14" fill="#fff" stroke="#cdbf9c" stroke-width="2"/>
+        <text x="40" y="112" font-family="Fredoka, sans-serif" font-size="15" fill="#2A2622">The cat sat on the</text>
+        <rect x="150" y="98" width="20" height="18" rx="4" fill="#F2B705"/>
+        <!-- arrow -->
+        <path d="M180 106 h26" stroke="#7C5CBF" stroke-width="4" stroke-linecap="round"/>
+        <path d="M204 100 l8 6 -8 6z" fill="#7C5CBF"/>
+        <!-- candidate words with bars -->
+        <g font-family="Fredoka, sans-serif" font-size="12" fill="#2A2622">
+          <rect x="218" y="64" width="96" height="22" rx="7" fill="#E7F4E9" stroke="#3FA34D" stroke-width="2"/><text x="226" y="79">mat 70%</text>
+          <rect x="218" y="92" width="64" height="22" rx="7" fill="#EAF1F8" stroke="#2E7FC2" stroke-width="2"/><text x="226" y="107">rug 20%</text>
+          <rect x="218" y="120" width="48" height="22" rx="7" fill="#FCF3D6" stroke="#B8870B" stroke-width="2"/><text x="226" y="135">moon 2%</text>
+        </g>
+        <!-- Coco the parrot -->
+        <g transform="translate(118,128)">
+          <path d="M30 6 C12 6 8 30 11 50 C14 66 28 70 30 70 C32 70 46 66 49 50 C52 30 48 6 30 6Z" fill="#E5533C"/>
+          <path d="M30 20 C20 20 17 36 20 50 C23 62 30 64 30 64 C30 64 37 62 40 50 C43 36 40 20 30 20Z" fill="#F2B705"/>
+          <circle cx="23" cy="30" r="8" fill="#fff"/><circle cx="37" cy="30" r="8" fill="#fff"/>
+          <circle cx="24" cy="31" r="4" fill="#2A2622"/><circle cx="36" cy="31" r="4" fill="#2A2622"/>
+          <path d="M25 40 q5 7 10 0 q0 8 -5 8 q-5 0 -5 -8Z" fill="#2A2622"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Coco the parrot had picked up a brand-new habit, and it was driving everyone slightly bananas. She had started <strong>finishing other people's sentences</strong>.</p>
+
+    <p class="says"><b>Mango:</b> “Hey Coco, can you pass me the —”</p>
+    <p class="says"><b>Coco:</b> “— BANANA! Pass me the banana!”</p>
+    <p class="says"><b>Pip:</b> “Once upon a —”</p>
+    <p class="says"><b>Coco:</b> “— TIME! Once upon a time!”</p>
+
+    <p>Every time, she guessed the next word before the speaker even got there. And the strange thing was — she was usually <em>right</em>.</p>
+
+    <p class="says"><b>Mango:</b> “Professor, how does she <em>do</em> that? Is she reading our minds?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “No mind-reading at all. Coco has heard so many sentences in her life that she's learned which words tend to come next. After ‘Once upon a…’, the word ‘time’ is almost always next. She isn't remembering one exact story — she's noticed a <strong>pattern</strong> across thousands of them.”</p>
+
+    <p>Mango's eyes went wide. He had used a chatbot at home — typed a question into a glowing box and watched it write back a whole, sensible answer. “Wait,” he said slowly. “Is that how the <em>chatbots</em> work too?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “That, Mango, is exactly the secret. A chatbot is a giant, supercharged Coco. We call it a <strong>language model</strong>.”</p>
+
+    <h2>The world's biggest guess-the-next-word game</h2>
+
+    <p>Here is the trick that powers every chatbot you have ever used. A language model is trained on a <strong>colossal</strong> amount of text — books, websites, conversations, more words than you could read in a thousand lifetimes. From all that reading it learns just one skill, practiced billions of times: <strong>given the words so far, guess the word that comes next.</strong></p>
+
+    <p>That sounds too simple to write a poem or answer a question. But watch what happens when you do it over and over. You guess one word. You add it to the sentence. Then you look at the new, slightly longer sentence and guess the <em>next</em> word. Then the next. String enough guesses together and out comes a full sentence — then a paragraph, then a whole story.</p>
+
+    <p class="says"><b>Coco:</b> “So I'm not copying a story. I'm <em>building</em> one, one word at a time!”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Precisely. And the very best part — it isn't looking up the answer in some hidden book. There is no book. It is <em>predicting</em> likely words, and likely words, strung together, sound an awful lot like knowing.”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>First, the text gets chopped into small pieces called <strong>tokens</strong>. A token is roughly a word or a chunk of a word — “banana” might be one token, while “unbelievable” could be split into “un”, “believ”, and “able”. The model only ever thinks in tokens.</p>
+    <p>During training, the model reads mountains of text and plays a guessing drill: it sees some tokens, tries to predict the next one, checks the real answer, and nudges itself to do better. Repeat that billions of times and it learns <strong>probabilities</strong> — given everything that came before, <em>which token is likely to come next?</em> After “The sky is”, the token “blue” gets a high probability; “spaghetti” gets a tiny one.</p>
+    <p>To write, it works <strong>one token at a time</strong>: predict a token, stick it on the end, then feed the longer text back in and predict again. This loop is called <strong>autoregression</strong> — each new word depends on all the words before it (building on the sequences and memory from Class 12). The text <em>you</em> type to start it off is called the <strong>prompt</strong>.</p>
+    <p>One honest truth: its “knowledge” is just <strong>patterns soaked up from its training text</strong>, not facts looked up in a database. To keep track of which earlier words matter most, it uses a clever trick called <em>attention</em> — and that is the star of the very next class.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A sentence with a blank, and four candidate next words each with a probability bar, the top one being chosen">
+      <!-- the sentence -->
+      <rect x="20" y="24" width="380" height="40" rx="12" fill="#fff" stroke="#cdbf9c" stroke-width="2"/>
+      <text x="36" y="50" font-family="Fredoka, sans-serif" font-size="17" fill="#2A2622">The cat sat on the</text>
+      <rect x="248" y="34" width="40" height="22" rx="6" fill="#F2B705"/>
+      <text x="268" y="50" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#2A2622">?</text>
+      <text x="300" y="50" font-family="Fredoka, sans-serif" font-size="13" fill="#7C5CBF">next token?</text>
+
+      <!-- candidate bars -->
+      <g font-family="Fredoka, sans-serif" font-size="14">
+        <!-- mat 70% -->
+        <text x="40" y="106" fill="#2A2622">mat</text>
+        <rect x="92" y="92" width="252" height="20" rx="6" fill="#E7F4E9"/>
+        <rect x="92" y="92" width="231" height="20" rx="6" fill="#3FA34D"/>
+        <text x="352" y="107" fill="#3FA34D">70%</text>
+        <!-- chosen marker -->
+        <path d="M334 88 l8 14 -16 0z" fill="#3FA34D" transform="translate(-10,-22)"/>
+        <text x="356" y="84" font-size="12" fill="#3FA34D">← picked</text>
+
+        <!-- rug 20% -->
+        <text x="40" y="142" fill="#2A2622">rug</text>
+        <rect x="92" y="128" width="252" height="20" rx="6" fill="#EAF1F8"/>
+        <rect x="92" y="128" width="66" height="20" rx="6" fill="#2E7FC2"/>
+        <text x="352" y="143" fill="#2E7FC2">20%</text>
+
+        <!-- sofa 8% -->
+        <text x="40" y="178" fill="#2A2622">sofa</text>
+        <rect x="92" y="164" width="252" height="20" rx="6" fill="#FCF3D6"/>
+        <rect x="92" y="164" width="27" height="20" rx="6" fill="#F2B705"/>
+        <text x="352" y="179" fill="#B8870B">8%</text>
+
+        <!-- moon 2% -->
+        <text x="40" y="214" fill="#2A2622">moon</text>
+        <rect x="92" y="200" width="252" height="20" rx="6" fill="#FBE6E1"/>
+        <rect x="92" y="200" width="8" height="20" rx="4" fill="#E5533C"/>
+        <text x="352" y="215" fill="#E5533C">2%</text>
+      </g>
+
+      <text x="210" y="246" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">The model adds “mat,” then guesses again from “The cat sat on the mat…”</text>
+    </svg>
+    <figcaption>Every word is a vote. The model scores all the words it knows, then usually picks the most likely one — and repeats.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>“There's one more delicious detail,” said Professor Hoot. “The model doesn't <em>have</em> to grab the top word every single time. If it always did, it would be a bit boring and repeat itself. So it sometimes picks one of the other likely words — which is why a chatbot can tell you a <em>different</em> story every time you ask. A pinch of surprise makes it feel creative.”</p>
+
+    <p class="says"><b>Mango:</b> “So when it writes me a story about a dragon, it's just… guessing dragon-ish words in a dragon-ish order?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Word by word by word. Magic? Maybe. But now you know the trick behind the curtain.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Be a Language Model</div>
+    <p>You can play the next-word game with your own brain — no computer needed.</p>
+    <ol>
+      <li><strong>Phone-keyboard version (with a trusted adult):</strong> open a texting app and type a starter word, like “I.” Now <em>only</em> ever tap the middle suggested word above the keyboard, again and again. Watch a wobbly, silly sentence build itself. That keyboard is a tiny language model!</li>
+      <li><strong>Group version:</strong> sit in a circle. The first person says a starter word (“Yesterday”). Each person in turn adds the single <em>most predictable</em> next word — the most ordinary, boring, expected word they can think of. Go around until someone ends the sentence.</li>
+      <li>Now play it again, but let each person add a slightly <em>surprising</em> word instead. Compare the two sentences. One sounds plain; the other gets wonderfully weird. That's the “pinch of surprise” dial inside a chatbot!</li>
+    </ol>
+    <p>You just felt how prediction, one word at a time, turns into language.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Because a language model picks words that <em>sound</em> likely, it can sometimes write something completely wrong with total confidence — a fake fact, a made-up book, a wrong date — all in a calm, sure voice. People call this a <strong>hallucination</strong>. The model isn't lying; it simply doesn't truly <em>know</em> whether its words are true. It only knows they sound right. So always double-check anything important — a name, a number, a fact for homework — with a trustworthy source. (We'll dig into staying safe in the chapters on bias and safety.)</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Language model</dt>
+      <dd>An AI trained on huge amounts of text that writes by predicting the next word over and over. The big ones are called <em>large language models</em>, or LLMs — the engines inside chatbots.</dd>
+      <dt>Token</dt>
+      <dd>A small piece of text — roughly a word or part of a word. A model reads and writes in tokens, not letters.</dd>
+      <dt>Prompt</dt>
+      <dd>The text you give a model to start it off. A good prompt sets up a good answer.</dd>
+      <dt>Probability</dt>
+      <dd>How likely something is. The model gives every possible next token a probability and usually picks a likely one.</dd>
+      <dt>Hallucination</dt>
+      <dd>When a model states something false but sounds confident, because it predicted likely-sounding words instead of checking a fact.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>A chatbot doesn't look up answers — it writes them one word at a time, always guessing what's likely to come next.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A <strong>language model</strong> learns from mountains of text to <strong>predict the next token</strong>.</li>
+      <li>It writes by guessing a word, adding it, and guessing again — that loop is <strong>autoregression</strong>.</li>
+      <li>Its “knowledge” is <strong>patterns from training text</strong>, not facts in a database — so it can <strong>hallucinate</strong>.</li>
+      <li>The text you give it to start is the <strong>prompt</strong>, and a little randomness lets it be creative.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: with so many words to juggle, how does a model know which ones matter most? It learns to pay <em>attention</em>. →</p>
+  </div>
+
+</section>

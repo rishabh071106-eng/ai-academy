@@ -1,0 +1,194 @@
+<section class="page chapter" id="ch04"
+         data-toc-num="4" data-toc-part="p2" data-id-anchor="ch04"
+         data-toc-title="Decision Trees: The Question Game">
+
+  <div class="chapter-opener">
+    <div class="kicker sky">Class Four</div>
+    <h1 class="chapter-title">Decision Trees</h1>
+    <p class="chapter-tagline">The Question Game — how a machine makes a decision by asking the smartest question first.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Ziggy the zebra sorting fruit by asking yes-or-no questions">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- a tree of questions -->
+        <g stroke="#b89b6a" stroke-width="6" stroke-linecap="round">
+          <line x1="180" y1="60" x2="100" y2="120"/><line x1="180" y1="60" x2="260" y2="120"/>
+          <line x1="100" y1="120" x2="60" y2="180"/><line x1="100" y1="120" x2="140" y2="180"/>
+          <line x1="260" y1="120" x2="300" y2="180"/>
+        </g>
+        <!-- root question node -->
+        <rect x="138" y="38" width="84" height="40" rx="12" fill="#F2B705"/>
+        <text x="180" y="63" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#2A2622">Is it red?</text>
+        <!-- leaves: fruits -->
+        <circle cx="60" cy="190" r="18" fill="#E5533C"/><text x="60" y="195" text-anchor="middle" font-size="16">🍎</text>
+        <circle cx="140" cy="190" r="18" fill="#F2B705"/><text x="140" y="195" text-anchor="middle" font-size="16">🍌</text>
+        <circle cx="300" cy="190" r="18" fill="#3FA34D"/><text x="300" y="195" text-anchor="middle" font-size="16">🍏</text>
+        <circle cx="100" cy="120" r="14" fill="#fff" stroke="#2E7FC2" stroke-width="3"/><text x="100" y="125" text-anchor="middle" font-size="12">?</text>
+        <circle cx="260" cy="120" r="14" fill="#fff" stroke="#2E7FC2" stroke-width="3"/><text x="260" y="125" text-anchor="middle" font-size="12">?</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Ziggy the zebra had a problem, and it was a fruity one. Professor Hoot had
+    dumped an enormous basket on the classroom floor — apples, bananas, green pears,
+    cherries, lemons, a single lonely blueberry — and asked the class to sort every
+    piece into the right crate. There were three crates: <em>red things</em>,
+    <em>yellow things</em>, and <em>green things</em>.</p>
+
+    <p>“Easy!” said Bolt the rabbit, and he began flinging fruit at top speed. A
+    banana sailed into the red crate. A cherry bounced into the green one. Within
+    thirty seconds he had made a magnificent, colorful mess.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Bolt, you sorted <em>fast</em>. But did you
+    sort <em>well</em>?”</p>
+
+    <p>Ziggy did something different. She didn't touch a single fruit yet. Instead,
+    she stood very still and thought about the <strong>best question to ask first</strong>.</p>
+
+    <p class="says"><b>Ziggy:</b> “If I ask, <em>‘Is it a cherry?’</em>, that only helps
+    with the cherries. But if I ask, <em>‘Is it red?’</em> — that splits the whole
+    basket almost in half in one go!”</p>
+
+    <p>And that was the secret. Ziggy held up each fruit and asked one yes-or-no
+    question at a time. <em>Is it red?</em> If yes, it went toward the red crate. If
+    no, she asked a second question: <em>Is it yellow?</em> Yes meant the yellow
+    crate; no meant green. Two small questions, and every single fruit landed in
+    exactly the right place.</p>
+
+    <p class="says"><b>Mango:</b> “You built a little <em>tree</em> of questions in your
+    head!”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “She certainly did. And that, class, is one
+    of the oldest and most useful tricks in all of artificial intelligence. It's
+    called a <strong>decision tree</strong>.”</p>
+
+    <h2>Why the first question matters most</h2>
+
+    <p>Here's the part Ziggy understood and Bolt didn't: not all questions are equally
+    good. A great question is one that <strong>splits a messy pile into neater
+    piles</strong>. “Is it red?” is a fantastic first question because it instantly
+    separates apples and cherries from everything else. “Is it a blueberry?” is a
+    terrible first question, because no matter the answer, you've barely sorted
+    anything — there was only one blueberry!</p>
+
+    <p>A decision tree always tries to ask the <em>most powerful question first</em>,
+    then the next most powerful, and so on, until every pile is tidy.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>A real decision tree learns from <strong>examples</strong>. Imagine you give a
+    computer a list of fruits, each one described by its <em>features</em> — color,
+    size, whether it's bumpy — along with the right answer (its name).</p>
+    <p>The computer tests every possible question and measures how much each one
+    <strong>tidies up the mess</strong>. Scientists have a name for the mess: they
+    call it <em>impurity</em>. A pile with apples <em>and</em> bananas <em>and</em>
+    pears all jumbled together has high impurity. A pile that's all apples has zero
+    impurity — it's perfectly pure.</p>
+    <p>The tree picks the question that <strong>reduces impurity the most</strong>,
+    splits the data on it, and then repeats the whole process on each new pile. It
+    keeps going until each pile is pure (or close enough). That's it — that's the
+    whole algorithm. No magic, just smart questions in a smart order.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A decision tree splitting fruit by two questions">
+      <!-- branches -->
+      <g stroke="#cdbf9c" stroke-width="3">
+        <line x1="210" y1="56" x2="110" y2="120"/><line x1="210" y1="56" x2="310" y2="120"/>
+        <line x1="310" y1="136" x2="250" y2="200"/><line x1="310" y1="136" x2="370" y2="200"/>
+      </g>
+      <!-- yes/no labels -->
+      <text x="150" y="98" font-family="Baloo 2, sans-serif" font-size="13" fill="#3FA34D">yes</text>
+      <text x="262" y="98" font-family="Baloo 2, sans-serif" font-size="13" fill="#E5533C">no</text>
+      <text x="270" y="178" font-family="Baloo 2, sans-serif" font-size="13" fill="#3FA34D">yes</text>
+      <text x="345" y="178" font-family="Baloo 2, sans-serif" font-size="13" fill="#E5533C">no</text>
+      <!-- root -->
+      <rect x="150" y="26" width="120" height="34" rx="10" fill="#F2B705"/>
+      <text x="210" y="48" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="14" fill="#2A2622">Is it red?</text>
+      <!-- leaf red -->
+      <rect x="60" y="120" width="100" height="34" rx="10" fill="#FBE6E1" stroke="#E5533C" stroke-width="2"/>
+      <text x="110" y="142" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">🍎 red crate</text>
+      <!-- second question -->
+      <rect x="250" y="120" width="120" height="34" rx="10" fill="#F2B705"/>
+      <text x="310" y="142" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Is it yellow?</text>
+      <!-- leaf yellow -->
+      <rect x="200" y="200" width="100" height="34" rx="10" fill="#FCF3D6" stroke="#B8870B" stroke-width="2"/>
+      <text x="250" y="222" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#B8870B">🍌 yellow</text>
+      <!-- leaf green -->
+      <rect x="320" y="200" width="100" height="34" rx="10" fill="#E7F4E9" stroke="#3FA34D" stroke-width="2"/>
+      <text x="370" y="222" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#3FA34D">🍏 green</text>
+    </svg>
+    <figcaption>Two well-chosen questions sort the whole basket. That's a decision tree.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>The wonderful thing about a decision tree is that you can <em>read</em> it. If
+    the machine sorts a fruit into the green crate, you can ask <em>why?</em> and it
+    will tell you: “Because it was not red, and it was not yellow.” That makes
+    decision trees one of the most <strong>honest</strong> kinds of AI — they never
+    hide their reasoning. Doctors, banks, and scientists love them for exactly that
+    reason.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Guess the Animal</div>
+    <p>Grab a friend and play the classic <strong>20 Questions</strong> game — but
+    pay attention to your strategy. Your friend thinks of an animal. You may only ask
+    yes-or-no questions.</p>
+    <ol>
+      <li>Your first question should split the animal kingdom roughly in half. Good
+      first questions: <em>“Does it live in water?”</em> or <em>“Is it bigger than a
+      dog?”</em> Bad first question: <em>“Is it a hamster?”</em></li>
+      <li>After each answer, pick the next question that splits what's <em>left</em>
+      in half.</li>
+      <li>Count your questions. Can you guess any animal in 7 questions or fewer?</li>
+    </ol>
+    <p>Congratulations — you just <em>were</em> a decision tree. Every good question
+    you asked reduced the impurity of the “pile” of possible animals.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>A decision tree can get <em>too</em> clever. If you let it keep asking questions
+    forever, it will grow a giant tree with one tiny branch for every single example —
+    basically memorizing the answers instead of learning the pattern. That's called
+    <strong>overfitting</strong>, and it's such an important trap that it gets its own
+    class later (Class 8). The fix is to stop the tree while it's still simple.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Decision tree</dt>
+      <dd>A model that makes a decision by asking a series of yes-or-no questions,
+      branching like a tree until it reaches an answer.</dd>
+      <dt>Feature</dt>
+      <dd>One describable fact about a thing — a fruit's color, size, or bumpiness.
+      Features are the clues a model gets to use.</dd>
+      <dt>Impurity</dt>
+      <dd>How mixed-up a pile is. The tree's whole job is to ask questions that lower
+      impurity until each pile is neat.</dd>
+      <dt>Leaf</dt>
+      <dd>The end of a branch, where the tree stops asking and gives its final answer.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>A smart decision isn't about asking <em>many</em> questions — it's about asking
+    the <em>right</em> question first.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A <strong>decision tree</strong> sorts things by asking yes-or-no questions in a clever order.</li>
+      <li>The best question is the one that <strong>tidies the mess</strong> the most.</li>
+      <li>Trees are <strong>easy to read</strong> — they can always explain their reasoning.</li>
+      <li>Let a tree grow too big and it starts <strong>memorizing</strong> instead of learning.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: when there's no obvious question to ask, how does a machine guess? It looks at its <em>neighbors</em>. →</p>
+  </div>
+
+</section>

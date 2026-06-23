@@ -1,0 +1,218 @@
+<section class="page chapter" id="ch07" data-toc-num="7" data-toc-part="p2" data-id-anchor="ch07" data-toc-title="Linear Regression: The Line Into Tomorrow">
+
+  <div class="chapter-opener">
+    <div class="kicker leaf">Class Seven</div>
+    <h1 class="chapter-title">Linear Regression</h1>
+    <p class="chapter-tagline">The Line Into Tomorrow — how a machine predicts a number by drawing the best straight line through your data.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Tess the tortoise watering a tall sunflower next to a growth chart with dots and a rising line">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- mini chart panel -->
+        <rect x="20" y="34" width="150" height="150" rx="12" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="3"/>
+        <line x1="40" y1="50" x2="40" y2="166" stroke="#cdbf9c" stroke-width="3"/>
+        <line x1="40" y1="166" x2="156" y2="166" stroke="#cdbf9c" stroke-width="3"/>
+        <!-- rising best-fit line -->
+        <line x1="44" y1="158" x2="152" y2="62" stroke="#2E7FC2" stroke-width="4" stroke-linecap="round"/>
+        <!-- dots near the line -->
+        <circle cx="56" cy="150" r="4" fill="#E5533C"/><circle cx="78" cy="132" r="4" fill="#E5533C"/>
+        <circle cx="100" cy="118" r="4" fill="#E5533C"/><circle cx="122" cy="92" r="4" fill="#E5533C"/>
+        <circle cx="142" cy="76" r="4" fill="#E5533C"/>
+        <!-- sunflower -->
+        <line x1="250" y1="190" x2="250" y2="92" stroke="#3FA34D" stroke-width="7" stroke-linecap="round"/>
+        <path d="M238 150 q-22 -6 -30 8 q22 6 30 -8Z" fill="#3FA34D"/>
+        <g>
+          <circle cx="250" cy="74" r="30" fill="#F2B705"/>
+          <g fill="#F2B705"><circle cx="250" cy="38" r="9"/><circle cx="286" cy="74" r="9"/><circle cx="250" cy="110" r="9"/><circle cx="214" cy="74" r="9"/><circle cx="275" cy="49" r="9"/><circle cx="275" cy="99" r="9"/><circle cx="225" cy="99" r="9"/><circle cx="225" cy="49" r="9"/></g>
+          <circle cx="250" cy="74" r="18" fill="#6b4a2b"/>
+        </g>
+        <!-- Tess -->
+        <ellipse cx="312" cy="178" rx="30" ry="20" fill="#3FA34D"/>
+        <path d="M286 176 q26 -16 52 0Z" fill="none" stroke="#2c7d39" stroke-width="2"/>
+        <circle cx="294" cy="180" r="11" fill="#7da86b"/>
+        <circle cx="291" cy="178" r="2.5" fill="#2A2622"/><circle cx="298" cy="178" r="2.5" fill="#2A2622"/>
+        <path d="M290 184 q4 3 8 0" stroke="#2A2622" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>The Academy was having a contest, and it was a slow, sunny, patient kind of
+    contest — exactly the sort Tess the tortoise loved. Every student had planted a
+    sunflower seed in a paper cup, and the rule was simple: grow the tallest sunflower
+    by the end of summer. But Professor Hoot added one twist. Each Friday, everyone had
+    to <strong>measure</strong> their plant and write down how tall it was.</p>
+
+    <p>Bolt the rabbit measured his once, decided it was “basically a tree already,”
+    and never measured again. Tess did something else. Week after week, she pressed her
+    ruler against the stem and wrote a careful little number in her notebook.</p>
+
+    <p class="says"><b>Pip:</b> “Two centimeters in Week 1… five in Week 2… eight in
+    Week 3… Tess, your numbers are so <em>neat</em>.”</p>
+
+    <p>By Week 5, Tess had a column of numbers. She drew two lines on a fresh page — one
+    going up the side for <em>height</em>, one going across the bottom for <em>week</em> —
+    and placed a dot for each measurement. Then she leaned back and blinked.</p>
+
+    <p class="says"><b>Tess:</b> “Look. The dots… they almost make a straight line.”</p>
+
+    <p>They did. The dots climbed upward in a tidy, slanted row, like steps on a gentle
+    staircase. Not perfectly straight — one dot sat a hair high, another a hair low —
+    but if you squinted, a single straight line could slide right through the middle of
+    all of them.</p>
+
+    <p class="says"><b>Mango:</b> “So what? It's a nice line. Can it <em>do</em> anything?”</p>
+
+    <p>Tess smiled her slow tortoise smile. She laid her ruler along the dots, drew the
+    line, and kept drawing it — past her last dot, out into the empty future part of the
+    chart, all the way to Week 8.</p>
+
+    <p class="says"><b>Tess:</b> “If the dots keep following this line, then in Week 8 my
+    sunflower should be about… twenty centimeters tall. That's my <strong>prediction</strong>.”</p>
+
+    <h2>Predicting a number, not a category</h2>
+
+    <p>Professor Hoot ruffled his feathers, delighted. “Class, remember when Ziggy sorted
+    fruit into crates? She put each thing into a <em>category</em> — red, yellow, green.
+    That's called <strong>classification</strong>. But Tess isn't sorting anything. She's
+    guessing a <em>number</em> — how many centimeters tall. Guessing a number from a
+    pattern has its own name. It's called <strong>regression</strong>.”</p>
+
+    <p>Three weeks later, the class gathered around Tess's cup with a ruler, holding their
+    breath. Week 8. The sunflower stood tall and proud. Pip measured carefully:
+    <strong>twenty-one centimeters</strong>. Tess had guessed twenty. Close — wonderfully,
+    impressively close — using nothing but a notebook, a ruler, and a straight line.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>Tess just did <strong>linear regression</strong> — one of the most useful tools in
+    all of machine learning. Here's the honest version.</p>
+    <p>Each measurement becomes a <strong>dot</strong> on a chart. One thing you know goes
+    across the bottom (the <em>input</em> — the week), and the thing you want to predict
+    goes up the side (the <em>number</em> — the height). Five measurements, five dots.</p>
+    <p>Now you draw a straight line through them. But not just any line — you want the one
+    that comes <strong>closest to all the dots at once</strong>. For each dot, measure the
+    gap between the dot and the line; that gap is called the <strong>error</strong>. A
+    computer tries the line that makes the total error as <em>small as possible</em>. That
+    special line has a name: the <strong>line of best fit</strong>.</p>
+    <p>Once you have the line, predicting is easy. Pick a new input — say, Week 8 — find it
+    along the bottom, go up to the line, and read off the height. That's your prediction.</p>
+    <p>One gentle bit of math: a straight line has a <strong>slope</strong> (how steep it
+    is — how many centimeters of growth per week) and a starting point (where it begins on
+    the side). Learning the line just means finding the best slope and starting point. That's
+    the whole trick. Classification picks a <em>category</em>; regression predicts a
+    <em>number</em>.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A scatter plot of sunflower height versus week with a best-fit line and a dashed projection to a predicted future height">
+      <!-- axes -->
+      <line x1="56" y1="28" x2="56" y2="214" stroke="#2A2622" stroke-width="3"/>
+      <line x1="56" y1="214" x2="392" y2="214" stroke="#2A2622" stroke-width="3"/>
+      <!-- axis labels -->
+      <text x="20" y="120" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622" transform="rotate(-90 20 120)">Height (cm)</text>
+      <text x="200" y="244" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Week →</text>
+      <!-- week ticks -->
+      <g font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622" text-anchor="middle">
+        <text x="92" y="230">1</text><text x="148" y="230">2</text><text x="204" y="230">3</text>
+        <text x="260" y="230">4</text><text x="316" y="230">5</text><text x="372" y="230">8</text>
+      </g>
+      <!-- best-fit line through the data -->
+      <line x1="64" y1="196" x2="316" y2="92" stroke="#2E7FC2" stroke-width="4" stroke-linecap="round"/>
+      <!-- dashed projection to future -->
+      <line x1="316" y1="92" x2="372" y2="69" stroke="#7C5CBF" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+      <line x1="372" y1="69" x2="372" y2="214" stroke="#7C5CBF" stroke-width="2" stroke-dasharray="4 5"/>
+      <!-- data dots (close to the line, with small errors) -->
+      <circle cx="92" cy="184" r="5" fill="#E5533C"/>
+      <circle cx="148" cy="158" r="5" fill="#E5533C"/>
+      <circle cx="204" cy="146" r="5" fill="#E5533C"/>
+      <circle cx="260" cy="116" r="5" fill="#E5533C"/>
+      <circle cx="316" cy="98" r="5" fill="#E5533C"/>
+      <!-- one little error gap shown -->
+      <line x1="204" y1="146" x2="204" y2="134" stroke="#E5533C" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="214" y="142" font-family="Fredoka, sans-serif" font-size="10" fill="#E5533C">error</text>
+      <!-- predicted point -->
+      <circle cx="372" cy="69" r="6" fill="#F2B705" stroke="#2A2622" stroke-width="2"/>
+      <text x="356" y="56" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#7C5CBF">predicted</text>
+      <!-- legend -->
+      <circle cx="70" cy="40" r="5" fill="#E5533C"/><text x="80" y="44" font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622">measured dots</text>
+      <line x1="64" y1="58" x2="92" y2="58" stroke="#2E7FC2" stroke-width="4"/><text x="98" y="62" font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622">line of best fit</text>
+    </svg>
+    <figcaption>Each dot is one week's measurement. The blue line fits the dots as closely as it can; following it past the data (dashed) gives the predicted height in Week 8.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>That's why this idea shows up everywhere. The same straight-line trick predicts how
+    much a house will cost from its size, how long a trip will take from its distance, or
+    how much a plant drinks from how hot the day is. Whenever you have dots that lean in a
+    direction, a line can carry the pattern forward into tomorrow.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Draw the Line Into Tomorrow</div>
+    <p>Pick something real that changes a little each day and track it:</p>
+    <ol>
+      <li>Choose your number — a sprouting bean's <em>height</em>, the coins in your
+      <em>savings jar</em>, or the <em>temperature</em> at the same time each afternoon.</li>
+      <li>Measure it once a day for at least five days and write down each number.</li>
+      <li>Draw two lines on paper: <em>day</em> across the bottom, your <em>number</em> up
+      the side. Place one dot per day.</li>
+      <li>Lay a ruler down and draw the <strong>straight line that passes as close to all
+      the dots as you can</strong> — about as many dots above it as below.</li>
+      <li>Keep the line going one day past your last dot. Where it lands is your
+      <strong>prediction</strong>. Write it down.</li>
+      <li>Tomorrow, measure for real. How close were you?</li>
+    </ol>
+    <p>Congratulations — you just fit a line of best fit by eye, exactly like Tess.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>A line will happily keep going <em>forever</em> — but the real world doesn't. Tess's
+    line says her sunflower grows about 2 cm every week. Follow that line far enough and it
+    promises a sunflower taller than the school, then taller than a mountain, then poking the
+    Moon. Of course that's silly. Real sunflowers slow down and stop.</p>
+    <p>Stretching a line way past your data is called <strong>extrapolation</strong>, and the
+    farther you go, the less you can trust it. Predicting next week? Pretty safe. Predicting
+    next <em>year</em>? Don't bet your lunch on it. And one more thing: not every pattern is a
+    straight line — some dots curve. If your dots don't lean in a tidy slant, a straight line
+    is the wrong tool.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Regression</dt>
+      <dd>Predicting a <em>number</em> from a pattern (like height in cm) — as opposed to
+      classification, which picks a category.</dd>
+      <dt>Line of best fit</dt>
+      <dd>The single straight line that passes as close as possible to all your dots at once.</dd>
+      <dt>Error</dt>
+      <dd>The gap between a dot and the line. The best line makes the total error as small as
+      it can be.</dd>
+      <dt>Slope</dt>
+      <dd>How steep the line is — how much the number changes for each step along the bottom
+      (here, centimeters of growth per week).</dd>
+      <dt>Prediction</dt>
+      <dd>The answer you read off the line at a new input you haven't measured yet.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>If your dots lean one way, the best straight line through them can carry the pattern
+    forward — and turn yesterday's measurements into tomorrow's guess.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li><strong>Regression</strong> predicts a number; <strong>classification</strong> picks a category.</li>
+      <li>Each example is a <strong>dot</strong>; the <strong>line of best fit</strong> comes as close to all of them as possible.</li>
+      <li>“Closest” means making the total <strong>error</strong> — the gaps from dots to line — as small as it can be.</li>
+      <li>You <strong>predict</strong> by reading the line at a new input — but stretch it too far and the prediction stops being trustworthy.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: what if a model fits the dots <em>too</em> perfectly and just memorizes them? That's <em>Overfitting: Memorizing Isn't Learning</em>. →</p>
+  </div>
+
+</section>

@@ -1,0 +1,225 @@
+<section class="page chapter" id="ch17" data-toc-num="17" data-toc-part="p4" data-id-anchor="ch17" data-toc-title="Recommendations: How AI Knows What You'll Like">
+
+  <div class="chapter-opener">
+    <div class="kicker grape">Class Seventeen</div>
+    <h1 class="chapter-title">Recommendation Systems</h1>
+    <p class="chapter-tagline">How an app seems to know the next video, song, or snack you'll love — before you've even tried it.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Mango the monkey tasting a berry that animals like him already loved">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- berry bushes -->
+        <g>
+          <circle cx="60" cy="150" r="26" fill="#3FA34D"/>
+          <circle cx="52" cy="146" r="5" fill="#7C5CBF"/><circle cx="66" cy="142" r="5" fill="#E76FA1"/><circle cx="60" cy="158" r="5" fill="#2E7FC2"/>
+          <circle cx="300" cy="150" r="26" fill="#3FA34D"/>
+          <circle cx="292" cy="146" r="5" fill="#E76FA1"/><circle cx="306" cy="142" r="5" fill="#7C5CBF"/><circle cx="300" cy="158" r="5" fill="#E5533C"/>
+        </g>
+        <!-- Mango (monkey) center -->
+        <g transform="translate(180,118)">
+          <ellipse cx="0" cy="40" rx="30" ry="8" fill="#000" opacity=".05"/>
+          <circle cx="-22" cy="-14" r="9" fill="#a9764a"/><circle cx="22" cy="-14" r="9" fill="#a9764a"/>
+          <circle cx="0" cy="-4" r="26" fill="#a9764a"/>
+          <ellipse cx="0" cy="4" rx="18" ry="16" fill="#f0d9b5"/>
+          <circle cx="-8" cy="-6" r="4" fill="#2A2622"/><circle cx="8" cy="-6" r="4" fill="#2A2622"/>
+          <path d="M-8 8 q8 7 16 0" stroke="#6b4a2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- a heart floating above, a held berry -->
+        <path d="M180 60 q-8 -12 -18 -4 q-8 7 18 22 q26 -15 18 -22 q-10 -8 -18 4Z" fill="#E5533C"/>
+        <circle cx="150" cy="95" r="7" fill="#7C5CBF"/>
+        <circle cx="210" cy="95" r="7" fill="#E76FA1"/>
+        <text x="180" y="200" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">"animals like me loved this one"</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>The forest had a delicious problem. Somewhere between the river and the old
+    oak, hundreds of berry bushes grew — sweet ones, sour ones, fizzy purple ones,
+    tiny pink ones that tasted like rain. There were far too many to ever try them
+    all. A monkey could spend his whole life tasting berries and still miss the best
+    one in the forest.</p>
+
+    <p class="says"><b>Mango:</b> “There must be a thousand bushes out here! How am I
+    supposed to know which berry to eat next? I'll be a very old monkey before I
+    finish.”</p>
+
+    <p>Bolt, naturally, had a plan that involved speed.</p>
+
+    <p class="says"><b>Bolt:</b> “Just taste them all, fast! I'll start at this end, you
+    start at that end, we'll meet in the middle by sundown.”</p>
+
+    <p>But Mango noticed something while he sat thinking. His friend Ziggy loved the
+    exact same berries he did — the fizzy purple ones, the sour blue ones. Every time
+    Mango adored a berry, it turned out Ziggy had adored it too. Their tastes were
+    practically <em>twins</em>.</p>
+
+    <p class="says"><b>Mango:</b> “Ziggy! You and I always love the same berries. So if
+    <em>you</em> found a new bush you loved, and I haven't tried it yet… I'd probably
+    love it too, right?”</p>
+
+    <p class="says"><b>Ziggy:</b> “The pink-rain berries by the waterfall. You haven't
+    had those. I think about them every night.”</p>
+
+    <p>Mango sprinted to the waterfall, popped one in his mouth, and his eyes went
+    wide. It was the best berry he'd ever tasted. He hadn't searched the whole forest.
+    He'd simply borrowed the taste of someone who liked what he liked.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Mango, you've just invented one of the
+    cleverest tricks on the internet. Every time an app suggests a video, a song, or a
+    snack, it is whispering the very thing you said: <strong>animals like you also
+    liked this</strong>.”</p>
+
+    <h2>Finding your taste twin</h2>
+
+    <p>Here's the heart of it. Nobody can taste everything — not Mango, and not you,
+    with millions of videos and songs in an app. So instead of searching everything,
+    the trick is to find the few people whose tastes <strong>match yours</strong>,
+    and let them point the way. If you and someone else loved the same ten songs,
+    chances are good you'll love their eleventh.</p>
+
+    <p>This is the same idea as the <em>neighbors</em> trick from Class Five: to guess
+    something about <strong>you</strong>, find the people <em>closest</em> to you and
+    copy their answer. Back then we were finding nearest neighbors to label a picture.
+    Here we're finding your nearest neighbors in <em>taste</em> to pick your next
+    favorite thing.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>A recommendation system starts with a giant scoreboard of <strong>ratings</strong>:
+    every like, thumbs-up, star, or "watched it twice" that lots and lots of people have
+    left. Picture an enormous grid — one row per person, one column per item — with a
+    heart in a cell when that person loved that item, and a blank where they haven't
+    tried it.</p>
+    <p>The most famous method is called <strong>collaborative filtering</strong>, and
+    it works in two steps. First it finds your <em>taste twins</em> — the people whose
+    pattern of hearts looks most <strong>similar</strong> to yours (this is the
+    nearest-neighbors idea from Class Five, measuring closeness). Then it looks at the
+    items your twins loved that <em>you haven't tried yet</em> — your blank cells — and
+    recommends those. It's "people like you also liked…", done with math.</p>
+    <p>There's a second flavor called <strong>content-based</strong> filtering. Instead
+    of comparing people, it compares <em>items</em>: if you loved a fast, funny,
+    purple-berry kind of song, it finds other fast, funny, purple-berry songs. And here's
+    the magic part: every time you tap like, skip, or watch-to-the-end, you fill in
+    another cell, so the system's guesses get <strong>sharper the more you use it</strong>.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A ratings grid where two animals with matching tastes predict a blank cell">
+      <!-- column headers: berries -->
+      <text x="150" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#7C5CBF">🫐</text>
+      <text x="210" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E76FA1">🍓</text>
+      <text x="270" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">🍒</text>
+      <text x="330" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2E7FC2">🍇</text>
+      <!-- row labels -->
+      <text x="86" y="74" text-anchor="end" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Mango</text>
+      <text x="86" y="114" text-anchor="end" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Ziggy</text>
+      <text x="86" y="154" text-anchor="end" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">Bolt</text>
+      <!-- grid cells: heart = loved, blank = untried, ? = to predict -->
+      <!-- Mango row -->
+      <rect x="120" y="56" width="44" height="28" rx="6" fill="#FBE6E1" stroke="#cdbf9c"/><text x="142" y="76" text-anchor="middle" font-size="14">❤️</text>
+      <rect x="180" y="56" width="44" height="28" rx="6" fill="#FBE6E1" stroke="#cdbf9c"/><text x="202" y="76" text-anchor="middle" font-size="14">❤️</text>
+      <rect x="240" y="56" width="44" height="28" rx="6" fill="#FFFDF7" stroke="#cdbf9c"/>
+      <rect x="300" y="56" width="44" height="28" rx="6" fill="#FCF3D6" stroke="#F2B705" stroke-width="2"/><text x="322" y="76" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#B8870B">?</text>
+      <!-- Ziggy row (taste twin of Mango) -->
+      <rect x="120" y="96" width="44" height="28" rx="6" fill="#E7F0FA" stroke="#2E7FC2" stroke-width="2"/><text x="142" y="116" text-anchor="middle" font-size="14">❤️</text>
+      <rect x="180" y="96" width="44" height="28" rx="6" fill="#E7F0FA" stroke="#2E7FC2" stroke-width="2"/><text x="202" y="116" text-anchor="middle" font-size="14">❤️</text>
+      <rect x="240" y="96" width="44" height="28" rx="6" fill="#FFFDF7" stroke="#cdbf9c"/>
+      <rect x="300" y="96" width="44" height="28" rx="6" fill="#E7F0FA" stroke="#2E7FC2" stroke-width="2"/><text x="322" y="116" text-anchor="middle" font-size="14">❤️</text>
+      <!-- Bolt row (different taste) -->
+      <rect x="120" y="136" width="44" height="28" rx="6" fill="#FFFDF7" stroke="#cdbf9c"/>
+      <rect x="180" y="136" width="44" height="28" rx="6" fill="#FFFDF7" stroke="#cdbf9c"/>
+      <rect x="240" y="136" width="44" height="28" rx="6" fill="#E7F4E9" stroke="#cdbf9c"/><text x="262" y="156" text-anchor="middle" font-size="14">❤️</text>
+      <rect x="300" y="136" width="44" height="28" rx="6" fill="#FFFDF7" stroke="#cdbf9c"/>
+      <!-- explanation -->
+      <text x="210" y="196" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12.5" fill="#2E7FC2">Mango &amp; Ziggy match on 🫐 and 🍓 — they're taste twins.</text>
+      <text x="210" y="218" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12.5" fill="#B8870B">Ziggy loves 🍇 and Mango hasn't tried it →</text>
+      <text x="210" y="238" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">so recommend 🍇 to Mango.</text>
+    </svg>
+    <figcaption>A ratings grid. Two animals with matching hearts are taste twins — so a blank cell for one can be filled by what the other loved.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Notice what the grid never needed: it never had to know <em>why</em> a berry was
+    tasty. It didn't measure sweetness or color or fizz. It only watched who loved what,
+    and let the patterns of agreement do the work. That's why these systems can
+    recommend things even a human expert couldn't explain — they're matchmaking on
+    pure behavior.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Find Your Taste Twin</div>
+    <p>You can run collaborative filtering by hand with a few friends and a pencil.</p>
+    <ol>
+      <li>Agree on <strong>five</strong> movies (or songs, or games) everyone knows.
+      Make a grid: friends down the side, the five titles across the top.</li>
+      <li>Everyone secretly rates each one from <strong>1 to 5 stars</strong>. Fill in
+      every cell. Then reveal the grids.</li>
+      <li>Find your <strong>taste twin</strong>: the friend whose star ratings are
+      closest to yours. (Add up the differences cell by cell — the smallest total
+      wins.)</li>
+      <li>Now ask your twin for one favorite movie that <em>you've never seen</em>.
+      That's your recommendation. Go watch it.</li>
+    </ol>
+    <p>Did it land? If it did, you just felt collaborative filtering work. If it didn't,
+    you've also just discovered why apps need <em>lots</em> of people, not just one
+    twin, to guess well.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>If a recommender only ever shows you more of what you already like, you can get
+    trapped in a <strong>filter bubble</strong> — a cozy little world where you only see
+    purple berries and forget that yellow ones even exist. You stop discovering new
+    music, new ideas, new kinds of people. The fix is to leave room for surprise: try a
+    bush no twin recommended.</p>
+    <p>Recommenders can also be <strong>gamed</strong>. If sneaky animals leave a pile
+    of fake hearts on a bland berry, the system may push it to everyone. Fake likes,
+    paid reviews, and bot accounts all bend the recommendations — which is exactly the
+    kind of unfairness we met when we talked about bias.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Recommendation system</dt>
+      <dd>Software that suggests the next item you might like — a video, song, or
+      product — based on what you and others have enjoyed before.</dd>
+      <dt>Collaborative filtering</dt>
+      <dd>Finding people whose tastes are similar to yours and recommending the things
+      they loved that you haven't tried yet.</dd>
+      <dt>Rating</dt>
+      <dd>A signal of how much someone liked something — a star, a like, a thumbs-up, or
+      even "watched it to the end." Ratings are the fuel for a recommender.</dd>
+      <dt>Similarity</dt>
+      <dd>A measure of how close two people's (or two items') tastes are. The closer the
+      match, the better the prediction.</dd>
+      <dt>Filter bubble</dt>
+      <dd>What happens when a recommender shows you only more of the same, so you stop
+      discovering anything new.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>You don't have to taste every berry in the forest — you just have to find the
+    friends who like what you like, and follow their hearts.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A <strong>recommendation system</strong> guesses what you'll like next from a
+      giant scoreboard of everyone's <strong>ratings</strong>.</li>
+      <li><strong>Collaborative filtering</strong> finds your <strong>taste twins</strong>
+      and suggests what they loved that you haven't tried — the neighbors trick from
+      Class Five.</li>
+      <li><strong>Content-based</strong> recommending compares the <em>items</em>
+      instead, suggesting things similar to ones you already loved.</li>
+      <li>Beware the <strong>filter bubble</strong> — and remember fake likes can fool a
+      recommender.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class, Part Five begins: machines that don't just <em>pick</em> things — they <em>imagine</em> brand-new ones. Generative AI. →</p>
+  </div>
+
+</section>
