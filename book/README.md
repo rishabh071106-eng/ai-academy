@@ -48,7 +48,25 @@ node book/build.mjs
 Open `book/dist/learn-ai-like-a-kid.html` in any browser (or run the repo's
 `npm run dev` server and visit `/book/dist/learn-ai-like-a-kid.html`).
 
-## Export the Amazon KDP interior (PDF)
+## The ready-made PDF
+
+A pre-rendered interior is already included:
+
+```
+book/dist/learn-ai-like-a-kid.pdf   ← 203 pages, 6×9 in, KDP trim size
+```
+
+It was generated from the HTML with **WeasyPrint**:
+
+```bash
+pip install weasyprint
+python3 -c "from weasyprint import HTML; HTML('book/dist/learn-ai-like-a-kid.html').write_pdf('book/dist/learn-ai-like-a-kid.pdf')"
+```
+
+For the crispest text/fonts (Chrome embeds the web fonts), you can also export
+from the browser instead — see below.
+
+## Export the Amazon KDP interior (PDF) from a browser
 
 1. Open `book/dist/learn-ai-like-a-kid.html` in **Google Chrome**.
 2. **File → Print** (or click the *Print / Save PDF* button at the top).
