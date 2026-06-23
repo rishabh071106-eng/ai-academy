@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "title": "Learn AI Like a Kid",
+    "subtitle": "Stories, Animals, and the Real Algorithms Behind Artificial Intelligence",
+    "author": "Whisker Woods Academy",
+    "description": "A friendly, story-driven illustrated guide that teaches kids ages 10–14 how artificial intelligence really works — from decision trees to neural networks to large language models — through the animals of Whisker Woods Academy."
+  },
+  "parts": [
+    { "key": "p1", "name": "Part One · Meet the Machines That Learn" },
+    { "key": "p2", "name": "Part Two · Sorting, Grouping & Guessing" },
+    { "key": "p3", "name": "Part Three · Brains Made of Math" },
+    { "key": "p4", "name": "Part Four · Machines That Talk & Decide" },
+    { "key": "p5", "name": "Part Five · Big Ideas & Being a Good Maker" }
+  ],
+  "order": [
+    "00-cover.html",
+    "01-titlepage.html",
+    "02-copyright.html",
+    "03-dedication.html",
+    "04-howto.html",
+    "05-cast.html",
+    "06-toc.html",
+    "part1.html",
+    "ch01.html",
+    "ch02.html",
+    "ch03.html",
+    "part2.html",
+    "ch04.html",
+    "ch05.html",
+    "ch06.html",
+    "ch07.html",
+    "ch08.html",
+    "part3.html",
+    "ch09.html",
+    "ch10.html",
+    "ch11.html",
+    "ch12.html",
+    "part4.html",
+    "ch13.html",
+    "ch14.html",
+    "ch15.html",
+    "ch16.html",
+    "ch17.html",
+    "part5.html",
+    "ch18.html",
+    "ch19.html",
+    "ch20.html",
+    "ch21.html",
+    "back-glossary.html",
+    "back-makerlab.html",
+    "back-about.html"
+  ]
+}

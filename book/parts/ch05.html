@@ -1,0 +1,204 @@
+<section class="page chapter" id="ch05" data-toc-num="5" data-toc-part="p2" data-id-anchor="ch05" data-toc-title="Nearest Neighbors: Birds of a Feather">
+
+  <div class="chapter-opener">
+    <div class="kicker grape">Class Five</div>
+    <h1 class="chapter-title">Nearest Neighbors</h1>
+    <p class="chapter-tagline">Birds of a feather — how a machine guesses what something is by looking at who it's most like.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="A mystery creature surrounded by birds on one side and mice on the other while the class looks on">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- left cluster: birds -->
+        <circle cx="70" cy="80" r="12" fill="#2E7FC2"/><circle cx="96" cy="104" r="12" fill="#2E7FC2"/><circle cx="60" cy="118" r="12" fill="#2E7FC2"/>
+        <text x="70" y="56" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2E7FC2">birds</text>
+        <!-- right cluster: mice -->
+        <circle cx="290" cy="86" r="12" fill="#E5533C"/><circle cx="264" cy="108" r="12" fill="#E5533C"/><circle cx="300" cy="122" r="12" fill="#E5533C"/>
+        <text x="290" y="62" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#E5533C">mice</text>
+        <!-- mystery creature in middle -->
+        <ellipse cx="180" cy="120" rx="30" ry="26" fill="#7C5CBF"/>
+        <circle cx="171" cy="114" r="5" fill="#fff"/><circle cx="189" cy="114" r="5" fill="#fff"/>
+        <circle cx="172" cy="115" r="2.5" fill="#2A2622"/><circle cx="188" cy="115" r="2.5" fill="#2A2622"/>
+        <path d="M171 130 q9 7 18 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <text x="180" y="172" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="20" fill="#7C5CBF">?</text>
+        <!-- dashed circle showing neighborhood -->
+        <circle cx="180" cy="120" r="60" fill="none" stroke="#F2B705" stroke-width="3" stroke-dasharray="6 7"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Something was scratching at the Academy door. When Professor Hoot swung it
+    open, in waddled a creature that no one — not one single animal in the whole
+    classroom — had ever seen before. It was round and soft, a little bigger than a
+    teacup. It had a tiny beak <em>and</em> whiskers. It made a sound halfway between
+    a chirp and a squeak.</p>
+
+    <p>The room went quiet.</p>
+
+    <p class="says"><b>Mango:</b> “What <em>is</em> it?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “That, Mango, is exactly the question.
+    There is no sign on its back. It came with no instructions. So — how shall we
+    figure out what it is?”</p>
+
+    <p>Pip the mouse, who always noticed the small things, crept closer. She didn't
+    try to make a rule. She just looked, very carefully, at the new creature, and
+    then at everyone else in the room.</p>
+
+    <p class="says"><b>Pip:</b> “It's small, like me. But it has a beak, like Coco.
+    Maybe… maybe we shouldn't guess from nothing. Maybe we should find out <em>who
+    it's most like</em>.”</p>
+
+    <p class="says"><b>Coco the parrot:</b> “Birds of a feather flock together!
+    Birds of a feather flock together!”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Coco, you clever bird, you've just named
+    the whole lesson.”</p>
+
+    <h2>Let the neighbors vote</h2>
+
+    <p>Here is what the class did. They picked a few simple things they could measure
+    about any animal — its <strong>size</strong>, the <strong>sound</strong> it made,
+    and what it liked to <strong>eat</strong>. Then they lined up the new creature
+    next to the animals it resembled most.</p>
+
+    <p>By size, it sat near Pip and the other small ones. By sound, it landed somewhere
+    between Coco's chirps and a mouse's squeak. By diet, it nibbled seeds — exactly
+    like the birds. The class gathered the <strong>five animals it was most similar
+    to</strong> overall and simply counted them up.</p>
+
+    <p class="says"><b>Pip:</b> “Of its five closest matches… three are birds, two
+    are mice. Birds win the vote. I think our mystery friend is a kind of
+    <strong>bird</strong>.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “No rules. No long list of questions. You
+    just found its <em>nearest neighbors</em> and let them vote. Class, you've
+    discovered one of the friendliest algorithms in all of AI.”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>This is the <strong>k-Nearest Neighbors</strong> algorithm, or <em>k-NN</em>
+    for short. It works like a map. Every example you already know gets plotted as a
+    dot, using its <em>features</em> as <strong>coordinates</strong> — size along one
+    axis, sound along another. Similar animals end up sitting close together, so the
+    birds form one little crowd and the mice form another.</p>
+    <p>When a mystery dot arrives, you measure the <strong>distance</strong> from it to
+    every known dot — just how far apart they are on the map. You find the
+    <strong>k</strong> closest dots (its nearest neighbors), look at their labels, and
+    take a <strong>majority vote</strong>. Whatever most of the neighbors are, that's
+    your guess.</p>
+    <p>That little letter <strong>k</strong> is the number of neighbors you ask. With
+    <em>k = 1</em> you trust the single closest dot — fast, but jumpy. With <em>k = 5</em>
+    you ask five and go with the crowd, which is steadier. People usually pick an
+    <strong>odd</strong> number for k so the vote can't end in a tie.</p>
+    <p>Here's the surprising part: k-NN doesn't really <em>train</em>. There's no
+    studying, no model being built. It simply <strong>remembers every example</strong>
+    and, when a new one shows up, compares it to all of them on the spot. It's learning
+    by remembering.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A scatter plot with a cluster of bird dots and a cluster of mouse dots, a question-mark point in the middle, and a dashed circle around its five nearest neighbors">
+      <!-- axes -->
+      <line x1="50" y1="220" x2="400" y2="220" stroke="#cdbf9c" stroke-width="3"/>
+      <line x1="50" y1="220" x2="50" y2="20" stroke="#cdbf9c" stroke-width="3"/>
+      <text x="225" y="248" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">size →</text>
+      <text x="22" y="120" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622" transform="rotate(-90 22 120)">sound (chirp ↔ squeak)</text>
+      <!-- bird cluster (blue) top-left-ish -->
+      <circle cx="120" cy="70" r="9" fill="#2E7FC2"/><circle cx="150" cy="95" r="9" fill="#2E7FC2"/>
+      <circle cx="105" cy="110" r="9" fill="#2E7FC2"/><circle cx="175" cy="120" r="9" fill="#2E7FC2"/>
+      <text x="120" y="48" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2E7FC2">birds</text>
+      <!-- mouse cluster (coral) bottom-right-ish -->
+      <circle cx="300" cy="150" r="9" fill="#E5533C"/><circle cx="330" cy="175" r="9" fill="#E5533C"/>
+      <circle cx="285" cy="185" r="9" fill="#E5533C"/><circle cx="245" cy="160" r="9" fill="#E5533C"/>
+      <text x="320" y="208" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#E5533C">mice</text>
+      <!-- mystery point -->
+      <circle cx="205" cy="135" r="11" fill="#7C5CBF"/>
+      <text x="205" y="140" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">?</text>
+      <!-- dashed neighborhood circle around 5 nearest: 3 birds + 2 mice -->
+      <circle cx="205" cy="135" r="58" fill="none" stroke="#F2B705" stroke-width="3" stroke-dasharray="6 7"/>
+      <!-- vote tally -->
+      <rect x="296" y="30" width="104" height="56" rx="10" fill="#FCF3D6" stroke="#B8870B" stroke-width="2"/>
+      <text x="348" y="52" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2E7FC2">birds: 3</text>
+      <text x="348" y="72" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#E5533C">mice: 2</text>
+    </svg>
+    <figcaption>k = 5: of the five nearest dots inside the circle, three are birds and two are mice. Birds win the vote — so the “?” is labeled a bird.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Notice how lazy this algorithm is, in the best possible way. The decision tree
+    from last class worked hard up front, building its questions. k-NN does almost
+    nothing until you ask it something — then it springs to life, measures every
+    distance, and votes. It keeps the whole crowd of examples in its pocket and pulls
+    them out only when it's needed.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: The Two-Feature Map</div>
+    <p>You'll need a big sheet of paper, a ruler, and a handful of classmates or family
+    members.</p>
+    <ol>
+      <li>Draw two lines for axes. Label the bottom one <em>height</em> and the side
+      one <em>shoe size</em>.</li>
+      <li>For each person you know, put a dot where their height and shoe size meet.
+      Color kids' dots blue and grown-ups' dots green.</li>
+      <li>Now think of a new person and plot their dot — but <strong>don't</strong>
+      write the color yet.</li>
+      <li>Find the <strong>three closest dots</strong> (k = 3) using your ruler. Are
+      most of them blue or green? That's your prediction: kid or grown-up.</li>
+    </ol>
+    <p>Check if you were right. You just ran k-NN by hand, ruler and all.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Choosing k is a balancing act. Pick k <strong>too small</strong> — say k = 1 —
+    and a single weird neighbor can fool you. One stray bird that wandered into the
+    mouse crowd, and your guess goes wrong. Pick k <strong>too big</strong> and you
+    drown out the local pattern: if you ask <em>everyone</em> in the room, the most
+    common animal always wins, even when the answer is sitting right next door.</p>
+    <p>There's one more trap. Distance is fussy about numbers. If one feature is
+    measured in huge values (say weight in <em>grams</em>: 5, 200, 4000) and another in
+    small ones (number of legs: 2 or 4), the big-number feature bullies the
+    measurement and the small one barely counts. The fix is <strong>scaling</strong> —
+    shrinking every feature to a similar range first, so each one gets a fair vote.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Nearest Neighbors</dt>
+      <dd>The known examples that sit closest to a new one on the feature map. To
+      classify the new one, you look at them.</dd>
+      <dt>Distance</dt>
+      <dd>How far apart two examples are when you plot them by their features. Smaller
+      distance means more similar.</dd>
+      <dt>k</dt>
+      <dd>The number of neighbors you ask. An odd k (like 3 or 5) keeps the vote from
+      ending in a tie.</dd>
+      <dt>Majority Vote</dt>
+      <dd>Letting the neighbors decide: whichever label most of them have becomes the
+      prediction.</dd>
+      <dt>Classification</dt>
+      <dd>Putting a new thing into the right group — bird or mouse, kid or grown-up.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>To guess what something is, you don't always need a rule — sometimes you just
+    need to find who it's most like, and let the neighbors vote.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li><strong>k-Nearest Neighbors</strong> classifies a new thing by finding the known examples most similar to it.</li>
+      <li>Plot examples by their <strong>features</strong>, measure <strong>distance</strong>, and take a <strong>majority vote</strong> of the k closest.</li>
+      <li>The letter <strong>k</strong> matters: too small is jumpy, too big drowns out the local pattern — and odd numbers avoid ties.</li>
+      <li>k-NN never really trains — it just <strong>remembers everything</strong> and compares when asked.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: what if nobody tells you the labels at all? The machine learns to find its own flocks. → <em>Clustering: Finding Your Flock</em></p>
+  </div>
+
+</section>

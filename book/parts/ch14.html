@@ -1,0 +1,235 @@
+<section class="page chapter" id="ch14" data-toc-num="14" data-toc-part="p4" data-id-anchor="ch14" data-toc-title="Attention: Focusing on What Matters">
+
+  <div class="chapter-opener">
+    <div class="kicker berry">Class Fourteen</div>
+    <h1 class="chapter-title">Attention</h1>
+    <p class="chapter-tagline">In a room full of noise, how does AI figure out which words actually matter? It learns to focus.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Mango the monkey focusing on a few important words in a noisy classroom while Coco and Professor Hoot watch">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- noisy speech bubbles, faded -->
+        <g opacity=".5">
+          <rect x="20" y="30" width="58" height="26" rx="12" fill="#fff" stroke="#cdbf9c" stroke-width="2"/><text x="49" y="47" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="10" fill="#9b8e6a">blah</text>
+          <rect x="282" y="34" width="58" height="26" rx="12" fill="#fff" stroke="#cdbf9c" stroke-width="2"/><text x="311" y="51" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="10" fill="#9b8e6a">chatter</text>
+          <rect x="262" y="150" width="58" height="26" rx="12" fill="#fff" stroke="#cdbf9c" stroke-width="2"/><text x="291" y="167" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="10" fill="#9b8e6a">noise</text>
+        </g>
+        <!-- the one bright bubble Mango focuses on -->
+        <rect x="120" y="20" width="120" height="34" rx="14" fill="#F2B705"/>
+        <text x="180" y="42" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">the cup is full</text>
+        <!-- Mango -->
+        <g transform="translate(150,96)">
+          <circle cx="14" cy="14" r="11" fill="#a9764a"/><circle cx="46" cy="14" r="11" fill="#a9764a"/>
+          <circle cx="30" cy="24" r="30" fill="#a9764a"/>
+          <ellipse cx="30" cy="32" rx="21" ry="20" fill="#f0d9b5"/>
+          <circle cx="22" cy="22" r="5" fill="#2A2622"/><circle cx="38" cy="22" r="5" fill="#2A2622"/>
+          <ellipse cx="30" cy="32" rx="4" ry="3" fill="#6b4a2b"/>
+          <path d="M22 40 q8 7 16 0" stroke="#6b4a2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- focus beam from Mango to the bright bubble -->
+        <path d="M180 96 L180 56" stroke="#E5533C" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+        <!-- Coco the parrot -->
+        <g transform="translate(40,120)">
+          <path d="M20 6 C6 6 2 24 5 40 C8 54 18 58 20 58 C22 58 32 54 35 40 C38 24 34 6 20 6Z" fill="#E5533C"/>
+          <circle cx="14" cy="24" r="7" fill="#fff"/><circle cx="26" cy="24" r="7" fill="#fff"/>
+          <circle cx="15" cy="25" r="3" fill="#2A2622"/><circle cx="25" cy="25" r="3" fill="#2A2622"/>
+          <path d="M16 33 q4 6 8 0 q0 7 -4 7 q-4 0 -4 -7Z" fill="#F2B705"/>
+        </g>
+        <!-- Professor Hoot -->
+        <g transform="translate(280,110)">
+          <path d="M22 6 C8 6 4 24 4 40 C4 58 14 64 22 64 C30 64 48 58 48 40 C48 24 40 6 22 6Z" fill="#9b6a3c"/>
+          <path d="M10 24 C10 14 16 11 22 11 C28 11 38 14 38 24 C38 32 32 35 22 35 C14 35 10 32 10 24Z" fill="#f3e2c7"/>
+          <circle cx="16" cy="24" r="6" fill="#fff"/><circle cx="30" cy="24" r="6" fill="#fff"/>
+          <circle cx="17" cy="25" r="3" fill="#2A2622"/><circle cx="29" cy="25" r="3" fill="#2A2622"/>
+          <path d="M22 29 l4 5 -8 0z" fill="#F2B705"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>The classroom was a roar. Bolt was retelling a race, Ziggy was arguing about
+    stripes, Pip was whispering, and somewhere near the window a cricket had got in
+    and would not stop chirping. Everyone was talking at once. And in the middle of
+    all that noise, Coco the parrot leaned over to Mango and said something quietly.</p>
+
+    <p class="says"><b>Coco:</b> “She poured it into the cup until <em>it</em> was full.”</p>
+
+    <p>Mango didn't flinch. Even with twenty voices crashing around her, she caught
+    the sentence, thought for half a second, and grinned.</p>
+
+    <p class="says"><b>Mango:</b> “The <em>cup</em> got full. Not the jug. You poured
+    juice into the cup, and the cup is what filled up.”</p>
+
+    <p class="says"><b>Coco:</b> “How did you even hear me? It's so loud in here!”</p>
+
+    <p class="says"><b>Mango:</b> “I didn't hear <em>everything</em>. I ignored the
+    cricket and Bolt and the stripes. I just locked onto the few words that mattered —
+    <em>poured</em>, <em>cup</em>, <em>full</em> — and let the rest blur out.”</p>
+
+    <p>Professor Hoot, who had been pretending to grade papers, looked up with one
+    very interested eye.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Mango, you just did the single most
+    important trick in modern AI. The thing that made today's chatbots suddenly,
+    shockingly good. It has a beautifully simple name. It's called
+    <strong>attention</strong>.”</p>
+
+    <h2>The little word with a big problem</h2>
+
+    <p>Remember Class Twelve, when we met memory — and its weakness? A model that
+    reads a sentence one word at a time has to <em>squeeze</em> everything it has read
+    so far into one small memory. By the end of a long sentence, the words from the
+    beginning have faded, like the start of a story you read an hour ago. The model
+    <strong>forgets</strong>.</p>
+
+    <p>That's a real headache for a sentence like Coco's: <em>“She poured it into the
+    cup until it was full.”</em> To understand that last <strong>“it,”</strong> the
+    model has to reach all the way back and decide: does “it” mean the <em>cup</em>,
+    or the thing being poured? Guess wrong and the whole meaning flips.</p>
+
+    <p class="says"><b>Mango:</b> “So instead of trying to remember the whole sentence
+    in one foggy lump… the model should be able to <em>look back</em> at the exact
+    earlier words it needs?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Exactly. And not just look back — look back
+    at <em>all</em> of them at once, and decide how much to focus on each. A lot of
+    attention to <em>cup</em>. Barely any to <em>she</em>. That focusing is the whole
+    idea.”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>Older language models had a cramped problem: each new word could only see a
+    single fading memory of everything before it. The clever idea behind
+    <strong>attention</strong> throws that limit away. For every word it's working on,
+    the model gets to look at <em>all</em> the earlier words at the same time — no
+    squeezing, no forgetting.</p>
+    <p>Then it asks, for this exact moment: <em>which of those earlier words actually
+    matter right now?</em> It gives each one a score — a <strong>weight</strong> — that
+    says how relevant it is. When the model is figuring out the final “it,” the word
+    <em>cup</em> might get a big fat weight while <em>she</em> and <em>until</em> get
+    tiny ones. The model then blends the words together according to those weights, so
+    the important ones shout and the unimportant ones whisper.</p>
+    <p>Here's the wonderful part: nobody hand-writes those weights. The model
+    <strong>learns</strong> them from mountains of text, the same way it learned to
+    predict words back in Class Thirteen. This one trick — look at everything, then
+    focus — fixed the forgetting problem so completely that it powers a whole new
+    design of model called the <strong>Transformer</strong>. Every big language model
+    you've heard of is built on it.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="The word it sends thick and thin attention arrows back to earlier words; the thickest arrow points to the word cup">
+      <text x="210" y="24" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">How much does the last “it” look at each word?</text>
+
+      <!-- the sentence words as boxes along the bottom -->
+      <g font-family="Fredoka, sans-serif" font-size="12">
+        <rect x="14"  y="200" width="48" height="30" rx="9" fill="#EDE7F4" stroke="#7C5CBF" stroke-width="2"/><text x="38"  y="220" text-anchor="middle" fill="#2A2622">She</text>
+        <rect x="70"  y="200" width="58" height="30" rx="9" fill="#EDE7F4" stroke="#7C5CBF" stroke-width="2"/><text x="99"  y="220" text-anchor="middle" fill="#2A2622">poured</text>
+        <rect x="136" y="200" width="40" height="30" rx="9" fill="#EDE7F4" stroke="#7C5CBF" stroke-width="2"/><text x="156" y="220" text-anchor="middle" fill="#2A2622">it</text>
+        <rect x="184" y="200" width="48" height="30" rx="9" fill="#EDE7F4" stroke="#7C5CBF" stroke-width="2"/><text x="208" y="220" text-anchor="middle" fill="#2A2622">into</text>
+        <rect x="240" y="200" width="44" height="30" rx="9" fill="#F2B705" stroke="#B8870B" stroke-width="2"/><text x="262" y="220" text-anchor="middle" fill="#2A2622">cup</text>
+        <rect x="292" y="200" width="52" height="30" rx="9" fill="#EDE7F4" stroke="#7C5CBF" stroke-width="2"/><text x="318" y="220" text-anchor="middle" fill="#2A2622">until</text>
+        <rect x="352" y="200" width="54" height="30" rx="9" fill="#E5533C" stroke="#a8331f" stroke-width="2"/><text x="379" y="220" text-anchor="middle" fill="#fff">it ←</text>
+      </g>
+
+      <!-- arrows from the final "it" (x=379) back to earlier words, thickness = attention weight -->
+      <g fill="none" stroke-linecap="round">
+        <path d="M379 198 C360 150 50 150 38 200"  stroke="#E5533C" stroke-width="1.5" opacity=".35"/>
+        <path d="M379 198 C360 150 110 150 99 200"  stroke="#E5533C" stroke-width="2.5" opacity=".45"/>
+        <path d="M379 198 C360 150 166 150 156 200" stroke="#E5533C" stroke-width="2"   opacity=".4"/>
+        <path d="M379 198 C360 150 215 150 208 200" stroke="#E5533C" stroke-width="1.5" opacity=".3"/>
+        <path d="M379 198 C350 120 270 120 262 200" stroke="#E5533C" stroke-width="11"  opacity=".85"/>
+        <path d="M379 198 C365 160 325 160 318 200" stroke="#E5533C" stroke-width="1.5" opacity=".3"/>
+      </g>
+      <!-- weight labels -->
+      <text x="262" y="120" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#a8331f" font-weight="bold">big focus</text>
+      <text x="262" y="135" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="10" fill="#9b8e6a">(this is what “it” means)</text>
+      <text x="60"  y="172" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="10" fill="#9b8e6a">thin = barely matters</text>
+    </svg>
+    <figcaption>Each arrow is how much the final “it” pays attention to an earlier word. The thick arrow to <strong>cup</strong> wins — that's what “it” refers to.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Look closely at that picture. The last word, “it,” throws a line back to every
+    earlier word — but the lines aren't equal. The line to <em>cup</em> is fat and
+    bold; the lines to <em>she</em> and <em>until</em> are thin little threads. That
+    thickness is the <strong>attention weight</strong>: how loudly each old word gets
+    to speak when the model decides what “it” means.</p>
+
+    <p class="says"><b>Coco:</b> “So the model isn't really remembering the sentence.
+    It's reaching back and <em>spotlighting</em> the parts it needs, fresh, every
+    time.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Beautifully put. And because it can do that
+    for words a hundred steps back just as easily as one step back, the forgetting
+    problem melts away. That, class, is why a machine can finally hold a long thought
+    together.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: The Highlighter Game</div>
+    <p>You're going to do attention <em>by hand</em>. Grab a highlighter (or just a
+    pencil) and a friend.</p>
+    <ol>
+      <li>Write down a sentence with a tricky pronoun. Try:
+      <em>“The trophy didn't fit in the suitcase because it was too big.”</em></li>
+      <li>What does <strong>“it”</strong> mean — the trophy or the suitcase? Highlight
+      <em>only</em> the words you truly need to figure it out. (Hint: you don't need
+      “the,” “in,” or “because.”)</li>
+      <li>Now change one word: <em>“…because it was too <strong>small</strong>.”</em>
+      Does “it” still point to the same thing? Re-highlight.</li>
+      <li>Compare your highlights with your friend's. Did you both spotlight the same
+      few words?</li>
+    </ol>
+    <p>The handful of words you painted yellow got a high attention weight. Everything
+    you left plain got a low one. Congratulations — you just <em>were</em> an attention
+    layer.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Attention is powerful, but it isn't <em>understanding</em>. The model still
+    doesn't <em>know</em> what a cup is — it's only predicting patterns, and choosing
+    where to point its spotlight is part of that pattern-guessing. Sometimes it points
+    the spotlight at the <strong>wrong word</strong> and confidently gives a wrong
+    answer. A tricky, twisty sentence can fool it just like it might briefly fool you.
+    Attention helps a model <em>focus</em>; it does not give it real understanding.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Attention</dt>
+      <dd>A model's ability to look at all the earlier words at once and decide how
+      much to focus on each one for the word it's working on right now.</dd>
+      <dt>Weight (focus)</dt>
+      <dd>A score saying how much one word matters to another. A big weight is a bright
+      spotlight; a tiny weight is barely a glance.</dd>
+      <dt>Context</dt>
+      <dd>All the surrounding words a model can look back at to figure out what the
+      current word really means.</dd>
+      <dt>Transformer</dt>
+      <dd>The design of model built on attention. It's the engine inside today's big
+      language models — the breakthrough that made them so good.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>Don't try to remember everything — learn to look back and <em>focus</em> on the
+    few words that matter. That's attention, and it changed AI forever.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>Old models <strong>forgot</strong> early words by squeezing everything into one fading memory.</li>
+      <li><strong>Attention</strong> lets a model look at all earlier words at once and weigh how much each one matters.</li>
+      <li>A big <strong>attention weight</strong> is a spotlight; it's how the model figures out which “it” is which.</li>
+      <li>This trick powers <strong>Transformers</strong> — but focus still isn't true understanding.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: how do you teach an AI to get <em>better</em>? You reward it. Rex says: treats. →</p>
+  </div>
+
+</section>

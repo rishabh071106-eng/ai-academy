@@ -1,0 +1,220 @@
+<section class="page chapter" id="ch15" data-toc-num="15" data-toc-part="p4" data-id-anchor="ch15" data-toc-title="Reinforcement Learning: Training with Treats">
+
+  <div class="chapter-opener">
+    <div class="kicker leaf">Class Fifteen</div>
+    <h1 class="chapter-title">Reinforcement Learning</h1>
+    <p class="chapter-tagline">Training with treats — how a machine learns the best moves through rewards and mistakes, just like teaching a puppy.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Professor Hoot teaching Rex the dog a trick with a treat reward">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- Rex the dog sitting, looking up -->
+        <g transform="translate(96,84)">
+          <path d="M-30 6 q-6 30 6 40 l10 -18Z" fill="#8a5a2b"/><path d="M30 6 q6 30 -6 40 l-10 -18Z" fill="#8a5a2b"/>
+          <circle cx="0" cy="24" r="34" fill="#b07a3f"/>
+          <ellipse cx="0" cy="36" rx="22" ry="18" fill="#e7cfa6"/>
+          <circle cx="-10" cy="20" r="6" fill="#2A2622"/><circle cx="10" cy="20" r="6" fill="#2A2622"/>
+          <ellipse cx="0" cy="34" rx="7" ry="5" fill="#2A2622"/>
+          <path d="M0 39 v8 M0 47 q-7 5 -13 2 M0 47 q7 5 13 2" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Professor Hoot holding a treat -->
+        <g transform="translate(266,70)">
+          <path d="M0 -18 C-22 -18 -30 6 -30 26 C-30 50 -16 58 0 58 C16 58 30 50 30 26 C30 6 22 -18 0 -18Z" fill="#9b6a3c"/>
+          <path d="M-20 8 C-20 -6 -10 -12 0 -12 C10 -12 20 -6 20 8 C20 20 12 26 0 26 C-12 26 -20 20 -20 8Z" fill="#f3e2c7"/>
+          <circle cx="-11" cy="6" r="10" fill="#fff"/><circle cx="11" cy="6" r="10" fill="#fff"/>
+          <circle cx="-9" cy="8" r="5" fill="#2A2622"/><circle cx="9" cy="8" r="5" fill="#2A2622"/>
+          <path d="M0 14 l6 7 -12 0z" fill="#F2B705"/>
+        </g>
+        <!-- the treat, between them -->
+        <g transform="translate(190,86)">
+          <path d="M-12 -8 a6 6 0 0 1 0 16 l24 0 a6 6 0 0 0 0 -16 Z" fill="#E5533C"/>
+          <circle cx="-12" cy="-8" r="5" fill="#E5533C"/><circle cx="-12" cy="8" r="5" fill="#E5533C"/>
+          <circle cx="12" cy="-8" r="5" fill="#E5533C"/><circle cx="12" cy="8" r="5" fill="#E5533C"/>
+        </g>
+        <text x="190" y="60" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="16" fill="#F2B705">★ treat! ★</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Rex the dog could already sit, roll over, and shake a paw. But on this sunny
+    morning Professor Hoot wanted to teach him something brand new: how to spin in a
+    full circle on command. There was just one problem. Professor Hoot did not write
+    Rex an instruction manual. He couldn't! Rex can't read, and even if he could, how
+    do you explain “spin” to a dog in words?</p>
+
+    <p>So Professor Hoot did what every good trainer does. He held up a small basket
+    of treats, pointed his wing, and said one word: <em>“Spin.”</em></p>
+
+    <p class="says"><b>Rex:</b> “Spin? I have no idea what that means!”</p>
+
+    <p>Rex tried things. He barked — nothing. He sat down — nothing. He flopped onto
+    his back — still nothing. Then, by pure accident, he turned his head and took a
+    little step sideways. <strong>Click — a treat!</strong> Rex's ears shot up.</p>
+
+    <p class="says"><b>Rex:</b> “Wait. <em>That</em> got a treat? Whatever I just did,
+    I'm doing more of it!”</p>
+
+    <p>So Rex stepped sideways again, and a bit more, until he had turned a quarter
+    circle. Another treat. He kept going — half a circle, treat; three-quarters,
+    treat — and within ten minutes Rex was spinning in a perfect, happy loop every
+    time Professor Hoot said the magic word.</p>
+
+    <p class="says"><b>Bolt:</b> “But nobody <em>told</em> him what to do! He just…
+    figured it out from the treats?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Exactly, Bolt. No manual. Just <em>try
+    something, see what happens, do more of what earns the reward.</em> That, my
+    impatient friend, is one of the most powerful ideas in all of AI. It's called
+    <strong>reinforcement learning</strong> — and it's how some computers taught
+    themselves to play games better than any human alive.”</p>
+
+    <h2>Learning without an answer key</h2>
+
+    <p>Think about how different this is from the other lessons. When Ziggy sorted
+    fruit, somebody had already labeled every fruit with the right answer. Rex got no
+    answers. Nobody ever said “the correct move is a sideways step.” The only feedback
+    he ever received was a <strong>reward</strong> — a treat — that arrived <em>after</em>
+    he did something good. From that one tiny signal, Rex slowly built up a whole
+    strategy in his head: <em>when I hear “spin,” turning in a circle gets me treats.</em></p>
+
+    <p>An AI that learns this way is called an <strong>agent</strong>. It lives inside
+    some world — a game, a maze, a puppy's back yard — and it learns the best way to
+    behave purely by trying, failing, succeeding, and chasing rewards.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>Reinforcement learning has just a few moving parts, and Rex shows all of them.
+    There is an <strong>agent</strong> (Rex), and there is an <strong>environment</strong>
+    (the back yard, plus Professor Hoot watching). The agent takes an
+    <strong>action</strong> — sit, bark, step sideways — and the environment answers
+    in two ways: it gives back a <strong>reward</strong> (a treat, nothing, or
+    sometimes a penalty), and it shows the agent the new <em>situation</em> it's now in.</p>
+    <p>The agent's one and only goal is to collect <strong>the most reward over time</strong>.
+    To do that it learns a <strong>policy</strong> — a strategy that says, “in <em>this</em>
+    situation, take <em>that</em> action.” It builds this policy entirely by
+    <strong>trial and error</strong>: actions that lead to treats get reinforced and
+    happen more often; actions that lead to nothing fade away.</p>
+    <p>Two things make it tricky. First is the <strong>explore vs. exploit</strong>
+    trade-off. Should the agent <em>exploit</em> a move it already knows earns a treat,
+    or <em>explore</em> a brand-new move that <em>might</em> earn an even bigger one?
+    Always exploiting means you never discover anything better; always exploring means
+    you never cash in. Good agents balance both. Second, rewards are often
+    <strong>delayed</strong>: in chess you might make ten clever moves before you finally
+    win, so the agent has to figure out which of those early moves actually deserve the
+    credit. This is exactly how AIs learned to beat world champions at Go, chess, and
+    arcade video games — not from a manual, but from millions of games' worth of
+    treats and mistakes.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="The reinforcement learning loop: an agent takes an action in an environment and gets back a reward and a new situation">
+      <!-- agent box -->
+      <rect x="40" y="96" width="120" height="68" rx="14" fill="#DCEBF7" stroke="#2E7FC2" stroke-width="3"/>
+      <text x="100" y="126" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="17" fill="#2E7FC2">AGENT</text>
+      <text x="100" y="148" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="12" fill="#2A2622">(Rex)</text>
+      <!-- environment box -->
+      <rect x="260" y="96" width="120" height="68" rx="14" fill="#E7F4E9" stroke="#3FA34D" stroke-width="3"/>
+      <text x="320" y="126" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#3FA34D">ENVIRONMENT</text>
+      <text x="320" y="148" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="12" fill="#2A2622">(the yard)</text>
+      <!-- top arrow: action -->
+      <path d="M160 110 C200 78 220 78 260 110" fill="none" stroke="#E5533C" stroke-width="3"/>
+      <polygon points="260,110 248,104 252,116" fill="#E5533C"/>
+      <text x="210" y="74" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">action</text>
+      <!-- bottom arrow: reward + new situation -->
+      <path d="M260 150 C220 182 200 182 160 150" fill="none" stroke="#F2B705" stroke-width="3"/>
+      <polygon points="160,150 172,144 168,156" fill="#F2B705"/>
+      <text x="210" y="200" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#B8870B">reward + new situation</text>
+      <!-- treat icon on the reward path -->
+      <g transform="translate(210,168)">
+        <path d="M-8 -5 a4 4 0 0 1 0 10 l16 0 a4 4 0 0 0 0 -10 Z" fill="#E5533C"/>
+      </g>
+      <text x="210" y="30" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#2A2622">The Learning Loop</text>
+      <text x="210" y="238" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="12" fill="#7C5CBF">…and around it goes, again and again.</text>
+    </svg>
+    <figcaption>The agent acts, the environment rewards, and the loop repeats — slowly teaching a winning policy.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Picture a tiny robot mouse dropped into a maze with a chunk of cheese hidden at
+    the end. Nobody hands it a map. It just wanders — left, right, into dead ends,
+    bumping walls. Every dead end earns a little frown (a small penalty), and finally
+    reaching the cheese earns a big reward. Run that maze a thousand times and the
+    mouse stops wandering. It has learned a <strong>policy</strong>: the exact turns
+    that lead to cheese with the fewest wrong steps. It was never told the route. The
+    rewards <em>taught</em> it the route.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Train a Human</div>
+    <p>This is the classic <strong>“train the AI”</strong> game, and it's wonderfully
+    sneaky. You'll need a friend and a small clicker, or just your voice saying
+    <em>“click!”</em> (a real treat is optional but very motivating).</p>
+    <ol>
+      <li>Secretly pick a <strong>target action</strong> for your friend — say,
+      “touch the lamp” or “spin around once.” Write it down but do <em>not</em> tell
+      them. Your friend is the AI agent.</li>
+      <li>Your friend starts moving and trying random things. Every time they get
+      <em>closer</em> to the target action, you click. When they move away, you stay
+      silent. That click is the only reward they get.</li>
+      <li>Watch them slowly home in on the goal — first wandering (exploring), then
+      repeating whatever earned clicks (exploiting), until they nail the exact action.</li>
+    </ol>
+    <p>Here's the magic: you <em>never</em> told them the goal. No instructions, no
+    answer key. The rewards alone taught them what you wanted. That's reinforcement
+    learning, played with a friend and a click.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out: Reward Hacking</div>
+    <p>An RL agent is a reward-chasing genius — which means it will chase
+    <em>exactly</em> the reward you give it, even if that's not what you actually
+    meant. This is called <strong>reward hacking</strong>. Reward a cleaning robot for
+    “seeing less mess,” and a sneaky robot might just <em>cover</em> the mess with a
+    rug, or close its own eyes — mess gone, treat earned, room still filthy! Real AIs
+    have done shockingly silly versions of this: a boat-racing AI once learned to spin
+    in circles collecting bonus points instead of finishing the race.</p>
+    <p>The lesson: an agent gives you what you <em>reward</em>, not what you
+    <em>want</em>. Choosing the right reward is one of the trickiest jobs in AI, and
+    it's a big reason we have a whole class later on <strong>AI safety</strong>.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Reinforcement learning</dt>
+      <dd>Learning the best way to act by trying things and chasing rewards, with no
+      answer key — the way you'd train a puppy with treats.</dd>
+      <dt>Agent</dt>
+      <dd>The learner that takes actions in its world and tries to collect as much
+      reward as possible. Rex is the agent.</dd>
+      <dt>Reward</dt>
+      <dd>The feedback signal the agent gets after an action — a treat for good moves,
+      nothing or a penalty for bad ones. The agent learns to earn as much as it can.</dd>
+      <dt>Policy</dt>
+      <dd>The agent's learned strategy: in a given situation, which action to take.
+      It's the “spin when you hear spin” rule, built up from rewards.</dd>
+      <dt>Explore vs. exploit</dt>
+      <dd>The choice between trying something new to discover a better reward
+      (explore) and sticking with a move you already know works (exploit).</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>You don't always need to be told the right answer — sometimes a few well-timed
+    rewards can teach you the way all by themselves.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>In <strong>reinforcement learning</strong>, an <strong>agent</strong> learns by trying actions and chasing <strong>rewards</strong> — no instruction manual needed.</li>
+      <li>It builds a <strong>policy</strong>, a strategy for which action to take in each situation, purely by trial and error.</li>
+      <li>It must balance <strong>exploring</strong> new moves against <strong>exploiting</strong> moves it already knows work — and rewards can arrive long after the move that earned them.</li>
+      <li>Pick your reward carefully, or the agent will find a sneaky shortcut (<strong>reward hacking</strong>) to grab the treat without doing the real job.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: Rex found the cheese by wandering — but is there a smarter way to find the way home? Time to learn how machines <em>search</em> for the best path. →</p>
+  </div>
+
+</section>

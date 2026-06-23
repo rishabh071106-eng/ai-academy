@@ -1,0 +1,243 @@
+<section class="page chapter" id="ch19" data-toc-num="19" data-toc-part="p5" data-id-anchor="ch19" data-toc-title="Bias & Fairness: When AI Gets It Wrong">
+
+  <div class="chapter-opener">
+    <div class="kicker leaf">Class Nineteen</div>
+    <h1 class="chapter-title">Bias &amp; Fairness</h1>
+    <p class="chapter-tagline">How a machine can be unfair without ever meaning to be — and how we roll up our sleeves and fix it.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="A judging machine giving a dog a high score while a cat, rabbit, and bird wait with low scores">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- judging machine -->
+        <rect x="130" y="40" width="100" height="96" rx="14" fill="#2E7FC2"/>
+        <rect x="146" y="56" width="68" height="34" rx="8" fill="#FFFDF7"/>
+        <text x="180" y="80" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="18" fill="#2A2622">9.8</text>
+        <circle cx="156" cy="112" r="6" fill="#F2B705"/><circle cx="180" cy="112" r="6" fill="#F2B705"/><circle cx="204" cy="112" r="6" fill="#F2B705"/>
+        <text x="180" y="32" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2A2622">BEST PET 3000</text>
+        <!-- dog, the favorite -->
+        <circle cx="180" cy="170" r="22" fill="#b07a3f"/>
+        <path d="M162 156 q-6 16 4 24 M198 156 q6 16 -4 24" stroke="#8a5a2b" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="173" cy="168" r="3.5" fill="#2A2622"/><circle cx="187" cy="168" r="3.5" fill="#2A2622"/>
+        <ellipse cx="180" cy="177" rx="4" ry="3" fill="#2A2622"/>
+        <!-- the overlooked contestants -->
+        <g transform="translate(44,150)">
+          <circle cx="0" cy="0" r="16" fill="#9b8fb0"/>
+          <path d="M-12 -10 l4 -12 6 10 M12 -10 l-4 -12 -6 10" fill="#9b8fb0"/>
+          <circle cx="-5" cy="-1" r="2.6" fill="#2A2622"/><circle cx="5" cy="-1" r="2.6" fill="#2A2622"/>
+          <text x="0" y="30" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">2.1</text>
+        </g>
+        <g transform="translate(300,148)">
+          <ellipse cx="-7" cy="-18" rx="4" ry="11" fill="#cdc7c1"/><ellipse cx="7" cy="-18" rx="4" ry="11" fill="#cdc7c1"/>
+          <circle cx="0" cy="0" r="16" fill="#cdc7c1"/>
+          <circle cx="-5" cy="-1" r="2.6" fill="#2A2622"/><circle cx="5" cy="-1" r="2.6" fill="#2A2622"/>
+          <text x="0" y="32" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">1.7</text>
+        </g>
+        <g transform="translate(312,98)">
+          <circle cx="0" cy="0" r="12" fill="#3FA34D"/>
+          <path d="M10 0 l12 -4 -8 8z" fill="#F2B705"/>
+          <circle cx="-3" cy="-2" r="2.2" fill="#2A2622"/>
+          <text x="0" y="26" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#E5533C">2.4</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>The classroom buzzed. Ziggy the zebra and Pip the mouse had spent all week
+    building something they were enormously proud of: the <strong>Best Pet 3000</strong>,
+    a judging machine that could look at any animal and give it a fairness score out
+    of ten. They had even painted gold stars on the side.</p>
+
+    <p>“To teach it,” Ziggy explained, “we showed it <em>thousands</em> of photos of
+    wonderful pets. Look how good it is!” She fed it a photo of Rex the dog. The
+    machine whirred, blinked, and lit up: <strong>9.8</strong>. Rex wagged his tail so
+    hard he nearly fell over.</p>
+
+    <p>Then contest day arrived, and three new contestants padded, hopped, and
+    fluttered into the room: a sleek cat, a fluffy rabbit, and a small green bird.
+    One by one, they stepped up to be judged.</p>
+
+    <p class="says"><b>Machine:</b> “Cat… score… <strong>2.1</strong>. Rabbit…
+    <strong>1.7</strong>. Bird… <strong>2.4</strong>.”</p>
+
+    <p>The room went quiet. The cat's whiskers drooped. Pip's ears went flat.</p>
+
+    <p class="says"><b>Pip:</b> “That's… not fair. They're lovely pets! Why is the
+    machine being so <em>mean</em> to them?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Ah. That is exactly the right question,
+    Pip — but I'd change one word. The machine isn't being <em>mean</em>. Meanness
+    needs a feeling, and the machine has none. Tell me: when you taught it, what was
+    in all those thousands of photos?”</p>
+
+    <p>Ziggy's stomach did a small flip. She looked at the training pile. Dogs. Dogs
+    in hats. Dogs at the beach. Dogs, dogs, dogs — and not a single cat, rabbit, or
+    bird among them.</p>
+
+    <p class="says"><b>Ziggy:</b> “Oh no. It never <em>learned</em> what a great cat
+    looks like. So anything that isn't a dog looks wrong to it.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Now you've found it. Your machine isn't
+    cruel. It's <strong>biased</strong> — it learned from a lopsided pile of examples,
+    so it became lopsided too. Remember Class Three, when we said a model is only as
+    good as the data you feed it? This is the shadow side of that very same truth.”</p>
+
+    <h2>The data was tilted, so the answer tilted too</h2>
+
+    <p>Bias isn't a glitch or a bug you can swat. It sneaks in quietly, through the
+    examples themselves. If almost everything an AI sees is a dog, it quietly decides
+    that <em>dog-ness</em> equals <em>good pet</em>. It isn't choosing to be unfair.
+    It is faithfully copying the unfair pattern we handed it — without ever knowing it
+    did anything wrong.</p>
+
+    <p>The fix, Ziggy realized, wasn't to argue with the machine. It was to go back to
+    the <strong>data</strong>. The class spent the afternoon photographing every kind
+    of pet they could find — cats and rabbits and birds and lizards and one very
+    patient goldfish — until the training pile was <strong>balanced</strong>. They fed
+    it all back in. This time, when the cat stepped up, the machine glowed:
+    <strong>9.5</strong>. The cat purred. Justice, at last.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>An AI learns by finding patterns in the examples we give it. That's its great
+    strength — and its great weakness. If the examples are <strong>fair and balanced</strong>,
+    it learns fair patterns. But if the data is lopsided, leaves whole groups out, or
+    quietly carries old human prejudices, the AI copies that unfairness right along
+    with everything else. That copied unfairness is called <strong>bias</strong>.</p>
+    <p>Bias can sneak in through three main doors:</p>
+    <ul>
+      <li><strong>Missing groups in the data</strong> — like a pet judge trained only
+      on dogs. Whoever isn't well represented gets judged worse.</li>
+      <li><strong>Biased labels</strong> — the "right answers" we attach to data are
+      written by people, and people carry their own unfair assumptions. The AI learns
+      those assumptions as if they were facts.</li>
+      <li><strong>How the problem is set up</strong> — the goal we pick, and the
+      features we let it look at, can quietly favor one group over another.</li>
+    </ul>
+    <p>This matters far beyond a pet contest. Real AI helps decide who gets a
+    <strong>loan</strong>, who gets a <strong>job interview</strong>, and who is
+    treated fairly by important systems. A biased model can quietly shut real people
+    out. Here's the hopeful part: the machine isn't evil. It reflects what we feed it.
+    And that means <em>we can do better</em> — by feeding it better.</p>
+    <p>The work of catching and fixing this is called <strong>fairness</strong>. It
+    means checking who the AI does worse for, repairing the data and the goals, and
+    then <strong>testing across different groups</strong> to make sure the fix actually
+    worked for everyone — not just the people who built it.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="Before and after: a lopsided training set of mostly dogs gives unfair scores, while a balanced set gives fair scores">
+      <!-- divider -->
+      <line x1="210" y1="20" x2="210" y2="240" stroke="#cdbf9c" stroke-width="2" stroke-dasharray="5 6"/>
+      <!-- LEFT: lopsided -->
+      <text x="105" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="14" fill="#E5533C">Lopsided data</text>
+      <!-- training group: lots of dogs, one of each other -->
+      <g font-size="17" text-anchor="middle">
+        <text x="40" y="68">🐶</text><text x="64" y="68">🐶</text><text x="88" y="68">🐶</text><text x="112" y="68">🐶</text><text x="136" y="68">🐶</text>
+        <text x="40" y="92">🐶</text><text x="64" y="92">🐶</text><text x="88" y="92">🐶</text><text x="112" y="92">🐶</text><text x="136" y="92">🐱</text>
+      </g>
+      <!-- unfair output bars -->
+      <text x="105" y="124" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="12" fill="#2A2622">scores it gives</text>
+      <g font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622">
+        <text x="44" y="150">🐶</text><rect x="58" y="140" width="80" height="12" rx="6" fill="#3FA34D"/>
+        <text x="44" y="174">🐱</text><rect x="58" y="164" width="20" height="12" rx="6" fill="#E5533C"/>
+        <text x="44" y="198">🐰</text><rect x="58" y="188" width="16" height="12" rx="6" fill="#E5533C"/>
+        <text x="44" y="222">🐦</text><rect x="58" y="212" width="22" height="12" rx="6" fill="#E5533C"/>
+      </g>
+      <text x="105" y="244" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="11" fill="#E5533C">unfair!</text>
+      <!-- RIGHT: balanced -->
+      <text x="315" y="34" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="14" fill="#3FA34D">Balanced data</text>
+      <g font-size="17" text-anchor="middle">
+        <text x="250" y="68">🐶</text><text x="274" y="68">🐱</text><text x="298" y="68">🐰</text><text x="322" y="68">🐦</text><text x="346" y="68">🦎</text>
+        <text x="250" y="92">🐱</text><text x="274" y="92">🐶</text><text x="298" y="92">🐦</text><text x="322" y="92">🐰</text><text x="346" y="92">🐠</text>
+      </g>
+      <text x="315" y="124" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="12" fill="#2A2622">scores it gives</text>
+      <g font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622">
+        <text x="254" y="150">🐶</text><rect x="268" y="140" width="78" height="12" rx="6" fill="#3FA34D"/>
+        <text x="254" y="174">🐱</text><rect x="268" y="164" width="76" height="12" rx="6" fill="#3FA34D"/>
+        <text x="254" y="198">🐰</text><rect x="268" y="188" width="80" height="12" rx="6" fill="#3FA34D"/>
+        <text x="254" y="222">🐦</text><rect x="268" y="212" width="74" height="12" rx="6" fill="#3FA34D"/>
+      </g>
+      <text x="315" y="244" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="11" fill="#3FA34D">fair!</text>
+    </svg>
+    <figcaption>Same machine, different data. A lopsided pile of examples scores everyone-but-dogs unfairly; a balanced pile judges them all fairly.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>“So the machine was never broken,” Pip said slowly, working it out. “<em>We</em>
+    gave it a lopsided view of the world, and it believed us.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Precisely, Pip. And that is the kindest and
+    the most uncomfortable thing about bias all at once. The machine has no opinions of
+    its own. It is a mirror. If we don't like what we see in it, the fairest thing we
+    can do is change what we put in front of the mirror.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Run a Fairness Audit</div>
+    <p>An <strong>audit</strong> is a careful check for who gets treated unfairly.
+    Let's audit an imaginary <strong>Talent Show Judge</strong> AI — one that was
+    trained only on videos of people <em>singing</em>.</p>
+    <ol>
+      <li>List the acts that might enter a talent show: singing, dancing, magic,
+      juggling, telling jokes, playing piano.</li>
+      <li>For each act, ask: <em>would a singing-only judge score this fairly?</em>
+      Circle every act it would unfairly rate low because it never learned about it.</li>
+      <li>Now write the fix: what new examples would you collect so the judge is fair
+      to <em>everyone</em>? (Videos of dancers, magicians, jugglers… a balanced pile.)</li>
+    </ol>
+    <p>Want a real one? Look at the emoji keyboard or the autocomplete on a phone (with
+    a trusted adult). Type a few names, jobs, or foods from different countries. Notice
+    who shows up instantly — and who the system seems to <em>forget</em>. That's bias
+    you can spot with your own eyes.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>The sneakiest thing about bias is that it's usually <strong>invisible to the
+    people who built the AI</strong> — because the AI works just fine <em>for them</em>.
+    Ziggy and Pip tested their machine with Rex, and it scored him a perfect 9.8, so
+    they assumed it was wonderful. They never thought to test it with a cat.</p>
+    <p>That's why <em>"it worked in our tests"</em> is never enough. You have to
+    <strong>deliberately test for the people it might fail</strong> — the groups that
+    aren't you, that aren't in the room. If you only check that it works for yourself,
+    you'll miss the unfairness completely.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Bias</dt>
+      <dd>When an AI treats some groups unfairly because it learned from lopsided,
+      incomplete, or prejudiced data. Not the machine being mean — the machine copying
+      an unfairness we handed it.</dd>
+      <dt>Fairness</dt>
+      <dd>The work of making sure an AI treats different groups equally well — by
+      finding who it does worse for and fixing it.</dd>
+      <dt>Representative data</dt>
+      <dd>Training examples that fairly include every group the AI will be used on, in
+      balanced amounts. The opposite of a pile of nothing-but-dogs.</dd>
+      <dt>Audit</dt>
+      <dd>A careful check of an AI to see who it treats unfairly, done by testing it
+      across many different groups — not just the easy ones.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>An AI is a mirror of its data — so if it's unfair, the answer isn't to blame the
+    machine, but to give it a fairer world to learn from.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li><strong>Bias</strong> happens when an AI learns from lopsided or unfair data and copies that unfairness.</li>
+      <li>It usually comes from <strong>missing groups</strong>, <strong>biased labels</strong>, or <strong>how the problem is set up</strong>.</li>
+      <li>The machine isn't evil — it <strong>reflects what we feed it</strong>, which means we can do better.</li>
+      <li><strong>Fairness</strong> work means auditing who the AI fails and testing across different groups — "it worked for us" isn't enough.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: if AI can get things wrong, how do we keep it safe and friendly? Class Twenty — <em>AI Safety: Keeping It Friendly</em>. →</p>
+  </div>
+
+</section>

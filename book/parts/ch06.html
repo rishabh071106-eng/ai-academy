@@ -1,0 +1,220 @@
+<section class="page chapter" id="ch06" data-toc-num="6" data-toc-part="p2" data-id-anchor="ch06" data-toc-title="Clustering: Finding Your Flock">
+
+  <div class="chapter-opener">
+    <div class="kicker berry">Class Six</div>
+    <h1 class="chapter-title">Clustering</h1>
+    <p class="chapter-tagline">Finding Your Flock — how a machine discovers hidden groups when nobody ever told it what the groups are.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Animals at recess drifting into three natural groups: runners, climbers, and swimmers">
+        <ellipse cx="180" cy="208" rx="155" ry="9" fill="#000" opacity=".06"/>
+        <!-- three loose group rings -->
+        <ellipse cx="86" cy="96" rx="52" ry="44" fill="#E7F4E9" stroke="#3FA34D" stroke-width="3"/>
+        <ellipse cx="262" cy="80" rx="56" ry="42" fill="#E9F1FA" stroke="#2E7FC2" stroke-width="3"/>
+        <ellipse cx="178" cy="172" rx="60" ry="34" fill="#FCF3D6" stroke="#F2B705" stroke-width="3"/>
+        <!-- runners (green) -->
+        <circle cx="70" cy="86" r="9" fill="#3FA34D"/><circle cx="98" cy="92" r="9" fill="#3FA34D"/><circle cx="84" cy="112" r="9" fill="#3FA34D"/>
+        <!-- climbers (blue) -->
+        <circle cx="244" cy="70" r="9" fill="#2E7FC2"/><circle cx="276" cy="66" r="9" fill="#2E7FC2"/><circle cx="262" cy="94" r="9" fill="#2E7FC2"/>
+        <!-- swimmers (yellow) -->
+        <circle cx="158" cy="168" r="9" fill="#F2B705"/><circle cx="190" cy="164" r="9" fill="#F2B705"/><circle cx="178" cy="184" r="9" fill="#F2B705"/>
+        <!-- centroid stars -->
+        <text x="84" y="100" text-anchor="middle" font-size="18">⭐</text>
+        <text x="262" y="84" text-anchor="middle" font-size="18">⭐</text>
+        <text x="178" y="176" text-anchor="middle" font-size="18">⭐</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>The bell rang for recess, and the whole Academy spilled out onto the big
+    meadow at once. No teacher blew a whistle. No one read out a list of teams. No
+    one said, <em>“You there — you're on the climbers, and you over there, you're a
+    swimmer.”</em> The animals were simply set loose into the grass and told to
+    play.</p>
+
+    <p>Ziggy the zebra found a quiet spot, sat down, and watched. She loved
+    watching. And after only a minute, she noticed something that made her ears
+    twitch.</p>
+
+    <p class="says"><b>Ziggy:</b> “Look! Nobody told them where to go… but they're
+    sorting <em>themselves</em>.”</p>
+
+    <p>It was true. Over by the long stretch of flat grass, the fastest animals had
+    gathered — they were racing each other end to end, a blur of legs. Up in the old
+    oak, the climbers had found one another and were swinging branch to branch. And
+    down by the pond, a splashing, happy huddle had formed: the swimmers. Three
+    clear groups, and not a single grown-up had drawn the lines.</p>
+
+    <p class="says"><b>Bolt:</b> “Of course I'm with the runners!” he panted,
+    skidding to a stop. “Where else would a rabbit go? Nobody had to <em>tell</em>
+    me. I just… belong here.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “And <em>that</em>, Bolt, is the whole
+    lesson — though you ran right past it. In every class so far, I handed you the
+    answers. ‘This is an apple, that is a banana.’ ‘This photo is a cat, that one is
+    a dog.’ The labels came first.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “But out here at recess, there are
+    <strong>no labels at all</strong>. Nobody named a single group. And yet the
+    groups appeared anyway — born out of how <em>similar</em> the animals are to one
+    another. That, class, is called <strong>clustering</strong>.”</p>
+
+    <h2>The first lesson with no answer key</h2>
+
+    <p>This was a brand-new kind of idea, and Ziggy felt it click into place. Up
+    until now, every machine in the book had been shown the right answers and asked
+    to copy the pattern. Teachers call that <strong>supervised learning</strong> —
+    there's a supervisor handing over labels.</p>
+
+    <p>Clustering is different. There is no answer key. The machine is handed a big
+    pile of things with <em>no</em> names, and its only job is to notice which ones
+    naturally belong together. Because no supervisor is telling it the answers, this
+    is called <strong>unsupervised learning</strong> — and it's one of the most
+    surprising tricks in all of AI. The machine finds the groups <em>by
+    itself</em>.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>The most famous clustering recipe is called <strong>k-means</strong>, and it
+    is shockingly simple. First a human picks one number: <strong>k</strong>, the
+    number of groups to look for. Say we choose <em>k = 3</em>, because we suspect
+    there are three kinds of recess animal.</p>
+    <p>Now the machine does four steps, over and over:</p>
+    <ol>
+      <li><strong>Drop k center points.</strong> It scatters 3 markers — called
+      <em>centroids</em> — randomly onto the field of data.</li>
+      <li><strong>Assign each animal to its nearest center.</strong> Every animal
+      joins whichever centroid is closest to it. Now there are three rough
+      groups.</li>
+      <li><strong>Move each center to the middle of its group.</strong> Each
+      centroid slides to the exact average position of all the animals that picked
+      it.</li>
+      <li><strong>Repeat steps 2 and 3.</strong> Animals re-pick their nearest
+      center, the centers move again…</li>
+    </ol>
+    <p>…until nothing changes anymore. When the groups stop shuffling, the machine
+    is done — it has discovered the clusters on its own. But here's the honest part:
+    the machine found <em>where</em> the groups are. It has <strong>no idea</strong>
+    what they mean. A human still has to look and say, “Ah — this group is the
+    swimmers.” And a human had to choose that there were 3 groups in the first place.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="Before and after: gray scattered dots become three colored clusters each with a centroid star">
+      <!-- divider -->
+      <line x1="210" y1="30" x2="210" y2="232" stroke="#cdbf9c" stroke-width="2" stroke-dasharray="5 6"/>
+      <text x="105" y="22" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="14" fill="#2A2622">Before: just dots</text>
+      <text x="315" y="22" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="14" fill="#2A2622">After: 3 clusters</text>
+      <!-- BEFORE: gray scatter -->
+      <g fill="#9b958c">
+        <circle cx="58" cy="70" r="6"/><circle cx="80" cy="92" r="6"/><circle cx="64" cy="108" r="6"/>
+        <circle cx="150" cy="64" r="6"/><circle cx="168" cy="86" r="6"/><circle cx="146" cy="98" r="6"/>
+        <circle cx="92" cy="180" r="6"/><circle cx="118" cy="172" r="6"/><circle cx="104" cy="200" r="6"/>
+      </g>
+      <!-- AFTER: colored clusters -->
+      <!-- green cluster -->
+      <g fill="#3FA34D">
+        <circle cx="268" cy="70" r="6"/><circle cx="290" cy="92" r="6"/><circle cx="274" cy="108" r="6"/>
+      </g>
+      <text x="278" y="94" text-anchor="middle" font-size="15">⭐</text>
+      <!-- blue cluster -->
+      <g fill="#2E7FC2">
+        <circle cx="360" cy="64" r="6"/><circle cx="378" cy="86" r="6"/><circle cx="356" cy="98" r="6"/>
+      </g>
+      <text x="365" y="87" text-anchor="middle" font-size="15">⭐</text>
+      <!-- yellow cluster -->
+      <g fill="#F2B705">
+        <circle cx="302" cy="180" r="6"/><circle cx="328" cy="172" r="6"/><circle cx="314" cy="200" r="6"/>
+      </g>
+      <text x="315" y="189" text-anchor="middle" font-size="15">⭐</text>
+    </svg>
+    <figcaption>Same dots, twice. The machine finds the groups and parks a centroid (⭐) at the heart of each. Only a human can name them.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Ziggy grabbed a stick and drew it in the dirt for Bolt: a swarm of plain
+    gray dots on the left, and the very same dots on the right — now colored into
+    three neat clumps, each with a little star at its heart.</p>
+
+    <p class="says"><b>Ziggy:</b> “The star is the <em>centroid</em> — the middle of
+    the group. The machine keeps nudging each star toward the middle of whoever's
+    nearest, until the stars stop moving. That's when it knows the flocks have
+    settled.”</p>
+
+    <p class="says"><b>Mango:</b> “But how does it know to call you ‘swimmers’?”</p>
+
+    <p class="says"><b>Ziggy:</b> “It doesn't! That's the funny part. The machine
+    just says, ‘Here's Group 1, Group 2, and Group 3.’ <em>We</em> walk over, take a
+    look, and say, ‘Oh — Group 3 is soaking wet, let's call them the swimmers.’ The
+    machine finds the flock. The human gives it a name.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: The Mystery Bag</div>
+    <p>Empty a junk drawer or a toy box onto the floor — buttons, LEGO bricks, odd
+    socks, coins, bottle caps, whatever's in there. Make it a real mess. Then,
+    <strong>without anyone telling you the categories</strong>, sort the pile into
+    groups that feel like they belong together.</p>
+    <ol>
+      <li>Just start grouping. Don't plan it. Trust your eyes.</li>
+      <li>When you're done, ask yourself two questions: <em>What did I group by —
+      color? size? shape?</em> That feature you used is exactly what k-means measures
+      to decide who's “near” whom.</li>
+      <li>And: <em>how many groups did I end up with — 3? 5?</em> Nobody handed you
+      that number. You picked your own <strong>k</strong>.</li>
+    </ol>
+    <p>Now try it again, but group by a <em>different</em> feature. The same pile
+    splits into completely different clusters! Change the feature, change the
+    flocks. You just ran k-means with your own two hands.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Clustering has a sneaky danger: it <strong>always</strong> finds groups —
+    even when there aren't any. Toss a handful of totally random, meaningless dots
+    at k-means and ask for 4 groups, and it will cheerfully hand you 4 groups. They
+    just won't <em>mean</em> anything.</p>
+    <p>So <strong>choosing k matters enormously</strong>. Ask for too few groups and
+    you'll squash swimmers and climbers into one mushy blob. Ask for too many and
+    you'll split the runners into a dozen pointless little slivers. And remember:
+    the machine never names the clusters — until a human reads them, “Group 2” means
+    nothing at all.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Clustering</dt>
+      <dd>Sorting a pile of things into groups based only on how similar they are —
+      with nobody saying what the groups should be.</dd>
+      <dt>Unsupervised learning</dt>
+      <dd>Learning from data that has <em>no</em> labels and no answer key. The
+      machine has to find the structure all by itself.</dd>
+      <dt>Centroid</dt>
+      <dd>The center point of a cluster — the average position of everything in the
+      group. k-means slides these around until they stop moving.</dd>
+      <dt>k</dt>
+      <dd>The number of clusters to look for. A human chooses k; the machine then
+      finds that many groups.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>Sometimes nobody tells you the groups — and a smart machine can still find the
+    flocks hiding inside the crowd, just by noticing who belongs near whom.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li><strong>Clustering</strong> finds hidden groups when <strong>no labels</strong> were ever given.</li>
+      <li>That's <strong>unsupervised learning</strong> — no answer key, just structure waiting to be found.</li>
+      <li><strong>k-means</strong> drops k centers, assigns each point to its nearest one, then moves the centers to the middle — over and over until they settle.</li>
+      <li>The machine finds the groups; a <strong>human</strong> still picks k and decides what each cluster <em>means</em>.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: instead of grouping the past, we draw a line straight through it — and follow it into tomorrow. →</p>
+  </div>
+
+</section>

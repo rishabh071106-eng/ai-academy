@@ -1,0 +1,253 @@
+<section class="page chapter" id="ch11" data-toc-num="11" data-toc-part="p3" data-id-anchor="ch11" data-toc-title="Computer Vision: Teaching Machines to See">
+
+  <div class="chapter-opener">
+    <div class="kicker leaf">Class Eleven</div>
+    <h1 class="chapter-title">Computer Vision</h1>
+    <p class="chapter-tagline">How can a machine "see," when all it ever gets is a giant grid of numbers?</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Pip the mouse and Skye the eagle looking at a photo that is really a grid of numbered squares">
+        <ellipse cx="180" cy="206" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- the photo / pixel grid -->
+        <rect x="118" y="40" width="120" height="120" rx="8" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="3"/>
+        <g stroke="#cdbf9c" stroke-width="1">
+          <line x1="148" y1="40" x2="148" y2="160"/><line x1="178" y1="40" x2="178" y2="160"/><line x1="208" y1="40" x2="208" y2="160"/>
+          <line x1="118" y1="70" x2="238" y2="70"/><line x1="118" y1="100" x2="238" y2="100"/><line x1="118" y1="130" x2="238" y2="130"/>
+        </g>
+        <!-- a few dark pixels forming a tiny shape -->
+        <rect x="148" y="70" width="30" height="30" fill="#2E7FC2"/>
+        <rect x="178" y="70" width="30" height="30" fill="#7C5CBF"/>
+        <rect x="148" y="100" width="30" height="30" fill="#7C5CBF"/>
+        <text x="163" y="90" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">9</text>
+        <text x="193" y="90" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">7</text>
+        <text x="223" y="90" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">1</text>
+        <text x="163" y="120" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#fff">7</text>
+        <!-- Pip the mouse (left) -->
+        <g transform="translate(56,118)">
+          <circle cx="-9" cy="-20" r="9" fill="#b9b3ad"/><circle cx="9" cy="-20" r="9" fill="#b9b3ad"/>
+          <circle cx="0" cy="0" r="20" fill="#cdc7c1"/>
+          <circle cx="-6" cy="-3" r="3.5" fill="#2A2622"/><circle cx="6" cy="-3" r="3.5" fill="#2A2622"/>
+          <circle cx="0" cy="6" r="3" fill="#E76FA1"/>
+        </g>
+        <!-- Skye the eagle (right) -->
+        <g transform="translate(304,116)">
+          <circle cx="0" cy="0" r="22" fill="#8a5a2b"/>
+          <path d="M-22 -2 C-22 -24 -2 -28 0 -28 C2 -28 22 -24 22 -2 C12 -10 -12 -10 -22 -2Z" fill="#f4f1ea"/>
+          <circle cx="-7" cy="-2" r="4" fill="#2A2622"/><circle cx="7" cy="-2" r="4" fill="#2A2622"/>
+          <path d="M-6 8 l12 0 -6 9z" fill="#F2B705"/>
+        </g>
+        <text x="180" y="30" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622">a picture = numbers</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Professor Hoot held up a photograph of a fluffy gray cat. “Tell me,” he said,
+    “what is this?” The whole class shouted at once: “A cat!” Easy. Pip the mouse,
+    who notices things nobody else does, smiled — she'd already counted its whiskers.</p>
+
+    <p>“Good,” said the owl. “Now watch.” He tapped the photo, and on the big screen
+    it began to <em>zoom</em>. Closer. Closer. The cat's soft ear blurred into a fuzzy
+    patch. The patch broke into blobs. The blobs broke into… <strong>tiny colored
+    squares</strong>. Zoomed all the way in, the cat was gone. There was nothing left
+    but a grid of little squares, each one a single flat color.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “This, class, is what a computer actually
+    sees. Not a cat. Not even a picture. Just a grid of dots — and every dot is only
+    a <strong>number</strong> telling how bright it is.”</p>
+
+    <p>A new friend had flown in for this class: <strong>Skye</strong>, a sharp-eyed
+    eagle who can spot a fish from the top of a tree. Skye squinted at the screen.</p>
+
+    <p class="says"><b>Skye:</b> “So a picture is secretly a spreadsheet? Every little
+    dot is a number — a 0 for black, a 9 for bright white, and everything in between?”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Exactly so. Each tiny square is called a
+    <strong>pixel</strong>. A phone photo has millions of them. To the computer, the
+    whole image is just a colossal grid of numbers. So here is our puzzle…” He looked
+    straight at Pip. “If all the machine gets is numbers, how on earth does it ever
+    say <em>cat</em>?”</p>
+
+    <h2>Build the big thing from small parts</h2>
+
+    <p>Pip went very quiet, the way she does when she's thinking hard. “When <em>I</em>
+    look at a cat,” she said softly, “I don't see ‘a cat' all at once. First I notice
+    little things. A pointy edge here. A curved line there. Then I notice those edges
+    make a triangle — an <em>ear</em>. Two round shapes — <em>eyes</em>. A row of
+    straight lines — <em>whiskers</em>. And only <em>then</em>, after I've spotted all
+    the little parts, my brain says: cat!”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Pip, you have just described how a machine
+    learns to see. It does not try to recognize a whole cat in one giant leap. It
+    starts with the <em>simplest</em> parts and builds up.”</p>
+
+    <p>Edges first. Then edges joined into small shapes — a corner, a curve. Then
+    shapes joined into bigger parts — an ear, an eye, a nose. Then all the parts
+    together — a face, a body, a whole cat. Small things stacked into bigger things,
+    layer by layer. Skye nodded slowly. “That's how I hunt, too. First I spot a flash
+    of movement. Then a fin. Then — fish!”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>To a computer, an image is a <strong>grid of pixels</strong>, and each pixel is
+    just a number for its brightness (a color pixel is three numbers — red, green,
+    blue). That's the whole input: rows and rows of numbers.</p>
+    <p>To find patterns in those numbers, the machine uses a special kind of neural
+    network — the same idea from Classes 9 and 10, but built for grids. It's called a
+    <strong>convolutional neural network</strong>, or CNN. Its trick is a little
+    <strong>filter</strong> (also called a <em>feature detector</em>): a tiny window,
+    maybe 3×3 pixels, that <strong>slides across the whole image</strong>, one patch at
+    a time, lighting up wherever it finds the pattern it's looking for. One filter
+    might fire on vertical edges; another on a patch of green; another on a corner.</p>
+    <p>Here's the beautiful part. The <strong>early layers</strong> of filters find
+    <em>simple</em> features — edges, corners, blobs of color. The next layer combines
+    those into <strong>shapes</strong> — a circle, a curve, a stripe. Deeper layers
+    combine <em>those</em> into <strong>parts</strong> — an eye, an ear, a wheel. And
+    the final layers combine the parts into whole <strong>objects</strong> — a cat, a
+    car, a face. Nobody tells the network what an edge or an ear is; it
+    <em>learns</em> the useful filters from thousands of example pictures. Stacking many
+    layers is exactly why these <em>deep</em> networks are so astonishingly good at
+    vision.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A pixel grid of a cat's ear turning into edges, then shapes, then the word Cat">
+      <!-- pixel grid forming a simple triangle (an ear) -->
+      <g font-family="Fredoka, sans-serif" font-size="11">
+        <!-- row labels: a 5x5 grid, dark squares form a triangle -->
+        <!-- background grid -->
+        <g stroke="#cdbf9c" stroke-width="1" fill="#FFFDF7">
+          <rect x="20" y="40" width="22" height="22"/><rect x="42" y="40" width="22" height="22"/><rect x="64" y="40" width="22" height="22"/><rect x="86" y="40" width="22" height="22"/><rect x="108" y="40" width="22" height="22"/>
+          <rect x="20" y="62" width="22" height="22"/><rect x="42" y="62" width="22" height="22"/><rect x="64" y="62" width="22" height="22"/><rect x="86" y="62" width="22" height="22"/><rect x="108" y="62" width="22" height="22"/>
+          <rect x="20" y="84" width="22" height="22"/><rect x="42" y="84" width="22" height="22"/><rect x="64" y="84" width="22" height="22"/><rect x="86" y="84" width="22" height="22"/><rect x="108" y="84" width="22" height="22"/>
+          <rect x="20" y="106" width="22" height="22"/><rect x="42" y="106" width="22" height="22"/><rect x="64" y="106" width="22" height="22"/><rect x="86" y="106" width="22" height="22"/><rect x="108" y="106" width="22" height="22"/>
+        </g>
+        <!-- dark pixels (the shape) -->
+        <rect x="64" y="40" width="22" height="22" fill="#2A2622"/>
+        <rect x="42" y="62" width="22" height="22" fill="#2A2622"/><rect x="64" y="62" width="22" height="22" fill="#2A2622"/><rect x="86" y="62" width="22" height="22" fill="#2A2622"/>
+        <rect x="20" y="84" width="22" height="22" fill="#2A2622"/><rect x="42" y="84" width="22" height="22" fill="#2A2622"/><rect x="64" y="84" width="22" height="22" fill="#2A2622"/><rect x="86" y="84" width="22" height="22" fill="#2A2622"/><rect x="108" y="84" width="22" height="22" fill="#2A2622"/>
+        <!-- a couple of numbers shown -->
+        <text x="31" y="55" text-anchor="middle" fill="#2A2622">0</text>
+        <text x="75" y="55" text-anchor="middle" fill="#fff">9</text>
+        <text x="119" y="99" text-anchor="middle" fill="#fff">9</text>
+      </g>
+      <text x="75" y="146" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2A2622">pixels (numbers)</text>
+
+      <!-- arrows -->
+      <g stroke="#7C5CBF" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M138 90 h28"/><path d="M158 84 l10 6 -10 6"/>
+      </g>
+
+      <!-- stage 2: edges -->
+      <rect x="170" y="56" width="64" height="64" rx="8" fill="#FFFDF7" stroke="#2E7FC2" stroke-width="2"/>
+      <g stroke="#2E7FC2" stroke-width="3" fill="none" stroke-linecap="round">
+        <line x1="184" y1="108" x2="202" y2="72"/><line x1="202" y1="72" x2="220" y2="108"/>
+      </g>
+      <text x="202" y="146" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2E7FC2">edges</text>
+
+      <g stroke="#7C5CBF" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M240 90 h28"/><path d="M260 84 l10 6 -10 6"/>
+      </g>
+
+      <!-- stage 3: shape (an ear) -->
+      <rect x="272" y="56" width="64" height="64" rx="8" fill="#FFFDF7" stroke="#3FA34D" stroke-width="2"/>
+      <path d="M286 110 L304 70 L322 110 Z" fill="#E7F4E9" stroke="#3FA34D" stroke-width="3" stroke-linejoin="round"/>
+      <text x="304" y="146" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#3FA34D">a part (ear)</text>
+
+      <g stroke="#7C5CBF" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M342 90 h28"/><path d="M362 84 l10 6 -10 6"/>
+      </g>
+
+      <!-- stage 4: Cat! -->
+      <rect x="316" y="170" width="92" height="44" rx="12" fill="#F2B705"/>
+      <text x="362" y="198" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="18" fill="#2A2622">Cat! 🐱</text>
+      <g stroke="#7C5CBF" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M362 124 v40"/><path d="M356 154 l6 10 6 -10"/>
+      </g>
+
+      <text x="210" y="240" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="12" fill="#2A2622">simple features → bigger features → whole object</text>
+    </svg>
+    <figcaption>A computer sees only numbers. Layer by layer, it builds edges into shapes, shapes into parts, and parts into a whole cat.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p class="says"><b>Skye:</b> “So the filters are like my eyes' first instinct —
+    they hunt for the small clues — and the deeper layers are my brain putting the
+    clues together.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “A fine way to picture it. And notice <em>why</em>
+    Pip is so good at this. She is patient with small parts. A machine that sees must
+    be patient with small parts too — because the small parts are <em>all it has</em>.”</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Become a Pixel Artist</div>
+    <p>Turn a picture into data the way a computer does it. You'll need graph paper (or
+    draw a grid of squares — 10×10 is great) and a pencil.</p>
+    <ol>
+      <li>Draw something simple inside the grid by <strong>filling whole squares</strong>:
+      a heart, a smiley, the letter of your name. Only fill a square if your shape
+      covers most of it.</li>
+      <li>Now write a <strong>number in every square</strong>: <strong>0</strong> for an
+      empty (white) square, <strong>9</strong> for a fully filled (black) square, and
+      something in between (like 4 or 5) for squares you only shaded a little.</li>
+      <li>You just turned a picture into a <em>grid of numbers</em> — the exact thing a
+      computer "sees."</li>
+      <li>Trade grids with a friend. Read <em>only</em> the numbers, not the drawing, and
+      try to color in each square by its number. Can you decode their picture?</li>
+    </ol>
+    <p>If your friend can rebuild your drawing from numbers alone, you've proved that a
+    picture really is just data.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>Because a vision AI only ever sees numbers, it can be <strong>fooled</strong> in
+    ways that would never trick you. Researchers have changed a few pixels in a photo —
+    so few that a human sees no difference at all — and watched a confident AI suddenly
+    call a panda a gibbon. These sneaky tricks are called <em>adversarial examples</em>.</p>
+    <p>And remember: a CNN only recognizes things <strong>similar to what it was trained
+    on</strong>. Show it a cat in a silly costume, a cat upside down, or a kind of cat
+    it never studied, and it may be completely stumped. It learned patterns from its
+    examples — it doesn't truly "understand" cats the way you do.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Pixel</dt>
+      <dd>One tiny dot of a picture. To a computer it's just a number (or three) saying
+      how bright and what color that dot is.</dd>
+      <dt>Computer vision</dt>
+      <dd>The field of teaching machines to make sense of images and video — to find
+      and recognize what's in a picture made of pixels.</dd>
+      <dt>Filter (feature detector)</dt>
+      <dd>A small window that slides across the image hunting for one simple pattern,
+      like an edge or a corner, lighting up wherever it finds it.</dd>
+      <dt>Convolutional neural network (CNN)</dt>
+      <dd>A neural network built for grids of pixels. It slides many filters over an
+      image and stacks them in layers to recognize objects.</dd>
+      <dt>Feature</dt>
+      <dd>A useful clue the network finds — from simple ones (edges) in early layers to
+      complex ones (an eye, a whole face) in deeper layers.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>A machine doesn't see a cat — it sees a grid of numbers, and learns to build the
+    cat out of edges, then shapes, then parts, one layer at a time.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>To a computer, every picture is just a <strong>grid of pixels</strong> — a giant grid of numbers.</li>
+      <li>A <strong>CNN</strong> slides little <strong>filters</strong> across the image to find simple patterns like edges.</li>
+      <li><strong>Early layers</strong> find simple features; <strong>deeper layers</strong> combine them into shapes, parts, and whole objects.</li>
+      <li>Vision AI can be <strong>fooled</strong> by a few changed pixels, and only knows things like what it was trained on.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: pictures stand still, but words and music come in order. How does a machine remember what came before? <em>Memory &amp; Sequences.</em> →</p>
+  </div>
+
+</section>

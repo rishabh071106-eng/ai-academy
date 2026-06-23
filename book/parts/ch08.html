@@ -1,0 +1,254 @@
+<section class="page chapter" id="ch08" data-toc-num="8" data-toc-part="p2" data-id-anchor="ch08" data-toc-title="Overfitting: Memorizing Isn't Learning">
+
+  <div class="chapter-opener">
+    <div class="kicker sky">Class Eight</div>
+    <h1 class="chapter-title">Overfitting</h1>
+    <p class="chapter-tagline">Memorizing isn't learning — the difference between truly understanding an idea and just remembering the answers.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Bolt the rabbit clutching a memorized answer sheet while Tess the tortoise smiles, with Professor Hoot holding a quiz">
+        <ellipse cx="180" cy="208" rx="150" ry="9" fill="#000" opacity=".06"/>
+        <!-- Professor Hoot in the middle, behind -->
+        <g transform="translate(180,30) scale(.62)">
+          <path d="M0 0 C-26 0 -36 26 -36 50 C-36 76 -18 86 0 86 C18 86 36 76 36 50 C36 26 26 0 0 0Z" fill="#9b6a3c"/>
+          <path d="M-24 32 C-24 16 -12 10 0 10 C12 10 24 16 24 32 C24 46 14 52 0 52 C-14 52 -24 46 -24 32Z" fill="#f3e2c7"/>
+          <circle cx="-12" cy="30" r="11" fill="#fff"/><circle cx="12" cy="30" r="11" fill="#fff"/>
+          <circle cx="-10" cy="32" r="5" fill="#2A2622"/><circle cx="10" cy="32" r="5" fill="#2A2622"/>
+          <path d="M0 38 l6 7 -12 0z" fill="#F2B705"/>
+        </g>
+        <!-- quiz paper held below Hoot -->
+        <rect x="150" y="92" width="60" height="40" rx="5" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="2"/>
+        <line x1="158" y1="102" x2="202" y2="102" stroke="#cdbf9c" stroke-width="2"/>
+        <line x1="158" y1="112" x2="202" y2="112" stroke="#cdbf9c" stroke-width="2"/>
+        <line x1="158" y1="122" x2="190" y2="122" stroke="#cdbf9c" stroke-width="2"/>
+        <text x="180" y="88" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="11" fill="#2A2622">QUIZ</text>
+        <!-- Bolt the rabbit on the left clutching answer sheet -->
+        <g transform="translate(70,120)">
+          <ellipse cx="-14" cy="-30" rx="6" ry="18" fill="#9fc1e0"/><ellipse cx="-14" cy="-28" rx="2.5" ry="12" fill="#E76FA1"/>
+          <ellipse cx="6" cy="-30" rx="6" ry="18" fill="#9fc1e0"/><ellipse cx="6" cy="-28" rx="2.5" ry="12" fill="#E76FA1"/>
+          <circle cx="-4" cy="0" r="24" fill="#9fc1e0"/>
+          <circle cx="-12" cy="-3" r="4.5" fill="#2A2622"/><circle cx="4" cy="-3" r="4.5" fill="#2A2622"/>
+          <ellipse cx="-4" cy="6" rx="3.5" ry="3" fill="#E76FA1"/>
+          <path d="M-12 12 q8 5 16 0" stroke="#2A2622" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <rect x="14" y="-6" width="26" height="34" rx="3" fill="#FFFDF7" stroke="#E5533C" stroke-width="2" transform="rotate(8 27 11)"/>
+          <text x="27" y="14" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="9" fill="#E5533C" transform="rotate(8 27 11)">100%</text>
+        </g>
+        <!-- Tess the tortoise on the right, calm -->
+        <g transform="translate(290,140)">
+          <ellipse cx="-20" cy="20" rx="7" ry="5" fill="#7da86b"/><ellipse cx="20" cy="20" rx="7" ry="5" fill="#7da86b"/>
+          <path d="M-30 14 C-30 -8 -14 -18 0 -18 C14 -18 30 -8 30 14 Z" fill="#3FA34D"/>
+          <path d="M-30 14 C-30 -8 -14 -18 0 -18 C14 -18 30 -8 30 14 Z" fill="none" stroke="#2c7d39" stroke-width="3"/>
+          <path d="M0 -18 V14 M-16 -14 L-20 12 M16 -14 L20 12" stroke="#2c7d39" stroke-width="2"/>
+          <circle cx="0" cy="22" r="11" fill="#7da86b"/>
+          <circle cx="-4" cy="20" r="2.5" fill="#2A2622"/><circle cx="4" cy="20" r="2.5" fill="#2A2622"/>
+          <path d="M-5 26 q5 4 10 0" stroke="#2A2622" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>It was test week at the Academy, and the whole class was nervous — all except
+    Bolt the rabbit, who was bouncing with confidence. Professor Hoot had handed out a
+    <strong>practice quiz</strong> the day before: five questions, with the answers
+    printed neatly on the back. “Study these well,” the owl had said, “and tomorrow's
+    real test will feel friendly.”</p>
+
+    <p>Bolt took one look at the practice answers and grinned. He didn't bother to
+    understand <em>any</em> of them. Instead, he did what he was fastest at: he
+    memorized. <em>Question one, answer “forty-two.” Question two, answer “the river.”</em>
+    By bedtime he could recite all five answers backward, forward, and in his sleep.</p>
+
+    <p class="says"><b>Bolt:</b> “I've got this! I know every single answer by heart.”</p>
+
+    <p>Tess the tortoise studied differently — and slower, of course. She barely
+    looked at the printed answers. Instead, she kept asking <em>why</em> each one was
+    right. “If the answer is the river, what's the <em>idea</em> behind it? When would
+    the answer be the lake instead?” She wasn't collecting answers. She was collecting
+    the <strong>reasons</strong>.</p>
+
+    <p class="says"><b>Tess:</b> “I might be slow, Bolt, but I'd rather understand five
+    questions than memorize five answers.”</p>
+
+    <p>The next morning, Professor Hoot passed out the real test — and flipped the
+    whole class upside down. The questions were <strong>brand new</strong>. Same ideas,
+    completely different wording. Not one of them matched the practice quiz.</p>
+
+    <p>Bolt's ears drooped. His memorized answers were useless — they fit the old
+    questions perfectly and the new ones not at all. He'd scored a glorious 100% on
+    the practice and now sat staring at a test he couldn't touch. Tess, meanwhile,
+    read each new question, recognized the underlying idea, and answered it calmly. She
+    aced the test she had never seen.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Bolt, you didn't <em>learn</em> the
+    material. You <em>memorized</em> it. In my world, we have a name for that mistake.
+    We call it <strong>overfitting</strong>.”</p>
+
+    <h2>Great on the old, useless on the new</h2>
+
+    <p>Here is the trap, and it's a sneaky one. Bolt looked like the best student in
+    the room — right up until the questions changed. A model that has overfit is exactly
+    like Bolt: it performs <em>brilliantly</em> on the examples it studied, and then
+    falls apart the moment it meets something new. The whole point of learning is to
+    handle the new. Memorizing the old gets you nowhere.</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>When we train a model, we feed it a pile of examples called the
+    <strong>training set</strong>. The model's goal is not really to ace those
+    examples — it's to learn the <em>pattern underneath</em> them so it can handle new
+    examples it has never seen. That skill has a name: <strong>generalization</strong>.</p>
+    <p><strong>Overfitting</strong> happens when a model hugs the training data
+    <em>too</em> closely. It memorizes not just the real pattern but also every random
+    bump, typo, and quirk — the <em>noise</em>. Like Bolt, it scores almost perfectly
+    on what it has seen and then flops on anything new, because it learned the
+    answers instead of the idea.</p>
+    <p>The opposite mistake is <strong>underfitting</strong>: a model so simple it
+    misses the real pattern entirely. That's like a student who only learned “the
+    answer is probably a number” — too vague to be right about anything. The goal is
+    the <strong>sweet spot in the middle</strong>: complex enough to catch the true
+    pattern, simple enough to ignore the noise.</p>
+    <p>So how do we catch overfitting honestly, before it's too late? We hide some
+    data. We split our examples into a <strong>training set</strong> (the model studies
+    these) and a separate <strong>test set</strong> (the model never sees these while
+    learning). Then we check the score on the test set — the questions it couldn't
+    have memorized. That's the real test, exactly like Hoot's. And here's a surprising
+    truth scientists rely on every day: a <em>simpler</em> model often generalizes
+    better than a fancy, complicated one. Back in Class Four we warned that a decision
+    tree grown too big starts memorizing instead of learning — that was overfitting,
+    and now you know its full name.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="Three panels showing underfitting, a just-right fit, and overfitting on the same scattered dots">
+      <!-- three panels -->
+      <g font-family="Fredoka, sans-serif" font-size="14">
+        <!-- Panel 1: Underfit -->
+        <rect x="14" y="40" width="120" height="120" rx="8" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="2"/>
+        <!-- scattered dots following a gentle curve -->
+        <circle cx="30" cy="130" r="3.5" fill="#2E7FC2"/>
+        <circle cx="46" cy="118" r="3.5" fill="#2E7FC2"/>
+        <circle cx="58" cy="100" r="3.5" fill="#2E7FC2"/>
+        <circle cx="74" cy="92" r="3.5" fill="#2E7FC2"/>
+        <circle cx="90" cy="78" r="3.5" fill="#2E7FC2"/>
+        <circle cx="104" cy="84" r="3.5" fill="#2E7FC2"/>
+        <circle cx="120" cy="64" r="3.5" fill="#2E7FC2"/>
+        <!-- straight line that misses the curve -->
+        <line x1="26" y1="128" x2="124" y2="70" stroke="#E5533C" stroke-width="3" stroke-linecap="round"/>
+        <text x="74" y="178" text-anchor="middle" fill="#E5533C">Underfit</text>
+        <text x="74" y="196" text-anchor="middle" font-size="10" fill="#2A2622">too simple</text>
+
+        <!-- Panel 2: Just right -->
+        <rect x="150" y="40" width="120" height="120" rx="8" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="2"/>
+        <circle cx="166" cy="130" r="3.5" fill="#2E7FC2"/>
+        <circle cx="182" cy="118" r="3.5" fill="#2E7FC2"/>
+        <circle cx="194" cy="100" r="3.5" fill="#2E7FC2"/>
+        <circle cx="210" cy="92" r="3.5" fill="#2E7FC2"/>
+        <circle cx="226" cy="78" r="3.5" fill="#2E7FC2"/>
+        <circle cx="240" cy="84" r="3.5" fill="#2E7FC2"/>
+        <circle cx="256" cy="64" r="3.5" fill="#2E7FC2"/>
+        <!-- smooth curve through the trend -->
+        <path d="M162 132 Q200 96 200 96 T258 66" fill="none" stroke="#3FA34D" stroke-width="3" stroke-linecap="round"/>
+        <text x="210" y="178" text-anchor="middle" fill="#3FA34D">Just right</text>
+        <text x="210" y="196" text-anchor="middle" font-size="10" fill="#2A2622">learns the trend</text>
+
+        <!-- Panel 3: Overfit -->
+        <rect x="286" y="40" width="120" height="120" rx="8" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="2"/>
+        <circle cx="302" cy="130" r="3.5" fill="#2E7FC2"/>
+        <circle cx="318" cy="118" r="3.5" fill="#2E7FC2"/>
+        <circle cx="330" cy="100" r="3.5" fill="#2E7FC2"/>
+        <circle cx="346" cy="92" r="3.5" fill="#2E7FC2"/>
+        <circle cx="362" cy="78" r="3.5" fill="#2E7FC2"/>
+        <circle cx="376" cy="84" r="3.5" fill="#2E7FC2"/>
+        <circle cx="392" cy="64" r="3.5" fill="#2E7FC2"/>
+        <!-- wiggly line touching every dot -->
+        <path d="M302 130 Q310 108 318 118 Q324 104 330 100 Q338 86 346 92 Q354 70 362 78 Q369 92 376 84 Q384 70 392 64"
+              fill="none" stroke="#7C5CBF" stroke-width="3" stroke-linecap="round"/>
+        <text x="346" y="178" text-anchor="middle" fill="#7C5CBF">Overfit</text>
+        <text x="346" y="196" text-anchor="middle" font-size="10" fill="#2A2622">memorizes every dot</text>
+      </g>
+      <text x="210" y="24" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="15" fill="#2A2622">Same dots, three different fits</text>
+    </svg>
+    <figcaption>The straight line is too simple (underfit). The smooth green curve catches the real trend (just right). The wiggly purple line touches every single dot — including the noise — and will get lost on a new dot (overfit).</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Look closely at that wiggly purple line. It passes through every dot
+    <em>perfectly</em> — a flawless 100% on the dots it was given. But it's a fake. Drop
+    a brand-new dot anywhere near the middle and the wiggly line will guess something
+    silly, because it was busy hugging old dots instead of learning the gentle upward
+    trend. The calm green curve misses a dot or two on purpose, and that's exactly why
+    it will do better on everything that comes next.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: The Multiplication Test</div>
+    <p>This experiment shows the difference between memorizing and understanding —
+    using just a pencil and a friend.</p>
+    <ol>
+      <li><strong>Be the "memorizing model."</strong> Memorize these five facts and
+      nothing else: 6×7=42, 8×4=32, 9×3=27, 7×5=35, 6×6=36. Don't think about <em>how</em>
+      multiplication works — just chant the five answers until you know them cold.</li>
+      <li><strong>Now be the "understanding model."</strong> On a different day, learn
+      what multiplication actually <em>means</em>: 6×7 is six groups of seven, which you
+      can count up or add.</li>
+      <li><strong>Take the real test.</strong> Have your friend ask you
+      <em>different</em> facts you never memorized — 8×6, 7×9, 4×5. The memorizing
+      version is stuck. The understanding version can work out every single one.</li>
+    </ol>
+    <p>Which "model" generalized? The one that learned the idea, not the answers. That's
+    the whole lesson of overfitting in one pencil-and-paper test.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>If a model scores a <strong>perfect 100% on its training data</strong>, do not
+    cheer — get suspicious. A perfect training score is usually a <em>red flag</em>,
+    not a trophy. It often means the model memorized the examples (noise and all)
+    instead of learning the pattern. The only honest scoreboard is a
+    <strong>test set</strong> the model has never, ever seen. If it does well on
+    fresh, unseen questions — <em>then</em> you can celebrate.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Overfitting</dt>
+      <dd>When a model fits its training examples too closely — memorizing even the
+      random noise — so it does great on what it has seen and badly on anything new.</dd>
+      <dt>Underfitting</dt>
+      <dd>The opposite mistake: a model too simple to catch the real pattern, so it
+      does poorly on everything, old and new alike.</dd>
+      <dt>Training set</dt>
+      <dd>The examples a model studies and learns from — its practice quiz.</dd>
+      <dt>Test set</dt>
+      <dd>A separate batch of examples the model never sees while learning, kept aside
+      to check honestly whether it really understood — its real test.</dd>
+      <dt>Generalization</dt>
+      <dd>The goal of all learning: handling new, unseen examples correctly, not just
+      the ones you studied.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>Learning isn't remembering the answers — it's understanding the idea well enough
+    to answer questions you've never seen before.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li><strong>Overfitting</strong> means fitting the training data so closely you
+      memorize its noise and fail on anything new.</li>
+      <li><strong>Underfitting</strong> is the opposite — too simple to catch the
+      pattern at all. The goal is the sweet spot in between.</li>
+      <li>We split data into a <strong>training set</strong> and a separate
+      <strong>test set</strong> so we can check learning honestly.</li>
+      <li>A perfect training score is a <strong>red flag</strong>; simpler models
+      often generalize better.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Part Three begins! Next class: what if a machine could learn the way a brain does, with thousands of tiny connected cells? Meet <em>neural networks</em>. →</p>
+  </div>
+
+</section>

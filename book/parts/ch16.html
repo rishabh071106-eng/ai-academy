@@ -1,0 +1,251 @@
+<section class="page chapter" id="ch16" data-toc-num="16" data-toc-part="p4" data-id-anchor="ch16" data-toc-title="Search & Pathfinding: Finding the Way Home">
+
+  <div class="chapter-opener">
+    <div class="kicker sky">Class Sixteen</div>
+    <h1 class="chapter-title">Search &amp; Pathfinding</h1>
+    <p class="chapter-tagline">Finding the Way Home — how a map app, or a character in a video game, finds the shortest path through a maze without trying every single one.</p>
+    <div class="hero-art">
+      <svg viewBox="0 0 360 220" role="img" aria-label="Pip the mouse lost in a hedge maze, with cheese waiting at the far end">
+        <ellipse cx="180" cy="208" rx="150" ry="10" fill="#000" opacity=".06"/>
+        <!-- maze walls (hedges) -->
+        <g stroke="#3FA34D" stroke-width="12" stroke-linecap="round" fill="none">
+          <path d="M40 40 H320"/>
+          <path d="M40 40 V180"/>
+          <path d="M40 180 H320"/>
+          <path d="M320 40 V180"/>
+          <path d="M100 40 V120"/>
+          <path d="M160 80 V180"/>
+          <path d="M220 40 V140"/>
+          <path d="M160 80 H280"/>
+        </g>
+        <!-- the path Pip should take -->
+        <path d="M70 160 H130 V100 H190 V60 H250 V120 H300" stroke="#F2B705" stroke-width="6" stroke-dasharray="3 9" stroke-linecap="round" fill="none"/>
+        <!-- Pip the mouse at start -->
+        <g transform="translate(70,160)">
+          <circle cx="0" cy="0" r="14" fill="#cdc7c1"/>
+          <circle cx="-9" cy="-12" r="7" fill="#b9b3ad"/><circle cx="9" cy="-12" r="7" fill="#b9b3ad"/>
+          <circle cx="-4" cy="-2" r="2.5" fill="#2A2622"/><circle cx="4" cy="-2" r="2.5" fill="#2A2622"/>
+          <circle cx="0" cy="4" r="2.5" fill="#E76FA1"/>
+        </g>
+        <!-- the cheese (goal) -->
+        <g transform="translate(300,120)">
+          <path d="M-14 8 L14 8 L10 -10 Z" fill="#F2B705" stroke="#d99a05" stroke-width="2"/>
+          <circle cx="-4" cy="2" r="2" fill="#d99a05"/><circle cx="5" cy="0" r="1.6" fill="#d99a05"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Pip the mouse was, to put it kindly, completely lost. Professor Hoot had built
+    an enormous <strong>hedge maze</strong> behind the Academy — tall green walls,
+    twisting corridors, dead ends everywhere — and somewhere on the far side sat the
+    most magnificent wedge of cheese Pip had ever smelled. The trouble was getting
+    there.</p>
+
+    <p>Pip tried the obvious thing first: he just started running. Left, then right,
+    then left again, down a corridor that ended in a wall. Back up. Down another one —
+    also a wall. After ten minutes he found himself, panting, exactly where he had
+    started.</p>
+
+    <p class="says"><b>Pip:</b> “I've been everywhere and gotten nowhere! There are
+    <em>hundreds</em> of paths. Do I really have to try every single one?”</p>
+
+    <p class="says"><b>Tess:</b> “That would take all day, Pip. There has to be a tidier
+    way to search.”</p>
+
+    <p>Professor Hoot glided down onto a hedge, looking very pleased, the way he always
+    did right before a lesson.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “What you two need is a <strong>plan for
+    exploring</strong>. Not a lucky guess — a method. The very same method your
+    family's map app uses to find the fastest road home, and the same one a video-game
+    character uses to chase you across a level. It's called <strong>search</strong>,
+    or <strong>pathfinding</strong>.”</p>
+
+    <h2>Spread out, one step at a time</h2>
+
+    <p>Hoot hopped down and drew a glowing line on the dirt from Pip's paws to the
+    nearest crossroads. “Stop thinking about the <em>whole</em> maze,” he said.
+    “Think about one step. From where you stand right now, which places can you reach
+    in a single step?”</p>
+
+    <p>Pip looked. Two corridors opened up — one north, one east. “I can go here, or
+    here,” he said.</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Good. Mark both of those as <em>‘one step
+    away.’</em> Now from each of <em>those</em> spots, where can you reach next? Mark
+    everything new as <em>‘two steps away.’</em> Keep spreading outward like a ripple
+    in a pond. Never step onto a spot you've already marked — you've been there. The
+    very first time your ripple touches the cheese, follow the marks backward, and you
+    will be holding the <strong>shortest path</strong>.”</p>
+
+    <p>Pip's whiskers twitched with delight. He wasn't guessing anymore. He was
+    <em>flooding</em> the maze with little numbers, and the numbers were doing the
+    thinking for him.</p>
+
+    <p class="says"><b>Tess:</b> “So we explore the close places first, then the
+    farther ones. Slow… but it can't possibly miss the shortest way.”</p>
+
+    <p class="says"><b>Professor Hoot:</b> “Exactly, Tess. That careful, even ripple
+    has a name — <strong>breadth-first search</strong>. And there's a cleverer cousin
+    that runs straight toward the cheese. Let me show you both.”</p>
+  </div>
+
+  <aside class="callout how">
+    <div class="callout-head"><span class="ico">🔍</span> How It Really Works</div>
+    <p>First, a computer turns the world into a <strong>graph</strong>. That's just a
+    set of places — called <strong>nodes</strong> — joined by paths. Each open square
+    in the maze is a node; if two squares are next to each other with no wall between,
+    there's a path connecting them. A road map is a graph too: intersections are nodes,
+    streets are the paths.</p>
+    <p><strong>Search</strong> explores this graph outward from the start. The plain,
+    careful version is <strong>breadth-first search</strong>. It works exactly like
+    Pip's ripple: it visits every node one step away, then every node two steps away,
+    then three, and so on. Because it always finishes the nearer ring before touching
+    a farther one, the moment it reaches the goal it has found the <strong>shortest
+    path</strong> — guaranteed. The catch is it spreads in <em>every</em> direction,
+    even away from the goal, so it can do a lot of wasted exploring.</p>
+    <p>The smarter version is called <strong>A*</strong> (say “A-star”). It still spreads
+    out, but it adds a <strong>heuristic</strong> — an educated guess of how far the
+    goal still is, like “the cheese smells stronger this way.” Instead of treating all
+    directions equally, A* always explores the spot whose <em>steps-so-far plus
+    smell-guess</em> is smallest. That makes it lean toward the goal and skip most of
+    the wandering, so it finds the same shortest path <strong>much faster</strong>.</p>
+    <p>One rule keeps any search honest: it must <strong>remember where it has already
+    been</strong>. Cross a spot off the list once you've visited it. Forget to do that,
+    and the search will happily walk in circles forever.</p>
+  </aside>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 420 260" role="img" aria-label="A grid maze where each open cell is numbered by how many steps it took to reach, with the shortest path to the cheese highlighted">
+      <!-- grid background -->
+      <rect x="40" y="30" width="300" height="200" rx="8" fill="#FFFDF7" stroke="#cdbf9c" stroke-width="2"/>
+      <!-- grid lines -->
+      <g stroke="#ece3cf" stroke-width="1">
+        <line x1="100" y1="30" x2="100" y2="230"/><line x1="160" y1="30" x2="160" y2="230"/>
+        <line x1="220" y1="30" x2="220" y2="230"/><line x1="280" y1="30" x2="280" y2="230"/>
+        <line x1="40" y1="70" x2="340" y2="70"/><line x1="40" y1="110" x2="340" y2="110"/>
+        <line x1="40" y1="150" x2="340" y2="150"/><line x1="40" y1="190" x2="340" y2="190"/>
+      </g>
+      <!-- walls (filled cells) -->
+      <g fill="#3FA34D">
+        <rect x="100" y="70" width="60" height="40"/>
+        <rect x="160" y="110" width="60" height="40"/>
+        <rect x="220" y="30" width="60" height="80"/>
+      </g>
+      <!-- shaded explored cells -->
+      <g fill="#FCF3D6">
+        <rect x="40" y="110" width="60" height="40"/>
+        <rect x="40" y="150" width="60" height="40"/>
+        <rect x="100" y="150" width="60" height="40"/>
+        <rect x="160" y="150" width="60" height="40"/>
+        <rect x="220" y="150" width="60" height="40"/>
+        <rect x="280" y="110" width="60" height="40"/>
+        <rect x="280" y="150" width="60" height="40"/>
+      </g>
+      <!-- highlighted shortest path -->
+      <path d="M70 130 V210 H310 V130" stroke="#F2B705" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <!-- step numbers -->
+      <g font-family="Fredoka, sans-serif" font-size="13" fill="#2A2622" text-anchor="middle">
+        <text x="70" y="135">0</text>
+        <text x="70" y="175">1</text>
+        <text x="130" y="175">2</text>
+        <text x="190" y="175">3</text>
+        <text x="250" y="175">4</text>
+        <text x="310" y="175">5</text>
+        <text x="310" y="135">6</text>
+      </g>
+      <!-- mouse at start -->
+      <circle cx="70" cy="50" r="13" fill="#cdc7c1"/>
+      <circle cx="62" cy="40" r="6" fill="#b9b3ad"/><circle cx="78" cy="40" r="6" fill="#b9b3ad"/>
+      <circle cx="66" cy="49" r="2" fill="#2A2622"/><circle cx="74" cy="49" r="2" fill="#2A2622"/>
+      <!-- cheese at goal -->
+      <g transform="translate(310,90)">
+        <path d="M-12 7 L12 7 L8 -9 Z" fill="#F2B705" stroke="#d99a05" stroke-width="2"/>
+        <circle cx="-3" cy="1" r="1.8" fill="#d99a05"/><circle cx="4" cy="0" r="1.4" fill="#d99a05"/>
+      </g>
+    </svg>
+    <figcaption>Each open cell is numbered by how many steps it took to reach. The pale
+    cells are ones the search explored; the yellow line is the shortest path the
+    numbers reveal.</figcaption>
+  </figure>
+
+  <div class="story">
+    <p>Pip followed the ripple, square by square, until a number landed right beside
+    the cheese. Then he read the numbers <em>backward</em> — 6, 5, 4, 3, 2, 1, 0 —
+    and that trail of shrinking numbers was the exact shortest path home. He hadn't
+    tried hundreds of routes. He'd tried each square exactly once.</p>
+  </div>
+
+  <aside class="callout try">
+    <div class="callout-head"><span class="ico">✏️</span> Try It Yourself: Number the Maze</div>
+    <p>Draw a grid maze on paper — about 6 by 6 squares. Color in some squares as
+    <strong>walls</strong>. Put a mouse in one corner and a piece of cheese somewhere
+    far away.</p>
+    <ol>
+      <li>Write <strong>0</strong> in the mouse's square.</li>
+      <li>Find every open square touching a <strong>0</strong> and write <strong>1</strong>
+      in it. Then every open square touching a <strong>1</strong> gets a <strong>2</strong>,
+      and so on. Spread out one ring at a time. <em>Never overwrite a number you've
+      already written</em> — that's how you remember where you've been.</li>
+      <li>When the cheese's square gets a number, stop. Walk backward from it —
+      …4, 3, 2, 1, 0 — and trace the shortest path! That numbering <strong>is</strong>
+      breadth-first search.</li>
+    </ol>
+    <p>Now try the fast cousin: at each step, peek at which open square is
+    <em>closest to the cheese as the crow flies</em> and explore that one first. Notice
+    how the “smell of cheese” pulls you toward the goal and saves you from numbering
+    half the maze. That's the heuristic that powers A*.</p>
+  </aside>
+
+  <aside class="callout oops">
+    <div class="callout-head"><span class="ico">⚠️</span> Watch Out</div>
+    <p>If a search <em>forgets</em> where it has already been, it can loop forever —
+    walking from A to B to A to B and never noticing. Always cross off visited spots.</p>
+    <p>And a heuristic is only a <em>guess</em>. A bad guess — say, “the cheese is always
+    north” when it's really east — can send A* charging the wrong way and make it slower
+    than the plain ripple. Good search needs an honest hint. Remember too: more places
+    and more paths mean more to explore, so a giant map (a whole city, a huge game
+    world) really needs the clever, goal-seeking kind of search.</p>
+  </aside>
+
+  <aside class="callout words">
+    <div class="callout-head"><span class="ico">📖</span> Word Bank</div>
+    <dl>
+      <dt>Graph</dt>
+      <dd>A set of places joined by paths. Turning a maze or a map into a graph is the
+      first thing a pathfinder does.</dd>
+      <dt>Node</dt>
+      <dd>One place in the graph — an open maze square, or an intersection on a map.</dd>
+      <dt>Search</dt>
+      <dd>Exploring a graph outward from the start to find a route to the goal, while
+      remembering where you've already been.</dd>
+      <dt>Heuristic</dt>
+      <dd>An educated guess of how far the goal still is — like “the cheese smells
+      stronger this way.” It steers a search toward the goal.</dd>
+      <dt>Shortest path</dt>
+      <dd>The route with the fewest steps from start to goal. Breadth-first search and
+      A* are both guaranteed to find it.</dd>
+    </dl>
+  </aside>
+
+  <aside class="callout idea">
+    <div class="callout-head"><span class="ico">💡</span> Big Idea</div>
+    <p>You don't have to try every path to find the best one — you just spread out
+    carefully, remember where you've been, and let a good guess pull you toward the
+    goal.</p>
+  </aside>
+
+  <div class="recap">
+    <h3>Before You Turn the Page…</h3>
+    <ul>
+      <li>A pathfinder turns the world into a <strong>graph</strong> of <strong>nodes</strong> joined by paths.</li>
+      <li><strong>Breadth-first search</strong> spreads out one ring at a time and always finds the <strong>shortest path</strong>.</li>
+      <li><strong>A*</strong> adds a <strong>heuristic</strong> — a smell-of-cheese guess — so it heads straight for the goal and finds the path faster.</li>
+      <li>A search must <strong>remember where it's been</strong>, or it loops forever — and a bad guess can lead it astray.</li>
+    </ul>
+    <p style="font-family:var(--display); color:var(--ink-soft); margin-top:.6em">Next class: searching finds what you're looking for — but how does AI suggest things you didn't even know you wanted? <em>Recommendations: How AI Knows What You'll Like.</em> →</p>
+  </div>
+
+</section>
