@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Loan Lifecycle — Interview Prep Guide</title>
+<style>
+  :root{
+    --ink:#1d2330; --soft:#566074; --line:#dfe3ea; --bg:#ffffff;
+    --accent:#1f5fae; --accent-2:#0f8a6a; --warn:#b4521a; --chip:#eef2f8;
+    --code-bg:#f5f7fb;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:var(--serif); color:var(--ink); background:var(--bg);
+    line-height:1.5; font-size:11pt; margin:0;
+  }
+  .wrap{max-width:48rem; margin:0 auto; padding:2.4rem 1.6rem 3rem;}
+
+  h1,h2,h3,h4,.kicker,.chip,th,.tag,nav,.cover-meta{font-family:var(--sans);}
+  h1{font-size:2rem; line-height:1.12; margin:.2rem 0 .4rem; letter-spacing:-.01em;}
+  h2{font-size:1.3rem; margin:2.2rem 0 .5rem; padding-bottom:.28rem; border-bottom:2px solid var(--line); letter-spacing:-.01em;}
+  h3{font-size:1.06rem; margin:1.4rem 0 .35rem; color:var(--accent);}
+  h4{font-size:.96rem; margin:1rem 0 .3rem; color:var(--ink);}
+  p{margin:.5rem 0;}
+  ul,ol{margin:.45rem 0 .7rem; padding-left:1.25rem;}
+  li{margin:.22rem 0;}
+  strong{color:var(--ink);}
+  em{color:var(--soft);}
+  code{font-family:var(--mono); font-size:.86em; background:var(--code-bg); padding:.08em .34em; border-radius:4px;}
+  a{color:var(--accent); text-decoration:none;}
+
+  .kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700;}
+
+  /* cover */
+  .cover{min-height:9.0in; display:flex; flex-direction:column; justify-content:center;
+         border-bottom:none; page-break-after:always;}
+  .cover h1{font-size:2.9rem; line-height:1.05;}
+  .cover .sub{font-size:1.15rem; color:var(--soft); margin:.4rem 0 1.6rem; max-width:34rem;}
+  .cover-rule{height:6px; width:80px; background:var(--accent); border-radius:3px; margin:.2rem 0 1.4rem;}
+  .cover-meta{font-size:.82rem; color:var(--soft); line-height:1.7; border-top:1px solid var(--line); padding-top:1rem; margin-top:1.4rem;}
+  .cover-meta b{color:var(--ink);}
+
+  /* table of contents */
+  .toc ol{list-style:none; padding:0; columns:2; column-gap:2rem;}
+  .toc li{font-family:var(--sans); font-size:.86rem; margin:.28rem 0; break-inside:avoid;}
+  .toc .n{display:inline-block; width:1.6rem; color:var(--accent); font-weight:700;}
+
+  /* boxes */
+  .box{border:1px solid var(--line); border-left:4px solid var(--accent);
+       background:#fbfcfe; border-radius:6px; padding:.7rem .9rem; margin:.9rem 0; break-inside:avoid;}
+  .box.q{border-left-color:var(--accent);}
+  .box.a{border-left-color:var(--accent-2); background:#f6fbf9;}
+  .box.warn{border-left-color:var(--warn); background:#fdf6f1;}
+  .box .tag{display:inline-block; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+            font-weight:700; padding:.1rem .4rem; border-radius:4px; margin-bottom:.3rem;}
+  .box.q .tag{background:#e7eefb; color:var(--accent);}
+  .box.a .tag{background:#e2f3ec; color:var(--accent-2);}
+  .box.warn .tag{background:#fbe6d8; color:var(--warn);}
+  .box p:first-of-type{margin-top:.1rem;}
+  .box p:last-child{margin-bottom:.1rem;}
+
+  /* tables */
+  table{width:100%; border-collapse:collapse; margin:.8rem 0; font-size:.84rem; break-inside:avoid;}
+  th,td{text-align:left; padding:.42rem .55rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--chip); font-size:.74rem; letter-spacing:.04em; text-transform:uppercase; color:var(--soft);}
+  td code{font-size:.8em;}
+
+  /* stage flow */
+  .flow{display:flex; flex-wrap:wrap; gap:.4rem; margin:.9rem 0; font-family:var(--sans);}
+  .flow .step{background:var(--chip); border:1px solid var(--line); border-radius:20px;
+              padding:.28rem .7rem; font-size:.78rem; font-weight:600; color:var(--ink);}
+  .flow .arr{align-self:center; color:var(--soft);}
+
+  .chip{display:inline-block; background:var(--chip); border:1px solid var(--line);
+        border-radius:5px; padding:.08rem .42rem; font-size:.76rem; margin:.1rem .15rem;}
+
+  .note{font-size:.84rem; color:var(--soft); font-style:italic;}
+  hr{border:none; border-top:1px solid var(--line); margin:1.6rem 0;}
+
+  .two-col{columns:2; column-gap:1.6rem;}
+  .two-col dl{margin:0;}
+  dt{font-family:var(--sans); font-weight:700; font-size:.86rem; margin-top:.55rem;}
+  dd{margin:.05rem 0 .3rem; font-size:.9rem;}
+
+  section{page-break-inside:auto;}
+  h2{page-break-after:avoid;}
+  h3,h4{page-break-after:avoid;}
+
+  @page{ size:Letter; margin:0.75in 0.7in; }
+  @media print{
+    .wrap{max-width:none; padding:0;}
+    a{color:var(--ink);}
+    .box,table,figure,.flow{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ───────────────────────── COVER ───────────────────────── -->
+<section class="cover">
+  <div class="kicker">Interview Preparation · Lending &amp; Fintech</div>
+  <h1>The Loan Lifecycle</h1>
+  <div class="cover-rule"></div>
+  <p class="sub">A complete, interview-ready field guide — every stage a loan passes through, the financial math behind it, the regulations that govern it, the systems that run it, and the questions you will be asked about all of it.</p>
+  <div class="cover-meta">
+    <b>Covers:</b> Origination · Underwriting · Pricing · Closing &amp; Funding · Servicing · Delinquency &amp; Collections · Loss Mitigation · Charge-off &amp; Recovery · Payoff<br>
+    <b>Plus:</b> Amortization math · Key ratios · Loan types · U.S. regulation · System-design considerations · 40+ interview Q&amp;A · Glossary<br>
+    <b>Audience:</b> Candidates for product, engineering, data, risk, and ops roles at banks, credit unions, and lending fintechs.
+  </div>
+</section>
+
+<!-- ───────────────────────── TOC ───────────────────────── -->
+<section class="toc">
+  <div class="kicker">Contents</div>
+  <h2 style="border:none;margin-top:.4rem">What's inside</h2>
+  <ol>
+    <li><span class="n">1</span>The lifecycle at a glance</li>
+    <li><span class="n">2</span>Stage 1 — Origination &amp; application</li>
+    <li><span class="n">3</span>Stage 2 — Underwriting</li>
+    <li><span class="n">4</span>Stage 3 — Approval &amp; pricing</li>
+    <li><span class="n">5</span>Stage 4 — Closing &amp; funding</li>
+    <li><span class="n">6</span>Stage 5 — Servicing</li>
+    <li><span class="n">7</span>Stage 6 — Delinquency &amp; default</li>
+    <li><span class="n">8</span>Stage 7 — Loss mitigation</li>
+    <li><span class="n">9</span>Stage 8 — Charge-off &amp; recovery</li>
+    <li><span class="n">10</span>Stage 9 — Payoff &amp; closure</li>
+    <li><span class="n">11</span>The money math</li>
+    <li><span class="n">12</span>Key ratios &amp; metrics</li>
+    <li><span class="n">13</span>Loan types</li>
+    <li><span class="n">14</span>U.S. regulatory landscape</li>
+    <li><span class="n">15</span>System-design considerations</li>
+    <li><span class="n">16</span>Interview Q&amp;A bank</li>
+    <li><span class="n">17</span>Glossary</li>
+    <li><span class="n">18</span>One-page cheat sheet</li>
+  </ol>
+</section>
+
+<!-- ───────────────────────── 1 OVERVIEW ───────────────────────── -->
+<section>
+<h2>1 · The lifecycle at a glance</h2>
+<p>A <strong>loan lifecycle</strong> is the end-to-end journey of a loan from the moment a borrower applies to the moment the debt is fully resolved — either paid off or written off. Every lending business, whether a 150-year-old bank or a two-year-old fintech, runs some version of this pipeline. Knowing the stages, who owns each one, and where money and risk move is the backbone of any lending interview.</p>
+
+<div class="flow">
+  <span class="step">1 · Origination</span><span class="arr">→</span>
+  <span class="step">2 · Underwriting</span><span class="arr">→</span>
+  <span class="step">3 · Approval &amp; Pricing</span><span class="arr">→</span>
+  <span class="step">4 · Closing &amp; Funding</span><span class="arr">→</span>
+  <span class="step">5 · Servicing</span><span class="arr">→</span>
+  <span class="step">6 · Delinquency</span><span class="arr">→</span>
+  <span class="step">7 · Loss Mitigation</span><span class="arr">→</span>
+  <span class="step">8 · Charge-off / Recovery</span><span class="arr">→</span>
+  <span class="step">9 · Payoff</span>
+</div>
+
+<p>Two things to keep straight from the start:</p>
+<ul>
+  <li><strong>The happy path is short.</strong> Most loans go Application → Underwriting → Funding → Servicing → Payoff. Stages 6–8 (delinquency, loss mitigation, charge-off) only happen when a borrower stops paying.</li>
+  <li><strong>"Origination" has two meanings.</strong> Narrowly, it's the application/intake step. Broadly, "origination" refers to everything <em>before</em> funding (application through closing). Clarify which one an interviewer means.</li>
+</ul>
+
+<table>
+  <tr><th>Stage</th><th>Owner</th><th>Core question being answered</th></tr>
+  <tr><td>Origination</td><td>Sales / Loan officer</td><td>Who is this borrower and what do they want?</td></tr>
+  <tr><td>Underwriting</td><td>Underwriter / Risk model</td><td>Can and will they repay?</td></tr>
+  <tr><td>Pricing</td><td>Risk / Capital markets</td><td>What rate compensates us for the risk?</td></tr>
+  <tr><td>Closing &amp; Funding</td><td>Ops / Closing</td><td>Are documents signed and money disbursed?</td></tr>
+  <tr><td>Servicing</td><td>Servicing / Ops</td><td>Are payments coming in correctly?</td></tr>
+  <tr><td>Collections</td><td>Collections</td><td>How do we recover a missed payment?</td></tr>
+  <tr><td>Loss mitigation</td><td>Loss mit / Workout</td><td>Can we restructure to avoid loss?</td></tr>
+  <tr><td>Charge-off / Recovery</td><td>Recovery / Legal</td><td>Accept the loss and recover what we can.</td></tr>
+</table>
+</section>
+
+<!-- ───────────────────────── 2 ORIGINATION ───────────────────────── -->
+<section>
+<h2>2 · Stage 1 — Origination &amp; application</h2>
+<p>The borrower expresses intent and provides data. The lender captures the application, verifies identity, and pulls the information needed to make a decision.</p>
+
+<h3>What happens</h3>
+<ul>
+  <li><strong>Application intake.</strong> Borrower submits personal details, requested amount, term, and purpose. Channels: branch, call center, web, mobile, broker, or point-of-sale (e.g., checkout financing).</li>
+  <li><strong>Identity verification (KYC).</strong> "Know Your Customer" — confirm the person is real and who they claim to be. Tied to <strong>AML</strong> (Anti-Money-Laundering) and <strong>CIP</strong> (Customer Identification Program) requirements, and OFAC sanctions screening.</li>
+  <li><strong>Consent &amp; disclosures.</strong> Borrower authorizes a credit pull and receives initial disclosures (for mortgages, the Loan Estimate within 3 business days).</li>
+  <li><strong>Data collection.</strong> Credit report/score, income documents (pay stubs, W-2s, bank statements, tax returns), employment verification, and for secured loans, collateral details.</li>
+  <li><strong>Pre-qualification vs. pre-approval.</strong> <em>Pre-qual</em> is a soft, self-reported estimate (soft credit pull, no commitment). <em>Pre-approval</em> is a stronger conditional offer based on a hard pull and verified data.</li>
+</ul>
+
+<div class="box warn">
+  <span class="tag">Watch out</span>
+  <p><strong>Soft vs. hard credit inquiry.</strong> A <em>soft pull</em> doesn't affect the borrower's score and is used for pre-qualification and marketing. A <em>hard pull</em> can lower the score a few points and requires borrower permission (FCRA "permissible purpose"). Doing a hard pull without consent is a compliance violation.</p>
+</div>
+
+<h3>Concepts to know</h3>
+<table>
+  <tr><th>Term</th><th>Meaning</th></tr>
+  <tr><td>KYC / CIP</td><td>Verifying borrower identity to prevent fraud and money laundering.</td></tr>
+  <tr><td>Credit bureaus</td><td>Equifax, Experian, TransUnion — they compile credit reports. FICO &amp; VantageScore turn reports into scores.</td></tr>
+  <tr><td>Tri-merge</td><td>A combined report pulling all three bureaus (common in mortgage).</td></tr>
+  <tr><td>Stips</td><td>"Stipulations" — documents the lender requires before approval (proof of income, ID, etc.).</td></tr>
+</table>
+</section>
+
+<!-- ───────────────────────── 3 UNDERWRITING ───────────────────────── -->
+<section>
+<h2>3 · Stage 2 — Underwriting</h2>
+<p>The risk decision. Underwriting assesses whether the borrower <strong>can</strong> repay (capacity) and <strong>will</strong> repay (willingness), and whether the loan fits the lender's policy and risk appetite.</p>
+
+<h3>The Five Cs of Credit</h3>
+<p>The classic framework — expect to be asked to name them:</p>
+<table>
+  <tr><th>C</th><th>What it measures</th><th>Typical signal</th></tr>
+  <tr><td><b>Character</b></td><td>Willingness to repay; credit history.</td><td>Credit score, payment history, derogatory marks.</td></tr>
+  <tr><td><b>Capacity</b></td><td>Ability to repay from income.</td><td>Debt-to-income (DTI), cash flow.</td></tr>
+  <tr><td><b>Capital</b></td><td>Borrower's own skin in the game.</td><td>Down payment, savings, reserves.</td></tr>
+  <tr><td><b>Collateral</b></td><td>Asset securing the loan.</td><td>Loan-to-value (LTV), appraisal.</td></tr>
+  <tr><td><b>Conditions</b></td><td>Loan purpose &amp; the economic environment.</td><td>Rate environment, industry, use of funds.</td></tr>
+</table>
+
+<h3>Manual vs. automated underwriting</h3>
+<ul>
+  <li><strong>Manual underwriting.</strong> A human underwriter reviews the file, exercises judgment, handles exceptions and complex income. Slower, costlier, used for jumbo/complex loans.</li>
+  <li><strong>Automated underwriting systems (AUS).</strong> Rules + models decide instantly. In mortgage: Fannie Mae's <em>Desktop Underwriter (DU)</em>, Freddie Mac's <em>Loan Product Advisor (LPA)</em>. Fintech lenders use proprietary ML scorecards.</li>
+  <li><strong>Hybrid.</strong> Auto-approve the clean middle, auto-decline the clear no's, route the gray zone to humans. This "refer" bucket is where most interview system-design discussion lives.</li>
+</ul>
+
+<div class="box warn">
+  <span class="tag">Watch out — fair lending</span>
+  <p>Underwriting models must not discriminate against protected classes (ECOA / Reg B). Even if a model never sees race, a feature like ZIP code can act as a <strong>proxy</strong> and create <strong>disparate impact</strong>. Models need fair-lending testing, adverse-action reasons, and explainability. This is a favorite interview probe for data/ML roles.</p>
+</div>
+
+<h3>Outputs of underwriting</h3>
+<ul>
+  <li><strong>Approve</strong> — proceed, possibly with conditions ("conditional approval" / "approved with stips").</li>
+  <li><strong>Decline</strong> — must send an <strong>adverse action notice</strong> (ECOA/FCRA) stating the principal reasons.</li>
+  <li><strong>Counter-offer</strong> — approve a smaller amount, shorter term, or higher rate.</li>
+</ul>
+</section>
+
+<!-- ───────────────────────── 4 PRICING ───────────────────────── -->
+<section>
+<h2>4 · Stage 3 — Approval &amp; pricing</h2>
+<p>An approved loan still needs a <strong>price</strong> — the interest rate and fees. Pricing translates risk into a number.</p>
+
+<h3>Risk-based pricing</h3>
+<p>Higher-risk borrowers pay higher rates. Conceptually the rate is built up from components:</p>
+<table>
+  <tr><th>Component</th><th>Covers</th></tr>
+  <tr><td>Cost of funds</td><td>What it costs the lender to borrow/raise the money.</td></tr>
+  <tr><td>Operating cost</td><td>Origination &amp; servicing overhead.</td></tr>
+  <tr><td>Expected loss</td><td>PD × LGD × EAD — the credit risk premium (see §12).</td></tr>
+  <tr><td>Cost of capital</td><td>Return required on the equity held against the loan.</td></tr>
+  <tr><td>Profit margin</td><td>Target spread.</td></tr>
+</table>
+
+<h3>Rate vs. APR</h3>
+<div class="box">
+  <p><strong>Interest rate</strong> is the cost of borrowing the principal, expressed annually. <strong>APR (Annual Percentage Rate)</strong> folds in points and most fees, so it's the true all-in cost and is required by TILA for an apples-to-apples comparison. <strong>APR ≥ interest rate</strong> almost always. APY (yield) is the savings-side analog that includes compounding.</p>
+</div>
+
+<h3>Fixed vs. variable</h3>
+<ul>
+  <li><strong>Fixed rate</strong> — same rate for the life of the loan; predictable payment.</li>
+  <li><strong>Variable / adjustable (ARM)</strong> — rate = <em>index</em> (e.g., SOFR, Prime) + <em>margin</em>, resetting periodically, often with caps on each adjustment and a lifetime cap.</li>
+</ul>
+<p class="note">In mortgage, the rate can be "locked" for a window so it doesn't move between approval and closing. Points are optional upfront fees paid to buy down the rate.</p>
+</section>
+
+<!-- ───────────────────────── 5 CLOSING ───────────────────────── -->
+<section>
+<h2>5 · Stage 4 — Closing &amp; funding</h2>
+<p>The loan becomes legally binding and the money moves.</p>
+<ul>
+  <li><strong>Final disclosures.</strong> For mortgages, the <strong>Closing Disclosure</strong> must reach the borrower at least <strong>3 business days before</strong> closing (TRID rule), so they can compare it against the Loan Estimate.</li>
+  <li><strong>Document execution.</strong> Borrower signs the <strong>promissory note</strong> (promise to repay) and, for secured loans, the <strong>security instrument</strong> (mortgage/deed of trust, or lien on the vehicle title).</li>
+  <li><strong>Perfecting the lien.</strong> Recording the mortgage or filing a <strong>UCC-1</strong> makes the lender's claim on collateral enforceable and senior.</li>
+  <li><strong>Funding / disbursement.</strong> Money is wired to the borrower, dealer, seller, or paid to the title/escrow company. The <strong>funding date</strong> often differs from the signing date.</li>
+  <li><strong>Right of rescission.</strong> For certain refinances/home-equity loans, the borrower gets 3 business days to cancel before funds disburse.</li>
+  <li><strong>Boarding.</strong> The new loan is "boarded" onto the servicing system — account number, amortization schedule, and first-payment date created.</li>
+</ul>
+
+<div class="box">
+  <span class="tag">Note · origination ends here</span>
+  <p>Everything up to and including funding is the <strong>origination</strong> side of the house. After boarding, the loan crosses into <strong>servicing</strong>. Many fintechs originate loans and then sell them; servicing may be done in-house or by a third-party <em>sub-servicer</em>.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 6 SERVICING ───────────────────────── -->
+<section>
+<h2>6 · Stage 5 — Servicing</h2>
+<p>The long, quiet middle. Servicing is everything that keeps a performing loan running until payoff — usually years. This is where most of a lending platform's day-to-day software lives.</p>
+
+<h3>Core servicing functions</h3>
+<ul>
+  <li><strong>Payment processing.</strong> Accept payments (ACH, card, check, wire), apply them in the correct order, and post to the ledger.</li>
+  <li><strong>Payment application waterfall.</strong> A payment is typically applied <em>fees → interest → principal</em>, or in many consumer loans <em>interest → principal → fees</em>. Order matters and is governed by the note. Extra payments may go to principal ("principal curtailment").</li>
+  <li><strong>Interest accrual.</strong> Interest accrues daily on the outstanding principal (see §11). Servicers run nightly accrual jobs.</li>
+  <li><strong>Amortization schedule.</strong> The plan of how each payment splits between interest and principal over the term.</li>
+  <li><strong>Escrow (mortgage).</strong> Servicer collects 1/12 of annual property taxes &amp; insurance with each payment and pays those bills when due. Annual escrow analysis trues up shortages/surpluses.</li>
+  <li><strong>Statements &amp; notices.</strong> Periodic statements, year-end interest (Form 1098), rate-change notices for ARMs.</li>
+  <li><strong>Customer servicing.</strong> Payoff quotes, due-date changes, autopay setup, hardship intake.</li>
+</ul>
+
+<h3>Statuses a performing loan moves through</h3>
+<div class="flow">
+  <span class="step">Current</span><span class="arr">→</span>
+  <span class="step">In grace period</span><span class="arr">→</span>
+  <span class="step">Late fee assessed</span><span class="arr">→</span>
+  <span class="step">Delinquent (30/60/90 DPD)</span>
+</div>
+<p class="note">DPD = "days past due." A grace period (often 10–15 days) lets a late payment land without a fee; the loan only reports delinquent to bureaus after ~30 days past due.</p>
+
+<h3>Servicing transfers &amp; the secondary market</h3>
+<p>Loans (or just the servicing rights, "MSRs" for mortgages) are frequently sold. When servicing transfers, the borrower gets a <strong>goodbye/hello letter</strong> and a 60-day window where a payment to the old servicer can't be counted late (RESPA). Loans are also <strong>securitized</strong> — bundled into pools (MBS/ABS) and sold to investors, which is why origination and servicing are often separate businesses.</p>
+</section>
+
+<!-- ───────────────────────── 7 DELINQUENCY ───────────────────────── -->
+<section>
+<h2>7 · Stage 6 — Delinquency &amp; default</h2>
+<p>A borrower misses payments. The loan moves from collections-light reminders to formal default handling.</p>
+
+<h3>The delinquency ladder</h3>
+<table>
+  <tr><th>Bucket</th><th>What's happening</th></tr>
+  <tr><td>1–29 DPD</td><td>Early/soft collections: reminders, texts, calls. Often curable quickly.</td></tr>
+  <tr><td>30 DPD</td><td>First bureau-reportable delinquency. Late fee already assessed.</td></tr>
+  <tr><td>60–90 DPD</td><td>Escalating contact. Loss-mitigation options offered.</td></tr>
+  <tr><td>90+ DPD</td><td>Serious delinquency. Often the trigger for default classification.</td></tr>
+  <tr><td>Default</td><td>Borrower has breached the note's terms. Acceleration may be invoked.</td></tr>
+</table>
+
+<h3>Key concepts</h3>
+<ul>
+  <li><strong>Delinquent vs. default.</strong> <em>Delinquent</em> = behind on a payment. <em>Default</em> = a formal breach of the contract (definition is in the note; commonly 90+ days, but can include other covenant breaches).</li>
+  <li><strong>Acceleration.</strong> After default, the lender can declare the <em>entire</em> remaining balance due immediately — not just the missed payment.</li>
+  <li><strong>Cure.</strong> Bringing the loan current by paying the past-due amount (plus fees) returns it to performing status.</li>
+  <li><strong>Roll rates.</strong> The probability a loan in one bucket "rolls" to the next (30→60→90). Core to loss forecasting and collections staffing.</li>
+</ul>
+
+<div class="box warn">
+  <span class="tag">Watch out — FDCPA</span>
+  <p>Collections activity is tightly regulated by the <strong>FDCPA</strong> (and state law): no calls before 8am/after 9pm, no harassment, no false threats, honor cease-contact requests. This applies most strictly to third-party debt collectors but shapes first-party practice too.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 8 LOSS MIT ───────────────────────── -->
+<section>
+<h2>8 · Stage 7 — Loss mitigation (workout)</h2>
+<p>Foreclosing or charging off is expensive. Loss mitigation tries to keep the borrower paying <em>something</em> and minimize the lender's loss. Expect to be asked the difference between these tools:</p>
+
+<table>
+  <tr><th>Option</th><th>What it does</th></tr>
+  <tr><td><b>Forbearance</b></td><td>Temporarily pause or reduce payments during hardship; arrears repaid later. Terms unchanged.</td></tr>
+  <tr><td><b>Deferment</b></td><td>Move missed payments to the end of the loan. Common in auto/student loans.</td></tr>
+  <tr><td><b>Repayment plan</b></td><td>Spread the past-due amount over several months on top of regular payments.</td></tr>
+  <tr><td><b>Loan modification</b></td><td>Permanently change terms — lower rate, longer term, or principal forbearance/forgiveness — to make payments affordable.</td></tr>
+  <tr><td><b>Refinance</b></td><td>Replace the old loan with a new one on better terms (borrower must still qualify).</td></tr>
+  <tr><td><b>Short sale / DIL</b></td><td>For secured loans: sell the collateral for less than owed, or hand it back ("deed in lieu") to avoid foreclosure.</td></tr>
+</table>
+
+<div class="box">
+  <span class="tag">TDR — know this term</span>
+  <p>When a lender grants a concession to a troubled borrower, it may be classified as a <strong>Troubled Debt Restructuring</strong>, which carries specific accounting and reporting treatment. Under newer accounting standards (<strong>CECL</strong>), TDR-specific designation was eliminated in favor of broader expected-loss disclosure — a nice detail to mention for risk/accounting-adjacent roles.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 9 CHARGE-OFF ───────────────────────── -->
+<section>
+<h2>9 · Stage 8 — Charge-off &amp; recovery</h2>
+<p>When recovery looks unlikely, the lender accepts the loss on its books — but the debt doesn't vanish.</p>
+<ul>
+  <li><strong>Charge-off.</strong> An <em>accounting</em> action: the lender declares the debt unlikely to be collected and removes it from assets (moves it against the loan-loss reserve). For most consumer loans this happens at <strong>120–180 DPD</strong> (regulatory guidance). <em>The borrower still legally owes the money.</em></li>
+  <li><strong>Recovery.</strong> After charge-off, the lender still tries to collect — in-house, via a contingency collection agency, or by <strong>selling the debt</strong> to a debt buyer for cents on the dollar. Anything recovered is "recovery income."</li>
+  <li><strong>Repossession / foreclosure.</strong> For secured loans, the lender seizes and sells the collateral. Proceeds reduce the balance; any remaining gap is a <strong>deficiency balance</strong> the borrower may still owe.</li>
+  <li><strong>Provision &amp; reserves.</strong> Lenders set aside an <strong>allowance for loan losses</strong> in advance (under <strong>CECL</strong>, based on <em>expected lifetime losses</em>). Charge-offs draw down this reserve; the periodic top-up is the "provision expense" on the income statement.</li>
+</ul>
+
+<div class="box warn">
+  <span class="tag">Watch out — common confusion</span>
+  <p><strong>Charge-off ≠ forgiveness.</strong> A charged-off debt can still be collected, sold, and reported on credit for up to 7 years. It only becomes uncollectible-by-law when the <em>statute of limitations</em> passes or the debt is formally settled/discharged (e.g., bankruptcy).</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 10 PAYOFF ───────────────────────── -->
+<section>
+<h2>10 · Stage 9 — Payoff &amp; closure</h2>
+<p>The happy ending, and the most common one. The loan is fully satisfied.</p>
+<ul>
+  <li><strong>Payoff quote.</strong> Outstanding principal + accrued interest to the payoff date + any fees. It changes daily because interest accrues — quotes are "good through" a specific date.</li>
+  <li><strong>Routes to payoff:</strong> scheduled final payment, early full prepayment, refinance (new loan pays off old), or sale of the collateral.</li>
+  <li><strong>Prepayment penalty.</strong> Some loans charge a fee for paying off early (lender loses expected interest). Many consumer loans prohibit them; disclosure is required where allowed.</li>
+  <li><strong>Lien release.</strong> For secured loans, the lender files a release/satisfaction (mortgage satisfaction, lien release on title) so the borrower owns the asset free and clear.</li>
+  <li><strong>Account closure &amp; reporting.</strong> Loan marked "paid/closed" and reported to bureaus as paid in full — a positive credit event.</li>
+</ul>
+</section>
+
+<!-- ───────────────────────── 11 MATH ───────────────────────── -->
+<section>
+<h2>11 · The money math</h2>
+<p>You will likely be asked to reason about at least one of these. Know the intuition even if you don't memorize the formula.</p>
+
+<h3>Amortization</h3>
+<p>An amortizing loan has a fixed periodic payment. Early payments are mostly interest; later payments are mostly principal. The fixed payment is:</p>
+<div class="box">
+  <p style="font-family:var(--mono);font-size:.92rem;">
+    M = P · [ i(1+i)<sup>n</sup> ] / [ (1+i)<sup>n</sup> − 1 ]
+  </p>
+  <p class="note" style="margin-top:.3rem">M = payment · P = principal · i = periodic rate (annual ÷ periods) · n = number of payments</p>
+</div>
+<p>Each period: <code>interest = balance × i</code>, <code>principal = M − interest</code>, <code>new balance = balance − principal</code>. Repeat until zero.</p>
+
+<table>
+  <tr><th>Month</th><th>Payment</th><th>Interest</th><th>Principal</th><th>Balance</th></tr>
+  <tr><td>—</td><td colspan="3">$10,000 loan · 12% APR (1%/mo) · 12 months</td><td>$10,000.00</td></tr>
+  <tr><td>1</td><td>$888.49</td><td>$100.00</td><td>$788.49</td><td>$9,211.51</td></tr>
+  <tr><td>2</td><td>$888.49</td><td>$92.12</td><td>$796.37</td><td>$8,415.14</td></tr>
+  <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+  <tr><td>12</td><td>$888.49</td><td>$8.80</td><td>$879.69</td><td>$0.00</td></tr>
+</table>
+<p class="note">Notice interest shrinks and principal grows each month — that's amortization in action.</p>
+
+<h3>Interest accrual conventions</h3>
+<ul>
+  <li><strong>Simple daily interest:</strong> <code>daily accrual = (balance × annual rate) / 365</code>. Most auto/personal loans. Paying early saves interest; paying late costs more.</li>
+  <li><strong>Day-count conventions:</strong> 30/360, actual/365, actual/360 — they change how a day's interest is computed. Easy to get wrong in code; a classic source of "off by a few cents" bugs.</li>
+  <li><strong>Compounding:</strong> interest charged on accrued interest. Credit cards compound daily; most installment loans don't compound if paid on schedule.</li>
+</ul>
+
+<h3>Interest rate vs. APR vs. APY</h3>
+<table>
+  <tr><th>Metric</th><th>Includes</th><th>Used for</th></tr>
+  <tr><td>Nominal rate</td><td>Just interest on principal</td><td>Computing the payment</td></tr>
+  <tr><td>APR</td><td>Interest + most fees/points</td><td>Comparing loan cost (TILA)</td></tr>
+  <tr><td>APY / EAR</td><td>Interest + compounding effect</td><td>True yield on savings/investments</td></tr>
+</table>
+</section>
+
+<!-- ───────────────────────── 12 RATIOS ───────────────────────── -->
+<section>
+<h2>12 · Key ratios &amp; risk metrics</h2>
+<table>
+  <tr><th>Metric</th><th>Formula / meaning</th><th>Why it matters</th></tr>
+  <tr><td><b>DTI</b><br>Debt-to-income</td><td>Monthly debt ÷ gross monthly income</td><td>Capacity to take on payments. Mortgages often cap ~43–50%.</td></tr>
+  <tr><td><b>LTV</b><br>Loan-to-value</td><td>Loan amount ÷ collateral value</td><td>Cushion if borrower defaults. &gt;80% on a mortgage usually triggers PMI.</td></tr>
+  <tr><td><b>FICO / score</b></td><td>300–850 credit score</td><td>Summary of credit risk (character).</td></tr>
+  <tr><td><b>PD</b></td><td>Probability of Default</td><td>Likelihood the loan defaults.</td></tr>
+  <tr><td><b>LGD</b></td><td>Loss Given Default (1 − recovery rate)</td><td>Share of exposure lost if it defaults.</td></tr>
+  <tr><td><b>EAD</b></td><td>Exposure at Default</td><td>Balance at risk when default hits.</td></tr>
+  <tr><td><b>Expected Loss</b></td><td><code>EL = PD × LGD × EAD</code></td><td>The cornerstone of credit pricing &amp; reserves.</td></tr>
+  <tr><td><b>NIM</b><br>Net interest margin</td><td>(Interest income − interest expense) ÷ assets</td><td>Core lending profitability.</td></tr>
+  <tr><td><b>NCO</b><br>Net charge-off rate</td><td>(Charge-offs − recoveries) ÷ avg loans</td><td>Realized credit losses; portfolio health.</td></tr>
+  <tr><td><b>Delinquency rate</b></td><td>Balance 30+ DPD ÷ total balance</td><td>Leading indicator of future losses.</td></tr>
+  <tr><td><b>Vintage / cohort</b></td><td>Loans grouped by origination period</td><td>Compares how each "vintage" performs over its life.</td></tr>
+</table>
+</section>
+
+<!-- ───────────────────────── 13 LOAN TYPES ───────────────────────── -->
+<section>
+<h2>13 · Loan types (and how the lifecycle bends)</h2>
+<div class="two-col">
+<dl>
+  <dt>Mortgage</dt>
+  <dd>Secured by real estate. Long (15–30 yr), heavily regulated (TRID, RESPA), escrow for taxes/insurance, foreclosure on default.</dd>
+  <dt>Auto loan</dt>
+  <dd>Secured by the vehicle. Shorter term, fast (often instant) underwriting, repossession on default, deficiency balances common.</dd>
+  <dt>Personal / installment</dt>
+  <dd>Usually unsecured. Fixed payments; fintech sweet spot. Charge-off (no collateral) rather than repossession.</dd>
+  <dt>Credit card (revolving)</dt>
+  <dd>No fixed term; a credit <em>line</em>. Minimum payments, daily compounding, utilization matters. "Lifecycle" loops continuously.</dd>
+  <dt>Student loan</dt>
+  <dd>Federal vs. private differ hugely. Deferment/forbearance, income-driven repayment, special bankruptcy treatment.</dd>
+  <dt>Small business / commercial</dt>
+  <dd>Underwriting on business financials &amp; cash flow; often personal guarantees, covenants, UCC liens.</dd>
+  <dt>HELOC</dt>
+  <dd>Revolving line secured by home equity. Draw period then repayment period.</dd>
+  <dt>BNPL</dt>
+  <dd>"Buy Now Pay Later." Tiny, short, point-of-sale installments. Light underwriting; growing regulatory attention.</dd>
+</dl>
+</div>
+<p class="note">Secured vs. unsecured is the single biggest fork: secured loans add collateral valuation, lien perfection, and repossession/foreclosure; unsecured loans lean harder on credit and income, and go straight to charge-off.</p>
+</section>
+
+<!-- ───────────────────────── 14 REGULATION ───────────────────────── -->
+<section>
+<h2>14 · U.S. regulatory landscape</h2>
+<p>You don't need to be a lawyer, but naming the right acronym at the right stage signals real domain knowledge.</p>
+<table>
+  <tr><th>Law / Reg</th><th>What it governs</th><th>Stage</th></tr>
+  <tr><td><b>TILA</b> (Reg Z)</td><td>Truth in Lending — APR &amp; cost disclosures, right of rescission.</td><td>Pricing / Closing</td></tr>
+  <tr><td><b>RESPA</b> (Reg X)</td><td>Real Estate Settlement — closing costs, escrow, servicing transfers.</td><td>Closing / Servicing</td></tr>
+  <tr><td><b>TRID</b></td><td>TILA-RESPA Integrated Disclosure — Loan Estimate &amp; Closing Disclosure.</td><td>Origination / Closing</td></tr>
+  <tr><td><b>ECOA</b> (Reg B)</td><td>Equal Credit Opportunity — no discrimination; adverse-action notices.</td><td>Underwriting</td></tr>
+  <tr><td><b>FCRA</b></td><td>Fair Credit Reporting — credit pulls, accuracy, permissible purpose.</td><td>Origination / Servicing</td></tr>
+  <tr><td><b>FDCPA</b></td><td>Fair Debt Collection Practices — how debts may be collected.</td><td>Collections</td></tr>
+  <tr><td><b>HMDA</b></td><td>Home Mortgage Disclosure — report lending data for fair-lending oversight.</td><td>Reporting</td></tr>
+  <tr><td><b>BSA / AML</b></td><td>Bank Secrecy / Anti-Money-Laundering — KYC, CIP, SARs.</td><td>Origination</td></tr>
+  <tr><td><b>UDAAP</b></td><td>Unfair, Deceptive, or Abusive Acts &amp; Practices — catch-all consumer protection.</td><td>All stages</td></tr>
+  <tr><td><b>SCRA</b></td><td>Servicemembers Civil Relief — rate caps &amp; protections for active military.</td><td>Servicing / Collections</td></tr>
+</table>
+<p class="note">Federal enforcers: the <strong>CFPB</strong> (consumer protection), OCC, FDIC, Federal Reserve, and state regulators.</p>
+</section>
+
+<!-- ───────────────────────── 15 SYSTEM DESIGN ───────────────────────── -->
+<section>
+<h2>15 · System-design considerations</h2>
+<p>For engineering/data roles, the lifecycle maps onto a set of systems. Be ready to whiteboard one.</p>
+
+<h3>The system map</h3>
+<table>
+  <tr><th>System</th><th>Owns</th></tr>
+  <tr><td>LOS — Loan Origination System</td><td>Application, document collection, underwriting workflow, decisioning up to funding.</td></tr>
+  <tr><td>Decision engine</td><td>Rules + ML scorecards; returns approve/decline/refer + price + reasons.</td></tr>
+  <tr><td>LMS — Loan Management/Servicing System</td><td>Ledger, accrual, payment processing, statements, payoff.</td></tr>
+  <tr><td>Collections platform</td><td>Delinquency workflows, dialer/comms, promise-to-pay.</td></tr>
+  <tr><td>Data warehouse / feature store</td><td>Reporting, vintage analysis, model features, regulatory reporting.</td></tr>
+</table>
+
+<h3>Hard problems interviewers love</h3>
+<ul>
+  <li><strong>The ledger must be correct and auditable.</strong> Use double-entry bookkeeping, an append-only event log, and idempotent posting. Never mutate balances in place — derive them from immutable transactions. Money bugs are the worst bugs.</li>
+  <li><strong>Idempotency.</strong> A payment webhook or retry must not double-charge or double-post. Idempotency keys everywhere money moves.</li>
+  <li><strong>Money representation.</strong> Never use floats for currency — use integer minor units (cents) or fixed-precision decimals. Rounding rules must be deterministic and documented.</li>
+  <li><strong>Daily batch vs. real-time.</strong> Interest accrual, delinquency aging, and statement cuts are typically nightly batch jobs; payments and decisions are real-time. Reconciling the two (and handling missed/late batches) is a real design question.</li>
+  <li><strong>State machine.</strong> Model loan status as an explicit state machine (current → delinquent → default → charged-off / paid) with allowed transitions and an audit trail.</li>
+  <li><strong>Time &amp; correctness.</strong> Business days, time zones, cutoff times, backdated payments, and day-count conventions all bite. Make "effective date" a first-class concept.</li>
+  <li><strong>Auditability &amp; compliance.</strong> Every decision needs stored inputs, model version, and adverse-action reasons. Regulators can ask "why was this person declined?" years later.</li>
+  <li><strong>Model governance (ML roles).</strong> Versioning, monitoring for drift, fair-lending testing, explainability (reason codes), and a human-review path for the "refer" bucket.</li>
+</ul>
+</section>
+
+<!-- ───────────────────────── 16 Q&A ───────────────────────── -->
+<section>
+<h2>16 · Interview Q&amp;A bank</h2>
+<p>Work through these out loud. The strong answers are compressed — expand with examples from your own experience.</p>
+
+<h3>Fundamentals</h3>
+<div class="box q"><span class="tag">Q</span><p>Walk me through the life of a loan from application to payoff.</p></div>
+<div class="box a"><span class="tag">A</span><p>Origination (apply + verify) → underwriting (can/will they repay, the 5 Cs) → pricing (risk-based rate, APR) → closing &amp; funding (sign the note, perfect the lien, disburse) → servicing (process payments, accrue interest, escrow) → if they miss payments: delinquency → loss mitigation → charge-off/recovery; otherwise → payoff and lien release. The happy path skips the last three.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>What's the difference between delinquency, default, and charge-off?</p></div>
+<div class="box a"><span class="tag">A</span><p><em>Delinquent</em> = behind on a payment (measured in DPD). <em>Default</em> = a formal breach of the note's terms, often 90+ DPD, which can trigger acceleration. <em>Charge-off</em> = an accounting decision (typically 120–180 DPD) to remove the asset from the books — but the borrower still legally owes it and recovery continues.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Interest rate vs. APR — which is higher and why?</p></div>
+<div class="box a"><span class="tag">A</span><p>APR is higher (or equal). The rate is just interest on principal; APR adds points and most fees, giving the true annualized cost. TILA requires APR so borrowers can compare loans apples-to-apples.</p></div>
+
+<h3>Credit &amp; risk</h3>
+<div class="box q"><span class="tag">Q</span><p>Name the Five Cs of credit.</p></div>
+<div class="box a"><span class="tag">A</span><p>Character (willingness/credit history), Capacity (ability to repay/DTI), Capital (skin in the game), Collateral (asset securing the loan/LTV), Conditions (purpose &amp; economic environment).</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How would you price a loan?</p></div>
+<div class="box a"><span class="tag">A</span><p>Build the rate up: cost of funds + operating cost + expected loss (PD × LGD × EAD) + cost of capital + margin. Higher-risk borrowers get higher rates (risk-based pricing). The expected-loss term is what links underwriting risk to the price.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>What is Expected Loss and how is it computed?</p></div>
+<div class="box a"><span class="tag">A</span><p><code>EL = PD × LGD × EAD</code>. Probability of default × loss given default (1 − recovery) × exposure at default. It drives both loan pricing and the loss reserves a lender holds (CECL).</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>A borrower has a high credit score but a 55% DTI. Approve?</p></div>
+<div class="box a"><span class="tag">A</span><p>Score covers <em>character</em>, but DTI is <em>capacity</em> — and 55% means more than half of gross income is already committed to debt, above typical limits. I'd lean decline or counter (smaller amount/longer term), and look at compensating factors: reserves, stable high income, low LTV. Good answer shows you weigh multiple Cs, not just the score.</p></div>
+
+<h3>Servicing &amp; collections</h3>
+<div class="box q"><span class="tag">Q</span><p>How is a payment applied to a loan?</p></div>
+<div class="box a"><span class="tag">A</span><p>Through a waterfall defined by the note — commonly fees → accrued interest → principal (consumer loans often do interest → principal → fees). Extra amounts can curtail principal. Order matters because it changes how fast principal falls and how much interest accrues next period.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>What loss-mitigation options would you offer a borrower in hardship?</p></div>
+<div class="box a"><span class="tag">A</span><p>Match the tool to the situation: short-term hardship → forbearance or a repayment plan; payments permanently unaffordable → loan modification (lower rate/longer term); for secured loans facing loss → short sale or deed in lieu. The goal is to minimize the lender's loss while keeping the borrower paying something.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Why might a lender restructure rather than foreclose?</p></div>
+<div class="box a"><span class="tag">A</span><p>Foreclosure/repossession is slow and expensive, recovers less than the balance (high LGD), and hurts the borrower. A modification that keeps a performing loan often yields a better economic outcome — lower loss given default — even at a reduced rate.</p></div>
+
+<h3>System design / engineering</h3>
+<div class="box q"><span class="tag">Q</span><p>How would you design the ledger for a loan servicing system?</p></div>
+<div class="box a"><span class="tag">A</span><p>Append-only, double-entry, event-sourced. Balances are derived from an immutable transaction log, never mutated in place. Every money movement carries an idempotency key. Currency stored as integer minor units. Nightly accrual posts interest transactions; payments post in real time. Full audit trail for every posting. This gives correctness, replayability, and auditability.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How do you prevent a payment webhook from being processed twice?</p></div>
+<div class="box a"><span class="tag">A</span><p>Idempotency: each payment event carries a unique key; the ledger rejects a second posting with the same key. Combine with a uniqueness constraint at the database level and transactional posting so retries are safe.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Where would you use real-time vs. batch processing?</p></div>
+<div class="box a"><span class="tag">A</span><p>Real-time: underwriting decisions, payment authorization/posting, payoff quotes. Batch (nightly): interest accrual, delinquency aging/status transitions, statement generation, escrow analysis, regulatory reporting. The tricky part is reconciling them and handling a missed or replayed batch deterministically using effective dates.</p></div>
+
+<h3>Compliance &amp; judgment</h3>
+<div class="box q"><span class="tag">Q</span><p>A model declines an applicant. What must happen next?</p></div>
+<div class="box a"><span class="tag">A</span><p>Send an <strong>adverse action notice</strong> (ECOA/FCRA) with the principal reasons for denial, and the credit score and bureau info used. So the model must produce stored, explainable reason codes — you can't decline someone with an unexplained black box.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Your model doesn't use race, but approval rates differ sharply by race. Problem?</p></div>
+<div class="box a"><span class="tag">A</span><p>Yes — that's potential <strong>disparate impact</strong>. A feature may be a proxy for a protected class (e.g., ZIP code). You'd run fair-lending testing, examine which features drive the gap, seek less-discriminatory alternatives, and document. "We didn't use the variable" is not a defense.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Why are origination and servicing often separate businesses?</p></div>
+<div class="box a"><span class="tag">A</span><p>Loans get sold and securitized. An originator can fund a loan and sell it (or just the servicing rights) into the secondary market, freeing capital to originate more. The buyer/investor owns the cash flows; a servicer is paid a fee to collect. Different economics, skills, and systems.</p></div>
+</section>
+
+<!-- ───────────────────────── 17 GLOSSARY ───────────────────────── -->
+<section>
+<h2>17 · Glossary</h2>
+<div class="two-col">
+<dl>
+  <dt>Acceleration</dt><dd>Demanding the full remaining balance after default.</dd>
+  <dt>Adverse action</dt><dd>Notice of denial with reasons, required by ECOA/FCRA.</dd>
+  <dt>Amortization</dt><dd>Paying down a loan via fixed payments split between interest and principal.</dd>
+  <dt>APR</dt><dd>All-in annual cost including fees; required by TILA.</dd>
+  <dt>AUS</dt><dd>Automated Underwriting System (e.g., DU, LPA).</dd>
+  <dt>Charge-off</dt><dd>Accounting write-down of an uncollectible loan; debt still owed.</dd>
+  <dt>Collateral</dt><dd>Asset pledged to secure a loan.</dd>
+  <dt>Curtailment</dt><dd>Extra payment applied directly to principal.</dd>
+  <dt>DPD</dt><dd>Days past due.</dd>
+  <dt>DTI</dt><dd>Debt-to-income ratio (capacity).</dd>
+  <dt>EAD</dt><dd>Exposure at default.</dd>
+  <dt>Escrow</dt><dd>Servicer-held account for taxes &amp; insurance.</dd>
+  <dt>Forbearance</dt><dd>Temporary pause/reduction of payments.</dd>
+  <dt>LGD</dt><dd>Loss given default (1 − recovery rate).</dd>
+  <dt>Lien</dt><dd>Legal claim on collateral; "perfected" when recorded/filed.</dd>
+  <dt>LTV</dt><dd>Loan-to-value ratio.</dd>
+  <dt>Modification</dt><dd>Permanent change to loan terms to aid repayment.</dd>
+  <dt>MSR</dt><dd>Mortgage servicing rights (tradeable).</dd>
+  <dt>NCO</dt><dd>Net charge-off rate.</dd>
+  <dt>Origination</dt><dd>Everything from application through funding.</dd>
+  <dt>PD</dt><dd>Probability of default.</dd>
+  <dt>Promissory note</dt><dd>The borrower's legal promise to repay.</dd>
+  <dt>Recovery</dt><dd>Money collected after charge-off.</dd>
+  <dt>Rescission</dt><dd>Borrower's right to cancel certain loans within 3 days.</dd>
+  <dt>Roll rate</dt><dd>Probability of moving from one delinquency bucket to the next.</dd>
+  <dt>Securitization</dt><dd>Bundling loans into securities sold to investors.</dd>
+  <dt>Servicing</dt><dd>Managing a loan after funding until payoff.</dd>
+  <dt>TDR</dt><dd>Troubled Debt Restructuring.</dd>
+  <dt>TRID</dt><dd>Integrated TILA/RESPA mortgage disclosures.</dd>
+  <dt>Underwriting</dt><dd>Assessing whether a borrower can and will repay.</dd>
+  <dt>Vintage</dt><dd>Loans grouped by origination period for performance analysis.</dd>
+</dl>
+</div>
+</section>
+
+<!-- ───────────────────────── 18 CHEAT SHEET ───────────────────────── -->
+<section style="page-break-before:always">
+<h2>18 · One-page cheat sheet</h2>
+
+<h4>The 9 stages</h4>
+<p><span class="chip">Origination</span><span class="chip">Underwriting</span><span class="chip">Pricing</span><span class="chip">Closing &amp; Funding</span><span class="chip">Servicing</span><span class="chip">Delinquency</span><span class="chip">Loss Mitigation</span><span class="chip">Charge-off / Recovery</span><span class="chip">Payoff</span></p>
+
+<h4>5 Cs of credit</h4>
+<p><span class="chip">Character</span><span class="chip">Capacity</span><span class="chip">Capital</span><span class="chip">Collateral</span><span class="chip">Conditions</span></p>
+
+<h4>Must-know equations</h4>
+<p style="font-family:var(--mono);font-size:.85rem;line-height:2;">
+EL = PD × LGD × EAD &nbsp;·&nbsp; DTI = debt ÷ income &nbsp;·&nbsp; LTV = loan ÷ value<br>
+M = P·i(1+i)<sup>n</sup> / ((1+i)<sup>n</sup>−1) &nbsp;·&nbsp; APR ≥ rate &nbsp;·&nbsp; NCO = (chargeoffs − recoveries) ÷ avg loans
+</p>
+
+<h4>Delinquency ladder</h4>
+<p><span class="chip">Current</span> → <span class="chip">Grace</span> → <span class="chip">30 DPD (reports)</span> → <span class="chip">60/90 DPD</span> → <span class="chip">Default (accelerate)</span> → <span class="chip">120–180 DPD charge-off</span></p>
+
+<h4>Regulation → stage</h4>
+<table>
+  <tr><td>KYC/AML/BSA</td><td>Origination</td></tr>
+  <tr><td>ECOA / FCRA</td><td>Underwriting (adverse action)</td></tr>
+  <tr><td>TILA / TRID / RESPA</td><td>Pricing &amp; Closing</td></tr>
+  <tr><td>RESPA / SCRA</td><td>Servicing</td></tr>
+  <tr><td>FDCPA</td><td>Collections</td></tr>
+</table>
+
+<h4>Loss-mit toolkit</h4>
+<p><span class="chip">Forbearance (pause)</span><span class="chip">Deferment (push to end)</span><span class="chip">Repayment plan</span><span class="chip">Modification (permanent)</span><span class="chip">Refinance</span><span class="chip">Short sale / DIL</span></p>
+
+<h4>Engineering watch-list</h4>
+<p><span class="chip">Append-only double-entry ledger</span><span class="chip">Idempotency keys</span><span class="chip">Integer cents, no floats</span><span class="chip">Explicit state machine</span><span class="chip">Real-time vs. nightly batch</span><span class="chip">Day-count conventions</span><span class="chip">Auditability &amp; reason codes</span></p>
+
+<hr>
+<p class="note">Prepared as standalone interview-prep material. Educational summary of common U.S. consumer-lending practice; not legal, financial, or compliance advice — specifics vary by product, lender, and jurisdiction.</p>
+</section>
+
+</div>
+</body>
+</html>
