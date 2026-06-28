@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Ultimate Maybank Product Owner Interview Guide</title>
+<style>
+  :root{
+    --ink:#16202e; --soft:#52607a; --line:#dde3ec; --bg:#ffffff;
+    --gold:#f5b400; --gold-d:#b98d00; --navy:#0a3b66; --teal:#0f8a6a; --warn:#b4521a; --rose:#c0436b; --grape:#7C5CBF;
+    --chip:#eef2f8; --code-bg:#f4f7fb;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:var(--serif); color:var(--ink); background:var(--bg); line-height:1.55; font-size:10.8pt; margin:0;}
+  .wrap{max-width:46rem; margin:0 auto; padding:2.2rem 1.5rem 3rem;}
+  h1,h2,h3,h4,.kicker,.tag,.toc li,.lbl,.cover-meta,figcaption,.pill,.chip,th,.step-n{font-family:var(--sans);}
+  h1{font-size:2.05rem; line-height:1.12; margin:.2rem 0 .4rem; letter-spacing:-.01em;}
+  h2{font-size:1.34rem; margin:2rem 0 .55rem; padding-bottom:.3rem; border-bottom:3px solid var(--gold); letter-spacing:-.01em;}
+  h3{font-size:1.08rem; margin:1.35rem 0 .4rem; color:var(--navy);}
+  h4{font-size:.96rem; margin:1rem 0 .3rem;}
+  p{margin:.5rem 0;}
+  ul,ol{margin:.45rem 0 .75rem; padding-left:1.2rem;} li{margin:.24rem 0;}
+  code{font-family:var(--mono); font-size:.85em; background:var(--code-bg); padding:.06em .32em; border-radius:4px;}
+  pre{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:.8rem 1rem; overflow:auto; font-family:var(--mono); font-size:.78rem; line-height:1.55; margin:.7rem 0;}
+  pre .kw{color:#0a3b66; font-weight:700;} pre .st{color:#0f8a6a;} pre .cm{color:#8a93a3; font-style:italic;}
+  .kicker{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-d); font-weight:800;}
+  .cover{min-height:9.1in; display:flex; flex-direction:column; justify-content:center; page-break-after:always;}
+  .cover h1{font-size:2.65rem; line-height:1.06;}
+  .cover .sub{font-size:1.1rem; color:var(--soft); margin:.45rem 0 1.3rem; max-width:34rem;}
+  .cover-bar{height:8px; width:96px; background:var(--gold); border-radius:4px; margin:.2rem 0 1.2rem;}
+  .cover-meta{font-size:.82rem; color:var(--soft); line-height:1.75; border-top:1px solid var(--line); padding-top:1rem; margin-top:1.2rem;}
+  .cover-meta b{color:var(--ink);}
+  .toc ol{list-style:none; padding:0;}
+  .toc li{font-size:.86rem; margin:.24rem 0;}
+  .toc .n{display:inline-block; width:1.8rem; color:var(--gold-d); font-weight:800;}
+  .toc .part{font-weight:800; color:var(--navy); margin-top:.8rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.07em;}
+  .box{border-radius:8px; padding:.7rem .95rem; margin:.9rem 0; break-inside:avoid; border:1px solid var(--line);}
+  .box .tag{display:inline-block; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; font-weight:800; padding:.1rem .42rem; border-radius:5px; margin-bottom:.35rem; font-family:var(--sans);}
+  .plain{background:#eef5fc; border-left:4px solid var(--navy);}     .plain .tag{background:#d8e6f4; color:var(--navy);}
+  .say{background:#fdf3f7; border-left:4px solid var(--rose);}       .say .tag{background:#f8dde8; color:var(--rose);}
+  .tip{background:#fffaf0; border-left:4px solid var(--gold-d);}     .tip .tag{background:#fdecc4; color:var(--gold-d);}
+  .warn{background:#fdf4ee; border-left:4px solid var(--warn);}     .warn .tag{background:#fae0d0; color:var(--warn);}
+  .ex{background:#f1faf6; border-left:4px solid var(--teal);}        .ex .tag{background:#d8f0e6; color:var(--teal);}
+  .box p:first-of-type{margin-top:.1rem;} .box p:last-child{margin-bottom:.1rem;}
+  table{width:100%; border-collapse:collapse; margin:.7rem 0; font-size:.82rem; break-inside:avoid;}
+  th,td{text-align:left; padding:.4rem .55rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--chip); font-size:.71rem; letter-spacing:.03em; text-transform:uppercase; color:var(--soft);}
+  figure{margin:1rem 0; break-inside:avoid;} figure svg{width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fcfdff;}
+  figcaption{font-size:.78rem; color:var(--soft); margin-top:.4rem; text-align:center; font-family:var(--sans);}
+  .pill{display:inline-block; background:var(--navy); color:#fff; border-radius:5px; padding:.06rem .42rem; font-size:.72rem; margin:.1rem .1rem; font-weight:600;}
+  .chip{display:inline-block; background:var(--chip); border:1px solid var(--line); border-radius:5px; padding:.08rem .42rem; font-size:.76rem; margin:.1rem;}
+  .note{font-size:.81rem; color:var(--soft); font-style:italic;}
+  hr{border:none; border-top:1px solid var(--line); margin:1.4rem 0;}
+  .steps{counter-reset:s; list-style:none; padding:0;}
+  .steps li{position:relative; padding:.1rem 0 .55rem 2.4rem; margin:0;}
+  .steps li::before{counter-increment:s; content:counter(s); position:absolute; left:0; top:0; width:1.7rem; height:1.7rem; background:var(--navy); color:#fff; border-radius:50%; font-family:var(--sans); font-weight:800; font-size:.85rem; display:flex; align-items:center; justify-content:center;}
+  .two-col{columns:2; column-gap:1.5rem;}
+  dt{font-family:var(--sans); font-weight:700; font-size:.83rem; margin-top:.45rem;} dd{margin:.05rem 0 .3rem; font-size:.86rem;}
+  .fill{border:1px dashed #c3ccda; border-radius:6px; min-height:1.4rem; background:#fbfcfe;}
+  .pagebreak{page-break-before:always;}
+  h2,h3,h4{page-break-after:avoid;}
+  @page{ size:Letter; margin:0.7in 0.65in; }
+  @media print{ .wrap{max-width:none; padding:0;} .box,table,figure,pre{break-inside:avoid;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══════ COVER ═══════ -->
+<section class="cover">
+  <div class="kicker">The Complete Reference · MBB Labs · Maybank · Senior Product Owner</div>
+  <h1>The Ultimate Maybank PO Interview Guide</h1>
+  <div class="cover-bar"></div>
+  <p class="sub">One document that teaches you to draw design diagrams, write basic SQL, explain the loan lifecycle simply, know every loan type and line of business Maybank serves, master the technical landscape — and build a career plan around the job description.</p>
+  <div class="cover-meta">
+    <b>Six parts, built for this exact role:</b><br>
+    1 · How to draw design diagrams (step-by-step + a guided practice)<br>
+    2 · SQL basics, hands-on, on a banking schema<br>
+    3 · The loan lifecycle, the easiest way possible<br>
+    4 · Every loan type &amp; line of business Maybank serves<br>
+    5 · All the technical aspects a PO must understand<br>
+    6 · Your career &amp; interview plan (mapped to the JD)<br><br>
+    <b>Use it with</b> your other three companions (the beginner story, the JD-aligned pack, and the general lifecycle reference). This is the master index that ties them together.
+  </div>
+</section>
+
+<!-- ═══════ TOC ═══════ -->
+<section>
+  <div class="kicker">Contents</div>
+  <h2 style="border:none;margin-top:.3rem">What's inside</h2>
+  <div class="toc">
+    <div class="part">Part 1 · Design diagrams</div>
+    <ol>
+      <li><span class="n">1</span>Why diagrams, and what interviewers look for</li>
+      <li><span class="n">2</span>The shapes — your visual alphabet</li>
+      <li><span class="n">3</span>How connections work</li>
+      <li><span class="n">4</span>The 8-step method</li>
+      <li><span class="n">5</span>Zoom levels (the C4 idea)</li>
+      <li><span class="n">6</span>Guided practice: build one live</li>
+      <li><span class="n">7</span>The finished Maybank diagram + mistakes to avoid</li>
+    </ol>
+    <div class="part">Part 2 · SQL basics</div>
+    <ol start="8">
+      <li><span class="n">8</span>The mental model + a banking schema</li>
+      <li><span class="n">9</span>The clauses, joins &amp; aggregates</li>
+      <li><span class="n">10</span>Practice questions (with answers)</li>
+    </ol>
+    <div class="part">Part 3 · Loan lifecycle, made easy</div>
+    <ol start="11"><li><span class="n">11</span>The whole journey on one page</li></ol>
+    <div class="part">Part 4 · Maybank's loans &amp; lines of business</div>
+    <ol start="12">
+      <li><span class="n">12</span>The three lines of business (+ Islamic &amp; Etiqa)</li>
+      <li><span class="n">13</span>Every loan / financing product</li>
+      <li><span class="n">14</span>Conventional ↔ Islamic, and how the lifecycle bends</li>
+    </ol>
+    <div class="part">Part 5 · The technical aspects</div>
+    <ol start="15">
+      <li><span class="n">15</span>The technology landscape</li>
+      <li><span class="n">16</span>Integration, APIs &amp; events</li>
+      <li><span class="n">17</span>Data, MIS &amp; analytics</li>
+      <li><span class="n">18</span>Security, cloud &amp; delivery (DevSecOps)</li>
+      <li><span class="n">19</span>The PO's technical vocabulary</li>
+    </ol>
+    <div class="part">Part 6 · Your career &amp; interview plan</div>
+    <ol start="20">
+      <li><span class="n">20</span>Map your resume to the JD</li>
+      <li><span class="n">21</span>Gap analysis &amp; your 90-day plan</li>
+      <li><span class="n">22</span>Your story, and the final checklist</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ════════════════ PART 1 ════════════════ -->
+<section class="pagebreak">
+<h2>1 · Why diagrams, and what interviewers look for</h2>
+<p>You said an interviewer once asked whether you can draw a system design diagram. Here's the reassuring truth: they're not testing whether you can draw <em>pretty</em> boxes. They're testing whether you can <b>take a messy real-world problem and organise it into clear parts and clear connections</b>. That's a thinking skill, and it's learnable in an afternoon.</p>
+<div class="box plain"><span class="tag">In plain words: what a design diagram <em>is</em></span>
+<p>A system design (architecture) diagram is just a <b>map of a software system</b>. It answers two questions: <b>“What are the pieces?”</b> (boxes) and <b>“How do they talk to each other?”</b> (arrows). That's genuinely all it is. Everything else is detail.</p></div>
+<div class="box tip"><span class="tag">What a good diagram shows the interviewer</span>
+<ul style="margin:.2rem 0">
+  <li>You can <b>break a big thing into parts</b> (decomposition).</li>
+  <li>You understand <b>how parts communicate</b> (and when to use which method).</li>
+  <li>You think about the <b>non-obvious things</b>: security, scale, what can fail.</li>
+  <li>You can <b>explain it out loud</b> so a non-expert follows along.</li>
+</ul></p></div>
+</section>
+
+<!-- 2 SHAPES -->
+<section>
+<h2>2 · The shapes — your visual alphabet</h2>
+<p>Like letters make words, a few shapes make any diagram. Use them <b>consistently</b>: the same kind of thing always gets the same shape.</p>
+<figure>
+<svg viewBox="0 0 760 380" role="img" aria-label="Legend of common system-diagram shapes and connection line styles">
+  <text x="24" y="30" font-family="sans-serif" font-size="16" font-weight="700" fill="#16202e">Shape vocabulary</text>
+  <g stroke="#0a3b66" stroke-width="2" fill="none">
+    <circle cx="46" cy="66" r="9"/><line x1="46" y1="75" x2="46" y2="98"/><line x1="32" y1="84" x2="60" y2="84"/><line x1="46" y1="98" x2="34" y2="114"/><line x1="46" y1="98" x2="58" y2="114"/>
+  </g>
+  <text x="74" y="92" font-family="sans-serif" font-size="13" fill="#16202e">User / Actor — a person who uses the system</text>
+  <rect x="28" y="132" width="60" height="34" rx="9" fill="#fff7e0" stroke="#b98d00" stroke-width="2"/>
+  <text x="100" y="153" font-family="sans-serif" font-size="13" fill="#16202e">Service / Application — a running piece of software</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="2"><path d="M30 196 a26 7 0 0 0 52 0 v28 a26 7 0 0 1 -52 0 z"/><ellipse cx="56" cy="196" rx="26" ry="7"/></g>
+  <text x="100" y="216" font-family="sans-serif" font-size="13" fill="#16202e">Database — where data is stored</text>
+  <g fill="#eef2f8" stroke="#52607a" stroke-width="2"><rect x="28" y="258" width="58" height="30" rx="4"/><line x1="44" y1="258" x2="44" y2="288"/><line x1="58" y1="258" x2="58" y2="288"/><line x1="72" y1="258" x2="72" y2="288"/></g>
+  <text x="100" y="277" font-family="sans-serif" font-size="13" fill="#16202e">Message queue — a waiting line for events</text>
+  <path d="M40 322 a16 16 0 0 1 30 -6 a13 13 0 0 1 4 25 h-34 a13 13 0 0 1 0 -19 z" fill="#f1f5fb" stroke="#52607a" stroke-width="2"/>
+  <text x="100" y="338" font-family="sans-serif" font-size="13" fill="#16202e">Cloud — the internet / an outside system</text>
+  <polygon points="430,52 462,80 430,108 398,80" fill="#fbe6d8" stroke="#b4521a" stroke-width="2"/>
+  <text x="476" y="85" font-family="sans-serif" font-size="13" fill="#16202e">Decision / Router</text>
+  <polygon points="404,132 420,124 436,132 436,150 420,158 404,150" fill="#e2f3ec" stroke="#0f8a6a" stroke-width="2"/>
+  <text x="452" y="146" font-family="sans-serif" font-size="13" fill="#16202e">Gateway (API / payment)</text>
+  <rect x="398" y="196" width="60" height="32" rx="3" fill="#fff" stroke="#16202e" stroke-width="2"/>
+  <text x="470" y="216" font-family="sans-serif" font-size="13" fill="#16202e">Component / Module</text>
+  <text x="398" y="266" font-family="sans-serif" font-size="16" font-weight="700" fill="#16202e">Connections</text>
+  <line x1="398" y1="292" x2="470" y2="292" stroke="#16202e" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="482" y="296" font-family="sans-serif" font-size="13" fill="#16202e">Synchronous call (asks &amp; waits)</text>
+  <line x1="398" y1="320" x2="470" y2="320" stroke="#0a3b66" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ahn)"/>
+  <text x="482" y="324" font-family="sans-serif" font-size="13" fill="#16202e">Async event (fire &amp; forget)</text>
+  <line x1="400" y1="348" x2="468" y2="348" stroke="#0f8a6a" stroke-width="2.5" marker-start="url(#ahs)" marker-end="url(#ahg)"/>
+  <text x="482" y="352" font-family="sans-serif" font-size="13" fill="#16202e">Two-way conversation</text>
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#16202e"/></marker>
+    <marker id="ahn" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0a3b66"/></marker>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0f8a6a"/></marker>
+    <marker id="ahs" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9 0 L0 4.5 L9 9 z" fill="#0f8a6a"/></marker>
+  </defs>
+</svg>
+<figcaption>Memorise these seven shapes and three line styles. They're enough to draw almost any system.</figcaption>
+</figure>
+</section>
+
+<!-- 3 CONNECTIONS -->
+<section>
+<h2>3 · How connections work</h2>
+<p>The arrows matter as much as the boxes. Every arrow should tell the reader <b>three</b> things — train yourself to always say all three out loud:</p>
+<table>
+  <tr><th>An arrow shows…</th><th>By…</th><th>Example</th></tr>
+  <tr><td><b>Direction</b> — who starts the conversation</td><td>which way the arrowhead points</td><td>App → Core (the app asks the core)</td></tr>
+  <tr><td><b>Type</b> — wait for a reply, or not?</td><td>solid line vs dashed line</td><td>solid = ask &amp; wait · dashed = send &amp; move on</td></tr>
+  <tr><td><b>What &amp; how</b> — the method + purpose</td><td>a short text label</td><td>“REST/HTTPS – get balance”</td></tr>
+</table>
+<div class="box plain"><span class="tag">In plain words: synchronous vs asynchronous</span>
+<p><b>Synchronous</b> = the caller <b>asks and waits</b> for the answer, like a phone call. Use it when you need the reply <em>now</em> (check a balance, approve a payment, return a credit decision the customer is waiting for).</p>
+<p><b>Asynchronous</b> = the caller <b>sends a message and moves on</b>, like a text/WhatsApp. Use it for things that can happen in the background (send an SMS, update analytics, tell another system “a loan was booked”). These usually travel through a <b>queue / event stream</b> (e.g. Kafka).</p></div>
+<div class="box say"><span class="tag">Say this — it scores points</span>
+<p>“I use <b>synchronous</b> calls when the user is waiting on the answer, and <b>asynchronous events</b> for background work — that decoupling keeps the core stable and the app fast.” Knowing <em>when</em> to use each is what separates a strong candidate from someone who's just memorised words.</p></div>
+<p><b>Common labels (the “how”):</b> <span class="pill">REST/HTTPS</span><span class="pill">gRPC</span><span class="pill">events (Kafka)</span><span class="pill">SQL</span><span class="pill">SFTP file batch</span><span class="pill">ISO 20022 (payments)</span></p>
+</section>
+
+<!-- 4 METHOD -->
+<section class="pagebreak">
+<h2>4 · The 8-step method</h2>
+<p>Run these steps in order, out loud, and you'll never freeze at a whiteboard again.</p>
+<ol class="steps">
+  <li><b>Clarify the problem first.</b> What must it do? And the “-ilities”: how many users, how fast, how available, how secure, and what <b>compliance</b> (BNM, PCI, PDPA, Shariah)? Saying these before drawing is half the score.</li>
+  <li><b>Put the actors &amp; outside systems at the edges.</b> Users on the left; external systems (CCRIS, CTOS, PayNet) on the right.</li>
+  <li><b>List the main parts by what they do.</b> “Origination”, “Credit decisioning”, “Pricing”, “Servicing”. One box = one job.</li>
+  <li><b>Add the data stores.</b> Each part that remembers things gets a database (cylinder).</li>
+  <li><b>Stack them in layers.</b> Channels → Security edge → Services → Integration → Core → Data. Layers reveal the flow.</li>
+  <li><b>Draw &amp; label every connection.</b> Direction + type + purpose. No bare arrows.</li>
+  <li><b>Mark the security boundary.</b> A dashed box around the “outside-facing” zone; note where login/MFA and encryption sit.</li>
+  <li><b>Walk one journey through it &amp; tidy up.</b> Trace “a customer applies → …” and check every hop exists. Add a legend. Done.</li>
+</ol>
+</section>
+
+<!-- 5 C4 -->
+<section>
+<h2>5 · Zoom levels (the C4 idea)</h2>
+<p>Professionals draw at different <b>zoom levels</b> depending on the audience — a model called <b>C4</b>. Mentioning it makes you sound senior.</p>
+<table>
+  <tr><th>Level</th><th>Zoom</th><th>Shows</th></tr>
+  <tr><td><b>1 · Context</b></td><td>Furthest out</td><td>The whole system as <em>one</em> box, plus who/what it talks to. Great for non-technical stakeholders.</td></tr>
+  <tr><td><b>2 · Container</b></td><td>Closer</td><td>The apps, services and databases inside. <b>This is the level you'll usually draw in an interview.</b></td></tr>
+  <tr><td><b>3 · Component</b></td><td>Inside one box</td><td>The parts within a single service.</td></tr>
+  <tr><td><b>4 · Code</b></td><td>Closest</td><td>Classes/functions. Rarely drawn by hand.</td></tr>
+</table>
+<figure>
+<svg viewBox="0 0 720 240" role="img" aria-label="A C4 context diagram: a customer and the Maybank lending platform as one box, connected to core banking and external agencies">
+  <defs><marker id="c4" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#52607a"/></marker></defs>
+  <!-- actor -->
+  <g stroke="#0a3b66" stroke-width="2" fill="none" transform="translate(40,90)"><circle cx="10" cy="0" r="11"/><line x1="10" y1="11" x2="10" y2="40"/><line x1="-8" y1="22" x2="28" y2="22"/><line x1="10" y1="40" x2="-6" y2="60"/><line x1="10" y1="40" x2="26" y2="60"/></g>
+  <text x="50" y="175" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#16202e">Customer</text>
+  <!-- system box -->
+  <rect x="250" y="70" width="220" height="100" rx="14" fill="#fff7e0" stroke="#b98d00" stroke-width="2.5"/>
+  <text x="360" y="112" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#b98d00">Maybank Lending Platform</text>
+  <text x="360" y="134" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#52607a">(the system we're building)</text>
+  <!-- externals -->
+  <rect x="560" y="40" width="130" height="44" rx="9" fill="#f1f5fb" stroke="#52607a"/><text x="625" y="67" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#16202e">Core banking</text>
+  <rect x="560" y="100" width="130" height="44" rx="9" fill="#f1f5fb" stroke="#52607a"/><text x="625" y="127" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#16202e">CCRIS / CTOS</text>
+  <rect x="560" y="160" width="130" height="44" rx="9" fill="#f1f5fb" stroke="#52607a"/><text x="625" y="187" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#16202e">PayNet</text>
+  <!-- arrows -->
+  <line x1="78" y1="118" x2="248" y2="118" stroke="#52607a" stroke-width="2" marker-end="url(#c4)"/><text x="163" y="110" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#52607a">applies for financing</text>
+  <line x1="472" y1="100" x2="558" y2="70" stroke="#52607a" stroke-width="2" marker-end="url(#c4)"/>
+  <line x1="472" y1="120" x2="558" y2="122" stroke="#52607a" stroke-width="2" marker-end="url(#c4)"/>
+  <line x1="472" y1="140" x2="558" y2="178" stroke="#52607a" stroke-width="2" marker-end="url(#c4)"/>
+</svg>
+<figcaption>A <b>Context</b> diagram (Level 1): the simplest possible view. Start here, then zoom in to Container level for the detail.</figcaption>
+</figure>
+</section>
+
+<!-- 6 GUIDED PRACTICE -->
+<section class="pagebreak">
+<h2>6 · Guided practice: build one live</h2>
+<p>Let's draw a diagram together for a realistic prompt, the way you would on the day. <b>Prompt:</b> <em>“Design a digital home-financing application for the MAE app.”</em> Follow the 8 steps:</p>
+<ol class="steps">
+  <li><b>Clarify:</b> “So we want customers to apply for home financing in-app, get a decision in minutes, fully compliant with BNM and PDPA, available 24/7, secure. Peak maybe thousands of applications a day.” <span class="note">(You just earned marks before drawing anything.)</span></li>
+  <li><b>Edges:</b> Actor = the customer on MAE. Externals = CCRIS, CTOS, MyKad (e-KYC), the core banking system, PayNet.</li>
+  <li><b>Parts by job:</b> Origination (runs the journey), e-KYC, Credit decisioning, Pricing, Document service, Notifications.</li>
+  <li><b>Data:</b> an application database; later, a data warehouse for reporting.</li>
+  <li><b>Layers:</b> Channel (MAE) → Edge (gateway + login) → Services (the six above) → Integration (event bus) → Core banking → Data.</li>
+  <li><b>Connect &amp; label:</b> MAE →(HTTPS) Gateway →(REST) Origination →(REST) Decisioning →(API) CCRIS/CTOS; Origination →(event) Notifications; Core →(CDC) Warehouse.</li>
+  <li><b>Security boundary:</b> dashed box around gateway + login; that's where the outside world meets the inside.</li>
+  <li><b>Walk it:</b> “Customer taps Apply → passes the gateway after MFA → Origination calls e-KYC (MyKad) and Decisioning (CCRIS+CTOS, computes DSR) → Pricing returns a rate → on accept, it books to Core → an event tells Notifications to SMS the customer.” Every hop exists. ✔</li>
+</ol>
+<div class="box tip"><span class="tag">The secret</span><p>Notice you didn't need to memorise an answer — you ran a <b>method</b>. The same 8 steps work for <em>any</em> prompt they give you (a payments system, a collections tool, a deposit-onboarding flow). Learn the method, not a picture.</p></div>
+</section>
+
+<!-- 7 FINISHED + MISTAKES -->
+<section>
+<h2>7 · The finished Maybank diagram + mistakes to avoid</h2>
+<p>Here's what that practice produces at <b>Container</b> level — a clean, layered, labelled diagram. Study how it reads top-to-bottom.</p>
+<figure>
+<svg viewBox="0 0 900 760" role="img" aria-label="Layered architecture diagram for a Maybank digital lending platform: channels, edge security, lending microservices, integration, core banking, data, and external regulatory systems">
+  <defs>
+    <marker id="A" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#16202e"/></marker>
+    <marker id="Ad" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0a3b66"/></marker>
+  </defs>
+  <style>.band{fill:#f7f9fc;stroke:#dde3ec;stroke-width:1.5;}.bl{font-family:sans-serif;font-size:12px;font-weight:800;fill:#52607a;letter-spacing:.04em;}.nt{font-family:sans-serif;font-size:11.5px;fill:#16202e;font-weight:600;}.lk{font-family:sans-serif;font-size:10px;fill:#52607a;}</style>
+  <rect class="band" x="20" y="16" width="700" height="86" rx="12"/><text class="bl" x="34" y="38">CHANNELS</text>
+  <rect x="34" y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="50" y="73">MAE app</text>
+  <rect x="166" y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="180" y="73">Maybank2u web</text>
+  <rect x="298" y="48" width="110" height="40" rx="8" fill="#fff7e0" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="318" y="73">Branch / RM</text>
+  <rect x="420" y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="436" y="73">ATM / SST</text>
+  <rect x="552" y="48" width="150" height="40" rx="8" fill="#fff7e0" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="568" y="73">Call centre</text>
+  <rect class="band" x="20" y="124" width="700" height="80" rx="12"/><text class="bl" x="34" y="146">EDGE &amp; SECURITY</text>
+  <rect x="34" y="156" width="150" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a" stroke-width="1.6"/><text class="nt" x="50" y="180">CDN / WAF</text>
+  <rect x="200" y="156" width="200" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a" stroke-width="1.6"/><text class="nt" x="216" y="180">API Gateway</text>
+  <rect x="416" y="156" width="200" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a" stroke-width="1.6"/><text class="nt" x="432" y="180">Identity / MFA</text>
+  <rect class="band" x="20" y="226" width="700" height="120" rx="12"/><text class="bl" x="34" y="248">LENDING SERVICES (microservices)</text>
+  <rect x="34" y="258" width="150" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="46" y="280">Origination</text>
+  <rect x="196" y="258" width="160" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="208" y="280">Credit decisioning</text>
+  <rect x="368" y="258" width="130" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="380" y="280">Pricing</text>
+  <rect x="510" y="258" width="190" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="522" y="280">e-KYC / documents</text>
+  <rect x="34" y="300" width="150" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="46" y="322">Servicing</text>
+  <rect x="196" y="300" width="160" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="208" y="322">Collections</text>
+  <rect x="368" y="300" width="130" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="380" y="322">Notifications</text>
+  <rect x="510" y="300" width="190" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="522" y="322">Shariah / profit engine</text>
+  <rect class="band" x="20" y="368" width="700" height="64" rx="12"/><text class="bl" x="34" y="390">INTEGRATION</text>
+  <rect x="34" y="392" width="320" height="32" rx="8" fill="#eef2f8" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="46" y="413">Service Bus / API mgmt</text>
+  <rect x="372" y="392" width="328" height="32" rx="8" fill="#eef2f8" stroke="#52607a" stroke-width="1.6"/><line x1="500" y1="392" x2="500" y2="424" stroke="#52607a"/><line x1="540" y1="392" x2="540" y2="424" stroke="#52607a"/><text class="nt" x="384" y="413">Event streaming (Kafka)</text>
+  <rect class="band" x="20" y="454" width="700" height="86" rx="12"/><text class="bl" x="34" y="476">CORE BANKING (system of record)</text>
+  <rect x="34" y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="62" y="512">CIF</text>
+  <rect x="166" y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="196" y="512">CASA</text>
+  <rect x="298" y="486" width="150" height="44" rx="8" fill="#fde9c8" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="312" y="512">Loans / Financing</text>
+  <rect x="460" y="486" width="110" height="44" rx="8" fill="#fde9c8" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="492" y="512">GL</text>
+  <rect x="582" y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#b98d00" stroke-width="1.6"/><text class="nt" x="596" y="512">Islamic module</text>
+  <rect class="band" x="20" y="562" width="700" height="78" rx="12"/><text class="bl" x="34" y="584">DATA &amp; ANALYTICS</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="1.6"><path d="M40 596 a22 6 0 0 0 44 0 v22 a22 6 0 0 1 -44 0 z"/><ellipse cx="62" cy="596" rx="22" ry="6"/></g><text class="nt" x="96" y="618">Operational DB</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="1.6"><path d="M250 596 a22 6 0 0 0 44 0 v22 a22 6 0 0 1 -44 0 z"/><ellipse cx="272" cy="596" rx="22" ry="6"/></g><text class="nt" x="306" y="618">Warehouse / lake</text>
+  <rect x="500" y="592" width="200" height="34" rx="8" fill="#fff" stroke="#0a3b66" stroke-width="1.6"/><text class="nt" x="512" y="614">BI · risk · ECL models</text>
+  <rect class="band" x="740" y="16" width="142" height="624" rx="12" fill="#f1f5fb"/><text class="bl" x="752" y="38">EXTERNAL /</text><text class="bl" x="752" y="54">REGULATORY</text>
+  <rect x="752" y="70" width="118" height="40" rx="8" fill="#fff" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="764" y="94">BNM CCRIS</text>
+  <rect x="752" y="122" width="118" height="40" rx="8" fill="#fff" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="764" y="146">CTOS / RAMCI</text>
+  <rect x="752" y="174" width="118" height="40" rx="8" fill="#fff" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="764" y="198">JPN — MyKad</text>
+  <rect x="752" y="226" width="118" height="40" rx="8" fill="#fff" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="764" y="250">PayNet rails</text>
+  <rect x="752" y="278" width="118" height="40" rx="8" fill="#fff" stroke="#52607a" stroke-width="1.6"/><text class="nt" x="764" y="302">EPF/KWSP, LHDN</text>
+  <line x1="120" y1="102" x2="120" y2="124" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="126" y="118">HTTPS</text>
+  <line x1="300" y1="204" x2="300" y2="226" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="220">REST</text>
+  <line x1="300" y1="346" x2="300" y2="368" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="362">API</text>
+  <line x1="300" y1="432" x2="300" y2="454" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="448">host call</text>
+  <line x1="430" y1="540" x2="430" y2="562" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/><text class="lk" x="436" y="556">CDC / ETL</text>
+  <line x1="720" y1="408" x2="752" y2="300" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <line x1="720" y1="408" x2="752" y2="194" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <line x1="720" y1="408" x2="752" y2="90" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <text class="lk" x="700" y="360" text-anchor="end">API / SFTP</text>
+  <rect x="14" y="120" width="712" height="86" rx="8" fill="none" stroke="#b4521a" stroke-width="1.4" stroke-dasharray="4 4"/><text x="600" y="135" font-family="sans-serif" font-size="10" fill="#b4521a">security boundary</text>
+</svg>
+<figcaption>The finished Container-level diagram. Yellow = the bank's core. Solid arrows = synchronous; dashed = asynchronous/batch.</figcaption>
+</figure>
+<div class="box warn"><span class="tag">Five mistakes that lose marks</span>
+<ol style="margin:.2rem 0">
+  <li><b>Bare arrows</b> with no labels — always state protocol + purpose.</li>
+  <li><b>Jumping into detail</b> before clarifying requirements.</li>
+  <li><b>Forgetting security &amp; compliance</b> — in a bank this is never optional.</li>
+  <li><b>Inconsistent shapes</b> — pick a style and stick to it.</li>
+  <li><b>Drawing in silence</b> — narrate as you go; the talk is the test.</li>
+</ol></p></div>
+<p><b>Tools to mention:</b> <span class="chip">draw.io / diagrams.net</span><span class="chip">Lucidchart</span><span class="chip">Miro</span><span class="chip">Excalidraw</span><span class="chip">Visio</span><span class="chip">PlantUML / Mermaid</span></p>
+</section>
+
+<!-- ════════════════ PART 2 SQL ════════════════ -->
+<section class="pagebreak">
+<h2>8 · SQL — the mental model + a banking schema</h2>
+<p>The JD asks for <b>basic SQL</b>. As a PO you won't write production queries, but you'll <b>read</b> them, ask analysts for data, and sanity-check numbers. That's very learnable.</p>
+<div class="box plain"><span class="tag">In plain words: what SQL is</span>
+<p><b>SQL</b> (“Structured Query Language”) is how you <b>ask a database questions</b>. Data lives in <b>tables</b> — like spreadsheets, with <b>rows</b> (records) and <b>columns</b> (fields). Tables link through <b>keys</b>: a <b>primary key (PK)</b> uniquely names each row; a <b>foreign key (FK)</b> points to another table's PK. SQL is just a polite way of saying “show me the rows where…”.</p></div>
+<p>Our toy schema (a loans database):</p>
+<table>
+  <tr><th>Table</th><th>Columns</th></tr>
+  <tr><td><code>customers</code></td><td><code>customer_id</code> (PK), name, income</td></tr>
+  <tr><td><code>loans</code></td><td><code>loan_id</code> (PK), <code>customer_id</code> (FK), product, outstanding, rate, status, months_in_arrears</td></tr>
+  <tr><td><code>payments</code></td><td><code>payment_id</code> (PK), <code>loan_id</code> (FK), paid_on, amount</td></tr>
+</table>
+</section>
+
+<section>
+<h2>9 · The clauses, joins &amp; aggregates</h2>
+<p>Six clauses do 90% of everything. Read this query like an English sentence:</p>
+<pre><span class="cm">-- "Show me, per product, how many active loans and total owed, biggest first."</span>
+<span class="kw">SELECT</span>   product, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> num_loans, <span class="kw">SUM</span>(outstanding) <span class="kw">AS</span> total_owed
+<span class="kw">FROM</span>     loans
+<span class="kw">WHERE</span>    status = <span class="st">'active'</span>          <span class="cm">-- filter rows</span>
+<span class="kw">GROUP BY</span> product                    <span class="cm">-- one result row per product</span>
+<span class="kw">ORDER BY</span> total_owed <span class="kw">DESC</span>           <span class="cm">-- sort</span>
+<span class="kw">LIMIT</span>    10;                         <span class="cm">-- keep top 10</span></pre>
+<table>
+  <tr><th>Clause</th><th>Does</th></tr>
+  <tr><td><code>SELECT</code></td><td>which columns to show</td></tr>
+  <tr><td><code>FROM</code></td><td>which table</td></tr>
+  <tr><td><code>WHERE</code></td><td>filter rows (<code>=, &gt;, IN, BETWEEN, LIKE, IS NULL</code>)</td></tr>
+  <tr><td><code>GROUP BY</code> + <code>COUNT/SUM/AVG</code></td><td>roll many rows into summaries</td></tr>
+  <tr><td><code>ORDER BY</code></td><td>sort the results</td></tr>
+  <tr><td><code>LIMIT</code></td><td>cut to the top N</td></tr>
+</table>
+<h3>JOIN — gluing tables together</h3>
+<pre><span class="cm">-- Put each customer's name beside their loans</span>
+<span class="kw">SELECT</span> c.name, l.product, l.outstanding
+<span class="kw">FROM</span>   customers c
+<span class="kw">JOIN</span>   loans l <span class="kw">ON</span> l.customer_id = c.customer_id;</pre>
+<p><b>INNER JOIN</b> = only matches in both tables · <b>LEFT JOIN</b> = all of the left table + matches (blanks where none — e.g. “all customers, even those with no loan”).</p>
+</section>
+
+<section>
+<h2>10 · Practice questions (with answers)</h2>
+<p>Cover the answers and try first. Getting the <b>shape</b> right matters more than perfect syntax.</p>
+<div class="box ex"><span class="tag">Q1 — easy</span><p>“List all loans that are 3+ months in arrears, biggest balance first.”</p>
+<pre><span class="kw">SELECT</span> loan_id, outstanding, months_in_arrears
+<span class="kw">FROM</span>   loans
+<span class="kw">WHERE</span>  months_in_arrears &gt;= 3
+<span class="kw">ORDER BY</span> outstanding <span class="kw">DESC</span>;</pre></div>
+<div class="box ex"><span class="tag">Q2 — aggregate</span><p>“Total amount owed, per product.”</p>
+<pre><span class="kw">SELECT</span> product, <span class="kw">SUM</span>(outstanding) <span class="kw">AS</span> total
+<span class="kw">FROM</span>   loans
+<span class="kw">GROUP BY</span> product;</pre></div>
+<div class="box ex"><span class="tag">Q3 — the impressive one</span><p>“What % of each product's book is impaired (3+ months late)? — the GIL ratio.”</p>
+<pre><span class="kw">SELECT</span> product,
+       <span class="kw">SUM</span>(<span class="kw">CASE WHEN</span> months_in_arrears &gt;= 3 <span class="kw">THEN</span> outstanding <span class="kw">ELSE</span> 0 <span class="kw">END</span>)
+       / <span class="kw">SUM</span>(outstanding) <span class="kw">AS</span> gil_ratio
+<span class="kw">FROM</span>   loans
+<span class="kw">GROUP BY</span> product;</pre></div>
+<div class="box say"><span class="tag">If asked SQL live, say this</span><p>“I'd <code>GROUP BY product</code>, <code>SUM</code> the outstanding, and join <code>loans</code> to <code>customers</code> on <code>customer_id</code>. For the impaired share I'd use a <code>CASE</code> inside the <code>SUM</code>.” Showing you can <b>shape</b> the query is the whole point.</p></div>
+<p class="note">Worth knowing the names of: <code>DISTINCT</code>, <code>HAVING</code> (filter on an aggregate), <code>CTE</code> (<code>WITH … AS</code>), window functions (<code>ROW_NUMBER() OVER(...)</code>), and DDL/DML (<code>CREATE/INSERT/UPDATE/DELETE</code> vs <code>SELECT</code>).</p>
+</section>
+
+<!-- ════════════════ PART 3 LIFECYCLE ════════════════ -->
+<section class="pagebreak">
+<h2>11 · The loan lifecycle, the easiest way possible</h2>
+<p>The simplest way to hold the whole thing in your head: a loan has a <b>beginning</b> (getting it), a <b>middle</b> (paying it), and an <b>end</b> (finishing it). Nine stages, but only three ideas.</p>
+<table>
+  <tr><th>Phase</th><th>Stage</th><th>In one line</th></tr>
+  <tr><td rowspan="4"><b>Getting it</b></td><td>1 · Apply</td><td>Customer asks; bank collects info &amp; checks ID (KYC).</td></tr>
+  <tr><td>2 · Credit check</td><td>Can &amp; will they repay? (5 Cs, DSR, CCRIS/CTOS) → a risk rating.</td></tr>
+  <tr><td>3 · Approve &amp; price</td><td>Yes/no, and the rate (risk-based: SBR + spread).</td></tr>
+  <tr><td>4 · Sign &amp; disburse</td><td>Sign the promise, register collateral, pay the money out.</td></tr>
+  <tr><td><b>Paying it</b></td><td>5 · Servicing</td><td>Monthly instalments; each splits into interest + principal.</td></tr>
+  <tr><td rowspan="3"><b>If it goes wrong</b></td><td>6 · Delinquency</td><td>Missed payments; bank chases (collections).</td></tr>
+  <tr><td>7 · Rehabilitation</td><td>Restructure/reschedule to keep them paying (R&amp;R, AKPK).</td></tr>
+  <tr><td>8 · Recovery</td><td>Last resort: sell the collateral (foreclosure/repossession).</td></tr>
+  <tr><td><b>Finishing it</b></td><td>9 · Settlement</td><td>Fully paid; collateral released; closed — a gold star on credit.</td></tr>
+</table>
+<div class="box tip"><span class="tag">The 10-second version for the interview</span><p>“Apply → credit-check → approve &amp; price → disburse → repay → and if there's trouble: chase → restructure → recover; otherwise → settle. Most loans only ever touch the beginning, middle and end.” Islamic version: say <b>financing</b> not loan, <b>profit</b> not interest.</p></div>
+<p class="note">Want the deep, story version? See your companion guide <em>“Lending &amp; Pricing, Explained Like a Story”</em> — it walks one borrower through all nine stages with worked pricing numbers.</p>
+</section>
+
+<!-- ════════════════ PART 4 LOBs ════════════════ -->
+<section class="pagebreak">
+<h2>12 · Maybank's three lines of business (+ Islamic &amp; Etiqa)</h2>
+<p>A “<b>line of business</b>” (LOB) is just a major division of the bank serving a type of customer. Maybank reports in <b>three</b>, with Islamic banking woven across all of them.</p>
+<table>
+  <tr><th>Line of business</th><th>Serves</th><th>Core products</th></tr>
+  <tr><td><b>Group Community Financial Services (GCFS)</b></td><td>Everyday people &amp; small businesses (retail, SME, business banking)</td><td>Savings/current accounts, fixed deposits, <b>home &amp; personal loans</b>, car financing, cards, SME financing, trade finance, remittance.</td></tr>
+  <tr><td><b>Group Global Banking (GGB)</b></td><td>Big corporates, governments, institutions</td><td>Corporate lending &amp; <b>syndicated/project finance</b>, investment banking (bond/equity issuance, M&amp;A advisory), <b>global markets/treasury</b> (FX, bonds), transaction banking, asset management.</td></tr>
+  <tr><td><b>Group Insurance &amp; Takaful (Etiqa)</b></td><td>Anyone needing protection/cover</td><td>Life &amp; general insurance, and family &amp; general <b>takaful</b> (the Islamic version).</td></tr>
+</table>
+<table>
+  <tr><th>Cross-cutting</th><th>What it is</th></tr>
+  <tr><td><b>Maybank Islamic</b></td><td>The <b>largest Islamic bank in ASEAN.</b> Offers a Shariah-compliant version of nearly every product above — Maybank's “Islamic First” approach. Not a separate LOB so much as a parallel product set across all three.</td></tr>
+</table>
+<div class="box say"><span class="tag">Say this</span><p>“Maybank runs three lines of business — Community Financial Services for retail &amp; SME, Global Banking for corporates, and Etiqa for insurance &amp; takaful — with <b>Maybank Islamic</b> offering a Shariah-compliant version across all of them. A lending product I own usually needs both a conventional and an Islamic variant from day one.”</p></div>
+</section>
+
+<section>
+<h2>13 · Every loan / financing product</h2>
+<p>Here's the catalogue, grouped by who borrows. (Product <em>names</em> change over time — verify on maybank2u — but the <b>types</b> are stable, and types are what an interview tests.)</p>
+
+<h3>Retail — for individuals</h3>
+<table>
+  <tr><th>Product type</th><th>What it's for</th><th>Secured?</th><th>Maybank examples</th></tr>
+  <tr><td><b>Home / mortgage</b></td><td>Buying property</td><td>Yes — the property</td><td>MaxiHome, HouzKEY (rent-to-own), home equity</td></tr>
+  <tr><td><b>Auto / Hire Purchase</b></td><td>Buying a car (new/used)</td><td>Yes — the vehicle</td><td>Hire Purchase (up to 90% MOF, up to 9 yrs); Islamic = AITAB</td></tr>
+  <tr><td><b>Personal financing</b></td><td>Any personal need (cash)</td><td>Usually no</td><td>Personal loan, salary/cash financing</td></tr>
+  <tr><td><b>Credit cards</b></td><td>Revolving everyday spend</td><td>No</td><td>Maybank credit/charge cards</td></tr>
+  <tr><td><b>Investment financing</b></td><td>Buying unit trusts (very common in Malaysia)</td><td>Secured by the units</td><td>ASB financing (Amanah Saham), share margin financing</td></tr>
+  <tr><td><b>Education financing</b></td><td>Tuition / study</td><td>Varies</td><td>Education financing</td></tr>
+</table>
+
+<h3>SME &amp; business — for smaller companies</h3>
+<table>
+  <tr><th>Product type</th><th>What it's for</th></tr>
+  <tr><td><b>SME term financing</b></td><td>Lump-sum for growth/assets (Maybank SME Digital Financing: ~RM3k–RM20m; often unsecured below RM500k).</td></tr>
+  <tr><td><b>Working capital / overdraft</b></td><td>Day-to-day cash flow gaps.</td></tr>
+  <tr><td><b>Commercial Hire Purchase</b></td><td>Business vehicles &amp; equipment.</td></tr>
+  <tr><td><b>Trade finance</b></td><td>Letters of credit, invoice/trade financing for importers/exporters.</td></tr>
+  <tr><td><b>Commercial property financing</b></td><td>Shops, factories, offices.</td></tr>
+</table>
+
+<h3>Corporate &amp; institutional — Global Banking</h3>
+<table>
+  <tr><th>Product type</th><th>What it's for</th></tr>
+  <tr><td><b>Corporate term loans</b></td><td>Large company borrowing.</td></tr>
+  <tr><td><b>Syndicated &amp; project finance</b></td><td>Huge loans shared by several banks; financing infrastructure/projects.</td></tr>
+  <tr><td><b>Trade &amp; supply-chain finance</b></td><td>Large-scale trade across borders.</td></tr>
+  <tr><td><b>Sukuk / bonds</b></td><td>Raising money from investors (sukuk = the Islamic bond).</td></tr>
+</table>
+<div class="box plain"><span class="tag">The one distinction that explains them all</span>
+<p><b>Secured vs unsecured</b> (is there collateral?) and <b>term vs revolving</b> (a fixed payoff schedule, or an ongoing credit line?). Almost every product above is just a combination: a mortgage is <b>secured + term</b>; a credit card is <b>unsecured + revolving</b>; an overdraft is <b>secured-or-not + revolving</b>. Master these two axes and the whole catalogue makes sense.</p></div>
+</section>
+
+<section>
+<h2>14 · Conventional ↔ Islamic, and how the lifecycle bends</h2>
+<table>
+  <tr><th>Conventional</th><th>Islamic equivalent</th><th>Contract used</th></tr>
+  <tr><td>Home loan</td><td>Home financing-i</td><td>Musharakah Mutanaqisah (diminishing partnership) / Commodity Murabahah</td></tr>
+  <tr><td>Car loan (Hire Purchase)</td><td>Hire Purchase-i</td><td>AITAB (Al-Ijarah Thumma Al-Bai — lease then buy)</td></tr>
+  <tr><td>Personal loan</td><td>Personal financing-i</td><td>Tawarruq (commodity murabahah)</td></tr>
+  <tr><td>Fixed deposit</td><td>Term deposit-i</td><td>Tawarruq / Mudarabah</td></tr>
+  <tr><td>Bond</td><td>Sukuk</td><td>Various (Ijarah, Murabahah…)</td></tr>
+</table>
+<p><b>How the lifecycle bends by product type:</b></p>
+<ul>
+  <li><b>Secured loans</b> (home, car) add steps: valuing the collateral, registering the lien, and — if it goes bad — repossession/foreclosure.</li>
+  <li><b>Unsecured loans</b> (personal, cards) skip collateral but price higher (no asset to recover), and go straight to charge-off if they fail.</li>
+  <li><b>Revolving products</b> (cards, overdraft) don't really “end” — the customer borrows and repays continuously within a limit.</li>
+  <li><b>Islamic products</b> follow the same nine stages but every product needs <b>Shariah Committee</b> approval and uses profit, not interest.</li>
+</ul>
+</section>
+
+<!-- ════════════════ PART 5 TECH ════════════════ -->
+<section class="pagebreak">
+<h2>15 · The technology landscape</h2>
+<p>You asked to cover “all the technical aspects.” Here's the whole stack a banking PO should be able to talk about — top (what customers touch) to bottom (where money is recorded).</p>
+<table>
+  <tr><th>Layer</th><th>What it is, in plain words</th></tr>
+  <tr><td><b>Channels</b></td><td>The apps customers use — MAE, Maybank2u, ATMs, branch screens.</td></tr>
+  <tr><td><b>Edge &amp; security</b></td><td>The “front door” — a gateway that routes traffic, a firewall (WAF), and login/MFA that checks who you are.</td></tr>
+  <tr><td><b>Microservices</b></td><td>The business logic, split into small independent services (origination, pricing, servicing…) instead of one giant program.</td></tr>
+  <tr><td><b>Integration</b></td><td>The “plumbing” connecting everything — an API layer plus an <b>event stream</b> (Kafka) for async messages.</td></tr>
+  <tr><td><b>Core banking</b></td><td>The master record-book — accounts, loans, the general ledger. The system of record.</td></tr>
+  <tr><td><b>Data &amp; analytics</b></td><td>Warehouses/lakes that copy data for reporting, dashboards (MIS) and risk models.</td></tr>
+</table>
+<div class="box plain"><span class="tag">In plain words: “microservices” &amp; “event-driven”</span>
+<p><b>Microservices</b> = building software as many <b>small, independent pieces</b> that each do one job, rather than one huge block. Easier to change one piece without breaking the rest. <b>Event-driven</b> = pieces talk by <b>announcing events</b> (“a loan was booked!”) that others react to, instead of calling each other directly. This is exactly the <b>“modern, event-driven architecture”</b> MBB Labs says it builds — so knowing these two words is gold.</p></div>
+</section>
+
+<section>
+<h2>16 · Integration, APIs &amp; events</h2>
+<div class="box plain"><span class="tag">In plain words: “API”</span>
+<p>An <b>API</b> (Application Programming Interface) is a <b>menu one system offers to another</b>. Just like you order from a restaurant menu without seeing the kitchen, the MAE app calls the core's API to “get balance” without knowing how the core works inside. APIs are how modern banks let the friendly apps talk safely to the serious core.</p></div>
+<table>
+  <tr><th>Term</th><th>Plain meaning</th></tr>
+  <tr><td><b>REST / HTTPS</b></td><td>The most common way apps call APIs over the web. Synchronous (ask &amp; wait).</td></tr>
+  <tr><td><b>Webhook / event</b></td><td>A system pushes a message when something happens (async).</td></tr>
+  <tr><td><b>Kafka / event stream</b></td><td>A high-speed “conveyor belt” of events many systems can read.</td></tr>
+  <tr><td><b>ESB / API gateway</b></td><td>Middle layer that routes, secures &amp; throttles all this traffic.</td></tr>
+  <tr><td><b>Idempotency</b></td><td>A safety trick so a repeated message (e.g. a retried payment) isn't processed twice. <em>Crucial for money.</em></td></tr>
+  <tr><td><b>ISO 20022 / ISO 8583</b></td><td>Standard “languages” for payments and card transactions.</td></tr>
+</table>
+<div class="box say"><span class="tag">Say this</span><p>“Customer-facing apps talk to the core through <b>APIs</b>, and services coordinate through <b>events</b> so they stay loosely coupled. For anything touching money I'd insist on <b>idempotency</b> so a retry never double-charges.”</p></div>
+</section>
+
+<section>
+<h2>17 · Data, MIS &amp; analytics</h2>
+<p>The JD stresses “functional design from data capture to MIS” and “data visualization.” Here's the chain, simply:</p>
+<p style="text-align:center;font-family:var(--sans);font-size:.85rem;line-height:2;">
+<span class="chip">Capture the right data points</span> → <span class="chip">Store (DB)</span> → <span class="chip">Copy out (ETL/CDC)</span> → <span class="chip">Warehouse / lake</span> → <span class="chip">Dashboards (MIS / BI)</span></p>
+<table>
+  <tr><th>Term</th><th>Plain meaning</th></tr>
+  <tr><td><b>Data point / data dictionary</b></td><td>An exact field you capture (e.g. income, collateral value) and its definition. If you don't capture it, you can't report on it.</td></tr>
+  <tr><td><b>OLTP vs OLAP</b></td><td>The live system that <b>runs</b> the bank (transactions) vs the system that <b>analyses</b> it (reporting). You separate them so reports don't slow the live system.</td></tr>
+  <tr><td><b>ETL / CDC</b></td><td>How data is copied from live systems into the warehouse (Extract-Transform-Load; or Change-Data-Capture, which streams changes as they happen).</td></tr>
+  <tr><td><b>Data warehouse / lake</b></td><td>Big stores of copied data for analysis. (Warehouse = tidy &amp; structured; lake = raw &amp; flexible.)</td></tr>
+  <tr><td><b>MIS / BI</b></td><td>Management Information System / Business Intelligence — the reports &amp; dashboards leaders use to decide. Tools: <b>Power BI, Tableau, Qlik</b>.</td></tr>
+  <tr><td><b>The right chart</b></td><td>Trend → line; compare → bar; funnel/drop-off → funnel; status vs target → KPI card.</td></tr>
+</table>
+<div class="box tip"><span class="tag">The PO insight worth repeating</span><p>“Design the <b>report you'll need</b> first, then work backwards to the <b>data points to capture</b>. Reporting fails when nobody captured the field at the start.”</p></div>
+</section>
+
+<section>
+<h2>18 · Security, cloud &amp; delivery (DevSecOps)</h2>
+<table>
+  <tr><th>Topic</th><th>What a PO must know</th></tr>
+  <tr><td><b>PCI DSS</b></td><td>The rulebook for handling card data: <b>tokenise</b> card numbers, <b>never store the CVV</b>, encrypt everything, isolate the card environment. Minimise what touches real card data.</td></tr>
+  <tr><td><b>Encryption</b></td><td>Scrambling data so only authorised systems can read it — “at rest” (stored) and “in transit” (moving).</td></tr>
+  <tr><td><b>IAM / MFA</b></td><td>Identity &amp; Access Management; Multi-Factor Authentication (password + OTP). Controls who can do what.</td></tr>
+  <tr><td><b>KYC / AML</b></td><td>Verify identity; screen for money-laundering &amp; sanctions; file suspicious-activity reports. Bake it into the product, don't bolt it on.</td></tr>
+  <tr><td><b>PDPA</b></td><td>Malaysia's data-protection law — capture consent, minimise data, protect it.</td></tr>
+  <tr><td><b>Cloud</b></td><td>Renting computing from providers (AWS/Azure/GCP) instead of owning servers — scales up/down on demand. Banks adopt it carefully for regulatory reasons.</td></tr>
+  <tr><td><b>CI/CD &amp; DevSecOps</b></td><td>Automated building, testing &amp; releasing of software — with <b>security built in</b> from the start. MBB Labs explicitly runs a DevSecOps culture.</td></tr>
+  <tr><td><b>NFRs</b></td><td>“Non-functional requirements” — scalability, availability (uptime), latency (speed), resilience. The qualities <em>besides</em> features.</td></tr>
+</table>
+<div class="box say"><span class="tag">Say this</span><p>“For a banking product I treat <b>security and compliance as design inputs</b> — PCI for cards, PDPA for data, KYC/AML for onboarding — and I care about the <b>non-functionals</b> (uptime, latency, resilience) as much as the features, because trust is the product.”</p></div>
+</section>
+
+<section>
+<h2>19 · The PO's technical vocabulary (quick reference)</h2>
+<div class="two-col">
+<dl>
+  <dt>API</dt><dd>A menu one system offers another to request data/actions.</dd>
+  <dt>Core banking</dt><dd>The master record-book of accounts &amp; the ledger.</dd>
+  <dt>Microservice</dt><dd>One small, independent piece of software doing one job.</dd>
+  <dt>Event-driven</dt><dd>Systems react to announced events rather than calling each other.</dd>
+  <dt>Kafka</dt><dd>A high-speed stream/queue carrying events.</dd>
+  <dt>Synchronous</dt><dd>Ask and wait (phone call).</dd>
+  <dt>Asynchronous</dt><dd>Send and move on (text message).</dd>
+  <dt>Idempotency</dt><dd>Safety so a repeat message isn't double-processed.</dd>
+  <dt>Latency</dt><dd>How long a request takes — lower is better.</dd>
+  <dt>Availability</dt><dd>% of time the system is up (e.g. 99.9%).</dd>
+  <dt>Scalability</dt><dd>Coping with more load by adding capacity.</dd>
+  <dt>ETL / CDC</dt><dd>Moving data into the warehouse (batch / streaming).</dd>
+  <dt>OLTP / OLAP</dt><dd>Running the bank vs analysing it.</dd>
+  <dt>Tokenisation</dt><dd>Replacing card numbers with safe stand-ins.</dd>
+  <dt>CI/CD</dt><dd>Automated build-test-release pipeline.</dd>
+  <dt>NFR</dt><dd>Quality requirements beyond features.</dd>
+  <dt>SLA</dt><dd>A promised service level (e.g. 99.9% uptime).</dd>
+  <dt>C4</dt><dd>The 4 zoom levels for diagrams.</dd>
+</dl>
+</div>
+</section>
+
+<!-- ════════════════ PART 6 CAREER ════════════════ -->
+<section class="pagebreak">
+<h2>20 · Map your resume to the JD</h2>
+<div class="box warn"><span class="tag">Action needed — share your resume</span>
+<p>I built this career section as a <b>fill-in framework</b> because I don't have your resume yet — only the job description was shared. <b>Upload your CV and I'll complete a tailored version</b> (your exact bullet points mapped to each JD line, a personalised gap plan, and a “why me” pitch in your voice). Meanwhile, work through the templates below — they're useful on their own.</p></div>
+
+<p>The single most powerful interview prep is a <b>two-column map</b>: each JD requirement on the left, <b>your proof</b> on the right. Fill this in for yourself:</p>
+<table>
+  <tr><th>JD asks for…</th><th>My evidence (a project, result, or example)</th></tr>
+  <tr><td>Product ownership &amp; backlog management</td><td class="fill"></td></tr>
+  <tr><td>Stakeholder management (international)</td><td class="fill"></td></tr>
+  <tr><td>Core banking / lending exposure</td><td class="fill"></td></tr>
+  <tr><td>Risk / pricing / analytics</td><td class="fill"></td></tr>
+  <tr><td>AGILE + JIRA + Confluence</td><td class="fill"></td></tr>
+  <tr><td>Functional design → MIS</td><td class="fill"></td></tr>
+  <tr><td>Basic SQL / data</td><td class="fill"></td></tr>
+  <tr><td>Leading / mentoring technical teams</td><td class="fill"></td></tr>
+</table>
+<div class="box tip"><span class="tag">How to fill each box</span><p>Use a one-line <b>STAR</b> result: “Led the backlog for X, cutting onboarding time 30%.” If a box is empty, that's a <b>gap</b> to address in §21 — not a reason to panic. Everyone has gaps; what matters is awareness and a plan.</p></div>
+</section>
+
+<section>
+<h2>21 · Gap analysis &amp; your 90-day plan</h2>
+<h3>Honest gap analysis</h3>
+<p>For anything you couldn't fill above, pick a strategy:</p>
+<table>
+  <tr><th>If the gap is…</th><th>Your move</th></tr>
+  <tr><td><b>Knowledge</b> (e.g. banking domain)</td><td>Close it now — these four guides are exactly that. Say: “I proactively studied the loan lifecycle and risk-based pricing to prepare.”</td></tr>
+  <tr><td><b>A tool</b> (e.g. JIRA, SQL)</td><td>Get basic hands-on fast; tools are learnable in days. Show willingness.</td></tr>
+  <tr><td><b>Experience</b> (e.g. never built core banking)</td><td>Bridge with a <b>transferable</b> example: “I haven't built a core banking system, but I've owned a complex transactional platform where correctness and stakeholders mattered the same way.”</td></tr>
+</table>
+
+<h3>Your first-90-days plan (mention this — it impresses)</h3>
+<table>
+  <tr><th>Phase</th><th>Focus</th></tr>
+  <tr><td><b>Days 1–30 · Learn</b></td><td>Understand the product, the core systems, the squad, the stakeholders in KL, and the current backlog. Listen more than talk.</td></tr>
+  <tr><td><b>Days 31–60 · Contribute</b></td><td>Take ownership of part of the backlog; ship a small, valuable improvement; build trust with engineering &amp; risk.</td></tr>
+  <tr><td><b>Days 61–90 · Lead</b></td><td>Own a roadmap slice end-to-end; set clear metrics; bring a data-backed proposal aligned to ROAR30 priorities.</td></tr>
+</table>
+<div class="box say"><span class="tag">Say this</span><p>“In my first 90 days I'd focus on <b>learning</b> the systems and stakeholders, then <b>contributing</b> a quick win to build trust, then <b>owning</b> a roadmap slice with clear metrics — all anchored to the ROAR30 priorities.”</p></div>
+</section>
+
+<section>
+<h2>22 · Your story, and the final checklist</h2>
+<h3>Build your 60-second “why me”</h3>
+<p>Use this fill-in skeleton (replace the brackets with your truth):</p>
+<div class="box plain"><span class="tag">Your pitch template</span>
+<p>“I'm a product person with <b>[X years]</b> building <b>[type of products]</b>. I'm strong at <b>[your top 2 strengths — e.g. backlog ownership &amp; stakeholder alignment]</b>, shown when I <b>[one proud result with a number]</b>. I've deliberately built my foundation in <b>lending, core banking and risk-based pricing</b> for this role, and I'm genuinely excited by <b>ROAR30</b> and MBB Labs' mandate to modernise with data and AI. I want to own products end-to-end while keeping the customer and ‘Humanising Financial Services' at the centre.”</p></div>
+
+<h3>Your three STAR stories (prepare these)</h3>
+<ol>
+  <li>A <b>delivery win</b> — you shipped something valuable (→ Excellence &amp; Efficiency).</li>
+  <li>A <b>stakeholder conflict</b> you navigated (→ Relationship Building).</li>
+  <li>A time you <b>led/mentored or handled ambiguity</b> (→ Growth, Teamwork).</li>
+</ol>
+
+<hr>
+<h3>The everything checklist</h3>
+<table>
+  <tr><th>✓</th><th>I can…</th></tr>
+  <tr><td>☐</td><td>Draw a layered system diagram using the 8-step method, narrating as I go.</td></tr>
+  <tr><td>☐</td><td>Explain sync vs async and label every connection.</td></tr>
+  <tr><td>☐</td><td>Read &amp; shape a basic SQL query (SELECT / WHERE / GROUP BY / JOIN).</td></tr>
+  <tr><td>☐</td><td>Tell the loan lifecycle in 10 seconds, and deeply if pushed.</td></tr>
+  <tr><td>☐</td><td>Explain risk-based pricing (5 ingredients; Expected Loss = PD×LGD×EAD).</td></tr>
+  <tr><td>☐</td><td>Name Maybank's 3 lines of business and the main loan types.</td></tr>
+  <tr><td>☐</td><td>Explain core banking + the digital layer, microservices, events, APIs.</td></tr>
+  <tr><td>☐</td><td>Quote the mission (Humanising), values (T.I.G.E.R.), strategy (ROAR30).</td></tr>
+  <tr><td>☐</td><td>Map my resume to the JD, with a 90-day plan and 3 STAR stories.</td></tr>
+  <tr><td>☐</td><td>Ask 3 thoughtful questions back.</td></tr>
+</table>
+
+<div class="box tip"><span class="tag">Final word</span><p>You now have the diagrams, the SQL, the lifecycle, the full product map, the technical vocabulary, and a career plan — in one place. The knowledge is handled. On the day, slow down, think out loud, tie answers to the customer and to Maybank's mission, and be honest about what you're still learning. That combination wins. 🐯</p></div>
+
+<hr>
+<p class="note">Educational interview-prep material. Product names &amp; LOB structure researched from public Maybank sources as of mid-2026 and may change — verify on maybank2u/maybank.com. Pricing figures elsewhere are illustrative. Not legal, financial, or Shariah advice.</p>
+</section>
+
+</div>
+</body>
+</html>
