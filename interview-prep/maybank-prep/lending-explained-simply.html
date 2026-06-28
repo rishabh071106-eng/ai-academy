@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lending &amp; Pricing, Explained Like a Story — Maybank Interview Companion</title>
+<style>
+  :root{
+    --ink:#1b2330; --soft:#56607a; --line:#e2e6ee; --bg:#ffffff;
+    --gold:#f5b400; --gold-d:#b98d00;
+    --navy:#0a3b66; --teal:#0f8a6a; --warn:#b4521a; --rose:#c0436b;
+    --chip:#eef2f8;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:var(--serif); color:var(--ink); background:var(--bg); line-height:1.62; font-size:11.5pt; margin:0;}
+  .wrap{max-width:43rem; margin:0 auto; padding:2.2rem 1.5rem 3rem;}
+  h1,h2,h3,h4,.kicker,.tag,.toc li,.lbl,.cover-meta,figcaption,.pill,.big{font-family:var(--sans);}
+  h1{font-size:2.05rem; line-height:1.12; margin:.2rem 0 .4rem; letter-spacing:-.01em;}
+  h2{font-size:1.4rem; margin:2rem 0 .6rem; padding-bottom:.3rem; border-bottom:3px solid var(--gold); letter-spacing:-.01em;}
+  h3{font-size:1.12rem; margin:1.4rem 0 .4rem; color:var(--navy);}
+  h4{font-size:.98rem; margin:1rem 0 .3rem;}
+  p{margin:.55rem 0;}
+  ul,ol{margin:.5rem 0 .8rem; padding-left:1.25rem;}
+  li{margin:.3rem 0;}
+  .kicker{font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-d); font-weight:800;}
+  .cover{min-height:9.1in; display:flex; flex-direction:column; justify-content:center; page-break-after:always;}
+  .cover h1{font-size:2.7rem; line-height:1.06;}
+  .cover .sub{font-size:1.12rem; color:var(--soft); margin:.5rem 0 1.4rem; max-width:33rem;}
+  .cover-bar{height:8px; width:92px; background:var(--gold); border-radius:4px; margin:.2rem 0 1.3rem;}
+  .cover-meta{font-size:.86rem; color:var(--soft); line-height:1.8; border-top:1px solid var(--line); padding-top:1rem; margin-top:1.3rem;}
+  .cover-meta b{color:var(--ink);}
+  .toc ol{list-style:none; padding:0;}
+  .toc li{font-size:.92rem; margin:.3rem 0;}
+  .toc .n{display:inline-block; width:1.9rem; color:var(--gold-d); font-weight:800;}
+  .toc .part{font-weight:800; color:var(--navy); margin-top:.9rem; font-size:.82rem; text-transform:uppercase; letter-spacing:.08em;}
+
+  .box{border-radius:9px; padding:.75rem 1rem; margin:1rem 0; break-inside:avoid; border:1px solid var(--line);}
+  .box .tag{display:inline-block; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; font-weight:800; padding:.12rem .45rem; border-radius:5px; margin-bottom:.4rem;}
+  .story{background:#fffaf0; border-left:4px solid var(--gold); font-style:italic;}
+  .story .tag{background:#fdecc4; color:var(--gold-d); font-style:normal;}
+  .story b{font-style:normal;}
+  .plain{background:#eef5fc; border-left:4px solid var(--navy);}
+  .plain .tag{background:#d8e6f4; color:var(--navy);}
+  .ex{background:#f1faf6; border-left:4px solid var(--teal);}
+  .ex .tag{background:#d8f0e6; color:var(--teal);}
+  .say{background:#fdf3f7; border-left:4px solid var(--rose);}
+  .say .tag{background:#f8dde8; color:var(--rose);}
+  .why{background:#f6f7fb; border-left:4px solid var(--soft);}
+  .why .tag{background:#e7eaf2; color:var(--soft);}
+  .warn{background:#fdf4ee; border-left:4px solid var(--warn);}
+  .warn .tag{background:#fae0d0; color:var(--warn);}
+  .box p:first-of-type{margin-top:.1rem;} .box p:last-child{margin-bottom:.1rem;}
+
+  table{width:100%; border-collapse:collapse; margin:.8rem 0; font-size:.9rem; break-inside:avoid;}
+  th,td{text-align:left; padding:.45rem .6rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--chip); font-size:.74rem; letter-spacing:.03em; text-transform:uppercase; color:var(--soft); font-family:var(--sans);}
+  .num td{font-family:var(--mono); font-size:.85rem;}
+  code{font-family:var(--mono); font-size:.86em; background:#f3f5f9; padding:.05em .32em; border-radius:4px;}
+  figure{margin:1.2rem 0; break-inside:avoid;}
+  figure svg{width:100%; height:auto;}
+  figcaption{font-size:.82rem; color:var(--soft); margin-top:.45rem; text-align:center; font-family:var(--sans);}
+  .pill{display:inline-block; background:var(--navy); color:#fff; border-radius:5px; padding:.07rem .45rem; font-size:.74rem; margin:.1rem .12rem; font-weight:600;}
+  .chip{display:inline-block; background:var(--chip); border:1px solid var(--line); border-radius:5px; padding:.08rem .45rem; font-size:.8rem; margin:.12rem; font-family:var(--sans);}
+  .note{font-size:.85rem; color:var(--soft); font-style:italic;}
+  hr{border:none; border-top:1px solid var(--line); margin:1.6rem 0;}
+  .pagebreak{page-break-before:always;}
+  h2,h3,h4{page-break-after:avoid;}
+  .big{font-size:1.5rem; font-weight:800; color:var(--navy);}
+  @page{ size:Letter; margin:0.75in 0.7in; }
+  @media print{ .wrap{max-width:none; padding:0;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══════════ COVER ═══════════ -->
+<section class="cover">
+  <div class="kicker">Your Plain-English Companion · Maybank / MBB Labs</div>
+  <h1>Lending &amp; Pricing,<br>Explained Like a Story</h1>
+  <div class="cover-bar"></div>
+  <p class="sub">No jargon. No assumptions. We start from “what is a bank,” follow one borrower through her whole loan, learn exactly how a loan's price is decided (with real numbers), and get you ready for a face-to-face with the Head of Product Management.</p>
+  <div class="cover-meta">
+    <b>This guide is for you if:</b> you're new to banking and the words feel like a wall.<br>
+    <b>How to read it:</b> slowly, in order, like a story. Every new word is explained the moment it appears. Boxes marked <span style="color:var(--rose)"><b>Say this</b></span> are lines you can use in the interview.<br>
+    <b>You'll come out knowing:</b> how a bank makes money · the full loan journey · how loan pricing really works · what core banking is · who Maybank &amp; MBB Labs are · and how to handle the interview.
+  </div>
+</section>
+
+<!-- ═══════════ TOC ═══════════ -->
+<section>
+  <div class="kicker">What we'll walk through</div>
+  <h2 style="border:none;margin-top:.3rem">Contents</h2>
+  <div class="toc">
+    <div class="part">Part 1 · The foundations</div>
+    <ol>
+      <li><span class="n">1</span>How does a bank actually make money?</li>
+      <li><span class="n">2</span>Meet Aina (our story begins)</li>
+    </ol>
+    <div class="part">Part 2 · The loan's journey, told as a story</div>
+    <ol start="3">
+      <li><span class="n">3</span>The dream &amp; the application</li>
+      <li><span class="n">4</span>“Can she handle it?” — the credit check</li>
+      <li><span class="n">5</span>The yes, and the price tag</li>
+      <li><span class="n">6</span>Signing &amp; getting the money</li>
+      <li><span class="n">7</span>The long, quiet middle (paying it back)</li>
+      <li><span class="n">8</span>When life goes wrong</li>
+      <li><span class="n">9</span>A helping hand</li>
+      <li><span class="n">10</span>The hard road, and the happy ending</li>
+    </ol>
+    <div class="part">Part 3 · How a loan's price is really decided</div>
+    <ol start="11">
+      <li><span class="n">11</span>Why doesn't everyone pay the same rate?</li>
+      <li><span class="n">12</span>What “interest” really is</li>
+      <li><span class="n">13</span>The five ingredients of a loan's price</li>
+      <li><span class="n">14</span>Risk, in numbers (PD, LGD, EAD)</li>
+      <li><span class="n">15</span>Full worked example: Aina vs Ben</li>
+      <li><span class="n">16</span>How pricing links to the whole loan</li>
+    </ol>
+    <div class="part">Part 4 · The machine &amp; the job</div>
+    <ol start="17">
+      <li><span class="n">17</span>Core banking, in one simple picture</li>
+      <li><span class="n">18</span>Where a Product Owner fits in</li>
+    </ol>
+    <div class="part">Part 5 · Your interview</div>
+    <ol start="19">
+      <li><span class="n">19</span>Maybank, in plain terms (researched)</li>
+      <li><span class="n">20</span>The strategy you must mention: ROAR30</li>
+      <li><span class="n">21</span>MBB Labs — where you'd work</li>
+      <li><span class="n">22</span>The face-to-face with the Head of Product</li>
+      <li><span class="n">23</span>Questions, answers &amp; your night-before checklist</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════ PART 1 ═══════════ -->
+<section class="pagebreak">
+<h2>1 · How does a bank actually make money?</h2>
+<p>Before loans, before pricing, before any fancy word — let's get the one idea everything else hangs on. If you understand this, the rest of banking suddenly makes sense.</p>
+
+<p>A bank is a <b>middleman for money</b>. Some people have spare money and want it kept safe (and maybe earn a little). Other people need money now and are willing to pay for the privilege of borrowing it. The bank sits in the middle and connects the two.</p>
+
+<figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Diagram showing savers giving deposits to a bank which pays them small interest, and the bank lending to borrowers who pay larger interest; the difference is the bank's profit">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#56607a"/></marker></defs>
+  <!-- savers -->
+  <rect x="20" y="70" width="170" height="110" rx="12" fill="#eef5fc" stroke="#0a3b66" stroke-width="1.6"/>
+  <text x="105" y="100" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#0a3b66">Savers</text>
+  <text x="105" y="124" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1b2330">people with</text>
+  <text x="105" y="140" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1b2330">spare money</text>
+  <!-- bank -->
+  <rect x="275" y="55" width="170" height="140" rx="14" fill="#fff7e0" stroke="#b98d00" stroke-width="2"/>
+  <text x="360" y="115" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="800" fill="#b98d00">THE BANK</text>
+  <text x="360" y="138" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1b2330">the middleman</text>
+  <!-- borrowers -->
+  <rect x="530" y="70" width="170" height="110" rx="12" fill="#f1faf6" stroke="#0f8a6a" stroke-width="1.6"/>
+  <text x="615" y="100" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#0f8a6a">Borrowers</text>
+  <text x="615" y="124" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1b2330">people who</text>
+  <text x="615" y="140" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1b2330">need money now</text>
+  <!-- arrows deposits -->
+  <line x1="192" y1="100" x2="272" y2="100" stroke="#56607a" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="232" y="92" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#56607a">deposit</text>
+  <line x1="272" y1="150" x2="192" y2="150" stroke="#56607a" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="232" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#56607a">pays small interest (2–3%)</text>
+  <!-- arrows loans -->
+  <line x1="448" y1="100" x2="528" y2="100" stroke="#56607a" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="488" y="92" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#56607a">loan</text>
+  <line x1="528" y1="150" x2="448" y2="150" stroke="#56607a" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="488" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#56607a">pays bigger interest (4–5%)</text>
+  <!-- spread -->
+  <text x="360" y="225" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1b2330">Bank keeps the gap in the middle  →  that gap is its profit</text>
+</svg>
+<figcaption>The whole of banking in one picture: take money in cheaply, lend it out for a bit more, keep the difference.</figcaption>
+</figure>
+
+<div class="box plain"><span class="tag">In plain words</span>
+<p>The bank pays savers a <b>small</b> rate (say 2–3%) and charges borrowers a <b>bigger</b> rate (say 4–5%). The difference — the “gap” — is roughly how the bank earns. Bankers call that gap the <b>spread</b>, or more precisely the <b>net interest margin (NIM)</b>.</p></div>
+
+<p>That's it. <b>Deposits</b> are the raw material (cheap money coming in). <b>Loans</b> are the product (money going out at a higher price). Everything else in this guide is detail hanging off that one idea.</p>
+
+<div class="box why"><span class="tag">Why this matters for your job</span>
+<p>As a Product Owner building lending products, you're working on the <b>“money going out” side</b> — the part that earns the bigger rate. But you should always remember the loan is only profitable compared to <b>what the money cost the bank to get in</b>. Hold that thought; it comes back when we talk about pricing.</p></div>
+
+<h3>Two quick words you'll hear constantly</h3>
+<table>
+  <tr><th>Word</th><th>Plain meaning</th></tr>
+  <tr><td><b>Deposit</b></td><td>Money customers put <em>into</em> the bank (savings, current account). To the bank this is actually a <b>debt it owes you</b> — it has to give it back.</td></tr>
+  <tr><td><b>Loan</b> / <b>Financing</b></td><td>Money the bank gives <em>out</em> to a customer, to be paid back over time with extra on top. (“Financing” is just the word used for the Islamic version — same idea, we'll cover it.)</td></tr>
+</table>
+</section>
+
+<!-- ═══════════ 2 AINA ═══════════ -->
+<section>
+<h2>2 · Meet Aina (our story begins)</h2>
+<div class="box story"><span class="tag">Our story</span>
+<p><b>Aina</b> is 29. She teaches science at a secondary school in Kuala Lumpur. For three years she's been renting a small flat, but she's tired of paying rent that buys her nothing. She's found an apartment she loves: <b>RM 400,000</b>. She has saved <b>RM 50,000</b>. She does not have RM 400,000. So she walks into Maybank — and our story begins.</p></div>
+
+<p>We're going to follow Aina's loan from this first hopeful step all the way to the day she owns the apartment outright. Along the way, every stage of the <b>loan lifecycle</b> will appear naturally, and we'll stop to explain each idea gently and deeply.</p>
+
+<div class="box plain"><span class="tag">In plain words: “loan lifecycle”</span>
+<p>The <b>loan lifecycle</b> is just the <b>life story of a loan</b> — every stage it passes through, from “I'd like to borrow” to “fully paid off.” Like a person's life has childhood, school, work, retirement — a loan has application, approval, repayment, and ending. That's all the word means. Don't let it intimidate you.</p></div>
+
+<p>Here is the whole journey on one line. We'll take it one stage at a time:</p>
+<p style="text-align:center; font-family:var(--sans); font-size:.86rem; line-height:2;">
+<span class="chip">1. Apply</span> →
+<span class="chip">2. Credit check</span> →
+<span class="chip">3. Approve &amp; price</span> →
+<span class="chip">4. Sign &amp; disburse</span> →
+<span class="chip">5. Repay (servicing)</span> →
+<span class="chip">6. Trouble (delinquency)</span> →
+<span class="chip">7. Help (restructure)</span> →
+<span class="chip">8. Recover</span> →
+<span class="chip">9. Settle (done!)</span>
+</p>
+<p class="note">Good news: most loans only ever touch stages 1–5 and then 9. Stages 6–8 are the “something went wrong” path. We'll learn them, but they're the exception, not the rule.</p>
+</section>
+
+<!-- ═══════════ PART 2 — LIFECYCLE STORY ═══════════ -->
+<section class="pagebreak">
+<h2>3 · Stage one — the dream &amp; the application</h2>
+<div class="box story"><span class="tag">Our story</span>
+<p>Aina sits across from a Maybank officer (or, these days, opens the <b>MAE</b> app on her phone). She says: “I'd like to finance an apartment. It costs RM 400,000. I have RM 50,000 saved.” The officer smiles and starts asking questions — lots of them.</p></div>
+
+<p>This first stage is <b>origination</b> — a fancy word that simply means <b>“starting the loan.”</b> The bank's goal here is to <b>collect information</b>. It needs to know two things: <em>who is this person?</em> and <em>what exactly do they want?</em></p>
+
+<h3>First: who are you, really? (KYC)</h3>
+<p>Before lending a single ringgit, the bank must be sure Aina is really Aina — not a fraudster using a stolen identity. It checks her <b>MyKad</b> (the Malaysian national ID card). This identity check has a name:</p>
+<div class="box plain"><span class="tag">In plain words: “KYC”</span>
+<p><b>KYC = “Know Your Customer.”</b> It's the bank confirming you are who you say you are, and that you're not a criminal laundering money. Think of it like airport security for banking — a little annoying, but it protects everyone. When it's done digitally (snap your IC, take a selfie), it's called <b>e-KYC</b>.</p></div>
+
+<h3>Second: can we check your money history? (consent + the credit check)</h3>
+<p>The officer asks Aina to <b>give permission</b> to look at her borrowing history. Why permission? Because the law (Malaysia's <b>PDPA</b> — Personal Data Protection Act) says a bank can't go digging into your personal data without your say-so.</p>
+<p>Once Aina agrees, the bank pulls her <b>credit report</b>.</p>
+<div class="box plain"><span class="tag">In plain words: “credit report &amp; CCRIS”</span>
+<p>A <b>credit report</b> is your <b>borrowing report card</b>. It shows every loan and credit card you've ever had and whether you paid on time. In Malaysia the main one is <b>CCRIS</b>, a database run by the central bank (Bank Negara Malaysia). Every bank reports to it and reads from it. There's also a private one called <b>CTOS</b>, which gives you a <b>score</b> — a single number summarising how trustworthy a borrower you are.</p></div>
+
+<div class="box story"><span class="tag">Our story</span>
+<p>Aina's report comes back clean. Three years of credit-card payments, never late. A small car loan, paid perfectly. The bank likes what it sees. So far, so good.</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“The application stage is really about <b>capturing the right data and verifying identity</b> — KYC, consent under PDPA, and pulling CCRIS and a CTOS score. As a Product Owner, the key decision here is <b>which data points to capture</b>, because whatever we don't capture now, we can't use to decide or report on later.”</p></div>
+</section>
+
+<!-- ═══════════ 4 UNDERWRITING ═══════════ -->
+<section>
+<h2>4 · Stage two — “can she handle it?” (the credit check)</h2>
+<p>Now comes the heart of lending. The bank has Aina's information; it must <b>decide whether to lend</b>. This decision-making is called <b>underwriting</b> — an old word from insurance. Forget the word; remember the question it answers:</p>
+<p class="big" style="text-align:center;">“Can she repay — and will she?”</p>
+
+<p>Bankers have a famous checklist for this, taught for a hundred years: the <b>Five Cs of Credit</b>. Let's meet them through Aina.</p>
+
+<table>
+  <tr><th>The “C”</th><th>The question</th><th>Aina's case</th></tr>
+  <tr><td><b>Character</b></td><td>Does she pay people back? (willingness)</td><td>Spotless credit report. ✔</td></tr>
+  <tr><td><b>Capacity</b></td><td>Can her income handle the payments? (ability)</td><td>Steady teacher's salary. ✔</td></tr>
+  <tr><td><b>Capital</b></td><td>Does she have her own money in it?</td><td>RM 50,000 saved. ✔</td></tr>
+  <tr><td><b>Collateral</b></td><td>If she can't pay, what can we sell?</td><td>The apartment itself. ✔</td></tr>
+  <tr><td><b>Conditions</b></td><td>Is the economy / purpose sensible?</td><td>A home to live in — sound. ✔</td></tr>
+</table>
+
+<h3>The most important number: can she afford it? (DSR)</h3>
+<p>Of the five Cs, <b>Capacity</b> is where most loans live or die. The bank works out: of the money Aina earns each month, how much is <b>already</b> promised to other debts — and is there enough left for this new home payment?</p>
+<div class="box plain"><span class="tag">In plain words: “DSR”</span>
+<p><b>DSR = Debt Service Ratio.</b> It's the share of your monthly income already eaten by debt payments. If you earn RM 5,000 and pay RM 2,000 to loans, your DSR is <b>40%</b>. Banks get nervous when this climbs too high (often above ~60–70%), because it means little breathing room. It's the single most important affordability check.</p></div>
+
+<div class="box ex"><span class="tag">A quick number</span>
+<p>Aina earns <b>RM 6,000</b>/month. Her only existing debt is a car loan of <b>RM 700</b>/month. The new home payment would be about <b>RM 1,800</b>/month (we'll see where that comes from later). So her total debt would be RM 2,500 out of RM 6,000 → a DSR of about <b>42%</b>. Comfortable. The bank is happy.</p></div>
+
+<h3>Who actually decides — a person or a computer?</h3>
+<p>For a clean case like Aina's, a <b>computer</b> can decide in seconds using rules and a scoring model. For messier cases (a business owner with irregular income), a <b>human underwriter</b> looks closely. Most banks do both: auto-approve the easy “yes,” auto-reject the obvious “no,” and send the tricky middle to a person.</p>
+<div class="box plain"><span class="tag">In plain words: “rating &amp; scorecard”</span>
+<p>A <b>scorecard</b> is the model that turns Aina's data into a number — like a credit score, but the bank's own. From that, the bank gives her a <b>risk rating</b> (a grade, like a school grade A to F). A good grade means “low chance of not paying.” <b>Remember this grade</b> — in Part 3 it will directly decide the <b>price</b> of her loan. This is the secret link between the credit check and the price tag.</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“Underwriting answers <em>can and will they repay</em>, using the Five Cs — and in practice the make-or-break number is the <b>DSR</b>. The output is a <b>risk rating</b>, and that rating is what later drives the pricing. So credit assessment and pricing aren't two separate things — they're one chain.”</p></div>
+</section>
+
+<!-- ═══════════ 5 APPROVAL & PRICE ═══════════ -->
+<section>
+<h2>5 · Stage three — the yes, and the price tag</h2>
+<div class="box story"><span class="tag">Our story</span>
+<p>The decision comes back: <b>approved.</b> But there are two details. First, the bank won't lend the full RM 400,000 — it asks Aina to put down 10% herself, so it will lend <b>RM 360,000</b>. Second, it tells her the <b>interest rate</b>: <b>4.40% per year</b>. The bank prints all this in a formal letter called the <b>Letter of Offer</b>.</p></div>
+
+<p>Two new ideas just appeared. Let's unpack both.</p>
+
+<h3>Why only RM 360,000? (the down payment &amp; “LTV”)</h3>
+<p>The apartment costs RM 400,000. The bank lends RM 360,000. Aina pays the other RM 40,000 herself (plus she keeps RM 10,000 of her savings for fees). That RM 40,000 is the <b>down payment</b> — her own “skin in the game.”</p>
+<div class="box plain"><span class="tag">In plain words: “LTV / Margin of Finance”</span>
+<p><b>LTV = Loan-to-Value.</b> It's the loan as a percentage of the thing's value. RM 360,000 loan ÷ RM 400,000 apartment = <b>90% LTV</b>. (In Malaysia this is often called <b>Margin of Finance</b>.) Why does the bank care? Because if Aina ever stops paying and the bank must sell the apartment, that 10% cushion protects it from loss. Lower LTV = safer for the bank.</p></div>
+
+<h3>The 4.40% — where does a price even come from?</h3>
+<p>This is the question you specifically wanted answered, and it deserves its own deep section. For now, just hold this teaser:</p>
+<div class="box why"><span class="tag">The big reveal (coming in Part 3)</span>
+<p>Aina's <b>4.40%</b> is not random and not the same for everyone. It is <b>built up</b> from what the money costs the bank, plus a little for running costs, plus a little extra to cover the <b>risk</b> that some borrowers won't repay, plus the bank's profit. Because Aina is <b>low risk</b>, her rate is low. A riskier borrower would be quoted a <b>higher</b> rate. We'll build her exact number, piece by piece, in Part 3.</p></div>
+</section>
+
+<!-- ═══════════ 6 DISBURSEMENT ═══════════ -->
+<section class="pagebreak">
+<h2>6 · Stage four — signing &amp; getting the money</h2>
+<div class="box story"><span class="tag">Our story</span>
+<p>Aina accepts the offer. She signs a stack of documents, the most important being a promise — in writing — to repay. The bank also registers a legal claim over the apartment. Then it pays the money to the seller. The apartment is hers to live in — though not yet fully hers to <em>own</em>.</p></div>
+
+<p>Two important things happened: a <b>promise</b> and a <b>claim</b>.</p>
+
+<div class="box plain"><span class="tag">In plain words: the two key documents</span>
+<p><b>1. The promise to repay.</b> Aina signs a legal document saying she'll pay the money back on the agreed terms. If she breaks it, the bank can take her to court.</p>
+<p><b>2. The claim on the apartment (the “charge” / lien).</b> The bank registers a legal hold over the apartment. This means: Aina lives there and it's “hers,” but she can't sell it without settling the bank first, and if she stops paying, the bank has the right to take and sell it. In Malaysia this is a <b>charge</b> under the National Land Code. The general word is a <b>lien</b>.</p></div>
+
+<div class="box plain"><span class="tag">In plain words: “collateral”</span>
+<p><b>Collateral</b> is simply <b>the thing the bank can take if you don't pay.</b> Here, it's the apartment. A loan <em>with</em> collateral (home, car) is a <b>secured loan</b> — safer for the bank, so cheaper for you. A loan with <em>no</em> collateral (a personal loan, a credit card) is <b>unsecured</b> — riskier for the bank, so more expensive. This is your first hint about why different loans cost different amounts.</p></div>
+
+<div class="box plain"><span class="tag">In plain words: “disbursement”</span>
+<p><b>Disbursement</b> just means <b>“the bank actually pays out the money.”</b> Notice it usually goes <em>to the seller</em>, not into Aina's hand. The day this happens, the loan officially “comes alive” and starts counting. (For a house still being built, the bank pays in stages as construction progresses — called <b>progressive disbursement</b>.)</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“At disbursement the loan becomes a real, live asset on the bank's books. The product/operational care here is getting the <b>documentation, the lien perfection, and the money movement</b> right — and then <b>‘boarding' the loan onto the servicing system</b> so repayments can begin. A mistake here is expensive and hard to undo.”</p></div>
+</section>
+
+<!-- ═══════════ 7 SERVICING ═══════════ -->
+<section>
+<h2>7 · Stage five — the long, quiet middle (paying it back)</h2>
+<div class="box story"><span class="tag">Our story</span>
+<p>Every month for the next 30 years, RM 1,803 leaves Aina's account automatically and goes to the bank. Month after month, year after year. This quiet, faithful repayment is where a loan spends almost its entire life.</p></div>
+
+<p>This stage is called <b>servicing</b> — “looking after the loan” while it's being repaid. It's unglamorous but it's <b>where most banking software actually lives</b>, so as a future Product Owner, pay attention here.</p>
+
+<div class="box plain"><span class="tag">In plain words: “installment”</span>
+<p>An <b>installment</b> is the fixed amount Aina pays each month (RM 1,803). Here's the surprising part that confuses everyone at first: <b>that single payment is secretly split into two parts</b> — some of it pays the bank's <b>interest</b> (the rent on the money), and the rest reduces what she actually <b>owes</b> (the <b>principal</b>).</p></div>
+
+<h3>The magic of the shrinking interest (amortization)</h3>
+<p>Here's something beautiful and worth truly understanding. In the early years, most of Aina's RM 1,803 is <b>interest</b> — because she still owes a lot, so the “rent” is high. But every month she chips away at what she owes, so next month's interest is a tiny bit smaller, and a tiny bit more of her payment goes to actually <b>shrinking the debt</b>. Over time this snowballs.</p>
+
+<figure>
+<svg viewBox="0 0 680 300" role="img" aria-label="Bar chart showing how each monthly payment splits between interest and principal over 30 years; early payments are mostly interest, later payments mostly principal">
+  <!-- axes -->
+  <line x1="60" y1="240" x2="650" y2="240" stroke="#56607a" stroke-width="1.5"/>
+  <line x1="60" y1="40" x2="60" y2="240" stroke="#56607a" stroke-width="1.5"/>
+  <text x="36" y="50" font-family="sans-serif" font-size="10" fill="#56607a">RM</text>
+  <text x="36" y="244" font-family="sans-serif" font-size="10" fill="#56607a">0</text>
+  <!-- 4 bars: year 1, 10, 20, 30. total height ~ same (1803). interest shrinks. -->
+  <!-- bar template: x, width 90. principal (teal) at bottom, interest (gold) on top. total px height 180 = RM1803 -->
+  <!-- Year 1: interest ~1320, principal ~483 => interest 132px, principal 48px -->
+  <g font-family="sans-serif" font-size="10">
+  <rect x="90"  y="192" width="90" height="48"  fill="#0f8a6a"/>
+  <rect x="90"  y="60"  width="90" height="132" fill="#f5b400"/>
+  <text x="135" y="256" text-anchor="middle" fill="#1b2330">Year 1</text>
+  <!-- Year 10: interest ~1090, principal ~713 => 109 / 71 -->
+  <rect x="230" y="169" width="90" height="71"  fill="#0f8a6a"/>
+  <rect x="230" y="60"  width="90" height="109" fill="#f5b400"/>
+  <text x="275" y="256" text-anchor="middle" fill="#1b2330">Year 10</text>
+  <!-- Year 20: interest ~700, principal ~1103 => 70 / 110 -->
+  <rect x="370" y="130" width="90" height="110" fill="#0f8a6a"/>
+  <rect x="370" y="60"  width="90" height="70"  fill="#f5b400"/>
+  <text x="415" y="256" text-anchor="middle" fill="#1b2330">Year 20</text>
+  <!-- Year 30: interest ~40, principal ~1763 => 4 / 176 -->
+  <rect x="510" y="64"  width="90" height="176" fill="#0f8a6a"/>
+  <rect x="510" y="60"  width="90" height="4"   fill="#f5b400"/>
+  <text x="555" y="256" text-anchor="middle" fill="#1b2330">Year 30</text>
+  </g>
+  <!-- legend -->
+  <rect x="430" y="14" width="14" height="14" fill="#f5b400"/><text x="450" y="26" font-family="sans-serif" font-size="11" fill="#1b2330">Interest (rent on the money)</text>
+  <rect x="430" y="32" width="14" height="14" fill="#0f8a6a"/><text x="450" y="44" font-family="sans-serif" font-size="11" fill="#1b2330">Principal (shrinking the debt)</text>
+  <text x="135" y="34" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#56607a">same total payment every month →</text>
+</svg>
+<figcaption>Each bar is one monthly payment of RM 1,803 — always the same size. But the yellow (interest) shrinks and the green (debt repayment) grows. This slow flip is called <b>amortization</b>.</figcaption>
+</figure>
+
+<div class="box plain"><span class="tag">In plain words: “amortization”</span>
+<p><b>Amortization</b> is just the name for this gradual paying-off — the same monthly payment, but slowly shifting from “mostly interest” to “mostly paying down the debt,” until one day it hits zero. You don't need the formula; you need the <b>picture above</b>. That intuition alone will carry you in an interview.</p></div>
+
+<h3>What else happens during servicing?</h3>
+<ul>
+  <li><b>Collecting the payment</b> — usually an automatic monthly deduction (a “standing instruction”).</li>
+  <li><b>Splitting it correctly</b> — interest vs principal, every single month.</li>
+  <li><b>Sending statements</b> — so Aina sees her balance shrinking.</li>
+  <li><b>Reporting to CCRIS</b> — every month the bank tells the central database “Aina paid on time,” which keeps <em>her</em> credit report healthy.</li>
+</ul>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“Servicing is the longest stage and where most platform software lives — payment processing, interest accrual, statements, and the payment ‘waterfall' that splits each installment into interest and principal. It's unglamorous, but it's the <b>system of record</b> for the customer's money, so correctness matters more than speed.”</p></div>
+</section>
+
+<!-- ═══════════ 8 DELINQUENCY ═══════════ -->
+<section>
+<h2>8 · Stage six — when life goes wrong</h2>
+<div class="box story"><span class="tag">Our story (an alternative path)</span>
+<p>Imagine, five years in, Aina loses her job. One month, for the first time, the RM 1,803 doesn't arrive. Then a second month. The loan has entered a stage no one wants: <b>delinquency.</b></p></div>
+
+<div class="box plain"><span class="tag">In plain words: “delinquency &amp; default”</span>
+<p><b>Delinquent</b> simply means <b>“behind on payments.”</b> Banks count it in <b>days past due</b> (DPD) or <b>months in arrears</b>. Miss one month = 30 days past due. Miss three months (~90 days) and the loan is usually called <b>impaired</b> or in <b>default</b> — a serious flag meaning the borrower has broken the agreement. (“Default” = the formal “you've broken the contract” line; “delinquent” = the softer “you're running late.”)</p></div>
+
+<div class="box why"><span class="tag">Why the bank acts fast</span>
+<p>A missed payment is an early warning. The longer someone is behind, the less likely they are to ever catch up. So banks watch a number called the <b>roll rate</b> — the chance a loan “rolls” from 1 month late to 2, to 3. Catching trouble early (a friendly reminder, a phone call) is far cheaper than dealing with it late. This early, gentle chasing is called <b>collections</b>.</p></div>
+
+<div class="box warn"><span class="tag">Watch out (a fairness rule)</span>
+<p>Chasing payments is tightly regulated. The bank can't harass, threaten, or call at all hours. Treating a struggling customer with dignity isn't just nice — it's the law, and it's the <b>“Humanising Financial Services”</b> mission you'll hear Maybank repeat. Remember that link for the interview.</p></div>
+</section>
+
+<!-- ═══════════ 9 RESTRUCTURE ═══════════ -->
+<section>
+<h2>9 · Stage seven — a helping hand</h2>
+<p>Here's something that surprises beginners: when a borrower is in trouble, the bank usually <b>doesn't</b> want to grab the house. Taking and selling collateral is slow, expensive, and recovers less than the loan. The bank often makes <b>more money by helping the borrower keep paying</b>, even at a reduced amount. So it offers a lifeline.</p>
+
+<div class="box plain"><span class="tag">In plain words: the rescue tools</span>
+<p>This stage is called <b>loss mitigation</b> (“reducing the loss”) or, in Malaysia, <b>R&amp;R — Rescheduling &amp; Restructuring.</b> The tools:</p>
+<ul style="margin-top:.3rem">
+  <li><b>Payment holiday / moratorium</b> — pause payments for a few months while the borrower gets back on their feet.</li>
+  <li><b>Reschedule</b> — stretch the loan over more years so each monthly payment becomes smaller.</li>
+  <li><b>Restructure</b> — change the terms more deeply (e.g. a lower rate for a while).</li>
+</ul></p></div>
+
+<div class="box story"><span class="tag">Our story</span>
+<p>Aina calls the bank and explains. They stretch her remaining loan over a few more years, dropping her payment to something she can manage with her new, smaller salary. She's relieved. The bank keeps a paying customer. Both win. (Malaysia even has a free national agency, <b>AKPK</b>, that helps people restructure their debts.)</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“Loss mitigation is an economic decision, not a charity. Foreclosing recovers less than the loan and costs a lot, so a restructure that keeps the customer paying often gives the bank a <b>better outcome</b> — and it fits the ‘Humanising' mission. The product challenge is spotting hardship early and offering the right option quickly.”</p></div>
+</section>
+
+<!-- ═══════════ 10 RECOVERY & SETTLE ═══════════ -->
+<section>
+<h2>10 · Stage eight &amp; nine — the hard road, and the happy ending</h2>
+
+<h3>The hard road (recovery) — only if all else fails</h3>
+<p>If a borrower truly can't pay even after help, the bank reaches the last resort: it uses the <b>collateral.</b> For a home, this is <b>foreclosure</b> — a legal process (in Malaysia, a court “order for sale”) ending in the apartment being sold at <b>auction</b>. For a car, it's <b>repossession.</b> Whatever the sale brings in reduces the debt.</p>
+<div class="box plain"><span class="tag">In plain words: “charge-off &amp; provisions”</span>
+<p>If a loan looks unlikely to be fully recovered, the bank <b>writes it down</b> in its accounts — admitting the loss. This is a <b>charge-off</b>. Importantly, the customer can still legally owe the money; it's an <em>accounting</em> step, not forgiveness. Banks also set aside money <em>in advance</em> for expected losses, called <b>provisions</b> (under a rule called <b>ECL / MFRS 9</b> — “expected credit loss”). Think of it as the bank keeping a rainy-day fund for loans that might go bad.</p></div>
+
+<h3>The happy ending (settlement) — the normal path</h3>
+<div class="box story"><span class="tag">Our story (back to the good timeline)</span>
+<p>Aina never lost her job. For 30 years she paid faithfully. One morning she makes her final payment. The bank releases its claim on the apartment — files a <b>discharge of charge</b> — and for the first time, the apartment is <b>100% hers</b>, owned free and clear. The loan's life is complete.</p></div>
+
+<div class="box plain"><span class="tag">In plain words: “settlement &amp; payoff”</span>
+<p><b>Settlement</b> (or <b>payoff</b>) is simply <b>the loan being fully paid and closed.</b> It can happen three ways: paying the last scheduled installment (Aina), paying it all off early, or <b>refinancing</b> (taking a new loan elsewhere to pay off this one). However it ends, the bank removes its lien and reports the loan as “settled” — a gold star on the customer's credit report.</p></div>
+
+<div class="box why"><span class="tag">Zoom out — you now know the whole journey</span>
+<p>Apply → credit check → approve &amp; price → sign &amp; disburse → repay → (trouble → help → recover) → settle. That's the entire loan lifecycle, and you understood every word. Take a breath — the hard part is done. Now let's answer your big question: <b>how is the price decided?</b></p></div>
+</section>
+
+<!-- ═══════════ PART 3 — PRICING ═══════════ -->
+<section class="pagebreak">
+<h2>11 · Why doesn't everyone pay the same rate?</h2>
+<p>You asked specifically about pricing, so we'll go slowly and build it from the ground up. Start with a question that unlocks everything:</p>
+<p class="big" style="text-align:center;">Why does a risky borrower pay a higher interest rate?</p>
+
+<p>Here's the intuition, using something you already understand: <b>car insurance.</b></p>
+<div class="box plain"><span class="tag">The insurance analogy</span>
+<p>A 19-year-old with two accidents pays <b>more</b> for car insurance than a careful 45-year-old. Why? Because the insurer expects to pay out more often for the risky driver, so it charges more upfront to cover that. <b>Lending works exactly the same way.</b> A borrower more likely to stop paying will, on average, cost the bank more — so the bank charges them a higher rate to cover that expected cost. That's the entire idea behind <b>risk-based pricing</b>: <b>price the loan to match the risk.</b></p></div>
+
+<div class="box why"><span class="tag">The fairness inside it</span>
+<p>It can feel unfair that struggling borrowers pay more. But think of it as a <b>pool</b>: the bank lends to many people; a few won't repay. The extra charged for risk is what covers those few losses — paid by the pool, so the bank stays solvent and can keep lending to everyone. Without risk-based pricing, safe borrowers would be overcharged to subsidise risky ones, or the bank would simply refuse risky borrowers entirely.</p></div>
+</section>
+
+<!-- ═══════════ 12 INTEREST ═══════════ -->
+<section>
+<h2>12 · What “interest” really is</h2>
+<p>Before we build a price, let's be crystal clear on the thing being priced.</p>
+<div class="box plain"><span class="tag">In plain words: “interest”</span>
+<p><b>Interest is rent on money.</b> When you rent an apartment, you pay the owner for using their space for a while. When you borrow money, you pay the bank <b>rent for using their money for a while.</b> The <b>interest rate</b> (say 4.40% per year) is the rent expressed as a yearly percentage of what you've borrowed. Borrow RM 100,000 at 4.40% and the first year's rent is about RM 4,400.</p></div>
+
+<div class="box plain"><span class="tag">One more: “rate” vs “APR”</span>
+<p>You'll see two numbers. The <b>interest rate</b> is the rent on the money. The <b>APR</b> (Annual Percentage Rate) is the rent <b>plus the fees</b>, rolled into one yearly percentage — so it shows the <b>true all-in cost</b> and lets you compare loans fairly. <b>APR is always a little higher than the plain rate.</b> That's all.</p></div>
+
+<div class="box why"><span class="tag">Islamic version (important at Maybank)</span>
+<p>Islamic finance forbids charging <b>interest</b> (called <b>riba</b>). So instead of lending money at interest, the bank does a real transaction — for a home, it co-buys the property with you and you gradually buy out its share, paying <b>profit</b> instead of interest. <b>Same economics, different structure and words:</b> “financing” not “loan,” “profit rate” not “interest rate.” Maybank is a <b>global leader</b> in this, so just knowing this paragraph will impress.</p></div>
+</section>
+
+<!-- ═══════════ 13 FIVE INGREDIENTS ═══════════ -->
+<section>
+<h2>13 · The five ingredients of a loan's price</h2>
+<p>Now the main event. A loan's interest rate isn't plucked from the air — it's a <b>recipe</b> with five ingredients stacked on top of each other. We'll add them one by one to build Aina's 4.40%.</p>
+
+<figure>
+<svg viewBox="0 0 560 330" role="img" aria-label="A stacked bar building up Aina's loan interest rate from five components: cost of funds, operating cost, expected loss, cost of capital, and profit margin, totalling 4.4 percent">
+  <!-- stacked bar -->
+  <!-- total 4.4% over 260px => 1% ≈ 59px. start y=300 baseline going up -->
+  <g font-family="sans-serif" font-size="12">
+  <!-- cost of funds 2.5% = 147px : y from 300-147=153 to 300 -->
+  <rect x="120" y="153" width="120" height="147" fill="#0a3b66"/>
+  <text x="250" y="232" fill="#1b2330">Cost of funds — what the money costs the bank</text>
+  <text x="180" y="285" text-anchor="middle" fill="#fff" font-weight="700">2.50%</text>
+  <!-- operating 0.5% = 30px : y 123-153 -->
+  <rect x="120" y="123" width="120" height="30" fill="#2E7FC2"/>
+  <text x="250" y="142" fill="#1b2330">Operating cost — staff, systems, branches</text>
+  <text x="180" y="144" text-anchor="middle" fill="#fff" font-weight="700" font-size="10">0.50%</text>
+  <!-- expected loss 0.3% = 18px : y 105-123 -->
+  <rect x="120" y="105" width="120" height="18" fill="#c0436b"/>
+  <text x="250" y="118" fill="#1b2330">Expected loss — covering risk of non-payment</text>
+  <text x="180" y="119" text-anchor="middle" fill="#fff" font-weight="700" font-size="9">0.30%</text>
+  <!-- cost of capital 0.7% = 41px : y 64-105 -->
+  <rect x="120" y="64" width="120" height="41" fill="#7C5CBF"/>
+  <text x="250" y="88" fill="#1b2330">Cost of capital — return on the bank's own buffer</text>
+  <text x="180" y="89" text-anchor="middle" fill="#fff" font-weight="700" font-size="10">0.70%</text>
+  <!-- profit 0.4% = 24px : y 40-64 -->
+  <rect x="120" y="40" width="120" height="24" fill="#f5b400"/>
+  <text x="250" y="56" fill="#1b2330">Profit margin — the bank's reward</text>
+  <text x="180" y="57" text-anchor="middle" fill="#1b2330" font-weight="700" font-size="9">0.40%</text>
+  <!-- total -->
+  <line x1="120" y1="40" x2="100" y2="40" stroke="#1b2330"/>
+  <line x1="120" y1="300" x2="100" y2="300" stroke="#1b2330"/>
+  <text x="92" y="175" text-anchor="end" font-weight="800" fill="#1b2330" font-size="14">= 4.40%</text>
+  <text x="92" y="193" text-anchor="end" fill="#56607a" font-size="10">Aina's rate</text>
+  </g>
+</svg>
+<figcaption>A loan's rate is a stack. Add up what the money costs, the running cost, the risk cover, the capital cost, and the profit — and you get the price the customer is quoted.</figcaption>
+</figure>
+
+<table>
+  <tr><th>Ingredient</th><th>In plain words</th><th>Aina</th></tr>
+  <tr><td><b>1. Cost of funds</b></td><td>What the bank paid to <em>get</em> the money (mostly the interest it pays savers). The floor under every loan.</td><td>2.50%</td></tr>
+  <tr><td><b>2. Operating cost</b></td><td>The cost of running the bank — staff, branches, the app, processing her loan.</td><td>0.50%</td></tr>
+  <tr><td><b>3. Expected loss</b></td><td>A small slice to cover the risk she (or borrowers like her) won't repay. <b>This is the risk-based part.</b></td><td>0.30%</td></tr>
+  <tr><td><b>4. Cost of capital</b></td><td>Banks must hold their own safety buffer against each loan; investors expect a return on it.</td><td>0.70%</td></tr>
+  <tr><td><b>5. Profit margin</b></td><td>The bank's reward for doing all this.</td><td>0.40%</td></tr>
+  <tr><td colspan="2"><b>Total interest rate</b></td><td><b>4.40%</b></td></tr>
+</table>
+
+<div class="box why"><span class="tag">The key insight</span>
+<p>Four of the five ingredients are roughly the <b>same for everyone</b>. Only <b>one</b> — the <b>expected loss</b> — changes a lot from person to person, depending on how risky they are. <b>That single ingredient is where “risk-based pricing” actually happens.</b> So to understand pricing differences, we just need to understand that one number. Let's do exactly that.</p></div>
+</section>
+
+<!-- ═══════════ 14 RISK IN NUMBERS ═══════════ -->
+<section class="pagebreak">
+<h2>14 · Risk, in numbers (PD, LGD, EAD)</h2>
+<p>How does a bank turn “this person is a bit risky” into an actual percentage for ingredient #3? With three simple ideas. Don't be scared of the abbreviations — each is just one plain question.</p>
+
+<table>
+  <tr><th>Term</th><th>The plain question it answers</th><th>Aina (low risk)</th></tr>
+  <tr><td><b>PD</b><br>Probability of Default</td><td>“What's the chance they stop paying?”</td><td>1% (1 in 100)</td></tr>
+  <tr><td><b>LGD</b><br>Loss Given Default</td><td>“<em>If</em> they stop, how much do we actually lose after selling the collateral?”</td><td>25%</td></tr>
+  <tr><td><b>EAD</b><br>Exposure at Default</td><td>“How much do they owe us at that moment?”</td><td>RM 360,000</td></tr>
+</table>
+
+<p>Multiply the three together and you get the <b>Expected Loss</b> — the average amount the bank expects to lose on this loan, per year:</p>
+
+<div class="box ex"><span class="tag">Worked: Aina's expected loss</span>
+<p style="font-family:var(--mono); font-size:.95rem;">Expected Loss = PD × LGD × EAD<br>
+= 1% × 25% × RM 360,000<br>
+= 0.01 × 0.25 × 360,000<br>
+= <b>RM 900 per year</b></p>
+<p>As a percentage of her RM 360,000 loan: 900 ÷ 360,000 = <b>0.25%</b> ≈ the <b>0.30%</b> we put in her price stack. <b>That's where ingredient #3 came from.</b></p></div>
+
+<div class="box plain"><span class="tag">Why collateral makes loans cheaper</span>
+<p>Notice the <b>LGD</b> (loss given default) is only 25%, not 100%. Why? Because even if Aina stops paying, the bank can <b>sell the apartment</b> and recover most of the money. The collateral shrinks the loss. <b>That's the deep reason a home loan is cheaper than a personal loan:</b> a personal loan has no collateral, so its LGD is near 100% — the bank loses almost everything if it goes bad, so it charges much more to cover that bigger risk.</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“The risk premium in a loan's price is the <b>Expected Loss</b> — Probability of Default times Loss Given Default times Exposure. So the chain is: the <b>credit assessment</b> produces a <b>risk rating</b> → the rating gives a <b>PD</b> → combined with collateral-driven <b>LGD</b> → that's the Expected Loss → which becomes the <b>spread</b> on top of the bank's base rate → the customer's price. Rating and pricing are one connected story.”</p></div>
+</section>
+
+<!-- ═══════════ 15 AINA VS BEN ═══════════ -->
+<section>
+<h2>15 · Full worked example: Aina vs Ben</h2>
+<p>Now let's see risk-based pricing in action by introducing a second character.</p>
+<div class="box story"><span class="tag">Our story</span>
+<p>Meet <b>Ben.</b> He wants the <em>same</em> apartment loan as Aina — <b>RM 360,000 over 30 years.</b> But Ben is self-employed; his income swings month to month, and his credit report shows two late payments last year. He's not a bad person — he's just a <b>riskier borrower.</b> Watch what happens to his price.</p></div>
+
+<p>Everything is the same except the <b>risk</b>. Aina's chance of default was 1%; Ben's is higher — say <b>5%</b>. The collateral is the same apartment, so LGD stays 25%. Let's recompute just the expected-loss ingredient:</p>
+
+<div class="box ex"><span class="tag">Worked: Ben's expected loss</span>
+<p style="font-family:var(--mono); font-size:.95rem;">Ben = PD × LGD × EAD = 5% × 25% × 360,000 = <b>RM 4,500 / year</b><br>
+As % of loan = 4,500 ÷ 360,000 = <b>1.25%</b></p>
+<p>So Ben's risk ingredient is <b>~1.25%</b>, versus Aina's <b>~0.25%</b> — a full <b>1% more</b>, purely because he's five times more likely to default.</p></div>
+
+<p>Now stack both prices side by side. Only ingredient #3 changed:</p>
+<table class="num">
+  <tr><th>Ingredient</th><th>Aina</th><th>Ben</th></tr>
+  <tr><td>Cost of funds</td><td>2.50%</td><td>2.50%</td></tr>
+  <tr><td>Operating cost</td><td>0.50%</td><td>0.50%</td></tr>
+  <tr><td><b>Expected loss (risk)</b></td><td><b>0.30%</b></td><td><b>1.30%</b></td></tr>
+  <tr><td>Cost of capital</td><td>0.70%</td><td>0.80%</td></tr>
+  <tr><td>Profit margin</td><td>0.40%</td><td>0.40%</td></tr>
+  <tr><td><b>Final rate</b></td><td><b>4.40%</b></td><td><b>5.50%</b></td></tr>
+</table>
+<p class="note">(Ben's cost of capital nudges up too, because banks must hold a bigger buffer against riskier loans — but the big mover is the risk premium.)</p>
+
+<h3>What that 1.1% does to real life</h3>
+<p>A one-percent difference sounds tiny. It isn't. Same loan, same apartment — here's the monthly payment each is quoted:</p>
+<table class="num">
+  <tr><th></th><th>Aina @ 4.40%</th><th>Ben @ 5.50%</th></tr>
+  <tr><td>Monthly payment</td><td>≈ RM 1,803</td><td>≈ RM 2,044</td></tr>
+  <tr><td>Extra per month</td><td>—</td><td>+ RM 241</td></tr>
+  <tr><td>Extra over 30 years</td><td>—</td><td>≈ + RM 87,000</td></tr>
+</table>
+
+<div class="box why"><span class="tag">The lesson, in one line</span>
+<p>Ben pays about <b>RM 87,000 more</b> over the life of the loan than Aina — for the identical apartment — entirely because he was a riskier borrower. <b>That is risk-based pricing.</b> And it's why a clean credit history is worth real money: it literally lowers the price of everything you ever borrow.</p></div>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“Risk-based pricing means two customers can get very different rates on the same product. The driver is the <b>expected-loss</b> component — set by the borrower's risk rating and the collateral. As a Product Owner I'd care that the pricing is <b>explainable and fair</b>: we must be able to tell a customer <em>why</em> they got their rate, and make sure the model isn't unfairly penalising protected groups.”</p></div>
+</section>
+
+<!-- ═══════════ 16 PRICING LINK ═══════════ -->
+<section>
+<h2>16 · How pricing links to the whole loan</h2>
+<p>Let's tie Part 3 back to the story, because the interview gold is showing you see the <b>connections</b>, not just the parts.</p>
+
+<figure>
+<svg viewBox="0 0 700 150" role="img" aria-label="A flow showing how the credit check feeds the rating, which sets the price, which sets the payment, which affects repayment and profit">
+  <defs><marker id="f2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b98d00"/></marker></defs>
+  <g font-family="sans-serif" font-size="11.5" text-anchor="middle">
+  <rect x="10"  y="55" width="118" height="46" rx="9" fill="#eef5fc" stroke="#0a3b66"/><text x="69" y="75">Credit check</text><text x="69" y="90" font-size="9" fill="#56607a">(Stage 2)</text>
+  <rect x="156" y="55" width="118" height="46" rx="9" fill="#eef5fc" stroke="#0a3b66"/><text x="215" y="75">Risk rating</text><text x="215" y="90" font-size="9" fill="#56607a">PD &amp; LGD</text>
+  <rect x="302" y="55" width="118" height="46" rx="9" fill="#fff7e0" stroke="#b98d00"/><text x="361" y="75">The price</text><text x="361" y="90" font-size="9" fill="#56607a">rate / spread</text>
+  <rect x="448" y="55" width="118" height="46" rx="9" fill="#f1faf6" stroke="#0f8a6a"/><text x="507" y="75">The payment</text><text x="507" y="90" font-size="9" fill="#56607a">(Stage 5)</text>
+  <rect x="594" y="55" width="100" height="46" rx="9" fill="#f6f7fb" stroke="#56607a"/><text x="644" y="78">Profit</text>
+  <line x1="128" y1="78" x2="154" y2="78" stroke="#b98d00" stroke-width="2" marker-end="url(#f2)"/>
+  <line x1="274" y1="78" x2="300" y2="78" stroke="#b98d00" stroke-width="2" marker-end="url(#f2)"/>
+  <line x1="420" y1="78" x2="446" y2="78" stroke="#b98d00" stroke-width="2" marker-end="url(#f2)"/>
+  <line x1="566" y1="78" x2="592" y2="78" stroke="#b98d00" stroke-width="2" marker-end="url(#f2)"/>
+  </g>
+</svg>
+<figcaption>Pricing isn't a side step — it's the link in the chain that turns a risk assessment into a payment and, ultimately, the bank's profit.</figcaption>
+</figure>
+
+<ul>
+  <li><b>Pricing happens at the approval stage</b> (Stage 3) — but it <b>uses the data from the credit check</b> (Stage 2). No credit assessment, no price.</li>
+  <li><b>The price sets the payment</b> the customer lives with for years (Stage 5). A higher rate = a bigger monthly installment.</li>
+  <li><b>The price drives the bank's profit.</b> Price too low and the bank loses money on risky loans; price too high and customers go to a competitor. Getting it right is a real product and business decision.</li>
+  <li><b>In Malaysia,</b> the price is quoted as <b>“SBR + spread.”</b> The <b>SBR</b> (Standardised Base Rate) is a public base number set in line with the central bank's policy rate; the <b>spread</b> is the bit on top that carries the four other ingredients including the risk premium. When the central bank raises rates, the SBR rises, and floating-rate customers' payments go up.</li>
+</ul>
+
+<div class="box plain"><span class="tag">In plain words: “fixed vs floating”</span>
+<p>A <b>fixed</b> rate stays the same for the whole loan — predictable. A <b>floating</b> (variable) rate moves up and down with the SBR — so the payment can change over time. Most Malaysian home loans are floating.</p></div>
+</section>
+
+<!-- ═══════════ PART 4 ═══════════ -->
+<section class="pagebreak">
+<h2>17 · Core banking, in one simple picture</h2>
+<p>You'll hear “core banking” constantly. It sounds technical; it's actually simple.</p>
+<div class="box plain"><span class="tag">In plain words: “core banking”</span>
+<p><b>Core banking is the bank's master record-book.</b> It's the central system that knows, for every customer: who they are, how much is in each account, every loan they have, and every transaction. When Aina's RM 1,803 leaves her account, the <b>core</b> is what records “payment received, balance updated.” It's the single source of truth for everyone's money — so it has to be rock-solid and is changed very carefully.</p></div>
+
+<p>Everything customers <em>touch</em> — the MAE app, the website, the ATM — sits <b>on top of</b> the core and talks to it. The apps are the friendly face; the core is the trusted ledger underneath.</p>
+<p style="text-align:center; font-family:var(--sans); font-size:.9rem; line-height:2;">
+<span class="chip">📱 Apps &amp; channels (MAE, Maybank2u)</span><br>↕<br>
+<span class="chip">🔌 Connectors (APIs)</span><br>↕<br>
+<span class="chip">🏦 Core banking — the master record-book</span>
+</p>
+
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“The core is the <b>system of record</b> — we keep it stable and change it rarely, because errors in the ledger are catastrophic. Innovation happens in the <b>digital layer on top</b>, which talks to the core through APIs. That's exactly the kind of modernisation MBB Labs exists to do.”</p></div>
+</section>
+
+<!-- ═══════════ 18 PO FIT ═══════════ -->
+<section>
+<h2>18 · Where a Product Owner fits in</h2>
+<p>So where does <em>your</em> job sit in all of this? Right in the middle — as the person who decides <b>what to build and why.</b></p>
+<div class="box plain"><span class="tag">In plain words: “Product Owner”</span>
+<p>A <b>Product Owner (PO)</b> owns a product (say, the digital home-financing journey in the MAE app). You decide <b>what features get built, in what order, and why</b> — based on customer needs and business value. You don't write the code; the engineers do. You're the bridge between the <b>business</b> (what we want to achieve), the <b>customer</b> (what they need), and the <b>tech team</b> (who build it). You also keep the <b>risk and compliance</b> people happy, because this is a bank.</p></div>
+
+<h3>The PO's daily tools (and the words for them)</h3>
+<table>
+  <tr><th>Word</th><th>Plain meaning</th></tr>
+  <tr><td><b>Backlog</b></td><td>Your to-do list of everything the product could have, ordered by importance. You own it.</td></tr>
+  <tr><td><b>User story</b></td><td>A small feature written from the customer's view: <em>“As a customer, I want to see my eligibility instantly, so that I know before applying.”</em></td></tr>
+  <tr><td><b>Sprint</b></td><td>A short work cycle (usually 2 weeks) where the team builds a chunk of the backlog.</td></tr>
+  <tr><td><b>Agile / Scrum</b></td><td>The way of working: build in small steps, get feedback, improve — rather than one giant launch.</td></tr>
+  <tr><td><b>JIRA</b></td><td>The software where you write stories and track sprints. (Named in your JD.)</td></tr>
+  <tr><td><b>Confluence</b></td><td>The wiki where you write documentation. (Also in your JD.)</td></tr>
+</table>
+<div class="box why"><span class="tag">The reassuring truth</span>
+<p>A great Product Owner is <b>not</b> the person who knows the most banking jargon. It's the person who deeply understands the <b>customer's problem</b>, can <b>prioritise</b> ruthlessly, and can <b>get a team aligned</b> to ship something valuable. The banking knowledge in this guide is your <b>foundation</b> — but your product thinking and communication are what they're really hiring.</p></div>
+</section>
+
+<!-- ═══════════ PART 5 — MAYBANK ═══════════ -->
+<section class="pagebreak">
+<h2>19 · Maybank, in plain terms (researched)</h2>
+<p>Time to get you ready for the room. Here's who you're interviewing with, in facts you can quote.</p>
+<ul>
+  <li><b>Who they are:</b> Maybank (Malayan Banking Berhad) is the <b>largest bank in Malaysia</b> and one of the <b>biggest in South-East Asia</b>. The JD cites <b>RM 722 billion</b> in assets; the group has since grown well beyond that, with net profit of <b>RM 10.51 billion</b> for the 2025 financial year.</li>
+  <li><b>Reach:</b> ~2,400 branches/offices across <b>20 countries</b>; the <b>only</b> bank present in <b>all 10 ASEAN countries</b>; ~44,000 employees serving ~22 million customers.</li>
+  <li><b>Their famous mission:</b> <b>“Humanising Financial Services”</b> — fair terms and pricing, being at the heart of the community. <em>Weave this phrase into your answers.</em></li>
+  <li><b>A global leader in Islamic finance</b> (Maybank Islamic).</li>
+  <li><b>Their values — T.I.G.E.R.:</b> Teamwork, Integrity, Growth, Excellence &amp; Efficiency, Relationship Building.</li>
+  <li><b>Their digital products:</b> <b>MAE</b> (the lifestyle app/e-wallet), <b>Maybank2u / M2U</b> (online banking), and recently <b>Maybank2E</b> (new digital business banking, 2026). Recent customer features include a “Money Lock” anti-fraud tool and cross-border QR payments across ASEAN.</li>
+</ul>
+<div class="box say"><span class="tag">Say this in the interview</span>
+<p>“What draws me to Maybank is that ‘Humanising Financial Services' isn't just a slogan — you see it in products like Money Lock and in how lending handles customers in hardship. As a Product Owner I'd want every feature I own to pass a simple test: does this genuinely make a customer's financial life easier and fairer?”</p></div>
+</section>
+
+<!-- ═══════════ 20 ROAR30 ═══════════ -->
+<section>
+<h2>20 · The strategy you must mention: ROAR30</h2>
+<p>This is your single biggest “I did my homework” moment. Most candidates will mention the <em>old</em> strategy. You'll know the <b>current</b> one.</p>
+<div class="box plain"><span class="tag">In plain words: “ROAR30”</span>
+<p>In <b>January 2026</b>, Maybank launched a new five-year plan called <b>ROAR30</b> (2026–2030). The headline: a <b>RM 10 billion</b> investment in <b>technology, data, and AI</b> — about <b>ten times</b> the tech spend of the previous plan. The goal is to embed <b>AI as a core operating tool</b> (not just chatbots), modernise the technology, and lift returns. The earlier plan it replaced was called <b>M25+</b> (built on customer-centricity, digitalisation, regional expansion, Islamic leadership, and sustainability).</p></div>
+
+<h3>Why ROAR30 matters for <em>your</em> interview</h3>
+<ul>
+  <li>It's a <b>RM 10 billion bet on tech, data and AI</b> — and <b>MBB Labs is the engine that builds it.</b> Your role exists <em>because</em> of this strategy.</li>
+  <li>It signals huge investment in <b>modernising platforms</b> (the “digital layer on top of the core” you learned about) and in <b>data &amp; analytics products</b> — exactly the JD's focus.</li>
+  <li>One of its pillars is being a <b>global Islamic finance leader</b> — tying back to the Shariah financing you now understand.</li>
+</ul>
+<div class="box say"><span class="tag">Say this in the interview (this will land)</span>
+<p>“I was excited to see the <b>ROAR30</b> strategy and the RM 10 billion commitment to tech, data and AI — and that MBB Labs is positioned as the product-delivery engine for it. For a Product Owner that's a rare opportunity: real investment, a clear mandate to modernise, and AI being treated as a core operating capability rather than a gimmick. That's exactly the kind of environment where I want to own products end-to-end.”</p></div>
+</section>
+
+<!-- ═══════════ 21 MBB LABS ═══════════ -->
+<section>
+<h2>21 · MBB Labs — where you'd work</h2>
+<div class="box plain"><span class="tag">In plain words: “MBB Labs”</span>
+<p><b>MBB Labs</b> is Maybank's <b>offshore development centre in Bengaluru (Bangalore), India</b> — part of the Maybank Group Technology &amp; Digital team. It's a <b>software product organisation</b>: designers, engineers, data scientists and product leaders building digital and analytics products for Maybank's customers <b>across ASEAN</b>. You'd be in India, building for a Malaysian/regional bank — an international setup by design.</p></div>
+<h3>What they actually build (from Maybank's own description)</h3>
+<ul>
+  <li><b>Product design &amp; delivery</b> — customer journeys across mobile, web, branches, chat and APIs; from onboarding to servicing; for retail, SME and corporate customers; with strong UX and regional compliance.</li>
+  <li><b>Platform modernisation</b> — rebuilding legacy systems with modern, <b>event-driven</b> architecture (remember the “digital layer on top of the core”); modular, scalable, less technical debt.</li>
+  <li><b>Security &amp; DevOps</b> — a “DevSecOps” culture: secure-by-design, automated testing, frequent safe releases.</li>
+</ul>
+<div class="box why"><span class="tag">Connect the dots</span>
+<p>Everything you learned in this guide maps onto MBB Labs' work: the <b>lending journey</b> (their product design), the <b>core-and-digital-layer</b> picture (their platform modernisation), and <b>risk/pricing analytics</b> (their data products under ROAR30). You're not walking in blind anymore — you can speak their language.</p></div>
+</section>
+
+<!-- ═══════════ 22 THE FACE-TO-FACE ═══════════ -->
+<section class="pagebreak">
+<h2>22 · The face-to-face with the Head of Product</h2>
+<p>Your next round is in person with the <b>Head of Product Management</b> — the person you'd ultimately report up to. This changes how you should prepare. Let's get you ready.</p>
+
+<div class="box why"><span class="tag">What this person actually cares about</span>
+<p>A Head of Product is <b>not</b> trying to catch you out on definitions. They're senior; they care about <b>how you think</b>. Specifically: Do you obsess over the <b>customer</b>? Can you <b>prioritise</b> and make trade-offs? Can you handle <b>ambiguity</b> and <b>stakeholders</b>? Do you think in <b>outcomes</b> (did it help the customer / business?) rather than just output (did we ship it)? And — will you be good to work with and grow? Domain knowledge matters, but it's the <b>floor</b>, not the ceiling.</p></div>
+
+<h3>The five things to demonstrate</h3>
+<table>
+  <tr><th>They're checking…</th><th>How you show it</th></tr>
+  <tr><td><b>Customer empathy</b></td><td>Frame answers around the customer's real problem (like Aina's). Tie to “Humanising Financial Services.”</td></tr>
+  <tr><td><b>Prioritisation</b></td><td>Show you sequence by <b>value vs effort</b>, with regulatory/risk items as non-negotiable “musts.”</td></tr>
+  <tr><td><b>Handling ambiguity</b></td><td>“I form a hypothesis, ship a small slice, measure, and adjust” — not “I wait for perfect clarity.”</td></tr>
+  <tr><td><b>Outcome thinking</b></td><td>Talk in metrics: adoption, conversion, time-to-approval, NPL — not just “we delivered it.”</td></tr>
+  <tr><td><b>Collaboration &amp; leadership</b></td><td>Credit teams, mention working with engineers/risk/KL stakeholders, mentoring juniors (T.I.G.E.R. “Growth”).</td></tr>
+</table>
+
+<h3>How to answer a behavioural question — the STAR method</h3>
+<div class="box plain"><span class="tag">In plain words: “STAR”</span>
+<p>When asked “tell me about a time you…”, structure your story as <b>STAR</b>: <b>S</b>ituation (set the scene briefly) → <b>T</b>ask (what you needed to do) → <b>A</b>ction (what <em>you</em> specifically did) → <b>R</b>esult (the outcome, ideally a number). Keep it ~2 minutes. End on the result.</p></div>
+
+<div class="box warn"><span class="tag">How to handle “I'm newer to banking”</span>
+<p>You might be asked something you don't fully know. <b>Don't bluff</b> — senior people see through it instantly, and it breaks <b>Integrity</b> (a T.I.G.E.R. value). Instead: say what you <em>do</em> understand, reason from first principles, and show you learn fast. For example: <em>“I'm still deepening my banking domain knowledge, but here's how I'd reason about it… and I've found I pick up domains quickly — for instance, to prepare for this role I worked through the full loan lifecycle and how risk-based pricing is built up.”</em> That turns a gap into evidence of curiosity (another T.I.G.E.R. value) and effort.</p></div>
+</section>
+
+<!-- ═══════════ 23 Q&A + CHECKLIST ═══════════ -->
+<section>
+<h2>23 · Questions, answers &amp; your night-before checklist</h2>
+
+<h3>Likely questions — and how to answer (you now know all of these)</h3>
+<table>
+  <tr><th>If they ask…</th><th>Your angle (short)</th></tr>
+  <tr><td>“Walk me through how a loan works.”</td><td>Tell Aina's story: apply → credit check → approve &amp; price → disburse → repay → settle. Calm and clear.</td></tr>
+  <tr><td>“How is a loan priced?”</td><td>The five-ingredient stack; only the <b>expected-loss</b> part changes with risk; show Aina-vs-Ben.</td></tr>
+  <tr><td>“Why do riskier customers pay more?”</td><td>The insurance analogy + Expected Loss = PD×LGD×EAD. Fair, not punitive.</td></tr>
+  <tr><td>“What's core banking?”</td><td>The master record-book; keep it stable, innovate in the digital layer on top.</td></tr>
+  <tr><td>“How would you prioritise a backlog?”</td><td>Value vs effort; regulatory/risk = non-negotiable musts; socialise trade-offs.</td></tr>
+  <tr><td>“What do you know about us?”</td><td>Humanising mission, T.I.G.E.R., and especially <b>ROAR30</b> + MBB Labs' role in it.</td></tr>
+  <tr><td>“Tell me about a hard trade-off / conflict.”</td><td>A STAR story ending in a measurable result.</td></tr>
+</table>
+
+<h3>Smart questions to ask <em>them</em> (always have 3 ready)</h3>
+<ul>
+  <li>“With ROAR30's big investment in data and AI, which product areas are the biggest priorities for this team over the next year?”</li>
+  <li>“How does the team balance shipping fast with the change-control and Shariah-governance that banking requires?”</li>
+  <li>“What does a great Product Owner look like here after 12 months — what would I have achieved?”</li>
+  <li>“How does the Bengaluru team collaborate with the business and risk stakeholders in Kuala Lumpur?”</li>
+</ul>
+
+<div class="box say"><span class="tag">Your one-sentence “why me”</span>
+<p>“I bring strong product-ownership and delivery skills, I've built a genuine foundation in lending and risk-based pricing, and I'm energised by ROAR30's mandate to modernise and use data and AI — so I can own products end-to-end while keeping the customer and ‘Humanising Financial Services' at the centre.”</p></div>
+
+<hr>
+<h3>Night-before checklist</h3>
+<table>
+  <tr><th>✓</th><th>Make sure you can…</th></tr>
+  <tr><td>☐</td><td>Tell the <b>loan lifecycle</b> as Aina's story, smoothly, in under 2 minutes.</td></tr>
+  <tr><td>☐</td><td>Explain <b>risk-based pricing</b> with the five ingredients and the Aina-vs-Ben example.</td></tr>
+  <tr><td>☐</td><td>Say <b>Expected Loss = PD × LGD × EAD</b> and what each word means in plain English.</td></tr>
+  <tr><td>☐</td><td>Explain <b>core banking</b> as the master record-book + digital layer on top.</td></tr>
+  <tr><td>☐</td><td>Quote the mission (<b>Humanising Financial Services</b>), the values (<b>T.I.G.E.R.</b>), and the strategy (<b>ROAR30</b>, RM 10bn on tech/data/AI).</td></tr>
+  <tr><td>☐</td><td>Tell what <b>MBB Labs</b> does and why your role exists.</td></tr>
+  <tr><td>☐</td><td>Have <b>3 STAR stories</b> and <b>3 questions to ask</b> ready.</td></tr>
+  <tr><td>☐</td><td>Have a calm answer for “<b>I'm still learning that</b>” — honesty + how fast you learn.</td></tr>
+</table>
+
+<div class="box why"><span class="tag">Final word</span>
+<p>You started this guide feeling buried under jargon. Look how far you've come: you can now explain how a bank earns, how a loan lives and dies, how its price is built number by number, what core banking is, and who Maybank and MBB Labs are. That's not memorising — that's <b>understanding</b>. Walk in calm, tell the story, be curious, and be yourself. You've got this. 🐯</p></div>
+
+<hr>
+<p class="note">Educational interview-prep material. Numbers in the pricing examples are illustrative and rounded to teach the concept — real rates, SBR, PD/LGD values and fees vary by bank, product, customer and time. Company facts were researched from public sources (Maybank newsroom &amp; reports, fintech/industry coverage) as of mid-2026; verify current figures before your interview. Not legal, financial, or Shariah advice.</p>
+</section>
+
+</div>
+</body>
+</html>
