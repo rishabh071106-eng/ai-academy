@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Maybank / MBB Labs — Senior Product Owner Interview Prep</title>
+<style>
+  :root{
+    --ink:#16202e; --soft:#52607a; --line:#dde3ec; --bg:#ffffff;
+    --accent:#f5b400; --accent-d:#caa000;
+    --navy:#0a3b66; --teal:#0f8a6a; --warn:#b4521a;
+    --chip:#eef2f8; --code-bg:#f4f7fb;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:var(--serif); color:var(--ink); background:var(--bg); line-height:1.5; font-size:10.6pt; margin:0;}
+  .wrap{max-width:48rem; margin:0 auto; padding:2.2rem 1.5rem 3rem;}
+  h1,h2,h3,h4,.kicker,.chip,th,.tag,.toc li,.lbl,.cover-meta,figcaption,.pill{font-family:var(--sans);}
+  h1{font-size:2rem; line-height:1.12; margin:.2rem 0 .4rem; letter-spacing:-.01em;}
+  h2{font-size:1.26rem; margin:1.9rem 0 .5rem; padding-bottom:.28rem; border-bottom:3px solid var(--accent); letter-spacing:-.01em;}
+  h3{font-size:1.04rem; margin:1.25rem 0 .35rem; color:var(--navy);}
+  h4{font-size:.94rem; margin:1rem 0 .3rem;}
+  p{margin:.5rem 0;}
+  ul,ol{margin:.4rem 0 .7rem; padding-left:1.2rem;}
+  li{margin:.2rem 0;}
+  code{font-family:var(--mono); font-size:.85em; background:var(--code-bg); padding:.06em .32em; border-radius:4px;}
+  pre{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:.8rem 1rem; overflow:auto; font-family:var(--mono); font-size:.78rem; line-height:1.55; margin:.7rem 0;}
+  pre .kw{color:#0a3b66; font-weight:700;} pre .st{color:#0f8a6a;} pre .cm{color:#8a93a3; font-style:italic;}
+  a{color:var(--navy); text-decoration:none;}
+  .kicker{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-d); font-weight:800;}
+  .cover{min-height:9.1in; display:flex; flex-direction:column; justify-content:center; page-break-after:always;}
+  .cover h1{font-size:2.55rem; line-height:1.05;}
+  .cover .sub{font-size:1.06rem; color:var(--soft); margin:.4rem 0 1.3rem; max-width:35rem;}
+  .cover-bar{height:8px; width:96px; background:var(--accent); border-radius:4px; margin:.2rem 0 1.2rem;}
+  .cover-meta{font-size:.8rem; color:var(--soft); line-height:1.7; border-top:1px solid var(--line); padding-top:.9rem; margin-top:1.1rem;}
+  .cover-meta b{color:var(--ink);}
+  .toc ol{list-style:none; padding:0; columns:2; column-gap:2rem;}
+  .toc li{font-size:.82rem; margin:.24rem 0; break-inside:avoid;}
+  .toc .n{display:inline-block; width:1.7rem; color:var(--accent-d); font-weight:800;}
+  .box{border:1px solid var(--line); border-left:4px solid var(--navy); background:#fbfcfe; border-radius:6px; padding:.65rem .85rem; margin:.8rem 0; break-inside:avoid;}
+  .box.q{border-left-color:var(--navy);}
+  .box.a{border-left-color:var(--teal); background:#f6fbf9;}
+  .box.warn{border-left-color:var(--warn); background:#fdf6f1;}
+  .box.tip{border-left-color:var(--accent-d); background:#fffaf0;}
+  .box .tag{display:inline-block; font-size:.63rem; letter-spacing:.1em; text-transform:uppercase; font-weight:800; padding:.1rem .4rem; border-radius:4px; margin-bottom:.3rem;}
+  .box.q .tag{background:#e6edf6; color:var(--navy);}
+  .box.a .tag{background:#e2f3ec; color:var(--teal);}
+  .box.warn .tag{background:#fbe6d8; color:var(--warn);}
+  .box.tip .tag{background:#fdf0cf; color:var(--accent-d);}
+  .box p:first-of-type{margin-top:.1rem;} .box p:last-child{margin-bottom:.1rem;}
+  table{width:100%; border-collapse:collapse; margin:.7rem 0; font-size:.82rem; break-inside:avoid;}
+  th,td{text-align:left; padding:.38rem .52rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--chip); font-size:.71rem; letter-spacing:.03em; text-transform:uppercase; color:var(--soft);}
+  .flow{display:flex; flex-wrap:wrap; gap:.32rem; margin:.8rem 0;}
+  .flow .step{font-family:var(--sans); background:var(--chip); border:1px solid var(--line); border-radius:18px; padding:.24rem .6rem; font-size:.74rem; font-weight:600;}
+  .flow .arr{align-self:center; color:var(--soft);}
+  .chip{display:inline-block; background:var(--chip); border:1px solid var(--line); border-radius:5px; padding:.08rem .42rem; font-size:.74rem; margin:.1rem .12rem;}
+  .pill{display:inline-block; background:var(--navy); color:#fff; border-radius:5px; padding:.06rem .42rem; font-size:.71rem; margin:.1rem .1rem; font-weight:600;}
+  figure{margin:1rem 0; break-inside:avoid;}
+  figure svg{width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fcfdff;}
+  figcaption{font-size:.77rem; color:var(--soft); margin-top:.4rem; text-align:center;}
+  .note{font-size:.81rem; color:var(--soft); font-style:italic;}
+  hr{border:none; border-top:1px solid var(--line); margin:1.4rem 0;}
+  .two-col{columns:2; column-gap:1.5rem;}
+  dt{font-family:var(--sans); font-weight:700; font-size:.84rem; margin-top:.5rem;}
+  dd{margin:.05rem 0 .3rem; font-size:.87rem;}
+  .pagebreak{page-break-before:always;}
+  h2,h3,h4{page-break-after:avoid;}
+  .jdtag{display:inline-block; font-family:var(--sans); font-size:.62rem; font-weight:800; letter-spacing:.06em; color:#fff; background:var(--accent-d); border-radius:4px; padding:.06rem .36rem; margin-left:.35rem; vertical-align:middle; text-transform:uppercase;}
+  @page{ size:Letter; margin:0.7in 0.65in; }
+  @media print{ .wrap{max-width:none; padding:0;} a{color:var(--ink);} .box,table,figure,.flow,pre{break-inside:avoid;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ════════════════ COVER ════════════════ -->
+<section class="cover">
+  <div class="kicker">Interview Preparation · MBB Labs · Maybank Group</div>
+  <h1>Senior Product Owner</h1>
+  <div class="cover-bar"></div>
+  <p class="sub">A complete, JD-aligned training pack for the MBB Labs (Maybank's Bengaluru offshore development centre) Senior Product Owner role — core banking, lending &amp; collateral systems, risk-based pricing, deposit management, risk analytics, system architecture diagrams, SQL, and the full product-ownership craft.</p>
+  <div class="cover-meta">
+    <b>Mapped directly to the job description:</b><br>
+    Core banking · Rating system · Risk-based pricing · Lending principles · Deposit management · PCI DSS · Risk analytics · Loan origination / collateral / servicing systems · Asset &amp; liability classes · Functional design → MIS · Data visualization · Software product lifecycle · AGILE · JIRA &amp; Confluence · Basic SQL · Product implementation · Stakeholder &amp; delivery leadership<br><br>
+    <b>How to use:</b> Start with §2 (“The JD, decoded”) to see the whole map, then read end-to-end and drill the Q&amp;A and the “explain this diagram” exercise out loud.
+  </div>
+</section>
+
+<!-- ════════════════ TOC ════════════════ -->
+<section class="toc">
+  <div class="kicker">Contents</div>
+  <h2 style="border:none;margin-top:.3rem">What's inside</h2>
+  <ol>
+    <li><span class="n">1</span>Your employer: Maybank &amp; MBB Labs</li>
+    <li><span class="n">2</span>The JD, decoded — every point</li>
+    <li><span class="n">3</span>Malaysian banking in 5 minutes</li>
+    <li><span class="n">4</span>Core banking — heart of the bank</li>
+    <li><span class="n">5</span>Lending principles &amp; the loan lifecycle</li>
+    <li><span class="n">6</span>Origination, collateral &amp; servicing systems</li>
+    <li><span class="n">7</span>Deposit management &amp; asset/liability classes</li>
+    <li><span class="n">8</span>Rating systems &amp; risk-based pricing</li>
+    <li><span class="n">9</span>Risk management &amp; risk analytics</li>
+    <li><span class="n">10</span>Islamic financing essentials</li>
+    <li><span class="n">11</span>PCI DSS, KYC/AML &amp; data security</li>
+    <li><span class="n">12</span>System architecture diagrams — step by step</li>
+    <li><span class="n">13</span>The shapes &amp; how connections work</li>
+    <li><span class="n">14</span>Worked example: Maybank lending architecture</li>
+    <li><span class="n">15</span>Functional design → MIS &amp; data viz</li>
+    <li><span class="n">16</span>SQL basics for a banking PO</li>
+    <li><span class="n">17</span>Product ownership, AGILE, JIRA &amp; Confluence</li>
+    <li><span class="n">18</span>Product lifecycle &amp; implementation</li>
+    <li><span class="n">19</span>Certifications: CAMS · KYC · FRM</li>
+    <li><span class="n">20</span>Interview Q&amp;A — drill these</li>
+    <li><span class="n">21</span>Glossary</li>
+    <li><span class="n">22</span>One-page cheat sheet</li>
+  </ol>
+</section>
+
+<!-- ════════════════ 1 EMPLOYER ════════════════ -->
+<section class="pagebreak">
+<h2>1 · Your employer: Maybank &amp; MBB Labs</h2>
+<p>The role is <b>Senior Product Owner</b> at <b>MBB Labs Private Limited</b>, the <b>Bengaluru (Bangalore) offshore development centre</b> of Maybank, reporting to the Head of Product Management. MBB Labs is positioned as a <b>software product development organisation</b> building digital and high-end analytics products to help Maybank become a “next-gen bank of choice.” So you sit in India, building products for a Malaysian/ASEAN bank — an <b>international</b> working environment by design.</p>
+
+<h3>Maybank facts (straight from the JD — quote these)</h3>
+<ul>
+  <li><b>4th largest bank in South-East Asia</b>, total assets &gt; <b>RM 722 billion</b>.</li>
+  <li>2,400+ branches/offices in <b>20 countries</b>; <b>44,000+</b> employees; <b>22 million</b> customers.</li>
+  <li>The <b>only regional bank present in all 10 ASEAN countries</b>; a <b>global leader in Islamic Finance</b>.</li>
+  <li>Mission: <b>“humanise financial services”</b> — fair terms &amp; pricing, at the heart of the community.</li>
+</ul>
+
+<h3>T.I.G.E.R. — Maybank's core values <span class="jdtag">JD</span></h3>
+<table>
+  <tr><th>Letter</th><th>Value</th><th>Show it in answers by…</th></tr>
+  <tr><td>T</td><td><b>Teamwork</b></td><td>Crediting the squad; cross-functional collaboration.</td></tr>
+  <tr><td>I</td><td><b>Integrity</b></td><td>Compliance-by-design; honest trade-off conversations.</td></tr>
+  <tr><td>G</td><td><b>Growth</b></td><td>Mentoring juniors; learning new domains quickly.</td></tr>
+  <tr><td>E</td><td><b>Excellence &amp; Efficiency</b></td><td>Outcome metrics; lean delivery; quality bar.</td></tr>
+  <tr><td>R</td><td><b>Relationship Building</b></td><td>Stakeholder engagement across Bengaluru &amp; KL.</td></tr>
+</table>
+<div class="box tip"><span class="tag">Frame your whole interview around three things</span><p><b>(1)</b> Humanising / customer value · <b>(2)</b> Islamic-first &amp; regulatory compliance · <b>(3)</b> Delivery excellence with technical teams. Anchor every answer to one of these and the T.I.G.E.R. values, and you'll sound like a Maybank insider.</p></div>
+</section>
+
+<!-- ════════════════ 2 JD DECODED ════════════════ -->
+<section class="pagebreak">
+<h2>2 · The JD, decoded — every point</h2>
+<p>This is your map. Every requirement in the job description, what it really means, and where in this pack you'll find the depth. Read this table first.</p>
+
+<table>
+  <tr><th>JD requirement</th><th>What they want you to know / say</th><th>§</th></tr>
+  <tr><td><b>Core Banking</b></td><td>The system of record (CIF, CASA, loans, GL); keep it stable, innovate in the digital layer via APIs/events.</td><td>4</td></tr>
+  <tr><td><b>Lending principles</b></td><td>5 Cs, the end-to-end loan lifecycle, affordability (DSR), secured vs unsecured.</td><td>5</td></tr>
+  <tr><td><b>Loan origination, Collateral &amp; servicing systems</b></td><td>LOS, collateral management &amp; valuation, LMS/servicing — what each does and the data they hold.</td><td>6</td></tr>
+  <tr><td><b>Deposit Management</b></td><td>Liability products (CASA, fixed deposits), cost of funds, CASA ratio, ALM.</td><td>7</td></tr>
+  <tr><td><b>Asset &amp; liability classes / international markets</b></td><td>Balance-sheet view: assets (loans, securities) vs liabilities (deposits, borrowings); ALM, interest-rate &amp; liquidity risk.</td><td>7</td></tr>
+  <tr><td><b>Rating system</b></td><td>Internal credit risk rating — obligor (PD) &amp; facility (LGD) grades, scorecards, masterscale.</td><td>8</td></tr>
+  <tr><td><b>Risk-based pricing</b></td><td>Rate = cost of funds + expected loss + capital + margin; price to risk grade; SBR + spread.</td><td>8</td></tr>
+  <tr><td><b>Risk management &amp; risk analytics</b></td><td>Credit/market/operational risk; Basel; PD·LGD·EAD; ECL/IFRS 9; stress testing.</td><td>9</td></tr>
+  <tr><td><b>PCI DSS compliance</b></td><td>Protecting cardholder data — 12 requirements, tokenisation, never store CVV, segmentation.</td><td>11</td></tr>
+  <tr><td><b>KYC / AML (CAMS)</b></td><td>Identity, screening, monitoring, SARs; why a product must “bake it in.”</td><td>11, 19</td></tr>
+  <tr><td><b>Functional design: data capture → app design → MIS</b></td><td>BRD/FSD, data dictionary, MIS &amp; reporting; turning needs into specs.</td><td>15</td></tr>
+  <tr><td><b>Data visualization</b></td><td>Dashboards &amp; BI (Power BI/Tableau/Qlik); choosing the right chart; KPIs.</td><td>15</td></tr>
+  <tr><td><b>Software product lifecycle / Product Implementation</b></td><td>Discovery → design → build → UAT → launch → hypercare → iterate.</td><td>18</td></tr>
+  <tr><td><b>AGILE methodology</b></td><td>Scrum roles &amp; ceremonies; PO owns the backlog &amp; “what/why.”</td><td>17</td></tr>
+  <tr><td><b>JIRA &amp; Confluence</b></td><td>Epics→stories→sprints in JIRA; documentation in Confluence.</td><td>17</td></tr>
+  <tr><td><b>Basic SQL</b></td><td>SELECT/JOIN/GROUP BY; read &amp; shape data, validate numbers.</td><td>16</td></tr>
+  <tr><td><b>Backlog ownership / maximise business value</b></td><td>Prioritisation frameworks (MoSCoW/RICE/WSJF); value vs effort.</td><td>17</td></tr>
+  <tr><td><b>Define functionality, features &amp; roadmap with business</b></td><td>Vision → roadmap → OKRs; stakeholder discovery.</td><td>17, 18</td></tr>
+  <tr><td><b>End-to-end product lifecycle ownership</b></td><td>Own outcomes from idea to in-market performance.</td><td>18</td></tr>
+  <tr><td><b>Stakeholder mgmt in an international environment</b></td><td>Bengaluru ↔ KL; business, risk, compliance, Shariah, tech.</td><td>17, 20</td></tr>
+  <tr><td><b>Prioritise &amp; navigate ambiguity</b></td><td>Decision-making with incomplete info; sequencing by value &amp; risk.</td><td>17, 20</td></tr>
+  <tr><td><b>Quantitative / analytical / problem solving</b></td><td>Metrics, funnels, ratios, hypothesis-driven thinking.</td><td>9, 15, 16</td></tr>
+  <tr><td><b>Lead &amp; mentor technical teams</b></td><td>Delivery leadership, collaboration, growing people (T.I.G.E.R. “Growth”).</td><td>17, 20</td></tr>
+  <tr><td><b>Education: Econ/Commerce/MBA; CAMS/KYC/FRM</b></td><td>Know what each certification signals.</td><td>19</td></tr>
+</table>
+<div class="box tip"><span class="tag">Note on geography</span><p>The JD also mentions “international financial markets across all <b>asset and liability classes</b>,” so don't limit yourself to Malaysian retail. Speak to the broader balance sheet (loans, deposits, treasury/markets) and the ASEAN footprint — while still knowing the Malaysia specifics in §3, which show real domain depth.</p></div>
+</section>
+
+<!-- ════════════════ 3 MY BANKING ════════════════ -->
+<section class="pagebreak">
+<h2>3 · Malaysian banking in 5 minutes</h2>
+<p>Even building from Bengaluru, you're serving Maybank's markets. These terms signal real domain knowledge.</p>
+<table>
+  <tr><th>Thing</th><th>What it is</th></tr>
+  <tr><td><b>BNM</b> — Bank Negara Malaysia</td><td>Central bank &amp; regulator; sets policy, licenses banks, issues guidelines (responsible financing, Islamic, AML).</td></tr>
+  <tr><td><b>OPR → SBR</b></td><td>The Overnight Policy Rate (BNM benchmark) sets the <b>Standardised Base Rate</b>. Floating loan rate = <code>SBR + spread</code>.</td></tr>
+  <tr><td><b>CCRIS</b></td><td>BNM's mandatory central credit database — 12 months of repayment conduct. Malaysia's credit file.</td></tr>
+  <tr><td><b>CTOS / RAMCI / Experian</b></td><td>Private credit reporting agencies &amp; scores (Credit Reporting Agencies Act 2010).</td></tr>
+  <tr><td><b>DSR</b></td><td>Debt Service Ratio — Malaysia's DTI; the affordability gate.</td></tr>
+  <tr><td><b>AKPK</b></td><td>BNM's credit-counselling &amp; debt-management agency (loss-mitigation channel).</td></tr>
+  <tr><td><b>PIDM</b></td><td>Deposit insurance (&amp; takaful) corporation.</td></tr>
+  <tr><td><b>PayNet</b></td><td>National rails: DuitNow (instant), RENTAS (RTGS), IBG, JomPAY, FPX.</td></tr>
+  <tr><td><b>PDPA 2010</b></td><td>Personal Data Protection Act — every digital product touches it.</td></tr>
+</table>
+<div class="box tip"><span class="tag">One-liner that lands</span><p>“A Malaysian floating-rate facility prices as <b>SBR + spread</b>, affordability is gated by <b>DSR</b> under BNM responsible-financing rules, and we assess credit on <b>CCRIS</b> + a CTOS score.”</p></div>
+</section>
+
+<!-- ════════════════ 4 CORE BANKING ════════════════ -->
+<section>
+<h2>4 · Core banking — heart of the bank <span class="jdtag">JD</span></h2>
+<p><b>Core banking</b> is the central system of record holding customer accounts and processing the fundamental transactions: opening accounts, deposits, booking loans/financing, posting debits/credits, calculating interest/profit, and maintaining the <b>general ledger (GL)</b>. (“CORE” ≈ <em>Centralised Online Real-time Environment</em>.) Everything else — apps, ATMs, lending workflows — reads from and writes to the core.</p>
+<table>
+  <tr><th>Module</th><th>Owns</th></tr>
+  <tr><td>Customer / CIF</td><td>Customer Information File — the single golden record (the “360 view”).</td></tr>
+  <tr><td>CASA</td><td>Current Account &amp; Savings Account — deposits, balances, posting.</td></tr>
+  <tr><td>Loans / Financing</td><td>Loan accounts, schedules, interest/profit accrual, delinquency status.</td></tr>
+  <tr><td>General Ledger</td><td>Double-entry accounting — every transaction posts here.</td></tr>
+  <tr><td>Term deposits</td><td>Fixed deposits / term financing.</td></tr>
+  <tr><td>Payments &amp; clearing hooks</td><td>Links to RENTAS, DuitNow, IBG, cheque clearing.</td></tr>
+  <tr><td>Islamic banking module</td><td>Shariah-compliant accounting — profit not interest (see §10).</td></tr>
+</table>
+<div class="box tip"><span class="tag">PO talking point</span><p>“The core is the <b>system of record</b>; we keep it thin and stable and build innovation in a <b>digital/microservices layer</b> that talks to it through APIs and events — ship fast on the edges without risking the ledger.” That's the modernisation story MBB Labs exists to deliver.</p></div>
+<div class="box warn"><span class="tag">Accuracy note</span><p>Most Malaysian domestic banks (Maybank included) have historically run core banking on <b>Silverlake Axis</b>'s platform — but internal stacks evolve (cloud, microservices). In the room, speak to <b>patterns</b> and present vendor names as “industry-reported,” not confidential fact.</p></div>
+</section>
+
+<!-- ════════════════ 5 LENDING + LIFECYCLE ════════════════ -->
+<section class="pagebreak">
+<h2>5 · Lending principles &amp; the loan lifecycle <span class="jdtag">JD</span></h2>
+
+<h3>The Five Cs of Credit</h3>
+<table>
+  <tr><th>C</th><th>Measures</th><th>Signal</th></tr>
+  <tr><td><b>Character</b></td><td>Willingness to repay</td><td>CCRIS conduct, CTOS score</td></tr>
+  <tr><td><b>Capacity</b></td><td>Ability to repay</td><td>DSR, cash flow</td></tr>
+  <tr><td><b>Capital</b></td><td>Skin in the game</td><td>Down payment, reserves</td></tr>
+  <tr><td><b>Collateral</b></td><td>Security</td><td>Margin of Finance / LTV, valuation</td></tr>
+  <tr><td><b>Conditions</b></td><td>Purpose &amp; economy</td><td>Rate cycle, sector</td></tr>
+</table>
+
+<h3>The end-to-end loan lifecycle (Malaysia / Maybank)</h3>
+<div class="flow">
+  <span class="step">1 Application</span><span class="arr">→</span>
+  <span class="step">2 Credit assessment</span><span class="arr">→</span>
+  <span class="step">3 Approval &amp; pricing</span><span class="arr">→</span>
+  <span class="step">4 Offer &amp; disbursement</span><span class="arr">→</span>
+  <span class="step">5 Servicing</span><span class="arr">→</span>
+  <span class="step">6 Delinquency</span><span class="arr">→</span>
+  <span class="step">7 Rehabilitation</span><span class="arr">→</span>
+  <span class="step">8 Recovery</span><span class="arr">→</span>
+  <span class="step">9 Settlement</span>
+</div>
+<table>
+  <tr><th>Stage</th><th>What happens</th></tr>
+  <tr><td><b>1 Application</b></td><td>Apply on M2U/MAE, branch or agent; <b>e-KYC</b> vs <b>MyKad</b>; PDPA consent; pick conventional or Islamic.</td></tr>
+  <tr><td><b>2 Credit assessment</b></td><td>Pull <b>CCRIS + CTOS</b>; verify income (payslip, EPF/KWSP, EA/BE tax form); compute <b>DSR</b>; BNM responsible-financing; auto-decision clean cases, refer complex.</td></tr>
+  <tr><td><b>3 Approval &amp; pricing</b></td><td>Risk-based <b>SBR + spread</b> (or Islamic profit rate with ceiling); approve/counter/decline; issue <b>Letter of Offer</b>.</td></tr>
+  <tr><td><b>4 Offer &amp; disbursement</b></td><td>Accept LO; sign facility agreement; create <b>charge</b> over property (National Land Code) or use <b>Hire-Purchase Act 1967</b> for autos; stamp duty; <b>MRTA/MRTT</b>; disburse (progressive for under-construction).</td></tr>
+  <tr><td><b>5 Servicing</b></td><td>Instalment via standing instruction/auto-debit/DuitNow; daily accrual; payment splits profit/interest + principal; statements; monthly CCRIS reporting.</td></tr>
+  <tr><td><b>6 Delinquency</b></td><td>Track <b>months in arrears (MIA)</b>; collections within fair-practice limits; <b>impaired</b> at ~90 DPD; drives <b>GIL</b> ratio.</td></tr>
+  <tr><td><b>7 Rehabilitation</b></td><td><b>R&amp;R</b> (reschedule/restructure: extend tenure, lower instalment, moratorium); refer hardship to <b>AKPK</b>.</td></tr>
+  <tr><td><b>8 Recovery</b></td><td>Secured: <b>foreclosure</b> via court Order for Sale &amp; auction (NLC) or vehicle <b>repossession</b>; unsecured: charge-off &amp; recovery/sale; provisions under <b>MFRS 9</b> ECL.</td></tr>
+  <tr><td><b>9 Settlement</b></td><td>Full/early settlement or refinance; <b>discharge of charge</b>; close &amp; report settled to CCRIS.</td></tr>
+</table>
+<p class="note">Islamic note: same flow — say “financing” not “loan,” “profit” not “interest.”</p>
+</section>
+
+<!-- ════════════════ 6 LOS/COLLATERAL/LMS ════════════════ -->
+<section>
+<h2>6 · Origination, collateral &amp; servicing systems <span class="jdtag">JD</span></h2>
+<p>The JD specifically wants experience “building systems on loan originations, Collateral system, loan servicing systems.” Know what each system does and the data it owns — that's exactly what a PO specs.</p>
+<table>
+  <tr><th>System</th><th>Owns / does</th><th>Key data points</th></tr>
+  <tr><td><b>LOS</b> — Loan Origination System</td><td>Application intake, document &amp; e-KYC, credit decisioning workflow, offer generation — everything <em>up to disbursement</em>.</td><td>Applicant, income, requested amount/tenure, decision, conditions, offer terms.</td></tr>
+  <tr><td><b>Collateral system</b></td><td>Records &amp; values security; tracks the lien/charge; revaluation; links collateral to one or many facilities.</td><td>Collateral type, valuation &amp; date, MOF/LTV, charge/perfection status, insurance.</td></tr>
+  <tr><td><b>LMS</b> — Loan/Servicing System</td><td>Post-disbursement life: ledger, accrual, repayment processing, statements, delinquency, payoff. Often part of the core.</td><td>Schedule, outstanding, instalment, arrears bucket, accrued interest/profit, status.</td></tr>
+</table>
+<div class="box tip"><span class="tag">Collateral — the detail that impresses</span><p>“A facility can be secured by multiple collaterals, and one collateral can secure multiple facilities — so the data model is <b>many-to-many</b>, and we must track <b>perfection</b> (the charge under the NLC), <b>revaluation</b> cycles, and <b>available vs utilised</b> security value. Collateral quality feeds <b>LGD</b> and therefore pricing and provisioning.” That sentence ties collateral → risk → pricing, exactly the JD's themes.</p></div>
+</section>
+
+<!-- ════════════════ 7 DEPOSITS / ALM ════════════════ -->
+<section class="pagebreak">
+<h2>7 · Deposit management &amp; asset/liability classes <span class="jdtag">JD</span></h2>
+<p>Lending is the <b>asset</b> side; deposits are the <b>liability</b> side that funds it. The JD wants both, plus the balance-sheet view across “all asset and liability classes.”</p>
+
+<h3>Deposit (liability) products</h3>
+<table>
+  <tr><th>Product</th><th>What it is</th></tr>
+  <tr><td><b>CASA</b></td><td>Current &amp; Savings Accounts — low/no interest, can be withdrawn anytime. Cheap, sticky funding.</td></tr>
+  <tr><td><b>Fixed / Term Deposit</b></td><td>Locked for a tenure at a fixed rate; pricier funding. Islamic equivalent uses Tawarruq/Mudarabah.</td></tr>
+  <tr><td><b>NIDs / money-market</b></td><td>Negotiable instruments &amp; wholesale funding.</td></tr>
+</table>
+<table>
+  <tr><th>Metric</th><th>Why it matters</th></tr>
+  <tr><td><b>CASA ratio</b></td><td>CASA ÷ total deposits. Higher = cheaper funding = better margin. A headline bank KPI.</td></tr>
+  <tr><td><b>Cost of funds</b></td><td>Weighted rate the bank pays for deposits/borrowings — the floor under loan pricing.</td></tr>
+  <tr><td><b>NIM</b> — net interest margin</td><td>(Interest income − interest expense) ÷ assets. Core profitability of the asset+liability spread.</td></tr>
+</table>
+
+<h3>Asset–Liability Management (ALM)</h3>
+<p>ALM is the discipline of matching the asset book (loans, securities) against the liability book (deposits, borrowings) to manage three risks:</p>
+<ul>
+  <li><b>Interest-rate risk</b> — assets and liabilities reprice at different speeds; if OPR moves, margin shifts.</li>
+  <li><b>Liquidity risk</b> — can the bank meet withdrawals/obligations? Measured by <b>LCR</b> (Liquidity Coverage Ratio) &amp; <b>NSFR</b> (Net Stable Funding Ratio) under Basel III.</li>
+  <li><b>Maturity mismatch</b> — borrowing short (deposits) to lend long (30-yr mortgages) is the classic banking tension.</li>
+</ul>
+<div class="box tip"><span class="tag">Balance-sheet framing</span><p>“A bank earns the <b>spread</b> between what assets yield and what liabilities cost, while managing rate, liquidity and credit risk. As a PO I design products on both sides — a financing product and the deposit product that funds it — with ALM and cost-of-funds in mind.” International markets add FX, bonds and money-market instruments across currencies.</p></div>
+</section>
+
+<!-- ════════════════ 8 RATING + PRICING ════════════════ -->
+<section>
+<h2>8 · Rating systems &amp; risk-based pricing <span class="jdtag">JD</span></h2>
+
+<h3>Credit risk <b>rating system</b></h3>
+<p>A rating system converts a borrower/facility into a <b>risk grade</b> that drives approval, pricing, limits and capital. Two ratings combine:</p>
+<table>
+  <tr><th>Rating</th><th>Answers</th><th>Maps to</th></tr>
+  <tr><td><b>Obligor / borrower rating</b></td><td>How likely is this borrower to default?</td><td><b>PD</b> — probability of default</td></tr>
+  <tr><td><b>Facility rating</b></td><td>If they default, how much do we lose?</td><td><b>LGD</b> — loss given default (driven by collateral)</td></tr>
+</table>
+<ul>
+  <li><b>Scorecards</b> turn data into a score: <b>application scorecards</b> (at origination) and <b>behavioural scorecards</b> (ongoing, from account conduct).</li>
+  <li>Grades sit on a <b>masterscale</b> (e.g. 1–10 or AAA…D), each mapped to a PD band.</li>
+  <li>Under Basel's <b>IRB</b> (Internal Ratings-Based) approach, banks use their own PD/LGD/EAD to compute capital; the alternative is the <b>Standardised</b> approach.</li>
+</ul>
+
+<h3>Risk-based pricing</h3>
+<p>Price the loan to its risk. The rate is built up from components:</p>
+<table>
+  <tr><th>Component</th><th>Covers</th></tr>
+  <tr><td>Cost of funds</td><td>What the deposits/borrowings funding the loan cost (links to §7).</td></tr>
+  <tr><td>Operating cost</td><td>Origination &amp; servicing overhead.</td></tr>
+  <tr><td><b>Expected loss</b></td><td><code>EL = PD × LGD × EAD</code> — the credit-risk premium from the rating.</td></tr>
+  <tr><td>Cost of capital</td><td>Return on the regulatory capital held against the loan.</td></tr>
+  <tr><td>Margin</td><td>Target profit spread.</td></tr>
+</table>
+<p>In Malaysia the customer rate is expressed as <b>SBR + spread</b>, where the spread embeds the above; Islamic uses a <b>profit rate</b> with a contractual <b>Ceiling Profit Rate</b>.</p>
+<div class="box tip"><span class="tag">The chain to memorise</span><p><b>Rating → PD/LGD → Expected Loss → spread → price.</b> A worse risk grade means a higher PD, a higher expected loss, and therefore a higher spread. This single chain connects the JD's “rating system” and “risk-based pricing” — say it out loud.</p></div>
+</section>
+
+<!-- ════════════════ 9 RISK MGMT ════════════════ -->
+<section class="pagebreak">
+<h2>9 · Risk management &amp; risk analytics <span class="jdtag">JD</span></h2>
+<p>The JD asks for a “sound conceptual foundation in banking, risk management practices” and exposure to “risk analytics.” Here's the foundation.</p>
+
+<h3>The three classic risk types</h3>
+<table>
+  <tr><th>Risk</th><th>What it is</th><th>Managed by</th></tr>
+  <tr><td><b>Credit risk</b></td><td>Borrower fails to repay.</td><td>Ratings, limits, collateral, provisioning.</td></tr>
+  <tr><td><b>Market risk</b></td><td>Losses from moves in rates, FX, prices.</td><td>VaR, hedging, ALM.</td></tr>
+  <tr><td><b>Operational risk</b></td><td>Failures of people, process, systems, fraud.</td><td>Controls, RCSA, BCP.</td></tr>
+  <tr><td colspan="3" class="note">Plus liquidity, compliance/conduct and reputational risk.</td></tr>
+</table>
+
+<h3>The risk analytics vocabulary</h3>
+<table>
+  <tr><th>Term</th><th>Meaning</th></tr>
+  <tr><td><b>PD · LGD · EAD</b></td><td>Probability of Default · Loss Given Default · Exposure at Default. <code>EL = PD×LGD×EAD</code>.</td></tr>
+  <tr><td><b>RWA</b></td><td>Risk-Weighted Assets — assets scaled by risk; capital is held as a % of RWA (Basel).</td></tr>
+  <tr><td><b>Basel III</b></td><td>Global capital &amp; liquidity framework — capital ratios, LCR, NSFR.</td></tr>
+  <tr><td><b>ECL / IFRS 9 (MFRS 9)</b></td><td>Expected Credit Loss provisioning, staged 1 (performing) / 2 (deteriorated) / 3 (impaired).</td></tr>
+  <tr><td><b>Stress testing</b></td><td>Modelling losses under adverse scenarios (recession, rate shock).</td></tr>
+  <tr><td><b>Roll rates / vintage</b></td><td>How accounts migrate across delinquency buckets; performance by origination cohort.</td></tr>
+  <tr><td><b>Credit limits &amp; concentration</b></td><td>Caps by borrower, sector, geography to avoid over-exposure.</td></tr>
+</table>
+<div class="box tip"><span class="tag">PO angle on risk analytics</span><p>“As a PO on a risk-analytics product I'd own the data pipeline from <b>origination data points</b> → features → the <b>rating/scoring</b> model → decisioning &amp; pricing → <b>MIS dashboards</b> that show PD migration, ECL staging and portfolio concentration to risk officers.” That ties risk analytics to functional design and data viz (the JD's other asks).</p></div>
+</section>
+
+<!-- ════════════════ 10 ISLAMIC ════════════════ -->
+<section>
+<h2>10 · Islamic financing essentials</h2>
+<p>Maybank is a <b>global leader in Islamic finance</b> (per the JD), so expect a Shariah question. Golden rule: <b>no riba (interest)</b>, no <b>gharar</b> (excessive uncertainty), no non-halal activity. Instead the bank structures a real trade/partnership and earns <b>profit</b>.</p>
+<table>
+  <tr><th>Contract</th><th>How it works</th><th>Used for</th></tr>
+  <tr><td><b>Murabahah</b></td><td>Cost-plus sale: bank buys, sells at cost + disclosed profit, in instalments.</td><td>Asset purchase</td></tr>
+  <tr><td><b>Tawarruq</b> / Commodity Murabahah</td><td>Commodity buy/sell to generate cash; dominant for personal financing &amp; deposits.</td><td>Personal financing, deposits</td></tr>
+  <tr><td><b>Musharakah Mutanaqisah</b></td><td>Diminishing partnership: co-own the property; customer buys out the bank's share + pays rent.</td><td>Home financing</td></tr>
+  <tr><td><b>Ijarah</b></td><td>Leasing — bank owns &amp; leases the asset.</td><td>Vehicle / equipment</td></tr>
+</table>
+<div class="box tip"><span class="tag">Language swap</span><p>loan→<b>financing</b> · interest→<b>profit</b> · late interest→<b>ta'widh / gharamah</b> · every product needs <b>Shariah Committee</b> approval &amp; ongoing governance.</p></div>
+</section>
+
+<!-- ════════════════ 11 PCI DSS / KYC ════════════════ -->
+<section class="pagebreak">
+<h2>11 · PCI DSS, KYC/AML &amp; data security <span class="jdtag">JD</span></h2>
+
+<h3>PCI DSS — protecting card data</h3>
+<p><b>PCI DSS</b> (Payment Card Industry Data Security Standard) is the mandatory standard for anyone who <b>stores, processes or transmits cardholder data</b>. It's not a law but it's enforced by the card networks; breaching it means fines and losing the ability to process cards.</p>
+<table>
+  <tr><th>Principle (of 12 requirements)</th><th>In practice</th></tr>
+  <tr><td>Protect cardholder data</td><td>Encrypt the <b>PAN</b> (card number) at rest &amp; in transit; mask when displayed.</td></tr>
+  <tr><td><b>Never store sensitive auth data</b></td><td>You may <em>never</em> store the <b>CVV</b>, full magnetic stripe, or PIN after authorisation.</td></tr>
+  <tr><td>Tokenisation</td><td>Replace the PAN with a token so systems downstream never touch real card data — shrinks PCI scope.</td></tr>
+  <tr><td>Network segmentation</td><td>Isolate the cardholder-data environment (CDE) from the rest of the network.</td></tr>
+  <tr><td>Access control &amp; logging</td><td>Least-privilege access, MFA, and audit trails on all access to card data.</td></tr>
+</table>
+<div class="box tip"><span class="tag">Say this</span><p>“For any feature touching card data I design to <b>minimise PCI scope</b> — tokenise early, never persist CVV, segment the CDE — so we stay compliant and reduce breach surface. Compliance is a design input from story one, not a final gate.” That directly answers the JD's “PCI DSS compliance” line.</p></div>
+
+<h3>KYC / AML (links to the CAMS certification)</h3>
+<ul>
+  <li><b>KYC</b> — Know Your Customer: verify identity (CIP), understand the customer, risk-rate them.</li>
+  <li><b>AML</b> — Anti-Money-Laundering: screen against sanctions/PEP lists, monitor transactions, file <b>SARs/STRs</b> (suspicious activity/transaction reports).</li>
+  <li><b>CDD / EDD</b> — Customer / Enhanced Due Diligence for higher-risk customers.</li>
+  <li><b>PDPA</b> (Malaysia) governs personal-data handling; design with consent &amp; data-minimisation.</li>
+</ul>
+<p class="note">A product owner “bakes in” KYC/AML and data protection — capturing the right data points, consent, screening hooks and audit trails — rather than bolting them on later.</p>
+</section>
+
+<!-- ════════════════ 12 ARCH STEPS ════════════════ -->
+<section class="pagebreak">
+<h2>12 · System architecture diagrams — step by step</h2>
+<p>This is the part you were asked about last time. A system architecture diagram answers one question: <b>“what are the parts, and how do they talk to each other?”</b> Here's a method you can run live on a whiteboard.</p>
+<h3>The 8-step method</h3>
+<ol>
+  <li><b>Clarify scope &amp; requirements first.</b> Functional (what it does) + non-functional — scale (users/TPS), latency, availability, security, and <b>compliance</b> (BNM, PDPA, PCI, Shariah). Stating these out loud is half the score.</li>
+  <li><b>Identify actors &amp; external systems.</b> Customers/staff on the left; outside systems (CCRIS, CTOS, PayNet, MyKad) on the right.</li>
+  <li><b>List components by capability</b> — “Origination service”, “Credit decisioning”, “Pricing”, “Servicing”. One box = one responsibility.</li>
+  <li><b>Add data stores</b> — each owning service gets a datastore (cylinder); mark the core &amp; the warehouse.</li>
+  <li><b>Group into layers</b> — Channels → Edge/Security → Application → Integration → Core → Data. Layering shows flow direction.</li>
+  <li><b>Draw &amp; label every connection</b> — direction + protocol + purpose: “REST/HTTPS – submit application”, “event (Kafka) – loan booked”, “SQL – read balance”, “SFTP – nightly CCRIS batch”. An unlabeled arrow is wasted.</li>
+  <li><b>Mark trust boundaries &amp; cross-cutting concerns</b> — DMZ vs internal; where auth/MFA, the API gateway, WAF, logging &amp; encryption sit.</li>
+  <li><b>Validate &amp; simplify</b> — walk one journey through it, confirm every hop, then add a legend and keep shapes consistent.</li>
+</ol>
+<div class="box tip"><span class="tag">Levels — the C4 model</span><p>Draw at zoom levels: <b>Context</b> (system + users/neighbours) → <b>Container</b> (apps, services, DBs) → <b>Component</b> (inside one service) → <b>Code</b>. Start at Context, zoom to Container, and say which level you're at.</p></div>
+<p><b>Tools:</b> <span class="chip">draw.io / diagrams.net</span><span class="chip">Lucidchart</span><span class="chip">Visio</span><span class="chip">Excalidraw</span><span class="chip">Miro</span><span class="chip">PlantUML / Mermaid (diagram-as-code)</span></p>
+</section>
+
+<!-- ════════════════ 13 SHAPES ════════════════ -->
+<section>
+<h2>13 · The shapes &amp; how connections work</h2>
+<p>The visual vocabulary you asked for. Use shapes <b>consistently</b> — same kind of thing = same shape.</p>
+<figure>
+<svg viewBox="0 0 760 380" role="img" aria-label="Legend of common system-diagram shapes and connection line styles">
+  <text x="24" y="30" font-family="sans-serif" font-size="16" font-weight="700" fill="#16202e">Shape vocabulary</text>
+  <g stroke="#0a3b66" stroke-width="2" fill="none">
+    <circle cx="46" cy="66" r="9"/>
+    <line x1="46" y1="75" x2="46" y2="98"/><line x1="32" y1="84" x2="60" y2="84"/>
+    <line x1="46" y1="98" x2="34" y2="114"/><line x1="46" y1="98" x2="58" y2="114"/>
+  </g>
+  <text x="74" y="92" font-family="sans-serif" font-size="13" fill="#16202e">User / Actor</text>
+  <rect x="28" y="132" width="60" height="34" rx="9" fill="#fff7e0" stroke="#caa000" stroke-width="2"/>
+  <text x="74" y="153" font-family="sans-serif" font-size="13" fill="#16202e">Service / Application</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="2">
+    <path d="M30 196 a26 7 0 0 0 52 0 v28 a26 7 0 0 1 -52 0 z"/>
+    <ellipse cx="56" cy="196" rx="26" ry="7"/>
+  </g>
+  <text x="96" y="216" font-family="sans-serif" font-size="13" fill="#16202e">Database / Datastore</text>
+  <g fill="#eef2f8" stroke="#52607a" stroke-width="2">
+    <rect x="28" y="258" width="58" height="30" rx="4"/>
+    <line x1="44" y1="258" x2="44" y2="288"/><line x1="58" y1="258" x2="58" y2="288"/><line x1="72" y1="258" x2="72" y2="288"/>
+  </g>
+  <text x="96" y="277" font-family="sans-serif" font-size="13" fill="#16202e">Message queue / topic</text>
+  <path d="M40 322 a16 16 0 0 1 30 -6 a13 13 0 0 1 4 25 h-34 a13 13 0 0 1 0 -19 z" fill="#f1f5fb" stroke="#52607a" stroke-width="2"/>
+  <text x="96" y="338" font-family="sans-serif" font-size="13" fill="#16202e">External system / Internet</text>
+  <polygon points="430,52 462,80 430,108 398,80" fill="#fbe6d8" stroke="#b4521a" stroke-width="2"/>
+  <text x="476" y="85" font-family="sans-serif" font-size="13" fill="#16202e">Decision / Router</text>
+  <polygon points="404,132 420,124 436,132 436,150 420,158 404,150" fill="#e2f3ec" stroke="#0f8a6a" stroke-width="2"/>
+  <text x="452" y="146" font-family="sans-serif" font-size="13" fill="#16202e">Gateway (API / payment)</text>
+  <rect x="398" y="196" width="60" height="32" rx="3" fill="#fff" stroke="#16202e" stroke-width="2"/>
+  <text x="468" y="216" font-family="sans-serif" font-size="13" fill="#16202e">Component / Module</text>
+  <text x="398" y="266" font-family="sans-serif" font-size="16" font-weight="700" fill="#16202e">Connections</text>
+  <line x1="398" y1="292" x2="470" y2="292" stroke="#16202e" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="482" y="296" font-family="sans-serif" font-size="13" fill="#16202e">Synchronous call (REST / gRPC)</text>
+  <line x1="398" y1="320" x2="470" y2="320" stroke="#0a3b66" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ahn)"/>
+  <text x="482" y="324" font-family="sans-serif" font-size="13" fill="#16202e">Async event / message</text>
+  <line x1="400" y1="348" x2="468" y2="348" stroke="#0f8a6a" stroke-width="2.5" marker-start="url(#ahs)" marker-end="url(#ahg)"/>
+  <text x="482" y="352" font-family="sans-serif" font-size="13" fill="#16202e">Bidirectional / sync both ways</text>
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#16202e"/></marker>
+    <marker id="ahn" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0a3b66"/></marker>
+    <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0f8a6a"/></marker>
+    <marker id="ahs" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9 0 L0 4.5 L9 9 z" fill="#0f8a6a"/></marker>
+  </defs>
+</svg>
+<figcaption>The core visual vocabulary. Pick a style and stay consistent throughout a diagram.</figcaption>
+</figure>
+<h3>How a connection “reads”</h3>
+<table>
+  <tr><th>Encoded by</th><th>Tells the reader</th><th>Example</th></tr>
+  <tr><td><b>Direction</b> (arrowhead)</td><td>Who initiates</td><td>App → Core (app calls the core)</td></tr>
+  <tr><td><b>Line style</b></td><td>Sync vs async</td><td>solid = request/response · dashed = event</td></tr>
+  <tr><td><b>Label</b></td><td>Protocol + purpose</td><td>“REST/HTTPS – get balance”, “Kafka – payment.posted”</td></tr>
+</table>
+<p><span class="pill">REST / HTTPS</span><span class="pill">gRPC</span><span class="pill">GraphQL</span><span class="pill">SOAP (legacy core)</span><span class="pill">Kafka / events</span><span class="pill">MQ / JMS</span><span class="pill">SQL / JDBC</span><span class="pill">SFTP batch</span><span class="pill">ISO 8583 (cards)</span><span class="pill">ISO 20022 (payments)</span></p>
+<div class="box tip"><span class="tag">The rule that wins points</span><p>“<b>Synchronous</b> when the caller needs the answer now (balance check, payment auth, a credit decision the customer is waiting on). <b>Async/event</b> when it can run in the background (SMS, analytics, downstream updates). Decoupling with events keeps the core stable and channels fast.” Saying <em>when</em> to use each is what separates a strong candidate.</p></div>
+</section>
+
+<!-- ════════════════ 14 MAYBANK ARCH ════════════════ -->
+<section class="pagebreak">
+<h2>14 · Worked example: Maybank lending architecture</h2>
+<p>A <b>Container-level</b> diagram for a digital home-financing journey. Note the layers, labelled connections, and regulatory externals. Practise narrating it top-to-bottom.</p>
+<figure>
+<svg viewBox="0 0 900 760" role="img" aria-label="Layered architecture diagram for a Maybank digital lending platform showing channels, edge security, lending microservices, integration, core banking, data, and external regulatory systems">
+  <defs>
+    <marker id="A" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#16202e"/></marker>
+    <marker id="Ad" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#0a3b66"/></marker>
+  </defs>
+  <style>
+    .band{fill:#f7f9fc; stroke:#dde3ec; stroke-width:1.5;}
+    .bl{font-family:sans-serif; font-size:12px; font-weight:800; fill:#52607a; letter-spacing:.04em;}
+    .node{stroke-width:1.6;}
+    .nt{font-family:sans-serif; font-size:11.5px; fill:#16202e; font-weight:600;}
+    .lk{font-family:sans-serif; font-size:10px; fill:#52607a;}
+  </style>
+  <rect class="band" x="20" y="16" width="700" height="86" rx="12"/>
+  <text class="bl" x="34" y="38">CHANNELS</text>
+  <rect class="node" x="34"  y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#caa000"/><text class="nt" x="50" y="73">MAE app</text>
+  <rect class="node" x="166" y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#caa000"/><text class="nt" x="180" y="73">Maybank2u web</text>
+  <rect class="node" x="298" y="48" width="110" height="40" rx="8" fill="#fff7e0" stroke="#caa000"/><text class="nt" x="318" y="73">Branch / RM</text>
+  <rect class="node" x="420" y="48" width="120" height="40" rx="8" fill="#fff7e0" stroke="#caa000"/><text class="nt" x="436" y="73">ATM / SST</text>
+  <rect class="node" x="552" y="48" width="150" height="40" rx="8" fill="#fff7e0" stroke="#caa000"/><text class="nt" x="568" y="73">Call centre / agent</text>
+  <rect class="band" x="20" y="124" width="700" height="80" rx="12"/>
+  <text class="bl" x="34" y="146">EDGE &amp; SECURITY</text>
+  <rect class="node" x="34"  y="156" width="150" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a"/><text class="nt" x="50" y="180">CDN / WAF</text>
+  <rect class="node" x="200" y="156" width="200" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a"/><text class="nt" x="216" y="180">API Gateway</text>
+  <rect class="node" x="416" y="156" width="200" height="38" rx="8" fill="#e2f3ec" stroke="#0f8a6a"/><text class="nt" x="432" y="180">Identity / MFA (IAM)</text>
+  <rect class="band" x="20" y="226" width="700" height="120" rx="12"/>
+  <text class="bl" x="34" y="248">DIGITAL LENDING SERVICES (microservices)</text>
+  <rect class="node" x="34"  y="258" width="150" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="46" y="280">Origination</text>
+  <rect class="node" x="196" y="258" width="160" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="208" y="280">Credit decisioning</text>
+  <rect class="node" x="368" y="258" width="130" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="380" y="280">Pricing</text>
+  <rect class="node" x="510" y="258" width="190" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="522" y="280">e-KYC / documents</text>
+  <rect class="node" x="34"  y="300" width="150" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="46" y="322">Servicing</text>
+  <rect class="node" x="196" y="300" width="160" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="208" y="322">Collections</text>
+  <rect class="node" x="368" y="300" width="130" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="380" y="322">Notifications</text>
+  <rect class="node" x="510" y="300" width="190" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="522" y="322">Shariah / profit engine</text>
+  <rect class="band" x="20" y="368" width="700" height="64" rx="12"/>
+  <text class="bl" x="34" y="390">INTEGRATION</text>
+  <rect class="node" x="34"  y="392" width="320" height="32" rx="8" fill="#eef2f8" stroke="#52607a"/><text class="nt" x="46" y="413">Enterprise Service Bus / API mgmt</text>
+  <rect class="node" x="372" y="392" width="328" height="32" rx="8" fill="#eef2f8" stroke="#52607a"/>
+  <line x1="500" y1="392" x2="500" y2="424" stroke="#52607a"/><line x1="540" y1="392" x2="540" y2="424" stroke="#52607a"/>
+  <text class="nt" x="384" y="413">Event streaming (Kafka)</text>
+  <rect class="band" x="20" y="454" width="700" height="86" rx="12"/>
+  <text class="bl" x="34" y="476">CORE BANKING (system of record)</text>
+  <rect class="node" x="34"  y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#caa000"/><text class="nt" x="62" y="512">CIF</text>
+  <rect class="node" x="166" y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#caa000"/><text class="nt" x="196" y="512">CASA</text>
+  <rect class="node" x="298" y="486" width="150" height="44" rx="8" fill="#fde9c8" stroke="#caa000"/><text class="nt" x="312" y="512">Loans / Financing</text>
+  <rect class="node" x="460" y="486" width="110" height="44" rx="8" fill="#fde9c8" stroke="#caa000"/><text class="nt" x="492" y="512">GL</text>
+  <rect class="node" x="582" y="486" width="120" height="44" rx="8" fill="#fde9c8" stroke="#caa000"/><text class="nt" x="596" y="512">Islamic module</text>
+  <rect class="band" x="20" y="562" width="700" height="78" rx="12"/>
+  <text class="bl" x="34" y="584">DATA &amp; ANALYTICS</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="1.6">
+    <path d="M40 596 a22 6 0 0 0 44 0 v22 a22 6 0 0 1 -44 0 z"/><ellipse cx="62" cy="596" rx="22" ry="6"/>
+  </g><text class="nt" x="96" y="618">Operational DB</text>
+  <g fill="#e3eef9" stroke="#0a3b66" stroke-width="1.6">
+    <path d="M250 596 a22 6 0 0 0 44 0 v22 a22 6 0 0 1 -44 0 z"/><ellipse cx="272" cy="596" rx="22" ry="6"/>
+  </g><text class="nt" x="306" y="618">Data warehouse / lake</text>
+  <rect class="node" x="500" y="592" width="200" height="34" rx="8" fill="#fff" stroke="#0a3b66"/><text class="nt" x="512" y="614">BI · risk · ECL models</text>
+  <rect class="band" x="740" y="16" width="142" height="624" rx="12" fill="#f1f5fb"/>
+  <text class="bl" x="752" y="38">EXTERNAL /</text><text class="bl" x="752" y="54">REGULATORY</text>
+  <rect class="node" x="752" y="70"  width="118" height="40" rx="8" fill="#fff" stroke="#52607a"/><text class="nt" x="764" y="94">BNM CCRIS</text>
+  <rect class="node" x="752" y="122" width="118" height="40" rx="8" fill="#fff" stroke="#52607a"/><text class="nt" x="764" y="146">CTOS / RAMCI</text>
+  <rect class="node" x="752" y="174" width="118" height="40" rx="8" fill="#fff" stroke="#52607a"/><text class="nt" x="764" y="198">JPN — MyKad</text>
+  <rect class="node" x="752" y="226" width="118" height="40" rx="8" fill="#fff" stroke="#52607a"/><text class="nt" x="764" y="250">PayNet rails</text>
+  <rect class="node" x="752" y="278" width="118" height="40" rx="8" fill="#fff" stroke="#52607a"/><text class="nt" x="764" y="302">EPF/KWSP, LHDN</text>
+  <line x1="120" y1="102" x2="120" y2="124" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="126" y="118">HTTPS</text>
+  <line x1="300" y1="204" x2="300" y2="226" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="220">REST</text>
+  <line x1="300" y1="346" x2="300" y2="368" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="362">API</text>
+  <line x1="300" y1="432" x2="300" y2="454" stroke="#16202e" stroke-width="2" marker-end="url(#A)"/><text class="lk" x="306" y="448">host call</text>
+  <line x1="430" y1="540" x2="430" y2="562" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/><text class="lk" x="436" y="556">CDC / ETL</text>
+  <line x1="720" y1="408" x2="752" y2="300" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <line x1="720" y1="408" x2="752" y2="194" stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <line x1="720" y1="408" x2="752" y2="90"  stroke="#0a3b66" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#Ad)"/>
+  <text class="lk" x="700" y="360" text-anchor="end">API / SFTP</text>
+  <rect x="14" y="120" width="712" height="86" rx="8" fill="none" stroke="#b4521a" stroke-width="1.4" stroke-dasharray="4 4"/>
+  <text x="600" y="135" font-family="sans-serif" font-size="10" fill="#b4521a">trust boundary (DMZ)</text>
+</svg>
+<figcaption>Container-level view of a Maybank-style digital lending platform. Yellow = Maybank-owned core; solid arrows = synchronous; dashed = asynchronous/batch; the dashed orange box is a security trust boundary.</figcaption>
+</figure>
+<h3>Narrate it in 30 seconds</h3>
+<p class="note">“A customer applies on <b>MAE</b> or <b>M2U</b>. Traffic passes the <b>WAF</b> and <b>API gateway</b>, authenticated by <b>IAM/MFA</b> — that's the trust boundary. <b>Origination</b> orchestrates the journey, calling <b>e-KYC</b> (verifies MyKad via JPN), <b>Credit decisioning</b> (pulls <b>CCRIS</b> + <b>CTOS</b>, computes DSR, applies the <b>rating</b>), then <b>Pricing</b> (SBR + spread, or the Shariah profit engine). On approval we book the facility into the <b>core</b> Loans module, which posts to the <b>GL</b>. Servicing/Collections run off the core; we publish <b>events</b> to Kafka so Notifications and the <b>warehouse</b> update asynchronously. Payments settle through <b>PayNet</b>.”</p>
+</section>
+
+<!-- ════════════════ 15 FUNCTIONAL DESIGN / MIS ════════════════ -->
+<section class="pagebreak">
+<h2>15 · Functional design → MIS &amp; data viz <span class="jdtag">JD</span></h2>
+<p>The JD wants “functional design — from critical data points capture to application design, development &amp; MIS creation,” plus “data visualization.” This is the PO-to-build pipeline.</p>
+
+<h3>From need to spec to report</h3>
+<div class="flow">
+  <span class="step">Business need</span><span class="arr">→</span>
+  <span class="step">Data points capture</span><span class="arr">→</span>
+  <span class="step">Functional design (BRD/FSD)</span><span class="arr">→</span>
+  <span class="step">Application design &amp; build</span><span class="arr">→</span>
+  <span class="step">MIS &amp; dashboards</span>
+</div>
+<table>
+  <tr><th>Artefact</th><th>What it captures</th></tr>
+  <tr><td><b>Data points / data dictionary</b></td><td>The exact fields to capture (e.g. income, employment, collateral value), their type, source, validation, and whether they feed decisioning, MIS or both.</td></tr>
+  <tr><td><b>BRD</b> — Business Requirements Document</td><td>The “what &amp; why” in business language — goals, scope, rules.</td></tr>
+  <tr><td><b>FSD</b> — Functional Spec Document</td><td>The “how it behaves” — screens, fields, validations, workflows, edge cases, NFRs.</td></tr>
+  <tr><td><b>MIS</b> — Management Information System</td><td>Reports &amp; dashboards that turn captured data into decisions (approval rates, GIL, ECL staging, funnel).</td></tr>
+</table>
+<div class="box tip"><span class="tag">The PO insight</span><p>“If I don't <b>capture the right data point at origination</b>, I can't report on it later. So functional design starts from the <b>MIS I'll need</b> and works backwards to the <b>fields to capture</b> — design the report and the data dictionary together.” This single idea links the JD's “data points capture → MIS creation.”</p></div>
+
+<h3>Data visualization — choosing the right view</h3>
+<table>
+  <tr><th>Question</th><th>Chart</th></tr>
+  <tr><td>Trend over time (e.g. NIM, GIL by month)</td><td>Line chart</td></tr>
+  <tr><td>Compare categories (outstanding by product)</td><td>Bar / column</td></tr>
+  <tr><td>Part-to-whole (portfolio mix, CASA ratio)</td><td>Stacked bar / donut (sparingly)</td></tr>
+  <tr><td>Drop-off through steps (application funnel)</td><td>Funnel chart</td></tr>
+  <tr><td>Distribution (DSR or score bands)</td><td>Histogram</td></tr>
+  <tr><td>Status at a glance (KPIs vs target)</td><td>KPI cards / gauges</td></tr>
+</table>
+<p><b>Tools to name:</b> <span class="chip">Power BI</span><span class="chip">Tableau</span><span class="chip">QlikView/Qlik Sense</span><span class="chip">Looker</span> · <span class="note">good dashboards lead with the decision, not the data — one screen, a clear KPI, drill-downs underneath.</span></p>
+</section>
+
+<!-- ════════════════ 16 SQL ════════════════ -->
+<section class="pagebreak">
+<h2>16 · SQL basics for a banking PO <span class="jdtag">JD</span></h2>
+<p>The JD asks for “basic SQL.” You won't write production SQL, but you'll <b>read</b> it, request data and validate numbers. Essentials on a tiny loan schema.</p>
+<h3>The mental model</h3>
+<p>Data lives in <b>tables</b> (rows = records, columns = fields), linked by <b>keys</b>: a <b>primary key (PK)</b> uniquely identifies a row; a <b>foreign key (FK)</b> points to another table's PK.</p>
+<table>
+  <tr><th>Table</th><th>Key columns</th></tr>
+  <tr><td><code>customers</code></td><td><code>customer_id</code> (PK), name, mykad, income</td></tr>
+  <tr><td><code>loans</code></td><td><code>loan_id</code> (PK), <code>customer_id</code> (FK), product, outstanding, rate, status, months_in_arrears</td></tr>
+  <tr><td><code>payments</code></td><td><code>payment_id</code> (PK), <code>loan_id</code> (FK), paid_on, amount</td></tr>
+</table>
+<h3>The 6 clauses that do 90% of the work</h3>
+<pre><span class="cm">-- SELECT what · FROM where · WHERE filter · GROUP aggregate · ORDER sort · LIMIT cut</span>
+<span class="kw">SELECT</span> product, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> num_loans, <span class="kw">SUM</span>(outstanding) <span class="kw">AS</span> total_owed
+<span class="kw">FROM</span>   loans
+<span class="kw">WHERE</span>  status = <span class="st">'active'</span>
+<span class="kw">GROUP BY</span> product
+<span class="kw">HAVING</span> <span class="kw">SUM</span>(outstanding) &gt; 1000000
+<span class="kw">ORDER BY</span> total_owed <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 10;</pre>
+<h3>JOINs</h3>
+<pre><span class="cm">-- Customer name next to each loan (INNER = only matching rows)</span>
+<span class="kw">SELECT</span> c.name, l.product, l.outstanding
+<span class="kw">FROM</span>   customers c
+<span class="kw">JOIN</span>   loans l <span class="kw">ON</span> l.customer_id = c.customer_id;</pre>
+<table>
+  <tr><th>Join</th><th>Returns</th></tr>
+  <tr><td><code>INNER JOIN</code></td><td>Only rows matching in both tables.</td></tr>
+  <tr><td><code>LEFT JOIN</code></td><td>All left rows + matches (NULLs where none).</td></tr>
+  <tr><td><code>RIGHT / FULL JOIN</code></td><td>Mirror of LEFT / both sides.</td></tr>
+</table>
+<h3>Banking queries you can talk through</h3>
+<pre><span class="cm">-- Gross impaired loan (GIL) ratio by product</span>
+<span class="kw">SELECT</span> product,
+       <span class="kw">SUM</span>(<span class="kw">CASE WHEN</span> months_in_arrears &gt;= 3 <span class="kw">THEN</span> outstanding <span class="kw">ELSE</span> 0 <span class="kw">END</span>)
+       / <span class="kw">SUM</span>(outstanding) <span class="kw">AS</span> gil_ratio
+<span class="kw">FROM</span>   loans
+<span class="kw">GROUP BY</span> product;</pre>
+<ul>
+  <li><b>Aggregates:</b> <code>COUNT, SUM, AVG, MIN, MAX</code> + <code>GROUP BY</code> / <code>HAVING</code>.</li>
+  <li><b>Filters:</b> <code>WHERE, DISTINCT, IN, BETWEEN, LIKE, IS NULL</code>.</li>
+  <li><b>CTEs:</b> <code>WITH active AS (SELECT …) SELECT … FROM active</code>.</li>
+  <li><b>Window functions:</b> <code>ROW_NUMBER() OVER(...)</code>, running totals (high-level awareness).</li>
+  <li><b>DDL vs DML:</b> <code>CREATE/ALTER/DROP</code> define; <code>INSERT/UPDATE/DELETE</code> change; <code>SELECT</code> reads.</li>
+</ul>
+<div class="box tip"><span class="tag">Interview-safe answer</span><p>“I'd <code>GROUP BY product</code> with <code>SUM(outstanding)</code>, joining <code>loans</code> to <code>customers</code> on <code>customer_id</code>, filtering <code>status='active'</code>.” Showing you can <b>shape a query</b> and reason about joins is the goal — perfect syntax isn't required.</p></div>
+</section>
+
+<!-- ════════════════ 17 PRODUCT OWNERSHIP / AGILE ════════════════ -->
+<section class="pagebreak">
+<h2>17 · Product ownership, AGILE, JIRA &amp; Confluence <span class="jdtag">JD</span></h2>
+<p>The PO owns <b>what</b> gets built and <b>why</b>; the team owns the <b>how</b>. In a bank you also own the bridge to <b>risk, compliance &amp; Shariah</b>.</p>
+
+<h3>Scrum in one table</h3>
+<table>
+  <tr><th>Role / event</th><th>Who / what</th></tr>
+  <tr><td><b>Product Owner</b></td><td>Owns &amp; prioritises the backlog; maximises value; accepts work.</td></tr>
+  <tr><td><b>Scrum Master</b></td><td>Owns the process; removes blockers.</td></tr>
+  <tr><td><b>Dev team</b></td><td>Owns the build &amp; estimates.</td></tr>
+  <tr><td>Sprint planning</td><td>Commit the sprint backlog.</td></tr>
+  <tr><td>Backlog refinement</td><td>Clarify &amp; size upcoming stories.</td></tr>
+  <tr><td>Daily stand-up</td><td>15-min sync.</td></tr>
+  <tr><td>Review &amp; retrospective</td><td>Show increment; improve the process.</td></tr>
+</table>
+
+<h3>The PO toolkit</h3>
+<table>
+  <tr><th>Tool</th><th>Use</th></tr>
+  <tr><td><b>Vision &amp; roadmap</b></td><td>Problem → prioritised roadmap tied to OKRs (raise digital approvals, cut time-to-yes).</td></tr>
+  <tr><td><b>Backlog</b></td><td>Epics → features → user stories, ordered by value.</td></tr>
+  <tr><td><b>User story</b></td><td><code>As a &lt;role&gt;, I want &lt;goal&gt;, so that &lt;benefit&gt;</code> + acceptance criteria.</td></tr>
+  <tr><td><b>Acceptance criteria</b></td><td>Gherkin <code>Given/When/Then</code>; testable.</td></tr>
+  <tr><td><b>INVEST</b></td><td>Story quality: Independent, Negotiable, Valuable, Estimable, Small, Testable.</td></tr>
+  <tr><td><b>Prioritisation</b></td><td><b>MoSCoW</b>, <b>RICE</b>, <b>WSJF</b>, Kano, value-vs-effort.</td></tr>
+  <tr><td><b>Metrics</b></td><td>Adoption, funnel conversion, NPS, approval rate, cost-to-serve, NPL guardrail.</td></tr>
+</table>
+
+<h3>JIRA &amp; Confluence (named in the JD)</h3>
+<table>
+  <tr><th>Tool</th><th>You use it to…</th></tr>
+  <tr><td><b>JIRA</b></td><td>Create epics &amp; <b>stories</b>, manage the <b>backlog</b>, run <b>sprints</b> on a board, track velocity &amp; burndown.</td></tr>
+  <tr><td><b>Confluence</b></td><td>Document the BRD/FSD, decisions, runbooks, release notes — the team's knowledge base, linked from JIRA.</td></tr>
+</table>
+
+<h3>A model user story (digital home financing)</h3>
+<div class="box">
+<p><b>Story:</b> <em>As a salaried applicant, I want to e-submit my income documents and instantly see an indicative financing amount, so that I know my eligibility before committing.</em></p>
+<p><b>Acceptance (Gherkin):</b> <code>Given</code> a verified customer · <code>When</code> they upload payslips &amp; consent to a CCRIS check · <code>Then</code> the system computes DSR and returns an indicative amount within 60s, or a clear reason.</p>
+<p><b>Compliance/NFR:</b> PDPA consent logged; decision explainable for adverse-action; Shariah variant available; audit trail retained.</p>
+</div>
+
+<h3>Stakeholders, ambiguity &amp; leadership <span class="jdtag">JD</span></h3>
+<ul>
+  <li><b>International stakeholders:</b> Bengaluru squad ↔ KL business/risk/Shariah. Over-communicate, align on outcomes, manage time-zones.</li>
+  <li><b>Navigating ambiguity:</b> when requirements are unclear, frame a hypothesis, ship a thin slice, measure, iterate — don't wait for perfect clarity.</li>
+  <li><b>Mentoring technical teams:</b> grow BAs/juniors, give context not just tasks, lead delivery without owning the code (T.I.G.E.R. “Growth”).</li>
+</ul>
+</section>
+
+<!-- ════════════════ 18 PRODUCT LIFECYCLE ════════════════ -->
+<section>
+<h2>18 · Product lifecycle &amp; implementation <span class="jdtag">JD</span></h2>
+<p>“Responsible for the end-to-end product lifecycle” and “Product Implementation” — own the product from idea to in-market performance, not just delivery.</p>
+<div class="flow">
+  <span class="step">Discovery</span><span class="arr">→</span>
+  <span class="step">Define &amp; design</span><span class="arr">→</span>
+  <span class="step">Build (sprints)</span><span class="arr">→</span>
+  <span class="step">UAT</span><span class="arr">→</span>
+  <span class="step">Launch / go-live</span><span class="arr">→</span>
+  <span class="step">Hypercare</span><span class="arr">→</span>
+  <span class="step">Measure &amp; iterate</span>
+</div>
+<table>
+  <tr><th>Phase</th><th>What you own</th></tr>
+  <tr><td>Discovery</td><td>Problem, customer &amp; market research, business case, success metrics.</td></tr>
+  <tr><td>Define &amp; design</td><td>BRD/FSD, data points, journeys, prioritised scope; risk/compliance/Shariah sign-off.</td></tr>
+  <tr><td>Build</td><td>Backlog, sprint delivery, accept/reject vs Definition of Done.</td></tr>
+  <tr><td><b>UAT</b></td><td>Business validates against acceptance criteria before go-live.</td></tr>
+  <tr><td><b>Implementation / go-live</b></td><td>Release plan, change management, training, cutover, rollback plan.</td></tr>
+  <tr><td>Hypercare</td><td>Heightened support post-launch; fix fast, watch the metrics.</td></tr>
+  <tr><td>Measure &amp; iterate</td><td>Read the MIS, learn, feed the next roadmap increment.</td></tr>
+</table>
+<div class="box tip"><span class="tag">End-to-end ownership line</span><p>“I own outcomes, not output — from the <b>business case</b> through <b>go-live</b> and <b>hypercare</b> to the <b>in-market metrics</b>, then I iterate. Implementation isn't the finish line; the adoption and risk numbers are.”</p></div>
+</section>
+
+<!-- ════════════════ 19 CERTS ════════════════ -->
+<section>
+<h2>19 · Certifications: CAMS · KYC · FRM <span class="jdtag">JD</span></h2>
+<table>
+  <tr><th>Cert</th><th>What it is</th><th>Signals</th></tr>
+  <tr><td><b>CAMS</b></td><td>Certified Anti-Money-Laundering Specialist (ACAMS).</td><td>Deep AML/sanctions/financial-crime knowledge.</td></tr>
+  <tr><td><b>KYC</b></td><td>Know-Your-Customer certifications/CDD training.</td><td>Onboarding, due diligence, identity risk.</td></tr>
+  <tr><td><b>FRM</b></td><td>Financial Risk Manager (GARP).</td><td>Credit/market/operational risk, Basel, quant risk.</td></tr>
+</table>
+<p class="note">You don't need these to interview well — but knowing what each <b>signals</b> lets you speak to AML, KYC and risk credibly, and to say which you'd pursue (FRM pairs naturally with this rating/pricing/risk-analytics role).</p>
+</section>
+
+<!-- ════════════════ 20 Q&A ════════════════ -->
+<section class="pagebreak">
+<h2>20 · Interview Q&amp;A — drill these</h2>
+
+<h3>Domain</h3>
+<div class="box q"><span class="tag">Q</span><p>Walk me through the end-to-end loan lifecycle.</p></div>
+<div class="box a"><span class="tag">A</span><p>Application (e-KYC vs MyKad) → credit assessment (CCRIS + CTOS, verify income, DSR under BNM rules) → approval &amp; pricing (rating → SBR + spread, or Islamic profit rate; Letter of Offer) → acceptance &amp; disbursement (facility agreement, charge under NLC, stamp duty, MRTA) → servicing (instalments, accrual, CCRIS reporting) → delinquency (months in arrears, impaired ~90 DPD) → rehabilitation (R&amp;R / AKPK) → recovery (foreclosure/repossession, MFRS 9 provisions) → settlement &amp; discharge.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How does a rating system connect to risk-based pricing?</p></div>
+<div class="box a"><span class="tag">A</span><p>The rating produces a <b>PD</b> (obligor) and, with collateral, an <b>LGD</b> (facility). Those give <b>Expected Loss = PD×LGD×EAD</b>, which becomes the credit-risk component of the spread. Worse grade → higher PD → higher EL → higher price. So: <b>rating → PD/LGD → EL → spread → rate.</b></p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Explain deposit management and why it matters to a lending PO.</p></div>
+<div class="box a"><span class="tag">A</span><p>Deposits (CASA, fixed deposits) are the <b>liabilities</b> that fund loans. The <b>CASA ratio</b> drives <b>cost of funds</b>, which is the floor under loan pricing and a key part of <b>NIM</b>. <b>ALM</b> matches the two sides for interest-rate and liquidity risk (LCR/NSFR). A lending product is only profitable relative to what its funding costs.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>What's the difference between conventional and Islamic financing?</p></div>
+<div class="box a"><span class="tag">A</span><p>Conventional charges interest (<b>riba</b>); Islamic avoids it by structuring a real transaction — Tawarruq for personal financing, Musharakah Mutanaqisah for home — earning <b>profit</b> with Shariah Committee approval. Same lifecycle, different contract and language.</p></div>
+
+<h3>Architecture &amp; tech</h3>
+<div class="box q"><span class="tag">Q</span><p>What is core banking and why not build everything in it?</p></div>
+<div class="box a"><span class="tag">A</span><p>Core banking is the system of record — CIF, CASA, loans, GL — where authoritative balances live. We change it rarely because ledger errors are catastrophic. Innovation goes in a <b>digital/microservices layer</b> that talks to the core via <b>APIs and events</b>, so we ship fast without risking the books.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Draw the architecture for a digital financing journey. (See §14.)</p></div>
+<div class="box a"><span class="tag">A</span><p>Layer it: Channels (MAE/M2U) → Edge (WAF, API gateway, MFA = trust boundary) → Lending microservices (origination, e-KYC, decisioning, pricing) → Integration (ESB + Kafka) → Core (loans + GL) → Data. Externals: CCRIS, CTOS, MyKad, PayNet. Solid arrows = synchronous, dashed = async/batch. Then narrate one journey through it and name the protocol on each hop.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>Sync vs async — when do you use each?</p></div>
+<div class="box a"><span class="tag">A</span><p>Synchronous when the caller needs the answer now — balance check, payment auth, a credit decision the customer waits on. Async/event for background work — SMS, analytics, downstream updates. Events decouple services and protect the core from load.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How do you keep a card feature PCI DSS-compliant?</p></div>
+<div class="box a"><span class="tag">A</span><p>Minimise scope: <b>tokenise</b> the PAN early, <b>never store the CVV</b>, encrypt card data at rest &amp; in transit, segment the cardholder-data environment, and enforce least-privilege access with full logging. Compliance is a design input, not a final gate.</p></div>
+
+<h3>Product ownership</h3>
+<div class="box q"><span class="tag">Q</span><p>You have 20 backlog items and one sprint — how do you prioritise?</p></div>
+<div class="box a"><span class="tag">A</span><p>Score value-vs-effort with <b>RICE/WSJF</b>, then overlay two banking non-negotiables: <b>regulatory/Shariah must-haves</b> and <b>risk</b>. Anything legally required or blocking go-live jumps the queue (MoSCoW “Must”). I sequence the rest by customer value and dependencies and socialise the trade-offs transparently.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How do you write a good user story for a lending feature?</p></div>
+<div class="box a"><span class="tag">A</span><p><code>As a salaried applicant, I want an instant indicative financing amount, so that I know my eligibility.</code> Then Given/When/Then acceptance criteria, plus explicit NFRs: PDPA consent, explainable decision for adverse-action, Shariah variant, audit trail. INVEST keeps it small and testable.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How would you measure success of a new digital financing product?</p></div>
+<div class="box a"><span class="tag">A</span><p>A north-star (completed digital applications) + a balanced set: funnel conversion &amp; drop-off, time-to-yes, digital adoption, approval/decline rates, NPS, cost-to-serve — and a guardrail the risk team owns: early-stage delinquency / NPL, so we're not “winning” by approving bad credit.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>How do you handle ambiguity and conflicting international stakeholders?</p></div>
+<div class="box a"><span class="tag">A</span><p>Align everyone on the <b>outcome</b> and the metric first; surface the disagreement explicitly; use data to choose; and de-risk by shipping a thin slice to learn rather than debating in the abstract. Across Bengaluru–KL I over-communicate in writing (Confluence) and keep one prioritised backlog (JIRA) as the single source of truth.</p></div>
+
+<div class="box q"><span class="tag">Q</span><p>A compliance constraint blocks the feature customers want. What do you do?</p></div>
+<div class="box a"><span class="tag">A</span><p>Compliance isn't optional, so I reframe: understand the exact rule (BNM/PDPA/PCI/Shariah) with risk, then find a compliant design that delivers most of the value — staged consent, an alternative contract, manual-now-automate-later. Document the trade-off and the path to the ideal state.</p></div>
+
+<h3>Behavioural (use STAR + T.I.G.E.R.)</h3>
+<p class="note"><b>S</b>ituation → <b>T</b>ask → <b>A</b>ction → <b>R</b>esult, finishing on a quantified result. Have ready: a prioritisation trade-off (Excellence/Efficiency), a stakeholder conflict resolved (Relationship Building), mentoring a junior (Growth), a compliance-driven redesign (Integrity), a delivery saved by the squad (Teamwork).</p>
+
+<div class="box tip"><span class="tag">Ask them back</span><p>“How does this squad balance speed of delivery against core-banking change-control and Shariah-governance cycles, working across Bengaluru and KL?” — shows you understand the real tension in this role.</p></div>
+</section>
+
+<!-- ════════════════ 21 GLOSSARY ════════════════ -->
+<section class="pagebreak">
+<h2>21 · Glossary</h2>
+<div class="two-col">
+<dl>
+  <dt>ALM</dt><dd>Asset-Liability Management — matching assets vs liabilities for rate &amp; liquidity risk.</dd>
+  <dt>AKPK</dt><dd>BNM credit-counselling &amp; debt-management agency.</dd>
+  <dt>AML</dt><dd>Anti-Money-Laundering.</dd>
+  <dt>Basel III</dt><dd>Global capital &amp; liquidity framework.</dd>
+  <dt>BNM</dt><dd>Bank Negara Malaysia — central bank/regulator.</dd>
+  <dt>BRD / FSD</dt><dd>Business / Functional spec documents.</dd>
+  <dt>CAMS</dt><dd>Certified Anti-Money-Laundering Specialist.</dd>
+  <dt>CASA</dt><dd>Current Account &amp; Savings Account.</dd>
+  <dt>CCRIS</dt><dd>BNM's central credit database.</dd>
+  <dt>CIF</dt><dd>Customer Information File — golden customer record.</dd>
+  <dt>Cost of funds</dt><dd>Weighted rate paid for deposits/borrowings.</dd>
+  <dt>CTOS</dt><dd>Private credit reporting agency/score.</dd>
+  <dt>DSR</dt><dd>Debt Service Ratio (Malaysia's DTI).</dd>
+  <dt>EAD</dt><dd>Exposure at Default.</dd>
+  <dt>ECL / MFRS 9</dt><dd>Expected Credit Loss provisioning standard.</dd>
+  <dt>FRM</dt><dd>Financial Risk Manager (GARP).</dd>
+  <dt>GIL</dt><dd>Gross Impaired Loans ratio.</dd>
+  <dt>GL</dt><dd>General Ledger.</dd>
+  <dt>IRB</dt><dd>Internal Ratings-Based capital approach (Basel).</dd>
+  <dt>LCR / NSFR</dt><dd>Liquidity Coverage / Net Stable Funding ratios.</dd>
+  <dt>LGD</dt><dd>Loss Given Default.</dd>
+  <dt>LOS / LMS</dt><dd>Loan Origination / Management (servicing) System.</dd>
+  <dt>MIS</dt><dd>Management Information System — reports/dashboards.</dd>
+  <dt>MOF</dt><dd>Margin of Finance (≈ LTV).</dd>
+  <dt>NIM</dt><dd>Net Interest Margin.</dd>
+  <dt>NLC</dt><dd>National Land Code (property charges/foreclosure).</dd>
+  <dt>OPR → SBR</dt><dd>BNM benchmark rate → Standardised Base Rate.</dd>
+  <dt>PCI DSS</dt><dd>Card-data security standard.</dd>
+  <dt>PD</dt><dd>Probability of Default.</dd>
+  <dt>PDPA</dt><dd>Personal Data Protection Act 2010.</dd>
+  <dt>R&amp;R</dt><dd>Rescheduling &amp; Restructuring.</dd>
+  <dt>RWA</dt><dd>Risk-Weighted Assets.</dd>
+  <dt>SAR / STR</dt><dd>Suspicious Activity / Transaction Report.</dd>
+  <dt>Tawarruq</dt><dd>Commodity-Murabahah Islamic cash financing.</dd>
+  <dt>T.I.G.E.R.</dt><dd>Maybank values: Teamwork, Integrity, Growth, Excellence &amp; Efficiency, Relationship Building.</dd>
+  <dt>UAT</dt><dd>User Acceptance Testing.</dd>
+  <dt>WSJF</dt><dd>Weighted Shortest Job First (prioritisation).</dd>
+</dl>
+</div>
+</section>
+
+<!-- ════════════════ 22 CHEAT SHEET ════════════════ -->
+<section class="pagebreak">
+<h2>22 · One-page cheat sheet</h2>
+
+<h4>Employer</h4>
+<p>MBB Labs = Maybank's <b>Bengaluru</b> ODC, a software product org. Maybank: 4th-largest SEA bank, RM722bn, 20 countries, all 10 ASEAN, Islamic-finance leader, “humanise financial services.” Values = <b>T.I.G.E.R.</b></p>
+
+<h4>JD spine — say these confidently</h4>
+<p><span class="chip">Core banking = system of record</span><span class="chip">Rating → PD/LGD</span><span class="chip">Risk-based pricing = SBR + spread</span><span class="chip">Deposits fund loans (CASA, cost of funds, NIM, ALM)</span><span class="chip">PCI DSS: tokenise, never store CVV</span><span class="chip">KYC/AML/CAMS</span><span class="chip">Functional design: data points → BRD/FSD → MIS</span><span class="chip">AGILE + JIRA + Confluence</span><span class="chip">basic SQL</span></p>
+
+<h4>Loan lifecycle (9)</h4>
+<p><span class="chip">Application</span><span class="chip">Credit assessment</span><span class="chip">Approval &amp; pricing</span><span class="chip">Offer &amp; disbursement</span><span class="chip">Servicing</span><span class="chip">Delinquency</span><span class="chip">Rehabilitation</span><span class="chip">Recovery</span><span class="chip">Settlement</span></p>
+
+<h4>The pricing chain</h4>
+<p style="font-family:var(--mono);font-size:.82rem;">rating → PD &amp; LGD → EL = PD×LGD×EAD → spread → customer rate (SBR + spread)</p>
+
+<h4>Diagram — 8 steps + connections</h4>
+<p><span class="chip">1 Requirements (incl. compliance)</span><span class="chip">2 Actors &amp; externals</span><span class="chip">3 Components by capability</span><span class="chip">4 Datastores</span><span class="chip">5 Layer it</span><span class="chip">6 Label every connection</span><span class="chip">7 Trust boundaries</span><span class="chip">8 Validate &amp; simplify</span></p>
+<p>solid = <b>sync</b> (REST) · dashed = <b>async</b> (Kafka) · cylinder = DB · hexagon = gateway · label <b>direction+protocol+purpose</b> · levels = <b>C4</b> Context→Container→Component.</p>
+
+<h4>SQL spine</h4>
+<p style="font-family:var(--mono);font-size:.8rem;">SELECT cols FROM t [JOIN t2 ON …] WHERE … GROUP BY … HAVING … ORDER BY … LIMIT n;</p>
+
+<h4>Product ownership</h4>
+<p><span class="chip">Vision→roadmap→OKRs</span><span class="chip">epic→feature→story</span><span class="chip">As a… I want… so that…</span><span class="chip">Given/When/Then</span><span class="chip">INVEST</span><span class="chip">MoSCoW/RICE/WSJF</span><span class="chip">end-to-end lifecycle + hypercare</span><span class="chip">STAR + T.I.G.E.R.</span></p>
+
+<hr>
+<p class="note">Educational interview-prep material for the MBB Labs / Maybank Senior Product Owner role. Summarises publicly known concepts and common market practice; internal bank systems evolve and are not fully public — present vendor/stack details as industry-reported, and verify current BNM/PCI/Basel rules. Not legal, financial, or Shariah advice.</p>
+</section>
+
+</div>
+</body>
+</html>
