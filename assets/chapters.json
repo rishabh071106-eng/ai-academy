@@ -199,6 +199,16 @@
       "tag": "Safety",
       "readTime": "6 min",
       "date": "2026-06-06"
+    },
+    {
+      "slug": "rest-api-actions-the-verbs-your-agent-speaks",
+      "number": "Chapter 21",
+      "title": "REST API Actions: The Verbs Your Agent Speaks",
+      "subtitle": "GET, POST, PUT, PATCH, DELETE — the handful of actions every REST API is built from, and why an AI agent has to get them right.",
+      "excerpt": "Five everyday verbs, two safety properties, and a few status codes describe almost any action an AI agent takes against the outside world.",
+      "tag": "Engineering",
+      "readTime": "8 min",
+      "date": "2026-06-29"
     }
   ]
 }
