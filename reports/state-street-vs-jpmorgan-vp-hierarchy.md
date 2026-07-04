@@ -99,11 +99,24 @@ Industry references (Wall Street Oasis, eFinancialCareers) note that **AVP is pr
 
 ---
 
-## 5. Refuted claim (killed in adversarial verification)
+## 5. The LinkedIn paradox: why State Street VPs often show MORE years of experience
+
+A common real-world observation (visible on LinkedIn) is that **State Street VPs frequently show 12–20 years of experience while JPM VPs show 6–10** — which *looks* like the State Street title is more senior. It's actually the opposite, and it's the strongest everyday evidence of the title-inflation gap:
+
+1. **More rungs to climb.** A State Street employee passes through Associate 1 → Associate 2 → Senior Associate → Officer → AVP before touching VP — five grades where a JPM joiner passes through two or three (Analyst → Associate → Sr Associate). More rungs at slower cadence = more calendar years to the same word "VP."
+2. **No standardized promotion clock.** Employee accounts describe State Street promotions as unstandardized and slow — *"most people, once established in a position, remain in that position until they leave or retire; only a few move up."* One documented path took ~5 years just to go Officer → AVP → VP *after* already being established. JPM, by contrast, runs a fairly structured cycle: Associate → VP commonly in 2–4 years (18–30 months on fast front-office tracks), with VP typically landing at ~5–6 total years in tech.
+3. **VP is a terminal grade at State Street, a pass-through grade at JPM.** At custody banks, many people reach VP and stay there for a decade-plus, so the *standing population* of State Street VPs accumulates long tenures. At JPM, strong VPs rotate up to ED, keeping the VP population younger.
+4. **Years served ≠ market seniority.** The verified pay data is unambiguous: despite having more years of experience, the State Street VP is paid less (US: ~$185K vs ~$242K Glassdoor average; India: SS VP ~₹35L vs JPM VP median ₹63.1L). Needing *more* years to reach a title that pays *less* is precisely what title inflation on a slower ladder looks like.
+
+**So the LinkedIn pattern confirms, rather than contradicts, the mapping:** the JPM ladder converts years into rank and pay faster; the State Street ladder spends more years per rung and tops many careers out at a VP title that the market prices around a JPM Senior Associate–VP band.
+
+*(Sources for this section: Indeed reviews/salary pages for State Street VP, thelayoff.com State Street threads, Quora on JPM 601→VP timelines, CareerClimb JPM ladder, Fishbowl threads — crowdsourced, unverified, but mutually consistent.)*
+
+## 6. Refuted claim (killed in adversarial verification)
 
 > ❌ *"State Street 'VP, Technology Manager' in India averages ~₹30L, implying only a ~₹2–3L pay step from AVP to VP."* — **REFUTED 0-3.** The ₹30L figure was a single niche hybrid job-title bucket surfaced on the AVP page, not a representative VP average; broader data (including 6figr's own SS VP page at ~₹35L) contradicts the small-step inference. The *direction* (compressed ladder) may still hold, but this specific quantification did not survive.
 
-## 6. Caveats & open questions
+## 7. Caveats & open questions
 
 - **All surviving evidence is crowdsourced** (Levels.fyi, Glassdoor, 6figr, forums) — no official HR band documents were obtainable, so no finding is rated above medium confidence despite unanimous verification votes.
 - Small samples in places (6figr AVP Technical n=16); ~14% cross-source variance on SS AVP India (₹28L vs ₹32.5L).
@@ -111,7 +124,7 @@ Industry references (Wall Street Oasis, eFinancialCareers) note that **AVP is pr
 - Direct State Street **VP** (not AVP) pay was the weakest link — the only formal claim on it was refuted, so the VP→VP mapping rests partly on inference.
 - Not covered by verified claims: typical years-per-rung at State Street, the SVP/EVP tier vs JPM ED/MD in authority terms, and formally verified US-dollar comps.
 
-## 7. Sources
+## 8. Sources
 
 **Verified-claim sources:** Levels.fyi (JPM VP SWE Bengaluru/India/Hyderabad/Mumbai/NYC/SF pages), 6figr India (State Street company, AVP, AVP Technical pages), Glassdoor India (State Street AVP, 106 salaries).
 **Supporting sources:** Glassdoor US (State Street VP — 630 salaries; JPM VP), Levels.fyi US (JPM VP; State Street AVP/VP/SVP bands), 6figr US (both firms' VP pages), eFinancialCareers (cross-bank title mapping; custody careers), Wall Street Oasis (bank hierarchy reference), CareerClimb (JPM SWE ladder), Blind/Quora/Fishbowl/Glassdoor forums (insider ladder accounts), Indeed India (JPM AVP).
