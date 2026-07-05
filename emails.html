@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Email Directory &mdash; AI Academy</title>
+<meta name="description" content="One shared place to collect email IDs — no more appending them to a message chain.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .email-wrap{max-width:640px;margin:0 auto;padding:3rem 1.5rem 6rem}
+  .email-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem}
+  .email-form{display:flex;gap:0.75rem;flex-wrap:wrap}
+  .email-form input{
+    flex:1;min-width:220px;padding:0.85rem 1rem;border-radius:100px;border:1px solid var(--border);
+    background:var(--card-2);color:var(--text);font-size:0.95rem;font-family:inherit;
+  }
+  .email-form input:focus{outline:none;border-color:var(--accent)}
+  .form-msg{font-size:0.85rem;margin-top:0.75rem;min-height:1.2em}
+  .form-msg.ok{color:#4ade80}
+  .form-msg.err{color:#ff6b6b}
+  .mem-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem}
+  .mem-count{font-size:0.85rem;color:var(--muted);font-weight:600}
+  .mem-count strong{color:var(--accent-2)}
+  .mem-bar{height:6px;border-radius:100px;background:var(--card-2);overflow:hidden;margin-bottom:1.25rem}
+  .mem-bar-fill{height:100%;width:0;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 0.3s}
+  .email-list{list-style:none;display:flex;flex-direction:column;gap:0.5rem;max-height:420px;overflow-y:auto}
+  .email-list li{
+    display:flex;align-items:center;gap:0.75rem;padding:0.6rem 1rem;
+    background:var(--card-2);border:1px solid var(--border);border-radius:12px;font-size:0.9rem;
+  }
+  .email-list .num{color:var(--muted);font-size:0.75rem;font-weight:700;min-width:2em;text-align:right}
+  .email-list .addr{flex:1;word-break:break-all}
+  .email-list .badge{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:10px;white-space:nowrap}
+  .badge.seed{background:rgba(124,92,255,0.15);color:var(--accent)}
+  .badge.mine{background:rgba(0,212,255,0.12);color:var(--accent-2)}
+  .email-list .del{
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1;padding:0.2rem 0.4rem;border-radius:8px;
+  }
+  .email-list .del:hover{color:#ff6b6b;background:rgba(255,107,107,0.1)}
+  .empty-note{color:var(--muted);font-size:0.9rem;text-align:center;padding:1.5rem 0}
+  .toolbar{display:flex;gap:0.5rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="logo-dot"></span> AI Academy</a>
+    <div class="nav-links">
+      <a href="index.html#chapters">Chapters</a>
+      <a href="emails.html">Email Directory</a>
+      <a href="index.html#subscribe">Subscribe</a>
+    </div>
+  </div>
+</nav>
+
+<div class="email-wrap">
+  <div class="section-head" style="margin-top:2rem">
+    <h2>Email Directory</h2>
+    <p>Instead of appending email IDs to a message chain, add yours here. The list below starts with all the previously shared IDs and remembers up to <strong>100</strong> entries.</p>
+  </div>
+
+  <div class="email-card">
+    <form id="emailForm" class="email-form" autocomplete="off">
+      <input type="email" id="emailInput" placeholder="your.name@example.com" required maxlength="120">
+      <button class="btn btn-primary" type="submit">Add my email</button>
+    </form>
+    <div id="formMsg" class="form-msg"></div>
+  </div>
+
+  <div class="email-card">
+    <div class="mem-head">
+      <div class="mem-count">Memory: <strong id="memUsed">0</strong> / 100 email IDs</div>
+      <div class="toolbar">
+        <button class="share-btn" id="copyAllBtn">📋 Copy all</button>
+        <button class="share-btn" id="downloadBtn">⬇ Download CSV</button>
+      </div>
+    </div>
+    <div class="mem-bar"><div class="mem-bar-fill" id="memBar"></div></div>
+    <ul class="email-list" id="emailList"></ul>
+    <div class="empty-note" id="emptyNote" hidden>No email IDs yet — be the first to add yours!</div>
+  </div>
+</div>
+
+<footer>
+  <div class="logo"><span class="logo-dot"></span> AI Academy</div>
+  <p>Auto-generated daily. Built with &hearts; and Claude.</p>
+</footer>
+
+<script>
+(function(){
+  const LIMIT = 100;                       // the form's memory holds at most 100 email IDs
+  const STORE_KEY = 'aiAcademyEmailDirectory';
+
+  let seedEmails = [];                     // old IDs shipped with the site (assets/emails.json)
+  let myEmails = [];                       // IDs added on this device (localStorage)
+
+  const form = document.getElementById('emailForm');
+  const input = document.getElementById('emailInput');
+  const msg = document.getElementById('formMsg');
+  const listEl = document.getElementById('emailList');
+  const emptyNote = document.getElementById('emptyNote');
+  const memUsed = document.getElementById('memUsed');
+  const memBar = document.getElementById('memBar');
+
+  function loadLocal(){
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(e => typeof e === 'string') : [];
+    } catch { return []; }
+  }
+  function saveLocal(){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(myEmails)); } catch {}
+  }
+
+  function allEmails(){
+    // seed first (the old IDs), then locally added ones, deduped case-insensitively
+    const seen = new Set();
+    const out = [];
+    for (const e of [...seedEmails, ...myEmails]) {
+      const k = e.trim().toLowerCase();
+      if (k && !seen.has(k)) { seen.add(k); out.push(e.trim()); }
+    }
+    return out.slice(0, LIMIT);
+  }
+
+  function setMsg(text, ok){
+    msg.textContent = text;
+    msg.className = 'form-msg ' + (ok ? 'ok' : 'err');
+  }
+
+  function render(){
+    const emails = allEmails();
+    const mine = new Set(myEmails.map(e => e.toLowerCase()));
+    const seed = new Set(seedEmails.map(e => e.toLowerCase()));
+
+    listEl.innerHTML = '';
+    emails.forEach((e, i) => {
+      const li = document.createElement('li');
+
+      const num = document.createElement('span');
+      num.className = 'num';
+      num.textContent = String(i + 1).padStart(2, '0');
+
+      const addr = document.createElement('span');
+      addr.className = 'addr';
+      addr.textContent = e;
+
+      const badge = document.createElement('span');
+      const isSeed = seed.has(e.toLowerCase());
+      badge.className = 'badge ' + (isSeed ? 'seed' : 'mine');
+      badge.textContent = isSeed ? 'from thread' : 'added here';
+
+      li.append(num, addr, badge);
+
+      if (!isSeed && mine.has(e.toLowerCase())) {
+        const del = document.createElement('button');
+        del.className = 'del';
+        del.title = 'Remove this email';
+        del.textContent = '✕';
+        del.addEventListener('click', () => {
+          myEmails = myEmails.filter(x => x.toLowerCase() !== e.toLowerCase());
+          saveLocal();
+          render();
+          setMsg('Removed ' + e, true);
+        });
+        li.append(del);
+      }
+      listEl.appendChild(li);
+    });
+
+    emptyNote.hidden = emails.length > 0;
+    memUsed.textContent = emails.length;
+    memBar.style.width = (emails.length / LIMIT * 100) + '%';
+  }
+
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const value = input.value.trim();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
+      setMsg('That doesn’t look like a valid email ID.', false);
+      return;
+    }
+    const key = value.toLowerCase();
+    if (allEmails().some(e => e.toLowerCase() === key)) {
+      setMsg('This email ID is already in the list.', false);
+      return;
+    }
+    if (allEmails().length >= LIMIT) {
+      setMsg('Memory full — the directory already holds ' + LIMIT + ' email IDs. Remove one to add more.', false);
+      return;
+    }
+    myEmails.push(value);
+    saveLocal();
+    render();
+    setMsg('Added ' + value + ' — saved in this form’s memory.', true);
+    form.reset();
+    input.focus();
+  });
+
+  document.getElementById('copyAllBtn').addEventListener('click', function(){
+    const btn = this;
+    navigator.clipboard.writeText(allEmails().join('\n')).then(() => {
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copy all'; }, 1500);
+    });
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const csv = 'email\n' + allEmails().join('\n') + '\n';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv'}));
+    a.download = 'email-directory.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  myEmails = loadLocal();
+  fetch('assets/emails.json')
+    .then(r => r.json())
+    .then(data => { seedEmails = Array.isArray(data.emails) ? data.emails : []; })
+    .catch(() => { seedEmails = []; })
+    .finally(render);
+})();
+</script>
+
+</body>
+</html>
