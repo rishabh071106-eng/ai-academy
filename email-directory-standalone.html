@@ -6,106 +6,141 @@
 <title>Email Directory</title>
 <style>
   :root{
-    --bg:#0a0e1a; --card:#141b2d; --card-2:#1a2237;
-    --accent:#7c5cff; --accent-2:#00d4ff;
-    --text:#e6e9f2; --muted:#8890a8; --border:rgba(255,255,255,0.08);
-    --radius:16px;
+    --bg:#0b1020; --card:#151c30; --card-2:#1c2440;
+    --accent:#7c5cff; --accent-2:#00d4ff; --green:#4ade80; --red:#ff6b6b;
+    --text:#eef1f9; --muted:#8f97b0; --border:rgba(255,255,255,0.09);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'Inter','Segoe UI',system-ui,sans-serif;
-    background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;
     background-image:
-      radial-gradient(circle at 20% 10%,rgba(124,92,255,0.15),transparent 40%),
-      radial-gradient(circle at 80% 70%,rgba(0,212,255,0.1),transparent 40%);
+      radial-gradient(circle at 15% 0%,rgba(124,92,255,0.18),transparent 45%),
+      radial-gradient(circle at 90% 80%,rgba(0,212,255,0.12),transparent 45%);
     background-attachment:fixed;
   }
-  .email-wrap{max-width:640px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
-  .head{text-align:center;margin-bottom:2rem}
+  .wrap{max-width:560px;margin:0 auto;padding:2rem 1rem 4rem}
+
+  /* header */
+  .head{text-align:center;margin-bottom:1.5rem}
+  .head .emoji{font-size:2.4rem;line-height:1;display:block;margin-bottom:0.4rem}
   .head h1{
-    font-size:clamp(1.8rem,5vw,2.4rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem;
+    font-size:clamp(1.7rem,6vw,2.2rem);font-weight:800;letter-spacing:-0.02em;
     background:linear-gradient(135deg,#fff 20%,var(--accent) 60%,var(--accent-2));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .head p{color:var(--muted);font-size:0.95rem;max-width:480px;margin:0 auto}
-  .email-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem}
-  .email-form{display:flex;gap:0.75rem;flex-wrap:wrap}
-  .email-form input{
-    flex:1;min-width:200px;padding:0.85rem 1rem;border-radius:100px;border:1px solid var(--border);
-    background:var(--card-2);color:var(--text);font-size:0.95rem;font-family:inherit;
+  .head .pill{
+    display:inline-block;margin-top:0.6rem;padding:0.3rem 1rem;border-radius:100px;
+    background:rgba(124,92,255,0.15);border:1px solid rgba(124,92,255,0.35);
+    color:var(--accent-2);font-size:0.85rem;font-weight:700;
   }
-  .email-form input:focus{outline:none;border-color:var(--accent)}
-  .btn{
-    padding:0.85rem 1.6rem;border-radius:100px;font-weight:600;font-size:0.95rem;font-family:inherit;
-    border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;
-    box-shadow:0 10px 30px rgba(124,92,255,0.4);transition:transform 0.15s;
+
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;
+    padding:1.25rem;margin-bottom:1rem;box-shadow:0 12px 40px rgba(0,0,0,0.35);
   }
-  .btn:hover{transform:translateY(-2px)}
-  .form-msg{font-size:0.85rem;margin-top:0.75rem;min-height:1.2em}
-  .form-msg.ok{color:#4ade80}
-  .form-msg.err{color:#ff6b6b}
-  .mem-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem}
+
+  /* add form */
+  .step{font-size:0.75rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-2);margin-bottom:0.6rem}
+  .add-form{display:flex;flex-direction:column;gap:0.6rem}
+  .add-form input{
+    width:100%;padding:1rem 1.1rem;border-radius:14px;border:1.5px solid var(--border);
+    background:var(--card-2);color:var(--text);font-size:1rem;font-family:inherit;
+  }
+  .add-form input:focus{outline:none;border-color:var(--accent)}
+  .btn-add{
+    width:100%;padding:1rem;border-radius:14px;border:none;cursor:pointer;
+    font-weight:700;font-size:1rem;font-family:inherit;color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    box-shadow:0 8px 24px rgba(124,92,255,0.4);transition:transform 0.12s;
+  }
+  .btn-add:active{transform:scale(0.98)}
+  .form-msg{font-size:0.85rem;margin-top:0.6rem;min-height:1.2em;text-align:center}
+  .form-msg.ok{color:var(--green)}
+  .form-msg.err{color:var(--red)}
+
+  /* list */
+  .list-head{display:flex;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:0.6rem}
   .mem-count{font-size:0.85rem;color:var(--muted);font-weight:600}
   .mem-count strong{color:var(--accent-2)}
-  .toolbar{display:flex;gap:0.5rem;flex-wrap:wrap}
-  .tool-btn{
-    padding:0.5rem 0.9rem;background:var(--card-2);border:1px solid var(--border);border-radius:100px;
-    color:var(--text);font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;
-  }
-  .tool-btn:hover{background:var(--accent);border-color:var(--accent)}
-  .tool-btn.copied{background:#4ade80;color:#0a0e1a;border-color:#4ade80}
-  .mem-bar{height:6px;border-radius:100px;background:var(--card-2);overflow:hidden;margin-bottom:1.25rem}
+  .mem-bar{height:5px;border-radius:100px;background:var(--card-2);overflow:hidden;margin-bottom:0.9rem}
   .mem-bar-fill{height:100%;width:0;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 0.3s}
-  .email-list{list-style:none;display:flex;flex-direction:column;gap:0.5rem;max-height:420px;overflow-y:auto}
+  .search{
+    width:100%;padding:0.7rem 1rem;border-radius:12px;border:1.5px solid var(--border);
+    background:var(--card-2);color:var(--text);font-size:0.9rem;font-family:inherit;margin-bottom:0.9rem;
+  }
+  .search:focus{outline:none;border-color:var(--accent)}
+  .email-list{list-style:none;display:flex;flex-direction:column;gap:0.45rem;max-height:400px;overflow-y:auto;padding-right:2px}
   .email-list li{
-    display:flex;align-items:center;gap:0.75rem;padding:0.6rem 1rem;
-    background:var(--card-2);border:1px solid var(--border);border-radius:12px;font-size:0.9rem;
+    display:flex;align-items:center;gap:0.7rem;padding:0.55rem 0.7rem;
+    background:var(--card-2);border:1px solid var(--border);border-radius:14px;font-size:0.88rem;
   }
-  .email-list .num{color:var(--muted);font-size:0.75rem;font-weight:700;min-width:2em;text-align:right}
-  .email-list .addr{flex:1;word-break:break-all}
-  .email-list .badge{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:10px;white-space:nowrap}
-  .badge.seed{background:rgba(124,92,255,0.15);color:var(--accent)}
-  .badge.mine{background:rgba(0,212,255,0.12);color:var(--accent-2)}
+  .avatar{
+    width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:0.85rem;color:#fff;text-transform:uppercase;
+  }
+  .email-list .addr{flex:1;word-break:break-all;line-height:1.35}
+  .email-list .who{display:block;font-size:0.68rem;color:var(--muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
   .email-list .del{
-    background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1;padding:0.2rem 0.4rem;border-radius:8px;
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;line-height:1;
+    padding:0.35rem 0.5rem;border-radius:10px;flex-shrink:0;
   }
-  .email-list .del:hover{color:#ff6b6b;background:rgba(255,107,107,0.1)}
-  .empty-note{color:var(--muted);font-size:0.9rem;text-align:center;padding:1.5rem 0}
-  .footnote{text-align:center;color:var(--muted);font-size:0.78rem;margin-top:1.5rem;line-height:1.6}
+  .email-list .del:hover{color:var(--red);background:rgba(255,107,107,0.1)}
+  .empty-note{color:var(--muted);font-size:0.9rem;text-align:center;padding:1.25rem 0}
+
+  /* action buttons */
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1rem}
+  .action-btn{
+    padding:0.85rem 0.5rem;border-radius:14px;border:1px solid var(--border);cursor:pointer;
+    background:var(--card-2);color:var(--text);font-weight:700;font-size:0.85rem;font-family:inherit;
+    display:flex;align-items:center;justify-content:center;gap:0.45rem;transition:all 0.15s;
+  }
+  .action-btn:hover{border-color:var(--accent)}
+  .action-btn.copied{background:var(--green);color:#0b1020;border-color:var(--green)}
+  .action-btn.wa{grid-column:1 / -1;background:rgba(37,211,102,0.12);border-color:rgba(37,211,102,0.4);color:#25d366}
+  .action-btn.wa:hover{background:rgba(37,211,102,0.22)}
+
+  .footnote{text-align:center;color:var(--muted);font-size:0.76rem;margin-top:1.25rem;line-height:1.6;padding:0 0.5rem}
 </style>
 </head>
 <body>
 
-<div class="email-wrap">
+<div class="wrap">
   <div class="head">
-    <h1>📧 Email Directory</h1>
-    <p>Instead of appending your email ID to the message chain, add it here. The list starts with all previously shared IDs and remembers up to <strong>100</strong> entries.</p>
+    <span class="emoji">📧</span>
+    <h1>Email Directory</h1>
+    <div class="pill"><span id="pillCount">0</span> email IDs collected</div>
   </div>
 
-  <div class="email-card">
-    <form id="emailForm" class="email-form" autocomplete="off">
-      <input type="email" id="emailInput" placeholder="your.name@example.com" required maxlength="120">
-      <button class="btn" type="submit">Add my email</button>
+  <div class="card">
+    <div class="step">Step 1 · Add your email</div>
+    <form id="emailForm" class="add-form" autocomplete="off">
+      <input type="email" id="emailInput" placeholder="your.name@example.com" required maxlength="120" inputmode="email">
+      <button class="btn-add" type="submit">＋ Add my email</button>
     </form>
     <div id="formMsg" class="form-msg"></div>
   </div>
 
-  <div class="email-card">
-    <div class="mem-head">
-      <div class="mem-count">Memory: <strong id="memUsed">0</strong> / 100 email IDs</div>
-      <div class="toolbar">
-        <button class="tool-btn" id="copyAllBtn">📋 Copy all</button>
-        <button class="tool-btn" id="downloadBtn">⬇ Download CSV</button>
-      </div>
+  <div class="card">
+    <div class="step">Step 2 · Share the list back</div>
+    <div class="list-head">
+      <div class="mem-count">Memory: <strong id="memUsed">0</strong> / 100</div>
     </div>
     <div class="mem-bar"><div class="mem-bar-fill" id="memBar"></div></div>
+    <input type="search" id="searchInput" class="search" placeholder="🔍 Search the list…">
     <ul class="email-list" id="emailList"></ul>
-    <div class="empty-note" id="emptyNote" hidden>No email IDs yet — be the first to add yours!</div>
+    <div class="empty-note" id="emptyNote" hidden>No matches found.</div>
+    <div class="actions">
+      <button class="action-btn" id="copyAllBtn">📋 Copy all</button>
+      <button class="action-btn" id="downloadBtn">⬇ CSV</button>
+      <button class="action-btn wa" id="waBtn">💬 Share list on WhatsApp</button>
+    </div>
   </div>
 
   <p class="footnote">
-    Your added email is saved in this browser's memory on your device.<br>
-    After adding, tap <strong>📋 Copy all</strong> and send the list back to the group so everyone stays in sync.
+    Emails you add are saved on your device (this form remembers up to 100).<br>
+    After adding yours, tap <strong>Share list on WhatsApp</strong> so the group gets the updated list.
   </p>
 </div>
 
@@ -114,7 +149,7 @@
   var LIMIT = 100;                          // the form's memory holds at most 100 email IDs
   var STORE_KEY = 'emailDirectoryStandalone';
 
-  // Previously shared email IDs from the message thread
+  // Previously shared email IDs from the message thread (latest list)
   var seedEmails = [
     "shindekalyani03@gmail.com",
     "jaiswaldhruv@gmail.com",
@@ -132,11 +167,17 @@
     "damini.rth@gmail.com",
     "vishaal2suresh@gmail.com",
     "karthikbalaji392@gmail.com",
+    "Rawatdeepak83@gmail.com",
+    "maneesh.basmatkar@gmail.com",
+    "vshukla315@gmail.com",
     "rishabh071106@gmail.com"
   ];
 
+  var AVATAR_COLORS = ['#7c5cff','#00d4ff','#ff8a5c','#4ade80','#f472b6','#facc15','#38bdf8','#a78bfa'];
+
   var myEmails = [];
   var memoryFallback = [];                  // used if localStorage is unavailable (some file:// contexts)
+  var filterText = '';
 
   var form = document.getElementById('emailForm');
   var input = document.getElementById('emailInput');
@@ -145,6 +186,8 @@
   var emptyNote = document.getElementById('emptyNote');
   var memUsed = document.getElementById('memUsed');
   var memBar = document.getElementById('memBar');
+  var pillCount = document.getElementById('pillCount');
+  var searchInput = document.getElementById('searchInput');
 
   function loadLocal(){
     try {
@@ -173,6 +216,12 @@
     msg.className = 'form-msg ' + (ok ? 'ok' : 'err');
   }
 
+  function avatarColor(email){
+    var h = 0;
+    for (var i = 0; i < email.length; i++) h = (h * 31 + email.charCodeAt(i)) >>> 0;
+    return AVATAR_COLORS[h % AVATAR_COLORS.length];
+  }
+
   function render(){
     var emails = allEmails();
     var mine = {};
@@ -180,24 +229,29 @@
     var seed = {};
     seedEmails.forEach(function(e){ seed[e.toLowerCase()] = true; });
 
+    var visible = emails.filter(function(e){
+      return e.toLowerCase().indexOf(filterText) !== -1;
+    });
+
     listEl.innerHTML = '';
-    emails.forEach(function(e, i){
+    visible.forEach(function(e){
       var li = document.createElement('li');
 
-      var num = document.createElement('span');
-      num.className = 'num';
-      num.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+      var av = document.createElement('span');
+      av.className = 'avatar';
+      av.style.background = avatarColor(e.toLowerCase());
+      av.textContent = e.charAt(0);
 
       var addr = document.createElement('span');
       addr.className = 'addr';
       addr.textContent = e;
-
-      var badge = document.createElement('span');
       var isSeed = !!seed[e.toLowerCase()];
-      badge.className = 'badge ' + (isSeed ? 'seed' : 'mine');
-      badge.textContent = isSeed ? 'from thread' : 'added here';
+      var who = document.createElement('span');
+      who.className = 'who';
+      who.textContent = isSeed ? 'from group list' : 'added by you';
+      addr.appendChild(who);
 
-      li.appendChild(num); li.appendChild(addr); li.appendChild(badge);
+      li.appendChild(av); li.appendChild(addr);
 
       if (!isSeed && mine[e.toLowerCase()]) {
         var del = document.createElement('button');
@@ -215,10 +269,16 @@
       listEl.appendChild(li);
     });
 
-    emptyNote.hidden = emails.length > 0;
+    emptyNote.hidden = visible.length > 0;
     memUsed.textContent = emails.length;
+    pillCount.textContent = emails.length;
     memBar.style.width = (emails.length / LIMIT * 100) + '%';
   }
+
+  searchInput.addEventListener('input', function(){
+    filterText = this.value.trim().toLowerCase();
+    render();
+  });
 
   form.addEventListener('submit', function(ev){
     ev.preventDefault();
@@ -232,7 +292,7 @@
     var current = allEmails();
     var exists = current.some(function(e){ return e.toLowerCase() === key; });
     if (exists) {
-      setMsg('This email ID is already in the list.', false);
+      setMsg('This email ID is already in the list. ✓', false);
       return;
     }
     if (current.length >= LIMIT) {
@@ -242,9 +302,8 @@
     myEmails.push(value);
     saveLocal();
     render();
-    setMsg('Added ' + value + ' — now tap “Copy all” and send the list to the group.', true);
+    setMsg('✓ Added! Now share the list back to the group (Step 2).', true);
     form.reset();
-    input.focus();
   });
 
   document.getElementById('copyAllBtn').addEventListener('click', function(){
@@ -279,6 +338,12 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById('waBtn').addEventListener('click', function(){
+    var emails = allEmails();
+    var text = '📧 Email Directory — latest list (' + emails.length + '):\n\n' + emails.join(';\n');
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
   });
 
   myEmails = loadLocal();
