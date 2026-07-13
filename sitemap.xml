@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://example.com/</loc><lastmod>2026-04-17</lastmod></url>
-  <url><loc>https://example.com/chapters/what-is-ai-really.html</loc><lastmod>2026-04-13</lastmod></url>
-  <url><loc>https://example.com/chapters/how-llms-work-without-math.html</loc><lastmod>2026-04-14</lastmod></url>
-  <url><loc>https://example.com/chapters/prompt-engineering-that-works.html</loc><lastmod>2026-04-15</lastmod></url>
-  <url><loc>https://example.com/chapters/rag-vs-fine-tune-vs-prompt.html</loc><lastmod>2026-04-16</lastmod></url>
-  <url><loc>https://example.com/chapters/agents-when-ai-uses-tools.html</loc><lastmod>2026-04-17</lastmod></url>
+  <url><loc>https://example.com/</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/what-is-ai-really.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/how-llms-work-without-math.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/prompt-engineering-that-works.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/rag-vs-fine-tune-vs-prompt.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/agents-when-ai-uses-tools.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/vector-databases-where-ai-stores-its-memories.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/evals-how-to-know-if-your-ai-actually-works.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/hallucinations-why-llms-make-things-up.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/context-windows-your-ai-s-short-term-memory.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/when-ai-learned-to-see-and-hear.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/open-source-vs-closed-source-models-in-2026.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/function-calling-how-ai-learned-to-use-tools.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/embeddings-how-machines-actually-understand-meaning.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/the-electric-bill-behind-every-chatbot.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/safety-and-alignment-where-we-actually-stand.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/the-case-for-smaller-smarter-models.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/reasoning-models-thinking-before-answering.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/how-training-actually-works.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/tokenization-quirks-every-developer-hits.html</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://example.com/chapters/rlhf-teaching-ai-with-a-thumbs-up.html</loc><lastmod>2026-07-13</lastmod></url>
 </urlset>

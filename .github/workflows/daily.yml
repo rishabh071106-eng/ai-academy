@@ -25,13 +25,14 @@ jobs:
       - name: Generate today's chapter
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SITE_URL: ${{ vars.SITE_URL }}
         run: node scripts/generate.mjs
 
       - name: Commit and push
         run: |
           git config user.name  "ai-academy-bot"
           git config user.email "bot@ai-academy.local"
-          git add chapters/ assets/chapters.json scripts/sources.json
+          git add chapters/ assets/chapters.json scripts/sources.json rss.xml sitemap.xml
           if git diff --staged --quiet; then
             echo "Nothing to commit."
           else

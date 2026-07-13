@@ -5,6 +5,127 @@
     <link>https://example.com</link>
     <description>Learn AI, one chapter at a time. New chapter daily.</description>
     <language>en-us</language>
+    <lastBuildDate>Mon, 13 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title><![CDATA[RLHF: Teaching AI with a Thumbs Up]]></title>
+      <link>https://example.com/chapters/rlhf-teaching-ai-with-a-thumbs-up.html</link>
+      <guid>https://example.com/chapters/rlhf-teaching-ai-with-a-thumbs-up.html</guid>
+      <pubDate>Sat, 06 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Language models can write anything—including toxic nonsense. RLHF is the training technique that taught them what humans actually want.]]></description>
+      <category>Safety</category>
+    </item>
+    <item>
+      <title><![CDATA[Tokenization Quirks Every Developer Hits]]></title>
+      <link>https://example.com/chapters/tokenization-quirks-every-developer-hits.html</link>
+      <guid>https://example.com/chapters/tokenization-quirks-every-developer-hits.html</guid>
+      <pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Tokenization is the invisible first step in every LLM interaction. Its quirks explain some of AI's strangest failures—and knowing them makes you better.]]></description>
+      <category>Engineering</category>
+    </item>
+    <item>
+      <title><![CDATA[How Training Actually Works]]></title>
+      <link>https://example.com/chapters/how-training-actually-works.html</link>
+      <guid>https://example.com/chapters/how-training-actually-works.html</guid>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[You know LLMs learn from data. But how, mechanically? Two passes through the network explain almost everything.]]></description>
+      <category>Theory</category>
+    </item>
+    <item>
+      <title><![CDATA[Reasoning Models: Thinking Before Answering]]></title>
+      <link>https://example.com/chapters/reasoning-models-thinking-before-answering.html</link>
+      <guid>https://example.com/chapters/reasoning-models-thinking-before-answering.html</guid>
+      <pubDate>Wed, 03 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Standard LLMs blurt out answers. Reasoning models think first. Here's how that inner monologue works and why it matters.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[The Case for Smaller, Smarter Models]]></title>
+      <link>https://example.com/chapters/the-case-for-smaller-smarter-models.html</link>
+      <guid>https://example.com/chapters/the-case-for-smaller-smarter-models.html</guid>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Bigger isn't always better. Small language models are bringing real AI capabilities to phones, laptops, and robots — no cloud required.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[Safety and Alignment: Where We Actually Stand]]></title>
+      <link>https://example.com/chapters/safety-and-alignment-where-we-actually-stand.html</link>
+      <guid>https://example.com/chapters/safety-and-alignment-where-we-actually-stand.html</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[AI alignment isn't theoretical anymore—it's an engineering discipline with real progress and real gaps. Here's an honest snapshot of the current state.]]></description>
+      <category>Safety</category>
+    </item>
+    <item>
+      <title><![CDATA[The Electric Bill Behind Every Chatbot]]></title>
+      <link>https://example.com/chapters/the-electric-bill-behind-every-chatbot.html</link>
+      <guid>https://example.com/chapters/the-electric-bill-behind-every-chatbot.html</guid>
+      <pubDate>Sun, 31 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Every AI response has a price tag. Here's what actually drives the cost of running LLMs in production and how companies try to shrink it.]]></description>
+      <category>Engineering</category>
+    </item>
+    <item>
+      <title><![CDATA[Embeddings: How Machines Actually Understand Meaning]]></title>
+      <link>https://example.com/chapters/embeddings-how-machines-actually-understand-meaning.html</link>
+      <guid>https://example.com/chapters/embeddings-how-machines-actually-understand-meaning.html</guid>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Embeddings turn words into coordinates in meaning-space. That simple idea powers the most useful AI search systems being built today.]]></description>
+      <category>Theory</category>
+    </item>
+    <item>
+      <title><![CDATA[Function Calling: How AI Learned to Use Tools]]></title>
+      <link>https://example.com/chapters/function-calling-how-ai-learned-to-use-tools.html</link>
+      <guid>https://example.com/chapters/function-calling-how-ai-learned-to-use-tools.html</guid>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[LLMs can't check your calendar or book a flight—unless you give them tools. Here's exactly how function calling works under the hood.]]></description>
+      <category>Agents</category>
+    </item>
+    <item>
+      <title><![CDATA[Open-Source vs Closed-Source Models in 2026]]></title>
+      <link>https://example.com/chapters/open-source-vs-closed-source-models-in-2026.html</link>
+      <guid>https://example.com/chapters/open-source-vs-closed-source-models-in-2026.html</guid>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Open-source models have closed the quality gap. But the battle has shifted to new terrain: agents, tooling, and who controls the stack.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[When AI Learned to See and Hear]]></title>
+      <link>https://example.com/chapters/when-ai-learned-to-see-and-hear.html</link>
+      <guid>https://example.com/chapters/when-ai-learned-to-see-and-hear.html</guid>
+      <pubDate>Wed, 27 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Text-only AI was just the beginning. Multimodal models see photos, hear speech, and reason across all of it at once. Here's how they work.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[Context Windows: Your AI's Short-Term Memory]]></title>
+      <link>https://example.com/chapters/context-windows-your-ai-s-short-term-memory.html</link>
+      <guid>https://example.com/chapters/context-windows-your-ai-s-short-term-memory.html</guid>
+      <pubDate>Tue, 26 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Every AI model has a ceiling on how much text it can process at once. Understanding context windows changes how you use these tools.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[Hallucinations: Why LLMs Make Things Up]]></title>
+      <link>https://example.com/chapters/hallucinations-why-llms-make-things-up.html</link>
+      <guid>https://example.com/chapters/hallucinations-why-llms-make-things-up.html</guid>
+      <pubDate>Mon, 25 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[LLMs don't retrieve facts. They predict plausible text. Understanding this distinction is the key to using them wisely.]]></description>
+      <category>LLMs</category>
+    </item>
+    <item>
+      <title><![CDATA[Evals: How to Know If Your AI Actually Works]]></title>
+      <link>https://example.com/chapters/evals-how-to-know-if-your-ai-actually-works.html</link>
+      <guid>https://example.com/chapters/evals-how-to-know-if-your-ai-actually-works.html</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Everyone talks about building AI. Almost nobody talks about measuring it. Here's how evaluations work — and why they're the skill that separates toy demos from real systems.]]></description>
+      <category>Engineering</category>
+    </item>
+    <item>
+      <title><![CDATA[Vector Databases: Where AI Stores Its Memories]]></title>
+      <link>https://example.com/chapters/vector-databases-where-ai-stores-its-memories.html</link>
+      <guid>https://example.com/chapters/vector-databases-where-ai-stores-its-memories.html</guid>
+      <pubDate>Sat, 23 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Vector databases turn meaning into math so AI can find what's relevant. Here's what they do, why they matter, and when you need one.]]></description>
+      <category>Engineering</category>
+    </item>
     <item>
       <title><![CDATA[Agentic AI: when the model uses tools]]></title>
       <link>https://example.com/chapters/agents-when-ai-uses-tools.html</link>
@@ -26,7 +147,7 @@
       <link>https://example.com/chapters/prompt-engineering-that-works.html</link>
       <guid>https://example.com/chapters/prompt-engineering-that-works.html</guid>
       <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Stop saying 'please'. Start giving structure, examples, and constraints.]]></description>
+      <description><![CDATA[Stop saying 'please'. Start giving structure, examples, and constraints. Here's how.]]></description>
       <category>Practical</category>
     </item>
     <item>
@@ -34,7 +155,7 @@
       <link>https://example.com/chapters/how-llms-work-without-math.html</link>
       <guid>https://example.com/chapters/how-llms-work-without-math.html</guid>
       <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Tokens, weights, and attention explained with everyday analogies.]]></description>
+      <description><![CDATA[Tokens, weights, and attention — explained with everyday analogies, zero matrix equations.]]></description>
       <category>LLMs</category>
     </item>
     <item>
@@ -42,7 +163,7 @@
       <link>https://example.com/chapters/what-is-ai-really.html</link>
       <guid>https://example.com/chapters/what-is-ai-really.html</guid>
       <pubDate>Mon, 13 Apr 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Forget sci-fi. AI is pattern-matching at scale.]]></description>
+      <description><![CDATA[Forget sci-fi. AI is pattern-matching at scale — and once you see it that way, the whole field clicks.]]></description>
       <category>Foundations</category>
     </item>
   </channel>

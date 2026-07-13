@@ -26,5 +26,26 @@
       "url": "https://thegradient.pub/rss/"
     }
   ],
-  "topicsQueue": []
+  "topicsQueue": [
+    "Fine-tuning in practice: LoRA, adapters, and when they beat prompting",
+    "Quantization: shrinking models without breaking them",
+    "Model Context Protocol (MCP): a standard way to plug tools into AI",
+    "Guardrails and jailbreaks: securing LLM applications",
+    "Latency and streaming: why some AI apps feel instant",
+    "Prompt caching: the easiest way to cut your AI bill",
+    "Synthetic data: when AI trains AI",
+    "How AI coding assistants actually work",
+    "Multi-agent systems: when one AI isn't enough",
+    "Beyond transformers: state space models and other challengers",
+    "Distillation: teaching small models big tricks",
+    "AI memory: giving models a life beyond the context window",
+    "Why benchmarks are broken (and how to read them anyway)",
+    "Inference economics: what a token really costs",
+    "Structured output: making LLMs speak reliable JSON",
+    "Speech and voice models: how AI listens and talks",
+    "Diffusion models: how AI generates images, explained simply",
+    "Privacy and AI: where your prompts actually go",
+    "On-device AI: running models in your pocket",
+    "The data wall: is the internet running out of training data?"
+  ]
 }
