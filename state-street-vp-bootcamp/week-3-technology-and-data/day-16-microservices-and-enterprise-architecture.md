@@ -61,6 +61,16 @@ Forget the conference-slide picture of a clean microservices mesh. A large custo
 | 2010s | First-generation web portals, REST APIs, private cloud, early big-data platforms | Yes — often the thing *you* are replacing | "Modern" ages fast; a 2012 portal is now legacy |
 | 2020s | Public cloud, microservices, Kafka event backbones, Snowflake, API products | Growing | This is where your roadmap lives |
 
+A representative split of where a large custodian's application estate (and run budget) actually sits — the modern layer is the visible tip, not the iceberg:
+
+```mermaid
+pie title Representative custodian application estate by run cost
+    "Mainframe cores and batch" : 35
+    "Vendor packages" : 25
+    "Distributed legacy (1990s-2010s)" : 25
+    "Modern cloud and services" : 15
+```
+
 Three structural facts follow, and they shape every decision you will make:
 
 1. **The books of record are batch-native.** The mainframe core processes the day's transactions, then runs an end-of-day (EOD) batch cycle — often 6–10 hours of dependent jobs — that strikes balances, accrues income, values positions and produces the files everything downstream consumes. Your "real-time" portal sits on top of an inherently periodic heartbeat.
@@ -146,6 +156,23 @@ The mistake to police: teams using synchronous APIs for everything, creating cha
 When a modern service must consume a legacy system, DDD prescribes an **anti-corruption layer (ACL)**: a translation component that converts the legacy model (EBCDIC copybooks, 8-character account codes, status flags like `S`, `P`, `X`) into your clean domain model — and *nothing legacy leaks past it*.
 
 Worked example: the mainframe encodes a settlement state as `STAT-CD = 'P'` with `RSN-CD = '042'`. Without an ACL, `'P'` and `'042'` appear in your portal code, your tests, your analytics — and when the core team recodes reason 042, twelve systems break. With an ACL, one adapter translates `('P','042')` → `PENDING(reason=COUNTERPARTY_INSUFFICIENT_SECURITIES)`, and the blast radius of core changes is one component. The ACL is also your *future decommissioning seam*: when the core is eventually replaced, only the ACL changes.
+
+### 1.6 Vendor packages — the third estate
+
+Between "our legacy" and "our new services" sits a large third category: **vendor packages** — corporate-actions processing, reconciliation, collateral, tax, SWIFT gateways. They behave differently from both, and product plans that ignore this get burned:
+
+| Property | Consequence for your roadmap |
+|---|---|
+| You don't control the release calendar | A field you need on the portal may arrive "in the vendor's Q4 release" — of next year. Plan integration features against *vendor* roadmaps, not just yours |
+| Customization is expensive debt | Every custom patch must be re-applied on each vendor upgrade; heavily customized packages become unupgradeable. Prefer configuration and wrapping (ACL again) to modification |
+| Integration surface is what it is | If the package only emits an EOD file, your "real-time CA elections" feature needs either a vendor enhancement, screen-scraping (never), or an intraday API the vendor sells separately |
+| Contracts run in decades | Switching cost is enormous; the credible threat of leaving at renewal is one of the few levers — coordinate with procurement years ahead |
+
+VP takeaway: treat major vendors as *dependency teams you cannot manage* — get their roadmap into your planning cycle, escalate through the vendor-management function early, and never promise a client a feature whose critical path runs through an uncommitted vendor release.
+
+### 1.7 Consistency across contexts — sagas in one page
+
+Splitting the monolith splits the database, and with it the ACID transaction. When one business action spans contexts — a client submits a payment instruction that must reserve cash, create the instruction, and notify — you can no longer wrap it in one transaction. The pattern is a **saga**: a sequence of local transactions, each publishing an event that triggers the next, with **compensating actions** to undo prior steps on failure (release the cash reservation if instruction creation fails). Two implications an executive should retain: (1) *eventual consistency is a product-design fact* — for seconds, the cash tile and the instruction list may disagree, and good UX shows "processing" states rather than pretending atomicity; (2) *compensations are features to specify* — what the client sees when step 3 of 4 fails is a product decision, not an engineering detail.
 
 ---
 
@@ -247,7 +274,48 @@ Consequences you must design for honestly:
 
 The honest-freshness playbook: stamp every dataset with an **"as of" timestamp sourced from the pipeline itself** (never "now"); show it on every screen and every export; publish a data-freshness status page; alert *proactively* when a batch is late ("US positions for 12-Jul will be available by 08:30 EST, delayed from 06:00") rather than letting clients find stale data. Freshness transparency is a *feature* clients will name in due-diligence reviews — the alternative, silently stale data, is a credibility incident.
 
-### 2.5 The enterprise architecture function
+### 2.5 Anatomy of one page load — the layers in motion
+
+To make the layering concrete, here is the portal home page rendering for a pension-fund client at 09:30 EST, with one upstream degraded:
+
+```mermaid
+sequenceDiagram
+    participant Browser as Client browser
+    participant BFF as Experience BFF
+    participant Ent as Entitlement service
+    participant Pos as Positions read store
+    participant Stl as Settlement service
+    participant CA as CA service (degraded)
+    Browser->>BFF: GET /dashboard (JWT)
+    BFF->>Ent: resolve visible accounts (timeout 300ms)
+    Ent-->>BFF: 14 accounts
+    par parallel tile fan-out
+        BFF->>Pos: positions summary (timeout 800ms)
+        Pos-->>BFF: EOD data, asOf 12-Jul 23:04 EST
+    and
+        BFF->>Stl: open fails count (timeout 800ms)
+        Stl-->>BFF: 3 fails, asOf 09:29 EST (event-fed)
+    and
+        BFF->>CA: pending elections (circuit OPEN)
+        CA-->>BFF: fail fast in 2ms - cached fallback used
+    end
+    BFF-->>Browser: page JSON with per-tile asOf and one degraded flag
+    Note over Browser: Renders in under 1s - CA tile shows cache banner
+```
+
+Read the mechanics like an executive: entitlement resolution happens **before** any data call (Day 11's rule — filter at the source of the read, never in the browser); tiles fan out **in parallel**, so page latency is the slowest healthy tile, not the sum; the open circuit fails in milliseconds instead of consuming an 800ms timeout; and every tile carries its own "as of." Five design decisions, all reviewable in a one-hour architecture walkthrough — this is the level of detail worth your personal attention.
+
+Common failure modes this design prevents, and what each looks like when it happens anyway:
+
+| Failure mode | Symptom clients see | Root cause | Design countermeasure |
+|---|---|---|---|
+| Sequential tile loading | 6-second page loads at 9am | BFF calls upstreams one by one | Parallel fan-out with per-call timeouts |
+| Missing entitlement pre-check | Client A glimpses client B's account name in a cached response | Filtering applied after caching | Entitlements resolved first; cache keys include entitlement scope |
+| Retry storm | Sick upstream gets 10x traffic and dies fully | Blind retries without breakers | Circuit breaker + backoff with jitter |
+| Uniform "as of" on mixed data | Client reconciles intraday cash against EOD accruals, logs a false break | One page-level timestamp | Per-tile asOf from the pipeline |
+| Thread-pool exhaustion | Whole portal hangs because documents is slow | Shared connection pool | Bulkheads per upstream |
+
+### 2.6 The enterprise architecture function
 
 Large banks run an **EA function** because 2,000+ applications with no coordination produces chaos regulators notice. What EA actually does:
 
@@ -296,6 +364,22 @@ EA's approval is also *air cover*: when your design later hits an incident or an
 - **Batch-late incidents per quarter and mean lateness** — and % of those where clients were *proactively* notified.
 - **Open-circuit minutes per upstream per month** — trending up means an upstream needs engineering attention, not more retries.
 - **Strangler burn-down**: % of page views served by legacy (should fall monotonically) and legacy run-cost retired.
+
+### Stakeholder map for architecture decisions
+
+| Stakeholder | What they optimize for | What they need from you | What you need from them |
+|---|---|---|---|
+| Enterprise architecture / ARB | Target-state alignment, no duplication, standards | Early engagement; designs that reference the standards | Pattern approval, air cover, roadmap influence |
+| Core custody technology leadership | Stability of books of record, batch SLA, MIPS cost | Read-store patterns that keep portal load off the core | Event feeds, extract SLAs, ACL cooperation |
+| Fund accounting platform owners | EOD accuracy, NAV timeliness | Honest "as of" labeling so their batch isn't blamed for portal staleness | Freshness timestamps in every extract |
+| Vendor management / procurement | Contract value, vendor risk | 18-month heads-up on needs tied to renewals | Vendor roadmap intelligence, escalation muscle |
+| CISO / security architecture | Least privilege, data protection, resilience | Entitlement enforcement at the experience layer; degradation that fails closed | Pragmatic review timelines |
+| Operations (custody ops, client service) | Break reduction, incident clarity | Circuit-breaker dashboards; proactive batch-late comms they can forward to clients | Ground truth on which data issues clients actually feel |
+| Your engineering leads | Team autonomy, sane on-call | Protected modernization capacity (~25%); realistic freshness promises to clients | Honest independence assessment — monolith seams vs true services |
+
+### A worked funding conversation
+
+You will pitch modernization to people who fund features. The argument that works is *unit economics of change*, not elegance. Representative example: on the legacy portal, adding one data field to the holdings screen takes 9 weeks (change requests across 3 systems, one release train per quarter, regression cycle); on the strangled stack it takes 2 weeks. If your book of demand is ~30 such changes a year, the delta is ~210 engineer-weeks/year — roughly four engineers of capacity recovered, before counting the USD 3M/yr run-cost retirement at decommissioning and the incident-cost reduction from circuit breakers (each "portal down" P1 costs real client-service hours and, repeated, real relationship damage in an industry where mandates are won on service quality). Frame modernization as buying back capacity and risk, with a dated cash-savings milestone — never as "engineering wants to refactor."
 
 ### Questions to ask your teams this week
 

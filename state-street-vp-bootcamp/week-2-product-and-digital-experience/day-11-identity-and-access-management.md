@@ -275,6 +275,19 @@ Design principles that make this safe rather than scary:
 
 The commercial punchline: a 500-client book with delegated admin turns roughly 10,000 annual user-admin service tickets (at, say, USD 40 fully-loaded cost each — USD 400k/yr) into client self-service, while *improving* audit quality because grants are captured structurally instead of in emails.
 
+What "good" looks like as an onboarding timeline for a new mandate:
+
+| Day | Milestone | Owner |
+|---|---|---|
+| T+0 | Mandate signed; client org and entity structure created from onboarding data | Custodian onboarding |
+| T+1 | SSO federation established (metadata exchange, test login) | Cyber engineering + client IT |
+| T+2 | Client admins created, trained via 30-min session, guardrails explained | Digital Experience team |
+| T+3 | Client admin bulk-loads 40 users with role/scope assignments; policy engine validates | Client admin |
+| T+5 | Four-eyes approvals complete for payment and admin roles; SCIM sync enabled | Client admin + custodian |
+| T+7 | All users logged in with passkeys enrolled; first-week adoption report sent to RM | Automatic |
+
+Seven days, two custodian touchpoints. Compare with the industry's unhappy default — six weeks of spreadsheet email tennis — and you have a differentiator that relationship managers will quote in every pitch.
+
 ### 2.6 Provisioning and lifecycle — SCIM and JML
 
 **SCIM 2.0** (System for Cross-domain Identity Management) is the REST/JSON standard by which the client's IdP pushes user create/update/deactivate events into your platform. It automates the most dangerous gap in institutional access: **the leaver who still has portal access weeks after resigning.**
@@ -358,6 +371,23 @@ Day 15 will cover APIs in depth; the IAM groundwork: machine clients authenticat
 | Orphaned accounts found in audit | Zero | The metric a regulator will ask about |
 | Entitlement check p99 latency | <20ms | Central AuthZ must not slow every page |
 
+### Stakeholder map for IAM decisions
+
+| Stakeholder | What they want from IAM | What they can block | Your play |
+|---|---|---|---|
+| CISO / cyber engineering | Standards compliance, one IdP, passkey adoption | Any new auth pattern; vendor selection | Co-author the passkey roadmap; let them own AuthN standards while you own client AuthZ UX |
+| Compliance | Recert evidence, SoD enforcement, leaver timeliness | Delegated-admin scope; feature launches touching entitlements | Codify the risk-tier matrix once; get standing approval instead of per-feature review |
+| Client onboarding / service | Fast user setup, fewer tickets | Nothing formally — but their workarounds create shadow process | Give them bulk tooling and dashboards; make the official path the fastest path |
+| Client's own security team | SSO, SCIM, audit API, DDQ answers | The deal (via due-diligence scoring) | Maintain a current security capability sheet; treat DDQ items as roadmap input |
+| Sales / relationship managers | "Yes" answers in RFPs | Nothing — but they will promise features you haven't built | Publish what is GA vs roadmap; brief them quarterly |
+| API/platform engineering (Day 15) | One token and scope model | Timeline, if entitlements aren't centralized | Sequence the central entitlement service before API scale-out |
+
+### Trade-offs to hold in your head
+
+- **Security vs onboarding speed:** every added control (four-eyes grants, mandatory passkeys) adds friction to a new mandate's first week. Resolve with *risk-tiered* defaults — frictionless for viewers, ceremonial for payment approvers — rather than one policy for all.
+- **Central enforcement vs team autonomy:** product teams hate waiting on a central entitlement service. The compromise is a central *model and decision service* with well-documented SDKs and a <20ms latency SLO, so using it is easier than bypassing it.
+- **Client flexibility vs auditability:** clients will ask for custom roles ("give us a role that can approve payments only on Fridays"). Every custom role is a permanent audit and testing liability. Offer ABAC policy parameters on standard roles instead of bespoke roles; say no more often than yes.
+
 ### Questions to ask your teams this week
 
 - "Show me every enforcement point where entitlements are checked. Is it one service or forty copies of the logic?"
@@ -381,6 +411,7 @@ Day 15 will cover APIs in depth; the IAM groundwork: machine clients authenticat
 1. **Entitlement matrix drill.** Take the Meridian example and add a requirement: the client acquires a fourth legal entity with 3 funds, and two existing Fund Accountants must cover it, but one of them must *lose* access to Entity 2. Write the exact assignment changes as (user, role, scope) operations, and identify which ones your policy engine should flag.
 2. **Protocol whiteboard.** Without looking at the chapter, draw the OIDC auth-code sequence and mark: where phishing is defeated (or not), where the entitlement lookup happens, and what breaks if the `state`/`nonce` checks are skipped. Compare with the diagram.
 3. **Recert critique.** Find any access-review screen you have seen (or sketch your current employer's). List five UX changes that would raise genuine review quality, and one metric to prove reviews are genuine.
+4. **Write the DDQ answer.** Draft a half-page response to the RFP question "Describe how our administrators can manage our users' access to your platform, and how you prevent inappropriate access." Use the delegated-admin guardrails and recert material — this exact question will cross your desk within a quarter.
 
 ## ❓ Self-check quiz
 
