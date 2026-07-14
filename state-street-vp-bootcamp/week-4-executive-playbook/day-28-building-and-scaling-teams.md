@@ -209,7 +209,7 @@ Context: the org in 1.2 has approval for +8 heads to stand up the AI enablement 
 ```mermaid
 timeline
     title Hiring sequence — two quarters, eight hires
-    Q1 month 1 : Senior PM, Servicing (Boston) — the multiplier; owns compliance-heavy roadmap
+    Q1 month 1 : Senior PM, Servicing (Boston) — the multiplier, owns compliance-heavy roadmap
                : Staff engineer, Experience Platform (Krakow) — unblocks everything downstream
     Q1 month 2 : AI pod lead engineer (Bangalore) — anchors the new pod in the GCC
                : SDET, Servicing (Hyderabad) — automation debt is the current bottleneck

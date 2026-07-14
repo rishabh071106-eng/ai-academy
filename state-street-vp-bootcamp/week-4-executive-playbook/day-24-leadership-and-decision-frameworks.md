@@ -53,10 +53,10 @@ quadrantChart
     title Leadership mode by team-member readiness (for THIS task)
     x-axis Low competence --> High competence
     y-axis Low confidence or commitment --> High confidence and commitment
-    quadrant-1 Delegate — outcomes and guardrails only
-    quadrant-2 Direct — clear instruction, close cadence
-    quadrant-3 Coach — teach, explain why, frequent check-ins
-    quadrant-4 Support — listen, encourage, unblock
+    quadrant-1 Delegate
+    quadrant-2 Direct
+    quadrant-3 Coach
+    quadrant-4 Support
     New PM first CA feature: [0.2, 0.35]
     Strong EM but new to banking: [0.45, 0.75]
     Veteran lead running platform: [0.9, 0.85]

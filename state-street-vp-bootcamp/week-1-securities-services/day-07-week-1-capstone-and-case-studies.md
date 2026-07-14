@@ -280,7 +280,7 @@ sequenceDiagram
     TA->>TA: Recalculate 3,900 transactions at corrected NAVs
     TA-->>NOG: Compensation file — USD 38,400 to subscribers, USD 28,800 to fund
     NOG->>BRD: Incident report, root cause, control remediation plan
-    Note over BRD: Board notification and error log; regulator informed per policy
+    Note over BRD: Board notification and error log — regulator informed per policy
 ```
 
 **Root causes:**

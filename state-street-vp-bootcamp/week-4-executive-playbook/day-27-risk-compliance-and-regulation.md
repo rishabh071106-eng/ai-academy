@@ -225,13 +225,13 @@ sequenceDiagram
     PM->>Comp: Week 0 — concept note BEFORE build:<br/>use case, data used, guardrails proposed
     Comp-->>PM: Preliminary view: viable IF grounded-only answers,<br/>no advice, full transcript retention
     PM->>Legal: Client-terms review — is AI output covered<br/>by existing portal terms?
-    Legal-->>PM: Requires disclosure banner + terms addendum;<br/>no "advice" language anywhere
+    Legal-->>PM: Requires disclosure banner + terms addendum,<br/>no "advice" language anywhere
     PM->>MRM: Model registration — is this in SR 11-7 scope?
     MRM-->>PM: Yes. Validation plan needed: grounding tests,<br/>hallucination rate benchmarks, ongoing monitoring
     PM->>Sec: Data-flow review: entitlement enforcement<br/>BEFORE retrieval, prompt-injection testing
     Sec-->>PM: Approved with pen-test of injection vectors
     PM->>Risk: RCSA update: new risks (wrong answer,<br/>data leak via retrieval), controls, KRIs
-    Risk-->>PM: Risk acceptance at VP level documented;<br/>KRI: answer-accuracy sample audit weekly
+    Risk-->>PM: Risk acceptance at VP level documented,<br/>KRI: answer-accuracy sample audit weekly
     PM->>Comp: Formal approval pack: all above + 17a-4<br/>retention design for transcripts + kill switch
     Comp-->>PM: Approved for limited launch: 5 pilot clients,<br/>human-review sampling, 90-day checkpoint
     PM->>CAB: Change record: progressive rollout plan,<br/>flag default-off, rollback criteria

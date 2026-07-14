@@ -127,13 +127,13 @@ Study the timestamps: under T+1, *everything to the left of settlement now happe
 ```mermaid
 timeline
     title US T+1 — critical path for a trade executed on Monday
-    Mon 09:30–16:00 ET : Execution window (trade date T)
-    Mon by ~19:00 ET : Buy-side allocations complete (DTCC recommendation 19:00)
-    Mon 21:00 ET : DTC affirmation cutoff — affirmed trades flow to night cycle
+    Mon 09.30–16.00 ET : Execution window (trade date T)
+    Mon by ~19.00 ET : Buy-side allocations complete (DTCC recommendation 19.00)
+    Mon 21.00 ET : DTC affirmation cutoff — affirmed trades flow to night cycle
     Mon night : NSCC netting runs : DTC night settlement cycle begins
     Tue early : FX executed/settled for foreign buyers funding USD
-    Tue by 15:00 ET : DTC day cycle — final DvP settlement window
-    Tue 16:00+ ET : Fails identified — recalls, claims, penalty clocks start
+    Tue by 15.00 ET : DTC day cycle — final DvP settlement window
+    Tue 16.00+ ET : Fails identified — recalls, claims, penalty clocks start
     Wed : Fail management — re-instruction, partials, buy-in watch
 ```
 

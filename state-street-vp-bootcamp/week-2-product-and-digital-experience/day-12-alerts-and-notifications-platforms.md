@@ -194,7 +194,7 @@ sequenceDiagram
     Ent-->>Rules: 11 users, 1 team
     Rules->>Rules: Match subscriptions — Priya, EMEA Ops team
     Rules->>Pref: Resolve channels and modes
-    Pref-->>Rules: Priya realtime in-app plus email; team breakout for High
+    Pref-->>Rules: Priya realtime in-app plus email, team breakout for High
     Rules->>Tmpl: Render per recipient — locale en-GB, timezone Europe/London
     Tmpl-->>Rules: Rendered payloads with idempotency keys
     Rules->>App: Write inbox items
