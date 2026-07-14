@@ -559,4 +559,91 @@ If you learn nothing else in week one, learn these. They are the terms most like
 | Webhook | An HTTP callback by which a system pushes event notifications to a subscriber's URL as things happen. | The simplest way clients get real-time events from you. |
 | Zero trust | A security model that trusts no network location by default, verifying every user, device and request continuously. | The architecture direction of the whole firm's security estate. |
 
-<!--NEXT-->
+## 10. Data, Analytics and AI
+
+| Term | Definition | Why it matters to you |
+|---|---|---|
+| Agent (AI) | An AI system that plans and executes multi-step tasks using tools, rather than answering a single prompt. | The next wave of copilot capability you'll be asked to evaluate. |
+| Anomaly detection | Machine-learning techniques that flag data points deviating from learned normal patterns, such as an implausible NAV movement. | Augments tolerance checks in NAV and reconciliation oversight. |
+| Bronze/silver/gold layers | A lakehouse convention staging data from raw (bronze) through cleaned (silver) to consumption-ready (gold). | Vocabulary for asking where in the pipeline a dataset sits. |
+| Certified data source | A dataset formally designated as governed, quality-checked and owned — the official source for its domain. | Nothing client-facing should render from an uncertified source. |
+| Data catalog | A searchable inventory of an organization's datasets, reports and their owners, definitions and certification status. | Answers "does governed client cash data already exist?" in minutes. |
+| Data lake | A repository storing raw data in open formats at low cost, schema applied on read. | Cheap storage for everything; governance decides if it's usable. |
+| Data lineage | The documented flow of data from origin through transformations to consumption. | Your fastest credible answer when a client challenges a number. |
+| Data mart | A subject-specific, consumption-shaped slice of the warehouse, such as a client-reporting mart. | The layer your portal dashboards and feeds should read from. |
+| Data mesh | An operating model treating data as products owned by domain teams rather than one central team. | The organizational debate behind many data-platform roadmaps. |
+| Data product | A dataset managed like a product — owner, SLA, documentation, consumers, roadmap. | How client-facing data feeds and shares should be run. |
+| Data quality dimensions | The standard lenses for assessing data: accuracy, completeness, timeliness, consistency, uniqueness, validity. | The shared vocabulary of every DQ scorecard you'll read. |
+| Data residency | Legal requirements constraining where data may be stored or processed geographically. | Shapes architecture for any global portal or AI feature. |
+| dbt | A widely used tool that manages SQL transformations in the warehouse with software-engineering discipline — version control, testing, documentation. | The de facto standard of the modern ELT stack. |
+| Dimensional model | A warehouse design organizing data into fact tables (events, measures) and dimension tables (context) for fast analytics. | The shape behind almost every dashboard you'll govern. |
+| Drift (model) | Degradation of a machine-learning model's accuracy as real-world data departs from its training data. | Why deployed models need monitoring, not just validation. |
+| ELT | Extract-load-transform: land raw data in the warehouse first, transform there using its compute. | The modern default, replacing transform-first ETL. |
+| Embedding | A numeric vector representing text or data such that similar meanings sit near each other, enabling semantic search. | The retrieval machinery under RAG and copilots. |
+| Fact table | The center of a star schema: one row per business event (a settlement, a trade) with numeric measures and dimension keys. | "What's the grain of the fact?" is the analyst's first question. |
+| Fine-tuning | Further training a foundation model on domain examples to specialize its behavior. | Rarely the first answer; RAG plus prompting usually wins in banks. |
+| Foundation model | A large model pre-trained on broad data and adapted to many tasks, such as a large language model. | The platform layer of the AI stack; you buy, rarely build. |
+| Grounding | Constraining an AI model's answer to supplied trusted context, with citations, rather than open-ended generation. | The difference between a deployable copilot and a liability. |
+| Hallucination | A generative model producing fluent but false content. | The core client-facing AI risk; mitigated by grounding and review. |
+| Human-in-the-loop | A workflow design where a person reviews or approves AI output before it takes effect. | The default pattern for anything client-impacting in a bank. |
+| Lakehouse | An architecture combining lake storage economics with warehouse-style management and performance. | The convergence point of most modern platform roadmaps. |
+| LLM (large language model) | A foundation model trained on text that generates and understands language — the engine of copilots and chat interfaces. | Product raw material; your job is the guardrails and the use case. |
+| Master data management (MDM) | The discipline of maintaining one canonical record for core entities such as clients, securities and accounts. | Bad master data is the root cause of half of ops breaks. |
+| Metrics/semantic layer | A single store of metric definitions (formula, grain, filters, owner) consumed by all BI tools and channels. | Prevents "two numbers disagree" — the worst analytics incident. |
+| Model risk management | The governance of models — inventory, validation, monitoring — formalized in guidance like the Fed's SR 11-7. | Every AI feature you ship enters this regime; plan the timeline. |
+| Prompt engineering | Designing the instructions and context given to a language model to shape reliable output. | Cheap first lever before fine-tuning; part of your teams' craft now. |
+| RAG (retrieval-augmented generation) | Retrieving relevant, entitled documents or data first and having the model answer only from them, with citations. | The standard pattern for grounded, auditable copilots. |
+| Row-level security | Filtering query results per viewer so each sees only their permitted rows from shared datasets and dashboards. | Must derive from the same entitlement model as the portal. |
+| SR 11-7 | The Federal Reserve's supervisory guidance on model risk management: validation, documentation, ongoing monitoring. | The reason AI deployment in a bank takes longer than a startup. |
+| Star schema | A dimensional model with a central fact table joined to surrounding dimension tables. | Read one ERD and you can navigate any analytics mart. |
+| Time travel (Snowflake) | Querying data as it existed at a past point in time, within a retention window. | Instant answers to "what did the portal show last Tuesday?" |
+| Token (AI) | The unit of text a language model processes and is priced by. | The cost driver of every AI feature's unit economics. |
+| Vector database | A store optimized for similarity search over embeddings. | Infrastructure behind semantic search and RAG retrieval. |
+| Virtual warehouse (Snowflake) | An independently sized and billed compute cluster querying shared storage. | The unit of Snowflake cost governance and workload isolation. |
+| Zero-copy cloning | Creating instant, storage-free copies of databases for testing or experimentation. | Realistic test environments without doubling storage cost. |
+
+## 11. Leadership, Finance and Corporate Vocabulary
+
+| Term | Definition | Why it matters to you |
+|---|---|---|
+| Accretive | Adding to earnings or value; the opposite of dilutive. | Exec shorthand for "this deal/investment improves the numbers." |
+| BAU (business as usual) | Ongoing run-the-bank activity, as distinct from change initiatives. | Funding conversations split every dollar into BAU vs change. |
+| Basis point (bp) | One hundredth of one percent (0.01%). | The unit of custody fees, fund expenses and rate moves. |
+| BLUF | Bottom line up front — stating the conclusion before the supporting detail. | The house style of effective executive communication. |
+| Book of work | The portfolio of initiatives a team or division has committed to deliver. | What execs mean when they ask "what's on your book?" |
+| Calibration | The comparative process by which committees align performance ratings and promotions across teams. | Where your promotion case is actually decided. |
+| Capex vs opex | Capitalized investment spending versus operating expense; software work is often split between them. | Shapes how your funding is accounted for and defended. |
+| Chargeback | Allocating central platform or technology costs to the business units consuming them. | Expect debates about your platform's cost allocation. |
+| COO (chief operating officer) | The executive who owns operations; in clients, often your product's real buyer and escalation point. | Client COOs judge you on ops touches and incidents. |
+| Cost-to-serve | The fully loaded cost of servicing a given client or activity. | The commercial metric your self-service products most directly move. |
+| Cost of delay | The value lost per unit time by not shipping something — the numerator of WSJF. | Turns prioritization debates into economics. |
+| Delta | The difference between two states or numbers. | "What's the delta?" = what changed / what's the gap. |
+| Dilutive | Reducing per-share value or earnings, as unexercised rights issues do to holdings. | The word for what a missed corporate action costs. |
+| EBIT / pre-tax margin | Earnings measures used to discuss profitability of a business line or deal. | The bottom line of the deal P&Ls your products influence. |
+| EVP / SVP / MD | Executive vice president, senior vice president, managing director — senior officer tiers at banks (exact ladders vary). | The altitude map of your stakeholders and your career. |
+| FTE (full-time equivalent) | A unit of workforce capacity equal to one full-time person. | Headcount — the currency of ops-efficiency business cases. |
+| G-SIB | Global systemically important bank, designated by regulators and subject to heightened requirements. | Why your employer's control environment is stricter than a fintech's. |
+| Guardrails | Pre-agreed boundaries within which a team may act autonomously. | How you delegate outcomes without micromanaging. |
+| Hurdle rate | The minimum return an investment must clear to be approved. | Your business cases compete against it. |
+| KPI / KRI | Key performance indicator (how well things run) / key risk indicator (early warning of risk). | Your dashboards will carry both; know which is which. |
+| Line of business (LOB) | A distinct business unit with its own P&L, clients and leadership. | The organizing unit of strategy, funding and politics. |
+| North star metric | The single metric that best captures the value a product delivers, from which supporting metrics cascade. | The top of your metrics tree; choose it carefully. |
+| NPV (net present value) | The value today of a stream of future costs and benefits, discounted. | The math inside credible multi-year business cases. |
+| Operating model | How an organization arranges people, processes, governance and technology to deliver. | Half your first-year battles are operating-model battles. |
+| P&L (profit and loss) | The income statement of a business unit; also shorthand for owning revenue and cost accountability. | "Who owns the P&L?" determines who really decides. |
+| Pre-wire | Briefing key stakeholders individually before a decision meeting so the forum confirms rather than discovers. | The single most useful meeting habit at VP level. |
+| RACI / DACI | Frameworks assigning decision roles: responsible, accountable, consulted, informed (or driver, approver, contributors, informed). | Ends "I thought you had it" on cross-functional work. |
+| Run rate | The annualized level of a cost or revenue based on its current pace. | How ongoing platform costs and savings are quoted. |
+| Runway | How long current funding or capacity lasts at the present burn rate. | Applies to your change budget as much as to startups. |
+| Sponsor | A senior leader who spends their own political capital advocating for a person or initiative. | Promotions and big initiatives move on sponsorship, not merit alone. |
+| Steering committee | A senior forum that directs and unblocks a program or portfolio. | Run yours with named decisions and a decision log. |
+| Synergies | Cost or revenue benefits from combining activities, often promised in reorganizations. | Treat claimed synergies with professional skepticism. |
+| TCO (total cost of ownership) | The full lifetime cost of a system — build, run, support, exit. | The honest basis for build-vs-buy comparisons. |
+| TOM (target operating model) | The designed future state of an organization's operating model. | The artifact big transformation programs are sold on. |
+| Toll gate / stage gate | A formal checkpoint where a program must demonstrate readiness to proceed. | Your launches will pass through several; prepare evidence early. |
+| Value driver tree | A decomposition of a business outcome into the measurable drivers that produce it. | Connects your roadmap to money in one diagram. |
+| WSJF (weighted shortest job first) | A prioritization method ranking work by cost of delay divided by job size. | The scoring debate you'll referee every quarter. |
+
+---
+
+*End of glossary. Terms are defined for practical executive use; consult primary sources (regulations, standards, vendor documentation) where precision is legally material.*
