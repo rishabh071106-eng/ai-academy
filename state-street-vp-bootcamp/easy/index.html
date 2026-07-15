@@ -47,7 +47,6 @@
   /* ---------- hero ---------- */
   .hero{background:linear-gradient(150deg,var(--navy) 0%,var(--navy-deep) 90%);color:#fff;border-radius:20px;
         padding:34px 30px;margin-bottom:26px;position:relative;overflow:hidden}
-  .hero::after{content:"🏦";position:absolute;right:-10px;bottom:-26px;font-size:130px;opacity:.14;transform:rotate(-8deg)}
   .hero .kick{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;font-family:system-ui,sans-serif}
   .hero h1{margin:10px 0 8px;font-size:clamp(26px,5vw,38px);line-height:1.15}
   .hero p{margin:0;max-width:56ch;color:#d9e6f2;font-size:16px}
@@ -217,10 +216,11 @@ function weekOf(n){ return n<=7?0 : n<=14?1 : n<=21?2 : 3; }
 
 function renderHome(){
   const nd=nextDay(), dc=doneCount();
-  let h='<section class="hero"><div class="kick">A 30-day path · from zero</div>'+
+  let h='<section class="hero"><div class="hero-grid"><div><div class="kick">A 30-day path · from zero</div>'+
     '<h1>Learn your new world,<br>one small day at a time.</h1>'+
-    '<p>No finance background needed. Every day is a 15–20 minute story: one idea, one picture, a few new words, and a tiny quiz. By Day 30 you will understand the whole machine.</p>'+
-    '<button class="cta" onclick="go('+nd+')">'+(dc===0?'Start Day 1 →':(dc>=30?'Journey complete! Revisit any day 🎉':'Continue Day '+nd+' →'))+'</button></section>';
+    '<p>No finance background needed. Every day is a 15–20 minute story: one idea, real pictures, a few new words, and a tiny quiz. Stuck on anything? Tap <b>🧑‍🏫 Ask Coach</b> (bottom right) — it talks back, and can even quiz you.</p>'+
+    '<button class="cta" onclick="go('+nd+')">'+(dc===0?'Start Day 1 →':(dc>=30?'Journey complete! Revisit any day 🎉':'Continue Day '+nd+' →'))+'</button></div>'+
+    '<div class="hero-art">'+heroArt('route')+'</div></div></section>';
   WEEKS.forEach((w,wi)=>{
     h+='<section class="island" style="--wc:'+w.c+'"><div class="island-head"><div class="wk">'+w.wk+'</div><h2>'+w.t+'</h2><p>'+w.p+'</p></div><div class="nodes">';
     DAYS.filter(d=>weekOf(d.n)===wi).forEach(d=>{
@@ -239,8 +239,10 @@ function renderDay(n){
   const d=DAYS.find(x=>x.n===n); if(!d){ renderHome(); return; }
   const w=WEEKS[weekOf(n)];
   let h='<button class="crumb" onclick="go(0)">← Back to my path</button>';
-  h+='<div class="lesson-head" style="--wc:'+w.c+'"><span class="day">'+w.wk.split('·')[0]+' · Day '+d.n+' of 30 · ~15 min</span>'+
-     '<span class="em">'+d.e+'</span><h1>'+d.t+'</h1><p>'+d.tag+'</p></div>';
+  h+='<div class="lesson-head" style="--wc:'+w.c+'"><div class="hero-grid"><div><span class="day">'+w.wk.split('·')[0]+' · Day '+d.n+' of 30 · ~15 min</span>'+
+     '<h1>'+d.e+' '+d.t+'</h1><p>'+d.tag+'</p>'+
+     '<button class="listen" onclick="listenLesson('+d.n+',this)">🔊 Read this to me</button></div>'+
+     '<div class="lh-art">'+heroArt(ART[d.n])+'</div></div></div>';
   h+='<div class="imagine"><div class="big">'+d.imagine.e+'</div><div><h3>'+d.imagine.h+'</h3><p>'+d.imagine.p+'</p></div></div>';
   d.secs.forEach(s=>{ h+='<section class="sec" style="--wc:'+w.c+'"><h2>'+s.h+'</h2>'+(s.b||'')+diagram(s.d)+(s.b2||'')+'</section>'; });
   h+='<section class="sec" style="--wc:'+w.c+'"><h2>🗝️ New words today</h2><p>Tap a word to see what it means.</p><div class="words">'+
@@ -1655,7 +1657,221 @@ const DAYS=[
    why:`Depth exists everywhere in the building; the connected view is rare. Guard it, grow it, use it.`}]},
 ];
 
+/* ================= ILLUSTRATIONS ================= */
+const GOLD='#e3a92c';
+const PICT={
+bank:`<path d="M16 52 L60 22 L104 52 Z"/><path d="M22 60 H98"/><path d="M32 60 V90 M52 60 V90 M72 60 V90 M92 60 V90"/><path d="M16 98 H104"/><circle cx="60" cy="40" r="6" fill="${GOLD}" stroke="none"/>`,
+globe:`<circle cx="60" cy="60" r="38"/><ellipse cx="60" cy="60" rx="38" ry="14"/><ellipse cx="60" cy="60" rx="14" ry="38"/><circle cx="88" cy="34" r="6" fill="${GOLD}" stroke="none"/>`,
+swap:`<path d="M28 44 H86 M86 44 l-12 -12 M86 44 l-12 12"/><path d="M92 76 H34 M34 76 l12 -12 M34 76 l12 12"/><circle cx="22" cy="44" r="9" fill="${GOLD}" stroke="none"/><rect x="92" y="68" width="16" height="16" rx="3"/>`,
+scale:`<path d="M60 24 V92"/><path d="M26 36 H94"/><path d="M26 36 L16 58 M26 36 L36 58 M16 58 a10 10 0 0 0 20 0"/><path d="M94 36 L84 58 M94 36 L104 58 M84 58 a10 10 0 0 0 20 0"/><path d="M42 98 H78"/><circle cx="26" cy="30" r="6" fill="${GOLD}" stroke="none"/>`,
+megaphone:`<path d="M24 52 L72 32 V84 L24 64 Z"/><path d="M24 52 V64"/><path d="M82 44 a20 20 0 0 1 0 28"/><path d="M92 36 a32 32 0 0 1 0 44"/><path d="M38 66 v16 a6 6 0 0 0 12 0" /><circle cx="72" cy="58" r="5" fill="${GOLD}" stroke="none"/>`,
+envelope:`<rect x="20" y="34" width="80" height="56" rx="7"/><path d="M22 38 L60 68 L98 38"/><circle cx="60" cy="80" r="6" fill="${GOLD}" stroke="none"/>`,
+puzzle:`<rect x="26" y="26" width="30" height="30" rx="5"/><rect x="64" y="26" width="30" height="30" rx="5"/><rect x="26" y="64" width="30" height="30" rx="5"/><rect x="66" y="66" width="28" height="28" rx="5" transform="rotate(9 80 80)" fill="${GOLD}" stroke="none"/>`,
+target:`<circle cx="62" cy="62" r="34"/><circle cx="62" cy="62" r="21"/><circle cx="62" cy="62" r="8" fill="${GOLD}" stroke="none"/><path d="M18 18 L54 54 M54 54 h-14 M54 54 v-14"/>`,
+route:`<path d="M24 92 C 38 40, 80 104, 96 30" stroke-dasharray="3 10"/><circle cx="24" cy="92" r="8"/><circle cx="96" cy="30" r="8" fill="${GOLD}" stroke="none"/><path d="M96 30 v-16 h16 l-6 6 6 6 h-14"/>`,
+user:`<circle cx="60" cy="44" r="17"/><path d="M28 96 a32 22 0 0 1 64 0"/><circle cx="82" cy="30" r="7" fill="${GOLD}" stroke="none"/>`,
+lock:`<rect x="34" y="54" width="52" height="42" rx="9"/><path d="M44 54 V42 a16 16 0 0 1 32 0 V54"/><circle cx="60" cy="72" r="6" fill="${GOLD}" stroke="none"/><path d="M60 78 v8"/>`,
+bell:`<path d="M60 26 a24 24 0 0 1 24 24 v14 l9 14 H27 l9 -14 V50 a24 24 0 0 1 24 -24 Z"/><path d="M60 26 v-6"/><circle cx="60" cy="90" r="7" fill="${GOLD}" stroke="none"/>`,
+doc:`<path d="M36 22 H74 L90 38 V96 a4 4 0 0 1 -4 4 H36 a4 4 0 0 1 -4 -4 V26 a4 4 0 0 1 4 -4 Z"/><path d="M74 22 V38 H90"/><path d="M42 52 H78 M42 64 H78 M42 76 H66"/><circle cx="78" cy="86" r="7" fill="${GOLD}" stroke="none"/>`,
+handshake:`<path d="M12 52 h26 l20 16"/><path d="M108 52 h-26 l-20 16"/><rect x="50" y="58" width="20" height="14" rx="4" transform="rotate(-12 60 65)" fill="${GOLD}" stroke="none"/><path d="M40 82 l10 8 M66 84 l10 6"/>`,
+plug:`<rect x="40" y="44" width="40" height="32" rx="9"/><path d="M50 44 V26 M70 44 V26"/><path d="M60 76 v8 c0 14 24 6 24 20"/><circle cx="60" cy="60" r="5" fill="${GOLD}" stroke="none"/>`,
+crane:`<rect x="22" y="56" width="26" height="42" rx="3"/><rect x="62" y="40" width="34" height="58" rx="3"/><path d="M22 40 H84 M84 40 V26"/><path d="M40 40 V30"/><circle cx="40" cy="48" r="6" fill="${GOLD}" stroke="none"/><path d="M28 66 h14 M28 78 h14 M70 52 h18 M70 64 h18 M70 76 h18"/>`,
+chat:`<rect x="18" y="26" width="58" height="36" rx="10"/><path d="M32 62 l-4 12 14 -12"/><rect x="52" y="58" width="52" height="32" rx="10" fill="${GOLD}" stroke="none"/><path d="M88 90 l6 10 2 -12" fill="${GOLD}" stroke="none"/><circle cx="36" cy="44" r="3.5" fill="currentColor" stroke="none"/><circle cx="48" cy="44" r="3.5" fill="currentColor" stroke="none"/><circle cx="60" cy="44" r="3.5" fill="currentColor" stroke="none"/>`,
+books:`<rect x="24" y="36" width="18" height="60" rx="3"/><rect x="46" y="28" width="18" height="68" rx="3"/><rect x="72" y="34" width="18" height="62" rx="3" transform="rotate(9 81 65)"/><path d="M46 44 h18" /><rect x="50" y="28" width="10" height="14" fill="${GOLD}" stroke="none"/>`,
+chart:`<path d="M24 24 V96 H100"/><rect x="34" y="62" width="12" height="34"/><rect x="54" y="46" width="12" height="50"/><rect x="74" y="70" width="12" height="26"/><path d="M34 52 L58 36 L82 54 L98 30"/><circle cx="98" cy="30" r="6" fill="${GOLD}" stroke="none"/>`,
+seal:`<circle cx="60" cy="58" r="34"/><path d="M46 58 l10 11 l20 -24" stroke="${GOLD}" stroke-width="8"/><path d="M42 88 l-6 14 10 -6 8 8 4 -14 M78 88 l6 14 -10 -6 -8 8 -4 -14"/>`,
+robot:`<rect x="30" y="42" width="60" height="46" rx="11"/><circle cx="48" cy="62" r="6" fill="${GOLD}" stroke="none"/><circle cx="72" cy="62" r="6" fill="${GOLD}" stroke="none"/><path d="M48 76 h24"/><path d="M60 42 V28"/><circle cx="60" cy="24" r="5"/><path d="M30 58 h-10 M90 58 h10"/>`,
+rocket:`<path d="M60 16 C76 34 76 60 68 82 H52 C44 60 44 34 60 16 Z"/><circle cx="60" cy="44" r="9" fill="${GOLD}" stroke="none"/><path d="M52 70 L34 84 l14 2 M68 70 L86 84 l-14 2"/><path d="M54 88 c2 8 10 8 12 0" stroke="${GOLD}"/>`,
+mic:`<rect x="49" y="24" width="22" height="38" rx="11"/><path d="M38 52 a22 22 0 0 0 44 0"/><path d="M60 76 V92 M46 92 H74"/><path d="M84 34 a14 14 0 0 1 0 20" stroke="${GOLD}"/>`,
+compass:`<circle cx="60" cy="60" r="37"/><path d="M74 42 L64 64 L46 78 L54 56 Z"/><path d="M74 42 L64 64 L54 56 Z" fill="${GOLD}" stroke="none"/><circle cx="60" cy="60" r="4" fill="currentColor" stroke="none"/>`,
+briefcase:`<rect x="24" y="46" width="72" height="46" rx="9"/><path d="M46 46 v-6 a14 10 0 0 1 28 0 v6"/><path d="M24 64 H96"/><rect x="53" y="58" width="14" height="12" rx="3" fill="${GOLD}" stroke="none"/>`,
+gauge:`<path d="M24 82 a36 36 0 0 1 72 0"/><path d="M30 68 l8 4 M60 46 v9 M90 68 l-8 4"/><path d="M60 82 L82 56" stroke="${GOLD}" stroke-width="7"/><circle cx="60" cy="82" r="7"/><path d="M18 94 H102"/>`,
+shield:`<path d="M60 20 L94 33 V58 c0 24 -15 36 -34 42 C41 94 26 82 26 58 V33 Z"/><path d="M46 58 l10 11 l20 -22" stroke="${GOLD}" stroke-width="8"/>`,
+team:`<circle cx="36" cy="52" r="11"/><path d="M18 88 a19 15 0 0 1 36 0"/><circle cx="84" cy="52" r="11"/><path d="M66 88 a19 15 0 0 1 36 0"/><circle cx="60" cy="42" r="13" fill="${GOLD}" stroke="none"/><path d="M40 92 a21 17 0 0 1 40 0"/>`,
+ladder:`<path d="M44 18 V102 M76 18 V102"/><path d="M44 32 H76 M44 48 H76 M44 64 H76 M44 80 H76"/><path d="M92 24 l3 8 8 1 -6 6 2 8 -7 -4 -7 4 2 -8 -6 -6 8 -1 Z" fill="${GOLD}" stroke="none"/>`,
+flag:`<path d="M38 18 V102"/><path d="M38 24 H86 L76 38 L86 52 H38"/><path d="M38 24 H86 L76 38 L86 52 H38" fill="${GOLD}" stroke="none" opacity=".35"/><path d="M22 102 H72"/><circle cx="96" cy="76" r="4" fill="${GOLD}" stroke="none"/><circle cx="104" cy="60" r="3" fill="${GOLD}" stroke="none"/><circle cx="90" cy="92" r="3" fill="${GOLD}" stroke="none"/>`
+};
+const ART={1:'bank',2:'globe',3:'swap',4:'scale',5:'megaphone',6:'envelope',7:'puzzle',8:'target',9:'route',10:'user',11:'lock',12:'bell',13:'doc',14:'handshake',15:'plug',16:'crane',17:'chat',18:'books',19:'chart',20:'seal',21:'robot',22:'rocket',23:'mic',24:'compass',25:'briefcase',26:'gauge',27:'shield',28:'team',29:'ladder',30:'flag'};
+function heroArt(key){
+  return '<svg class="hart" viewBox="0 0 200 150" role="img" aria-hidden="true">'+
+   '<circle cx="150" cy="42" r="48" fill="rgba(255,255,255,.09)"/><circle cx="28" cy="118" r="28" fill="rgba(255,255,255,.06)"/>'+
+   '<circle cx="176" cy="116" r="5" fill="'+GOLD+'" opacity=".7"/><circle cx="20" cy="24" r="4" fill="'+GOLD+'" opacity=".55"/>'+
+   '<svg x="44" y="16" width="116" height="116" viewBox="0 0 120 120"><g stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">'+(PICT[key]||PICT.compass)+'</g></svg></svg>';
+}
+
+/* ================= VOICE (read aloud) ================= */
+let speaking=false;
+function speak(text, btn){
+  if(!('speechSynthesis' in window)){ toast('Voice not supported in this browser'); return; }
+  window.speechSynthesis.cancel();
+  if(speaking){ speaking=false; if(btn) btn.textContent='🔊 Read this to me'; return; }
+  const u=new SpeechSynthesisUtterance(text); u.rate=0.95; u.lang='en-US';
+  u.onend=()=>{ speaking=false; if(btn) btn.textContent='🔊 Read this to me'; };
+  speaking=true; if(btn) btn.textContent='⏹ Stop reading';
+  window.speechSynthesis.speak(u);
+}
+function stripHtml(s){ const d=document.createElement('div'); d.innerHTML=s; return d.textContent||''; }
+function listenLesson(n, btn){
+  const d=DAYS.find(x=>x.n===n); if(!d) return;
+  let t='Day '+d.n+'. '+d.t+'. '+d.tag+'. '+stripHtml(d.imagine.h)+'. '+stripHtml(d.imagine.p)+'. ';
+  d.secs.forEach(s=>{ t+=s.h+'. '+stripHtml(s.b||'')+' '+stripHtml(s.b2||'')+' '; });
+  speak(t, btn);
+}
+
+/* ================= COACH (talk-back tutor) ================= */
+let voiceReplies=false;
+function coachInit(){
+  document.body.insertAdjacentHTML('beforeend',
+  '<button class="coach-fab" id="coachFab" onclick="coachToggle()" aria-label="Open Coach chat">🧑‍🏫<span>Ask Coach</span></button>'+
+  '<section class="coach" id="coachPanel" hidden aria-label="Coach chat">'+
+    '<header><span>🧑‍🏫 Coach <small>— ask me anything from the course</small></span>'+
+    '<span><button class="cbtn" id="voiceBtn" onclick="voiceToggle(this)" title="Speak replies aloud">🔇</button>'+
+    '<button class="cbtn" onclick="coachToggle()" title="Close">✖</button></span></header>'+
+    '<div class="coach-msgs" id="coachMsgs"></div>'+
+    '<div class="coach-chips" id="coachChips"></div>'+
+    '<div class="coach-in"><input id="coachInput" type="text" placeholder="Type a question… e.g. what is NAV?" onkeydown="if(event.key===\'Enter\')coachSend()">'+
+    '<button class="cbtn mic" id="micBtn" title="Speak your question">🎤</button>'+
+    '<button class="csend" onclick="coachSend()">Send</button></div>'+
+  '</section>');
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const mic=document.getElementById('micBtn');
+  if(SR){ mic.onclick=()=>{ const r=new SR(); r.lang='en-US'; mic.textContent='👂';
+      r.onresult=e=>{ document.getElementById('coachInput').value=e.results[0][0].transcript; mic.textContent='🎤'; coachSend(); };
+      r.onerror=()=>{ mic.textContent='🎤'; }; r.onend=()=>{ mic.textContent='🎤'; }; r.start(); }; }
+  else mic.style.display='none';
+}
+function voiceToggle(b){ voiceReplies=!voiceReplies; b.textContent=voiceReplies?'🔊':'🔇'; if(!voiceReplies) window.speechSynthesis&&window.speechSynthesis.cancel(); }
+let coachStarted=false;
+function coachToggle(){
+  const p=document.getElementById('coachPanel');
+  p.hidden=!p.hidden;
+  if(!p.hidden&&!coachStarted){ coachStarted=true;
+    coachSay('Hi Rishabh! 👋 I’m your coach. Ask me about any word or idea in this course — like <i>“what is NAV?”</i> or <i>“explain T+1”</i>. I can also <b>quiz you</b>, or tell you <b>what to read next</b>. Try the buttons below!');
+    coachChips(['What is a custodian?','Explain T+1 simply','What is NAV?','What should I read today?','Quiz me!']); }
+}
+function coachSay(html){
+  const m=document.getElementById('coachMsgs');
+  m.insertAdjacentHTML('beforeend','<div class="cmsg coach-b">'+html+'</div>');
+  m.scrollTop=m.scrollHeight;
+  if(voiceReplies) { const u=new SpeechSynthesisUtterance(stripHtml(html)); u.rate=1; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }
+}
+function coachUser(t){
+  const m=document.getElementById('coachMsgs');
+  const d=document.createElement('div'); d.className='cmsg user-b'; d.textContent=t; m.appendChild(d);
+  m.scrollTop=m.scrollHeight;
+}
+function coachChips(list){
+  document.getElementById('coachChips').innerHTML=list.map(c=>'<button class="chip" onclick="coachAsk(this.textContent)">'+c+'</button>').join('');
+}
+function coachAsk(t){ document.getElementById('coachInput').value=t; coachSend(); }
+function coachSend(){
+  const i=document.getElementById('coachInput'); const q=i.value.trim(); if(!q) return;
+  i.value=''; coachUser(q); setTimeout(()=>coachAnswer(q),250);
+}
+/* knowledge base built from course content */
+let KB=null;
+function buildKB(){
+  KB=[];
+  DAYS.forEach(d=>{
+    d.words.forEach(w=>KB.push({keys:norm(w.w), boost:3, reply:'<b>'+w.w+'</b>: '+w.d, day:d.n}));
+    KB.push({keys:norm(d.t+' '+d.tag), boost:1, reply:'That’s the heart of <b>Day '+d.n+' — '+d.t+'</b>: '+d.tag+'.', day:d.n});
+  });
+  const extra=[
+   ['custody custodian safekeeping guard bank state street','A <b>custodian</b> is a bank that keeps other people’s investments safe — it guards, counts and reports, but never owns. Think of a coat check for $40 trillion.',1],
+   ['t+1 t plus one settle settlement next day swap trade finish','<b>T+1</b> means a trade finishes the NEXT business day: shares and money swap simultaneously (DvP). Tight deadlines made live status screens essential.',3],
+   ['nav worth fund price per share net asset value lemonade','<b>NAV</b> = what one share of a fund is worth tonight: (assets − debts) ÷ number of shares. Calculated and checked every single night.',4],
+   ['corporate action dividend offer election deadline announcement tender rights','A <b>corporate action</b> is a company event affecting investors — dividends (automatic) or offers with deadlines (dangerous if missed!).',5],
+   ['swift message mt iso 20022 bank messaging network','<b>SWIFT</b> is the ultra-secure messaging network banks share. Strict message templates, legally meaningful — and it moves messages, never money.',6],
+   ['api webhook machine hatch integration endpoint','An <b>API</b> lets client computer systems fetch your data automatically (the delivery hatch); a <b>webhook</b> is you proactively notifying them. Your biggest clients live on these.',15],
+   ['event kafka group chat publish subscribe stream','An <b>event</b> is a tiny announcement ("trade 8812 settled!") posted once to the bank’s internal group chat; every interested system reacts. That’s event-driven architecture.',17],
+   ['snowflake warehouse data library sql','The <b>data warehouse</b> (e.g. Snowflake) is the organized library where copies of all numbers go for analysis — and it can share live views straight into clients’ own systems.',18],
+   ['ai artificial intelligence llm genai hallucination copilot robot','<b>AI in banking</b> = a brilliant intern that sometimes invents answers. Use it grounded (answer only from trusted documents, with citations) and supervised.',21],
+   ['who are you what are you help what can you do how do you work','I’m your built-in study coach! I can: ① explain any term from the course ② point you to the right day ③ quiz you ④ read replies aloud (tap 🔇). I work fully offline — I only know this course.',0],
+   ['hello hi hey good morning namaste','Hello! 👋 Ready to learn? Ask me any term, or say <b>quiz me</b>. If you’re just starting, say <b>what should I read today</b>.',0],
+   ['thanks thank you great awesome nice','You’re welcome! 🎉 Keep going — one day at a time. Say <b>quiz me</b> if you want to test yourself.',0],
+  ];
+  extra.forEach(x=>KB.push({keys:norm(x[0]), boost:2, reply:x[1], day:x[2]}));
+}
+function norm(s){ return s.toLowerCase().replace(/[^a-z0-9+ ]/g,' ').split(/\s+/).filter(w=>w.length>1); }
+const STOP=new Set(['what','is','the','a','an','of','to','in','me','it','and','or','do','does','how','why','explain','simply','please','tell','about','mean','means']);
+function coachAnswer(q){
+  if(!KB) buildKB();
+  const ql=q.toLowerCase();
+  if(/quiz|test me|question me/.test(ql)) return quizMe();
+  if(/(what|which).*(read|do|start|next|today)|where.*(start|begin)/.test(ql)){
+    const nd=nextDay(), d=DAYS.find(x=>x.n===nd);
+    coachSay('Your next step is <b>Day '+nd+' — '+d.t+'</b> '+d.e+' ('+d.tag+'). About 15 minutes. '+dayBtn(nd));
+    coachChips(['Quiz me!','What is a custodian?','Explain T+1 simply']); return;
+  }
+  const qt=norm(q).filter(w=>!STOP.has(w));
+  let best=null, bestScore=0;
+  KB.forEach(e=>{ let s=0; qt.forEach(t=>{ if(e.keys.includes(t)) s+=e.boost; }); if(s>bestScore){ bestScore=s; best=e; } });
+  if(best&&bestScore>0){
+    coachSay(best.reply+(best.day?'<br>'+dayBtn(best.day):''));
+    const rel=DAYS.find(x=>x.n===best.day);
+    coachChips(rel?['Quiz me!','What should I read today?','What is '+rel.words[0].w+'?']:['Quiz me!','What should I read today?']);
+  } else {
+    const sug=[]; const seen=new Set();
+    while(sug.length<4){ const d=DAYS[Math.floor(Math.random()*DAYS.length)]; const w=d.words[Math.floor(Math.random()*d.words.length)].w; if(!seen.has(w)){ seen.add(w); sug.push('What is '+w+'?'); } }
+    coachSay('Hmm, I don’t know that one — I only know this course’s world. 🙈 Try asking about a term from the lessons, for example:');
+    coachChips(sug.concat(['Quiz me!']));
+  }
+}
+function dayBtn(n){ const d=DAYS.find(x=>x.n===n); return '<button class="chip go-day" onclick="go('+n+');coachToggle()">📖 Open Day '+n+' — '+d.t+'</button>'; }
+let cq=null;
+function quizMe(){
+  const maxD=Math.min(30, Math.max(nextDay(), 1));
+  const d=DAYS[Math.floor(Math.random()*maxD)];
+  const qi=Math.floor(Math.random()*d.quiz.length); cq={n:d.n, qi:qi};
+  const q=d.quiz[qi];
+  coachSay('From <b>Day '+d.n+' — '+d.t+'</b> '+d.e+':<br><b>'+q.q+'</b><br>'+
+    q.o.map((o,oi)=>'<button class="chip qopt" onclick="coachQuizAns('+oi+')">'+String.fromCharCode(65+oi)+'. '+o+'</button>').join('<br>'));
+  coachChips(['Skip — another question','Stop quizzing']);
+}
+function coachQuizAns(oi){
+  if(!cq) return; const d=DAYS.find(x=>x.n===cq.n); const q=d.quiz[cq.qi]; cq=null;
+  if(oi===q.a) coachSay('✅ <b>Correct!</b> '+q.why+'<br>Want another? Say <b>quiz me</b>.');
+  else coachSay('❌ Not quite — the answer was <b>'+String.fromCharCode(65+q.a)+'. '+q.o[q.a]+'</b>.<br>💡 '+q.why+'<br>'+dayBtn(d.n));
+  coachChips(['Quiz me!','What should I read today?']);
+}
+
+/* ================= extra styles ================= */
+document.head.insertAdjacentHTML('beforeend','<style>'+
+'.hero-grid{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}'+
+'.hero-art,.lh-art{color:#fff;flex:0 1 auto;min-width:150px;display:flex;justify-content:center}'+
+'.hero-art svg,.lh-art svg{width:min(215px,46vw);height:auto;display:block}'+
+'.listen{margin-top:14px;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.45);color:#fff;border-radius:99px;padding:8px 18px;font-size:14px;font-weight:600}'+
+'.listen:hover{background:rgba(255,255,255,.28)}'+
+'.coach-fab{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:8px;background:var(--navy-deep);color:#fff;'+
+ 'border:2px solid var(--gold);border-radius:99px;padding:12px 20px;font-size:17px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.3)}'+
+'.coach-fab span{font-size:14.5px}'+
+'.coach{position:fixed;right:14px;bottom:14px;z-index:70;width:min(400px,calc(100vw - 28px));height:min(560px,calc(100vh - 60px));'+
+ 'background:var(--card);border:1.5px solid var(--line);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}'+
+'.coach[hidden]{display:none}'+
+'.coach header{background:var(--navy-deep);color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}'+
+'.coach header small{font-weight:400;opacity:.75;font-size:12px}'+
+'.cbtn{background:rgba(255,255,255,.14);border:none;color:#fff;border-radius:8px;padding:5px 9px;font-size:14px;margin-left:6px}'+
+'.coach-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}'+
+'.cmsg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:14.5px;line-height:1.55}'+
+'.coach-b{background:color-mix(in srgb, var(--teal) 10%, var(--card));border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);align-self:flex-start;border-bottom-left-radius:4px}'+
+'.user-b{background:var(--navy-deep);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}'+
+'[data-theme] .user-b{color:#fff}'+
+'.coach-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-top:1px solid var(--line)}'+
+'.chip{background:none;border:1.5px solid var(--teal);color:var(--teal);border-radius:99px;padding:5px 12px;font-size:13px;text-align:left}'+
+'.chip:hover{background:color-mix(in srgb, var(--teal) 10%, transparent)}'+
+'.qopt{display:inline-block;margin-top:6px;color:var(--ink);border-color:var(--line)}'+
+'.go-day{margin-top:6px;display:inline-block}'+
+'.coach-in{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--line)}'+
+'.coach-in input{flex:1;border:1.5px solid var(--line);border-radius:99px;padding:9px 15px;font:inherit;font-size:14px;background:var(--paper);color:var(--ink)}'+
+'.coach-in input:focus{outline:2px solid var(--teal)}'+
+'.coach-in .cbtn{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);font-size:16px}'+
+'.csend{background:var(--teal);color:#fff;border:none;border-radius:99px;padding:9px 18px;font-weight:700;font-size:14px}'+
+'@media (max-width:560px){.hero-art svg,.lh-art svg{width:150px}.coach-fab span{display:none}.coach-fab{padding:14px 16px}}'+
+'@media print{.coach-fab,.coach{display:none}}'+
+'</style>');
+
 /* ---------------- boot ---------------- */
+coachInit();
 route();
 </script>
 </body>
