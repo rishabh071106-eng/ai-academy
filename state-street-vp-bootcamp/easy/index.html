@@ -185,7 +185,7 @@
 /* ---------------- state ---------------- */
 const KEY='ssb-journey-v1';
 let state; try{ state=JSON.parse(localStorage.getItem(KEY))||{done:{}}; }catch(e){ state={done:{}}; }
-function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 function doneCount(){ return Object.keys(state.done).length; }
 function nextDay(){ for(let i=1;i<=30;i++){ if(!state.done[i]) return i; } return 30; }
 
