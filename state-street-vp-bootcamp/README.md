@@ -3,6 +3,8 @@
 > **A 30-day daily learning handbook, prepared exclusively for Rishabh Sharma.**
 > One chapter a day · 60–90 minutes each · heavy on diagrams, systems thinking and real banking numbers.
 
+> 🌱 **New to all of this? Start with the [Interactive Beginner's Journey](easy/index.html)** — the same 30 days rewritten from zero: plain language, everyday analogies, visual diagrams, tap-to-reveal word cards, quizzes and progress tracking. Open `easy/index.html` in any browser (or on the deployed site). Use the deep chapters below as your level-two reference.
+
 This is not generic product-management material. Every chapter is written for one specific job: **VP, Product Development (Digital Experience) at a global custodian bank** — the person who owns the client-facing digital layer (portals, APIs, alerts, documents, dashboards) sitting on top of custody, fund accounting and asset-servicing operations.
 
 All diagrams are Mermaid and render directly on GitHub — just click any chapter.

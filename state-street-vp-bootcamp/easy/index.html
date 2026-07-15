@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My 30-Day Journey — State Street from Zero</title>
+<style>
+  :root{
+    --paper:#f2f5f8; --card:#ffffff; --ink:#1b2a3d; --ink-soft:#516378; --line:#dbe3ea;
+    --navy:#0d3b66; --navy-deep:#092a4a; --teal:#0f8b8d; --gold:#e3a92c; --good:#1d8a4e; --bad:#c0392b;
+    --w1:#0d3b66; --w2:#0f8b8d; --w3:#5b4ea8; --w4:#a84e5b;
+    --radius:14px; --shadow:0 2px 10px rgba(13,59,102,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#0e1622; --card:#182435; --ink:#e8eef5; --ink-soft:#9fb0c3; --line:#2a3a4f;
+      --navy:#7db3e8; --navy-deep:#0a1826; --teal:#3ec6c8; --gold:#f0be52; --good:#4fc47f; --bad:#e8705f;
+      --w1:#4f8fd0; --w2:#3ec6c8; --w3:#9a8fe0; --w4:#d98795; --shadow:0 2px 10px rgba(0,0,0,.35); }
+  }
+  :root[data-theme="dark"]{ --paper:#0e1622; --card:#182435; --ink:#e8eef5; --ink-soft:#9fb0c3; --line:#2a3a4f;
+      --navy:#7db3e8; --navy-deep:#0a1826; --teal:#3ec6c8; --gold:#f0be52; --good:#4fc47f; --bad:#e8705f;
+      --w1:#4f8fd0; --w2:#3ec6c8; --w3:#9a8fe0; --w4:#d98795; --shadow:0 2px 10px rgba(0,0,0,.35); }
+  :root[data-theme="light"]{ --paper:#f2f5f8; --card:#ffffff; --ink:#1b2a3d; --ink-soft:#516378; --line:#dbe3ea;
+      --navy:#0d3b66; --navy-deep:#092a4a; --teal:#0f8b8d; --gold:#e3a92c; --good:#1d8a4e; --bad:#c0392b;
+      --w1:#0d3b66; --w2:#0f8b8d; --w3:#5b4ea8; --w4:#a84e5b; --shadow:0 2px 10px rgba(13,59,102,.08); }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+       font-size:17px;line-height:1.65}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;letter-spacing:.1px}
+  h1{text-wrap:balance} h2{text-wrap:balance}
+  button{font:inherit;cursor:pointer}
+  a{color:var(--teal)}
+
+  /* ---------- top bar ---------- */
+  .top{position:sticky;top:0;z-index:20;background:var(--navy-deep);color:#fff;box-shadow:var(--shadow)}
+  .top-in{max-width:880px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px}
+  .top .logo{font-family:Georgia,serif;font-size:18px;font-weight:700;white-space:nowrap}
+  .top .logo span{color:var(--gold)}
+  .pbar{flex:1;height:10px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+  .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width .5s ease}
+  .pcount{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap;color:#cfe0ef}
+
+  .wrap{max-width:880px;margin:0 auto;padding:22px 18px 90px}
+
+  /* ---------- hero ---------- */
+  .hero{background:linear-gradient(150deg,var(--navy) 0%,var(--navy-deep) 90%);color:#fff;border-radius:20px;
+        padding:34px 30px;margin-bottom:26px;position:relative;overflow:hidden}
+  .hero::after{content:"🏦";position:absolute;right:-10px;bottom:-26px;font-size:130px;opacity:.14;transform:rotate(-8deg)}
+  .hero .kick{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;font-family:system-ui,sans-serif}
+  .hero h1{margin:10px 0 8px;font-size:clamp(26px,5vw,38px);line-height:1.15}
+  .hero p{margin:0;max-width:56ch;color:#d9e6f2;font-size:16px}
+  .hero .cta{margin-top:18px;display:inline-block;background:var(--gold);color:#20293a;border:none;border-radius:99px;
+             padding:12px 26px;font-weight:700;font-size:16px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+  .hero .cta:active{transform:translateY(2px);box-shadow:none}
+
+  /* ---------- journey map ---------- */
+  .island{border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);margin:20px 0;overflow:hidden;border-top:6px solid var(--wc)}
+  .island-head{padding:16px 20px 6px}
+  .island-head .wk{font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--wc)}
+  .island-head h2{margin:4px 0 2px;font-size:21px}
+  .island-head p{margin:0 0 8px;color:var(--ink-soft);font-size:14.5px}
+  .nodes{display:flex;flex-direction:column;padding:6px 12px 16px}
+  .node{display:flex;align-items:center;gap:14px;padding:11px 10px;border-radius:12px;border:none;background:none;text-align:left;width:100%}
+  .node:hover{background:color-mix(in srgb, var(--wc) 8%, transparent)}
+  .node .dot{width:46px;height:46px;min-width:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+             font-size:21px;background:color-mix(in srgb, var(--wc) 14%, var(--card));border:2.5px solid var(--wc);position:relative}
+  .node.done .dot{background:var(--wc);border-color:var(--wc)}
+  .node.done .dot::after{content:"✓";position:absolute;right:-4px;bottom:-4px;background:var(--good);color:#fff;
+             width:18px;height:18px;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
+  .node.next .dot{animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--wc) 45%, transparent)}50%{box-shadow:0 0 0 9px transparent}}
+  @media (prefers-reduced-motion: reduce){ .node.next .dot{animation:none} .pbar i{transition:none} }
+  .node .nt{flex:1}
+  .node .nt b{display:block;font-size:16px;color:var(--ink)}
+  .node .nt span{display:block;font-size:13.5px;color:var(--ink-soft)}
+  .node .go{font-size:13px;font-weight:700;color:var(--wc);white-space:nowrap}
+  .node.next .go{background:var(--wc);color:#fff;border-radius:99px;padding:6px 14px}
+
+  /* ---------- lesson ---------- */
+  .crumb{display:inline-flex;align-items:center;gap:8px;background:none;border:1.5px solid var(--line);color:var(--ink-soft);
+         border-radius:99px;padding:7px 16px;font-size:14px;margin-bottom:16px}
+  .crumb:hover{border-color:var(--teal);color:var(--teal)}
+  .lesson-head{border-radius:20px;padding:28px 26px;color:#fff;background:linear-gradient(140deg,var(--wc),color-mix(in srgb,var(--wc) 55%, #000));margin-bottom:22px}
+  .lesson-head .day{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.85;font-family:system-ui,sans-serif}
+  .lesson-head h1{margin:8px 0 6px;font-size:clamp(24px,4.5vw,32px);line-height:1.18}
+  .lesson-head .em{font-size:44px;line-height:1;display:block;margin-bottom:8px}
+  .lesson-head p{margin:0;font-size:16.5px;opacity:.93;max-width:58ch}
+
+  .imagine{background:color-mix(in srgb, var(--gold) 13%, var(--card));border:1.5px solid color-mix(in srgb, var(--gold) 45%, transparent);
+           border-radius:var(--radius);padding:20px 22px;margin:18px 0;display:flex;gap:16px}
+  .imagine .big{font-size:40px;line-height:1.1}
+  .imagine h3{margin:0 0 6px;font-size:17px;color:color-mix(in srgb, var(--gold) 60%, var(--ink))}
+  .imagine p{margin:0;font-size:16px}
+
+  .sec{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;margin:18px 0}
+  .sec h2{margin:0 0 10px;font-size:20px;color:var(--wc)}
+  .sec p{margin:9px 0;max-width:66ch}
+  .sec ul{margin:8px 0;padding-left:22px;max-width:64ch}
+  .sec li{margin:6px 0}
+  .sec b{color:var(--ink)}
+  .callout{border-left:4px solid var(--teal);background:color-mix(in srgb, var(--teal) 8%, var(--card));
+           padding:12px 16px;border-radius:8px;margin:12px 0;font-size:15.5px}
+
+  /* diagram widgets */
+  .flow{display:flex;gap:0;overflow-x:auto;padding:14px 4px;align-items:stretch}
+  .fstep{min-width:128px;flex:1;background:color-mix(in srgb, var(--wc) 9%, var(--card));border:1.5px solid color-mix(in srgb, var(--wc) 35%, transparent);
+         border-radius:12px;padding:12px 10px;text-align:center;position:relative;margin-right:34px}
+  .fstep:last-child{margin-right:0}
+  .fstep::after{content:"➜";position:absolute;right:-27px;top:50%;transform:translateY(-50%);color:var(--wc);font-size:17px}
+  .fstep:last-child::after{content:none}
+  .fstep .fe{font-size:27px;display:block}
+  .fstep .ft{font-weight:700;font-size:14px;display:block;margin:5px 0 2px;color:var(--ink)}
+  .fstep .fs{font-size:12.5px;color:var(--ink-soft);display:block;line-height:1.45}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  @media(max-width:620px){.split{grid-template-columns:1fr}}
+  .half{border-radius:12px;padding:14px 16px;border:1.5px solid var(--line)}
+  .half.ha{background:color-mix(in srgb, var(--teal) 9%, var(--card));border-color:color-mix(in srgb, var(--teal) 40%, transparent)}
+  .half.hb{background:color-mix(in srgb, var(--bad) 7%, var(--card));border-color:color-mix(in srgb, var(--bad) 30%, transparent)}
+  .half h4{margin:0 0 8px;font-size:15px}
+  .half ul{margin:0;padding-left:18px;font-size:14.5px}
+  .half li{margin:5px 0}
+
+  .stack{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+  .layer{display:flex;align-items:center;gap:14px;border-radius:12px;padding:12px 16px;
+         background:color-mix(in srgb, var(--wc) 9%, var(--card));border:1.5px solid color-mix(in srgb, var(--wc) 30%, transparent)}
+  .layer .le{font-size:26px}
+  .layer .lt{font-weight:700;font-size:15px;display:block}
+  .layer .ls{font-size:13.5px;color:var(--ink-soft);display:block}
+  .stack .down{text-align:center;color:var(--wc);font-size:15px;margin:-3px 0}
+
+  .cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+  .gcard{background:color-mix(in srgb, var(--wc) 8%, var(--card));border:1.5px solid color-mix(in srgb, var(--wc) 28%, transparent);
+         border-radius:12px;padding:14px 12px;text-align:center}
+  .gcard .ge{font-size:30px;display:block}
+  .gcard .gt{font-weight:700;font-size:14px;display:block;margin:6px 0 3px}
+  .gcard .gs{font-size:12.5px;color:var(--ink-soft);line-height:1.45;display:block}
+
+  /* word chips */
+  .words{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+  .word{border:1.5px solid var(--wc);background:none;border-radius:12px;padding:9px 14px;font-size:14.5px;color:var(--ink);text-align:left;max-width:100%}
+  .word b{color:var(--wc)}
+  .word .wd{display:none;margin-top:5px;font-size:14px;color:var(--ink-soft)}
+  .word.open{background:color-mix(in srgb, var(--wc) 8%, var(--card))}
+  .word.open .wd{display:block}
+  .word .tap{font-size:11.5px;color:var(--ink-soft);margin-left:6px}
+  .word.open .tap{display:none}
+
+  /* quiz */
+  .quiz .qq{margin:16px 0 8px;font-weight:700;font-size:16.5px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:11px 15px;text-align:left;font-size:15.5px;color:var(--ink)}
+  .opt:hover{border-color:var(--teal)}
+  .opt.right{border-color:var(--good);background:color-mix(in srgb, var(--good) 12%, var(--card));font-weight:700}
+  .opt.wrong{border-color:var(--bad);background:color-mix(in srgb, var(--bad) 10%, var(--card))}
+  .why{display:none;margin:8px 0 0;font-size:14.5px;padding:10px 14px;border-radius:10px;background:color-mix(in srgb, var(--teal) 10%, var(--card));border-left:4px solid var(--teal)}
+  .why.show{display:block}
+
+  .finish{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:26px 0 10px}
+  .done-btn{background:var(--good);color:#fff;border:none;border-radius:99px;padding:13px 30px;font-size:16.5px;font-weight:700;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+  .done-btn:active{transform:translateY(2px);box-shadow:none}
+  .done-btn[disabled]{background:var(--ink-soft);opacity:.6}
+  .deep-link{font-size:14px;color:var(--ink-soft)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--navy-deep);color:#fff;
+         padding:13px 26px;border-radius:99px;font-weight:700;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .3s;z-index:50}
+  .toast.show{opacity:1}
+  .navrow{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
+  .navrow button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:9px 18px;font-size:14px;color:var(--ink)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo">🧭 Zero to <span>VP</span></div>
+    <div class="pbar"><i id="pbarfill" style="width:0%"></i></div>
+    <div class="pcount" id="pcount">0 / 30 days</div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ---------------- state ---------------- */
+const KEY='ssb-journey-v1';
+let state; try{ state=JSON.parse(localStorage.getItem(KEY))||{done:{}}; }catch(e){ state={done:{}}; }
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function doneCount(){ return Object.keys(state.done).length; }
+function nextDay(){ for(let i=1;i<=30;i++){ if(!state.done[i]) return i; } return 30; }
+
+const WEEKS=[
+ {c:'var(--w1)', wk:'Week 1 · Days 1–7', t:'The Business', p:'What this giant bank actually does all day — in plain words.'},
+ {c:'var(--w2)', wk:'Week 2 · Days 8–14', t:'Your Craft', p:'Being a product leader: what you build, for whom, and how.'},
+ {c:'var(--w3)', wk:'Week 3 · Days 15–21', t:'The Tech', p:'APIs, events, data and AI — explained like you have never coded.'},
+ {c:'var(--w4)', wk:'Week 4 · Days 22–30', t:'The Leader', p:'Your first 90 days, your bosses, your clients, your career.'},
+];
+const REPO='https://github.com/rishabh071106-eng/ai-academy/blob/claude/state-street-vp-bootcamp-wu710b/state-street-vp-bootcamp/';
+
+/* ---------------- rendering helpers ---------------- */
+function esc(s){ return s; }
+function diagram(d){
+  if(!d) return '';
+  if(d.type==='flow') return '<div class="flow">'+d.steps.map(s=>
+    '<div class="fstep"><span class="fe">'+s.e+'</span><span class="ft">'+s.t+'</span><span class="fs">'+(s.s||'')+'</span></div>').join('')+'</div>';
+  if(d.type==='split') return '<div class="split">'+
+    '<div class="half ha"><h4>'+d.a.h+'</h4><ul>'+d.a.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>'+
+    '<div class="half hb"><h4>'+d.b.h+'</h4><ul>'+d.b.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div></div>';
+  if(d.type==='stack') return '<div class="stack">'+d.layers.map((l,i)=>
+    (i?'<div class="down">▼</div>':'')+'<div class="layer"><span class="le">'+l.e+'</span><span><span class="lt">'+l.t+'</span><span class="ls">'+(l.s||'')+'</span></span></div>').join('')+'</div>';
+  if(d.type==='grid') return '<div class="cardgrid">'+d.cards.map(c=>
+    '<div class="gcard"><span class="ge">'+c.e+'</span><span class="gt">'+c.t+'</span><span class="gs">'+(c.s||'')+'</span></div>').join('')+'</div>';
+  return '';
+}
+function weekOf(n){ return n<=7?0 : n<=14?1 : n<=21?2 : 3; }
+
+function renderHome(){
+  const nd=nextDay(), dc=doneCount();
+  let h='<section class="hero"><div class="kick">A 30-day path · from zero</div>'+
+    '<h1>Learn your new world,<br>one small day at a time.</h1>'+
+    '<p>No finance background needed. Every day is a 15–20 minute story: one idea, one picture, a few new words, and a tiny quiz. By Day 30 you will understand the whole machine.</p>'+
+    '<button class="cta" onclick="go('+nd+')">'+(dc===0?'Start Day 1 →':(dc>=30?'Journey complete! Revisit any day 🎉':'Continue Day '+nd+' →'))+'</button></section>';
+  WEEKS.forEach((w,wi)=>{
+    h+='<section class="island" style="--wc:'+w.c+'"><div class="island-head"><div class="wk">'+w.wk+'</div><h2>'+w.t+'</h2><p>'+w.p+'</p></div><div class="nodes">';
+    DAYS.filter(d=>weekOf(d.n)===wi).forEach(d=>{
+      const cls = state.done[d.n]?'done':(d.n===nd?'next':'');
+      h+='<button class="node '+cls+'" onclick="go('+d.n+')"><span class="dot">'+d.e+'</span>'+
+         '<span class="nt"><b>Day '+d.n+' — '+d.t+'</b><span>'+d.tag+'</span></span>'+
+         '<span class="go">'+(state.done[d.n]?'Review':(d.n===nd?'Start':'Open'))+'</span></button>';
+    });
+    h+='</div></section>';
+  });
+  document.getElementById('app').innerHTML=h;
+  window.scrollTo(0,0); refreshBar();
+}
+
+function renderDay(n){
+  const d=DAYS.find(x=>x.n===n); if(!d){ renderHome(); return; }
+  const w=WEEKS[weekOf(n)];
+  let h='<button class="crumb" onclick="go(0)">← Back to my path</button>';
+  h+='<div class="lesson-head" style="--wc:'+w.c+'"><span class="day">'+w.wk.split('·')[0]+' · Day '+d.n+' of 30 · ~15 min</span>'+
+     '<span class="em">'+d.e+'</span><h1>'+d.t+'</h1><p>'+d.tag+'</p></div>';
+  h+='<div class="imagine"><div class="big">'+d.imagine.e+'</div><div><h3>'+d.imagine.h+'</h3><p>'+d.imagine.p+'</p></div></div>';
+  d.secs.forEach(s=>{ h+='<section class="sec" style="--wc:'+w.c+'"><h2>'+s.h+'</h2>'+(s.b||'')+diagram(s.d)+(s.b2||'')+'</section>'; });
+  h+='<section class="sec" style="--wc:'+w.c+'"><h2>🗝️ New words today</h2><p>Tap a word to see what it means.</p><div class="words">'+
+     d.words.map(x=>'<button class="word" onclick="this.classList.toggle(\'open\')"><b>'+x.w+'</b><span class="tap">tap</span><span class="wd">'+x.d+'</span></button>').join('')+'</div></section>';
+  h+='<section class="sec quiz" style="--wc:'+w.c+'"><h2>✅ Quick check</h2><p>Pick an answer — you get instant feedback, and wrong guesses are free.</p>';
+  d.quiz.forEach((q,qi)=>{
+    h+='<div class="qq">'+(qi+1)+'. '+q.q+'</div><div class="opts">'+
+       q.o.map((o,oi)=>'<button class="opt" onclick="answer(this,'+n+','+qi+','+oi+')">'+o+'</button>').join('')+'</div>'+
+       '<div class="why" id="why-'+n+'-'+qi+'">💡 '+q.why+'</div>';
+  });
+  h+='</section>';
+  h+='<div class="finish"><button class="done-btn" onclick="complete('+n+')">'+(state.done[n]?'Completed ✓ (tap to go on)':'I finished Day '+n+' ✓')+'</button>'+
+     '<span class="deep-link">Want the full-depth version? <a href="'+REPO+d.deep+'" target="_blank" rel="noopener">Read the deep-dive chapter ↗</a></span></div>';
+  h+='<div class="navrow">'+(n>1?'<button onclick="go('+(n-1)+')">← Day '+(n-1)+'</button>':'<span></span>')+
+     (n<30?'<button onclick="go('+(n+1)+')">Day '+(n+1)+' →</button>':'')+'</div>';
+  document.getElementById('app').innerHTML=h;
+  window.scrollTo(0,0);
+}
+
+function answer(btn,n,qi,oi){
+  const d=DAYS.find(x=>x.n===n), q=d.quiz[qi];
+  const opts=btn.parentElement.querySelectorAll('.opt');
+  opts.forEach((o,i)=>{ o.classList.remove('right','wrong'); if(i===q.a) o.classList.add('right'); });
+  if(oi!==q.a) btn.classList.add('wrong');
+  document.getElementById('why-'+n+'-'+qi).classList.add('show');
+}
+function complete(n){
+  if(!state.done[n]){ state.done[n]=true; save(); toast(doneCount()>=30?'🎉 ALL 30 DAYS DONE — incredible!':'🎉 Day '+n+' done! '+(30-doneCount())+' to go'); }
+  go(n<30?0:0);
+}
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function refreshBar(){ const c=doneCount(); document.getElementById('pbarfill').style.width=(c/30*100)+'%'; document.getElementById('pcount').textContent=c+' / 30 days'; }
+function go(n){ location.hash = n?('day-'+n):''; route(); }
+function route(){ const m=location.hash.match(/day-(\d+)/); refreshBar(); if(m) renderDay(+m[1]); else renderHome(); }
+window.addEventListener('hashchange', route);
+
+/* ---------------- CONTENT: 30 days ---------------- */
+const DAYS=[
+/* ============ WEEK 1 — THE BUSINESS ============ */
+{n:1, e:`🏦`, t:`What is State Street, really?`, tag:`A bank that guards money instead of lending it`,
+ deep:`week-1-securities-services/day-01-state-street-and-custody-banking.md`,
+ imagine:{e:`🧥`, h:`Imagine a giant coat check`,
+  p:`You go to a theatre and hand over your coat. You get ticket #4021. The coat room never wears your coat and never sells it — it just keeps it perfectly safe, and hands it back when you show the ticket. Now imagine a coat check that guards <b>40 trillion dollars</b> of the world's investments. That is State Street. It doesn't own that money — it protects it, counts it, and reports on it. This job is called being a <b>custodian</b>.`},
+ secs:[
+  {h:`Not the bank you're picturing`,
+   b:`<p>When you hear "bank," you probably think of the place with your savings account and home loans. State Street is a different animal. It almost never deals with regular people. Its customers are giant organizations, and its main job is <b>safekeeping</b>.</p>`,
+   d:{type:`split`,
+      a:{h:`🏦 State Street (a custodian bank)`, items:[`Customers: pension funds, investment companies`,`Job: keep their investments safe and organized`,`Earns: small fees on HUGE amounts`,`Like: a vault + accountant + messenger`]},
+      b:{h:`🏪 A normal bank`, items:[`Customers: people and businesses`,`Job: hold deposits, give out loans`,`Earns: interest on loans`,`Like: a shop for money`]}}},
+  {h:`Who are the customers?`,
+   b:`<p>State Street's clients are the organizations that manage the world's savings — including, indirectly, yours and your family's:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`👵`, t:`Pension funds`, s:`Save money so millions of people can retire`},
+    {e:`📊`, t:`Asset managers`, s:`Companies that invest other people's money (mutual funds, ETFs)`},
+    {e:`🛡️`, t:`Insurance companies`, s:`Invest premiums so they can pay claims later`},
+    {e:`🌐`, t:`Sovereign funds`, s:`Whole countries' savings accounts`}]},
+   b2:`<div class="callout">💡 <b>Key idea:</b> when a pension fund "keeps its money at State Street," the money is still the pension fund's. State Street just guards it, moves it when told to, and keeps perfect records. Perfect records are the entire product.</div>`},
+  {h:`How does it make money?`,
+   b:`<p>Mostly through <b>tiny fees on gigantic amounts</b>. If you charge just 0.01% per year for safekeeping $40 trillion, that's $4 billion. Small slice, enormous pizza. There are a few other streams too:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`🔐`, t:`Safekeeping fees`, s:`A tiny % for guarding assets`},
+    {e:`🧾`, t:`Transaction fees`, s:`A few dollars each time something moves`},
+    {e:`💱`, t:`Currency exchange`, s:`Helping clients swap dollars, euros, yen`},
+    {e:`🤝`, t:`Lending shares`, s:`Safely lending out assets for extra income`},
+    {e:`💻`, t:`Software and data`, s:`Selling the tools and the numbers themselves`}]}},
+  {h:`And where do YOU fit in?`,
+   b:`<p>All that guarding and counting happens in big internal systems. But clients need to <b>see</b> it — on websites, dashboards and apps. That layer of screens and connections is called the <b>digital experience</b>, and it's exactly what you'll lead. You own the windows into the machine.</p>`,
+   d:{type:`stack`, layers:[
+    {e:`🧑‍💼`, t:`Clients`, s:`Pension funds, asset managers — they want to see their stuff`},
+    {e:`📱`, t:`YOUR WORLD: portal, apps, alerts, reports`, s:`The windows clients look through`},
+    {e:`⚙️`, t:`Operations teams`, s:`Thousands of people processing and checking`},
+    {e:`🏛️`, t:`Core systems (the ledgers)`, s:`The giant record books that hold the truth`}]}},
+ ],
+ words:[
+  {w:`Custodian`, d:`A bank whose job is keeping other people's investments safe — not lending or spending them.`},
+  {w:`Asset`, d:`Anything valuable that's owned: shares of a company, bonds, cash.`},
+  {w:`AUC`, d:`"Assets Under Custody" — the total value of everything a custodian is guarding. State Street's is over $40 trillion.`},
+  {w:`Institutional investor`, d:`A big organization that invests (pension fund, insurance company) — as opposed to an individual person.`},
+  {w:`Portal`, d:`The secure website where clients log in to see their accounts, reports and alerts. Your product!`}],
+ quiz:[
+  {q:`A pension fund keeps $1 billion "at State Street." Whose money is it?`,
+   o:[`State Street's — it was deposited`, `The pension fund's — State Street just guards it`, `It's split 50/50`], a:1,
+   why:`Custody means safekeeping, not owning. Like the coat check: holding the coat doesn't make it theirs.`},
+  {q:`How does a custodian mainly earn money?`,
+   o:[`Interest on loans, like a normal bank`, `Tiny fees on very large amounts it safeguards`, `Buying and selling shares for profit`], a:1,
+   why:`Small percentage × trillions of dollars = billions in fees. That's the custody business model.`},
+  {q:`What part of the machine will YOU own?`,
+   o:[`The vaults and ledgers`, `The operations teams`, `The screens, apps and connections clients use to see everything`], a:2,
+   why:`You lead Digital Experience — the windows into the machine. Clients judge the whole bank by them.`}]},
+
+{n:2, e:`🌍`, t:`Where do the assets actually live?`, tag:`The chain of keepers that stretches around the world`,
+ deep:`week-1-securities-services/day-02-asset-servicing-lifecycle.md`,
+ imagine:{e:`🎫`, h:`Imagine luggage on a round-the-world trip`,
+  p:`You check a suitcase in Boston for a flight to Tokyo. You keep a claim ticket. Your airline hands the bag to a partner airline, which hands it to Tokyo airport's storage. The bag sits in ONE place, but a chain of trusted keepers each has a record of who it belongs to. Investments work the same way: your client's German shares physically "sit" in Germany's national vault, and a chain of custodians holds the tickets.`},
+ secs:[
+  {h:`The chain of keepers`,
+   b:`<p>Here's the secret: when you "own a share," these days nothing paper moves at all. There's a national electronic vault in each country (called a <b>CSD</b> — central securities depository) that records who owns what. Everyone else in the chain just keeps tickets pointing down the line:</p>`,
+   d:{type:`stack`, layers:[
+    {e:`👵`, t:`The investor (a pension fund)`, s:`"I own 1,000 shares of a German carmaker"`},
+    {e:`🏦`, t:`Global custodian (State Street)`, s:`Keeps the pension fund's official record`},
+    {e:`🤝`, t:`Local helper (sub-custodian in Germany)`, s:`State Street's trusted partner on the ground`},
+    {e:`🏛️`, t:`Germany's national vault (the CSD)`, s:`The final electronic record for ALL German shares`}]},
+   b2:`<div class="callout">💡 One global custodian connects clients to <b>100+ countries</b> through local helpers. That network is a huge part of what clients pay for — they'd never build it themselves.</div>`},
+  {h:`Getting a new client on board`,
+   b:`<p>Before any of this works, a new client has to be "onboarded" — like a very serious airport check-in:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🪪`, t:`Prove identity`, s:`KYC — "know your customer" checks against fraud and crime`},
+    {e:`📝`, t:`Sign agreements`, s:`Contracts, fee schedules, instructions`},
+    {e:`🗂️`, t:`Open accounts`, s:`One per market, per fund — often hundreds`},
+    {e:`🔗`, t:`Connect systems`, s:`Portal logins, data feeds, message links`},
+    {e:`✅`, t:`Go live`, s:`Assets transfer in and daily life begins`}]}},
+  {h:`The daily chores (this is "asset servicing")`,
+   b:`<p>Once assets are sitting safely, they constantly produce little tasks. Companies pay dividends. Foreign governments take tax that must be claimed back. Shareholders get to vote. The custodian handles all of it:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`💰`, t:`Collect income`, s:`Catch every dividend and interest payment`},
+    {e:`🧾`, t:`Reclaim tax`, s:`Get clients' over-paid foreign tax refunded`},
+    {e:`🗳️`, t:`Voting`, s:`Pass shareholder votes to the real owner`},
+    {e:`📈`, t:`Report`, s:`Show clients exactly what they hold, daily`}]},
+   b2:`<p>Each chore looks small. Multiply by millions of holdings across 100 countries, every day — that's why custodians employ tens of thousands of people and why <b>your screens</b> matter: they're how clients watch all of this happening.</p>`},
+ ],
+ words:[
+  {w:`CSD`, d:`Central Securities Depository — a country's official electronic vault recording who owns every share and bond there.`},
+  {w:`Sub-custodian`, d:`A local bank in a foreign country that acts as the global custodian's hands and feet in that market.`},
+  {w:`Onboarding`, d:`The careful process of setting up a new client: identity checks, contracts, accounts, connections.`},
+  {w:`KYC`, d:`"Know Your Customer" — the legal duty to verify who a client really is, to keep criminals out of the system.`},
+  {w:`Position`, d:`How much of one thing an account holds. "1,000 shares of ACME" is a position.`}],
+ quiz:[
+  {q:`Where does the FINAL official record of German shares live?`,
+   o:[`At State Street in Boston`, `In Germany's national vault (its CSD)`, `On paper certificates in a safe`], a:1,
+   why:`Each country's CSD is the bottom of the chain — everyone above holds records pointing down to it.`},
+  {q:`Why does a pension fund pay for a global custodian instead of going directly to 100 countries?`,
+   o:[`It's legally forbidden to go direct`, `The custodian's network and expertise in every market would cost a fortune to rebuild`, `Custodians invest the money better`], a:1,
+   why:`The 100-market network of local helpers, rules and connections IS the product clients buy.`},
+  {q:`Which of these is "asset servicing"?`,
+   o:[`Catching dividends and reclaiming foreign tax for clients`, `Choosing which shares clients should buy`, `Lending money to companies`], a:0,
+   why:`Servicing = all the chores that owned assets generate. Custodians never choose investments — that's the client's job.`}]},
+
+{n:3, e:`⚡`, t:`How a trade actually happens`, tag:`From "buy!" to done — in just one day (T+1)`,
+ deep:`week-1-securities-services/day-03-trade-lifecycle-and-t1-settlement.md`,
+ imagine:{e:`🏠`, h:`Imagine buying a house — at superspeed`,
+  p:`Buying a house has steps: you agree a price, lawyers check paperwork, then on completion day keys and money swap at the same moment. Buying shares is the same — agree, check, swap — except the whole thing now finishes <b>the next business day</b>. That deadline is called <b>T+1</b>: Trade day, plus one.`},
+ secs:[
+  {h:`The five steps of every trade`,
+   b:`<p>Millions of trades happen daily, and every single one walks these steps:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🎯`, t:`1. Decide and buy`, s:`The client's fund manager buys 100,000 shares`},
+    {e:`🤝`, t:`2. Agree details`, s:`Both sides confirm: what, how many, what price`},
+    {e:`✅`, t:`3. Affirm`, s:`Formal "yes, correct!" — due by 9pm SAME day in the US`},
+    {e:`🔁`, t:`4. Settle`, s:`Next day: shares and money swap at the same instant`},
+    {e:`📗`, t:`5. Record`, s:`Custodian updates the client's accounts`}]},
+   b2:`<div class="callout">💡 Step 4 is the magic moment. The swap is <b>simultaneous</b> — shares only move if money moves, so nobody can run off with one side. This is called <b>DvP</b>: Delivery versus Payment.</div>`},
+  {h:`Why "next day" changed everything`,
+   b:`<p>Until 2024, US trades had two days to finish (T+2). Now it's one (T+1). Losing a day sounds small — it isn't:</p>
+      <ul>
+      <li>⏰ <b>Same-evening deadlines.</b> Paperwork that had a leisurely day now must be confirmed by 9pm on trade day.</li>
+      <li>🌏 <b>Timezone squeeze.</b> A buyer in Tokyo has almost no overlap with New York hours to fix problems.</li>
+      <li>💱 <b>Cash must be ready faster.</b> Foreign buyers need dollars a day earlier.</li>
+      </ul>
+      <p>Less time to check means machines and instant status screens had to replace phone calls and next-morning emails. <b>T+1 made your digital products mission-critical.</b></p>`},
+  {h:`When trades go wrong: fails`,
+   b:`<p>Sometimes on swap day one side isn't ready — seller doesn't have the shares in place, buyer doesn't have the cash. The trade <b>fails</b> (it's late, not cancelled). Fails cost money: penalties (in Europe, automatic fines), funding costs, and angry clients.</p>`,
+   d:{type:`split`,
+    a:{h:`😌 Settled (the goal)`, items:[`Both sides ready`,`Swap happens on time`,`Everyone forgets about it instantly`]},
+    b:{h:`😰 Failed (the exception)`, items:[`One side not ready`,`Penalty fines can start ticking`,`Ops teams investigate and chase`,`Clients want to see WHY, live, on your portal`]}},
+   b2:`<p>Notice the pattern you'll meet all month: <b>the boring 99% takes care of itself — products earn their keep on the painful 1%</b>. Great custody screens show the exceptions first.</p>`},
+ ],
+ words:[
+  {w:`T+1`, d:`Trades finish one business day after they're made. "T" is trade day.`},
+  {w:`Settlement`, d:`The final swap: shares delivered, money paid, simultaneously.`},
+  {w:`DvP`, d:`Delivery versus Payment — the rule that shares and cash move together or not at all.`},
+  {w:`Affirmation`, d:`The formal same-day "yes, these trade details are correct" — due by 9pm ET in the US.`},
+  {w:`Fail`, d:`A trade that didn't complete on time because one side wasn't ready. It gets fixed late, often with penalties.`},
+  {w:`SSI`, d:`Standing Settlement Instructions — the saved "delivery address" for where a client's shares and cash should go.`}],
+ quiz:[
+  {q:`You buy shares on Tuesday in the US. When must the swap finish?`,
+   o:[`Tuesday night`, `Wednesday (the next business day)`, `Friday (end of week)`], a:1,
+   why:`T+1 = trade day plus one business day. Tuesday trade → Wednesday settlement.`},
+  {q:`What clever rule stops a fraudster taking shares without paying?`,
+   o:[`A human watches every trade`, `DvP — delivery and payment happen simultaneously or not at all`, `Buyers always pay a week early`], a:1,
+   why:`Delivery-versus-Payment makes the swap atomic. No payment, no shares.`},
+  {q:`Why did T+1 make digital products MORE important?`,
+   o:[`It didn't — less time means fewer screens`, `Deadlines got so tight that live status and instant alerts replaced phone calls`, `Regulators required prettier websites`], a:1,
+   why:`With hours instead of days to fix problems, clients need real-time visibility — that's your product.`}]},
+
+{n:4, e:`🧮`, t:`What's a fund worth today? (NAV)`, tag:`The one number, computed fresh every single night`,
+ deep:`week-1-securities-services/day-04-fund-accounting-and-nav.md`,
+ imagine:{e:`🍋`, h:`Imagine a lemonade stand with 4 partners`,
+  p:`You and three friends run a lemonade stand. Tonight you count: $60 cash in the box, lemons worth $20, and you owe $8 for sugar. Total value: 60 + 20 − 8 = $72. Four equal partners, so each share is worth <b>$18</b>. Congratulations — you just calculated a <b>NAV</b>: Net Asset Value. Investment funds do exactly this, every night, with billions of dollars.`},
+ secs:[
+  {h:`The recipe (it's genuinely this simple)`,
+   b:`<p>A fund is a big pot of investments owned by many people in shares. Every evening, someone must answer: <i>what is one share worth today?</i></p>`,
+   d:{type:`flow`, steps:[
+    {e:`📈`, t:`Add up assets`, s:`Every share, bond and dollar, at today's prices`},
+    {e:`➖`, t:`Subtract debts`, s:`Bills, fees owed, unpaid purchases`},
+    {e:`➗`, t:`Divide by shares`, s:`Split by how many fund shares exist`},
+    {e:`🏷️`, t:`Publish NAV`, s:`Tonight's official price per share`}]},
+   b2:`<div class="callout">💡 Why it matters: <b>people buy and sell fund shares at this exact number</b>. If it's wrong, someone paid too much or got too little — with real money.</div>`},
+  {h:`Why it takes an army every night`,
+   b:`<p>The formula is easy. The inputs are the hard part. Every evening, for each of thousands of funds:</p>
+   <ul>
+   <li>🌍 <b>Thousands of prices</b> stream in — and some are stale or missing (a Tokyo price is 14 hours old by New York's evening).</li>
+   <li>🔍 <b>Sanity checks</b> flag anything weird — a price that jumped 40% is probably a typo, not reality.</li>
+   <li>🧾 <b>Every fee and dividend</b> must be counted, down to the day.</li>
+   <li>👀 <b>A human signs off</b> — if the fund moved very differently from its market, someone finds out why BEFORE publishing.</li>
+   </ul>
+   <p>All between the 4pm market close and roughly 10pm. Every. Single. Night.</p>`},
+  {h:`When the number is wrong`,
+   b:`<p>Mistakes happen — a price feed drops a decimal, a dividend gets missed. If the published NAV was wrong by more than a small threshold (often about half a percent), there's a painful cleanup:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`😱`, t:`Error found`, s:`Days later, a check catches it`},
+    {e:`🧮`, t:`Recalculate`, s:`Every affected night, redone correctly`},
+    {e:`🔎`, t:`Find victims`, s:`Everyone who bought or sold at wrong prices`},
+    {e:`💸`, t:`Compensate`, s:`Pay back every loss — often the custodian pays`}]},
+   b2:`<p><b>Your angle:</b> clients want a dashboard showing tonight's NAV, whether it's on time, and why it moved. "Is the NAV out yet?" is one of the most common phone calls your products can eliminate.</p>`},
+ ],
+ words:[
+  {w:`Fund`, d:`A shared pot of investments owned by many investors together, divided into shares.`},
+  {w:`NAV`, d:`Net Asset Value — what one share of a fund is worth: (assets − debts) ÷ number of shares.`},
+  {w:`Fund accounting`, d:`The team and systems that calculate the NAV every night.`},
+  {w:`Accrual`, d:`Counting costs bit-by-bit daily (like a fee of 1% a year charged as a tiny slice each day) instead of in one lump.`},
+  {w:`ETF`, d:`A fund whose shares trade on a stock exchange all day, like a share — but it still gets a nightly NAV.`}],
+ quiz:[
+  {q:`A fund has $500m of assets, owes $20m, and has 40m shares. NAV per share?`,
+   o:[`$12.50`, `$12.00`, `$11.50`], a:1,
+   why:`(500 − 20) ÷ 40 = $12.00. You can genuinely do this on a napkin — the lemonade math scales.`},
+  {q:`Why is a wrong NAV a big deal?`,
+   o:[`It looks bad in the newspaper`, `People actually bought and sold at that wrong price, so real money must be paid back`, `The computers must be rebooted`], a:1,
+   why:`The NAV is a transaction price, not a report. Errors above the threshold mean recalculating and compensating.`},
+  {q:`What's the smart "sanity check" before publishing a NAV?`,
+   o:[`Compare the fund's move to its market — a big unexplained gap means investigate first`, `Check the number is positive`, `Ask the client if it looks right`], a:0,
+   why:`If the market rose 0.2% and the fund shows +1.4%, something's off — a bad price, a missed dividend. Catch it before it publishes.`}]},
+
+{n:5, e:`📣`, t:`When companies make announcements`, tag:`Corporate actions — and the deadlines that bite`,
+ deep:`week-1-securities-services/day-05-corporate-actions.md`,
+ imagine:{e:`📋`, h:`Imagine school permission slips`,
+  p:`Some school notes are just FYI: "picture day is Friday" — nothing to do. But some MUST be signed and returned by a deadline: "sign by Friday or your child misses the trip." Companies send investors both kinds. A dividend just arrives (FYI). But an offer like "sell us your shares at a 25% bonus price — answer by the 15th" needs a decision. Miss THAT deadline and your client loses real money. These announcements are called <b>corporate actions</b>.`},
+ secs:[
+  {h:`Three flavors of announcement`,
+   b:``,
+   d:{type:`grid`, cards:[
+    {e:`😌`, t:`Automatic`, s:`Dividends, share splits. Just happens — custodian books it correctly. No decision.`},
+    {e:`⚠️`, t:`Your choice`, s:`"Want to sell us your shares at a premium?" Optional — but deadline-bound. HIGHEST RISK.`},
+    {e:`🤔`, t:`Happens, but pick a form`, s:`"Dividend: cash or extra shares?" It happens either way; silence gets the default.`}]},
+   b2:`<div class="callout">💡 The middle one is where careers and lawsuits happen. An optional offer worth millions, a hard deadline, and a client who never saw the notice = disaster.</div>`},
+  {h:`The journey of one announcement`,
+   b:`<p>Follow one "your choice" offer through the machine:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`📰`, t:`Company announces`, s:`News arrives from several sources — often disagreeing on details!`},
+    {e:`🧹`, t:`Clean it up`, s:`Custodian compares sources, builds ONE trusted version`},
+    {e:`🧮`, t:`Who's affected?`, s:`Find every client holding that share`},
+    {e:`📨`, t:`Notify + remind`, s:`Tell them the terms and the deadline. Then remind. Then escalate.`},
+    {e:`☑️`, t:`Collect answers`, s:`Client decides on the portal or by message`},
+    {e:`💸`, t:`Execute and pay`, s:`Pass elections to market; money and shares move`}]}},
+  {h:`The horror story (why this matters)`,
+   b:`<p>A real pattern the industry knows well: a client holds €80m of a bank's shares. The bank offers new shares at a big discount — deadline in 12 days. The notice goes to a message queue nobody watches. Reminder emails land in the inbox of someone on holiday. Deadline passes. The client's holding loses <b>~€12 million</b> in value, and the custodian pays a big share of it.</p>
+   <p>Look at what actually failed: not the vaults, not the math — <b>the last mile of human attention</b>. Notices sent but not <i>seen</i>.</p>
+   <div class="callout">🎯 That last mile is literally your job description: readable event pages, deadline alerts that escalate louder as time runs out, an "answer online" button, and a tracker showing who hasn't responded. Day 12 builds this.</div>`},
+ ],
+ words:[
+  {w:`Corporate action`, d:`Any company event that affects its investors: dividends, splits, buyout offers, votes.`},
+  {w:`Dividend`, d:`A cash payout a company gives its shareholders, usually a few times a year.`},
+  {w:`Election`, d:`The client's answer to a choice-type corporate action ("I accept the offer for 60% of my shares").`},
+  {w:`Deadline (cutoff)`, d:`The date by which an election must arrive. The custodian sets its own deadline a bit earlier than the market's, to have time to process.`},
+  {w:`Golden record`, d:`The one cleaned-up, trusted version of an announcement, built by comparing several messy sources.`},
+  {w:`Record date`, d:`The snapshot day — whoever holds the shares on this date gets the dividend or the offer rights.`}],
+ quiz:[
+  {q:`Which corporate action type is the most dangerous operationally?`,
+   o:[`A dividend that pays automatically`, `An optional offer with a deadline that a client might miss`, `A share split`], a:1,
+   why:`Optional + deadline + big money = the classic multi-million loss when a notice goes unseen.`},
+  {q:`Why does the custodian "clean up" announcements before telling clients?`,
+   o:[`To translate them into English`, `Because different sources often disagree on details, and clients must get ONE trusted version`, `To shorten them`], a:1,
+   why:`Building the golden record is a core custodian skill — a wrong deadline in it poisons everything downstream.`},
+  {q:`In the €12m horror story, what actually failed?`,
+   o:[`The math was wrong`, `The vault lost the shares`, `The notifications were sent but never actually SEEN by a human in time`], a:2,
+   why:`The last mile of attention failed — which is exactly what better alerts, escalation and portal design fix.`}]},
+
+{n:6, e:`💸`, t:`How banks talk and money moves`, tag:`SWIFT: the world's most serious messaging app`,
+ deep:`week-1-securities-services/day-06-swift-payments-and-cash-management.md`,
+ imagine:{e:`✉️`, h:`Imagine a WhatsApp where every message is legally binding`,
+  p:`Banks in different countries constantly need to tell each other things: "pay this," "deliver those shares," "here's your statement." They can't use email — too easy to fake. So 11,000+ banks share one ultra-secure messaging network called <b>SWIFT</b>, where every message follows a strict template and really means something. Fun fact: SWIFT moves <b>no money itself</b>. It's only the messages — like texting "I sent the rent" is not the same as the bank transfer.`},
+ secs:[
+  {h:`Messages in strict uniforms`,
+   b:`<p>A SWIFT message isn't free text — it's a form where every box has a meaning, so a computer in Tokyo can read what a computer in Boston sent, instantly and without confusion. Each message type has a code. The custody world's greatest hits:</p>
+   <ul>
+   <li>📩 <b>MT541</b> — "receive these shares and pay for them" (a settlement instruction, from Day 3)</li>
+   <li>📣 <b>MT564</b> — "here's a corporate action announcement" (from Day 5)</li>
+   <li>☑️ <b>MT565</b> — "here's my election/answer"</li>
+   <li>📊 <b>MT535</b> — "here's your statement of holdings"</li>
+   <li>💰 <b>MT900-series</b> — cash confirmations and statements</li>
+   </ul>
+   <p>The industry is slowly moving from these older "MT" telegram-style messages to a richer modern format (<b>ISO 20022</b>) — like upgrading from SMS to full email. Both will coexist for years, and your products must read both.</p>`},
+  {h:`So how does money ACTUALLY move?`,
+   b:`<p>Banks keep accounts <i>at each other</i>. A US bank keeps a euro account at a European partner bank; that's called a <b>nostro</b> ("our account at yours"). "Sending money to Europe" really means: adjust balances in these linked accounts and confirm by message.</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🏦`, t:`Boston bank`, s:`"Pay €10m from my euro account"`},
+    {e:`✉️`, t:`SWIFT message`, s:`Secure, standard instruction`},
+    {e:`🏦`, t:`Frankfurt partner`, s:`Moves €10m out of the nostro account`},
+    {e:`🏛️`, t:`Euro payment rail`, s:`Central-bank system completes it`},
+    {e:`✅`, t:`Confirmation back`, s:`"Done" message returns`}]},
+   b2:`<div class="callout">💡 Every country has payment "rails" (the US has Fedwire, Europe has TARGET2). And every rail has <b>closing times</b>. Miss the cutoff and the money leaves TOMORROW — which, in a T+1 world, can mean a failed trade.</div>`},
+  {h:`Why cash is a product problem too`,
+   b:`<p>Clients hold cash balances in many currencies at the custodian, and they care about three things your screens must answer instantly:</p>
+   <ul>
+   <li>💵 <b>How much cash do I have, right now, in each currency?</b></li>
+   <li>📅 <b>Will I have enough tomorrow</b> for the trades that are settling? (Being short = failed trades or expensive overdrafts)</li>
+   <li>😴 <b>Is idle cash earning something?</b> (Big balances often auto-move into overnight earning — a "sweep")</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`SWIFT`, d:`The secure global messaging network banks use to instruct and confirm — messages only, never the money itself.`},
+  {w:`MT564`, d:`The SWIFT message type that announces a corporate action to a client. (565 = the answer back.)`},
+  {w:`ISO 20022`, d:`The modern, richer message format slowly replacing old MT messages — SMS upgrading to email.`},
+  {w:`Nostro`, d:`"Our account at your bank" — how banks hold foreign currency with partners abroad.`},
+  {w:`Cutoff`, d:`The daily closing time of a payment system. After it, your payment waits until tomorrow.`},
+  {w:`Sweep`, d:`Automatically moving idle end-of-day cash into something that earns overnight interest.`}],
+ quiz:[
+  {q:`What does SWIFT actually move?`,
+   o:[`Money`, `Messages about money and securities`, `Gold between vaults`], a:1,
+   why:`SWIFT is the messaging layer. The money moves separately on payment rails and between linked bank accounts.`},
+  {q:`A payment misses the day's cutoff. What happens?`,
+   o:[`It's cancelled forever`, `It goes tomorrow — which can make a T+1 trade fail`, `It costs double`], a:1,
+   why:`Cutoffs are hard closing times. In a next-day settlement world, a one-day cash delay can break a trade.`},
+  {q:`What is a "nostro" account?`,
+   o:[`A secret account`, `Our bank's own account held at a partner bank abroad, in their currency`, `A client's retirement account`], a:1,
+   why:`Nostro = "ours at yours." It's how a Boston bank can hold and pay euros in Frankfurt.`}]},
+
+{n:7, e:`🧩`, t:`Week 1 wrap: the machine, assembled`, tag:`One picture, one story, one victory lap`,
+ deep:`week-1-securities-services/day-07-week-1-capstone-and-case-studies.md`,
+ imagine:{e:`🏭`, h:`Imagine the factory tour, end to end`,
+  p:`Six days ago, "custodian bank" meant nothing to you. Now you can walk the whole factory floor: the vault chain that holds the world's assets, the daily trade swaps, the nightly worth-counting, the announcement machine, and the money-messaging system underneath. Today: connect it into ONE picture you'll carry forever.`},
+ secs:[
+  {h:`The whole business on one screen`,
+   b:``,
+   d:{type:`stack`, layers:[
+    {e:`🧑‍💼`, t:`Clients (Day 1)`, s:`Pension funds and asset managers who own everything`},
+    {e:`📱`, t:`Your digital layer`, s:`Portal, alerts, reports — how clients watch it all`},
+    {e:`⚡`, t:`Trades settle T+1 (Day 3)`, s:`Shares and cash swap simultaneously — DvP`},
+    {e:`📣`, t:`Corporate actions (Day 5)`, s:`Announcements, elections, deadlines`},
+    {e:`🧮`, t:`NAV every night (Day 4)`, s:`Assets − debts ÷ shares, signed off, published`},
+    {e:`💸`, t:`SWIFT and cash (Day 6)`, s:`The messages and money-rails underneath`},
+    {e:`🌍`, t:`The keeper chain (Day 2)`, s:`Sub-custodians and national vaults worldwide`}]},
+   b2:`<div class="callout">🧠 <b>The one-sentence version:</b> a custodian keeps perfect records of who owns what, moves things safely when told to, handles every chore ownership creates, and shows clients all of it — and YOU own the showing.</div>`},
+  {h:`Three mini-stories to test yourself against`,
+   b:`<p><b>Story A — the late trade.</b> A client's big buy isn't affirmed by the 9pm deadline. Next day it fails to settle; penalty clocks start. <i>Where does the client look first?</i> Your portal. If they learn about it from a phone call the next afternoon, your product failed too.</p>
+   <p><b>Story B — the wrong NAV.</b> A pricing feed drops a decimal; the NAV is 0.9% too high for three days. Investors traded at wrong prices; compensation is owed. <i>What could have caught it sooner?</i> The movement check — and a dashboard making the weird jump impossible to miss.</p>
+   <p><b>Story C — the missed offer.</b> A rich buyout offer expires unanswered because notices went unseen (Day 5's €12m story). <i>The fix isn't more messages</i> — it's escalating alerts, an answer-online button, and a "who hasn't responded" tracker.</p>
+   <p>Notice: in all three stories, the core machine mostly worked — <b>the visibility layer decided the outcome</b>. That's your job in one insight.</p>`},
+  {h:`Your Week 1 badge exam`,
+   b:`<p>The quiz below is a little longer today — six questions across the whole week. Ace it and Week 2 awaits: you stop learning what the bank does, and start learning how to <b>build products</b> for it.</p>`},
+ ],
+ words:[
+  {w:`Asset servicing`, d:`The umbrella name for everything Week 1 covered: safekeeping plus all the chores of ownership.`},
+  {w:`Exception`, d:`The one thing out of a hundred that went wrong and needs a human. Great custody products are exception-first.`},
+  {w:`Book of record`, d:`The system holding the official truth about holdings and cash. Everything you display traces back to one.`}],
+ quiz:[
+  {q:`The chain, bottom to top: where's the final truth about who owns a share?`,
+   o:[`The national vault (CSD) of that share's country`, `The client's spreadsheet`, `The stock exchange`], a:0,
+   why:`Day 2: the CSD is the bottom of the keeper chain — everyone above holds tickets pointing to it.`},
+  {q:`DvP protects everyone by…`,
+   o:[`insuring every trade`, `making shares and cash move simultaneously or not at all`, `requiring a manager's signature`], a:1,
+   why:`Day 3: the atomic swap. No cash, no shares.`},
+  {q:`NAV in one formula:`,
+   o:[`assets ÷ debts`, `(assets − debts) ÷ number of shares`, `yesterday's price + today's news`], a:1,
+   why:`Day 4: the lemonade-stand math, at billion-dollar scale.`},
+  {q:`The most dangerous corporate action is…`,
+   o:[`an automatic dividend`, `an optional offer with a deadline`, `a share split`], a:1,
+   why:`Day 5: optional + deadline + unseen notice = the industry's classic disaster.`},
+  {q:`SWIFT is best described as…`,
+   o:[`the pipe money flows through`, `banking's secure, structured messaging network`, `a stock exchange`], a:1,
+   why:`Day 6: messages only. Money moves on payment rails and nostro accounts.`},
+  {q:`The deep lesson of the three mini-stories:`,
+   o:[`core systems always fail`, `outcomes were decided by the VISIBILITY layer — alerts, status, dashboards`, `clients don't read anything`], a:1,
+   why:`The machine mostly worked; seeing (or not seeing) decided the damage. That visibility layer is your product.`}]},
+/* ============ WEEK 2 — YOUR CRAFT ============ */
+{n:8, e:`🎯`, t:`Product strategy, minus the jargon`, tag:`Choosing what to build when your customers are giants`,
+ deep:`week-2-product-and-digital-experience/day-08-product-strategy-in-financial-services.md`,
+ imagine:{e:`🍽️`, h:`Imagine cooking for 5 food critics, not 5,000 diners`,
+  p:`A street-food stall serves thousands of strangers; if one dislikes lunch, no big deal. Now imagine a restaurant with only five customers — each a famous critic who pays millions a year, visits with a checklist, and compares you to two rival restaurants every visit. THAT is building products at a custodian: few, enormous, demanding clients with multi-year contracts. Everything about product strategy changes.`},
+ secs:[
+  {h:`How this world differs from normal tech`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`🏦 Your world (B2B, institutional)`, items:[`Dozens of huge clients, not millions of users`,`Deals won through months-long formal evaluations (RFPs)`,`The person who BUYS is not the person who USES`,`One unhappy giant client = a crisis meeting`]},
+    b:{h:`📱 A consumer app`, items:[`Millions of small users`,`Users choose in seconds in an app store`,`Buyer = user`,`One unhappy user = a bad review`]}},
+   b2:`<div class="callout">💡 Biggest mind-shift: your portal is <b>rarely paid for directly</b>. It wins deals, keeps clients from leaving, and cuts the cost of serving them. Its value shows up in someone else's numbers — you must learn to prove it (Day 26).</div>`},
+  {h:`Strategy = answering 3 questions, honestly`,
+   b:``,
+   d:{type:`flow`, steps:[
+    {e:`🧭`, t:`1. Where do we play?`, s:`Which clients, which problems? (You can't do everything)`},
+    {e:`🏆`, t:`2. How do we win?`, s:`What will WE do meaningfully better than rivals?`},
+    {e:`🧱`, t:`3. What must be true?`, s:`Skills, systems, money needed — and do we have them?`}]},
+   b2:`<p>Example answer for your role: <i>"We win the operations teams. Rivals show prettier marketing pages; we make the daily painful 1% — fails, deadlines, breaks — the fastest to spot and fix in the industry."</i> Notice how it says <b>no</b> to lots of things. A strategy that says no to nothing is a wish, not a strategy.</p>`},
+  {h:`Build it, buy it, or partner?`,
+   b:`<p>For every capability, ask three questions in order:</p>
+   <ul>
+   <li>🥇 <b>Is this how we win?</b> (our special sauce) → <b>Build it</b>, own it, invest deep.</li>
+   <li>🧰 <b>Is it necessary but standard?</b> (video calls, e-signatures) → <b>Buy it</b>, don't reinvent.</li>
+   <li>🤝 <b>Is it valuable but someone else's specialty?</b> → <b>Partner</b> and integrate.</li>
+   </ul>
+   <p>Classic mistake in banks: building bland versions of things you could buy, while UNDER-investing in the thing that actually differentiates you. Guard your builders' hours for the special sauce.</p>`},
+ ],
+ words:[
+  {w:`B2B`, d:`Business-to-business: your customers are companies, not consumers. Fewer, bigger, slower, more demanding.`},
+  {w:`RFP`, d:`Request For Proposal — the huge formal questionnaire big clients send when choosing a provider. Digital sections are scored!`},
+  {w:`Strategy`, d:`Choosing where to play and how to win — which requires clearly saying NO to other options.`},
+  {w:`Differentiator`, d:`The thing you do meaningfully better than rivals — the reason a client picks you.`},
+  {w:`Retention`, d:`Keeping existing clients. In this industry, keeping a giant client is worth more than most new sales.`}],
+ quiz:[
+  {q:`Your portal usually earns money by…`,
+   o:[`monthly subscription fees from users`, `helping win deals, keep clients and cut service costs`, `showing ads`], a:1,
+   why:`Digital is rarely a paid line item — it powers revenue and savings that show up elsewhere. Prove it or lose budget.`},
+  {q:`A strategy is real when it…`,
+   o:[`lists everything you could ever build`, `clearly says NO to some clients and problems`, `matches the biggest competitor exactly`], a:1,
+   why:`"Where to play" means choosing. A plan with no NOs is a wish list.`},
+  {q:`E-signature capability for your portal: build or buy?`,
+   o:[`Build — everything in-house is safer`, `Buy — it's standard plumbing, not your special sauce`, `Skip it`], a:1,
+   why:`Save your builders for differentiators. Standard capabilities are bought and integrated.`}]},
+
+{n:9, e:`🗺️`, t:`Roadmaps and choosing what's first`, tag:`Too many good ideas, one team — now what?`,
+ deep:`week-2-product-and-digital-experience/day-09-product-operating-model-and-roadmaps.md`,
+ imagine:{e:`🎒`, h:`Imagine packing one backpack for a year abroad`,
+  p:`Everything on your bed looks essential. But the bag holds 15 things. So you rank: what do I need FIRST? What's heavy but rarely used? What can I buy later if needed? Product priorities are exactly this — everyone's idea is "essential," the team is one backpack, and your job is the honest ranking (plus explaining, kindly, why someone's hairdryer didn't make it).`},
+ secs:[
+  {h:`A fair way to rank ideas`,
+   b:`<p>Arguments about priorities get poisonous when they're opinion vs opinion. Scoring frameworks make them numbers vs numbers. The simplest good one, <b>RICE</b>:</p>
+   <ul>
+   <li>📏 <b>Reach</b> — how many clients/users does this touch?</li>
+   <li>💥 <b>Impact</b> — how much does it help each of them?</li>
+   <li>🎯 <b>Confidence</b> — how sure are we about those guesses?</li>
+   <li>⚖️ <b>Effort</b> — how much work?</li>
+   </ul>
+   <p>Score = (Reach × Impact × Confidence) ÷ Effort. Watch it work on three real ideas:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`📣`, t:`Deadline alerts for offers`, s:`Touches every client · prevents disasters · small build → score: HUGE. Do first!`},
+    {e:`🔌`, t:`Settlement status API`, s:`Top clients only · big impact for them · medium build → score: strong. Next.`},
+    {e:`🎨`, t:`Dashboard visual refresh`, s:`Everyone sees it · mild benefit · medium build → score: modest. It waits.`}]},
+   b2:`<div class="callout">💡 The score isn't the boss — it's the <b>honesty machine</b>. You can overrule it (a legal deadline, a strategic bet) but you say so out loud, in front of the numbers.</div>`},
+  {h:`Roadmaps: promise carefully`,
+   b:`<p>A roadmap is a communication tool, and its shape should match how sure you are:</p>
+   <ul>
+   <li>📆 <b>Dates roadmap</b> ("API ships March 31") — only for true commitments: regulatory deadlines, contract promises. Dates you publish become dates you owe.</li>
+   <li>🌊 <b>Now / Next / Later</b> — honest about uncertainty. "Now" is being built; "Next" is likely; "Later" is direction, not promise.</li>
+   </ul>
+   <p>Why it matters: salespeople will show clients whatever roadmap exists. If it has dates, those dates just became contractual in the client's mind. Give sales a special "safe-to-share" version with confidence labels.</p>`},
+  {h:`Teams: rented crews vs owner-teams`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`🏡 Owner-team (aim for this)`, items:[`Stays on the product for years`,`Owns an OUTCOME ("cut fail-related calls 30%")`,`Learns the domain deeply, compounds`,`Cares about quality — they'll live with it`]},
+    b:{h:`🚚 Project crew (the old way)`, items:[`Assembled for one project, then scattered`,`Owns a task list, not a result`,`Knowledge walks away at the end`,`"Done" means "handed over," not "working well"`]}},
+   b2:`<p>Big banks historically fund project-crews. The industry is shifting to owner-teams — expect to fight this battle, gently and repeatedly, with the funding process (Day 14 teaches how).</p>`},
+ ],
+ words:[
+  {w:`Roadmap`, d:`The plan of what you'll build and roughly when — really a promise-management tool.`},
+  {w:`RICE`, d:`A scoring formula for ranking ideas: Reach × Impact × Confidence ÷ Effort.`},
+  {w:`Backlog`, d:`The ranked to-do list of everything a team might build.`},
+  {w:`OKR`, d:`Objective and Key Results — a goal ("clients self-serve more") plus numbers proving it ("tickets down 25%").`},
+  {w:`Now/Next/Later`, d:`A roadmap format sorted by certainty instead of fake precise dates.`}],
+ quiz:[
+  {q:`Why score ideas with something like RICE?`,
+   o:[`Scores are always right`, `It turns opinion-fights into transparent number-conversations`, `Regulators require it`], a:1,
+   why:`The score is an honesty machine — you can overrule it, but visibly and with reasons.`},
+  {q:`When are exact DATES right on a roadmap?`,
+   o:[`Always — dates motivate teams`, `Only for real commitments like regulations and contracts`, `Never`], a:1,
+   why:`Published dates become owed dates. Use Now/Next/Later where certainty is honestly lower.`},
+  {q:`Why prefer teams that stay on a product for years?`,
+   o:[`Cheaper salaries`, `Domain knowledge compounds, and owners care about outcomes, not handovers`, `Fewer meetings`], a:1,
+   why:`Owner-teams learn deeply and live with their quality. Project crews scatter, taking the knowledge with them.`}]},
+
+{n:10, e:`🧑‍💻`, t:`Meet your users (they're not who you think)`, tag:`A day in the life of the people on your screens`,
+ deep:`week-2-product-and-digital-experience/day-10-customer-journey-and-ux-for-institutional-clients.md`,
+ imagine:{e:`🚦`, h:`Imagine designing an air-traffic control screen`,
+  p:`An air-traffic controller doesn't want a beautiful, minimal, calming app. They want ALL the information, dense and instant, with anything abnormal screaming for attention. Your real users — operations analysts at client firms — are the same. They live in your portal 6 hours a day, hunting for the 1% that went wrong. Designing for them is designing for professionals under pressure, not shoppers browsing.`},
+ secs:[
+  {h:`The cast of characters`,
+   b:`<p>"The client" is actually several very different people sharing one login page:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`🔍`, t:`Operations analyst`, s:`In your portal ALL DAY. Hunts exceptions: fails, breaks, deadlines. Wants speed and density.`},
+    {e:`🧮`, t:`Fund controller`, s:`Watches NAVs and month-end reports. Wants accuracy, timeliness, proof.`},
+    {e:`📈`, t:`Portfolio manager`, s:`Rarely logs in. Wants one number ("what do I hold?") — fast, or via their own systems.`},
+    {e:`💼`, t:`The executive sponsor`, s:`Never logs in. Decides at renewal whether you were worth it. Sees only summaries and moods.`}]},
+   b2:`<div class="callout">💡 Classic trap: designing for the executive who buys (loves clean dashboards) instead of the analyst who uses (needs dense tables). The analyst's daily experience becomes the mood the executive hears about at renewal.</div>`},
+  {h:`Walk a mile: one journey, mapped`,
+   b:`<p>The best design tool is embarrassingly simple: pick one real task and walk it step by step, noting where it hurts. Example — analyst investigates a failed trade:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🔔`, t:`Finds out`, s:`Ideally your alert — not the counterparty phoning!`},
+    {e:`🔎`, t:`Looks it up`, s:`Search must work with any reference number they have`},
+    {e:`🕵️`, t:`Diagnoses`, s:`WHY did it fail? Status history, missing pieces, whose side?`},
+    {e:`📞`, t:`Acts`, s:`Chase counterparty, fix instruction — can they do it HERE?`},
+    {e:`📝`, t:`Reports`, s:`Tell their boss — is there an exportable summary?`}]},
+   b2:`<p>Each step has a question — and each "no" in those answers is a support ticket, a phone call, or a frustrated client. Map 5 journeys like this in your first months and you'll know more than most.</p>`},
+  {h:`Rules of thumb for professional-grade screens`,
+   b:`<ul>
+   <li>🚨 <b>Exceptions first.</b> Don't celebrate the 99% that's fine; surface the 1% that isn't, sorted by urgency.</li>
+   <li>📋 <b>Tables beat tiles.</b> Analysts compare and scan; dense, sortable, filterable tables are their power tool.</li>
+   <li>🕐 <b>Say how fresh the data is.</b> "As of 06:00" on every screen. Guessing freshness destroys trust (remember NAV night!).</li>
+   <li>📤 <b>Let everything export.</b> They live in Excel too. Fighting it loses; making exports great wins.</li>
+   <li>♿ <b>Accessible by default.</b> Keyboard-only operation, readable contrast — professional users, enterprise requirement, and the right thing.</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`Persona`, d:`A sketch of one user type — their goals, pressures and pains — so you design for someone real, not "the client."`},
+  {w:`User journey`, d:`The step-by-step path someone takes to finish a real task, with the pain points marked.`},
+  {w:`Exception-first`, d:`Design principle: show what needs attention before what's fine.`},
+  {w:`UX`, d:`User experience — how it feels to get a task done: speed, clarity, confidence. Not decoration.`},
+  {w:`Accessibility`, d:`Designing so people with different abilities can fully use it — keyboards, screen readers, contrast.`}],
+ quiz:[
+  {q:`Who actually spends the most hours in your portal?`,
+   o:[`The client's CEO`, `Operations analysts hunting exceptions`, `Portfolio managers`], a:1,
+   why:`Analysts live there daily. Design for their density and speed — their experience becomes the account's mood.`},
+  {q:`"Exception-first" means…`,
+   o:[`hide all problems`, `show the things that went wrong, biggest urgency first`, `only executives see errors`], a:1,
+   why:`Air-traffic-control thinking: the abnormal must scream; the normal can whisper.`},
+  {q:`Why label data freshness ("as of 06:00") everywhere?`,
+   o:[`It looks technical`, `Because acting on data that's older than it looks destroys trust and causes real mistakes`, `Regulators require timestamps on marketing pages`], a:1,
+   why:`Professionals make decisions from your screens. They must know exactly how current the picture is.`}]},
+
+{n:11, e:`🔐`, t:`Who's allowed to see what?`, tag:`Logins, permissions, and the hotel-keycard trick`,
+ deep:`week-2-product-and-digital-experience/day-11-identity-and-access-management.md`,
+ imagine:{e:`🏨`, h:`Imagine running a 5,000-room hotel`,
+  p:`Every guest gets a keycard. Housekeeping's cards open a whole floor; the manager's opens everything; your card opens YOUR room only. Nobody stands at each door checking ID — the card system enforces it all, silently, and logs every door opened. Your portal needs exactly this: thousands of users from hundreds of client firms, each seeing precisely their own accounts and nothing more. One wrong door = one client seeing another's money = catastrophe.`},
+ secs:[
+  {h:`Two different questions, always in order`,
+   b:``,
+   d:{type:`flow`, steps:[
+    {e:`🪪`, t:`1. WHO are you?`, s:`Authentication — prove your identity (password + phone code, or company login)`},
+    {e:`🗝️`, t:`2. WHAT may you do?`, s:`Authorization — which accounts you can SEE, which actions you can TAKE`}]},
+   b2:`<div class="callout">💡 Keep these separate in your head forever. Auth-<b>entication</b> = the passport check. Auth-<b>orization</b> = the visa. Most login-related product debates are about one or the other, and confusing them muddles everything.</div>`},
+  {h:`Permissions get complicated FAST`,
+   b:`<p>A client firm has 40 staff. Some may only VIEW some funds. Some may APPROVE payments on certain accounts, up to certain amounts. Auditors see everything, touch nothing. And it changes weekly as people join, move and leave. Two tools tame it:</p>
+   <ul>
+   <li>👥 <b>Roles</b> (job-title keycards): define "Viewer," "Ops Analyst," "Approver" once, hand them out. Simple, auditable.</li>
+   <li>🎛️ <b>Fine-grained rules</b> on top: "Approver, but only for the Europe funds, only under $10m."</li>
+   </ul>
+   <p>The magic feature clients love: <b>let their own admins manage their own users</b>. The client's admin adds the new joiner, removes the leaver — instantly, without emailing you. Faster for them, safer for the bank, and it removes a whole category of support tickets.</p>`},
+  {h:`Extra locks for dangerous doors`,
+   b:`<p>Viewing a balance and approving a $17 million election are not equally risky — so don't protect them equally:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`👀`, t:`Just looking`, s:`Normal login is enough`},
+    {e:`🔁`, t:`Step-up check`, s:`Big action? Re-confirm identity right then (fresh phone prompt)`},
+    {e:`👥`, t:`Four-eyes rule`, s:`Huge action? A SECOND person at the client must approve`},
+    {e:`📜`, t:`Everything logged`, s:`Who did what, when — forever. Auditors will ask.`}]},
+   b2:`<p>Remember Day 5's corporate-action elections? Now you know why they end with a second approver and a fresh identity check. Security choices ARE product design.</p>`},
+ ],
+ words:[
+  {w:`Authentication`, d:`Proving who you are (password, phone code, fingerprint). The passport check.`},
+  {w:`Authorization`, d:`What you're allowed to see and do once you're in. The visa.`},
+  {w:`MFA`, d:`Multi-factor authentication — password PLUS something else (phone prompt), so a stolen password alone is useless.`},
+  {w:`Role`, d:`A named bundle of permissions ("Ops Analyst") assigned to people — the job-title keycard.`},
+  {w:`Entitlements`, d:`The full detailed map of who may see and do what, per account and function.`},
+  {w:`SSO`, d:`Single sign-on — users log in with their own company's account, and the company can switch it off the day they leave.`}],
+ quiz:[
+  {q:`Authentication vs authorization:`,
+   o:[`Same thing, two spellings`, `First proves WHO you are; second decides WHAT you may do`, `One for staff, one for clients`], a:1,
+   why:`Passport, then visa. Every access conversation should name which one it's about.`},
+  {q:`Why let client firms manage their own users?`,
+   o:[`It shifts blame to them`, `Faster for them, safer for everyone (leavers removed same-day), and far fewer support tickets`, `It's legally required`], a:1,
+   why:`Delegated administration is the quietly killer feature of institutional portals.`},
+  {q:`A user approves a $17m election. What should the system have done?`,
+   o:[`Nothing special — they were logged in`, `Fresh identity re-check plus a second approver, all logged`, `Sent an email afterwards`], a:1,
+   why:`Match protection to risk: step-up auth + four-eyes + audit trail for the dangerous doors.`}]},
+
+{n:12, e:`🔔`, t:`The art of the perfect nudge`, tag:`Alerts that save millions (without becoming spam)`,
+ deep:`week-2-product-and-digital-experience/day-12-alerts-and-notifications-platforms.md`,
+ imagine:{e:`⏰`, h:`Imagine a friend who reminds you of things`,
+  p:`A good friend texts "your flight's at 7am tomorrow — checked in yet?" A bad friend texts forty times a day about everything, so you mute them and MISS the flight text. Notifications live on this knife-edge. Remember Day 5's €12 million missed deadline? The notices were sent, muted-by-overload, unseen. Today: how to be the good friend, as a platform.`},
+ secs:[
+  {h:`One pipeline for the whole company`,
+   b:`<p>The mistake every big company makes: each app builds its own emails. Result: chaos, no shared preferences, no record. The fix: <b>one central notification pipeline</b> every product plugs into:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`⚡`, t:`Something happens`, s:`Trade fails, deadline nears, NAV publishes, statement lands`},
+    {e:`🧠`, t:`Who cares?`, s:`Match the event to entitled, subscribed people (Day 11's map!)`},
+    {e:`🎛️`, t:`How do THEY want it?`, s:`Their channel and timing preferences`},
+    {e:`✍️`, t:`Compose`, s:`Clear message, right language and timezone`},
+    {e:`📬`, t:`Deliver`, s:`In-app, email, SMS, or straight into client systems`},
+    {e:`📜`, t:`Record`, s:`Proof of what was sent, to whom, when — forever`}]}},
+  {h:`Beating alert fatigue (the €12m lesson)`,
+   b:`<ul>
+   <li>🚦 <b>Not everything is urgent.</b> Three levels: 🔴 act now, 🟡 today, ⚪ FYI (bundled into one daily digest). Guard the red level jealously — it only works if it's rare.</li>
+   <li>📈 <b>Escalate, don't repeat.</b> Deadline unanswered? Get LOUDER and WIDER: 5 days out → analyst, in-app. 2 days → analyst + their boss, +email. 1 day → also the client's ops head, +SMS. Same message 40 times = muted; widening circle = seen.</li>
+   <li>🎛️ <b>Let users tune it</b> — per event type, per account, digest vs instant. A tuned notification is a read notification.</li>
+   <li>🌍 <b>Timezones must be perfect.</b> "Deadline 17:00" — whose 17:00? Ambiguity here loses real money.</li>
+   </ul>`},
+  {h:`Proof matters as much as delivery`,
+   b:`<p>When something goes wrong ("we were never told!"), the notification record is the bank's defense: what was sent, to whom, when, delivered to which address, opened or not. This is why the pipeline logs everything permanently — it's not bureaucracy, it's the receipts.</p>
+   <div class="callout">🎯 <b>Your product-owner test for any alert idea:</b> Who exactly gets this? Why them? How do they mute the noise but never the critical? What's our proof it arrived? What happens if it's ignored?</div>`},
+ ],
+ words:[
+  {w:`Notification platform`, d:`One shared pipeline all products use to reach people — instead of every app sending its own emails.`},
+  {w:`Alert fatigue`, d:`When too many notifications teach people to ignore ALL of them — including the vital one.`},
+  {w:`Escalation`, d:`Getting louder and wider as a deadline nears: more urgency, more channels, more senior people.`},
+  {w:`Digest`, d:`Bundling non-urgent updates into one summary message instead of many pings.`},
+  {w:`Webhook`, d:`A notification sent machine-to-machine — straight into the client's own systems, no human inbox involved.`}],
+ quiz:[
+  {q:`The deep cause of alert fatigue:`,
+   o:[`Emails are old-fashioned`, `Too much noise teaches people to ignore everything — including the critical alert`, `Notifications cost too much`], a:1,
+   why:`The bad friend problem. Guarding the urgent tier is what keeps it believable.`},
+  {q:`A client hasn't answered a big offer, deadline in 2 days. Best move?`,
+   o:[`Resend the same message hourly`, `Escalate: add their manager, add another channel, raise urgency`, `Wait — it's their responsibility`], a:1,
+   why:`Wider and louder beats repetition. The widening circle is what finally gets seen.`},
+  {q:`Why keep permanent records of every notification?`,
+   o:[`Marketing analytics`, `They're the receipts when someone claims "we were never told"`, `To reuse old messages`], a:1,
+   why:`Proof of notification protects the bank in disputes — remember who pays when elections are missed.`}]},
+
+{n:13, e:`📄`, t:`The document factory`, tag:`Statements, reports — and why nothing may be deleted`,
+ deep:`week-2-product-and-digital-experience/day-13-document-management-and-client-reporting.md`,
+ imagine:{e:`🖨️`, h:`Imagine a printing press with a legal department`,
+  p:`Every month-end, a factory inside the bank prints (digitally) millions of statements, valuations and tax papers. Each must reach exactly the right reader, be findable in seconds years later — and by LAW, many can never be edited or deleted, like ink that can't be unprinted. Boring? This "factory" is the product clients touch most often. A missing statement at board-meeting time is a crisis.`},
+ secs:[
+  {h:`A document's life story`,
+   b:``,
+   d:{type:`flow`, steps:[
+    {e:`🏭`, t:`Generate`, s:`Month-end: millions of documents composed from the books`},
+    {e:`🏷️`, t:`Label`, s:`Tag each: which client, account, period, type — labels make search work`},
+    {e:`🔐`, t:`Protect`, s:`Only entitled eyes see it (Day 11 again!)`},
+    {e:`📬`, t:`Notify`, s:`"Your statement is ready" (Day 12 again!)`},
+    {e:`🗄️`, t:`Retain`, s:`Kept unchangeable for years — the law says so`},
+    {e:`🗑️`, t:`Eventually purge`, s:`After the legal period, deletion is also a rule`}]},
+   b2:`<div class="callout">💡 See how the platform pieces snap together? Documents use the permission map from Day 11 and the notification pipeline from Day 12. Platform capabilities compound — that's why you build them once, centrally.</div>`},
+  {h:`The unbreakable-ink rule`,
+   b:`<p>Financial regulators require records kept in a form that <b>cannot be altered or deleted</b> — even by the bank itself — for set periods (often ~7 years). Storage is literally configured to refuse edits, like writing in permanent ink.</p>
+   <p>Why so strict? If a dispute reaches court, the statement from March 2021 must be provably EXACTLY what the client saw. That's also why "just fix the typo in last month's statement" is never simple: the original stays; a correction is issued alongside it.</p>`},
+  {h:`From paper-thinking to data-thinking`,
+   b:`<p>Watch clients climb this ladder — and help them climb:</p>`,
+   d:{type:`stack`, layers:[
+    {e:`📄`, t:`PDF statements`, s:`Fine for boards and filing cabinets`},
+    {e:`🔎`, t:`Searchable portal library`, s:`Find any doc in seconds — filters, no folder-diving`},
+    {e:`📊`, t:`Interactive reports`, s:`Explore the numbers on screen, then export`},
+    {e:`🔌`, t:`Raw data feeds`, s:`Numbers flow into the client's own systems — no documents at all`}]},
+   b2:`<p>Sophisticated clients want the bottom rungs; smaller ones the top. Your portfolio serves the whole ladder — and the same underlying numbers must agree at every rung (a Week 3 obsession).</p>`},
+ ],
+ words:[
+  {w:`Statement`, d:`The official periodic document listing an account's holdings, values and activity.`},
+  {w:`Metadata`, d:`Labels on a document (client, date, type) — what makes millions of documents searchable.`},
+  {w:`Retention`, d:`The legal duty to keep records, unaltered, for a set number of years.`},
+  {w:`WORM`, d:`"Write Once, Read Many" — storage that physically refuses edits and deletes. The unbreakable ink.`},
+  {w:`E-delivery`, d:`Delivering documents via portal/notification instead of post — with proof of delivery.`}],
+ quiz:[
+  {q:`Why can't the bank just edit last month's statement to fix a typo?`,
+   o:[`The file format is read-only`, `Regulations require originals kept unchangeable; corrections are issued alongside`, `It can, if a manager agrees`], a:1,
+   why:`Court-proof records mean the original stays forever; you add a correction, never replace.`},
+  {q:`What makes millions of documents findable in seconds?`,
+   o:[`Faster hard drives`, `Good labels (metadata) on every document`, `Fewer documents`], a:1,
+   why:`Search is only as good as the tagging. Metadata design is real product work.`},
+  {q:`A top client says "stop sending PDFs, send the numbers into our systems." This is…`,
+   o:[`laziness`, `the natural top of the maturity ladder — data feeds instead of documents`, `impossible in banking`], a:1,
+   why:`Sophisticated clients consume data, not paper. Serving the whole ladder is the strategy.`}]},
+
+{n:14, e:`🤝`, t:`Getting a bank to say yes`, tag:`Stakeholders: the level where products live or die`,
+ deep:`week-2-product-and-digital-experience/day-14-stakeholder-management-and-week-2-capstone.md`,
+ imagine:{e:`🎬`, h:`Imagine directing a movie you don't fully control`,
+  p:`A film director owns the vision but controls almost nothing directly: the studio funds it, actors perform it, lawyers clear it, censors rate it. Your roadmap is the same. Compliance can block a launch, operations can quietly not adopt it, sales promises things you never planned, and technology owns the builders. Directing without owning is the actual job of a VP — and there's a craft to it.`},
+ secs:[
+  {h:`Know what each partner treasures`,
+   b:`<p>Influence is bartering, and each group trades in a different currency:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`⚙️`, t:`Operations`, s:`Treasure: fewer manual chores. Bring tools that kill their pain — they'll champion you.`},
+    {e:`🛡️`, t:`Compliance`, s:`Treasure: NO surprises. Involve them at the IDEA stage and they're partners, not blockers.`},
+    {e:`💼`, t:`Sales`, s:`Treasure: stories that win deals. Give demos and safe roadmaps — they amplify you to clients.`},
+    {e:`💻`, t:`Technology`, s:`Treasure: realistic plans and clear priorities. Respect constraints — get craftsmanship back.`},
+    {e:`☎️`, t:`Client service`, s:`Treasure: advance warning and fewer angry calls. They hear EVERYTHING first — goldmine.`},
+    {e:`💰`, t:`Finance`, s:`Treasure: evidence. Bring numbers that hold up — get funding continuity.`}]}},
+  {h:`Meetings are theatre; decisions happen before`,
+   b:`<p>The golden rule of big organizations: <b>a decision meeting should CONFIRM a decision, not discover the question.</b></p>`,
+   d:{type:`flow`, steps:[
+    {e:`☕`, t:`Pre-talk each key person`, s:`15 minutes each: share the idea, hear objections`},
+    {e:`🔧`, t:`Absorb one concern each`, s:`Now it's partly THEIR proposal`},
+    {e:`📄`, t:`Short memo, sent early`, s:`Everyone reads before, not during`},
+    {e:`✅`, t:`Meeting confirms`, s:`Decision recorded: what, who, when`}]},
+   b2:`<div class="callout">💡 This is called <b>pre-wiring</b>, and it's the single highest-return habit at your level. Surprising senior people in meetings feels dramatic and works never. And always write decisions down — unrecorded decisions get re-argued in three months.</div>`},
+  {h:`When you clash (you will)`,
+   b:`<p>Two rules keep conflict healthy:</p>
+   <ul>
+   <li>🤝 <b>Never escalate a surprise.</b> If you must take a disagreement upward, write the options TOGETHER with the person you disagree with — one page, shared facts, both options fairly stated — and go to the bosses jointly. It's respected, it's fast, and the relationship survives.</li>
+   <li>📝 <b>Never accept an unrecorded decision.</b> "We agreed in the hallway" is worth nothing in a bank.</li>
+   </ul>
+   <p><b>Week 2 in one line:</b> you learned what to build (strategy), in what order (priorities), for whom (users), on which platform bones (permissions, alerts, documents) — and today, how to get a giant organization to actually let you build it. That's the craft. Next week: the technology under it all — in plain words.</p>`},
+ ],
+ words:[
+  {w:`Stakeholder`, d:`Anyone whose yes, no, or shrug affects your product — inside or outside the company.`},
+  {w:`Pre-wiring`, d:`Talking to key people one-on-one BEFORE a decision meeting, so the meeting confirms rather than debates.`},
+  {w:`Escalation`, d:`Taking a stuck disagreement to more senior people — best done jointly, never as an ambush.`},
+  {w:`Compliance`, d:`The team ensuring the bank follows laws and rules. Involve early = partner; involve late = blocker.`},
+  {w:`Decision log`, d:`The written record of what was decided, by whom, when. The antidote to eternal re-arguing.`}],
+ quiz:[
+  {q:`Compliance keeps "blocking" your launches. The usual root cause?`,
+   o:[`They dislike innovation`, `They're being surprised late — involve them at the idea stage instead`, `Their team is too small`], a:1,
+   why:`"No surprises" is their currency. Early involvement turns the blocker into a co-designer.`},
+  {q:`Pre-wiring means…`,
+   o:[`installing meeting-room cables`, `aligning key people 1-on-1 before the meeting, so it confirms instead of debates`, `emailing slides during the meeting`], a:1,
+   why:`Decisions are made in the corridors; meetings ratify them. Work the corridors kindly.`},
+  {q:`You and Ops still disagree after real effort. Best move?`,
+   o:[`Secretly convince the boss first`, `Write one page TOGETHER — shared facts, both options — and escalate jointly`, `Drop it forever`], a:1,
+   why:`Joint escalation on shared facts is fast, fair, and keeps the relationship — the opposite of the ambush.`}]},
+/* ============ WEEK 3 — THE TECH ============ */
+{n:15, e:`🔌`, t:`APIs: when machines order for themselves`, tag:`Your biggest clients don't want your website at all`,
+ deep:`week-3-technology-and-data/day-15-apis-and-api-products.md`,
+ imagine:{e:`🍽️`, h:`Imagine a restaurant with a waiter — and a delivery hatch`,
+  p:`Humans dine in the restaurant: menus, waiters, ambiance. But the supermarket next door doesn't want a table — it wants a hatch where its truck collects 500 meals daily, automatically, no chit-chat. An <b>API</b> is that hatch: a standard way for one computer system to request things from another. Your biggest clients' systems collect data through your hatch thousands of times a day — the portal is for humans, APIs are for their machines.`},
+ secs:[
+  {h:`How the hatch works`,
+   b:`<p>An API is a set of standard requests with standard answers. No magic:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🤖`, t:`Client's system asks`, s:`"Give me all of account 4021's failed trades"`},
+    {e:`🪪`, t:`Yours checks ID`, s:`Valid credentials? Entitled to THAT account? (Day 11!)`},
+    {e:`📦`, t:`Answers in a standard shape`, s:`Machine-readable list, always the same format`},
+    {e:`🔁`, t:`Repeats all day`, s:`Every few minutes, no human, no phone call`}]},
+   b2:`<div class="callout">💡 There's also the reverse flavor: a <b>webhook</b>, where YOUR system calls THEIRS the moment something happens ("trade 8812 just failed!"). Ask vs be-told. T+1 deadlines (Day 3) made the be-told flavor precious.</div>`},
+  {h:`An API is a PROMISE (that's the hard part)`,
+   b:`<p>Once 40 client firms build their systems against your hatch, its shape is a promise. Rename one field and you break real companies' operations overnight — a relationship crisis, not a bug.</p>
+   <ul>
+   <li>➕ <b>Adding</b> new info: fine anytime — nobody breaks.</li>
+   <li>✂️ <b>Changing or removing</b>: build the new version alongside, then give clients <b>12–18 months</b> to move. Yes, months. Institutions change slowly, and forcing speed converts your release into their emergency.</li>
+   </ul>
+   <p>Guarding this discipline against every team that "just wants to fix" a field is genuinely a VP-level duty.</p>`},
+  {h:`Treat the API like a product, not plumbing`,
+   b:`<p>Since clients' engineers are users too, they deserve product thinking:</p>
+   <ul>
+   <li>📚 <b>Great docs</b> — clear, current, with copy-paste examples.</li>
+   <li>🧪 <b>A sandbox</b> — a practice environment with realistic fake data, so clients build safely before touching real accounts.</li>
+   <li>⏱️ <b>One north-star metric: time-to-first-success</b> — how long from "we'd like access" to their first working request. Banks take weeks; every day you shave off is felt differentiation.</li>
+   <li>📈 <b>Usage telemetry</b> — you can SEE which clients call what. Gold for product decisions, and for spotting a client whose usage quietly stopped (early warning!).</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`API`, d:`A standard way for one system to request data or actions from another. The delivery hatch.`},
+  {w:`Webhook`, d:`The reverse: your system proactively notifies theirs the instant something happens.`},
+  {w:`Breaking change`, d:`Any API change that stops existing users' systems working. In this world: a relationship event.`},
+  {w:`Sandbox`, d:`A safe practice copy of your API with fake data, for clients to build and test against.`},
+  {w:`Deprecation`, d:`The polite, LONG process of retiring an old API version — announce, support both, give 12–18 months.`}],
+ quiz:[
+  {q:`Why do your most sophisticated clients barely use the portal?`,
+   o:[`It's badly designed`, `Their own systems consume your data via APIs — machines don't need screens`, `They can't afford logins`], a:1,
+   why:`Portals serve humans; APIs serve the client's machines. For big firms the API IS the product.`},
+  {q:`A team wants to rename a field in a live API. Correct answer?`,
+   o:[`Fine, ship Friday`, `New version alongside the old, then 12–18 months for clients to migrate`, `Never change anything ever`], a:1,
+   why:`The shape is a promise 40 firms built against. Breaking changes get versions and long, kind runways.`},
+  {q:`The best single health metric for an API product:`,
+   o:[`Lines of code`, `Time from "we want access" to a client's first successful request`, `Number of fields returned`], a:1,
+   why:`Time-to-first-success measures the whole experience: docs, sandbox, onboarding, design.`}]},
+
+{n:16, e:`🏗️`, t:`Old systems, new systems, one bank`, tag:`Renovating a house you can never stop living in`,
+ deep:`week-3-technology-and-data/day-16-microservices-and-enterprise-architecture.md`,
+ imagine:{e:`🏚️`, h:`Imagine renovating a mansion... that can never close`,
+  p:`The bank's technology is a 200-year-old mansion: some wings are brand new, some wiring is from the 1980s and still works brilliantly — and the residents (trillions of dollars of daily activity) can NEVER move out during renovations. You can't demolish and rebuild. You renovate room by room, keeping the lights on. Today: how that's actually done, and the words architects use for it.`},
+ secs:[
+  {h:`The floors of the building`,
+   b:`<p>Almost every big bank's tech looks like this from the side:</p>`,
+   d:{type:`stack`, layers:[
+    {e:`📱`, t:`Screens and hatches (YOU)`, s:`Portal, apps, APIs — what clients touch`},
+    {e:`🔀`, t:`The adapter layer`, s:`Translates between friendly modern shapes and the old cores`},
+    {e:`⚙️`, t:`Services by specialty`, s:`Separate mid-size systems: settlements, corporate actions, cash…`},
+    {e:`🏛️`, t:`Core ledgers (often decades old)`, s:`The books of record. Ancient, ultra-reliable, everything depends on them`}]},
+   b2:`<div class="callout">💡 Big insight for your job: the old cores often update in <b>overnight batches</b>. So your beautiful "live" screen may show data that is truly "as of 6am." Never fake freshness — label it (Day 10's rule) and know which floor your data comes from.</div>`},
+  {h:`One big machine, or many small ones?`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`🧩 Many small services (modern)`, items:[`Each specialty is its own system`,`Teams change their piece without touching others`,`One piece failing ≠ everything failing`,`BUT: many moving parts to coordinate`]},
+    b:{h:`🗿 One giant system (classic)`, items:[`Everything in one huge codebase`,`Simple when small…`,`…but any change risks everything, so change slows to a crawl`,`One failure can take it ALL down`]}},
+   b2:`<p>The industry moved to "many small" (called <b>microservices</b>) mostly for the speed-of-change and blast-radius reasons. Your practical takeaway: features that span many services take longer than they look — coordination is the hidden cost.</p>`},
+  {h:`The strangler fig (best renovation trick ever)`,
+   b:`<p>There's a jungle tree that grows AROUND an old tree until it can stand alone, and the old one fades inside it. Replacing an old system works the same way:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🌱`, t:`New system starts small`, s:`Takes over ONE screen or function`},
+    {e:`🌿`, t:`Grows page by page`, s:`Users drift over gradually; both run in parallel`},
+    {e:`🌳`, t:`New carries everything`, s:`Old system quietly idle`},
+    {e:`🍂`, t:`Old one retired`, s:`Nobody noticed a "migration day" — that's success`}]},
+   b2:`<p>The tempting alternative — build the whole replacement in secret for 3 years, then switch everything one big weekend — is called big-bang, and it's how banks end up in the news. When someone proposes it, reach for the fig.</p>`},
+ ],
+ words:[
+  {w:`Architecture`, d:`The floor plan of the systems: what exists, what talks to what, where data lives.`},
+  {w:`Mainframe`, d:`The decades-old, ultra-reliable computers still running many core ledgers.`},
+  {w:`Batch`, d:`Processing work in big overnight chunks rather than instantly — why some data is "as of 6am."`},
+  {w:`Microservices`, d:`Building from many small specialist systems instead of one giant one.`},
+  {w:`Strangler fig`, d:`Replacing an old system by growing the new one around it, piece by piece, until the old fades away.`},
+  {w:`Blast radius`, d:`How much else breaks when one thing fails. Good architecture keeps it small.`}],
+ quiz:[
+  {q:`Your "live" positions screen actually shows 6am data. Why?`,
+   o:[`The internet is slow`, `The core ledger updates in overnight batches — so label freshness honestly`, `Someone forgot to refresh`], a:1,
+   why:`Know which floor your data comes from. Batch cores mean as-of labels, not fake real-time.`},
+  {q:`Why did banks split giant systems into many small ones?`,
+   o:[`Small systems are cheaper to license`, `Faster change and smaller blast radius when something fails`, `Fashion`], a:1,
+   why:`Independent pieces = teams can move without fear, and one failure doesn't sink everything.`},
+  {q:`Replacing a 20-year-old portal: which approach?`,
+   o:[`Big-bang: build 3 years in secret, switch one weekend`, `Strangler fig: new one takes over page by page, in parallel`, `Keep the old one forever`], a:1,
+   why:`Gradual replacement de-risks everything. Big-bang cutovers are how banks make headlines.`}]},
+
+{n:17, e:`📨`, t:`Events: the bank's group chat`, tag:`Systems that announce news instead of waiting to be asked`,
+ deep:`week-3-technology-and-data/day-17-event-driven-architecture.md`,
+ imagine:{e:`📢`, h:`Imagine a family group chat`,
+  p:`When your cousin gets engaged, she doesn't phone 40 relatives one by one — she posts once in the group chat, and everyone who cares reacts: mom starts planning, uncle checks flights. In a bank, things HAPPEN constantly — a trade settles, a deadline nears, a NAV publishes — and dozens of systems care. So modern banks run a giant internal group chat: systems <b>post events</b> once, and every interested system reacts. It's called event-driven architecture.`},
+ secs:[
+  {h:`Why the group chat beats phone calls`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`📢 Post events (modern)`, items:[`Announce once — "trade 8812 settled!"`,`Any number of systems react instantly`,`New listeners join without changing the announcer`,`News travels in seconds`]},
+    b:{h:`☎️ Ask constantly (old way)`, items:[`Every system phones every other: "anything new? now? now?"`,`Wasteful, slow, tangled`,`Adding a listener = rewiring the source`,`News waits until someone asks`]}},
+   b2:`<p>Look how much of your world is literally reactions to one event post: a trade fails → the portal status flips, an alert fires (Day 12), the client's webhook triggers (Day 15), the ops queue gets a task. One post, four reactions. This chat is the nervous system your products sit on.</p>`},
+  {h:`The two gotchas (know these and impress architects)`,
+   b:`<ul>
+   <li>👯 <b>Messages can arrive TWICE.</b> The network guarantees "at least once" delivery — occasionally that means twice. If systems don't check "have I seen event #8812 before?", a client sees the same fail listed twice or gets the same alert twice. The check is called being <b>idempotent</b>, and it's why you should ask any team building on events: "what happens on a duplicate?"</li>
+   <li>🔀 <b>Messages can arrive OUT OF ORDER.</b> "Settled" might arrive before "matched." Screens must handle a status going seemingly backwards without confusing the user.</li>
+   </ul>
+   <div class="callout">💡 These two questions — duplicates and ordering — are 80% of what a product exec needs to probe in any event-driven design review. Ask them and watch engineers smile.</div>`},
+  {h:`The chat has rules`,
+   b:`<p>A real group chat needs etiquette; so does this one:</p>
+   <ul>
+   <li>📖 <b>Every event type has an owner and a defined shape.</b> If the settlements team changes what their event contains, every listener is affected — so changes are versioned and announced (exactly like APIs on Day 15 — an event IS a contract).</li>
+   <li>🗃️ <b>The chat keeps history.</b> New systems can "scroll up" and replay past events to catch up — enormously useful.</li>
+   <li>🚑 <b>Failed messages go to a rescue queue</b> (the "dead letter" queue) where humans investigate — nothing silently vanishes.</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`Event`, d:`A small announcement that something happened: "trade 8812 settled at 14:02." Facts, not requests.`},
+  {w:`Publish/subscribe`, d:`The group-chat pattern: one system posts, any number listen. Nobody phones anybody.`},
+  {w:`Kafka`, d:`The most popular technology for running this giant internal group chat. You'll hear the name weekly.`},
+  {w:`Idempotent`, d:`Safe against duplicates — processing the same message twice changes nothing the second time.`},
+  {w:`Dead letter queue`, d:`The rescue bin for messages that failed processing, so humans can investigate — nothing vanishes.`},
+  {w:`Replay`, d:`Re-reading past events from the chat's history to rebuild or catch up a system.`}],
+ quiz:[
+  {q:`Event-driven means…`,
+   o:[`systems constantly ask each other "anything new?"`, `systems announce news once and all interested systems react`, `everything runs on a timer`], a:1,
+   why:`Post once, many react — the group chat. Faster, cleaner, and easy to add listeners.`},
+  {q:`The same "trade failed" event arrives twice. A well-built consumer…`,
+   o:[`shows the fail twice — the data said so`, `recognizes event #8812 was already processed and ignores the copy`, `crashes safely`], a:1,
+   why:`At-least-once delivery makes duplicates normal. Idempotent consumers are the fix — always ask about this.`},
+  {q:`Why do event shapes need owners and versions?`,
+   o:[`For documentation beauty`, `Because an event is a contract — changing it affects every listener, like changing an API`, `Regulators audit chat logs`], a:1,
+   why:`Day 15's promise-discipline applies here too. Contracts everywhere machines depend on each other.`}]},
+
+{n:18, e:`🗄️`, t:`The data library (and Snowflake)`, tag:`Where numbers go to become answers`,
+ deep:`week-3-technology-and-data/day-18-data-platforms-snowflake-and-sql.md`,
+ imagine:{e:`📚`, h:`Imagine a library that photocopies itself for guests`,
+  p:`The bank's operational systems are like busy kitchens — great at cooking, terrible places to sit and read. So every night, copies of all the numbers flow into one giant, beautifully organized library: the <b>data warehouse</b>. Analysts ask it questions, dashboards read from it — and the modern twist (this is Snowflake's party trick) — you can grant a client's own analysts a reading desk with a live view of THEIR shelf, no photocopying, no couriers.`},
+ secs:[
+  {h:`Why a separate library?`,
+   b:`<ul>
+   <li>🍳 <b>Kitchens must cook.</b> Heavy analytical questions ("compare all fails across 100 markets for 2 years") would slow the systems doing real-time work. So analysis happens on copies, in the library.</li>
+   <li>🗂️ <b>One organized place.</b> Data from settlements, corporate actions, cash — all arranged consistently, so questions can span everything.</li>
+   <li>🕰️ <b>History lives here.</b> Operational systems care about NOW; the library keeps years — that's where trends come from.</li>
+   </ul>`,
+   d:{type:`flow`, steps:[
+    {e:`⚙️`, t:`Operational systems`, s:`The busy kitchens (Days 16–17)`},
+    {e:`🌙`, t:`Nightly copy-in`, s:`Data flows to the library, cleaned and arranged`},
+    {e:`🗄️`, t:`The warehouse`, s:`One organized, historical, question-ready store`},
+    {e:`📊`, t:`Everyone reads`, s:`Dashboards, reports, clients' feeds, AI — all one source`}]}},
+  {h:`Snowflake, and the trick that matters commercially`,
+   b:`<p><b>Snowflake</b> is a popular cloud warehouse. Two things about it are worth an executive's memory:</p>
+   <ul>
+   <li>💸 <b>You pay for questions, not shelves.</b> Storing data is cheap; computing answers is billed by use. Great economics — but a badly written monster-query burns real money, so cost governance is a thing.</li>
+   <li>🤝 <b>Secure data sharing.</b> Instead of exporting nightly files to clients (fragile, slow, endless plumbing), you grant their Snowflake account a live, permission-controlled view of their own data. No copies, always current, entitlements enforced. Clients literally evaluate custodians on this in RFPs now — a data-plumbing feature became a <b>selling point</b>.</li>
+   </ul>`},
+  {h:`SQL: the question language (read-only tour)`,
+   b:`<p>Questions to the library are written in <b>SQL</b> — closer to structured English than to programming. You never need to write it; being able to READ a line builds real credibility:</p>
+   <p style="font-family:monospace;background:color-mix(in srgb,var(--wc) 8%,var(--card));padding:12px 14px;border-radius:10px;font-size:14px">SELECT market, COUNT(*)<br>FROM failed_trades<br>WHERE fail_date &gt; '2026-01-01'<br>GROUP BY market<br>ORDER BY COUNT(*) DESC;</p>
+   <p>Read aloud: <i>"Count failed trades since January, grouped by market, biggest first."</i> That's it. Ten minutes of pattern-recognition, not a career change.</p>
+   <div class="callout">💡 One number, everywhere: the portal, the data share, the monthly report and the sales deck must all read from the SAME library shelf. Two channels showing different "fail counts" is the most credibility-destroying incident in client analytics — Day 20 shows the machinery that prevents it.</div>`},
+ ],
+ words:[
+  {w:`Data warehouse`, d:`The organized library where copies of all the bank's numbers go for analysis and reporting.`},
+  {w:`Snowflake`, d:`A leading cloud data warehouse — pay-per-question pricing and built-in secure data sharing.`},
+  {w:`SQL`, d:`The near-English language for asking a database questions. Reading it is a superpower; writing it is optional.`},
+  {w:`Pipeline`, d:`The automated nightly flow that copies, cleans and arranges data into the warehouse.`},
+  {w:`Data sharing`, d:`Granting a client's own systems a live, permission-controlled view of their data — no file exports.`},
+  {w:`Data freshness`, d:`How current the library copy is. Usually "as of last night" — and must be labeled (Day 10!).`}],
+ quiz:[
+  {q:`Why analyze in a warehouse instead of the live systems?`,
+   o:[`Live systems have no data`, `Heavy questions would slow the systems doing real-time work — so analysis runs on organized copies`, `Warehouses are more secure`], a:1,
+   why:`Kitchens cook; libraries answer questions. Separating the two protects both.`},
+  {q:`Snowflake data sharing replaces nightly files with…`,
+   o:[`bigger nightly files`, `a live, permission-controlled view of the client's own data in their own account`, `USB sticks`], a:1,
+   why:`No copies, always current, entitlements enforced — and clients now score custodians on it.`},
+  {q:`Portal says 14 fails, monthly report says 12. Root cause is usually…`,
+   o:[`someone lied`, `two channels reading from different sources or times — the "one library shelf" rule was broken`, `rounding`], a:1,
+   why:`Consistency across channels is THE trust requirement. One governed source, all channels read it.`}]},
+
+{n:19, e:`📊`, t:`Dashboards that actually get used`, tag:`Turning the library into pictures people act on`,
+ deep:`week-3-technology-and-data/day-19-bi-tableau-and-analytics-products.md`,
+ imagine:{e:`🚗`, h:`Imagine a car dashboard designed by committee`,
+  p:`Your car shows speed, fuel and a red light when something's wrong. Now imagine a car with 45 dials: tire temperatures, per-cylinder pressure, average speed since purchase... You'd miss the red light in the noise. Most corporate dashboards are that second car. Today: making the first kind — and the special challenge of dashboards clients see.`},
+ secs:[
+  {h:`Five rules that separate used from ignored`,
+   b:`<ul>
+   <li>❓ <b>Answer a question.</b> A dashboard's title should basically be one: "Are we settling on time — and where are we failing?" If nobody can name its question, it's a data dump.</li>
+   <li>⏱️ <b>Pass the 5-second test.</b> Status obvious at a glance: a few headline numbers with targets, color meaning something (red = act, not decoration).</li>
+   <li>🚨 <b>Exceptions first</b> (Day 10's rule, now for charts). Show the 12 failing things, not a pie chart celebrating the 98% fine.</li>
+   <li>⛏️ <b>Let people dig.</b> Every summary number must open into its details — market → client → the actual records. A number you can't dig into gets rebuilt in Excel within a week.</li>
+   <li>🕐 <b>Show freshness and definitions.</b> "As of 06:00," and hovering a metric explains exactly how it's calculated.</li>
+   </ul>`},
+  {h:`One definition to rule them all`,
+   b:`<p>Silent killer of analytics trust: five teams compute "fail rate" five slightly different ways (count or value? include cancels?), so two executives present different numbers for the same month. Nobody lied — definitions drifted.</p>
+   <p>The fix is boring and vital: a <b>shared metric dictionary</b>. Each metric defined ONCE — formula, inclusions, owner — and every dashboard, report and API reads that definition. When a client asks "how exactly is this computed?", the answer is a click, not an archaeology project.</p>
+   <div class="callout">💡 Tools you'll hear named: <b>Tableau</b> and <b>Power BI</b> — the leading dashboard-building suites. Fine tools; the five rules and the dictionary matter far more than the logo.</div>`},
+  {h:`Client-facing analytics: build or embed?`,
+   b:`<p>Internal dashboards can be assembled in Tableau by analysts. But when analytics go INTO your portal for clients, the bar jumps — your brand, your performance, your permissions (only THEIR rows — Day 11). Two routes:</p>`,
+   d:{type:`split`,
+    a:{h:`🏗️ Build charts natively`, items:[`Your look, your speed, part of the workflow`,`Click a bar → open those failed trades → act`,`More effort — you own every feature`,`Right for the standard experience everyone gets`]},
+    b:{h:`📦 Embed a BI tool`, items:[`Rich exploration features immediately`,`Per-user licensing costs at client scale — do the math BEFORE the demo`,`Feels slightly "bolted on"`,`Right for the deep-analysis tier for data-hungry clients`]}},
+   b2:`<p>Mature answer: native for the standard tier, embedded for the analytical tier — and both reading the same library and metric dictionary so the numbers can never disagree.</p>`},
+ ],
+ words:[
+  {w:`Dashboard`, d:`A screen of charts and numbers meant to answer a specific question at a glance.`},
+  {w:`BI`, d:`"Business Intelligence" — the tools and practice of turning data into charts and analysis (Tableau, Power BI).`},
+  {w:`KPI`, d:`Key Performance Indicator — a headline number tracked against a target.`},
+  {w:`Metric dictionary`, d:`The shared, owned definitions of every metric — the cure for "two numbers disagree."`},
+  {w:`Drill down`, d:`Clicking a summary to see what's inside — total → by market → by client → the records.`},
+  {w:`Embedded analytics`, d:`Placing a BI tool's charts inside your own portal instead of building charts natively.`}],
+ quiz:[
+  {q:`The first question to ask of any dashboard:`,
+   o:[`Which charting tool built it?`, `What question does it answer?`, `How many charts fit?`], a:1,
+   why:`No question = data dump. The title should basically be the question.`},
+  {q:`Two executives show different "fail rates" for the same month. Most likely cause?`,
+   o:[`One is lying`, `Slightly different metric definitions drifted apart — no shared dictionary`, `Currency conversion`], a:1,
+   why:`Definition drift is the silent killer. One dictionary, everyone reads it.`},
+  {q:`Analytics inside the client portal must ALWAYS…`,
+   o:[`use animation`, `filter to exactly the client's own entitled rows (Day 11) and match every other channel's numbers`, `be built in Tableau`], a:1,
+   why:`Entitlements + consistency are non-negotiable when clients see it. Tool choice is secondary.`}]},
+
+{n:20, e:`✅`, t:`Can we trust this number?`, tag:`Data governance: owners, quality and the paper trail`,
+ deep:`week-3-technology-and-data/day-20-data-governance-and-collibra.md`,
+ imagine:{e:`🥫`, h:`Imagine food labels for data`,
+  p:`At the supermarket, every product tells you what's inside, where it came from, and when it expires — and someone is legally responsible for that label being true. Now picture the bank's data the same way: every important number should have an ingredient list (where it came from), a freshness date, and a named person responsible. That practice is called <b>data governance</b> — and for a company whose product IS accurate records, it's close to being the whole game.`},
+ secs:[
+  {h:`Every important number gets an owner`,
+   b:`<p>Governance sounds abstract; it's actually three job titles:</p>`,
+   d:{type:`grid`, cards:[
+    {e:`👑`, t:`Data owner`, s:`A senior business person accountable for a domain ("head of settlements owns settlement data"). The neck on the line.`},
+    {e:`🔧`, t:`Data steward`, s:`The named expert doing the daily work: definitions, quality issues, access questions.`},
+    {e:`💻`, t:`Data custodian`, s:`The tech teams running the systems that store and move it. (The role — not the bank!)`}]},
+   b2:`<div class="callout">💡 Why you care: when a client challenges a number on your portal, the steward is who you call. When you want to ADD a data field to a screen, the owner's team approves the definition. Build these steps into your process and they take days; skip them and every launch ends in a data-quality escalation.</div>`},
+  {h:`The paper trail (lineage) — your best friend in a dispute`,
+   b:`<p>A client emails: "Your portal says 14 failed trades, our own file says 12. Explain." With a documented trail of where the number travels, this is an hour's work, not a week's:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`🏛️`, t:`Book of record`, s:`The settlement system's truth`},
+    {e:`📨`, t:`Event stream`, s:`Day 17's group chat carries updates`},
+    {e:`🗄️`, t:`Warehouse`, s:`Day 18's library, loaded nightly at 05:00`},
+    {e:`📖`, t:`Metric dictionary`, s:`Day 19's shared definition of "fail"`},
+    {e:`📊`, t:`Portal AND file`, s:`Both read the same shelf... but cut at different times!`}]},
+   b2:`<p>Mystery solved by the trail: the file was generated at 05:00, the portal refreshed at 07:00, and two fails were fixed in between. Nobody was wrong — and you can PROVE it, calmly, with receipts. That's what lineage buys: fast, confident answers instead of panicked archaeology.</p>`},
+  {h:`Quality is measured, not assumed`,
+   b:`<p>"Good data" gets specific with simple checks — is it <b>accurate</b> (matches reality), <b>complete</b> (nothing missing), <b>timely</b> (there when needed), <b>consistent</b> (same everywhere), <b>unique</b> (no duplicates), <b>valid</b> (right format)? Scores get tracked on scorecards; failures become tickets for stewards.</p>
+   <p>One sneaky-important case: <b>reference data</b> — the shared "address books" (security identifiers, client records, delivery instructions). A single wrong entry there quietly breaks dozens of downstream things (remember failed trades from bad SSIs on Day 3?). Half of operational breaks trace back to reference data — which is why governance programs obsess over it.</p>
+   <p>Tools exist for all this (you'll hear <b>Collibra</b> — a catalog of what data exists, who owns it, and how it flows). The tool is the map; the owners and stewards are the territory.</p>`},
+ ],
+ words:[
+  {w:`Data governance`, d:`The discipline of named ownership, quality measurement and traceability for important data.`},
+  {w:`Data owner`, d:`The senior business person accountable for a data domain's accuracy and definitions.`},
+  {w:`Steward`, d:`The named expert handling a domain's daily data questions and quality issues.`},
+  {w:`Lineage`, d:`The documented journey of a number from source system to screen — your receipts in any dispute.`},
+  {w:`Reference data`, d:`The shared address books: security IDs, client records, delivery instructions. Small errors, huge blast radius.`},
+  {w:`Collibra`, d:`A popular tool that catalogs what data exists, what it means, who owns it and where it flows.`}],
+ quiz:[
+  {q:`A client challenges a number on your portal. Your first call is to…`,
+   o:[`the CEO`, `the data steward for that domain — with the lineage trail as your map`, `the client's lawyer`], a:1,
+   why:`Named ownership plus lineage turns disputes into an hour of calm receipts, not a week of archaeology.`},
+  {q:`Portal (07:00 refresh) and client file (05:00 cut) disagree by two trades. This is…`,
+   o:[`a scandal`, `a timing difference — explainable and provable via lineage`, `impossible`], a:1,
+   why:`Not all differences are errors. The trail lets you explain WHICH kind you're looking at, fast.`},
+  {q:`Why does bad reference data cause outsized damage?`,
+   o:[`It's stored on old servers`, `It's shared by everything — one wrong "address book" entry breaks dozens of downstream processes`, `It's expensive to buy`], a:1,
+   why:`Upstream of everything = blast radius of everything. Half of ops breaks trace back here.`}]},
+
+{n:21, e:`🤖`, t:`AI in a bank (hype-free)`, tag:`Powerful intern, needs supervision — plus your Week 3 wrap`,
+ deep:`week-3-technology-and-data/day-21-ai-in-financial-services-and-week-3-capstone.md`,
+ imagine:{e:`🧑‍🎓`, h:`Imagine a brilliant intern with no fear of being wrong`,
+  p:`New AI tools are like a dazzling intern: reads a 40-page document in seconds, drafts beautifully, never tires. One flaw: when unsure, it sometimes <b>answers confidently anyway</b> — invented, fluent, wrong. In most offices that's embarrassing. In a bank, telling a client a wrong number is an incident with a capital I. So banks use the intern where it shines, and never let it speak to clients unsupervised.`},
+ secs:[
+  {h:`Where AI genuinely helps in custody today`,
+   b:``,
+   d:{type:`grid`, cards:[
+    {e:`📄`, t:`Reading documents`, s:`Corporate-action notices (Day 5) arrive as messy text. AI extracts terms fast; humans verify.`},
+    {e:`🧩`, t:`Matching breaks`, s:`Two records SHOULD match but don't quite. AI spots the likely pair; humans confirm.`},
+    {e:`🚨`, t:`Smelling anomalies`, s:`"Tonight's NAV move looks unusual" (Day 4) — a smarter tolerance check.`},
+    {e:`✍️`, t:`Drafting service replies`, s:`AI drafts from account data; a human edits and SENDS. Minutes become seconds.`},
+    {e:`💬`, t:`Answering client questions`, s:`"Why did my position drop?" — answered from the client's own data. Careful mode only (below).`}]}},
+  {h:`The safety pattern to memorize: grounded + supervised`,
+   b:`<p>How do you let AI answer client questions without inventing? Two locks:</p>
+   <ul>
+   <li>📚 <b>Grounding:</b> the AI may only answer FROM documents and data you hand it — the client's own records — and must show citations. Like an open-book exam where every claim needs a page reference. (And it may only be handed data this user is entitled to see — Day 11 applies to robots too!)</li>
+   <li>👀 <b>Human-in-the-loop:</b> for anything consequential, a person reviews before it takes effect.</li>
+   </ul>
+   <p>Also know: banks have long-standing formal rules for anything model-driven (inventory, validation, monitoring — "model risk management"). It's why an AI feature takes longer to ship in a bank than a startup — not obstruction, just the fire code. Plan the timeline for it.</p>`},
+  {h:`Week 3, assembled`,
+   b:`<p>Look what you now understand, in one flow:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`⚙️`, t:`Systems do work`, s:`Old cores + small services (Day 16)`},
+    {e:`📢`, t:`Events announce it`, s:`The group chat (Day 17)`},
+    {e:`🔌`, t:`APIs serve machines`, s:`Client systems self-serve (Day 15)`},
+    {e:`🗄️`, t:`The library collects`, s:`Warehouse + data shares (Day 18)`},
+    {e:`📊`, t:`Dashboards answer`, s:`With one metric dictionary (Day 19)`},
+    {e:`✅`, t:`Governance guarantees`, s:`Owners, quality, lineage (Day 20)`},
+    {e:`🤖`, t:`AI accelerates`, s:`Grounded and supervised (today)`}]},
+   b2:`<div class="callout">🎓 You can now hold a real conversation with any architect or data leader in the building. Next week, the final act: leading — your first 90 days, your bosses, your clients, your metrics, your career.</div>`},
+ ],
+ words:[
+  {w:`GenAI / LLM`, d:`AI that reads and writes language — the brilliant intern. Powerful at drafting and extracting; can invent when unsure.`},
+  {w:`Hallucination`, d:`AI confidently stating something false. THE risk to control in client-facing uses.`},
+  {w:`Grounding (RAG)`, d:`Restricting AI to answer only from supplied trusted documents, with citations. The open-book exam.`},
+  {w:`Human-in-the-loop`, d:`A person reviews AI output before it takes effect. Default for anything consequential in a bank.`},
+  {w:`Model risk management`, d:`The bank's formal regime for anything model-driven: register it, validate it, monitor it. The fire code for AI.`}],
+ quiz:[
+  {q:`The #1 risk of client-facing AI in a bank:`,
+   o:[`It's too slow`, `Confident, fluent, WRONG answers (hallucination)`, `It's too expensive`], a:1,
+   why:`A wrong number told to a client is an incident. Everything in the safety pattern exists for this.`},
+  {q:`"Grounding" means the AI…`,
+   o:[`runs on physical servers`, `may only answer from supplied, entitled documents — with citations`, `is turned off at night`], a:1,
+   why:`Open-book exam with page references — and only the books this user may read (Day 11 for robots).`},
+  {q:`Why does shipping AI take longer in a bank than a startup?`,
+   o:[`Bank engineers are slower`, `Formal model-risk rules: registration, validation, monitoring — the fire code`, `AI dislikes finance`], a:1,
+   why:`Not obstruction — governed deployment. Budget the timeline for it and compliance becomes a partner (Day 14!).`}]},
+/* ============ WEEK 4 — THE LEADER ============ */
+{n:22, e:`🚀`, t:`Your first 90 days`, tag:`Learn, then aim, then deliver — in that order`,
+ deep:`week-4-executive-playbook/day-22-first-90-days.md`,
+ imagine:{e:`🧑‍🍳`, h:`Imagine taking over a famous kitchen`,
+  p:`A new head chef doesn't rewrite the menu on day one. First they taste everything, watch the line at rush hour, learn who really runs things, and hear what regulars love and hate. THEN they change the menu — starting with one dish everyone agrees needs fixing, executed perfectly. New executives who skip the tasting phase cook confidently for customers they don't know. 90 days, three acts: taste, aim, cook.`},
+ secs:[
+  {h:`The three acts`,
+   b:``,
+   d:{type:`flow`, steps:[
+    {e:`👂`, t:`Days 1–30: LISTEN`, s:`Meet everyone, use the products, visit the ops floor. Judge nothing yet.`},
+    {e:`🎯`, t:`Days 31–60: AIM`, s:`Write what you've learned, pick 2–3 quick wins, sketch your direction`},
+    {e:`🔨`, t:`Days 61–90: DELIVER`, s:`Ship a visible win, present your plan, adjust the team if needed`}]},
+   b2:`<div class="callout">💡 The order is the whole secret. Loud opinions in week 2 make you sound smart and land wrong — you don't know the history yet. Quiet in week 10 makes people wonder why you came. Early = ears; later = voice.</div>`},
+  {h:`Act 1: who to meet, and what to actually ask`,
+   b:`<p>Meet in this order: your own team (1-on-1s first), your boss (what does success look like in a year?), operations floor (shadow real work for a full day — non-negotiable, instant credibility), client service (they hear all the pain first), 2–3 real clients (just listen), then compliance, sales and architecture.</p>
+   <p>Questions that unlock people:</p>
+   <ul>
+   <li>"What's the <b>dumbest thing</b> we make clients do?" (instant roadmap gold)</li>
+   <li>"What did the last leader try that <b>didn't work</b> — and why?" (buried landmines, mapped)</li>
+   <li>"If you had my job for a month, what's the <b>first thing</b> you'd change?"</li>
+   <li>"What promises have already been made to clients?" (commitments you're silently carrying)</li>
+   </ul>`},
+  {h:`Act 2 and 3: choosing wins that build trust`,
+   b:`<p>Your first delivery is a trust-builder, so choose it by these filters — visible to clients AND ops, shippable in under 90 days, low risk, and ideally something everyone already agrees is broken. From your month of learning, classics include: deadline alerts that escalate (Day 12), honest data-freshness labels (Days 10/16), or killing the top "where is it?" phone call with a status screen (Day 3).</p>
+   <p>Then at day ~90, present the plan: <i>here's what I learned (people recognize their words), here's what we shipped already (proof), here's where we're going (direction), here's what I need (the ask)</i>. Learned → shipped → going → need. That structure never fails.</p>
+   <div class="callout">⚠️ The three classic traps: rebuilding everything at once (big-bang — Day 16 warned you), promising sales dates to seem helpful (Day 9 warned you), and mistaking meeting-attendance for credibility (shipping is credibility).</div>`},
+ ],
+ words:[
+  {w:`Listening tour`, d:`Your first-month circuit of structured conversations — collecting truth before forming opinions.`},
+  {w:`Quick win`, d:`A small, visible, low-risk improvement delivered fast to build trust for bigger things.`},
+  {w:`Ops shadowing`, d:`Sitting with operations staff watching real work for a day. The fastest credibility-builder that exists.`},
+  {w:`Stakeholder map`, d:`Your who's-who: who decides, who influences, who must never be surprised (Day 14's cast).`},
+  {w:`In-flight commitments`, d:`Promises to clients already made before you arrived. Find them in month one — you own them now.`}],
+ quiz:[
+  {q:`Weeks 1–4 of a new VP role are best spent…`,
+   o:[`announcing your vision with energy`, `listening, shadowing ops and using the products — judging nothing yet`, `reorganizing the team`], a:1,
+   why:`Taste before you cook. Early opinions sound smart and land wrong; early ears earn the right to aim.`},
+  {q:`The best FIRST delivery is…`,
+   o:[`the boldest idea you brought from outside`, `something visible, fast, low-risk, that everyone already agrees is broken`, `a portal-wide redesign`], a:1,
+   why:`Quick wins are trust-builders. Consensus pain + fast ship = credibility for the bigger bets.`},
+  {q:`"What did the last leader try that didn't work?" exists to…`,
+   o:[`gossip`, `map the buried landmines and history you'd otherwise step on`, `criticize predecessors`], a:1,
+   why:`Organizations remember. Knowing what failed and why saves you from re-running the failure.`}]},
+
+{n:23, e:`🗣️`, t:`Speaking executive`, tag:`Answer first — everything else follows`,
+ deep:`week-4-executive-playbook/day-23-executive-communication.md`,
+ imagine:{e:`📰`, h:`Imagine a newspaper that buried its headlines`,
+  p:`No paper prints "Various events occurred; motives were considered; more inside." The headline states the news; details follow for whoever wants them. Now recall the last status update you saw: three background slides, four "context" charts, conclusion on slide 9. Executives read like newspaper readers — headline first, details optional. Learning to write and speak that way is the highest-return communication skill in corporate life.`},
+ secs:[
+  {h:`The pyramid: one rule, endless mileage`,
+   b:`<p><b>Start with the answer.</b> Then the 2–3 reasons. Then the evidence, for whoever wants it.</p>`,
+   d:{type:`stack`, layers:[
+    {e:`🎯`, t:`THE ANSWER (say it first)`, s:`"We should delay launch by 3 weeks."`},
+    {e:`🧱`, t:`The reasons (2–3, grouped)`, s:`"Testing found entitlement bugs · a top client asked for the window · the fix removes launch risk"`},
+    {e:`📚`, t:`The evidence (on request)`, s:`Bug lists, client email, revised plan`}]},
+   b2:`<div class="callout">💡 Why it feels wrong at first: school taught buildup-then-conclusion. But executives decide dozens of things daily — answer-first respects their reality, and mid-story interruptions can't hurt you when the conclusion already landed in sentence one.</div>`},
+  {h:`Status reports that build trust`,
+   b:`<p>The instinct is to lead with sunshine and whisper the risks. Reverse it — <b>lead with the risks</b>:</p>
+   <ul>
+   <li>🟢🟡🔴 Use honest traffic lights. A project that's "green, green, green, RED-surprise!" destroys your credibility permanently. An early yellow with a plan attached ("yellow: vendor slipped 2 weeks; recovery: X; need: nothing yet") builds it.</li>
+   <li>📉 Bad news travels UP fast, from you, with a plan. Bosses forgive problems; they never forgive being blindsided in front of THEIR bosses (it's Day 14's no-surprises rule, pointed upward).</li>
+   </ul>`},
+  {h:`Meetings and the 10-minute deck`,
+   b:`<p>Presenting upward, you'll get 10 minutes of a 30-minute slot. Build for that:</p>
+   <ul>
+   <li>1️⃣ Slide 1 = the answer and the ask. If the meeting ended now, the decision could still happen.</li>
+   <li>📊 One chart, one message — the chart's title states the finding ("Fails concentrated in one market"), not the dataset ("Fails by market").</li>
+   <li>🅿️ Hostile question you can't answer? Park it honestly: "I don't know — I'll have it to you by Thursday." (Far stronger than improvising, and everyone knows it.)</li>
+   <li>☕ And the biggest lever isn't in the room: <b>pre-wire</b> (Day 14). Big meetings go well when they were decided before they started.</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`Pyramid principle`, d:`Answer first, then grouped reasons, then evidence. The executive-communication master rule.`},
+  {w:`BLUF`, d:`"Bottom Line Up Front" — military shorthand for the same idea. Great for emails: first line = the point.`},
+  {w:`RAG status`, d:`Red/Amber/Green project health. Only works if yellow is used honestly and early.`},
+  {w:`The ask`, d:`What you need from the audience — a decision, money, air cover. Every upward communication has one; state it.`},
+  {w:`Parking`, d:`Deferring a question honestly with a committed follow-up date, instead of improvising an answer.`}],
+ quiz:[
+  {q:`The pyramid principle says to open with…`,
+   o:[`background and history`, `the answer/recommendation itself`, `an icebreaker`], a:1,
+   why:`Headline first. Details exist for whoever wants them — and interruptions can't hurt you.`},
+  {q:`Your project hit a real problem. You…`,
+   o:[`keep it green and quietly fix it`, `flag yellow early, WITH a recovery plan attached`, `wait for the boss to notice`], a:1,
+   why:`Early honest yellow = trust. Green-green-RED = a reputation that never fully recovers.`},
+  {q:`Asked something you don't know in front of executives:`,
+   o:[`improvise confidently`, `"I don't know — you'll have it by Thursday," then deliver Thursday`, `change the subject`], a:1,
+   why:`Honest parking with a kept promise reads as strength. Improvised wrong answers read forever.`}]},
+
+{n:24, e:`🧭`, t:`Decisions and delegation`, tag:`Doors that swing back — and outcomes, not task lists`,
+ deep:`week-4-executive-playbook/day-24-leadership-and-decision-frameworks.md`,
+ imagine:{e:`🚪`, h:`Imagine two kinds of doors`,
+  p:`Some doors swing both ways — walk through, dislike the room, walk back. Others lock behind you. Most decisions are swing-doors: a dashboard layout, a pilot with one client — if wrong, adjust. A few lock: a public API promise (Day 15!), a platform choice, a key hire. The most common executive mistake isn't bad judgment — it's treating swing-doors with lock-door caution (everything slows to committee-speed) or lock-doors with swing-door speed (ouch).`},
+ secs:[
+  {h:`Sort by door, then act accordingly`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`🔄 Swing-door (most decisions)`, items:[`Reversible if wrong`,`Decide FAST, with ~70% of the information`,`Push the decision DOWN to the closest team`,`Cost of slow deciding exceeds cost of wrong deciding`]},
+    b:{h:`🔒 Lock-door (the few)`, items:[`Hard or impossible to reverse`,`Slow down deliberately: options, data, devil's advocate`,`Decide at the right level, senior eyes on it`,`Examples: public API contracts, platform bets, key hires`]}},
+   b2:`<div class="callout">💡 Add two upgrades: for lock-doors, run a <b>pre-mortem</b> ("it's next year and this failed — why?" — permission to voice doubts, catches blind spots). For every decision: name ONE decider, a date, and write it down (Day 14's decision log). Committees advise; a person decides.</div>`},
+  {h:`Delegation: hand over outcomes, not chores`,
+   b:`<p>You now deliver through others. Two ways to hand work over:</p>
+   <ul>
+   <li>📋 <b>Task list</b> (weak): "Do these ten things." You become the bottleneck for thing eleven; they learn compliance.</li>
+   <li>🎯 <b>Outcome + guardrails</b> (strong): "Cut fail-related client calls 30% this quarter. Guardrails: within budget, compliance approves anything client-facing, flag surprises early. HOW is yours."</li>
+   </ul>
+   <p>People rise startlingly to owned outcomes — and calibrate the leash to the person AND the task: a veteran gets headline-only check-ins; someone new to the domain gets weekly coaching. Same person may need different modes on different work; adjusting is the skill.</p>`},
+  {h:`Feedback that lands, and your calendar truth`,
+   b:`<p><b>Feedback recipe (SBI):</b> Situation → Behavior → Impact. "In Monday's client meeting (S), you gave a date we haven't committed to (B); the client now expects March and sales is escalating (I)." Specific, factual, prompt — infinitely better than vague "be more careful," and it works for praise too.</p>
+   <p><b>Your calendar is your real strategy.</b> Claiming clients matter while spending 2% of your week with them means your actual strategy is internal meetings. Audit monthly; protect thinking time like a client meeting; keep asking "what can ONLY I do?" — everything else is delegation fuel.</p>`},
+ ],
+ words:[
+  {w:`Two-way door`, d:`A reversible decision. Decide fast, delegate freely, adjust if wrong.`},
+  {w:`One-way door`, d:`Hard-to-reverse. Slow down, gather options, decide senior, eyes open.`},
+  {w:`Pre-mortem`, d:`Before a big commitment: "assume it failed — why?" Structured permission for doubts.`},
+  {w:`Guardrails`, d:`The boundaries inside which a team decides freely: budget, approvals, escalation triggers.`},
+  {w:`SBI`, d:`Situation-Behavior-Impact — the feedback recipe that's specific and factual instead of vague.`},
+  {w:`Decider`, d:`The ONE named person who makes a given decision. Committees advise; a person decides.`}],
+ quiz:[
+  {q:`A dashboard layout choice is stuck in week three of committee review. Diagnosis?`,
+   o:[`Healthy rigor`, `A swing-door being treated like a lock-door — decide fast and adjust if wrong`, `Needs more stakeholders`], a:1,
+   why:`Reversible + delayed = pure cost. Save the deliberation for doors that lock (like public API promises).`},
+  {q:`Strong delegation hands over…`,
+   o:[`a detailed task list`, `an outcome plus guardrails — the HOW belongs to them`, `whatever's left over`], a:1,
+   why:`Outcomes grow owners; task lists grow bottlenecks (you).`},
+  {q:`Useful feedback sounds like…`,
+   o:[`"be more careful in meetings"`, `"In Monday's meeting (S), you promised an uncommitted date (B); client now expects March (I)"`, `"nice job lately"`], a:1,
+   why:`SBI: specific situation, observable behavior, real impact. Landable, actionable, fair.`}]},
+
+{n:25, e:`💼`, t:`Clients and the money machine`, tag:`How deals work — and how to say no to a giant`,
+ deep:`week-4-executive-playbook/day-25-client-engagement-and-commercial-acumen.md`,
+ imagine:{e:`🧾`, h:`Imagine a hotel where five guests book entire floors — for decades`,
+  p:`This hotel has no walk-ins. Each guest negotiates for a year before checking in, stays 10+ years, pays millions — and every few years invites rival hotels to bid for their floor. Keeping a guest is worth more than winning a new one, and every detail (yes, including the app — YOUR app) gets scored at rebid time. Welcome to custody economics.`},
+ secs:[
+  {h:`How the money actually works`,
+   b:`<p>A big custody deal earns roughly like this: a tiny percentage on assets guarded (Day 1's small-slice-huge-pizza), fees per transaction, currency-exchange income, and lending income. Sounds enormous — but the costs (armies of ops people, technology, 100-market networks) eat most of it. <b>Margins are thin.</b></p>
+   <p>Two consequences shape your whole job:</p>
+   <ul>
+   <li>📉 Fees get squeezed at every renewal → the winning lever is <b>cost-to-serve</b>: every phone call your products replace with self-service drops straight to the bottom line. THIS is digital's provable money story (Day 26 makes it numeric).</li>
+   <li>🤝 One giant client = tens of millions a year across many services → their escalations reach the C-suite by lunch, and losing one is a very bad year.</li>
+   </ul>`},
+  {h:`Your role in winning and keeping`,
+   b:``,
+   d:{type:`flow`, steps:[
+    {e:`📋`, t:`The RFP`, s:`Digital sections are SCORED. Own a library of great, TRUE answers.`},
+    {e:`🎬`, t:`The demo`, s:`Rehearsed, using scenarios from THE CLIENT's world. Demos lose deals more often than features do.`},
+    {e:`🔍`, t:`Due diligence`, s:`They visit and check the demo was real. Truth in step 1 pays off here.`},
+    {e:`📅`, t:`Quarterly reviews`, s:`Your slot = adoption evidence and what's next. Proof, not promises.`},
+    {e:`🔁`, t:`The rebid, years later`, s:`Daily product experience quietly decided this long ago.`}]},
+   b2:`<div class="callout">💡 Watch for slow leaks: client health rarely fails suddenly. Falling logins, key users quietly leaving, QBRs delegated downward, repetitive complaint tickets — 18 months later, "surprise" rebid. Your usage data (Day 15's telemetry!) is the earliest smoke detector in the firm. Watch it and tell the relationship manager early.</div>`},
+  {h:`Saying no to a top-10 client (without losing them)`,
+   b:`<p>Your #4 client demands a custom feature only they want. The script:</p>
+   <ul>
+   <li>👂 <b>Dig for the underlying need</b> — visit, listen fully. Often the real job can be served a standard way.</li>
+   <li>💰 <b>Cost it honestly, out loud</b> — "that's the deadline-alerts release for ALL clients, delayed two quarters." Now your no is a trade-off they can respect, not a rejection.</li>
+   <li>🎁 <b>Offer the adjacent yes</b> — configuration instead of custom code; an API so THEY build their last mile (Day 15); a paid professional-services route if it's truly worth it to them.</li>
+   <li>🤝 <b>Pre-align your own house</b> (Day 14) — they WILL retry the ask above your head; the bank must answer identically.</li>
+   </ul>
+   <p>Why the line matters: custom code per client is how platforms die — 30 bespoke versions, each blocking every upgrade. Configuration and APIs are how you say yes safely. You are this line's guardian.</p>`},
+ ],
+ words:[
+  {w:`RFP`, d:`The formal months-long questionnaire clients use to choose custodians. Your digital answers get scored.`},
+  {w:`QBR`, d:`Quarterly Business Review — the regular health-check meeting with a big client.`},
+  {w:`Cost-to-serve`, d:`What it costs to service a client. The margin lever your self-service products directly move.`},
+  {w:`Client health`, d:`Early-warning signals (usage, tickets, engagement) that predict renewal risk 18 months out.`},
+  {w:`Bespoke`, d:`Custom-built for one client. Tempting, occasionally right, usually the start of platform death.`},
+  {w:`Relationship manager`, d:`The bank's owner of a client relationship — your ally for commercial context and early warnings.`}],
+ quiz:[
+  {q:`Digital's most provable money story in a thin-margin business:`,
+   o:[`charging users for the portal`, `cutting cost-to-serve — self-service replacing expensive manual handling`, `selling ads`], a:1,
+   why:`Fees compress at renewals; costs are the controllable lever, and your products move it measurably.`},
+  {q:`The earliest sign a big client may leave in 18 months:`,
+   o:[`an angry letter`, `quiet decline: falling usage, key users gone, delegated QBRs, repetitive tickets`, `a press release`], a:1,
+   why:`Attrition leaks before it bursts — and your telemetry sees the leak first. Report it early.`},
+  {q:`Top client demands a just-for-them feature. Best answer shape:`,
+   o:[`always yes — they're huge`, `understand the need, show the trade-off cost, offer configuration/API alternatives`, `flat no`], a:1,
+   why:`The costed no with an adjacent yes keeps client AND platform. Bespoke sprawl kills platforms slowly.`}]},
+
+{n:26, e:`📈`, t:`Proving it with numbers`, tag:`The metrics tree — from north star to Monday's fixes`,
+ deep:`week-4-executive-playbook/day-26-metrics-okrs-and-running-the-business.md`,
+ imagine:{e:`🩺`, h:`Imagine a doctor with one big question and many small tests`,
+  p:`"Is this patient healthy?" is answered through measurements that ladder up: blood pressure, pulse, tests — each meaningful, together conclusive. Your product portfolio needs the same: one big question at the top ("is digital making custody better?"), supported by a tree of measurable vitals. Without it you're asking for budget with anecdotes — and losing to whoever brings numbers.`},
+ secs:[
+  {h:`Build the tree`,
+   b:``,
+   d:{type:`stack`, layers:[
+    {e:`⭐`, t:`North star: % of client needs met self-service`, s:`One number that captures the mission (yours may differ — pick it deliberately)`},
+    {e:`🌿`, t:`Branches: adoption · engagement · quality · value`, s:`Are they using it? Does it work? What does it save?`},
+    {e:`🍃`, t:`Leaves: the numbers teams move weekly`, s:`Activation rate · alert-response speed · task success · tickets deflected`}]},
+   b2:`<div class="callout">💡 The tree's power: every team's Monday work connects visibly to the mission, and when an executive asks "why fund this?", you walk DOWN the tree with numbers instead of adjectives.</div>`},
+  {h:`B2B metric traps (learn them before they bite)`,
+   b:`<ul>
+   <li>🎭 <b>Registered users is vanity.</b> 5,000 registered, 400 weekly-active: the truth is 400. Measure <b>active per entitled</b>.</li>
+   <li>🐋 <b>Averages hide whales.</b> "Usage up 30%!" — one giant client onboarded a team; three mid-size clients quietly went dark (Day 25's smoke!). Always segment by client.</li>
+   <li>🔁 <b>High usage can mean PAIN.</b> Twenty daily visits to the fails screen might mean twenty problems. Pair usage numbers with outcome numbers (task success, time-to-resolve).</li>
+   <li>💵 <b>Deflection math is your budget weapon:</b> a service call costs real money (say ~$15 fully loaded); alerts + self-service deflecting 40,000 calls/year = $600k/year, recurring. Auditable, renewable, unbeatable in a funding meeting (Day 25's cost-to-serve, quantified).</li>
+   </ul>`},
+  {h:`OKRs: the tree, turned into quarterly promises`,
+   b:`<p>An <b>Objective</b> is a direction ("clients resolve issues without calling us"); <b>Key Results</b> are the season's proof-numbers ("deflection 22%→30% · alert response halved · zero critical-alert misses"). Two rules that keep them honest:</p>
+   <ul>
+   <li>🎯 KRs are <b>outcomes, not shipping lists</b>. "Launch the alerts feature" is a task; "alert-response time halved" is a result. Ship-and-nobody-uses-it = zero.</li>
+   <li>📉 <b>Missing an ambitious KR honestly beats gaming a safe one.</b> The review question is "what did we learn and change?", not "who do we blame?"</li>
+   </ul>
+   <p>Close the loop in business reviews pyramid-style (Day 23): headline, three drivers, risks with plans, the ask. Numbers first, story around them.</p>`},
+ ],
+ words:[
+  {w:`North star metric`, d:`The single number that best captures your product's mission. The top of the tree.`},
+  {w:`Vanity metric`, d:`A number that flatters but doesn't inform decisions (registered users, raw page views).`},
+  {w:`Active per entitled`, d:`Of people who COULD use it, how many DO. The honest adoption ratio.`},
+  {w:`Deflection`, d:`A need met by self-service instead of a human call — countable, costable, your budget weapon.`},
+  {w:`OKR`, d:`Objective (direction) + Key Results (this quarter's proof-numbers). Outcomes, never task lists.`},
+  {w:`Segmentation`, d:`Splitting metrics by client/persona so whales can't hide the truth in averages.`}],
+ quiz:[
+  {q:`5,000 registered users, 400 weekly active. Your honest adoption story is…`,
+   o:[`"5,000 users!"`, `400 weekly-active — and measured against how many are entitled`, `the average of both`], a:1,
+   why:`Registered is vanity; active-per-entitled is truth. Executives eventually find out which you fed them.`},
+  {q:`Total usage +30% this quarter. Before celebrating, you…`,
+   o:[`celebrate`, `segment by client — a whale can mask three clients going quiet (attrition smoke!)`, `raise targets`], a:1,
+   why:`Averages hide whales. Day 25's early-warning system depends on segmented eyes.`},
+  {q:`A strong Key Result sounds like…`,
+   o:[`"launch the new alerts module"`, `"average alert-response time halved, zero critical misses"`, `"work very hard on alerts"`], a:1,
+   why:`Outcomes, not shipping lists. Shipped-but-unused counts for exactly zero.`}]},
+
+{n:27, e:`🛡️`, t:`Risk, rules and shipping safely`, tag:`Why banks check twice — and how to move fast anyway`,
+ deep:`week-4-executive-playbook/day-27-risk-compliance-and-regulation.md`,
+ imagine:{e:`✈️`, h:`Imagine why planes are safe`,
+  p:`Aviation isn't safe because pilots are brave — it's checklists, co-pilots cross-checking, and independent inspectors. Layers. Banking safety works identically, and here's the part new product leaders miss: <b>you are the pilot, not the passenger</b>. The checking layers double-check — but the first responsibility for your product's risks is yours. Own that, and the layers become allies; dodge it, and they become gates.`},
+ secs:[
+  {h:`The three layers (and your seat)`,
+   b:``,
+   d:{type:`stack`, layers:[
+    {e:`✈️`, t:`Layer 1: YOU and your teams`, s:`Run the product = own its risks. Wrong data shown, permissions bug, missed alert — yours first.`},
+    {e:`🧑‍✈️`, t:`Layer 2: Risk and Compliance`, s:`Set the rules, challenge you, cross-check. Advisers and inspectors, not owners of YOUR risk.`},
+    {e:`🔍`, t:`Layer 3: Internal Audit`, s:`Independently checks layers 1 and 2. Reports to the very top.`}]},
+   b2:`<div class="callout">💡 The mindset shift: "compliance owns risk" is the amateur view. The professional view: <i>I own my product's risks; the layers help me not miss any.</i> Bosses can hear the difference in one meeting.</div>`},
+  {h:`Your product's real risks (name them like an owner)`,
+   b:``,
+   d:{type:`grid`, cards:[
+    {e:`🔢`, t:`Wrong data shown`, s:`Clients act on your screens. Wrong number = misstatement (why lineage matters — Day 20)`},
+    {e:`🔓`, t:`A permissions slip`, s:`One client sees another's data = reportable breach (why Day 11 is sacred)`},
+    {e:`🔕`, t:`A missed critical alert`, s:`The €12m story (Day 5). Notification proof = your receipts (Day 12)`},
+    {e:`⛔`, t:`The portal goes down`, s:`At month-end or a deadline, an outage is a client crisis with notification duties`},
+    {e:`🧨`, t:`A change breaks things`, s:`Most incidents follow a change — hence careful releases (below)`},
+    {e:`🤖`, t:`AI says something false`, s:`Day 21's hallucination — grounded + supervised, always`}]}},
+  {h:`Shipping fast INSIDE the rules`,
+   b:`<p>Banks have change controls (approvals, freeze windows) because most incidents follow a change. Good teams move quickly anyway, using tricks that de-risk change itself:</p>
+   <ul>
+   <li>🎛️ <b>Feature flags:</b> ship OFF, turn on gradually, kill-switch instantly — releasing and launching become separate, reversible steps (two-way doors! Day 24).</li>
+   <li>🌊 <b>Progressive rollout:</b> 2 friendly clients → 20 → everyone. Problems surface small.</li>
+   <li>🧯 <b>Pre-agreed rollback:</b> "if X breaks, revert in minutes" — written BEFORE launch. Approvers approve faster when reversal is proven.</li>
+   </ul>
+   <p>And the eternal rule for anything client-facing and new (remember Day 21's AI walkthrough): involve compliance at the <b>idea</b> stage. Week 0, one pager, "here's the concept and its guardrails — what would make it approvable?" That question turns months of late-stage blockage into weeks of co-design (Day 14's currency: no surprises).</p>`},
+ ],
+ words:[
+  {w:`Three lines of defense`, d:`Business owns its risks → risk/compliance set rules and challenge → audit independently checks. You're line one.`},
+  {w:`Operational risk`, d:`Risk from things breaking or humans erring — the family your product risks belong to.`},
+  {w:`Feature flag`, d:`A remote on/off switch per feature: gradual launch, instant rollback.`},
+  {w:`Progressive rollout`, d:`Releasing to a few clients first, then widening. Problems surface small.`},
+  {w:`Incident`, d:`Something went wrong for real. Fix, notify honestly (clients/regulators when required), learn blame-free.`},
+  {w:`Change freeze`, d:`Periods (month-end, big deadlines) when changes are barred — because most incidents follow changes.`}],
+ quiz:[
+  {q:`Who owns the risk of a permissions bug in YOUR portal?`,
+   o:[`Compliance`, `You and your teams — line one. The other layers check and challenge.`, `The client`], a:1,
+   why:`Run the product = own its risks. The layers are cross-checkers, not risk-owners for you.`},
+  {q:`Feature flags matter in a bank because they…`,
+   o:[`impress engineers`, `make launches gradual and instantly reversible — safe speed inside change controls`, `hide features from auditors`], a:1,
+   why:`They turn a lock-door launch into a swing-door one. Approvals come faster when rollback is proven.`},
+  {q:`The best moment to involve compliance in a new client-facing idea:`,
+   o:[`after building, before launch`, `at the concept stage — "what would make this approvable?"`, `only if they ask`], a:1,
+   why:`Week-0 involvement = co-designers. Week-20 surprise = blockers. Their currency is no surprises.`}]},
+
+{n:28, e:`👥`, t:`Building teams across the world`, tag:`Structure, hubs and hiring — the multiplier work`,
+ deep:`week-4-executive-playbook/day-28-building-and-scaling-teams.md`,
+ imagine:{e:`🎼`, h:`Imagine conducting an orchestra spread across four cities`,
+  p:`Strings in Boston, brass in Hyderabad, percussion in Kraków, woodwinds in Bangalore — playing one symphony across time zones. That's a modern bank's product organization. The conductor's real work isn't playing an instrument; it's structure (who sits in which section), trust (sections that never see each other must still play together) and tempo (rituals that keep time). Your ~60 people produce what your STRUCTURE lets them produce.`},
+ secs:[
+  {h:`Shape teams around client journeys, not org charts`,
+   b:``,
+   d:{type:`grid`, cards:[
+    {e:`🌊`, t:`Journey teams`, s:`One team owns "track my trades," another "corporate actions," another "documents." Long-lived owners (Day 9!), each with PM + engineers + design.`},
+    {e:`🧱`, t:`A platform team`, s:`Owns what every journey team shares: permissions, alerts pipeline, design system. Their customers are the other teams.`},
+    {e:`🎓`, t:`Enabling specialists`, s:`Float where needed: accessibility, data, research. Teach, then move on.`}]},
+   b2:`<div class="callout">💡 The test of good structure: how many OTHER teams must a team talk to before shipping? More hand-offs = slower + more misunderstandings. Restructure to cut hand-offs, not to redraw boxes.</div>`},
+  {h:`Global hubs, honestly`,
+   b:`<p>Big banks run major centers in Boston, Hyderabad, Bangalore, Kraków and beyond — deep talent, follow-the-sun coverage. One failure mode ruins it: <b>HQ decides, satellites execute.</b> Second-class dynamics demoralize brilliant people and slowly hollow out delivery. The antidotes:</p>
+   <ul>
+   <li>🏆 <b>Whole journeys owned by hubs</b> — a Hyderabad team OWNS corporate-actions experience end-to-end (PM, design, engineering), not just tickets from Boston.</li>
+   <li>🕐 <b>Overlap hours + writing culture</b> — a few shared hours for live conversation; decisions written down (Day 14's log) so nobody wakes up excluded.</li>
+   <li>✈️ <b>Deliberate visits</b> — leaders visit hubs, hub leaders present to executives. Presence signals partnership.</li>
+   </ul>
+   <p>Vendors and consultancies extend capacity fine — with one hard line: <b>never outsource product judgment.</b> Rent hands, never the brain. And insist on knowledge transfer, or it walks out at contract end.</p>`},
+  {h:`Hiring and rituals`,
+   b:`<p><b>Hire in multiplier order:</b> seniors first (they set standards and make every later hire better), then builders against the biggest bottleneck, then juniors into a structure that can grow them. Tempting shortcut — "five juniors fast, they're cheap" — costs a year of drift.</p>
+   <p><b>Rituals carry culture across oceans:</b> demo days (every team shows REAL working software monthly — accountability + celebration + cross-pollination in one hour), ops-shadowing rotations (Day 22's trick, institutionalized), blame-free incident reviews (Day 27), and skip-levels (you, their team member, no manager between — early-warning gold).</p>`},
+ ],
+ words:[
+  {w:`Journey team`, d:`A long-lived team owning one client journey end-to-end — the stable owner-team of Day 9.`},
+  {w:`Platform team`, d:`The team whose product is shared internal capability (permissions, alerts, design system) serving other teams.`},
+  {w:`GCC`, d:`Global Capability Center — a bank's major delivery hub (Hyderabad, Bangalore, Kraków…). Talent centers, not "outsourcing."`},
+  {w:`Hand-off`, d:`Work passing between teams. Each one adds delay and misunderstanding — structure to minimize them.`},
+  {w:`Demo day`, d:`Monthly ritual: teams show real working software. Accountability, celebration and alignment in one.`},
+  {w:`Skip-level`, d:`Meeting your manager's reports directly, no manager present. How truth reaches you early.`}],
+ quiz:[
+  {q:`The best test of an org structure:`,
+   o:[`how impressive the chart looks`, `how FEW other teams each team needs before it can ship`, `how many managers exist`], a:1,
+   why:`Hand-offs are where speed and truth die. Structure to minimize them.`},
+  {q:`The classic global-team failure is…`,
+   o:[`time zones existing`, `HQ deciding while hubs "just execute" — second-class dynamics`, `too many holidays`], a:1,
+   why:`The fix: hubs OWN whole journeys, overlap hours, written decisions, real visits.`},
+  {q:`What must never be outsourced?`,
+   o:[`testing`, `product judgment — deciding WHAT to build and WHY`, `documentation`], a:1,
+   why:`Rent hands when needed; never rent the brain. Judgment is the asset your teams compound.`}]},
+
+{n:29, e:`🪜`, t:`Your career: VP and beyond`, tag:`How promotion really works — and interviews at this level`,
+ deep:`week-4-executive-playbook/day-29-path-to-svp-and-interview-prep.md`,
+ imagine:{e:`🏛️`, h:`Imagine a jury that decides your case in 5 minutes — without you in the room`,
+  p:`Once a year, senior leaders gather to compare promotion candidates. Your case gets minutes, presented by someone else, judged against other candidates. Verdicts hinge on the written evidence and on who speaks up for you. Unfair? Somewhat. Universal? Completely. So build the two things juries respond to: an evidence file, and an advocate in the room.`},
+ secs:[
+  {h:`Evidence and advocates`,
+   b:`<ul>
+   <li>📁 <b>The brag file (start this week, 20 min/month):</b> every win with NUMBERS — "deflection 22→31%, ~$540k/yr" — plus praise emails and scope changes. December-you will remember nothing; the file remembers everything, and its numbers come straight from your metrics tree (Day 26).</li>
+   <li>🎤 <b>A sponsor, not just mentors.</b> A mentor advises you over coffee; a <b>sponsor spends their own credibility advocating for you in that room</b>. You can't ask for sponsorship like a favor — you earn it by making a senior leader's big priority succeed, visibly, more than once. (It's Day 14's currency game, played upward.)</li>
+   <li>📏 <b>The bar is comparative:</b> not "did well this year" but "stronger case than the others on the slate." Distinctive scope — the cross-team thing only you did — beats excellent delivery of the expected.</li>
+   </ul>`},
+  {h:`What the next level actually looks like`,
+   b:``,
+   d:{type:`split`,
+    a:{h:`🧗 SVP behaviors (the next room)`, items:[`DEFINES which problems matter for the business`,`Horizon: 2–3 years`,`Known outside the firm (industry forums, client executives)`,`EXPORTS leaders — alumni now lead elsewhere`,`Trusted broker between departments`]},
+    b:{h:`🧱 VP behaviors (strong today)`, items:[`Solves hard problems handed down`,`Horizon: 2–4 quarters`,`Known inside the firm`,`Builds a strong team`,`Manages stakeholders well`]},},
+   b2:`<div class="callout">💡 Self-audit twice a year: one sentence of EVIDENCE per row on the left. Empty rows = your development plan, pre-written.</div>`},
+  {h:`Interviews at this level (internal moves count too)`,
+   b:`<p>Senior interviews are evidence-based: "tell me about a time you actually..." Prepare once, use for years:</p>
+   <ul>
+   <li>📖 <b>Ten true stories</b>, each told in 2 minutes as Situation → Task → Action → Result-with-numbers, plus one honest "what I'd do differently." Cover: a turnaround, a conflict resolved, a failure and its lessons, a person you grew, an unpopular right call, a client save.</li>
+   <li>🧠 For scenario questions, <b>reason with frameworks out loud</b> — segment the users (Day 10), size the trade-off (Day 9), reversible or not (Day 24). They're hiring your thinking, not trivia recall.</li>
+   <li>❓ <b>Your questions signal your level:</b> "What decision rights does this role hold?" · "What's the operating-model tension I'd inherit?" (Day 9) · "Who are this role's three key partners and what do they currently want that they're not getting?" (Day 14). That's VP-grade thinking, out loud.</li>
+   </ul>`},
+ ],
+ words:[
+  {w:`Calibration`, d:`The comparative annual process where leaders rank candidates across teams. Where promotions are actually decided.`},
+  {w:`Sponsor`, d:`A senior leader who spends their OWN credibility advocating for you in rooms you're not in. Earned, not requested.`},
+  {w:`Brag file`, d:`Your running evidence log: wins with numbers, praise, scope. 20 minutes monthly; priceless annually.`},
+  {w:`Scope`, d:`The size and ambiguity of what you're trusted to own. Growing it (visibly) IS the promotion case.`},
+  {w:`STAR`, d:`Situation, Task, Action, Result — the 2-minute true-story format for evidence-based interviews.`}],
+ quiz:[
+  {q:`A sponsor differs from a mentor because a sponsor…`,
+   o:[`is more senior`, `spends their own credibility advocating for you in the decision room`, `meets you weekly`], a:1,
+   why:`Mentors advise; sponsors act — and promotion rooms run on advocates plus evidence.`},
+  {q:`The promotion bar at big companies is…`,
+   o:[`"had a good year"`, `comparative: a stronger case than the other candidates on the slate`, `years of service`], a:1,
+   why:`Calibration compares. Distinctive scope + numbers + an advocate is what wins comparisons.`},
+  {q:`The best interview preparation at this level:`,
+   o:[`memorizing custody trivia`, `ten true 2-minute stories with numbers, plus frameworks you reason with out loud`, `rehearsing buzzwords`], a:1,
+   why:`Evidence-based interviews reward prepared truth and visible thinking, not recall.`}]},
+
+{n:30, e:`🏁`, t:`The whole machine — one story`, tag:`Follow one trade through everything you now know`,
+ deep:`week-4-executive-playbook/day-30-capstone-the-full-system.md`,
+ imagine:{e:`🛰️`, h:`Imagine watching the whole city from above — and recognizing every street`,
+  p:`Thirty days ago this was fog. Today, fly over the whole city one last time and watch a single real scenario move through every district you've learned. If you can retell today's story out loud — to a friend, a whiteboard, a mirror — you understand this business better than most people inside it. Because you know how it CONNECTS.`},
+ secs:[
+  {h:`One trade's incredible journey`,
+   b:`<p>Monday, 10am. A pension fund's manager buys <b>500,000 shares of ACME ($15m)</b>. Watch every day of your journey light up:</p>`,
+   d:{type:`flow`, steps:[
+    {e:`⚡`, t:`Trade agreed + affirmed by 9pm`, s:`T+1 clock ticking (Day 3)`},
+    {e:`🔁`, t:`Tuesday: the swap`, s:`Shares + cash move together — DvP (Day 3), rails + messages (Day 6)`},
+    {e:`📢`, t:`"Settled!" hits the chat`, s:`One event, many reactions (Day 17)`},
+    {e:`📱`, t:`Screens, APIs, webhooks update`, s:`Client sees it everywhere at once (Days 10, 15)`},
+    {e:`🧮`, t:`That night: NAV includes it`, s:`Priced, checked, signed, published (Day 4)`}]},
+   b2:`<p>Two weeks later, ACME announces a <b>buyout offer at a 15% premium — answer within 12 days</b> (Day 5). The machine you now understand comes alive: the announcement is scrubbed into one golden record → every holder identified → notices sent → <b>escalating reminders</b> as the deadline nears (Day 12) → the client elects on the portal, with a fresh identity check and a second approver (Day 11) → election flows to market → cash arrives → statements record everything, unchangeably (Day 13) → the data lands in the library (Day 18) → dashboards update consistently (Day 19), provably (Day 20) → and when the client asks the AI assistant "why did my ACME position drop?", it answers from their own entitled records, with citations (Day 21). <b>No €12m story. The machine — YOUR machine — worked.</b></p>`},
+  {h:`Ten ideas to keep forever`,
+   b:`<ul>
+   <li>1️⃣ <b>It's a ledger business.</b> Perfect records of other people's stuff — accuracy is the brand (Day 1).</li>
+   <li>2️⃣ <b>Deadlines are where money is won and lost</b> — 9pm affirmations, election cutoffs, NAV nights (Days 3–5).</li>
+   <li>3️⃣ <b>Everything is an event</b> — and your products are reactions to the chat (Day 17).</li>
+   <li>4️⃣ <b>Permissions are the product</b> — every screen, API and AI answer obeys one map (Day 11).</li>
+   <li>5️⃣ <b>One number, every channel</b> — portal, file, deck must agree, provably (Days 18–20).</li>
+   <li>6️⃣ <b>The last mile is human attention</b> — losses die in unread notices; alerts are risk controls (Days 5, 12).</li>
+   <li>7️⃣ <b>Machines are clients too</b> — APIs are promises; break them slowly and kindly (Day 15).</li>
+   <li>8️⃣ <b>Self-service is the money story</b> — deflection drops straight to thin margins (Days 25–26).</li>
+   <li>9️⃣ <b>The org runs on consent</b> — currencies, pre-wiring, no surprises (Day 14).</li>
+   <li>🔟 <b>Trust compounds</b> — honest status, honest metrics, owned risks (Days 23, 26, 27).</li>
+   </ul>`},
+  {h:`A closing note — and what's next`,
+   b:`<p>Rishabh — you didn't need to out-know the 30-year custody veterans. Your edge is different: <b>you now see how it all connects</b>, across silos, in the client's language, on the screens and APIs where it becomes real. Most people in the building have depth in one district; you have the map of the city.</p>
+   <p>Keep three habits: one hour on the ops floor weekly, one client conversation weekly, twenty minutes on the brag file monthly. When you're ready to go deeper on any day, its full-depth chapter is one click away below — that 426-page handbook is your level-two, all month, all year.</p>
+   <p><b>Now close the app and go find the ops floor.</b> The best product VPs are the ones the operations teams claim as their own. 🎓</p>`},
+ ],
+ words:[
+  {w:`Capstone`, d:`The final piece that locks an arch — and a course's final synthesis. You just completed one.`},
+  {w:`Systems thinking`, d:`Seeing how parts connect and affect each other — your real advantage after these 30 days.`},
+  {w:`The map of the city`, d:`Your mental model of how custody, product, tech and leadership interlock. Maintain it; it appreciates.`}],
+ quiz:[
+  {q:`Trade agreed Monday. Under T+1, the swap happens…`,
+   o:[`Monday midnight`, `Tuesday — shares and cash together (DvP)`, `Friday`], a:1,
+   why:`Day 3, forever: T+1, and delivery-versus-payment protects both sides.`},
+  {q:`The buyout offer went right (unlike the €12m story) because…`,
+   o:[`the client was lucky`, `escalating alerts + portal election with approvals + tracked responses — the last mile was engineered`, `the deadline was extended`], a:1,
+   why:`Days 5+11+12 working together. Attention was engineered, not hoped for.`},
+  {q:`When the AI assistant answered "why did my position drop?", it was safe because…`,
+   o:[`AI is always right`, `grounded in the client's own entitled records, with citations (and supervised where consequential)`, `a human typed it secretly`], a:1,
+   why:`Day 21's twin locks: grounding + entitlements. Powerful intern, proper supervision.`},
+  {q:`And the meta-question: what's YOUR durable edge after 30 days?`,
+   o:[`memorized acronyms`, `the connected map — how business, systems, clients and leadership interlock`, `faster email replies`], a:1,
+   why:`Depth exists everywhere in the building; the connected view is rare. Guard it, grow it, use it.`}]},
+];
+
+/* ---------------- boot ---------------- */
+route();
+</script>
+</body>
+</html>
