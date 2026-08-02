@@ -1,0 +1,259 @@
+<meta charset="utf-8">
+<title>Rishabh Sharma — Product Leadership Job Console</title>
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --ink:#16232E; --muted:#5A6B7A; --line:#DCE3E9;
+  --accent:#0E6E6E; --accent-soft:#E3F1F0; --urgent:#B4540A; --urgent-soft:#FBEEDF;
+  --good:#1F7A46; --good-soft:#E4F3EA; --warn:#8A6D1D; --warn-soft:#F7F0DA;
+  --shadow:0 1px 2px rgba(22,35,46,.06),0 4px 14px rgba(22,35,46,.05);
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0F1519; --surface:#182027; --ink:#E8EDF1; --muted:#93A4B2; --line:#26313A;
+  --accent:#3FB8B0; --accent-soft:#12312F; --urgent:#E8945A; --urgent-soft:#33220F;
+  --good:#57C786; --good-soft:#11291A; --warn:#D9B44A; --warn-soft:#2B2410;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1519; --surface:#182027; --ink:#E8EDF1; --muted:#93A4B2; --line:#26313A;
+  --accent:#3FB8B0; --accent-soft:#12312F; --urgent:#E8945A; --urgent-soft:#33220F;
+  --good:#57C786; --good-soft:#11291A; --warn:#D9B44A; --warn-soft:#2B2410;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --bg:#F4F6F8; --surface:#FFFFFF; --ink:#16232E; --muted:#5A6B7A; --line:#DCE3E9;
+  --accent:#0E6E6E; --accent-soft:#E3F1F0; --urgent:#B4540A; --urgent-soft:#FBEEDF;
+  --good:#1F7A46; --good-soft:#E4F3EA; --warn:#8A6D1D; --warn-soft:#F7F0DA;
+  --shadow:0 1px 2px rgba(22,35,46,.06),0 4px 14px rgba(22,35,46,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+header h1{font-family:Georgia,'Times New Roman',serif;font-size:30px;margin:0 0 4px;text-wrap:balance}
+header .sub{color:var(--muted);margin:0 0 6px}
+.note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:14px 0 0}
+.note b{color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+.tile .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.tile .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tile.urgent .n{color:var(--urgent)}
+.tile.good .n{color:var(--good)}
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:18px}
+.filters input[type=search],.filters select{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit;font-size:14px}
+.filters input[type=search]{flex:1;min-width:160px}
+.filters label.toggle{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+h2.sec{font-family:Georgia,serif;font-size:20px;margin:30px 0 4px}
+h2.sec .count{color:var(--muted);font-family:inherit;font-size:14px;font-weight:400}
+p.secdesc{color:var(--muted);font-size:13px;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--urgent);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.card .why{font-size:13px;color:var(--muted)}
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:start;box-shadow:var(--shadow)}
+.fit{width:44px;height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums;background:var(--accent-soft);color:var(--accent)}
+.fit.f10{background:var(--good-soft);color:var(--good)}
+.fit.low{background:var(--warn-soft);color:var(--warn)}
+.jt{font-weight:600}
+.jc{color:var(--muted);font-size:13px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.b{font-size:11px;letter-spacing:.03em;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.b.plat{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.b.imm{background:var(--urgent-soft);color:var(--urgent);border-color:transparent;font-weight:600}
+.b.ver{background:var(--good-soft);color:var(--good);border-color:transparent}
+.b.unver{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.why2{font-size:13px;color:var(--muted);margin-top:6px}
+.notes{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic}
+.act{display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:150px}
+a.apply{background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;white-space:nowrap}
+:root[data-theme="dark"] a.apply, :root:not([data-theme="light"]) a.apply{color:#08211f}
+@media (prefers-color-scheme: light){a.apply{color:#fff}}
+:root[data-theme="light"] a.apply{color:#fff}
+:root[data-theme="dark"] a.apply{color:#08211f}
+a.apply:focus-visible,select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select.status{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:12.5px}
+select.status.applied{border-color:var(--good);color:var(--good)}
+select.status.interview{border-color:var(--accent);color:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:26px;box-shadow:var(--shadow)}
+.panel h3{font-family:Georgia,serif;margin:0 0 8px;font-size:17px}
+.panel ol,.panel ul{margin:8px 0;padding-left:20px;font-size:14px}
+.panel code{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}.row{grid-template-columns:44px 1fr}.act{grid-column:1/-1;flex-direction:row;justify-content:flex-end}}
+.toolbar{display:flex;gap:10px;margin:16px 0 0;flex-wrap:wrap}
+button.tb{background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
+.empty{color:var(--muted);padding:30px;text-align:center;font-size:14px}
+footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Product Leadership Job Console</h1>
+  <p class="sub">Rishabh Sharma · VP Product Management → CPO / Head of Product / Director-VP Product · Bengaluru &amp; India · researched 2 Aug 2026</p>
+  <div class="note"><b>How to read this:</b> 85 live senior product-leadership roles found by a 5-track deep sweep (Workday bank/GCC sites, Indian fintech ATS boards, SaaS/AI companies, big tech, executive job boards). State Street and JP Morgan are excluded. <b>Verified</b> = confirmed against the canonical careers site; <b>confirm link</b> = found via fresh Aug-2026 search index — open and confirm before applying. Your application status saves in this browser and exports as CSV.</div>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="n" id="t-total">0</div><div class="l">Live roles</div></div>
+  <div class="tile urgent"><div class="n" id="t-imm">0</div><div class="l">Act fast / immediate</div></div>
+  <div class="tile good"><div class="n" id="t-top">0</div><div class="l">Fit 8+</div></div>
+  <div class="tile"><div class="n" id="t-easy">0</div><div class="l">One-page applies</div></div>
+  <div class="tile good"><div class="n" id="t-applied">0</div><div class="l">Applied</div></div>
+</div>
+
+<div class="filters">
+  <input type="search" id="q" placeholder="Search company, title, location…" aria-label="Search jobs">
+  <select id="f-cat" aria-label="Category">
+    <option value="">All tracks</option>
+    <option value="exec-search">Exec search / boards</option>
+    <option value="workday-banks">Banks &amp; payments (Workday)</option>
+    <option value="fintech-india">Indian fintech</option>
+    <option value="saas-ai">SaaS &amp; AI</option>
+    <option value="bigtech">Big tech</option>
+  </select>
+  <select id="f-plat" aria-label="Platform"><option value="">All platforms</option></select>
+  <select id="f-fit" aria-label="Minimum fit">
+    <option value="0">Any fit</option><option value="8" selected>Fit ≥ 8</option><option value="9">Fit ≥ 9</option>
+  </select>
+  <label class="toggle"><input type="checkbox" id="f-imm"> Immediate only</label>
+  <label class="toggle"><input type="checkbox" id="f-todo"> Hide applied</label>
+</div>
+
+<h2 class="sec">⚡ Immediate joiner — act fast <span class="count" id="c-imm"></span></h2>
+<p class="secdesc">Postings that explicitly want immediate/0–30-day joiners, close soon, or went up in the last few days. Apply to these first, today.</p>
+<div class="cards" id="immediate"></div>
+
+<h2 class="sec">All matches, ranked by fit <span class="count" id="c-all"></span></h2>
+<div class="rows" id="list"></div>
+
+<div class="toolbar">
+  <button class="tb" id="export">Export status CSV</button>
+  <button class="tb" id="reset">Reset all statuses</button>
+</div>
+
+<div class="grid2">
+<div class="panel">
+  <h3>Apply fast — the 2-minute drill</h3>
+  <ol>
+    <li><b>Greenhouse / Lever / Ashby</b> (badge says so): one page, no account. Upload the resume PDF, paste answers from the question bank. ~2–3 min each.</li>
+    <li><b>Workday</b>: first visit to a company = create account with rishabh071106@gmail.com + email code, then <i>Autofill with Resume</i>. Audit every screen — Workday misparses ~⅓ of fields. ~10–15 min first time, ~5 min after (<i>Use My Last Application</i>).</li>
+    <li><b>iimjobs / Naukri / LinkedIn / Wellfound</b>: apply with the platform profile; keep it synced to this resume.</li>
+    <li>Pace it: max 2–3 reqs per company per week; recruiters see burst-applying inside a tenant.</li>
+  </ol>
+</div>
+<div class="panel">
+  <h3>Standard answers (copy-paste)</h3>
+  <ul>
+    <li><b>Work auth:</b> Indian citizen, no sponsorship needed</li>
+    <li><b>Notice period:</b> set yours once — "Immediate–30 days (negotiable)" if applicable</li>
+    <li><b>Current CTC:</b> prefer not to disclose / per band</li>
+    <li><b>Expected CTC:</b> as per role band, negotiable</li>
+    <li><b>Heard via:</b> Company website</li>
+    <li><b>LinkedIn:</b> <code>linkedin.com/in/rishabhsharmaiimk</code></li>
+    <li><b>Resume:</b> <code>career/resume/Rishabh_Sharma_Resume_Product_Leader.pdf</code> in the repo — one file everywhere</li>
+  </ul>
+</div>
+</div>
+
+<footer>Sources: five parallel research sweeps, 2 Aug 2026. Direct page fetches are blocked from the research sandbox, so non-verified entries were located via fresh search-index crawls — always confirm the posting is live before investing in a long Workday flow. Full data: <code>career/data/jobs.json</code> · Playbook: <code>career/apply/APPLY-PLAYBOOK.md</code>.</footer>
+</div>
+
+<script>
+const JOBS = __JOBS__;
+const LSKEY = "rs-job-status-v1";
+let status = {};
+try { status = JSON.parse(localStorage.getItem(LSKEY) || "{}"); } catch(e){}
+const save = () => localStorage.setItem(LSKEY, JSON.stringify(status));
+const STAGES = ["To review","Applying","Applied","Interview","Offer","Dropped"];
+const esc = s => String(s??"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ONE_PAGE = ["greenhouse","lever","ashby"];
+const CATLBL = {"exec-search":"Exec search","workday-banks":"Banks/GCC","fintech-india":"Indian fintech","saas-ai":"SaaS & AI","bigtech":"Big tech"};
+
+const platSel = document.getElementById("f-plat");
+[...new Set(JOBS.map(j=>j.platform))].sort().forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;platSel.appendChild(o);});
+
+function badge(j){
+  let h = `<span class="b plat">${esc(j.platform)}</span>`;
+  h += `<span class="b">${esc(CATLBL[j.category]||j.category)}</span>`;
+  if (j.immediate_joiner) h += `<span class="b imm">⚡ act fast</span>`;
+  h += j.verified ? `<span class="b ver">verified</span>` : `<span class="b unver">confirm link</span>`;
+  if (j.posted_date) h += `<span class="b">${esc(j.posted_date)}</span>`;
+  if (ONE_PAGE.includes(j.platform)) h += `<span class="b ver">one-page apply</span>`;
+  return h;
+}
+function statusSel(j){
+  const cur = status[j.id] || "To review";
+  const cls = cur==="Applied"||cur==="Offer" ? "applied" : cur==="Interview" ? "interview" : "";
+  return `<select class="status ${cls}" data-id="${j.id}" aria-label="Status for ${esc(j.company)}">` +
+    STAGES.map(s=>`<option ${s===cur?"selected":""}>${s}</option>`).join("") + `</select>`;
+}
+function fitCls(f){ return f>=10 ? "fit f10" : f>=8 ? "fit" : "fit low"; }
+
+function render(){
+  const q = document.getElementById("q").value.toLowerCase();
+  const cat = document.getElementById("f-cat").value;
+  const plat = platSel.value;
+  const minFit = +document.getElementById("f-fit").value;
+  const immOnly = document.getElementById("f-imm").checked;
+  const hideApplied = document.getElementById("f-todo").checked;
+  const match = j =>
+    (!q || (j.company+" "+j.title+" "+j.location+" "+(j.notes||"")).toLowerCase().includes(q)) &&
+    (!cat || j.category===cat) && (!plat || j.platform===plat) &&
+    j.fit_score>=minFit && (!immOnly || j.immediate_joiner) &&
+    (!hideApplied || !["Applied","Interview","Offer","Dropped"].includes(status[j.id]||""));
+
+  const imm = JOBS.filter(j=>j.immediate_joiner && match(j));
+  document.getElementById("immediate").innerHTML = imm.map(j=>`
+    <div class="card">
+      <div><span class="${fitCls(j.fit_score)}" style="float:right">${j.fit_score}</span>
+        <div class="jt">${esc(j.title)}</div>
+        <div class="jc">${esc(j.company)} · ${esc(j.location)} · ${esc(j.seniority)}</div>
+      </div>
+      <div class="why">${esc(j.fit_reason)}</div>
+      ${j.notes?`<div class="notes">${esc(j.notes)}</div>`:""}
+      <div class="badges">${badge(j)}</div>
+      <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
+        ${statusSel(j)} <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open &amp; apply ↗</a>
+      </div>
+    </div>`).join("") || `<div class="empty">Nothing matches the current filters.</div>`;
+  document.getElementById("c-imm").textContent = `(${imm.length})`;
+
+  const rest = JOBS.filter(j=>!j.immediate_joiner && match(j));
+  document.getElementById("list").innerHTML = rest.map(j=>`
+    <div class="row">
+      <div class="${fitCls(j.fit_score)}">${j.fit_score}</div>
+      <div>
+        <div class="jt">${esc(j.title)}</div>
+        <div class="jc">${esc(j.company)} · ${esc(j.location)} · ${esc(j.seniority)}</div>
+        <div class="why2">${esc(j.fit_reason)}</div>
+        ${j.notes?`<div class="notes">${esc(j.notes)}</div>`:""}
+        <div class="badges">${badge(j)}</div>
+      </div>
+      <div class="act">
+        <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open &amp; apply ↗</a>
+        ${statusSel(j)}
+      </div>
+    </div>`).join("") || `<div class="empty">Nothing matches the current filters.</div>`;
+  document.getElementById("c-all").textContent = `(${rest.length} shown)`;
+
+  document.getElementById("t-total").textContent = JOBS.length;
+  document.getElementById("t-imm").textContent = JOBS.filter(j=>j.immediate_joiner).length;
+  document.getElementById("t-top").textContent = JOBS.filter(j=>j.fit_score>=8).length;
+  document.getElementById("t-easy").textContent = JOBS.filter(j=>ONE_PAGE.includes(j.platform)).length;
+  document.getElementById("t-applied").textContent = Object.values(status).filter(s=>["Applied","Interview","Offer"].includes(s)).length;
+}
+document.addEventListener("change", e=>{
+  if (e.target.matches("select.status")){ status[e.target.dataset.id] = e.target.value; save(); render(); }
+  else if (e.target.closest(".filters")) render();
+});
+document.getElementById("q").addEventListener("input", render);
+document.getElementById("export").onclick = ()=>{
+  const rows = [["Company","Title","Location","Seniority","Fit","Platform","Immediate","Status","URL"]];
+  JOBS.forEach(j=>rows.push([j.company,j.title,j.location,j.seniority,j.fit_score,j.platform,j.immediate_joiner?"yes":"",status[j.id]||"To review",j.apply_url]));
+  const csv = rows.map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = "data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+  a.download = "job-applications-status.csv"; a.click();
+};
+document.getElementById("reset").onclick = ()=>{ if(confirm("Clear all application statuses?")){ status={}; save(); render(); } };
+render();
+</script>
