@@ -30,10 +30,12 @@ Human-only steps everywhere: account credentials, email verification codes (OTP)
 - **Notice period**: "Serving notice — last working day 11 Sep 2026; can join from 12 Sep 2026." (~6 weeks — counts as near-immediate for senior reqs.)
 - **Earliest start date**: 2026-09-12 (or "mid-September 2026").
 - **Current CTC**: ₹48L fixed — only if mandatory (numeric only in Workday: 4800000).
-- **Expected CTC**: anchor ₹85L+ total (numeric: 8500000). You hold a competing offer of ₹75L fixed + ~10% bonus — never name the company on a form; mention "competing offer in hand, deciding in coming weeks" at recruiter screens to compress timelines and set the floor.
+- **Expected CTC**: ask ₹95L (numeric: 9500000), negotiate toward ₹1 Cr total. Competing offer (₹75L fixed + ~10% bonus ≈ ₹82.5L) is the private walk-away floor — never name the company on a form; mention "competing offer in hand, deciding in coming weeks" at recruiter screens to compress timelines.
 
-### Comp floor rule
-The offer in hand ≈ ₹82.5L total. Deprioritize roles that can't clear it: senior-PM/Lead-grade postings (fit ≤6 on the dashboard) at banks/GCCs typically band ₹50–70L — apply only where scope or brand justifies a flat move. CPO/Head-of-Product/Director-and-above roles (the fit 8–10 tier, e.g. the ₹79–96 LPA Senior Director Consumer Lending) are the right pond.
+### Comp targeting at ₹95L–1Cr
+- **In band**: CPO/Head-of-Product exec-search mandates, big-tech Director/GPM (Google GPM ₹1Cr+, Intuit VP well above, Salesforce/Adobe/Uber Director ₹1Cr±), Visa/Mastercard Director (₹90L–1.3Cr with equity/bonus), NatWest/Wells Fargo Director-ED grades (upper band), the ₹79–96L Senior Director Consumer Lending (top of band = the ask).
+- **Below band — deprioritize**: Lead/Senior-PM/AVP-grade reqs (fit ≤6), most Indian-fintech Associate-Director seats unless heavy ESOPs are on the table. Startup CPO roles: judge cash+ESOP mix, ask for ₹95L cash-heavy.
+- At ₹95L+, negotiation happens at offer stage, not screening — keep forms at 9500000 and let scope/level do the talking.
 
 ### Timeline math (today = 2 Aug)
 - Aug 2–14: applications + recruiter screens (senior processes take 4–8 weeks — start everything now).
