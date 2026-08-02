@@ -76,5 +76,5 @@
     "gender": "Prefer to self-identify per candidate choice",
     "disability_veteran_us_forms": "Not applicable for India requisitions; answer 'I don't wish to answer' where optional"
   },
-  "excluded_companies": ["State Street", "JP Morgan / JPMorgan Chase (current employer)"]
+  "excluded_companies": ["State Street", "JP Morgan / JPMorgan Chase (current employer)", "Wells Fargo"]
 }
