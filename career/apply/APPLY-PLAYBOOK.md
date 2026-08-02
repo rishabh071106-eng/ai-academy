@@ -27,10 +27,18 @@ Human-only steps everywhere: account credentials, email verification codes (OTP)
 ## Standard question bank (copy-paste answers)
 
 - **Authorized to work in India**: Yes. **Sponsorship**: No.
-- **Notice period**: <set once — e.g. "Immediate to 30 days (negotiable)" if serving notice>
-- **Earliest start date**: <align with notice period>
-- **Current CTC**: prefer not to disclose unless field is mandatory (numeric only, no commas, in Workday).
-- **Expected CTC**: "As per role band" / numeric only if forced.
+- **Notice period**: "Serving notice — last working day 11 Sep 2026; can join from 12 Sep 2026." (~6 weeks — counts as near-immediate for senior reqs.)
+- **Earliest start date**: 2026-09-12 (or "mid-September 2026").
+- **Current CTC**: ₹48L fixed — only if mandatory (numeric only in Workday: 4800000).
+- **Expected CTC**: anchor ₹85L+ total (numeric: 8500000). You hold a competing offer of ₹75L fixed + ~10% bonus — never name the company on a form; mention "competing offer in hand, deciding in coming weeks" at recruiter screens to compress timelines and set the floor.
+
+### Comp floor rule
+The offer in hand ≈ ₹82.5L total. Deprioritize roles that can't clear it: senior-PM/Lead-grade postings (fit ≤6 on the dashboard) at banks/GCCs typically band ₹50–70L — apply only where scope or brand justifies a flat move. CPO/Head-of-Product/Director-and-above roles (the fit 8–10 tier, e.g. the ₹79–96 LPA Senior Director Consumer Lending) are the right pond.
+
+### Timeline math (today = 2 Aug)
+- Aug 2–14: applications + recruiter screens (senior processes take 4–8 weeks — start everything now).
+- Aug 15 – Sep 5: interview loops; use the competing offer's decision deadline to compress.
+- Sep 11: JPM last working day. Any new offer landing after this is still fine — you join later; but an offer before ~Sep 1 lets you decide between it and the one in hand without a gap.
 - **How did you hear about us**: Company website.
 - **Previously worked for this company**: No (note: answer Yes at Citi/Standard Bank contexts only if the form counts vendor/consultant engagements — read the fine print).
 - **Relatives at company**: No.
