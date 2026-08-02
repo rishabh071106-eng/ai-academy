@@ -83,6 +83,25 @@ select.status.interview{border-color:var(--accent);color:var(--accent)}
 button.tb{background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
 .empty{color:var(--muted);padding:30px;text-align:center;font-size:14px}
 footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+button.guide{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.modal-bg{position:fixed;inset:0;background:rgba(10,16,20,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);color:var(--ink);width:100%;max-width:680px;max-height:88vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:20px 20px 30px;box-shadow:0 -8px 40px rgba(0,0,0,.3)}
+@media(min-width:720px){.modal-bg{align-items:center}.modal{border-radius:14px}}
+.modal h3{font-family:Georgia,serif;margin:0 0 2px;font-size:18px;padding-right:40px}
+.modal .mc{color:var(--muted);font-size:13px;margin-bottom:12px}
+.modal .x{position:absolute;background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;right:18px;margin-top:-4px}
+.steps{margin:10px 0 14px;padding:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;display:flex;gap:10px;margin:8px 0;font-size:14px}
+.steps li::before{content:counter(st);flex:0 0 22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.chip{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:13px;cursor:pointer;color:var(--ink);text-align:left;font-family:inherit;max-width:100%}
+.chip small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.chip.copied{border-color:var(--good);background:var(--good-soft)}
+.pitchbox{width:100%;min-height:120px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px;font:13px/1.5 inherit;box-sizing:border-box}
+.mrow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.mrow a.apply{flex:1;text-align:center}
+button.done{flex:1;background:var(--good);color:#fff;border:none;border-radius:8px;padding:9px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 </style>
 
 <div class="wrap">
@@ -156,6 +175,10 @@ footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid 
 </div>
 </div>
 
+<div class="modal-bg" id="mbg" role="dialog" aria-modal="true">
+  <div class="modal" id="modal"></div>
+</div>
+
 <footer>Sources: five parallel research sweeps, 2 Aug 2026. Direct page fetches are blocked from the research sandbox, so non-verified entries were located via fresh search-index crawls — always confirm the posting is live before investing in a long Workday flow. Full data: <code>career/data/jobs.json</code> · Playbook: <code>career/apply/APPLY-PLAYBOOK.md</code>.</footer>
 </div>
 
@@ -213,8 +236,12 @@ function render(){
       <div class="why">${esc(j.fit_reason)}</div>
       ${j.notes?`<div class="notes">${esc(j.notes)}</div>`:""}
       <div class="badges">${badge(j)}</div>
-      <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
-        ${statusSel(j)} <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open &amp; apply ↗</a>
+      <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap">
+        ${statusSel(j)}
+        <span style="display:flex;gap:8px">
+          <button class="guide" data-guide="${j.id}">🧭 Guide me</button>
+          <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open ↗</a>
+        </span>
       </div>
     </div>`).join("") || `<div class="empty">Nothing matches the current filters.</div>`;
   document.getElementById("c-imm").textContent = `(${imm.length})`;
@@ -231,7 +258,8 @@ function render(){
         <div class="badges">${badge(j)}</div>
       </div>
       <div class="act">
-        <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open &amp; apply ↗</a>
+        <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open ↗</a>
+        <button class="guide" data-guide="${j.id}">🧭 Guide me</button>
         ${statusSel(j)}
       </div>
     </div>`).join("") || `<div class="empty">Nothing matches the current filters.</div>`;
@@ -253,9 +281,77 @@ document.getElementById("export").onclick = ()=>{
   JOBS.forEach(j=>rows.push([j.company,j.title,j.location,j.seniority,j.fit_score,j.platform,j.immediate_joiner?"yes":"",status[j.id]||"To review",j.apply_url]));
   const csv = rows.map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
   const a = document.createElement("a");
-  a.href = "data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
   a.download = "job-applications-status.csv"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
 };
+
+/* ---------- Apply Copilot ---------- */
+const PITCHES = {
+ 1:"As VP Product at JP Morgan I own exactly this mandate today: the global digital loan booking platform across CIB and Commercial Banking — journeys, underwriting integration, pricing/risk connectivity, portfolio outcomes. I scaled adoption 40%→85% in 12 months and led the platform's move to straight-through processing with a multi-agent AI architecture. Serving notice (available 12 Sep) and looking for end-to-end consumer-lending product ownership — this role is that.",
+ 2:"Fifteen years building banking and payments-adjacent platforms across US/UK/EMEA/APAC/Africa, currently VP Product at JP Morgan owning strategy, roadmap and P&L narrative for a global lending platform. I bring the pairing a payments CPO needs now: regulated-industry product judgment plus hands-on agentic-AI delivery (LLM extraction, RAG, operator copilots in production). IIM Kozhikode EMBA, M.Tech AI (IIT Bhilai) in progress, available mid-September.",
+ 3:"I run a digital lending platform at JP Morgan today — APIs and Kafka event streams stitching Loan IQ, ACBS, underwriting and risk into one booking flow — and previously spent six years modernizing Standard Bank's core banking across 26 partner platforms. Lending platform leadership in a global bank's digital unit is my exact lane. Available from 12 September.",
+ 4:"Leading a global PM org for a B2B network platform with an AI-native mandate is a superset of my current role: global lending-platform product across four regions, multi-agent AI transformation, and six prior years integrating 26 partner platforms into Standard Bank's network. I've run SAP-based modernization from the customer side — I know where enterprise buyers feel network-platform pain. Available mid-September, Bengaluru-based.",
+ 9:"Everything Agentforce promises enterprises, I've delivered inside one: agents doing document extraction, RAG-grounded intelligence and human-in-the-loop copilots on a regulated banking platform, with the AI governance and adoption metrics (40%→85%) to prove it lands. I product-manage AI platforms with an architect's fluency — APIs, Kafka, AWS — and a P&L owner's discipline.",
+ 13:"Fifteen years of fintech product leadership (JP Morgan VP today; Standard Bank core-banking modernization before), with production agentic-AI delivery and an adoption playbook that took a global platform from 40% to 85%. I'm looking for a Head-of-Product seat where that operating depth compounds — happy to be matched across the portfolio. Available from 12 September.",
+ 14:"Fincent's AI-first fintech ambition is the arc of my career: banking platforms for 15 years, and for the last four, turning one into an AI-native system (multi-agent STP, LLM extraction, copilots) at JP Morgan. As CPO I'd bring big-bank credibility for the SMB-finance trust problem plus startup-speed AI delivery. EMBA (IIM Kozhikode), M.Tech AI (IIT Bhilai, ongoing).",
+ 16:"I lead product for an AI-heavy enterprise platform at JP Morgan — LLM, RAG and agent surfaces in production — and have built and mentored product teams across three continents. Glean's India product org needs someone who has run enterprise-grade AI product end-to-end and can hire and coach the team that scales it; that's been my last five years.",
+ 17:"I ship agentic AI in one of the world's most regulated environments: a multi-agent architecture running LLM extraction, RAG and copilots inside JP Morgan's global lending platform. I know what enterprises need before they trust agents with core workflows — governance, auditability, graceful failure — because I built it. 15 years of enterprise platform product leadership, M.Tech AI in progress, Bengaluru-based.",
+ 20:"VP Product at JP Morgan: strategy, vision, multi-year roadmap and P&L narrative for a global platform, adoption scaled 40%→85% in 12 months through a product-led playbook of UX redesign, embedded analytics and disciplined experimentation. That playbook is Intuit's language — customer-obsessed discovery plus AI-first delivery (I ship LLM/RAG/copilot systems in production today). Available from mid-September.",
+ 21:"Agentic AI is not a slide for me — I designed and shipped a multi-agent architecture (LLM document extraction, RAG intelligence, copilots) inside JP Morgan's lending platform, with measurable FTE and cycle-time gains and a governance framework regulators can live with. I'm pursuing an M.Tech in AI at IIT Bhilai to stay ahead of the curve I'm shipping on. Director-level payments AI strategy in India is the seat I want.",
+ 25:"I've done for a JP Morgan platform what this role wants to do across Visa's product org: embedded AI into how product actually ships — multi-agent architecture for straight-through processing, RAG-powered covenant intelligence, operator copilots — with an AI governance framework behind it. 15 years of payments-adjacent banking platforms and current M.Tech AI research; credible with engineers and MDs from day one."
+};
+const GENERIC_PITCH = "Product leader with 15 years in banking/fintech; currently VP Product at JP Morgan owning the global digital loan booking platform — strategy, roadmap, P&L narrative — where I scaled adoption 40%→85% in 12 months and shipped a multi-agent AI architecture (LLM extraction, RAG, copilots) driving straight-through processing. IIM Kozhikode EMBA; M.Tech AI (IIT Bhilai) in progress. Serving notice — available from 12 September 2026.";
+const ANSWERS = [
+ ["First name","Rishabh"],["Last name","Sharma"],["Email","rishabh071106@gmail.com"],["Phone","+91 7087750777"],
+ ["LinkedIn","https://linkedin.com/in/rishabhsharmaiimk"],["Location","Bengaluru, Karnataka, India"],
+ ["Current company","JP Morgan Chase & Co."],["Current title","Vice President — Product Management"],
+ ["Notice period","Serving notice — last working day 11 Sep 2026; can join from 12 Sep 2026"],
+ ["Earliest start","2026-09-12"],["Expected CTC (numeric)","9500000"],["Current CTC (only if mandatory)","4800000"],
+ ["Work authorization","Indian citizen — no sponsorship required"],["How heard","Company website"],
+ ["Portfolio","https://brodoit.com"]
+];
+const STEPS = {
+ workday: ["Tap Open ↗ — on the posting hit Apply (or add /apply to the URL).","First time at this company: Create Account with your email; enter the 6-digit code from your inbox.","Choose 'Autofill with Resume' and upload the resume PDF (get it from GitHub → career/resume/ — keep a copy on this device).","Audit every screen — Workday misreads ~1/3 of parsed fields; fix from the chips below.","Application Questions → copy answers from the chips. Voluntary disclosures are optional.","Review → Submit → come back and mark Applied."],
+ greenhouse: ["Tap Open ↗ and hit Apply on the posting.","Upload the resume PDF first — it prefills several fields.","Fill the rest from the chips below; paste the pitch into any 'cover letter / why us' box.","Solve the CAPTCHA if shown → Submit → mark Applied here."],
+ lever: ["Tap Open ↗ — Lever forms are one page, no account.","Upload resume, then copy the chips below into the fields.","Paste the pitch into 'Additional information' → Submit → mark Applied."],
+ iimjobs: ["Tap Open ↗ — log in to your iimjobs account (keep profile synced to this resume).","Tap Apply; paste the pitch below as the covering note — it is the main thing recruiters read.","Confirm notice period as 'immediate to 30/45 days' equivalents where a dropdown forces it → Submit → mark Applied."],
+ naukri: ["Tap Open ↗ — log in to Naukri and hit Apply.","If a questionnaire appears, copy answers from the chips.","Paste the pitch if a message box is offered → Submit → mark Applied."],
+ linkedin: ["Tap Open ↗ — use Easy Apply if offered, else follow to the company site.","Chips below cover every standard question.","Paste the pitch into any message/summary box → Submit → mark Applied."],
+ generic: ["Tap Open ↗ and start the application on the careers site.","Upload the resume PDF; fill remaining fields from the chips below.","Paste the pitch into any free-text 'why you' box.","Submit → come back and mark Applied."]
+};
+const mbg = document.getElementById("mbg"), modal = document.getElementById("modal");
+function openGuide(id){
+  const j = JOBS.find(x=>x.id===+id); if(!j) return;
+  const steps = STEPS[j.platform] || STEPS[["greenhouse","lever","ashby"].includes(j.platform)?"greenhouse":"generic"] || STEPS.generic;
+  const pitch = PITCHES[j.id] || GENERIC_PITCH;
+  modal.innerHTML = `
+    <button class="x" aria-label="Close" onclick="document.getElementById('mbg').classList.remove('open')">×</button>
+    <h3>${esc(j.title)}</h3>
+    <div class="mc">${esc(j.company)} · ${esc(j.location)} · fit ${j.fit_score}/10 · ${esc(j.platform)}${j.verified?"":" · ⚠ confirm posting is live first"}</div>
+    <ol class="steps">${steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="chips">${ANSWERS.map(([k,v])=>`<button class="chip" data-copy="${esc(v)}"><small>${esc(k)}</small>${esc(v)}</button>`).join("")}</div>
+    <p style="font-size:12px;color:var(--muted);margin:2px 0 10px">Tap any chip to copy it.</p>
+    <label style="font-size:13px;font-weight:600">Tailored pitch — tap to copy:</label>
+    <textarea class="pitchbox" readonly data-copy="${esc(pitch)}">${esc(pitch)}</textarea>
+    <div class="mrow">
+      <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open posting ↗</a>
+      <button class="done" data-done="${j.id}">✓ Mark Applied</button>
+    </div>`;
+  mbg.classList.add("open");
+}
+document.addEventListener("click", async e=>{
+  const g = e.target.closest("[data-guide]"); if (g) return openGuide(g.dataset.guide);
+  const c = e.target.closest("[data-copy]");
+  if (c) {
+    try { await navigator.clipboard.writeText(c.dataset.copy); } catch { const r=document.createRange(); r.selectNodeContents(c); const s=getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand("copy"); }
+    c.classList.add("copied"); setTimeout(()=>c.classList.remove("copied"), 900); return;
+  }
+  const d = e.target.closest("[data-done]");
+  if (d) { status[d.dataset.done] = "Applied"; save(); render(); mbg.classList.remove("open"); return; }
+  if (e.target === mbg) mbg.classList.remove("open");
+});
+document.addEventListener("keydown", e=>{ if (e.key==="Escape") mbg.classList.remove("open"); });
 document.getElementById("reset").onclick = ()=>{ if(confirm("Clear all application statuses?")){ status={}; save(); render(); } };
 render();
 </script>
