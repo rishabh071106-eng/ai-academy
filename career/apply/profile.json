@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "source": "Rishabh_Sharma_Resume_Product_Leader.PDF (uploaded 2026-08-02)",
+    "purpose": "Canonical prefill data pack for ATS applications (Workday / Greenhouse / Lever / Ashby). Field names follow Workday's 'My Information' and 'My Experience' sections.",
+    "last_updated": "2026-08-02"
+  },
+  "my_information": {
+    "legal_first_name": "Rishabh",
+    "legal_last_name": "Sharma",
+    "email": "rishabh071106@gmail.com",
+    "phone_device_type": "Mobile",
+    "country_phone_code": "+91",
+    "phone_number": "7087750777",
+    "country": "India",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "how_did_you_hear_about_us": "Company careers site",
+    "previously_worked_for_company": "Answer per company (Yes for Wipro-clients Citibank/Standard Bank engagements only if asked about vendor work)"
+  },
+  "links": {
+    "linkedin": "https://linkedin.com/in/rishabhsharmaiimk",
+    "portfolio": "https://brodoit.com"
+  },
+  "headline": "Product Leader | Vice President — Product Management, JP Morgan | Digital Banking Platforms, AI & Cloud",
+  "summary": "Product leader with 15 years in banking and financial services across US, UK, EMEA, APAC, and Africa. Currently Vice President — Product Management at JP Morgan, owning strategy, vision, and multi-year roadmap for the global digital loan booking platform — connected via APIs and Kafka across upstream and downstream systems, moving toward straight-through processing powered by a multi-agent AI architecture. Scaled platform user adoption from 40% to 85% in 12 months. Earlier led Standard Bank's core banking modernization (26 partner platforms) over six years in Johannesburg. IIM Kozhikode Executive MBA; pursuing M.Tech in AI from IIT Bhilai.",
+  "work_experience": [
+    {
+      "job_title": "Vice President — Product Management",
+      "company": "JP Morgan Chase & Co.",
+      "location": "Bengaluru, India",
+      "from": "2020-06",
+      "to": "Present",
+      "currently_work_here": true,
+      "role_description": "Own product strategy, vision, multi-year roadmap, and P&L narrative for JP Morgan's digital loan booking platform serving Syndicated Portfolio Lending across CIB and Commercial Banking in US, UK, EMEA, APAC. Built platform connectivity via standardized APIs and Kafka event streaming (Loan IQ, ACBS, underwriting, risk). Led transformation toward straight-through processing with a multi-agent AI architecture (LLM document extraction, RAG covenant intelligence, operator copilots) delivering FTE optimization and cycle-time compression. Scaled user adoption 40%→85% in 12 months via product-led playbook (React UI, embedded Tableau, in-app analytics, discovery-and-experimentation loop). Established AI governance framework, data strategy, North Star Metric, KPI framework. Promoted AVP (2020) → VP (2023)."
+    },
+    {
+      "job_title": "Senior Consultant (final role)",
+      "company": "Wipro Technologies",
+      "location": "Pune / Chennai / Johannesburg",
+      "from": "2011-10",
+      "to": "2020-06",
+      "currently_work_here": false,
+      "role_description": "Clients: Citibank, Standard Bank of South Africa. Led end-to-end core banking modernization at Standard Bank — SAP target architecture, COBOL migration, integration of 26 partner platforms across self-service, branch, and back-office channels. Directed AML compliance programme delivering a zero-finding audit. Championed Waterfall-to-Agile transformation (2016); managed a 38-person globally distributed team across India, South Africa, UK. Earlier delivered multi-year Citibank programmes (core banking, cards, operations) as Project Engineer."
+    }
+  ],
+  "education": [
+    { "school": "IIT Bhilai", "degree": "M.Tech — Artificial Intelligence", "status": "Ongoing" },
+    { "school": "IIM Kozhikode", "degree": "Executive MBA" },
+    { "school": "Jaypee University of Information Technology", "degree": "B.Tech — Electronics & Communication" }
+  ],
+  "certifications": [
+    "Agentic AI Automation — Future Agents (2025)",
+    "International Immersion Program — SDA Bocconi, Italy (2025)",
+    "CAPSTONE 2.0, Business Strategy Simulation — CAPSIM (2025)",
+    "Certified Scrum Product Owner (CSPO) — Scrum Alliance (2024)",
+    "Professional Certification in Product Management — S.P. Jain Global, Dubai (2024)",
+    "Certified Strategy Professional (2023)",
+    "Tableau — Skill Nation (2021)",
+    "Certified ScrumMaster (CSM) — Scrum Alliance (2020)",
+    "AWS Certified Cloud Practitioner (2019)",
+    "Certified SAFe Practitioner (2018)"
+  ],
+  "skills_keywords": [
+    "Product Strategy", "Product Vision", "Roadmap Ownership", "Prioritization", "Product Discovery", "A/B Experimentation", "North Star Metric", "KPIs", "OKRs", "P&L", "Go-to-Market", "Product-Led Growth", "Figma", "React",
+    "REST APIs", "GraphQL", "Kafka", "Event-Driven Architecture", "AWS", "Microservices", "Agentic AI", "Multi-Agent Architectures", "LLMs", "RAG", "MCP", "LLMOps", "Responsible AI", "Straight-Through Processing",
+    "SQL", "Snowflake", "Databricks", "Tableau", "Amplitude", "Embedded Analytics",
+    "Executive Stakeholder Management", "Transformation Leadership", "Change Management", "Agile", "SAFe", "JIRA", "Confluence",
+    "Digital Banking", "Syndicated Lending", "Corporate Banking", "Commercial Banking", "Core Banking Modernization", "Loan IQ", "ACBS", "SAP", "AML Compliance"
+  ],
+  "application_questions_defaults": {
+    "work_authorization_india": "Indian citizen — authorized to work in India without sponsorship",
+    "willing_to_relocate": "Open to Bengaluru (current base); open to discussion for other hubs",
+    "notice_period": "SET BEFORE APPLYING — typically 30/60/90 days at VP level; if serving notice or negotiable, state 'Immediate to 30 days (negotiable)'",
+    "current_compensation": "Do not disclose unless mandatory; prefer 'As per company band'",
+    "expected_compensation": "As per role band / negotiable",
+    "gender": "Prefer to self-identify per candidate choice",
+    "disability_veteran_us_forms": "Not applicable for India requisitions; answer 'I don't wish to answer' where optional"
+  },
+  "excluded_companies": ["State Street", "JP Morgan / JPMorgan Chase (current employer)"]
+}
