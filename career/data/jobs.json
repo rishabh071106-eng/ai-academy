@@ -1277,5 +1277,53 @@
     "verified": false,
     "category": "fintech-india",
     "id": 89
+  },
+  {
+    "company": "Capital One",
+    "title": "Director — Product Management (ML/AI Products)",
+    "location": "Bengaluru (Hybrid)",
+    "seniority": "Director",
+    "apply_url": "https://builtin.com/job/director-product-management/7684413",
+    "platform": "other",
+    "posted_date": "2026-08-04",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director-level ML/AI product leadership at a top US consumer bank's India GCC — directly leverages the multi-agent AI + banking-platform record.",
+    "notes": "Indexed 'Posted 2 Hours Ago' on Built In (4 Aug) — very fresh. Apply via Built In / capitalonecareers.com; fetches blocked so confirm live before Workday-length flow.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 90
+  },
+  {
+    "company": "Capital One",
+    "title": "Director, Product Management (Autonomous & Intelligent Data Products)",
+    "location": "Bengaluru (Hybrid)",
+    "seniority": "Director",
+    "apply_url": "https://builtin.com/job/director-product-management/3620359",
+    "platform": "other",
+    "posted_date": "2026-08-03",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Autonomous/intelligent data-products charter maps to the agentic-AI and data-strategy side of the profile; Director band at a bank GCC.",
+    "notes": "Indexed 'Posted 15 Hours Ago' — may be a re-bump of an existing Capital One India Director-PM req; verify against capitalonecareers.com before applying.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 91
+  },
+  {
+    "company": "NatWest Group (NatWest Digital X)",
+    "title": "Platform Lead, Director (req R-00277564)",
+    "location": "Bengaluru / Gurugram / Chennai",
+    "seniority": "Director",
+    "apply_url": "https://jobs.natwestgroup.com/search/?q=R-00277564",
+    "platform": "workday",
+    "posted_date": "2026-08-03",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "Director-level platform product leadership at NatWest Digital X — same Product & Proposition family as the high-fit Broker Platform (Lending) req already tracked.",
+    "notes": "Distinct req from tracked R-00277563 (id 3, Broker Platform Lending); posted ~1 day ago. Confirm charter on the req page before applying.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 92
   }
 ]
