@@ -1325,5 +1325,53 @@
     "verified": false,
     "category": "workday-banks",
     "id": 92
+  },
+  {
+    "company": "Jupiter",
+    "title": "Director of Product — AI Applications",
+    "location": "Bengaluru",
+    "seniority": "Director",
+    "apply_url": "https://jobs.lever.co/jupiter/2a039dc1-b772-4119-8d3a-807fa15650a3",
+    "platform": "lever",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "Director-level consumer-banking AI product charter at a neobank — direct overlap with the multi-agent AI / LLM digital-banking record.",
+    "notes": "Live on Jupiter's Lever board 6 Aug; exact post date not exposed and page fetch blocked from sandbox — confirm live before applying. Third Jupiter role on the board.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 93
+  },
+  {
+    "company": "NatWest Group (NatWest Digital X)",
+    "title": "Commercial Lending AI Platform Lead, Director",
+    "location": "Bengaluru / Chennai / Gurugram",
+    "seniority": "Director",
+    "apply_url": "https://jobs.natwestgroup.com/search/product-and-proposition/jobs/in/country/india",
+    "platform": "workday",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 10,
+    "fit_reason": "Agentic commercial-lending platform (LLMs, cloud-native replacing legacy core) — near-exact mirror of the JPM digital loan booking + multi-agent AI mandate. Top-priority apply.",
+    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 94
+  },
+  {
+    "company": "NatWest Group (NatWest Digital X)",
+    "title": "Platform Lead — AI Enablement, Director",
+    "location": "Gurugram",
+    "seniority": "Director",
+    "apply_url": "https://builtin.com/job/platform-lead-ai-enablement-director/8023025",
+    "platform": "other",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director platform role embedding AI agents/automation into platform strategy (12+ yrs) — fits the agentic-AI + platform record; more infra-leaning and Gurugram-based.",
+    "notes": "Active on Built In and LinkedIn (job 4346624626) 6 Aug; freshness within 72h unconfirmed. Distinct from other tracked NDX reqs.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 95
   }
 ]
