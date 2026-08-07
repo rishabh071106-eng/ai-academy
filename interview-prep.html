@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Aishwarya Sharma — Infosys Adobe Commerce Interview Mastery</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e8eaf2; --muted:#9aa3b5;
+    --brand:#7c9cff; --brand2:#4f6ef7; --accent:#ffb86b; --ok:#4ade80; --warn:#f87171;
+    --border:#2a2f3f; --code:#12141c; --say:#12331f; --sayb:#1f6b3a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.65; padding-bottom:80px;
+  }
+  header{
+    background:linear-gradient(135deg,#1a1f35 0%,#232a4d 55%,#1a2140 100%);
+    border-bottom:1px solid var(--border); padding:34px 20px 26px; text-align:center;
+  }
+  header h1{font-size:clamp(1.4rem,3.5vw,2.1rem); letter-spacing:.3px;}
+  header .sub{color:var(--muted); margin-top:8px; font-size:.98rem;}
+  header .pillrow{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+  .pill{background:rgba(124,156,255,.14); border:1px solid rgba(124,156,255,.35); color:#c3d2ff;
+    padding:4px 12px; border-radius:999px; font-size:.8rem;}
+  nav{
+    position:sticky; top:0; z-index:50; background:rgba(15,17,23,.94); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border); display:flex; overflow-x:auto; gap:4px; padding:10px 12px;
+  }
+  nav::-webkit-scrollbar{height:0;}
+  .tab{
+    flex:0 0 auto; background:transparent; color:var(--muted); border:1px solid transparent;
+    padding:8px 14px; border-radius:10px; cursor:pointer; font-size:.88rem; font-weight:600;
+    transition:.18s; white-space:nowrap; font-family:inherit;
+  }
+  .tab:hover{color:var(--ink); background:var(--panel2);}
+  .tab.active{background:var(--brand2); color:#fff; border-color:var(--brand);}
+  main{max-width:980px; margin:0 auto; padding:28px 18px;}
+  section.panel{display:none; animation:fade .25s ease;}
+  section.panel.show{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  h2{font-size:1.5rem; margin:8px 0 6px; color:#fff;}
+  h3{font-size:1.12rem; margin:26px 0 10px; color:var(--brand); letter-spacing:.2px;}
+  p{margin:10px 0; color:var(--ink);}
+  .lead{color:var(--muted); font-size:1rem; margin-bottom:18px;}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; margin:14px 0;
+  }
+  .card.tip{border-left:4px solid var(--accent);}
+  .card.good{border-left:4px solid var(--ok);}
+  .card.bad{border-left:4px solid var(--warn);}
+  details{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    margin:10px 0; overflow:hidden;
+  }
+  details[open]{border-color:#3b4360;}
+  summary{
+    cursor:pointer; padding:14px 18px; font-weight:600; list-style:none;
+    display:flex; align-items:center; gap:10px; user-select:none; font-size:.98rem;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::before{content:"▸"; color:var(--brand); transition:.2s; font-size:1rem;}
+  details[open] summary::before{transform:rotate(90deg);}
+  summary:hover{background:var(--panel2);}
+  .body{padding:2px 20px 18px; border-top:1px dashed var(--border);}
+  .say{
+    background:var(--say); border:1px solid var(--sayb); border-radius:10px;
+    padding:14px 16px; margin:12px 0; font-size:.96rem;
+  }
+  .say::before{content:"🗣️ SAY THIS"; display:block; font-size:.7rem; letter-spacing:1.5px;
+    color:var(--ok); font-weight:700; margin-bottom:8px;}
+  .avoid{
+    background:#33161a; border:1px solid #6b1f2a; border-radius:10px; padding:12px 16px; margin:12px 0; font-size:.93rem;
+  }
+  .avoid::before{content:"🚫 NEVER SAY"; display:block; font-size:.7rem; letter-spacing:1.5px;
+    color:var(--warn); font-weight:700; margin-bottom:6px;}
+  code{
+    background:var(--code); border:1px solid var(--border); border-radius:6px;
+    padding:1px 7px; font-family:"SF Mono",Consolas,Menlo,monospace; font-size:.86em; color:#a5c8ff;
+  }
+  pre{
+    background:var(--code); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px; overflow-x:auto; margin:12px 0; font-size:.85rem; line-height:1.55;
+  }
+  pre code{background:none; border:none; padding:0;}
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:.92rem;}
+  th,td{border:1px solid var(--border); padding:9px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--panel2); color:#cdd6f4;}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  ul,ol{margin:10px 0 10px 22px;}
+  li{margin:6px 0;}
+  .chk{display:flex; align-items:flex-start; gap:10px; padding:8px 12px; border-radius:8px; cursor:pointer;}
+  .chk:hover{background:var(--panel2);}
+  .chk input{margin-top:5px; accent-color:var(--brand2); width:16px; height:16px; flex:0 0 auto;}
+  .chk.done span{color:var(--muted); text-decoration:line-through;}
+  .progressbar{
+    height:10px; background:var(--panel2); border-radius:99px; overflow:hidden; margin:10px 0 4px;
+    border:1px solid var(--border);
+  }
+  .progressbar > div{height:100%; width:0%; background:linear-gradient(90deg,var(--brand2),var(--ok)); transition:.35s;}
+  .kbd{font-size:.78rem; color:var(--muted);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr;}}
+  .big{font-size:1.05rem;}
+  .tag{display:inline-block; background:var(--panel2); border:1px solid var(--border);
+    border-radius:6px; padding:2px 9px; font-size:.78rem; color:var(--muted); margin:2px 3px 2px 0;}
+  footer{ text-align:center; color:var(--muted); font-size:.85rem; padding:30px 16px;}
+  .star b{color:var(--accent);}
+  @media print{
+    nav,header .pillrow{display:none;}
+    section.panel{display:block !important;}
+    body{background:#fff; color:#111;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 Aishwarya Sharma — Interview Mastery Kit</h1>
+  <div class="sub">Senior Adobe Commerce (Magento) Consultant · Infosys · Bengaluru · Full-time On-site</div>
+  <div class="pillrow">
+    <span class="pill">9+ yrs Magento</span>
+    <span class="pill">Adobe Certified (2023)</span>
+    <span class="pill">Lead Developer @ Altimetrik</span>
+    <span class="pill">Target band: 5–9 yrs ✓ You're at the TOP of it</span>
+  </div>
+</header>
+
+<nav id="nav">
+  <button class="tab active" data-t="plan">🎯 Game Plan</button>
+  <button class="tab" data-t="mind">💪 Confidence</button>
+  <button class="tab" data-t="why">🔄 Why Switch</button>
+  <button class="tab" data-t="intro">🗣️ Your Intro</button>
+  <button class="tab" data-t="core">🧱 Magento Core</button>
+  <button class="tab" data-t="perf">⚡ Perf · Cache · Cloud</button>
+  <button class="tab" data-t="api">🔌 APIs & Integrations</button>
+  <button class="tab" data-t="scen">🏗️ Consultant Scenarios</button>
+  <button class="tab" data-t="star">📖 Your Stories</button>
+  <button class="tab" data-t="hr">🤝 HR & Salary</button>
+  <button class="tab" data-t="week">📅 7-Day Plan</button>
+</nav>
+
+<main>
+
+<!-- ================= GAME PLAN ================= -->
+<section class="panel show" id="plan">
+  <h2>🎯 The Game Plan</h2>
+  <p class="lead">Aishwarya, read this first. You are not "trying to get" this job — you are a 9-year Magento specialist interviewing for a role written almost exactly around your resume. This page shows you why, and how the interview will flow.</p>
+
+  <div class="card good">
+    <h3 style="margin-top:0">Why this role is YOURS to lose</h3>
+    <table>
+      <tr><th>What Infosys asks</th><th>What you already have</th></tr>
+      <tr><td>5–9 yrs, strong hands-on Adobe Commerce</td><td><b>9+ years</b>, pure Magento since 2017 (M1 → M2, OS + Enterprise/Adobe Commerce)</td></tr>
+      <tr><td>Custom modules & storefront components</td><td>Custom modules on every project: Toolkart recommendation tool, Peelworks REST API modules, canvas personalisation (fabric.js)</td></tr>
+      <tr><td>Strong PHP + OO design</td><td>9 yrs PHP, Adobe Certified Developer (2023), code-quality lead (SonarQube cleanup driver at Altimetrik)</td></tr>
+      <tr><td>Catalog, checkout, orders, customers workflows</td><td>Catalog pricing rules, MSI, checkout payment/shipping integrations (Stripe, Adyen, PayUbiz, Paytm)</td></tr>
+      <tr><td>Integrations: payments, shipping, ERP, REST/GraphQL</td><td>ERP ↔ Magento two-way sync module, Delhivery shipping, SMS/SMTP integrations, custom REST APIs</td></tr>
+      <tr><td>Performance, caching, indexing, production issues</td><td>Speed optimisation on FNAC & Surfline, caching solutions at Xperi, New Relic production triage at Altimetrik</td></tr>
+      <tr><td>Mentorship & technical leadership</td><td>Trained juniors at Xperi, <b>Lead Developer</b> title today, drives review & quality process</td></tr>
+      <tr><td>Version upgrades & release management</td><td>Magento 2.1.18 → 2.3.5 upgrade (Tivoliwines), release cycles at Xperi/Altimetrik</td></tr>
+    </table>
+  </div>
+
+  <h3>How the Infosys process typically runs</h3>
+  <div class="card">
+    <ol>
+      <li><b>Round 1 — Technical (60–75 min):</b> Magento architecture depth: plugins vs observers vs preferences, DI, EAV, indexing, caching, checkout & order flow, a bit of raw PHP/OOP, maybe a small live scenario ("how would you add a field to checkout?").</li>
+      <li><b>Round 2 — Techno-managerial / Solutioning (45–60 min):</b> Consultant-level: estimation, architecture of an integration, production war stories, leading a team, handling clients. This is where the "Consultant" in the title lives — study the 🏗️ Scenarios tab hard.</li>
+      <li><b>Round 3 — HR (30 min):</b> Salary, notice period, relocation/on-site confirmation, stability questions. Scripts in the 🤝 HR tab.</li>
+    </ol>
+    <p class="kbd">Note: Infosys interviewers often anchor on the JD. Re-read the JD line by line the night before — every bullet is a potential question.</p>
+  </div>
+
+  <h3>Your three headline messages (repeat in every round)</h3>
+  <div class="card tip">
+    <ol class="big">
+      <li><b>"Nine years, one platform."</b> You are a Magento specialist, not a generalist — exactly what a Senior Adobe Commerce Consultant should be.</li>
+      <li><b>"I've done the whole lifecycle."</b> Requirement gathering → estimation → build → integrate → optimise → release → production support → mentoring.</li>
+      <li><b>"I lead with quality."</b> Certified developer, SonarQube quality driver, code reviewer, junior mentor. Consulting = trusted advisor, and quality is your proof.</li>
+    </ol>
+  </div>
+
+  <h3>Progress tracker</h3>
+  <div class="card">
+    <div class="progressbar"><div id="pbar"></div></div>
+    <div id="pcount" class="kbd">0 of 12 preparation milestones done</div>
+    <div id="checklist">
+      <label class="chk"><input type="checkbox" data-k="c1"><span>Read the full JD twice, aloud once</span></label>
+      <label class="chk"><input type="checkbox" data-k="c2"><span>Practised 90-second intro 5 times (record on phone!)</span></label>
+      <label class="chk"><input type="checkbox" data-k="c3"><span>"Why switch" + "career break" answers feel natural, not memorised</span></label>
+      <label class="chk"><input type="checkbox" data-k="c4"><span>Can explain plugins vs observers vs preferences with examples</span></label>
+      <label class="chk"><input type="checkbox" data-k="c5"><span>Can draw quote → order → invoice → shipment flow from memory</span></label>
+      <label class="chk"><input type="checkbox" data-k="c6"><span>Can explain full-page cache + private content (sections.xml)</span></label>
+      <label class="chk"><input type="checkbox" data-k="c7"><span>Can explain indexers & "Update by Schedule" (mview)</span></label>
+      <label class="chk"><input type="checkbox" data-k="c8"><span>Rehearsed 4 STAR stories out loud</span></label>
+      <label class="chk"><input type="checkbox" data-k="c9"><span>Comfortable with 3 consultant scenarios (estimation, ERP, slow site)</span></label>
+      <label class="chk"><input type="checkbox" data-k="c10"><span>Salary numbers & negotiation lines decided</span></label>
+      <label class="chk"><input type="checkbox" data-k="c11"><span>Prepared 3 questions to ask the interviewer</span></label>
+      <label class="chk"><input type="checkbox" data-k="c12"><span>Mock interview with Rishabh done 😄</span></label>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONFIDENCE ================= -->
+<section class="panel" id="mind">
+  <h2>💪 Confidence & Mindset</h2>
+  <p class="lead">Confidence is not a personality trait — it is preparation plus posture plus the story you tell yourself. Here is your story.</p>
+
+  <div class="card good">
+    <h3 style="margin-top:0">The truth you walk in with</h3>
+    <ul class="big">
+      <li>You have shipped e-commerce for <b>real brands</b> — Decathlon, FNAC, Surfline — brands with real traffic and real money on the line.</li>
+      <li>You are <b>Adobe Certified</b>. Most applicants for this role are not.</li>
+      <li>You came back from maternity into a <b>Lead Developer</b> role and are driving quality for the team. That is not a comeback — that is an upgrade. Own it.</li>
+      <li>Infosys posted this role because they <b>need</b> senior Magento people. The market is short of them. You hold leverage.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>The 5 rules of a confident interview voice</summary>
+    <div class="body">
+      <ol>
+        <li><b>Slow down 20%.</b> Nervous people speed up. Seniors pause. A 2-second pause before answering reads as thoughtfulness, not ignorance.</li>
+        <li><b>Answer, then stop.</b> Give your answer in 30–60 seconds and stop talking. Rambling signals doubt. If they want more, they'll ask.</li>
+        <li><b>Use "I", not "we", for your work.</b> "I designed the sync module" — not "we did a module." In a consultant interview, they're hiring <i>you</i>.</li>
+        <li><b>It's OK to say "I haven't used that in production, but here's my understanding…"</b> — then give the concept. This is the single most senior-sounding sentence in any interview. Bluffing is the only fatal error.</li>
+        <li><b>Ask a clarifying question before big scenario answers.</b> "Is this B2C or B2B? Roughly how many SKUs?" — consultants ask before they answer. It instantly elevates you.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>Body language & logistics (on-site / video)</summary>
+    <div class="body">
+      <ul>
+        <li>Sit slightly forward, hands visible, notebook and pen out — write down multi-part questions so you never lose part 2.</li>
+        <li>Smile when you greet and when you talk about your projects. Enthusiasm for the platform is a hiring signal for consultant roles.</li>
+        <li>If video: camera at eye level, light facing you, join 5 min early, keep this cheat sheet's 📅 tab open on a second screen — headings only, don't read.</li>
+        <li>Keep water nearby. Sipping water is a legitimate 5-second thinking pause.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>When your mind goes blank (it happens to everyone)</summary>
+    <div class="body">
+      <div class="say">"That's a good question — give me a moment to structure my answer."</div>
+      <p>Then use a frame: <b>Concept → Example from my project → Trade-off</b>. Even a partial answer delivered calmly beats a perfect answer delivered in panic. If you truly don't know:</p>
+      <div class="say">"I haven't hit that exact case, but based on how Magento handles [nearest concept], my approach would be… and I'd verify it against the dev docs before committing to a design."</div>
+      <p>You just demonstrated honesty + reasoning + process. That's a pass, not a fail.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>The night before & the morning of</summary>
+    <div class="body">
+      <ul>
+        <li><b>Night before:</b> Only revise the 📅 cheat sheet + your 4 STAR stories. No new topics after 8 PM. Sleep > cramming.</li>
+        <li><b>Morning:</b> Say your 90-second intro once, out loud, in the mirror. Eat properly. Reach/join early.</li>
+        <li><b>2 minutes before:</b> Power posture, three slow breaths, and repeat: <i>"Nine years. One platform. I've already done this job."</i></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= WHY SWITCH ================= -->
+<section class="panel" id="why">
+  <h2>🔄 "Why do you want to switch?" — The Complete Script</h2>
+  <p class="lead">This is your most sensitive question because you joined Altimetrik relatively recently after your maternity break. Handled well, it becomes a <b>strength</b>: a story of deliberate career design. Practise these until they sound like you.</p>
+
+  <details open>
+    <summary>Q1 · "Why do you want to leave Altimetrik / switch now?"</summary>
+    <div class="body">
+      <div class="say">
+        "Altimetrik has been great for me — I lead Magento development for our e-commerce client, I drive our code-quality initiatives, and I mentor the team. So I'm not running away from anything.
+        I'm applying here because of what this role is: a <b>Senior Adobe Commerce Consultant</b> position that's end-to-end — discovery, solutioning, architecture, delivery.
+        I've spent nine years going deep on this one platform, I'm Adobe certified, and the natural next step for me is the consultant track: owning solution decisions with clients, not only executing them.
+        Infosys is one of the few places offering exactly that, at enterprise scale, on the platform I'm a specialist in. That's why this specific role, and why now."
+      </div>
+      <div class="avoid">Anything negative about Altimetrik, salary as the main reason, "better opportunity" without specifics, or "my current project is boring."</div>
+      <p><b>Why this works:</b> it's pull, not push. You're moving <i>toward</i> a defined career step (consultant track, enterprise scale, platform depth), not away from a problem. Interviewers hear stability, not restlessness.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2 · "You joined Altimetrik not long ago. Why are you switching again so soon? Will you leave us too?"</summary>
+    <div class="body">
+      <div class="say">
+        "Fair question, and I'll be transparent. I took a planned career break for maternity, and when I returned, Altimetrik gave me an excellent re-entry — I'm grateful for it, and I've delivered fully there: I came in and quickly took lead responsibility for the Magento workstream.
+        But that move was about the right <b>re-entry</b>; this move is about the right <b>long-term platform</b> for my specialisation.
+        I'm being very selective — I'm not interviewing everywhere. I'm looking at exactly one kind of role: senior Adobe Commerce consulting. When I make this move, I intend it to be my long-term home where I grow from senior consultant toward architect. Infosys has that ladder within the Adobe practice, which is precisely why I'm here."
+      </div>
+      <p><b>Key psychology:</b> name the concern before they push ("I'll be transparent"), separate the two moves (re-entry vs. long-term), and show selectivity ("one kind of role"). Selectivity signals commitment.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3 · "I see a gap in your profile in 2024. Can you explain it?"</summary>
+    <div class="body">
+      <div class="say">
+        "Yes — that was my maternity break, completely planned. I wrapped up my responsibilities at Xperi properly, took time with my family, and during the later part of the break I kept myself current — I stayed on top of Adobe Commerce release notes and refreshed my certification-level knowledge.
+        I returned to work at Altimetrik and was leading a workstream within months, so the transition back was smooth. Honestly, coming back made me clearer and more deliberate about my career direction — which is part of why I'm sitting here today."
+      </div>
+      <div class="avoid">Apologising for the break, over-explaining, or sounding defensive. It's one confident paragraph, then move on. A career break for family is normal and legally protected — no strong interviewer will push further.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q4 · "Why Infosys specifically?" </summary>
+    <div class="body">
+      <div class="say">
+        "Three reasons. First, scale of the practice — Infosys runs Adobe Commerce programs for global enterprise clients, which means complex catalogs, real traffic, serious integrations — the kind of problems I enjoy.
+        Second, the consultant career path — there's a clear track from senior consultant to technology architect within the digital commerce practice, and that's my 3-to-5-year direction.
+        Third, structure — mature delivery processes, learning culture, and long-running client relationships. After nine years I know exactly the environment I do my best work in, and this is it."
+      </div>
+      <p class="kbd">Bonus if asked what you know about Infosys: global leader in next-gen digital services & consulting, clients in 50+ countries, big Adobe partnership and dedicated Adobe practice, strong AI-powered core ("Topaz") messaging. One sentence is enough — don't recite.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q5 · "This role is on-site in Bengaluru. Are you fine with that? What about family commitments?"</summary>
+    <div class="body">
+      <div class="say">
+        "Yes, completely fine — I'm based in Bangalore and my family setup fully supports my career. I've been working through my current role without any constraint, and on-site collaboration actually suits how I like to work with teams."
+      </div>
+      <div class="avoid">Volunteering childcare details or hesitation. One confident sentence. If they probe inappropriately, stay calm: "My availability is exactly the same as any other senior professional's — full and reliable."</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q6 · "Where do you see yourself in 3–5 years?"</summary>
+    <div class="body">
+      <div class="say">
+        "In three years, a go-to Adobe Commerce solution lead here — owning architecture on a large account, possibly with the Adobe Commerce Architect certification added to my developer certification. In five, moving into a technology architect role in the commerce practice, mentoring a group of consultants the way I mentor developers today."
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= INTRO ================= -->
+<section class="panel" id="intro">
+  <h2>🗣️ "Tell me about yourself" — Your 90-Second Opener</h2>
+  <p class="lead">This answer sets the temperature of the whole interview. Memorise the skeleton, not the words. Record yourself until it lands in under 100 seconds.</p>
+
+  <div class="card good">
+    <div class="say">
+      "Thank you. I'm Aishwarya Sharma — I've spent the last nine years building e-commerce on one platform: Magento, now Adobe Commerce. I'm an Adobe Certified Developer, and currently I'm a Lead Developer at Altimetrik, where I lead the Magento workstream for a European fashion-retail client — custom module development, Adyen payment integration, and I also drive our code-quality program using SonarQube and production monitoring with New Relic.
+      <br><br>
+      Before that I was at Xperi Corporation, where alongside feature delivery I mentored junior developers and modernised legacy code. Earlier, at Neosoft and Navabrind, I delivered projects for brands like Decathlon and FNAC — custom REST APIs, a two-way ERP data-sync module, Multi-Source Inventory, a product recommendation engine, and a full version upgrade with Stripe payment integration. I started my career building a personalised-gifting platform where I integrated payments, shipping and notifications end-to-end.
+      <br><br>
+      So across nine years I've covered the full lifecycle — requirements, estimation, custom development, integrations, performance, releases and production support — and increasingly, leading others while doing it. That's exactly why this Senior Consultant role excites me: it's the formal version of the direction I've been growing in. Happy to go deeper into any part."
+    </div>
+  </div>
+
+  <h3>The skeleton (if you forget everything else)</h3>
+  <div class="card">
+    <ol>
+      <li><b>Identity line:</b> 9 years, one platform, Adobe Certified, currently Lead Developer.</li>
+      <li><b>Now:</b> Altimetrik — leading Magento workstream, payments, quality, monitoring.</li>
+      <li><b>Before:</b> Xperi (mentoring + modernisation) → Neosoft/Navabrind (Decathlon, FNAC, ERP sync, MSI, upgrade, Stripe) → Rightgifting (end-to-end integrations).</li>
+      <li><b>Bridge:</b> full lifecycle + leadership → "that's why this consultant role."</li>
+      <li><b>Handoff:</b> "Happy to go deeper into any part." (Invites them to pick — you control round 1's opening topic.)</li>
+    </ol>
+  </div>
+
+  <div class="card tip">
+    <b>Pro move:</b> the last line "happy to go deeper" almost always makes them ask about your <i>current</i> project — which is the project you know best. You just steered the interview onto home ground.
+  </div>
+</section>
+
+<!-- ================= CORE TECH ================= -->
+<section class="panel" id="core">
+  <h2>🧱 Magento / Adobe Commerce Core — Model Answers</h2>
+  <p class="lead">These are the highest-probability technical questions for a senior role, each with a spoken-style model answer. Say them out loud — reading is not rehearsing.</p>
+
+  <h3>Architecture & customisation</h3>
+
+  <details>
+    <summary>Plugins vs Observers vs Preferences — when do you use which? (Asked in ~every senior interview)</summary>
+    <div class="body">
+      <div class="say">
+        "My order of preference is: plugin first, observer for event-driven side-effects, preference as a last resort.
+        <br><br>
+        A <b>plugin (interceptor)</b> wraps a public method of a class — <code>before</code> to modify inputs, <code>after</code> to modify the result, <code>around</code> only when I must control whether the original runs at all, because <code>around</code> hurts performance and stack readability. Plugins are declared in <code>di.xml</code> with a <code>sortOrder</code>, and multiple modules can plug the same method safely — that's why it's the most upgrade-safe option.
+        <br><br>
+        An <b>observer</b> listens to an event via <code>events.xml</code> — right when I want to react to something happening (order placed → notify ERP) without changing the behaviour itself.
+        <br><br>
+        A <b>preference</b> replaces a class entirely in DI — it's a global override, only one module can win, and it breaks easily on upgrade, so I only use it when there's no public method to intercept and no event."
+      </div>
+      <p><b>Follow-up they may ask — plugin execution order:</b> for multiple plugins, all <code>before</code> run by ascending sortOrder, then <code>around</code> wrap like an onion, then all <code>after</code> run. Plugins don't work on private/final methods, final classes, or objects created directly with <code>new</code>.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Explain Dependency Injection in Magento 2. What are Factories, Proxies, Virtual Types?</summary>
+    <div class="body">
+      <div class="say">
+        "Magento 2 uses constructor injection configured through <code>di.xml</code> — you type-hint interfaces and the Object Manager injects the configured implementation. We never call the Object Manager directly in our code; it's used only by the framework and generated code.
+        <br><br>
+        A <b>Factory</b> is auto-generated code we inject when we need a <i>new</i> instance at runtime — for example a new <code>OrderItem</code> — because injecting the class directly would give a shared instance.
+        <br><br>
+        A <b>Proxy</b> is a lazy-loading wrapper — if a dependency is expensive (say a session or a heavy collection) and not always used, I declare a Proxy in di.xml so the real object is instantiated only on first use. Classic fix for slow CLI commands loading the session.
+        <br><br>
+        A <b>Virtual Type</b> lets me create a configured variant of an existing class purely in di.xml — different constructor arguments, no new PHP class — great for reusing something like a logger with a different handler."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>What are Service Contracts and why do they matter?</summary>
+    <div class="body">
+      <div class="say">
+        "Service contracts are the module's public API — the <code>Api</code> folder: service interfaces like <code>ProductRepositoryInterface</code> and data interfaces like <code>ProductInterface</code>. Other modules, plugins, and web APIs should talk to these interfaces, never to concrete models or resource models.
+        The benefit is stability: Adobe commits to backward compatibility on the API layer, so customisations built against contracts survive upgrades. They're also what gets exposed through <code>webapi.xml</code> as REST/SOAP endpoints automatically. In code reviews I flag any direct model usage where a repository exists."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Explain the EAV model. Why does Magento use it, and what's the trade-off?</summary>
+    <div class="body">
+      <div class="say">
+        "EAV — Entity, Attribute, Value — stores attributes in per-type value tables instead of columns: <code>catalog_product_entity</code> plus <code>_varchar</code>, <code>_int</code>, <code>_decimal</code>, <code>_datetime</code>, <code>_text</code> tables. Products, categories and customers are EAV; orders and quotes are flat tables because they're written once and read heavily.
+        <br><br>
+        The win is flexibility — merchants add attributes without schema changes, and values can differ per store view, which is how multi-language works. The cost is heavy joins on read. Magento compensates with indexers that flatten data for the storefront — like <code>catalog_product_flat</code> historically and price/eav indexes today — plus Elasticsearch/OpenSearch serving category and search listings."
+      </div>
+      <p><b>Follow-up — attribute scope:</b> global / website / store view. Price is website scope by default; name and description are store-view scope.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Walk me through module structure & the deploy commands and what each actually does</summary>
+    <div class="body">
+      <pre><code>app/code/Vendor/Module/
+├── registration.php          # registers the module
+├── etc/module.xml            # name, sequence (load order)
+├── etc/di.xml                # DI: plugins, preferences, virtual types
+├── etc/events.xml            # observers
+├── etc/webapi.xml            # REST/SOAP routes
+├── etc/db_schema.xml         # declarative schema (tables)
+├── etc/acl.xml, menu.xml, system.xml   # admin: permissions, menu, config
+├── Api/                      # service + data interfaces
+├── Model/                    # models, resource models, repositories
+├── Plugin/  Observer/  Setup/Patch/Data/
+├── Controller/  Block/  ViewModel/
+└── view/frontend|adminhtml/  # layout XML, templates, web/js</code></pre>
+      <div class="say">
+        "<code>setup:upgrade</code> applies schema and data patches and registers modules. <code>setup:di:compile</code> generates the code DI needs — factories, proxies, interceptors — mandatory in production mode. <code>setup:static-content:deploy</code> publishes themes' static assets per locale. In production I run them in that order during deployment; in developer mode generation happens on the fly."
+      </div>
+      <p><b>Follow-up — declarative schema vs InstallSchema:</b> since 2.3, tables are declared in <code>db_schema.xml</code> and Magento diffs the declaration against the DB — idempotent and supports rollback of dropped columns via whitelist. Data changes go in <b>data patches</b> implementing <code>DataPatchInterface</code> with dependencies instead of version comparisons.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Layout XML, Blocks, ViewModels, UI Components — how does the frontend fit together?</summary>
+    <div class="body">
+      <div class="say">
+        "A page is assembled from layout XML handles — <code>default.xml</code>, then the page-specific handle like <code>catalog_product_view.xml</code>. Layout defines <b>containers</b> (structure) and <b>blocks</b> (content bound to a template). Modern practice is thin blocks with <b>ViewModels</b> for presentation logic, injected via layout arguments — better than overriding block classes.
+        Theme resolution follows the fallback chain: my theme → parent theme(s) → module view files.
+        <br><br>
+        <b>UI Components</b> are the KnockoutJS-based system used for checkout, admin grids and forms — configured through XML and JS components. Checkout customisation is mostly a <code>LayoutProcessor</code> plugin plus a JS mixin or a custom component — for example adding a delivery-note field to the shipping step, saving it via an extension attribute on the quote."
+      </div>
+      <p><b>Follow-up — add a field to checkout (classic!):</b> LayoutProcessor plugin to inject the field into the jsLayout → knockout template renders it → on submit, pass via <code>extension_attributes</code> on shipping information → plugin/observer persists to quote table → <code>fieldset.xml</code> (sales_convert_quote) or plugin copies quote → order.</p>
+    </div>
+  </details>
+
+  <h3>Commerce workflows (the JD explicitly lists these)</h3>
+
+  <details>
+    <summary>Walk me through what happens from "Place Order" to a completed order (tables included)</summary>
+    <div class="body">
+      <div class="say">
+        "Everything starts as a <b>quote</b> — the cart — in <code>quote</code>, <code>quote_item</code>, <code>quote_address</code>, <code>quote_payment</code>. On Place Order, checkout calls the payment method, and quote management converts the quote via <code>sales_convert_quote</code> mapping into <code>sales_order</code>, <code>sales_order_item</code>, <code>sales_order_address</code>, <code>sales_order_payment</code>, firing <code>sales_order_place_after</code>.
+        <br><br>
+        The order starts in <i>Pending</i> (or <i>Processing</i> if payment captured). An <b>invoice</b> records the money — <code>sales_invoice</code> — either capture-online for gateways like Adyen/Stripe or offline. A <b>shipment</b> (<code>sales_shipment</code>) records fulfilment with tracking; a <b>credit memo</b> handles refunds. Order state vs status: state is the internal machine (new, processing, complete, closed, canceled, holded); statuses are merchant-facing labels mapped to states.
+        <br><br>
+        With MSI, placing the order creates a <b>reservation</b> — stock is logically deducted through reservation entries and only physically deducted at shipment."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>How do catalog price rules differ from cart price rules? Where do promotions fit?</summary>
+    <div class="body">
+      <div class="say">
+        "<b>Catalog price rules</b> change the displayed product price itself, before cart — applied by the price indexer on a schedule, based on attribute conditions. Good for 'flat 20% off category X this week'.
+        <b>Cart price rules</b> apply at quote level during totals collection — coupon codes, buy-X-get-Y, free shipping — and can be limited by customer group, coupon usage, subtotal conditions.
+        The totals pipeline collects subtotal → discounts → shipping → tax → grand total; custom fees are added by declaring a new total collector in <code>sales.xml</code>. On projects I've also handled promotion accuracy — on Surfline I maintained catalog pricing rules to keep promotions correct."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>How does Multi-Source Inventory (MSI) work?</summary>
+    <div class="body">
+      <div class="say">
+        "MSI separates physical <b>Sources</b> (warehouses, stores) from logical <b>Stocks</b>, which map sources to sales channels (websites). Salable quantity is computed as the aggregate of assigned sources minus <b>reservations</b> — the append-only compensation records created at order placement. Physical deduction happens at shipment; cancellations append compensating reservations. The Source Selection Algorithm decides which source fulfils an order — by priority or distance. I worked hands-on with MSI on the Peelworks project, where inventory truth lived partly in the ERP, so understanding reservations was critical to keep both systems consistent."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Adobe Commerce vs Magento Open Source — what does the paid edition add?</summary>
+    <div class="body">
+      <div class="say">
+        "Open Source has the core platform. Adobe Commerce adds: <b>B2B suite</b> (company accounts, shared catalogs, requisition lists, quotes/negotiation), <b>Content Staging & Preview</b> for scheduled campaigns, <b>customer segmentation & targeted rules</b>, <b>Page Builder</b> (now also in OS but originated there), <b>RMA</b>, gift cards & store credit, Adobe Sensei-powered <b>Product Recommendations & Live Search</b>, <b>Business Intelligence</b> dashboards, and on Cloud: the managed hosting, Fastly CDN/WAF, staging/production environments and ece-tools deployment. For a consultant, edition choice is usually driven by B2B needs, content operations and support SLAs."
+      </div>
+    </div>
+  </details>
+
+  <h3>PHP & engineering quality (they will test "strong PHP" from the JD)</h3>
+
+  <details>
+    <summary>Rapid-fire PHP/OOP: interfaces vs abstract classes, traits, late static binding, strict types</summary>
+    <div class="body">
+      <ul>
+        <li><b>Interface vs abstract class:</b> interface = pure contract, multiple implementable; abstract class = partial implementation + state, single inheritance. Magento leans on interfaces for service contracts.</li>
+        <li><b>Traits:</b> horizontal code reuse compiled into the class; use sparingly — Magento core barely uses them.</li>
+        <li><b>Late static binding:</b> <code>static::</code> resolves to the runtime class, <code>self::</code> to the defining class.</li>
+        <li><b>Type system:</b> <code>declare(strict_types=1)</code>, scalar & return types, nullable types <code>?int</code>, union types (PHP 8), constructor property promotion, readonly properties, enums (8.1). Mention you enforce these via SonarQube/code review — that's your Altimetrik story.</li>
+        <li><b>Design patterns you can name in Magento:</b> Factory, Proxy (lazy), Observer, Interceptor/Decorator (plugins), Repository, Strategy (payment/shipping methods), Registry (deprecated!), Singleton-per-request via shared instances, Service Layer.</li>
+      </ul>
+      <div class="say">"At Altimetrik I lead our quality gate — SonarQube rules for PHP and JavaScript, standards from Magento's own coding standard ruleset, and code review before merge. I've personally driven cleanup of hundreds of static-analysis findings while keeping releases flowing."</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Security: how do you keep a Magento store secure?</summary>
+    <div class="body">
+      <div class="say">
+        "Layers. Platform level: apply Adobe's security patches promptly — I track the security-only patch line so we can patch without taking a full version upgrade. Application level: output escaping with <code>escapeHtml/escapeUrl</code> against XSS, form keys against CSRF, ACL rules for every admin route and config section, never trusting input in custom APIs, and avoiding raw SQL in favour of the framework's prepared statements. Operational level: locked-down admin URL, 2FA (built-in since 2.4), least-privilege admin roles and integration tokens, reCAPTCHA on public forms, and a WAF — on Cloud that's Fastly. And code review as the last gate: I specifically look for unescaped output and missing ACL in every PR."
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= PERFORMANCE ================= -->
+<section class="panel" id="perf">
+  <h2>⚡ Performance, Caching, Indexing & Cloud</h2>
+  <p class="lead">The JD explicitly says: "diagnose and resolve production issues, performance bottlenecks, and scalability concerns (caching, indexing, database, search)." This tab is that sentence, answered.</p>
+
+  <details open>
+    <summary>Explain Magento's caching architecture end-to-end (FPC, Varnish, Redis, private content)</summary>
+    <div class="body">
+      <div class="say">
+        "Top layer is <b>full-page cache</b>. In production that should be <b>Varnish</b> (or Fastly on Adobe Commerce Cloud), not the built-in FPC. Magento renders a page once, Varnish serves it to everyone after that.
+        <br><br>
+        The obvious problem: cart, customer name, wishlist differ per user. Magento solves it with <b>private content</b> — those blocks are rendered generic in the cached page, and the browser fills them via the <b>customer-data JS library</b>, which pulls JSON 'sections' (cart, customer) from the server and stores them in localStorage. <code>sections.xml</code> maps POST actions to sections that must invalidate — add to cart → cart section refreshes. Marking a block <code>cacheable="false"</code> in layout makes the <i>entire page</i> uncacheable — a classic performance bug I've actually fixed in the wild.
+        <br><br>
+        Below that: <b>Redis</b> for the config/block/layout caches and for sessions; cache <b>tags</b> let Magento invalidate precisely — saving a product purges only pages tagged with it. Cache types can be managed per type; in deployments we warm critical pages after flush rather than flushing blindly."
+      </div>
+      <p><b>Likely follow-up — "page is not caching, how do you debug?"</b> Check response headers (<code>X-Magento-Cache-Debug</code> in dev), look for <code>cacheable="false"</code> blocks in layout, check the page isn't a POST/customer-specific route, confirm Varnish VCL health, check marketing params are stripped/normalised.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Indexers: what are they, and what does "Update by Schedule" really do?</summary>
+    <div class="body">
+      <div class="say">
+        "Indexers pre-compute expensive derived data: price index, catalog rule index, category-product relations, stock, catalog search (feeding Elasticsearch/OpenSearch). Two modes: <b>Update on Save</b> reindexes synchronously on every save — fine for tiny catalogs, terrible at scale. <b>Update by Schedule</b> uses the <b>mview</b> mechanism: MySQL triggers write changed entity IDs into changelog tables (<code>*_cl</code>), and the <code>indexer_update_all_views</code> cron consumes them, reindexing only deltas. On any real catalog — like a client with frequent ERP price feeds — schedule mode is mandatory, otherwise imports crawl and admin saves block. I also know the ops side: <code>bin/magento indexer:status</code>, resetting a stuck 'processing' indexer, and watching changelog backlog size as a health metric."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>A production Magento site is slow. Walk me through your triage. (Star question — rehearse!)</summary>
+    <div class="body">
+      <div class="say">
+        "First I split the problem: slow for <i>everyone or some users</i>, <i>all pages or specific flows</i>, <i>since when</i> — correlate with the last release or campaign start.
+        <br><br>
+        Then layer by layer. <b>Edge:</b> is Varnish/Fastly actually hitting — cache-hit ratio, or is everything MISSing because of a cookie or a <code>cacheable="false"</code> regression? <b>App:</b> New Relic (which I use daily at Altimetrik) — slowest transactions, worst DB queries, external calls blocking render, like a payment or ERP API called synchronously on a catalog page. <b>DB:</b> slow query log, missing indexes, table locks from a heavy import running in business hours. <b>Search:</b> Elasticsearch heap and query health. <b>Infra:</b> PHP-FPM worker saturation, Redis memory eviction, CPU steal.
+        <br><br>
+        Typical real causes I've fixed: uncacheable blocks, N+1 loading of products in a custom block instead of a collection/repository with proper joins, indexers left on Update-on-Save, cron pileups, and third-party modules doing external HTTP calls inline. Fix, measure, then add the regression guard — a dashboard alert or a code-review rule — so it can't come back silently."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Code-level performance rules you enforce as a lead</summary>
+    <div class="body">
+      <ul>
+        <li>Never load models in loops — use collections/repositories with <code>addFieldToFilter</code>, select only needed attributes.</li>
+        <li>No <code>getSize()</code>/<code>count()</code> on huge collections when an EXISTS check works; paginate imports/exports; use generators for large datasets.</li>
+        <li>Push slow work off the request path: message queues / async operations for ERP calls, email, feed generation.</li>
+        <li>Frontend: critical CSS, defer JS, image lazy-load + WebP, minimise KO component bloat on checkout; measure with Lighthouse/CrUX.</li>
+        <li>Cron hygiene: dedicated groups, don't let one stuck job starve <code>indexer</code> group.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Adobe Commerce Cloud — what should a consultant know?</summary>
+    <div class="body">
+      <div class="say">
+        "Cloud is the managed PaaS: Pro has Integration / Staging / Production, with production a three-node HA cluster; Starter is simpler. Deployments are git-driven through <b>ece-tools</b>: build phase (composer, DI compile, static content) then deploy phase (config import, cache flush), configured in <code>.magento.app.yaml</code>, <code>services.yaml</code> and <code>.magento.env.yaml</code>. <b>Fastly</b> sits in front as CDN, image optimisation and WAF. Config should live in <code>config.php</code>/env variables — 'pipeline deployment' — so environments are reproducible. Logs and monitoring come with New Relic baked in. Even though my hands-on hosting has included on-prem and cloud VMs, the architecture maps one-to-one to what I already do: Varnish→Fastly, Redis, Elasticsearch, cron, deploy scripts — so I'm fully comfortable consulting on it."
+      </div>
+      <p class="kbd">Honesty note: if you haven't deployed on Adobe Commerce Cloud specifically, say exactly the last sentence above — mapped experience + comfort. Do NOT claim Cloud production experience you can't back with detail.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Upgrades: how do you run a safe Magento version upgrade?</summary>
+    <div class="body">
+      <div class="say">
+        "I've done this end-to-end — I upgraded Tivoliwines from 2.1.18 to 2.3.5. My process: audit first — <code>composer.json</code>, all third-party modules and their compatibility, core overrides and preferences, then the Upgrade Compatibility Tool to surface breaking usage. Upgrade on a branch: bump core via composer, fix DI compile errors, replace deprecated APIs, upgrade or patch each extension, regenerate schema whitelist. Test in a staging environment with a production data copy: checkout, payments in sandbox, order flow, integrations, and a performance smoke test. Release with a rollback plan — DB backup, tagged release, maintenance window, and post-release monitoring on error rates. The lesson from doing it for real: third-party extensions are 80% of upgrade pain, which is why as a lead I keep the extension footprint small and prefer building on service contracts."
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= APIS ================= -->
+<section class="panel" id="api">
+  <h2>🔌 APIs & Integrations (Payments · Shipping · ERP · PIM)</h2>
+  <p class="lead">The JD: "Drive integrations with third-party services (payments, shipping, tax, ERP/CRM, PIM) using REST/GraphQL and secure integration patterns." You have receipts for every word of that sentence.</p>
+
+  <details open>
+    <summary>REST vs GraphQL vs Async/Bulk — when do you use which?</summary>
+    <div class="body">
+      <div class="say">
+        "<b>REST</b> is the workhorse for system-to-system integration — ERP pushing products, OMS pulling orders. Routes are declared in <code>webapi.xml</code>, mapping a URL + HTTP verb to a service contract method with ACL. I've built these hands-on: on Peelworks I created custom REST modules including an order/product tracking API for the mobile app.
+        <br><br>
+        <b>GraphQL</b> is designed for the storefront — headless/PWA frontends query exactly the fields they need in one round trip; it's the API behind PWA Studio. Schema extension is via <code>schema.graphqls</code> plus resolvers.
+        <br><br>
+        For heavy write volume, the <b>asynchronous and bulk REST endpoints</b> queue requests into RabbitMQ and consumers process them — the right pattern for ERP pushing thousands of price/stock updates, instead of hammering synchronous endpoints.
+        <br><br>
+        Auth options: integration tokens for trusted server-to-server, OAuth for third-party apps, customer/admin tokens for user-scoped calls — with tokens scoped by ACL to the minimum needed."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Design an ERP ↔ Magento integration (you actually built one — lead with that!)</summary>
+    <div class="body">
+      <div class="say">
+        "I built exactly this at Neosoft for Peelworks — a module for two-way data synchronisation between Magento and the ERP. The design principles I apply:
+        <br><br>
+        <b>Direction & ownership:</b> decide the source of truth per entity — ERP owns products, prices, stock; Magento owns orders and customers. Never bidirectional ownership of the same field.
+        <b>Transport:</b> deltas, not full dumps — timestamps or changelog-driven; queued via message queue or async bulk API so spikes don't hurt the storefront.
+        <b>Reliability:</b> idempotency keys so retries don't duplicate orders; dead-letter handling with alerting; reconciliation job that compares counts/checksums daily to catch silent drift.
+        <b>Performance:</b> batch updates, disable-then-reindex for large imports, run heavy syncs off-peak.
+        <b>Monitoring:</b> a sync dashboard — last success, queue depth, failure count — because an integration you can't observe is an outage you'll discover from an angry customer."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>How do you integrate a payment gateway? (Stripe, Adyen, PayUbiz, Paytm — all yours)</summary>
+    <div class="body">
+      <div class="say">
+        "I've integrated Stripe on Tivoliwines, PayUbiz and Paytm at Rightgifting, and I work with Adyen in my current project. Magento's modern way is the <b>payment gateway framework</b>: a payment method is configuration plus a chain of components — command pool (authorize, capture, void, refund), request builders that map order data to the gateway's API, an HTTP client, response handlers and validators. Frontend is a KO component feeding the payment info, ideally tokenising card data client-side so raw PAN never touches our server — that's the PCI boundary.
+        <br><br>
+        The parts people underestimate, which I always design for: <b>webhooks/notifications</b> — Adyen for example is notification-driven, so order state must be settled by the async notification, handled idempotently; <b>edge states</b> — payment captured but order save failed, duplicate notifications, partial refunds; and <b>reconciliation</b> against gateway reports. In my current project I've also debugged Adyen notification-cron issues in production, so I know the failure modes first-hand."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Message queues & crons — how does async processing work?</summary>
+    <div class="body">
+      <div class="say">
+        "Queues: a publisher pushes a message to an exchange, a topology routes it to a queue, a consumer processes it — configured via <code>communication.xml</code>, <code>queue_topology.xml</code>, <code>queue_publisher.xml</code>, <code>queue_consumer.xml</code>. Backend is RabbitMQ in production (MySQL-based queue exists but doesn't scale). Consumers run via <code>queue:consumers:start</code>, supervised by cron or a process manager.
+        <br><br>
+        Cron: jobs declared in <code>crontab.xml</code> in groups; schedule stored in <code>cron_schedule</code>. Ops knowledge that matters: stuck 'running' jobs blocking a group, missed schedules from an overloaded box, and cleaning the schedule table. I've debugged production cron issues — including payment-notification cron failures — using New Relic and logs."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Headless / PWA — what's your take as a consultant?</summary>
+    <div class="body">
+      <div class="say">
+        "Options: Luma (classic), PWA Studio or a custom React/Next storefront on GraphQL, or Adobe's newer Edge Delivery / drop-in components direction. My consulting view: headless buys frontend velocity and Lighthouse scores, but costs you the ecosystem — many extensions assume Luma, so every third-party feature needs frontend rebuilding. I recommend headless when the client has a strong frontend team and a differentiated UX vision; I recommend optimised Luma/Hyvä-style approaches when time-to-market and extension leverage matter more. The right answer is a TCO conversation, not a fashion choice."
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= SCENARIOS ================= -->
+<section class="panel" id="scen">
+  <h2>🏗️ Consultant-Level Scenarios (Round 2 Gold)</h2>
+  <p class="lead">"Consultant" means: ask clarifying questions → structure the answer → give options with trade-offs → recommend. Practise saying these frameworks out loud.</p>
+
+  <details open>
+    <summary>"A client wants a new Adobe Commerce store. How do you run discovery & estimation?"</summary>
+    <div class="body">
+      <div class="say">
+        "Discovery first, in four buckets. <b>Business:</b> B2C or B2B, markets/languages/currencies, order volume, peak events. <b>Catalog:</b> SKU count, configurable/bundle complexity, who owns product data — is there a PIM? <b>Integrations:</b> ERP, OMS, payment providers, tax, shipping carriers, CRM, analytics. <b>Non-functional:</b> performance targets, compliance, launch date, budget guardrails.
+        <br><br>
+        Then I decompose into epics — catalog, checkout & payments, integrations, theme/UX, data migration, infra & launch — and estimate each with the team using story points or three-point estimates, adding explicit risk buffer on integrations and migration because that's where surprises live. Output: a phased plan — MVP launch scope versus fast-follow — because my strong recommendation is always to launch a smaller scope earlier and iterate. I present estimates with assumptions written down; an estimate without assumptions is a future dispute."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"Client's checkout conversion dropped after last release. What do you do?"</summary>
+    <div class="body">
+      <div class="say">
+        "Treat it as an incident. First quantify: which step of the funnel drops — analytics tells me if it's cart→shipping, shipping→payment, or payment failures. Cross-check New Relic and browser errors: a JS error in a checkout KO component often breaks silently for a segment — one browser, one payment method, guest vs logged-in.
+        Then diff the release: what touched checkout, payment configs, or shipping rates? If a payment method's error rate spiked, check the gateway dashboard before blaming code — sometimes it's the PSP.
+        Mitigation before root cause if revenue is bleeding: feature-flag off or roll back the offending change — which is why I insist releases are small and rollback-able. Afterwards: postmortem, and a synthetic checkout monitor so the next regression pages us before customers feel it."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"Design a multi-country rollout (5 countries, 3 currencies, 2 languages each)."</summary>
+    <div class="body">
+      <div class="say">
+        "Magento hierarchy: Websites → Stores → Store Views. My default: one website per country — that gives separate base currency, pricing, tax, payment and shipping config per country — with store views per language. Shared catalog with per-website price scope, or per-country catalogs if assortments truly differ.
+        Key decisions I'd surface: single Adobe Commerce instance versus regional instances (latency + ops trade-off), tax and invoicing compliance per country, payment method mix per market — local methods matter for conversion — domain strategy and hreflang for SEO, and a content-operations model so marketing can run country campaigns without dev tickets — Content Staging helps there. I'd pilot with one country, template the setup, then stamp out the rest."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"1 million SKUs need to be imported nightly from a PIM. Architecture?"</summary>
+    <div class="body">
+      <div class="say">
+        "First push back on the requirement: does the full million change nightly? Almost never — so <b>delta sync</b>, full load only as recovery. Transport via async bulk API or direct queue consumers. Import path optimised: batched operations rather than row-by-row saves, indexers on schedule and reindexed after the batch, cache invalidation targeted by tags rather than a full flush. Media offloaded to CDN, downloaded async. Guardrails: validation quarantine for bad rows so one broken record doesn't kill the batch, run-duration alerting, and a reconciliation count at the end. And I'd run it against staging first with production-scale data — import performance only shows its problems at real volume."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"How do you define technical standards for a team?" (JD bullet, verbatim)</summary>
+    <div class="body">
+      <div class="say">
+        "I do this today. Three layers. <b>Automated:</b> SonarQube quality gates plus Magento coding-standard PHPCS in CI — at Altimetrik I drove our SonarQube adoption and personally burned down the backlog across PHP and JavaScript.
+        <b>Process:</b> mandatory peer review with a checklist — service contracts over model access, plugin over preference, ACL on every route, output escaping, no logic in templates; definition-of-done includes tests and doc notes.
+        <b>Human:</b> I mentor rather than gatekeep — at Xperi I trained junior developers and documented workflows for new joiners, because a standard that lives only in review comments dies. Standards stick when the team understands the 'why'."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"An extension vendor's module conflicts with your customisation. Client is blocked. Go."</summary>
+    <div class="body">
+      <div class="say">
+        "Diagnose precisely: plugin list on the disputed method (<code>bin/magento dev:di:info</code>), who wins on preference, what sortOrder collision exists. Short-term unblock: adjust plugin sortOrder or scope our plugin more narrowly. Right fix: if the vendor module is at fault, open a vendor ticket with a reproducible case, and carry a composer patch until their fix ships — patches tracked in version control, re-validated each upgrade. Never fork a vendor module silently; that's an upgrade time-bomb. And I log the decision in the project's ADR so the next team knows why the patch exists."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"Production is down on a sale day. Walk me through your incident leadership."</summary>
+    <div class="body">
+      <div class="say">
+        "Roles first, panic never: one person communicates to stakeholders — status every 30 minutes even if the status is 'still investigating' — while I drive diagnosis. Check the obvious fast: last deploy? traffic spike? infra alarm? payment provider down? Restore service before root-causing: roll back, scale out, serve cached, or gracefully degrade — disable a heavy feature to keep checkout alive; checkout availability is the only KPI during a sale.
+        Afterwards: blameless postmortem, and every incident buys us a permanent improvement — an alert, a runbook line, a capacity fix. I've done production triage with New Relic in my current role, so this isn't theory for me."
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= STAR ================= -->
+<section class="panel" id="star">
+  <h2>📖 Your Project Stories (STAR Format)</h2>
+  <p class="lead">Behavioral answers = stories. Four polished stories cover 90% of behavioral questions. Structure: <b>S</b>ituation → <b>T</b>ask → <b>A</b>ction → <b>R</b>esult. Keep each under 2 minutes.</p>
+
+  <details open>
+    <summary>Story 1 · "Lead & quality driver" — Altimetrik (use for: leadership, initiative, quality, current work)</summary>
+    <div class="body">
+      <p class="star"><b>S:</b> "In my current role at Altimetrik I lead Magento development for a European fashion e-commerce client. When I joined, the codebase had accumulated significant technical debt — hundreds of static-analysis violations across PHP and JavaScript, and recurring production noise in New Relic, including payment-notification cron failures with our Adyen integration."</p>
+      <p class="star"><b>T:</b> "As lead, I owned both delivery of new features and getting quality under control — without pausing releases."</p>
+      <p class="star"><b>A:</b> "I set up a triaged SonarQube backlog, sized every finding, assigned them across the team, and drove them sprint by sprint alongside feature work. I fixed the hardest categories myself — deprecated APIs, regex and consistency issues — and resolved the Adyen cron errors in production. I also made review standards explicit so new code stopped adding debt."</p>
+      <p class="star"><b>R:</b> "We burned down the violation backlog to near-zero, production error noise dropped visibly in New Relic, and the client's confidence in our releases went up. The bigger result: the team now maintains the quality gate without me policing it."</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Story 2 · "Complex integration" — Peelworks ERP sync (use for: hardest technical problem, integrations, API design)</summary>
+    <div class="body">
+      <p class="star"><b>S:</b> "At Neosoft, Peelworks ran Magento 2 Enterprise as the backend for an Android commerce app, with an ERP holding business data. Product, order and inventory data had to stay consistent between two systems, and the mobile app needed order/product tracking that core APIs didn't provide."</p>
+      <p class="star"><b>T:</b> "I owned building the integration layer: custom REST APIs for the app and a two-way sync module between Magento and the ERP, plus MSI-based inventory."</p>
+      <p class="star"><b>A:</b> "I designed the REST endpoints on Magento's service contracts with proper webapi ACL, and built the sync module with clear ownership per entity — ERP as source of truth for catalog and stock, Magento for orders — using delta updates and safe retries so a failed sync never duplicated or lost data. Working with MSI meant understanding reservations so both systems agreed on salable stock."</p>
+      <p class="star"><b>R:</b> "The app and ERP stayed reliably consistent, and the pattern — deltas, idempotent retries, single source of truth per entity — is one I've reused on every integration since. It's exactly the integration approach this consultant role calls for."</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Story 3 · "Upgrade & payments under pressure" — Tivoliwines (use for: risk management, ownership, delivery)</summary>
+    <div class="body">
+      <p class="star"><b>S:</b> "Tivoliwines, a UK wine retailer, was on Magento 2.1.18 — out of support, security exposure, and blocking newer extensions. They also needed Stripe payments live."</p>
+      <p class="star"><b>T:</b> "I owned the upgrade to 2.3.5 and the Stripe integration on a live revenue-generating store."</p>
+      <p class="star"><b>A:</b> "I audited every third-party module for compatibility first — that's where upgrade risk concentrates — upgraded core via composer on a branch, fixed deprecated API usage and DI compile issues, then validated the full purchase path on staging with sandbox payments before a planned cutover with a rollback point. Stripe went in through the payment gateway framework with webhook handling for asynchronous events."</p>
+      <p class="star"><b>R:</b> "Clean cutover, no order loss, secure supported platform, and a new payment method that improved the checkout experience. That project taught me my upgrade playbook, which I've applied since."</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Story 4 · "Mentoring & standards" — Xperi (use for: mentorship, teamwork, knowledge sharing)</summary>
+    <div class="body">
+      <p class="star"><b>S:</b> "At Xperi, our Magento team was growing and new joiners were ramping slowly on a codebase with a lot of legacy patterns."</p>
+      <p class="star"><b>T:</b> "Beyond my delivery work, I took on onboarding and raising the team's standard."</p>
+      <p class="star"><b>A:</b> "I documented technical workflows for new hires, ran hands-on sessions on Magento best practices — plugins over preferences, service contracts, proper layout customisation — reviewed code with teaching-style comments rather than just 'change this', and modernised legacy modules to give the team clean examples to copy from."</p>
+      <p class="star"><b>R:</b> "New developers became productive noticeably faster, review cycles shortened because fewer basics came up, and mentoring became a permanent part of how I work — which is directly what the mentorship bullet in this role asks for."</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Quick answers bank (short behavioral questions)</summary>
+    <div class="body">
+      <table>
+        <tr><th>Question</th><th>Your anchor</th></tr>
+        <tr><td>Biggest strength?</td><td>"Depth plus ownership — nine years on one platform, and I take things end-to-end: I don't hand off a problem half-solved." (→ Story 1 or 3)</td></tr>
+        <tr><td>A weakness?</td><td>"I used to hold work too close — as a senior dev I'd rather fix it myself than delegate. Leading at Altimetrik forced me to delegate with clear standards instead, and mentoring made me better at it. I still catch myself sometimes on critical fixes."</td></tr>
+        <tr><td>Conflict with a colleague?</td><td>Disagreement on fixing vs patching a vendor module (→ Scenario tab, extension conflict). Resolved with data: dev:di:info evidence + upgrade-cost argument. Principle: "argue with evidence, decide, commit."</td></tr>
+        <tr><td>A failure?</td><td>Early-career: underestimated third-party module risk in an upgrade, cost extra testing days. Lesson → audit extensions FIRST, now step one of your playbook. (Ends as growth, not confession.)</td></tr>
+        <tr><td>Handling tight deadlines?</td><td>Scope negotiation beats heroics: "I split must-have from fast-follow and protect quality on the critical path — a broken checkout shipped on time is still a failure."</td></tr>
+        <tr><td>Client pushes an unrealistic demand?</td><td>"I never say a flat no — I show options with costs. 'We can do X by the date if we defer Y, or full scope two weeks later.' Clients respect trade-offs, not refusals."</td></tr>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- ================= HR ================= -->
+<section class="panel" id="hr">
+  <h2>🤝 HR Round & Salary Negotiation</h2>
+  <p class="lead">HR rounds fail people who wing them. You will not wing it.</p>
+
+  <div class="card tip">
+    <h3 style="margin-top:0">Your numbers (decide BEFORE the call)</h3>
+    <table>
+      <tr><th>Item</th><th>Position</th></tr>
+      <tr><td>Current CTC</td><td>₹27 LPA (state it plainly and confidently — it's a strong number)</td></tr>
+      <tr><td>Expected CTC — opening ask</td><td><b>₹38–40 LPA</b> ("I'm looking at around 38 to 40, based on the seniority of this role and my specialisation")</td></tr>
+      <tr><td>Acceptable landing zone</td><td>₹34–36 LPA (≈ 30%+ hike). Below ₹33, the move stops making financial sense — be prepared to hold.</td></tr>
+      <tr><td>Walk-away</td><td>Decide with Rishabh in advance and don't reveal it. Never negotiate against yourself.</td></tr>
+      <tr><td>Notice period</td><td>Know your exact contractual notice at Altimetrik. If long: "My notice is X days; I'll initiate immediately on offer and explore buyout/early release if needed."</td></tr>
+    </table>
+  </div>
+
+  <details open>
+    <summary>"What are your salary expectations?"</summary>
+    <div class="body">
+      <div class="say">
+        "My current package is 27 lakhs. Given this is a senior consultant position and my nine years of specialised Adobe Commerce experience map directly onto every line of the role, I'm looking at around 38 to 40 lakhs. That said, the role fit matters most to me — if we're aligned on the role and level, I'm confident we can align on numbers."
+      </div>
+      <p><b>Rules:</b> Say your number once, calmly, then stop talking. Silence is negotiation. If they counter low: "I appreciate that. Given the market for certified senior Magento consultants and that I'd be coming in at the top of the experience band, is there flexibility to get closer to 38? I'm also open to structuring it with a joining bonus if the fixed band is constrained."</p>
+      <div class="avoid">"Negotiable as per company norms" (surrenders leverage) · a range starting at your minimum · justifying by personal expenses. Justify by market value and role scope only.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>"Do you have other offers?" / "How soon can you join?"</summary>
+    <div class="body">
+      <div class="say">
+        "I'm in active discussions elsewhere, but this role is my clear first preference because it's exactly my specialisation — that's why I'm being selective rather than collecting offers."
+      </div>
+      <p>(True "active discussions" can simply mean you're applying. Never fabricate a specific offer — seniors get caught.)</p>
+      <div class="say">"My notice period is [X] days. I'll resign the day I have the offer letter, and I'll actively pursue early release. I don't sit on offers."</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Stability questions ("Why 4 companies?" / "Will you stay?")</summary>
+    <div class="body">
+      <div class="say">
+        "If you look at my moves, each one added a specific capability: Rightgifting gave me end-to-end fundamentals, Navabrind gave me client diversity and upgrades, Neosoft gave me enterprise integrations at brands like Decathlon, Xperi matured me into mentoring and standards, and Altimetrik gave me the lead role. Every move was forward, within one platform. I'm now at the point where the next step isn't another company doing the same work — it's the consultant track, and that's a step I want to take once, in the right place, for the long term."
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Questions YOU should ask (pick 3 — asking nothing reads as low interest)</summary>
+    <div class="body">
+      <ol>
+        <li>"What does the Adobe Commerce practice look like here — team size, and would I be aligned to one large account or across clients?" <span class="kbd">(shows practice thinking)</span></li>
+        <li>"What does success look like for this role in the first six months?" <span class="kbd">(shows outcome orientation)</span></li>
+        <li>"How much of the role is greenfield builds versus ongoing delivery and support?" <span class="kbd">(genuinely useful for you)</span></li>
+        <li>"Is there a path and support toward the Adobe Commerce Architect certification within the practice?" <span class="kbd">(signals ambition + retention)</span></li>
+        <li>"How are solution decisions made with clients — does the consultant own the technical recommendation?" <span class="kbd">(consultant mindset)</span></li>
+      </ol>
+      <div class="avoid">Leave/WFH policy and salary-adjacent questions in technical rounds — save logistics for HR after they want you.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Offer etiquette & closing</summary>
+    <div class="body">
+      <ul>
+        <li>Get everything in writing: fixed vs variable split, joining bonus, band/designation (should be Consultant/Senior Consultant grade — designation affects your next 5 years at Infosys).</li>
+        <li>Variable pay at large IT services firms is genuinely variable — negotiate <b>fixed</b> first.</li>
+        <li>It's fine to ask for 2–3 days to review an offer. It is not fine to go silent.</li>
+        <li>Close warmly regardless: "Thank you — this conversation made me more excited about the role." Interviewers remember exits.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= WEEK PLAN ================= -->
+<section class="panel" id="week">
+  <h2>📅 7-Day Preparation Plan + Final Cheat Sheet</h2>
+  <p class="lead">One focused week, ~2 hours a day. Speaking out loud beats reading — 30 minutes of every session is verbal practice.</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Day</th><th>Focus (90 min study + 30 min speaking)</th></tr>
+      <tr><td><b>Day 1</b></td><td>🎯 Game Plan + 🗣️ Intro. Write your intro in your own words; record 3 takes. Read JD aloud once.</td></tr>
+      <tr><td><b>Day 2</b></td><td>🔄 Why Switch + break answers. Practise with Rishabh playing a skeptical interviewer. Repeat until zero hesitation.</td></tr>
+      <tr><td><b>Day 3</b></td><td>🧱 Core: plugins/observers/preferences, DI, service contracts, EAV, module structure. Say each answer aloud twice.</td></tr>
+      <tr><td><b>Day 4</b></td><td>🧱 + ⚡: order flow & tables, MSI, price rules, caching (FPC + private content), indexers, "slow site" triage.</td></tr>
+      <tr><td><b>Day 5</b></td><td>🔌 APIs & integrations + your ERP/payment stories. These are YOUR strongest cards — polish till they shine.</td></tr>
+      <tr><td><b>Day 6</b></td><td>🏗️ All consultant scenarios + 📖 four STAR stories, all out loud. Full mock interview with Rishabh (60 min).</td></tr>
+      <tr><td><b>Day 7</b></td><td>🤝 HR scripts + numbers. Light revision of cheat sheet below. Stop by 8 PM. Sleep.</td></tr>
+    </table>
+  </div>
+
+  <h3>🗂️ Last-Hour Cheat Sheet (the only thing you revise on interview day)</h3>
+  <div class="grid2">
+    <div class="card">
+      <b>Identity</b>
+      <ul>
+        <li>9 yrs · one platform · Adobe Certified 2023 · Lead Dev</li>
+        <li>Brands: Decathlon, FNAC, Surfline, Xperi, EU fashion client</li>
+        <li>3 messages: specialist · full lifecycle · quality leader</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Customisation ladder</b>
+      <ul>
+        <li>Plugin → Observer → Preference (last resort)</li>
+        <li>before / after / around (around = costly, rare)</li>
+        <li>di.xml sortOrder · no plugins on private/final</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Order flow</b>
+      <ul>
+        <li>quote → sales_order (+items/address/payment)</li>
+        <li>invoice = money · shipment = goods · creditmemo = refund</li>
+        <li>MSI: reservation at order, deduction at shipment</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Caching</b>
+      <ul>
+        <li>Varnish/Fastly FPC · Redis backend+sessions</li>
+        <li>Private content = customer-data JS + sections.xml</li>
+        <li>cacheable="false" kills whole-page caching!</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Indexing & performance</b>
+      <ul>
+        <li>Update by Schedule = triggers → _cl changelog → cron</li>
+        <li>Triage: edge → app (New Relic) → DB → search → infra</li>
+        <li>N+1, uncacheable blocks, sync external calls = usual suspects</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Integrations</b>
+      <ul>
+        <li>REST=systems · GraphQL=storefront · Bulk/async=volume via RabbitMQ</li>
+        <li>ERP: source of truth per entity · deltas · idempotent · reconcile</li>
+        <li>Payments: gateway framework, webhooks idempotent, PCI = tokenise</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Consultant reflex</b>
+      <ul>
+        <li>Clarify first (B2B/B2C? SKUs? volume?)</li>
+        <li>Options + trade-offs, then ONE recommendation</li>
+        <li>Estimates carry written assumptions</li>
+      </ul>
+    </div>
+    <div class="card">
+      <b>Numbers & scripts</b>
+      <ul>
+        <li>Ask 38–40 · land 34–36 · say it once, then silence</li>
+        <li>Break = one confident paragraph, move on</li>
+        <li>Unknown Q: "Haven't hit that exact case, but…"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card good big" style="text-align:center; margin-top:22px;">
+    💙 <b>Aishwarya — you've already done this job for nine years. The interview is just you describing your own life's work, calmly.</b><br>
+    <span class="kbd">Nine years. One platform. Walk in like you own it — because you do.</span>
+  </div>
+</section>
+
+</main>
+
+<footer>Prepared with ❤️ for Aishwarya Sharma · Infosys Senior Adobe Commerce (Magento) Consultant · Bengaluru · 2026</footer>
+
+<script>
+  // Tabs
+  const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.panel');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    panels.forEach(p=>p.classList.remove('show'));
+    document.getElementById(t.dataset.t).classList.add('show');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+  // Checklist with localStorage
+  const boxes=document.querySelectorAll('#checklist input');
+  const KEY='aish-prep-';
+  function refresh(){
+    let done=0;
+    boxes.forEach(b=>{ b.closest('.chk').classList.toggle('done',b.checked); if(b.checked)done++; });
+    const pct=Math.round(done/boxes.length*100);
+    document.getElementById('pbar').style.width=pct+'%';
+    document.getElementById('pcount').textContent=done+' of '+boxes.length+' preparation milestones done'+(pct===100?' — she is READY! 🎉':'');
+  }
+  boxes.forEach(b=>{
+    try{ b.checked=localStorage.getItem(KEY+b.dataset.k)==='1'; }catch(e){}
+    b.addEventListener('change',()=>{ try{localStorage.setItem(KEY+b.dataset.k,b.checked?'1':'0');}catch(e){} refresh(); });
+  });
+  refresh();
+</script>
+</body>
+</html>
