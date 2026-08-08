@@ -1433,7 +1433,7 @@
     "immediate_joiner": false,
     "fit_score": 7,
     "fit_reason": "Primary product leader for the new Hyderabad hub of a US digital-payments fintech, reporting to CPO; integrations/API domain matches the API/Kafka strength.",
-    "notes": "Part of announced 150-role India expansion; Greenhouse ATS at boards.greenhouse.io/invoicecloud. Cross-confirmed by two lanes 7 Aug.",
+    "notes": "Part of announced 150-role India expansion; Greenhouse ATS at boards.greenhouse.io/invoicecloud. Cross-confirmed by two lanes 7 Aug. CAUTION (8 Aug sweep): separate evidence suggests this req was originally posted Jan 2026 — the 'posted 2 days ago' signal was likely aggregator re-indexing; confirm the req is genuinely open before investing effort.",
     "verified": false,
     "category": "saas-ai",
     "id": 99
@@ -1453,5 +1453,53 @@
     "verified": false,
     "category": "workday-banks",
     "id": 100
+  },
+  {
+    "company": "Finastra",
+    "title": "Director, Product Management — Corporate Channels & Cash Management",
+    "location": "Bengaluru",
+    "seniority": "Director",
+    "apply_url": "https://finastra.wd3.myworkdayjobs.com/en-US/FINC/job/Director--Product-Management--Corporate-Channels-and-Cash-Management_REQ0525_0033936",
+    "platform": "workday",
+    "posted_date": "2026-08-05",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "15–20 yrs mandate over corporate digital-banking channels, cash management and GenAI product investment at a core-banking software leader — squarely matches the core-banking modernization + GenAI record.",
+    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip.",
+    "verified": false,
+    "category": "saas-ai",
+    "id": 101
+  },
+  {
+    "company": "Mastercard",
+    "title": "Director, Product Management — Operational Insights (commercialization/GTM)",
+    "location": "Gurgaon",
+    "seniority": "Director",
+    "apply_url": "https://www.themuse.com/jobs/mastercard/director-product-management-fe2a99",
+    "platform": "other",
+    "posted_date": "2026-08-06",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director on Mastercard's Operational Insights global product team (data-product commercialization) — payments-data fit at Director band; Gurgaon-based.",
+    "notes": "'Posted 2 days ago' on Muse as of 8 Aug; original req on careers.mastercard.com (R-number unconfirmed, fetch blocked).",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 102
+  },
+  {
+    "company": "Google",
+    "title": "Group Product Manager, SecOps Platform (Agentic SOC foundations)",
+    "location": "Bengaluru",
+    "seniority": "GPM",
+    "apply_url": "https://www.google.com/about/careers/applications/jobs/results/122771397981151942-group-product-manager",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "GPM building agentic-SOC platform foundations (identity/access, APIs, provisioning, billing) — agentic-AI platform + API strengths transfer directly; 10–12 yrs band at Google comp.",
+    "notes": "Active on Google Careers, newly indexed on foundit.in as of 8 Aug; posting date not visible so 48h freshness unconfirmed. Security domain is new territory — position the platform/API story.",
+    "verified": false,
+    "category": "bigtech",
+    "id": 103
   }
 ]
