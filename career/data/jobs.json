@@ -1581,5 +1581,37 @@
     "verified": false,
     "category": "workday-banks",
     "id": 108
+  },
+  {
+    "company": "PayU",
+    "title": "Director of Product — Merchant Experience",
+    "location": "Bengaluru / Gurgaon",
+    "seniority": "Director",
+    "apply_url": "https://www.instahyre.com/job-427571-director-of-product-at-payu-bangalore-gurgaon/",
+    "platform": "instahyre",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director owning merchant NPS across PayU's payments business units (11–14 yrs) — payments-platform product leadership at scale, first PayU role on the board.",
+    "notes": "Instahyre ID 427571 is far newer than previously tracked IDs, suggesting a recent post; also mirrored on startup.jobs. Exact date unexposed — confirm live before applying.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 109
+  },
+  {
+    "company": "Bounteous x Accolite",
+    "title": "Director, Product Management (Financial Services)",
+    "location": "Chennai",
+    "seniority": "Director",
+    "apply_url": "https://www.bounteous.com/careers/job/d73ee3d2-6343-41c3-a51e-fb04b2e50d4f",
+    "platform": "careers-site",
+    "posted_date": "2026-08-10",
+    "immediate_joiner": false,
+    "fit_score": 6,
+    "fit_reason": "Director leading digital product vision for financial-services clients (Strategy / Data & AI) — solid domain overlap, but consultancy-side delivery rather than owning a product P&L; Chennai-based.",
+    "notes": "LinkedIn showed 'actively hiring, 1 day ago' on 10 Aug; live on Bounteous careers and Built In Chennai. Verify comp band before investing — services-firm Director bands often sit below ₹95L.",
+    "verified": false,
+    "category": "exec-search",
+    "id": 110
   }
 ]
