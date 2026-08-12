@@ -1613,5 +1613,21 @@
     "verified": false,
     "category": "exec-search",
     "id": 110
+  },
+  {
+    "company": "Mastercard",
+    "title": "Director, Products and Solutions",
+    "location": "Mumbai",
+    "seniority": "Director",
+    "apply_url": "https://www.themuse.com/jobs/mastercard/director-products-and-solutions-74fbce",
+    "platform": "workday",
+    "posted_date": "2026-08-12",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director owning debit-product GTM/CVP across 20+ issuing banks — payments product leadership at Mastercard, though more commercial/GTM-leaning than platform-building; Mumbai-based.",
+    "notes": "'Posted Today' via Muse on 12 Aug; original req on careers.mastercard.com (fetch blocked). Fifth distinct Mastercard role on the board.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 111
   }
 ]
