@@ -1629,5 +1629,21 @@
     "verified": false,
     "category": "workday-banks",
     "id": 111
+  },
+  {
+    "company": "American Express",
+    "title": "Director — Digital Product Management (Enterprise Payments Centre of Excellence)",
+    "location": "Bengaluru",
+    "seniority": "Director",
+    "apply_url": "https://careers.americanexpress.com/en/sites/CX_1/job/26009573",
+    "platform": "careers-site",
+    "posted_date": "2026-08-12",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director leading design/delivery of modern, scalable enterprise payment-platform capabilities across global markets (10–15 yrs) — payments-platform product leadership squarely matching the API/Kafka platform record; first Amex role on the board.",
+    "notes": "'Posted 2 days ago' via iimjobs mirror (job 1676406) as of 14 Aug; apply on careers.americanexpress.com req 26009573 (fetch blocked from sandbox — confirm live).",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 112
   }
 ]
