@@ -77,18 +77,47 @@ def kick(dur=0.55, punch=1.0):
     return sat(body * 1.15 + click * punch, 1.6) * 0.9
 
 
-def sub808(note, dur, glide=0.045):
-    """Long 808 with a pitch glide into the root and tape-ish saturation."""
+def sub808(note, dur, glide=0.045, from_note=None):
+    """808 with a pitch glide into the root and tape-ish saturation.
+
+    from_note gives a true portamento slide up/down from the previous note -
+    the signature 808 move. Without it the glide is just a short drop into pitch.
+    """
     n = int(dur * SR)
     t = np.arange(n) / SR
     f0 = midi(note)
-    f = f0 * (1 + 0.55 * np.exp(-t / glide))
+    if from_note is not None:
+        # slide across ~110ms from the previous note's pitch
+        f = f0 * (midi(from_note) / f0) ** np.exp(-t / 0.11)
+    else:
+        f = f0 * (1 + 0.55 * np.exp(-t / glide))
     x = np.sin(2 * np.pi * np.cumsum(f) / SR)
     e = env_ad(n, 0.006, dur * 0.42, 2.6)
     # short fade-out so notes never click when they get cut off
     fade = int(0.02 * SR)
     e[-fade:] *= np.linspace(1, 0, fade)
     return sat(x * e, 2.2) * 0.60
+
+
+def bass_mid(note, dur, gain=1.0):
+    """Warm mid-bass an octave above the 808 (~110-170 Hz).
+
+    This is the layer you actually *hear* as "the bassline" on laptop speakers,
+    earbuds and phone speakers - the sub only carries the weight underneath it.
+    Saw + square through a resonant-ish low-pass, plucked envelope.
+    """
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    f = midi(note + 12)
+    ph = f * t
+    saw = 2 * (ph % 1.0) - 1.0
+    sq = np.sign(np.sin(2 * np.pi * ph))
+    x = 0.72 * saw + 0.28 * sq
+    x = fft_filter(x, low=f * 7.0, high=70)
+    e = env_ad(n, 0.005, dur * 0.36, 2.2)
+    fade = min(int(0.015 * SR), n)
+    e[-fade:] *= np.linspace(1, 0, fade)
+    return sat(x * e, 1.9) * 0.115 * gain
 
 
 def snare(dur=0.35):
@@ -191,7 +220,17 @@ CHORDS = [
     [57, 61, 64],   # A    (A3 C#4 E4)
     [59, 63, 66],   # B    (B3 D#4 F#4)
 ]
-BASS = [37, 37, 33, 35]      # C#2, C#2, A1, B1
+BASS = [37, 37, 33, 35]      # C#2, C#2, A1, B1  (root of each bar)
+
+# The actual bassline. Per chord-loop slot: (16th step, MIDI note, length in
+# 16ths, slide-from-previous-note). Movement + slides are what make a bassline
+# a bassline instead of a held root note.
+BASS_PATTERN = {
+    0: [(0, 37, 6, False), (6, 37, 3, False), (10, 44, 3, False), (14, 35, 2, True)],
+    1: [(0, 37, 5, False), (5, 44, 2, True), (8, 37, 4, False), (13, 40, 3, False)],
+    2: [(0, 33, 6, False), (6, 33, 3, False), (10, 40, 3, False), (14, 37, 2, True)],
+    3: [(0, 35, 5, False), (5, 35, 3, False), (9, 42, 3, False), (13, 37, 3, True)],
+}
 
 # lead motif over the 4-bar loop: (beat offset, midi note, beats long)
 LEAD = [
@@ -226,6 +265,7 @@ def build():
     n = int((total_bars * BAR + 3.0) * SR)
     drums = np.zeros(n)
     bass = np.zeros(n)
+    bassmid = np.zeros(n)
     music = np.zeros(n)
     fx = np.zeros(n)
     rng = np.random.default_rng(2024)
@@ -290,15 +330,20 @@ def build():
                     put(drums, tabla(note=64 if s % 8 == 3 else 69),
                         t0 + s * BEAT / 4, 0.55)
 
-            # ---- 808 / bass
+            # ---- 808 / bassline
             if s_on:
                 if half:
-                    put(bass, sub808(root - 12, BAR * 0.95), t0, 1.0)
+                    put(bass, sub808(root - 12, BAR * 0.95), t0, 1.1)
+                    put(bassmid, bass_mid(root, BAR * 0.92), t0, 0.75)
                 else:
-                    put(bass, sub808(root, BEAT * 2.6), t0, 1.0)
-                    put(bass, sub808(root, BEAT * 1.2), t0 + 2.5 * BEAT, 0.8)
-                    if b % 4 == 3:
-                        put(bass, sub808(root + 3, BEAT * 0.9), t0 + 3.5 * BEAT, 0.75)
+                    prev = None
+                    for step, note, ln, slide in BASS_PATTERN[slot]:
+                        at = t0 + step * BEAT / 4
+                        ln_s = ln * BEAT / 4 * 1.06
+                        put(bass, sub808(note, ln_s,
+                                         from_note=prev if slide else None), at, 1.0)
+                        put(bassmid, bass_mid(note, ln_s), at, 1.0)
+                        prev = note
 
             # ---- pad
             if pad_on:
@@ -337,13 +382,15 @@ def build():
                 duck[i:i + ln] = np.minimum(duck[i:i + ln],
                                             np.linspace(0.55, 1.0, ln) ** 0.6)
     bass *= duck
+    bassmid *= duck
     music *= duck * 0.5 + 0.5
 
     # Split the 808: clean sub below 180Hz, plus a saturated harmonic layer in the
     # mids so the bassline is still audible on phone / laptop speakers.
     sub_clean = fft_filter(bass, low=180)
-    sub_harm = fft_filter(sat(bass * 4.0, 3.5), high=220, low=3000) * 0.30
-    bass = sub_clean + sub_harm
+    sub_harm = fft_filter(sat(bass * 4.0, 3.5), high=220, low=3000) * 0.34
+    mid_bass = fft_filter(bassmid, high=85, low=1600)
+    bass = sub_clean * 1.10 + sub_harm + mid_bass * 1.25
     music = fft_filter(music, high=130)       # carve room for the 808
     drums = fft_filter(drums, high=35)
 

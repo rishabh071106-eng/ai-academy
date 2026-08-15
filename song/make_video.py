@@ -332,7 +332,7 @@ def main():
         ff, "-y", "-loglevel", "error",
         "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "%dx%d" % (W, H), "-r", str(FPS),
         "-i", "-", "-i", str(AUDIO),
-        "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart",
         str(OUTPUT),
     ]
@@ -392,7 +392,7 @@ def main():
 
         # --- grain riding the hats, over everything
         grain = np.roll(grains[i % GRAIN_POOL], (i * 137) % W, axis=1)
-        frame += grain * (0.012 + 0.030 * hi)
+        frame += grain * (0.008 + 0.018 * hi)
 
         # --- HUD last, so the vignette can't swallow the corner label
         l_rgb, l_a = labels[c_name]

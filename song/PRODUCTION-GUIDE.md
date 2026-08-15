@@ -29,7 +29,8 @@ Everything is synthesised in `make_beat.py`:
 | Element | How it's made | Where to tweak |
 |---|---|---|
 | Kick | Sine sweeping 130 Hz → 47 Hz + a 4 ms noise click | `kick()` |
-| 808 | Sine with a 45 ms pitch glide into the root, tanh-saturated | `sub808()` |
+| 808 | Sine with portamento slides between notes, tanh-saturated | `sub808()` |
+| Mid-bass | Saw + square, low-passed, plucked — the layer you *hear* as the bassline | `bass_mid()` |
 | Snare | 185 + 331 Hz tone layer + band-passed noise | `snare()` |
 | Clap | 4 noise bursts spaced 11 ms apart (that's what makes it a *clap*) | `clap()` |
 | Hats | Noise ring-modulated at 6.4 kHz, high-passed at 7.2 kHz | `hat()` |
@@ -50,16 +51,37 @@ Hats    x x x x x x x x x x x x x x x x      (+ 32nd rolls on step 8 & 16, tripl
 Perc    . . . x . . . x . . . x . . . x
 ```
 
-Two production details that matter more than they sound like they should:
+### The bassline
+
+The bass is three layers playing one written line, not a held root note:
+
+```
+        1 e & a 2 e & a 3 e & a 4 e & a
+C#m     C#. . . . . C#. . . G#. . . B~      ~ = slide into the next note
+C#m     C#. . . . G#~ . C#. . . . E . .
+A       A . . . . . A . . . E . . . C#~
+B       B . . . . B . . . F#. . . C#~ .
+```
+
+1. **Sub (below 180 Hz)** — clean sine, the weight you feel.
+2. **Saturated mid layer (220 Hz–3 kHz)** — a distorted copy of the sub. Phone and
+   laptop speakers physically cannot reproduce 40 Hz; this layer is the only
+   reason the bassline exists at all on them.
+3. **Mid-bass (`bass_mid`, ~110–170 Hz)** — saw+square an octave above the 808,
+   plucked. This is what your ear reads as "the bassline."
+
+Slides (`from_note=`) are the signature 808 move — the pitch glides from the
+previous note over ~110 ms instead of restarting. Edit `BASS_PATTERN` to rewrite
+the line: `(16th step, MIDI note, length in 16ths, slide from previous)`.
+
+Two more production details that matter more than they sound like they should:
 
 - **Sidechain.** The 808 and the music duck ~45% for 180 ms every kick. Without
   this the sub and the kick fight and the low end turns to mud. See `duck` in `build()`.
-- **The 808 is split in two.** Below 180 Hz it stays a clean sine; a heavily
-  saturated copy is band-passed 220 Hz–3 kHz and mixed in at 30%. Phone and
-  laptop speakers physically cannot reproduce 40 Hz — that saturated mid layer is
-  the *only* reason the bassline is audible on them. First render of this beat had
-  90% of its energy below 120 Hz and sounded empty everywhere except headphones.
-  It's now ~72%.
+- **Low-end balance.** The first render of this beat had 90% of its energy below
+  120 Hz — it sounded huge in headphones and empty everywhere else. After the
+  three-layer bass split it sits at ~71% below 120 Hz, with real content at
+  120–500 Hz where small speakers live.
 
 The mix sits at **−15.9 dBFS RMS with a −1 dBFS peak**. That headroom is
 deliberate — it's where your vocal goes. Don't normalise the beat louder before
@@ -117,11 +139,12 @@ guessing:
 - **There is no voice-cloning or text-to-speech model in this environment.** Not
   a permissions problem, not a "didn't try" problem — the capability isn't
   installed here, so no synthetic vocal of any kind can be produced.
-- **I also can't pull audio from the Liberated Electro Soul channel.** No YouTube
-  downloader here, and I can't listen to audio even if I could fetch it. So I
-  couldn't analyse your register, timbre or delivery to tailor the key. If you
-  tell me roughly where your voice sits (or if C# minor feels too low/high when
-  you try the beat), transposing is a one-line change — see §1 above.
+- **I also can't pull audio from the Liberated Electro Soul channel**, or from
+  any Hamrah Beats reference. There's no YouTube downloader here, and I can't
+  listen to audio even if I could fetch it. So nothing in this beat is modelled
+  on those tracks — it was written from scratch. I also couldn't analyse your
+  register or delivery to pick the key. If C# minor sits wrong when you try
+  rapping over it, transposing is a one-line change — see §1 above.
 
 **To clone your own voice yourself** — this is genuinely 20 minutes of work:
 
