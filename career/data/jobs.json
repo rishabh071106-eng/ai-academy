@@ -1241,7 +1241,7 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Leads GenAI/ML Innovation Lab for working-capital/lending fintech, reports to CPTO — direct hit on lending + AI/agentic background",
-    "notes": "Strongest recency signal this sweep (posted ~1 day ago); periodically reposted evergreen req — confirm still open",
+    "notes": "Strongest recency signal this sweep (posted ~1 day ago); periodically reposted evergreen req — confirm still open Re-bumped on LinkedIn 'Actively Hiring, 1 day ago' as of 15 Aug — mandate still open.",
     "verified": false,
     "category": "fintech-india",
     "id": 87
@@ -1645,5 +1645,37 @@
     "verified": false,
     "category": "workday-banks",
     "id": 112
+  },
+  {
+    "company": "Paytm",
+    "title": "Director Product — Customer Value Management (CVM)",
+    "location": "Noida",
+    "seniority": "Director",
+    "apply_url": "https://jobs.lever.co/paytm/f0144245-1f2b-48dc-8584-692da1a4f7bf",
+    "platform": "lever",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director owning customer value management / lifecycle growth across Paytm's base — growth-product leadership adjacent to the CLM/adtech side of the platform record.",
+    "notes": "Live on Paytm's Lever board 15 Aug, newly cross-posted to aggregators; Lever hides post date so freshness unconfirmed. Seventh Paytm role tracked.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 113
+  },
+  {
+    "company": "Paytm Money",
+    "title": "Director, Product Management — Paytm Money",
+    "location": "Noida / Bengaluru (unconfirmed)",
+    "seniority": "Director",
+    "apply_url": "https://jobs.lever.co/paytm/db52bfeb-36e8-487c-bac6-bceda66be6ae",
+    "platform": "lever",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director for Paytm's wealth/broking arm — regulated-fintech product leadership; wealth is new domain territory but the platform + compliance record transfers.",
+    "notes": "Live on Paytm's Lever board 15 Aug, not previously tracked; posting date not exposed.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 114
   }
 ]
