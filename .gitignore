@@ -2,3 +2,6 @@ node_modules/
 .env
 .DS_Store
 *.log
+
+# Rendered master WAV (48MB) - regenerate with: python3 song/make_beat.py
+song/*.wav
