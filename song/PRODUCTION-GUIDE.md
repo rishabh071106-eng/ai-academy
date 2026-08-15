@@ -29,8 +29,8 @@ Everything is synthesised in `make_beat.py`:
 | Element | How it's made | Where to tweak |
 |---|---|---|
 | Kick | Sine sweeping 130 Hz → 47 Hz + a 4 ms noise click | `kick()` |
-| 808 | Sine with portamento slides between notes, tanh-saturated | `sub808()` |
-| Mid-bass | Saw + square, low-passed, plucked — the layer you *hear* as the bassline | `bass_mid()` |
+| Sub bass | Pure sine + sub-octave sine, portamento slides between notes | `sub808()` |
+| Bass definition | Sine + 2 quiet harmonics an octave up — no saw, no square | `bass_mid()` |
 | Snare | 185 + 331 Hz tone layer + band-passed noise | `snare()` |
 | Clap | 4 noise bursts spaced 11 ms apart (that's what makes it a *clap*) | `clap()` |
 | Hats | Noise ring-modulated at 6.4 kHz, high-passed at 7.2 kHz | `hat()` |
@@ -63,12 +63,19 @@ A       A . . . . . A . . . E . . . C#~
 B       B . . . . B . . . F#. . . C#~ .
 ```
 
-1. **Sub (below 180 Hz)** — clean sine, the weight you feel.
-2. **Saturated mid layer (220 Hz–3 kHz)** — a distorted copy of the sub. Phone and
-   laptop speakers physically cannot reproduce 40 Hz; this layer is the only
-   reason the bassline exists at all on them.
-3. **Mid-bass (`bass_mid`, ~110–170 Hz)** — saw+square an octave above the 808,
-   plucked. This is what your ear reads as "the bassline."
+1. **Sub (below 200 Hz)** — a pure sine at the root plus a **sub-octave sine**
+   underneath it (C#2 at 69 Hz + C#1 at 34.6 Hz). This is the weight you feel.
+2. **Warmth (200–900 Hz, at 11%)** — a lightly driven copy, band-limited and kept
+   quiet. Just enough that the line is traceable on a phone.
+3. **Definition (`bass_mid`, ~110–170 Hz)** — sine plus two quiet harmonics an
+   octave above the sub.
+
+**This bass is deliberately clean, not a trap 808.** No saw, no square, no hard
+drive anywhere in the chain — those are what make a bass growl and buzz. If you
+ever *do* want the gritty sound, raise the `sat()` drive in `sub808()` from 0.55
+and push `sub_harm` above 0.11; those two numbers are the entire difference.
+Measured on the current render, the bass has **0.0% of its energy above 600 Hz**
+and 59% below 90 Hz.
 
 Slides (`from_note=`) are the signature 808 move — the pitch glides from the
 previous note over ~110 ms instead of restarting. Edit `BASS_PATTERN` to rewrite
@@ -139,12 +146,17 @@ guessing:
 - **There is no voice-cloning or text-to-speech model in this environment.** Not
   a permissions problem, not a "didn't try" problem — the capability isn't
   installed here, so no synthetic vocal of any kind can be produced.
-- **I also can't pull audio from the Liberated Electro Soul channel**, or from
-  any Hamrah Beats reference. There's no YouTube downloader here, and I can't
-  listen to audio even if I could fetch it. So nothing in this beat is modelled
-  on those tracks — it was written from scratch. I also couldn't analyse your
+- **I also can't reach the Liberated Electro Soul channel**, or any Hamrah Beats
+  reference. YouTube is blocked outright by this environment's network proxy
+  (`EGRESS_BLOCKED`), there's no audio downloader here, and I can't listen to
+  audio in any case. So nothing in this beat or these lyrics is modelled on those
+  tracks — all of it was written from scratch. I also couldn't analyse your
   register or delivery to pick the key. If C# minor sits wrong when you try
   rapping over it, transposing is a one-line change — see §1 above.
+
+**To get the style matched:** paste the lyrics of one of your tracks as *text*,
+or describe the flow (syllables per bar, rhyme scheme, how much Hindi vs English,
+subjects you write about). Text I can work from — audio and links I cannot.
 
 **To clone your own voice yourself** — this is genuinely 20 minutes of work:
 

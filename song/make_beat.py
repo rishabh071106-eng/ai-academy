@@ -78,10 +78,10 @@ def kick(dur=0.55, punch=1.0):
 
 
 def sub808(note, dur, glide=0.045, from_note=None):
-    """808 with a pitch glide into the root and tape-ish saturation.
+    """Deep, clean sub bass with a pitch glide into the root.
 
-    from_note gives a true portamento slide up/down from the previous note -
-    the signature 808 move. Without it the glide is just a short drop into pitch.
+    from_note gives a true portamento slide up/down from the previous note.
+    Without it the glide is just a short drop into pitch.
     """
     n = int(dur * SR)
     t = np.arange(n) / SR
@@ -91,33 +91,35 @@ def sub808(note, dur, glide=0.045, from_note=None):
         f = f0 * (midi(from_note) / f0) ** np.exp(-t / 0.11)
     else:
         f = f0 * (1 + 0.55 * np.exp(-t / glide))
-    x = np.sin(2 * np.pi * np.cumsum(f) / SR)
-    e = env_ad(n, 0.006, dur * 0.42, 2.6)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    # pure sine fundamental + a sub-octave sine underneath it for depth.
+    # No hard saturation here - drive is what turns a deep sub into a gritty
+    # trap 808, and this bass is meant to be felt, not heard growling.
+    x = np.sin(ph) + 0.62 * np.sin(ph * 0.5)
+    e = env_ad(n, 0.010, dur * 0.50, 2.2)
     # short fade-out so notes never click when they get cut off
     fade = int(0.02 * SR)
     e[-fade:] *= np.linspace(1, 0, fade)
-    return sat(x * e, 2.2) * 0.60
+    return sat(x * e, 0.55) * 0.52
 
 
 def bass_mid(note, dur, gain=1.0):
-    """Warm mid-bass an octave above the 808 (~110-170 Hz).
+    """Clean definition layer an octave above the sub (~110-170 Hz).
 
-    This is the layer you actually *hear* as "the bassline" on laptop speakers,
-    earbuds and phone speakers - the sub only carries the weight underneath it.
-    Saw + square through a resonant-ish low-pass, plucked envelope.
+    Sine plus two quiet harmonics - just enough for the bassline to be legible
+    on phone and laptop speakers, which cannot reproduce the sub at all. Saw
+    and square waves live here in most rap beats; they are also what makes the
+    bass sound gritty, so this uses neither.
     """
     n = int(dur * SR)
     t = np.arange(n) / SR
-    f = midi(note + 12)
-    ph = f * t
-    saw = 2 * (ph % 1.0) - 1.0
-    sq = np.sign(np.sin(2 * np.pi * ph))
-    x = 0.72 * saw + 0.28 * sq
-    x = fft_filter(x, low=f * 7.0, high=70)
-    e = env_ad(n, 0.005, dur * 0.36, 2.2)
-    fade = min(int(0.015 * SR), n)
+    ph = 2 * np.pi * midi(note + 12) * t
+    x = np.sin(ph) + 0.20 * np.sin(2 * ph) + 0.07 * np.sin(3 * ph)
+    x = fft_filter(x, low=520, high=70)
+    e = env_ad(n, 0.012, dur * 0.42, 2.0)
+    fade = min(int(0.018 * SR), n)
     e[-fade:] *= np.linspace(1, 0, fade)
-    return sat(x * e, 1.9) * 0.115 * gain
+    return x * e * 0.055 * gain
 
 
 def snare(dur=0.35):
@@ -387,10 +389,13 @@ def build():
 
     # Split the 808: clean sub below 180Hz, plus a saturated harmonic layer in the
     # mids so the bassline is still audible on phone / laptop speakers.
-    sub_clean = fft_filter(bass, low=180)
-    sub_harm = fft_filter(sat(bass * 4.0, 3.5), high=220, low=3000) * 0.34
-    mid_bass = fft_filter(bassmid, high=85, low=1600)
-    bass = sub_clean * 1.10 + sub_harm + mid_bass * 1.25
+    sub_clean = fft_filter(bass, low=200)
+    # A little warmth so the line is traceable on small speakers, kept low and
+    # band-limited to 200-900Hz. Pushed any harder this is exactly the grit
+    # that makes a sub sound like a distorted trap 808 instead of deep bass.
+    sub_harm = fft_filter(sat(bass * 2.2, 2.0), high=200, low=900) * 0.11
+    mid_bass = fft_filter(bassmid, high=80, low=700)
+    bass = sub_clean * 1.55 + sub_harm + mid_bass * 0.95
     music = fft_filter(music, high=130)       # carve room for the 808
     drums = fft_filter(drums, high=35)
 
