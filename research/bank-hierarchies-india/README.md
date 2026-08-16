@@ -143,6 +143,136 @@ comparison charts skip it. Same trap as Northern Trust's Second Vice President.
 
 ---
 
+### 2.4 Combined level + salary comparison
+
+Every cell is **title · total CTC in ₹ LPA, Bengaluru 2026** (fixed + target bonus), for a
+tech/analytics profile. Pure Operations sits ~25% lower; front-office markets/IB ~40% higher.
+
+#### US custodians & investment banks
+
+| Rung | State Street | BNY | Northern Trust | JPMorganChase | Goldman | Morgan Stanley |
+|---|---|---|---|---|---|---|
+| R0 | Apprentice · **2.4–4.5** | Trainee · **2.5–4** | Trainee · **3–5** | Team Member · **4–9** | Intern · **8–20** | Intern · **4–10** |
+| R1 | **Associate 1** · **4–7.5** | Analyst (E/F) · **4–8** | Analyst · **4–7** | Analyst · **10–22** | Analyst · **15–35** | Analyst · **12–28** |
+| R2 | **Associate 2** · **6–10** | Sr. Analyst (G) · **7–13** | Sr. Analyst · **7–13** | Analyst · **10–22** | Analyst · **15–35** | Analyst · **12–28** |
+| R3 | **Senior Associate** · **9–16** | Associate (H) · **12–20** | Consultant · **12–20** | Associate · **20–40** | Associate · **28–55** | Associate · **25–48** |
+| R4 | **Officer** · **15–26** | Sr. Associate (I) · **18–30** | **Officer** · **18–28** | Associate · **20–40** | Associate · **28–55** | Associate · **25–48** |
+| R5 | **AVP** (AVP-1/2) · **23–42** | **VP-1 (J)** · **28–45** | **Second VP** · **25–40** | VP · **40–90** | VP · **45–95** | VP · **50–95** |
+| R6 | **VP** · **42–75** | **VP-2 (K)** · **40–60** | **VP** · **35–55** | VP · **40–90** | VP · **45–95** | VP · **50–95** |
+| R7 | **MD** ⚠️ · **80–140** | **SVP (L)** · **60–110** | **SVP** · **60–120** | **ED** · **90–180** | MD · **150–350** | **ED** · **90–170** |
+| R8 | **SVP** ⚠️ · **130–250** | Director (M) · **100–180** | **EVP** · **150+** | ED · **90–180** | MD · **150–350** | MD · **140–300** |
+| R9 | **EVP** · **300+** | **MD** · **180–350** | President | **MD** · **200–450** | MD · **150–350** | MD · **140–300** |
+| R10 | Vice Chair | Senior MD | CEO | Operating Cttee | **Partner** · **500–1,500** | Operating Cttee |
+
+#### US universal banks
+
+| Rung | Citi | Bank of America | Wells Fargo (IC track) | Wells Fargo (management track) |
+|---|---|---|---|---|
+| R0 | Non-officer C01–C07 · **2.5–6** | Team Developer · **3.5–7** | — | — |
+| R1 | Analyst **C08** · **5–10** | Team Developer · **3.5–7** | Associate **P1** · **4.5–9** | — |
+| R2 | Officer **C09** · **8–16** | Sr. Team Developer · **6–12** | Analyst **P2** · **9–17** | — |
+| R3 | Sr. Analyst **C10** · **13–22** | Assistant Manager · **10–20** | Sr. Consultant **P3** · **16–28** | — |
+| R4 | Manager/AVP **C11** ⚠️ · **18–30** | Team Manager · **16–28** | **Lead P4** *(officer: VP)* · **25–45** | **Assoc. Manager M1** *(VP)* · **25–45** |
+| R5 | **AVP C12** · **25–40** | **AVP** · **22–40** | **Sr. Lead P5** *(ED)* · **40–70** | **Manager M2** *(VP/ED)* · **40–70** |
+| R6 | **VP C13** · **35–60** | **VP** · **38–70** | **Principal P6** *(ED)* · **65–130** | **Sr. Manager M3** *(ED)* · **70–150** |
+| R7 | **SVP C14** · **55–100** | **SVP** · **75–150** | — | **Director M4** *(ED)* · **120–220** |
+| R8 | **Director C15** · **90–180** | SVP · **75–150** | — | **Executive M5** *(MD)* · **200–350** |
+| R9 | **MD C16** · **180–400** | **MD** · **180–400** | — | **Sr. Executive M6–M8** *(EVP)* · **350+** |
+
+#### European / UK banks (1)
+
+| Rung | UBS (+ ex-CS) | Deutsche Bank | Barclays | HSBC |
+|---|---|---|---|---|
+| R1 | Employee · **5–14** | **NCT (G7)** · **4–9** | **BA1** · **4–9** | **GCB 8** · **3–6** |
+| R2 | Employee · **5–14** | **Analyst (G6)** · **9–18** | **BA2** · **8–14** | **GCB 7** · **6–12** |
+| R3 | **Auth. Officer (AO)** · **14–25** | **Associate (G5)** · **16–30** | **BA3** · **12–22** | **GCB 6** *(6.2)* · **11–24** |
+| R4 | AO · **14–25** | Associate · **16–30** | **BA4** (lead) · **18–35** | GCB 6 *(6.1)* · **11–24** |
+| R5 | **Assoc. Director (AD)** · **22–38** | **AVP (G4)** · **26–45** | **AVP** · **28–50** | **GCB 5** *(5.2→5.1)* · **22–45** |
+| R6 | **Director** ⚠️ · **35–65** | **VP (G3)** · **45–80** | **VP** · **48–85** | **GCB 4** · **45–85** |
+| R7 | **Executive Director** · **60–130** | **Director (G2)** · **80–160** | **Director** · **85–170** | **GCB 3** · **85–160** |
+| R8 | ED · **60–130** | Director · **80–160** | Director · **85–170** | GCB 3 · **85–160** |
+| R9 | **Managing Director** · **150–350** | **MD (G1)** · **180–400** | **MD** · **180–400** | **GCB 2** · **200–400** |
+| R10 | **Group MD** · **500+** | Group Board | Group ExCo | **GCB 1 / 0** |
+
+#### European / UK / Japanese banks (2)
+
+| Rung | Standard Chartered | BNP Paribas (ISPL) | Société Générale (GSC) | Nomura |
+|---|---|---|---|---|
+| R1 | **Grade 8** · **4–10** | Analyst · **4–9** | **9B / 9A** · **5–11** | Analyst · **10–24** |
+| R2 | Grade 8 · **4–10** | Analyst · **4–9** | **8B** · **11–19** | Analyst · **10–24** |
+| R3 | **Grade 7** (Manager) · **10–22** | Sr. Analyst · **9–18** | **8A** (Sr. Analyst) · **17–28** | Associate · **22–45** |
+| R4 | Grade 7 · **10–22** | Asst. Mgr / Mgr · **16–28** | **7B** (Manager) · **26–45** | Associate · **22–45** |
+| R5 | **Grade 6** (Sr. Mgr / Assoc. Dir) · **20–40** | **AVP** · **25–42** | **7A** · **26–45** | **VP** · **45–85** |
+| R6 | Grade 6 → **Grade 5** · **38–70** | **VP** · **40–75** | **6A** (Sr. Manager) · **42–75** | VP · **45–85** |
+| R7 | **Grade 5** (Director) · **38–70** | **Director** · **75–150** | **Band 5** (Director) · **70–140** | **ED** · **85–180** |
+| R8 | **Grade 4** (Exec Director) · **70–140** | Director · **75–150** | **Band 4** · **150+** | ED · **85–180** |
+| R9 | **Grade 3** (MD) · **160–350** | **MD** · **160–350** | **Band 3** (MD) · **250+** | **MD** · **180–450** |
+
+#### Indian private banks
+
+| Rung | HDFC Bank | ICICI Bank | Axis Bank | Kotak Mahindra |
+|---|---|---|---|---|
+| R1 | Sales Officer / PB · **2–4** | — | Mgmt Trainee / Officer · **3–5** | **M1** Officer · **3.5–6** |
+| R2 | **Asst. Manager (E1)** · **4–7** | **AM** · **4–7** | Assistant Manager · **4–8** | **M2** Dy. Manager · **5–9** |
+| R3 | **Dy. Manager (E2)** · **6–11** | **DM-I / DM-II** · **5.5–10** | Deputy Manager · **6–11** | **M3** Manager · **8–15** |
+| R4 | **Manager (E3)** · **10–18** | **M-I / M-II** · **9–17** | Manager · **10–18** | **M4** Sr. Manager · **14–25** |
+| R5 | **Sr. Mgr / AVP (D1)** · **16–30** | **CM-I / CM-II** · **16–30** | Sr. Manager → **AVP** · **15–35** | **M5** Chief Mgr · **22–38** → **M6** AVP · **32–55** |
+| R6 | **Deputy VP (D2)** ⚠️ · **28–45** | **AGM** · **28–48** | **VP** · **35–65** | **M7** VP · **50–85** |
+| R7 | **VP (D3)** · **40–70** | **DGM** · **45–75** | **SVP-1 / SVP-2** · **60–130** | **M8** Sr. VP · **80–150** |
+| R8 | **Senior VP (D4)** · **65–120** | **JGM** · **70–110** / **GM** · **100–180** | **EVP** · **150–400** | **M9** SVP/EVP · **130–250** |
+| R9 | **EVP / Group Head (CX)** · **120–350** | **SGM-I / SGM-II** · **180–300** | President / Group Exec · **150–400** | **M10–M11** · **250+** |
+| R10 | MD & CEO · **200–500** | ED · **300–600** → MD & CEO · **800+** | MD & CEO | Board |
+
+#### Indian PSU banks vs. RBI
+
+| Scale / Grade | PSU designation | Starting basic (12th BPS) | PSU gross CTC (Bengaluru) | RBI equivalent | RBI CTC |
+|---|---|---|---|---|---|
+| Clerical | **Junior Associate** | ₹24,050 | **5.5–8** | Assistant | **9–12** |
+| **Scale I — JMGS-I** | PO / Assistant Manager | ₹48,480 | **9–13** | Asst. Mgr (**Grade A**) | **18–24** |
+| **Scale II — MMGS-II** | **Manager** | ₹64,820 | **13–17** | **Manager (Grade B)** | **18–24** |
+| **Scale III — MMGS-III** | **Senior Manager** | ₹85,920 | **17–22** | **AGM (Grade C)** | **26–34** |
+| **Scale IV — SMGS-IV** | **Chief Manager** | ₹1,02,300 | **21–26** | **DGM (Grade D)** | **34–44** |
+| **Scale V — SMGS-V** | **AGM** | ₹1,20,940 | **25–31** | **GM (Grade E)** | **44–55** |
+| **Scale VI — TEGS-VI** | **DGM** | ₹1,40,500 | **30–36** | **CGM (Grade F)** | **55–70** |
+| **Scale VII — TEGS-VII** | **GM** | ₹1,56,500 | **35–44** | PCGM / Executive Director | **70–95** |
+| **TEGSS-I** (SBI) | **Chief GM** | negotiated | **45–60** | Deputy Governor | **95–130** |
+| **TEGSS-II** (SBI) | **Dy. Managing Director** | negotiated | **60–90** | Governor | **150+** |
+
+#### Other financial GCCs in Bengaluru
+
+| Firm | Ladder with salary (₹ LPA) |
+|---|---|
+| **American Express** | Band 25 · **5–9** → **Band 30** (Analyst/Sr. Analyst) · **12–28** → **Band 35** (Manager/Sr. Manager) · **25–45** → **Band 40** (**Director**) · **45–90** → **Band 45** (**VP**) · **100–200** → Band 50 (SVP) · **250+** ⚠️ Amex Director ≈ bank VP |
+| **BlackRock** | Analyst · **12–25** → Associate · **25–45** → **VP** · **45–90** → **Director** · **90–180** → **MD** · **200–450** |
+| **Fidelity (FMR India)** | Analyst · **8–16** → Sr. Analyst · **15–28** → Manager · **25–42** → **Director** · **40–70** → **VP** · **70–140** → SVP · **150+** ⚠️ Director sits *below* VP |
+| **ANZ Bengaluru** | Analyst · **7–14** → Sr. Analyst · **14–26** → Manager · **26–45** → Sr. Manager · **45–75** → Head of / Director · **75–150** → Executive · **180+** |
+| **RBC** | Analyst · **8–16** → Sr. Analyst · **16–30** → Manager · **30–55** → **Director** · **55–110** → **MD** · **150+** |
+
+#### Comments on the money
+
+- **The AVP→VP jump is the biggest single pay step** in every ladder — typically **+50–80%** — and
+  it is where 4–6 years of waiting sits. Externals get the title far more easily than internals.
+- **State Street pays below the IB/tech pack at every rung** (AVP 23–42 vs. Citi 25–40, Deutsche
+  26–45, Barclays 28–50), but its **MD rung (80–140)** is reachable at ~18–25 years, whereas a
+  Goldman/JPM MD is a different order of selection entirely. Compare on rung + money, never on the
+  letters "MD".
+- **Goldman / Morgan Stanley / JPMorgan pay 2–3× State Street, BNY and Northern Trust at the junior
+  rungs (R1–R3).** The custodians have the lowest entry pay of any foreign bank in Bengaluru. The
+  gap narrows in percentage terms above VP.
+- **Deferred comp starts at AVP/VP** at US and European banks — 10–40% of bonus in RSUs or deferred
+  cash on 3–4 year vesting. At Goldman/MS/JPM at VP+ this can be 20–35% of total, so a "CTC" number
+  understates the offer. At Indian banks deferred comp is negligible below EVP.
+- **Indian private banks are competitive only from AVP upward** and lag badly at entry (HDFC E1
+  ₹4–7 L vs. JPMC Analyst ₹10–22 L). Above SVP they catch up and pass most GCCs, because
+  P&L-owning roles sit in India rather than offshore.
+- **PSU banks lose on cash above Scale I**, but the headline understates by ₹3–8 L/yr in Bengaluru
+  (leased accommodation, car, parents' medical, concessional loans, pension). A Scale V AGM earns
+  roughly what a private-bank AVP earns.
+- **RBI beats PSU banks by ~40–80%** at equivalent grades and is the highest-paying government
+  banking employer in India.
+
+---
+
 ## 3. Detailed ladders + Bengaluru salary bands
 
 ### 3.1 State Street  ·  Confidence: title order **A/B**, grade codes **C**
