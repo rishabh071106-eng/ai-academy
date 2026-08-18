@@ -1677,5 +1677,21 @@
     "verified": false,
     "category": "fintech-india",
     "id": 114
+  },
+  {
+    "company": "Visa",
+    "title": "Senior Director — DSOI Products, Visa GCC",
+    "location": "Bengaluru",
+    "seniority": "Senior Director",
+    "apply_url": "https://in.linkedin.com/jobs/view/senior-director-dsoi-products-visa-gcc-at-visa-4446063251",
+    "platform": "other",
+    "posted_date": "2026-08-14",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "Senior Director (15+ yrs) leading a Bengaluru GCC product organization with an AI mandate at Visa — seniority, location, and AI-platform emphasis all line up with the profile and the ₹95L–1Cr band.",
+    "notes": "LinkedIn showed '~4 days old' on 18 Aug (slightly outside the 48h bar but new to the tracker); find the req on Visa's SmartRecruiters/careers site to apply — page fetch blocked from sandbox.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 115
   }
 ]
