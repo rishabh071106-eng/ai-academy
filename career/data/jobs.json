@@ -1693,5 +1693,21 @@
     "verified": false,
     "category": "workday-banks",
     "id": 115
+  },
+  {
+    "company": "Atlassian",
+    "title": "Senior Group Product Manager — Jira Service Management Ops",
+    "location": "Bengaluru (remote)",
+    "seniority": "Senior GPM",
+    "apply_url": "https://www.atlassian.com/company/careers/details/18888",
+    "platform": "careers-site",
+    "posted_date": "2026-08-18",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Senior GPM leading the AIOps/automation/AI roadmap with 7–9 PM reports — people-leadership + AI-platform charter at big-tech comp; remote-friendly Bengaluru.",
+    "notes": "'Posted 23 hours ago' on Built In as of 19 Aug (job 4428338); Atlassian careers req 18888. Distinct from tracked Principal PM JSM Enterprise (id 29). ITSM domain is new, but the AI-automation story maps.",
+    "verified": false,
+    "category": "bigtech",
+    "id": 116
   }
 ]
