@@ -1465,7 +1465,7 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "15–20 yrs mandate over corporate digital-banking channels, cash management and GenAI product investment at a core-banking software leader — squarely matches the core-banking modernization + GenAI record.",
-    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip.",
+    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug.",
     "verified": false,
     "category": "saas-ai",
     "id": 101
@@ -1709,5 +1709,53 @@
     "verified": false,
     "category": "bigtech",
     "id": 116
+  },
+  {
+    "company": "Capital One",
+    "title": "Senior Director — Product Management (ML Experience / GenAI Platform)",
+    "location": "Bengaluru",
+    "seniority": "Senior Director",
+    "apply_url": "https://www.capitalonecareers.com/job/bengaluru/senior-director-product-management/1732/91940333232",
+    "platform": "careers-site",
+    "posted_date": "2026-08-19",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "Senior Director owning the MLX/GenAI platform product team at a top US bank's India GCC — a level up from the tracked Capital One Directors and squarely on the multi-agent AI + banking record.",
+    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91).",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 117
+  },
+  {
+    "company": "BNY",
+    "title": "Senior Director — POM Product Management (Subgroup Product Lead, custody platform)",
+    "location": "Pune",
+    "seniority": "Senior Director",
+    "apply_url": "https://www.linkedin.com/jobs/view/senior-director-pom-product-management-manager-at-bny-4435194427",
+    "platform": "other",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Senior Director product lead for BNY's custody platform organization — banking-platform product leadership a level above the tracked BNY VP PO role; Pune-based, ops-platform-leaning.",
+    "notes": "Fresh high-ID LinkedIn repost (4435194427) as of 20 Aug; exact posting date unconfirmed. Distinct from tracked id 65.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 118
+  },
+  {
+    "company": "Google",
+    "title": "Group Product Manager, Search Platforms",
+    "location": "Bengaluru / Hyderabad",
+    "seniority": "GPM",
+    "apply_url": "https://www.google.com/about/careers/applications/jobs/results/90891607418512070-group-product-manager/",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "GPM for Search platform infrastructure at Google — platform/API product leadership at big-tech comp; not fintech, but the scale story fits.",
+    "notes": "First surfaced as an unverifiable lead 3 Aug; confirmed live on Google Careers 20 Aug (Google listings are undated). Ninth Google req tracked.",
+    "verified": false,
+    "category": "bigtech",
+    "id": 119
   }
 ]
