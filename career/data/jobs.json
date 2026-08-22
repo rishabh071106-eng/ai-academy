@@ -1225,7 +1225,7 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "India Leadership Team payments-product head; 15–17 yrs asked, regulator/C-level facing — near-perfect match for an 18-yr global-bank VP in payments",
-    "notes": "Exec comp supports ₹95L+; exact post date unverifiable from sandbox — confirm freshness on the board before applying",
+    "notes": "Exec comp supports ₹95L+; exact post date unverifiable from sandbox — confirm freshness on the board before applying Reposted again ~19 Aug (Built In) — still hiring as of 22 Aug.",
     "verified": false,
     "category": "fintech-india",
     "id": 86
@@ -1757,5 +1757,21 @@
     "verified": false,
     "category": "bigtech",
     "id": 119
+  },
+  {
+    "company": "Mastercard",
+    "title": "Director, Product Management — Network Products Platform",
+    "location": "Pune",
+    "seniority": "Director",
+    "apply_url": "https://builtinpune.in/job/director-product-management/4054760",
+    "platform": "other",
+    "posted_date": "2026-08-21",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director leading platform capabilities for Mastercard Network products — payments-infrastructure platform ownership close to the API/Kafka platform record; Pune-based.",
+    "notes": "'Actively hiring, 1 day ago' on Built In Pune as of 22 Aug; find the R-number on careers.mastercard.com to apply (fetch blocked). Possible overlap with undatable PM-Technical R-280362 — confirm distinct before applying to both.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 120
   }
 ]
