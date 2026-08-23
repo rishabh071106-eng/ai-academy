@@ -1,0 +1,1231 @@
+<title>Vacuum World, Line by Line</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F2F4F3; --panel:#FFFFFF; --panel-2:#E9EDEC;
+  --ink:#12181B; --ink-2:#38474B; --muted:#5B6A6E; --faint:#87989C;
+  --rule:#D6DDDC; --rule-2:#C3CDCB;
+  --clean:#0B6E63; --clean-soft:#DCEDE9;
+  --dirt:#A25E12; --dirt-soft:#F5E7D4;
+  --code-bg:#11181B; --code-fg:#D9E4E1; --code-ln:#4E6167; --code-rule:#222E32;
+  --c-c:#7E9298; --c-s:#9BC7A8; --c-k:#8FC7D6; --c-b:#C9B98A; --c-n:#D6A98A; --c-f:#E3E9E7; --c-se:#B79ECB;
+  --out-bg:#E7ECEA; --out-fg:#1B2528;
+  --shadow:0 1px 2px rgba(18,24,27,.06), 0 8px 24px -12px rgba(18,24,27,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1416; --panel:#141C1F; --panel-2:#1A2427;
+    --ink:#E4EDEB; --ink-2:#C2D0CE; --muted:#93A5A8; --faint:#6E8286;
+    --rule:#243035; --rule-2:#2E3D42;
+    --clean:#4FC9B4; --clean-soft:#12312D;
+    --dirt:#E0A257; --dirt-soft:#33240F;
+    --code-bg:#0A1012; --code-fg:#D9E4E1; --code-ln:#46595F; --code-rule:#1C2629;
+    --out-bg:#111A1D; --out-fg:#CFDCD9;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1416; --panel:#141C1F; --panel-2:#1A2427;
+  --ink:#E4EDEB; --ink-2:#C2D0CE; --muted:#93A5A8; --faint:#6E8286;
+  --rule:#243035; --rule-2:#2E3D42;
+  --clean:#4FC9B4; --clean-soft:#12312D;
+  --dirt:#E0A257; --dirt-soft:#33240F;
+  --code-bg:#0A1012; --code-fg:#D9E4E1; --code-ln:#46595F; --code-rule:#1C2629;
+  --out-bg:#111A1D; --out-fg:#CFDCD9;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.layout{display:grid; grid-template-columns:minmax(0,1fr); max-width:1180px; margin:0 auto; padding:0 24px}
+@media(min-width:1060px){
+  .layout{grid-template-columns:224px minmax(0,1fr); gap:56px; padding:0 32px}
+}
+
+/* ---- rail ---- */
+.rail{display:none}
+@media(min-width:1060px){
+  .rail{display:block; position:sticky; top:0; align-self:start; max-height:100vh; overflow-y:auto; padding:40px 0 60px}
+}
+.rail-title{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); margin:0 0 14px}
+.rail ol{list-style:none; margin:0 0 22px; padding:0; display:flex; flex-direction:column; gap:1px}
+.rail a{display:flex; gap:9px; text-decoration:none; color:var(--muted); font-size:13.5px;
+  line-height:1.35; padding:5px 8px; border-radius:5px; border-left:2px solid transparent}
+.rail a:hover{color:var(--ink); background:var(--panel-2)}
+.rail a .rn{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--faint); padding-top:1px}
+.rail a:focus-visible{outline:2px solid var(--clean); outline-offset:2px}
+
+/* ---- masthead ---- */
+main{padding:0 0 100px; min-width:0}
+.masthead{padding:64px 0 40px; border-bottom:1px solid var(--rule); margin-bottom:52px}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--clean); margin:0 0 18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--rule-2)}
+h1{font-family:Spectral,Georgia,serif; font-weight:700; font-size:clamp(2.4rem,5.4vw,3.9rem);
+  line-height:1.04; letter-spacing:-.018em; margin:0 0 20px; text-wrap:balance}
+.standfirst{font-size:1.16rem; line-height:1.58; color:var(--ink-2); max-width:62ch; margin:0 0 30px}
+.standfirst strong{color:var(--ink); font-weight:600}
+.meta{display:flex; flex-wrap:wrap; gap:0; border:1px solid var(--rule); border-radius:8px;
+  background:var(--panel); overflow:hidden}
+.meta div{flex:1 1 150px; padding:13px 16px; border-right:1px solid var(--rule)}
+.meta div:last-child{border-right:0}
+.meta dt{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--faint); margin:0 0 4px}
+.meta dd{margin:0; font-size:14px; color:var(--ink); font-weight:500}
+
+/* ---- sections ---- */
+section{margin:0 0 76px; scroll-margin-top:24px}
+h2{font-family:Spectral,Georgia,serif; font-weight:700; font-size:clamp(1.6rem,3.2vw,2.15rem);
+  line-height:1.16; letter-spacing:-.012em; margin:0 0 8px; text-wrap:balance;
+  display:flex; align-items:baseline; gap:14px}
+h2 .snum{font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:500; color:var(--clean);
+  letter-spacing:.1em; flex:none; padding-top:2px}
+h3{font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:1.06rem; letter-spacing:.002em;
+  margin:38px 0 10px; color:var(--ink)}
+h4{font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); margin:30px 0 10px}
+p{margin:0 0 16px; max-width:70ch}
+li{max-width:68ch}
+a{color:var(--clean)}
+strong{font-weight:600}
+em{font-style:italic}
+.lede{font-size:1.04rem; color:var(--ink-2); max-width:66ch; margin-bottom:26px}
+code:not(.code code){font-family:"IBM Plex Mono",monospace; font-size:.855em;
+  background:var(--panel-2); padding:.1em .34em; border-radius:3px; color:var(--ink)}
+
+/* ---- code ---- */
+.codewrap{background:var(--code-bg); border-radius:9px; overflow-x:auto; margin:0 0 4px;
+  border:1px solid var(--code-rule); box-shadow:var(--shadow)}
+pre.code{margin:0; padding:18px 20px; font-family:"IBM Plex Mono",monospace;
+  font-size:13px; line-height:1.72; color:var(--code-fg); min-width:min-content}
+pre.code code{display:grid; grid-template-columns:auto 1fr; gap:0 18px}
+.ln{color:var(--code-ln); text-align:right; user-select:none; font-size:11.5px; padding-top:.15em}
+.lc{white-space:pre}
+.code .c{color:var(--c-c); font-style:italic}
+.code .s{color:var(--c-s)}
+.code .k{color:var(--c-k)}
+.code .b{color:var(--c-b)}
+.code .n{color:var(--c-n)}
+.code .f{color:var(--c-f)}
+.code .se{color:var(--c-se)}
+.codecap{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--faint);
+  margin:0 0 10px; letter-spacing:.05em}
+
+/* ---- output ---- */
+.outwrap{margin:14px 0 0; border:1px solid var(--rule); border-radius:9px; overflow:hidden; background:var(--out-bg)}
+.outlabel{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); padding:8px 16px; border-bottom:1px solid var(--rule);
+  background:var(--panel)}
+pre.out{margin:0; padding:16px; font-family:"IBM Plex Mono",monospace; font-size:12.4px;
+  line-height:1.62; color:var(--out-fg); overflow-x:auto; white-space:pre}
+
+/* ---- annotations ---- */
+.ann{display:flex; flex-direction:column; gap:0; margin:20px 0 0;
+  border:1px solid var(--rule); border-radius:9px; background:var(--panel); overflow:hidden}
+.ann-row{display:grid; grid-template-columns:66px minmax(0,1fr); gap:16px;
+  padding:12px 16px; border-bottom:1px solid var(--rule)}
+.ann-row:last-child{border-bottom:0}
+.ann-row .lref{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--clean);
+  font-weight:500; padding-top:3px; letter-spacing:.01em; font-variant-numeric:tabular-nums}
+.ann-row .atxt{font-size:14.6px; line-height:1.56; color:var(--ink-2)}
+.ann-row .atxt strong{color:var(--ink)}
+.ann-row .atxt code{font-size:.86em}
+
+/* ---- callouts ---- */
+.note{border-left:3px solid var(--clean); background:var(--clean-soft); padding:15px 18px;
+  border-radius:0 7px 7px 0; margin:24px 0; font-size:15.2px; color:var(--ink-2)}
+.warn{border-left:3px solid var(--dirt); background:var(--dirt-soft); padding:15px 18px;
+  border-radius:0 7px 7px 0; margin:24px 0; font-size:15.2px; color:var(--ink-2)}
+.note p:last-child,.warn p:last-child{margin-bottom:0}
+.note .tag,.warn .tag{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; display:block; margin-bottom:6px}
+.note .tag{color:var(--clean)} .warn .tag{color:var(--dirt)}
+
+/* ---- world state chips ---- */
+.world{display:inline-flex; gap:6px; align-items:center; vertical-align:middle;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; margin:6px 0 0 4px}
+.sq{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;
+  border-radius:5px; border:1px solid var(--rule-2); font-weight:600; font-size:12px}
+.sq.dirty{background:var(--dirt-soft); color:var(--dirt); border-color:var(--dirt)}
+.sq.clean{background:var(--clean-soft); color:var(--clean); border-color:var(--clean)}
+.sq.here{outline:2px solid var(--ink); outline-offset:2px}
+
+/* ---- tables ---- */
+.tablewrap{overflow-x:auto; margin:22px 0; border:1px solid var(--rule); border-radius:9px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:14.4px; min-width:520px}
+th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--faint); text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule); font-weight:500}
+td{padding:11px 16px; border-bottom:1px solid var(--rule); color:var(--ink-2); vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; text-align:right; color:var(--ink)}
+td strong{color:var(--ink)}
+
+/* ---- step list ---- */
+ol.steps{counter-reset:s; list-style:none; padding:0; margin:20px 0; display:flex; flex-direction:column; gap:14px}
+ol.steps li{counter-increment:s; position:relative; padding-left:38px; font-size:15.4px; color:var(--ink-2)}
+ol.steps li::before{content:counter(s); position:absolute; left:0; top:1px;
+  font-family:"IBM Plex Mono",monospace; font-size:11px;
+  color:var(--clean); border:1px solid var(--rule-2); border-radius:50%; width:24px; height:24px;
+  display:flex; align-items:center; justify-content:center}
+ul.plain{padding-left:20px; margin:16px 0; display:flex; flex-direction:column; gap:9px; color:var(--ink-2); font-size:15.6px}
+
+@media(max-width:520px){
+  .ann-row{grid-template-columns:44px minmax(0,1fr); gap:11px; padding:11px 13px}
+  .ann-row .atxt{font-size:14px}
+  .meta div{flex:1 1 100%; border-right:0; border-bottom:1px solid var(--rule)}
+  .meta div:last-child{border-bottom:0}
+  ol.steps li{padding-left:32px; font-size:14.8px}
+}
+
+.hr{height:1px; background:var(--rule); border:0; margin:0 0 52px}
+footer{border-top:1px solid var(--rule); padding-top:26px; color:var(--muted); font-size:13.6px}
+footer p{max-width:70ch}
+
+@media print{
+  .rail{display:none}
+  body{font-size:11pt; background:#fff; color:#000}
+  .layout{display:block; max-width:none; padding:0}
+  section{page-break-inside:auto; margin-bottom:34px}
+  h2{page-break-after:avoid}
+  .codewrap,.outwrap,.ann,.tablewrap{page-break-inside:avoid}
+  .codewrap{box-shadow:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="layout">
+<nav class="rail" aria-label="Contents">
+  <p class="rail-title">Contents</p>
+  <ol><li><a href="#idea"><span class="rn">00</span><span>The one idea</span></a></li><li><a href="#environment"><span class="rn">01</span><span>The environment</span></a></li><li><a href="#peas"><span class="rn">02</span><span>PEAS</span></a></li><li><a href="#runner"><span class="rn">03</span><span>The run loop</span></a></li><li><a href="#reflex"><span class="rn">04</span><span>1 · Simple reflex</span></a></li><li><a href="#model"><span class="rn">05</span><span>2 · Model-based</span></a></li><li><a href="#goal"><span class="rn">06</span><span>3 · Goal-based</span></a></li><li><a href="#utility"><span class="rn">07</span><span>4 · Utility-based</span></a></li><li><a href="#learning"><span class="rn">08</span><span>5 · Learning</span></a></li><li><a href="#compare"><span class="rn">09</span><span>The comparison</span></a></li><li><a href="#ex1"><span class="rn">10</span><span>Exercise 1</span></a></li><li><a href="#ex2"><span class="rn">11</span><span>Exercise 2</span></a></li><li><a href="#ex3"><span class="rn">12</span><span>Exercise 3</span></a></li><li><a href="#ex4"><span class="rn">13</span><span>Exercise 4</span></a></li><li><a href="#lands"><span class="rn">14</span><span>Where it lands</span></a></li></ol>
+</nav>
+<main>
+<header class="masthead">
+  <p class="eyebrow"><span>Tutorial 1</span><span class="dot"></span><span>Agents, hands on</span>
+     <span class="dot"></span><span>Line by line</span></p>
+  <h1>Five agent architectures, one filthy room</h1>
+  <p class="standfirst">A complete walkthrough of the vacuum-world notebook &mdash;
+     <strong>every line of code explained</strong>, every output shown as it actually ran, and
+     full worked solutions to all four exercises. Read it top to bottom and you will know not just
+     what each agent does, but why the architectures stop being interchangeable the moment the
+     world gets harder.</p>
+  <dl class="meta">
+    <div><dt>Based on</dt><dd>Tutorial_1_Agents_Hands_On.ipynb</dd></div>
+    <div><dt>Code</dt><dd>Python 3.11, no dependencies</dd></div>
+    <div><dt>Outputs</dt><dd>Executed, not transcribed</dd></div>
+    <div><dt>Covers</dt><dd>9 cells + 4 solutions</dd></div>
+  </dl>
+</header>
+<section id="idea"><h2><span class="snum">00</span><span>The one idea to hold on to</span></h2>
+<p class="lede">Everything in this notebook is a variation on a single loop. The agent
+<em>senses</em>, <em>decides</em>, and <em>acts</em>; the world changes; it senses again.</p>
+
+<p>An <strong>agent</strong> is anything that perceives its environment through <strong>sensors</strong>
+and acts on it through <strong>actuators</strong>. What it does is defined by an <strong>agent
+function</strong> that maps a percept sequence to an action. That function is an abstraction; the
+<strong>agent program</strong> is the concrete code that implements it. The five architectures in this
+tutorial are five different ways of writing that program.</p>
+
+<div class="note"><span class="tag">The split that matters</span>
+<p>The notebook keeps the <strong>environment</strong> and the <strong>agent</strong> in separate objects
+that share nothing but a percept and an action string. The environment knows the whole world; the agent
+knows only what <code>percept()</code> hands it. Every interesting result later comes from that gap.</p></div>
+
+<h3>What each architecture adds</h3>
+<div class="tablewrap"><table><thead><tr><th>Architecture</th><th>What it adds</th><th>The question it can answer</th></tr></thead><tbody><tr><td><strong>Simple reflex</strong></td><td>Nothing &mdash; rules on the current percept only</td><td>&ldquo;What is under me right now?&rdquo;</td></tr><tr><td><strong>Model-based reflex</strong></td><td>Internal state: memory of what it has seen</td><td>&ldquo;What is the world like, including where I am not?&rdquo;</td></tr><tr><td><strong>Goal-based</strong></td><td>An explicit goal and a plan to reach it</td><td>&ldquo;What sequence gets me to the state I want?&rdquo;</td></tr><tr><td><strong>Utility-based</strong></td><td>A scoring function over competing outcomes</td><td>&ldquo;Which of these imperfect options is best?&rdquo;</td></tr><tr><td><strong>Learning</strong></td><td>A feedback loop that edits its own policy</td><td>&ldquo;What worked last time?&rdquo;</td></tr></tbody></table></div>
+<p>They are cumulative in capability but not in cost. The whole payoff of the exercises at the end is
+discovering that more capability is not automatically better &mdash; each addition brings its own
+failure mode.</p>
+</section><section id="environment"><h2><span class="snum">01</span><span>The environment (the world the agent lives in)</span></h2>
+<p class="lede">This is the longest cell in the notebook and the most important. Read it as a
+contract: it defines exactly what the agent is allowed to know and exactly what it is allowed to do.</p>
+<p class="codecap">Cell 1 &mdash; the vacuum world</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">import</span> random</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="k">from</span> copy <span class="k">import</span> deepcopy</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">LOCATIONS = [<span class="s">"A"</span>, <span class="s">"B"</span>]</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">6</span><span class="lc"><span class="k">class</span> VacuumEnvironment:</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">    <span class="k">def</span> <span class="f">__init__</span>(<span class="se">self</span>, dirt_prob=<span class="n">0.5</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">        rng = random.<span class="f">Random</span>(seed)</span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">        <span class="se">self</span>.status = {loc: (<span class="s">"Dirty"</span> <span class="k">if</span> rng.<span class="f">random</span>() &lt; dirt_prob <span class="k">else</span> <span class="s">"Clean"</span>) <span class="k">for</span> loc <span class="k">in</span> LOCATIONS}</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">        <span class="se">self</span>.agent_location = rng.<span class="f">choice</span>(LOCATIONS)</span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">        <span class="se">self</span>.performance = <span class="n">0</span>       <span class="c"># scorecard: +10 per successful clean, -1 per move</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">        <span class="se">self</span>.history = []               <span class="c"># (location, action, world_state) trace for inspection</span></span>
+<span class="ln" aria-hidden="true">13</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">    <span class="k">def</span> <span class="f">percept</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">        <span class="s">'''Sensors: the agent perceives only its current location and its status.'''</span></span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">        <span class="k">return</span> (<span class="se">self</span>.agent_location, <span class="se">self</span>.status[<span class="se">self</span>.agent_location])</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">    <span class="k">def</span> <span class="f">execute</span>(<span class="se">self</span>, action):</span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">        <span class="s">'''Actuators: apply the chosen action to the environment.'''</span></span>
+<span class="ln" aria-hidden="true">20</span><span class="lc">        loc = <span class="se">self</span>.agent_location</span>
+<span class="ln" aria-hidden="true">21</span><span class="lc">        <span class="k">if</span> action == <span class="s">"Suck"</span>:</span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">            <span class="k">if</span> <span class="se">self</span>.status[loc] == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">                <span class="se">self</span>.status[loc] = <span class="s">"Clean"</span></span>
+<span class="ln" aria-hidden="true">24</span><span class="lc">                <span class="se">self</span>.performance += <span class="n">10</span></span>
+<span class="ln" aria-hidden="true">25</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"Left"</span>:</span>
+<span class="ln" aria-hidden="true">26</span><span class="lc">            <span class="se">self</span>.agent_location = <span class="s">"A"</span></span>
+<span class="ln" aria-hidden="true">27</span><span class="lc">            <span class="se">self</span>.performance -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">28</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"Right"</span>:</span>
+<span class="ln" aria-hidden="true">29</span><span class="lc">            <span class="se">self</span>.agent_location = <span class="s">"B"</span></span>
+<span class="ln" aria-hidden="true">30</span><span class="lc">            <span class="se">self</span>.performance -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">31</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"NoOp"</span>:</span>
+<span class="ln" aria-hidden="true">32</span><span class="lc">            <span class="k">pass</span></span>
+<span class="ln" aria-hidden="true">33</span><span class="lc">        <span class="k">else</span>:</span>
+<span class="ln" aria-hidden="true">34</span><span class="lc">            <span class="k">raise</span> <span class="f">ValueError</span>(f<span class="s">"Unknown action: {action}"</span>)</span>
+<span class="ln" aria-hidden="true">35</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">36</span><span class="lc">        <span class="se">self</span>.history.<span class="f">append</span>((loc, action, <span class="f">deepcopy</span>(<span class="se">self</span>.status)))</span>
+<span class="ln" aria-hidden="true">37</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.<span class="f">percept</span>()</span>
+<span class="ln" aria-hidden="true">38</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">39</span><span class="lc">    <span class="k">def</span> <span class="f">is_clean</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">40</span><span class="lc">        <span class="k">return</span> <span class="b">all</span>(v == <span class="s">"Clean"</span> <span class="k">for</span> v <span class="k">in</span> <span class="se">self</span>.status.<span class="f">values</span>())</span>
+<span class="ln" aria-hidden="true">41</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">42</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">43</span><span class="lc"><span class="c"># Quick sanity check</span></span>
+<span class="ln" aria-hidden="true">44</span><span class="lc">env = <span class="f">VacuumEnvironment</span>(seed=<span class="n">1</span>)</span>
+<span class="ln" aria-hidden="true">45</span><span class="lc"><span class="b">print</span>(<span class="s">"Initial world state:"</span>, env.status)</span>
+<span class="ln" aria-hidden="true">46</span><span class="lc"><span class="b">print</span>(<span class="s">"Initial percept:"</span>, env.<span class="f">percept</span>())</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">The only import the core tutorial needs. <code>random</code> generates the starting world &mdash; and later, the learning agent's exploration.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt"><code>deepcopy</code> is imported for one job, on line 36. It is what makes the history a genuine <em>trace</em> instead of the same dictionary repeated.</div></div><div class="ann-row"><div class="lref">L4</div><div class="atxt">The world is two squares, <code>A</code> and <code>B</code>. A module-level constant so both the environment and the agents refer to the same world. Exercise 3 changes this line and discovers how much depends on it.</div></div><div class="ann-row"><div class="lref">L6</div><div class="atxt">The environment is its own class. The agent is not a method on it &mdash; that separation is the whole design.</div></div><div class="ann-row"><div class="lref">L7</div><div class="atxt"><code>dirt_prob</code> is the chance each square starts dirty. <code>seed</code> makes a run reproducible, which is what lets you compare architectures fairly.</div></div><div class="ann-row"><div class="lref">L8</div><div class="atxt">A <em>private</em> random generator, not the global <code>random</code> module. So the world's layout cannot be shifted by anything else in the notebook calling <code>random</code> &mdash; which matters, because the learning agent does exactly that.</div></div><div class="ann-row"><div class="lref">L9</div><div class="atxt">A dict comprehension building <code>{'A': 'Dirty'|'Clean', 'B': ...}</code>. Each square is dirty with probability <code>dirt_prob</code>. This dictionary <em>is</em> the world.</div></div><div class="ann-row"><div class="lref">L10</div><div class="atxt">The agent's starting square, also drawn from the seeded generator.</div></div><div class="ann-row"><div class="lref">L11</div><div class="atxt">The scorecard, starting at zero. The comment states the whole performance measure: <strong>+10 per successful clean, &minus;1 per move</strong>. That ratio is what makes travelling worthwhile &mdash; and Exercise 4 is about what happens when you change it.</div></div><div class="ann-row"><div class="lref">L12</div><div class="atxt">An empty list that will collect <code>(location, action, world_state)</code> triples so you can inspect behaviour afterwards.</div></div><div class="ann-row"><div class="lref">L14&ndash;16</div><div class="atxt"><strong>The sensors.</strong> The single most consequential method here. It returns a tuple of the agent's <em>current location</em> and the status of <em>that square only</em>. It cannot see the other square. Everything the agent does not know, it does not know because of this one line.</div></div><div class="ann-row"><div class="lref">L18&ndash;19</div><div class="atxt"><strong>The actuators.</strong> Takes an action string and applies its effect to the world.</div></div><div class="ann-row"><div class="lref">L20</div><div class="atxt">Cache the location <em>before</em> the action potentially moves the agent. Line 36 needs the square the action was taken <em>from</em>.</div></div><div class="ann-row"><div class="lref">L21&ndash;24</div><div class="atxt"><code>Suck</code> only scores when the square was actually dirty. Sucking a clean square is silently free: no reward, and no penalty either. Harmless here &mdash; but that free no-op is exactly the loophole Exercise 1 catches the utility agent exploiting.</div></div><div class="ann-row"><div class="lref">L25&ndash;27</div><div class="atxt"><code>Left</code> sets the location to <code>&quot;A&quot;</code> &mdash; note this is <strong>absolute, not relative</strong>. In a two-square world &ldquo;go left&rdquo; and &ldquo;go to A&rdquo; are the same thing. That coincidence hides a real assumption, and Exercises 2 and 3 both turn on it. Cost: &minus;1.</div></div><div class="ann-row"><div class="lref">L28&ndash;30</div><div class="atxt"><code>Right</code> is the mirror image: go to <code>B</code>, pay &minus;1.</div></div><div class="ann-row"><div class="lref">L31&ndash;32</div><div class="atxt"><code>NoOp</code> changes nothing and costs nothing. It is the only free action, which makes it the baseline every utility comparison is measured against.</div></div><div class="ann-row"><div class="lref">L33&ndash;34</div><div class="atxt">Anything else is a programming error, raised loudly. A cheap contract check that stops a typo in an agent from silently becoming a no-op.</div></div><div class="ann-row"><div class="lref">L36</div><div class="atxt">Append the step to the trace. The <code>deepcopy</code> matters: <code>self.status</code> is mutated in place, so storing it directly would leave every entry pointing at the same dict and the trace would show the final state six times over.</div></div><div class="ann-row"><div class="lref">L37</div><div class="atxt">Return the fresh percept as a convenience. The runner ignores it and calls <code>percept()</code> itself, so this is belt-and-braces.</div></div><div class="ann-row"><div class="lref">L39&ndash;40</div><div class="atxt">A god's-eye check on whether the whole world is clean. Note carefully: <strong>this is a method on the environment, not the agent.</strong> The agent can never call it &mdash; it would be cheating. Knowing when to stop is something each architecture must earn for itself.</div></div><div class="ann-row"><div class="lref">L43&ndash;46</div><div class="atxt">A sanity check. Build a world with <code>seed=1</code>, print the true state, then print what the agent would actually perceive.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Initial world state: {'A': 'Dirty', 'B': 'Clean'}
+Initial percept: ('A', 'Dirty')</pre></div>
+<p>Look at those two output lines together. The world is
+<span class="world"><span class="sq dirty here">A</span><span class="sq clean">B</span><span style="color:var(--muted);font-size:11px">&nbsp;agent at A</span></span> &mdash; but the percept is just
+<code>('A', 'Dirty')</code>. The fact that <code>B</code> is already clean exists in the environment
+and is invisible to the agent. Hold that thought; it is the entire plot.</p>
+</section><section id="peas"><h2><span class="snum">02</span><span>PEAS: specifying the task before you code it</span></h2>
+<p class="lede">PEAS &mdash; Performance, Environment, Actuators, Sensors &mdash; is a checklist for
+pinning down a task precisely enough to build for it. Here it is written out as a plain dictionary.</p>
+<p class="codecap">Cell 2 &mdash; the task specification</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc">vacuum_world_peas = {</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    <span class="s">"Performance"</span>: <span class="s">"Reward for clean squares, small penalty per move"</span>,</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="s">"Environment"</span>: <span class="s">"Two locations (A, B), each Dirty or Clean"</span>,</span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">    <span class="s">"Actuators"</span>: <span class="s">"Suck, Left, Right, NoOp"</span>,</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">    <span class="s">"Sensors"</span>: <span class="s">"Current location, dirt status of current location"</span>,</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">}</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"><span class="k">for</span> k, v <span class="k">in</span> vacuum_world_peas.<span class="f">items</span>():</span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{k:12s}: {v}"</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;6</div><div class="atxt">A plain dictionary, one key per PEAS letter. There is no clever machinery here on purpose: the value is in being forced to <em>write the four answers down</em> before writing agent code.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt"><strong>Performance</strong>: reward for clean squares, small penalty per move. Note that this is a description of lines 11, 24, 27 and 30 of the previous cell &mdash; the spec and the code have to agree, and nothing enforces it but you.</div></div><div class="ann-row"><div class="lref">L3</div><div class="atxt"><strong>Environment</strong>: two locations, each dirty or clean. Small, static, fully observable at each square, and episodic. Every one of those four properties is deliberately broken by one of the exercises.</div></div><div class="ann-row"><div class="lref">L4</div><div class="atxt"><strong>Actuators</strong>: the four legal action strings, matching the branches of <code>execute()</code> exactly.</div></div><div class="ann-row"><div class="lref">L5</div><div class="atxt"><strong>Sensors</strong>: current location and dirt status <em>of the current location</em>. The phrasing carries the limitation.</div></div><div class="ann-row"><div class="lref">L8&ndash;9</div><div class="atxt">Print each pair. <code>f&quot;{k:12s}&quot;</code> left-pads the key to 12 characters so the colons line up into a column.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Performance : Reward for clean squares, small penalty per move
+Environment : Two locations (A, B), each Dirty or Clean
+Actuators   : Suck, Left, Right, NoOp
+Sensors     : Current location, dirt status of current location</pre></div><div class="note"><span class="tag">Why this cell earns its place</span>
+<p>Every failure in the exercise section is a PEAS assumption that stopped being true. Dirt that
+reappears breaks <em>Environment</em>. Hiding the location breaks <em>Sensors</em>. A deadline breaks
+<em>Performance</em>. Writing PEAS down is what makes those failures legible instead of mysterious.</p></div></section><section id="runner"><h2><span class="snum">03</span><span>The run loop (the harness everything is scored by)</span></h2>
+<p class="lede">Seven lines, and it is the sense&ndash;decide&ndash;act cycle in its plainest possible
+form. Every score in this tutorial comes out of this function.</p>
+<p class="codecap">Cell 4 &mdash; the harness</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">run</span>(agent_program, steps=<span class="n">6</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    env = <span class="f">VacuumEnvironment</span>(seed=seed)</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(steps):</span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">        p = env.<span class="f">percept</span>()</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        a = <span class="f">agent_program</span>(p)</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        env.<span class="f">execute</span>(a)</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">    <span class="k">return</span> env.performance, env.<span class="f">is_clean</span>(), env.history</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">Takes an <em>agent program</em> &mdash; a function from percept to action &mdash; plus a step budget and a seed. Because the agent is just a function, every architecture can be scored by the identical harness.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt">A fresh environment per run. Passing the same seed to every agent guarantees they all face the same starting world, which is what makes the comparison table meaningful.</div></div><div class="ann-row"><div class="lref">L3</div><div class="atxt">Run for a fixed number of steps. <code>_</code> signals the counter is unused. Note there is <strong>no termination check</strong> &mdash; the loop does not stop when the world is clean. That is deliberate: it means idling has to be a choice the agent makes, not a favour the harness does for it.</div></div><div class="ann-row"><div class="lref">L4</div><div class="atxt"><strong>Sense.</strong> Ask the environment what the agent can currently perceive.</div></div><div class="ann-row"><div class="lref">L5</div><div class="atxt"><strong>Decide.</strong> Hand that percept to the agent program and receive an action string. This line is the entire agent interface.</div></div><div class="ann-row"><div class="lref">L6</div><div class="atxt"><strong>Act.</strong> Apply the action to the environment, which updates the world, the score and the trace.</div></div><div class="ann-row"><div class="lref">L7</div><div class="atxt">Return final score, whether the world ended up clean, and the full trace.</div></div></div><div class="warn"><span class="tag">A detail worth noticing</span>
+<p>Six steps is a tight budget for a world that needs at most one move and two sucks. That tightness
+is why <code>NoOp</code> is worth points: an agent that keeps pacing after the job is done burns
+&minus;1 per step, and there are only six steps to spend.</p></div></section><section id="reflex"><h2><span class="snum">04</span><span>Architecture 1 — Simple reflex</span></h2>
+<p class="lede">Condition&ndash;action rules on the current percept. No memory of anything.</p>
+<p class="codecap">Cell 3 &mdash; simple reflex agent</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">simple_reflex_agent</span>():</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    <span class="s">'''Rule: if the current square is dirty, clean it; otherwise move to the other square.'''</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">        <span class="k">elif</span> location == <span class="s">"A"</span>:</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">            <span class="k">return</span> <span class="s">"Right"</span></span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">        <span class="k">else</span>:</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">            <span class="k">return</span> <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">    <span class="k">return</span> program</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">A <em>factory</em>: calling <code>simple_reflex_agent()</code> returns a fresh program. Every architecture in the notebook follows this shape, so the comparison loop can call <code>factory()</code> uniformly and each agent starts with clean internal state.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt">The docstring is the agent function in English: dirty &rarr; clean it, otherwise move.</div></div><div class="ann-row"><div class="lref">L3</div><div class="atxt">The inner function is the actual agent program. Its only input is <code>percept</code> &mdash; no history, no world access.</div></div><div class="ann-row"><div class="lref">L4</div><div class="atxt">Unpack the tuple from <code>percept()</code> into the two things the agent knows.</div></div><div class="ann-row"><div class="lref">L5&ndash;6</div><div class="atxt">Rule one: if the square under me is dirty, suck. Immediate and always correct.</div></div><div class="ann-row"><div class="lref">L7&ndash;8</div><div class="atxt">Rule two: a clean square at <code>A</code> means go right.</div></div><div class="ann-row"><div class="lref">L9&ndash;10</div><div class="atxt">Rule three: otherwise (clean, at <code>B</code>) go left.</div></div><div class="ann-row"><div class="lref">L11</div><div class="atxt">Return the program. Nothing is captured in the closure &mdash; <strong>there is no state to capture.</strong> That absence is the definition of this architecture.</div></div></div>
+<h3>Watching it run</h3>
+<p>The trace cell runs the agent and prints one line per step.</p>
+<p class="codecap">Cell 5 &mdash; trace, seed=3</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc">_, _, trace = <span class="f">run</span>(<span class="f">simple_reflex_agent</span>(), seed=<span class="n">3</span>)</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="k">for</span> step, (loc, action, state) <span class="k">in</span> <span class="b">enumerate</span>(trace, <span class="n">1</span>):</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="b">print</span>(f<span class="s">"Step {step}: at {loc} -&gt; action={action:6s} -&gt; world={state}"</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">Run the agent and keep only the trace; <code>_, _,</code> discards score and cleanliness. Note <code>seed=3</code> &mdash; a different world from the default.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt"><code>enumerate(trace, 1)</code> numbers the steps from 1, and each entry unpacks into the triple stored on line 36 of the environment.</div></div><div class="ann-row"><div class="lref">L3</div><div class="atxt"><code>{action:6s}</code> pads the action to six characters so the arrows line up into a readable column.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Step 1: at B -&gt; action=Left   -&gt; world={'A': 'Dirty', 'B': 'Clean'}
+Step 2: at A -&gt; action=Suck   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 3: at A -&gt; action=Right  -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 4: at B -&gt; action=Left   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 5: at A -&gt; action=Right  -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 6: at B -&gt; action=Left   -&gt; world={'A': 'Clean', 'B': 'Clean'}</pre></div>
+<p>Step by step, with the world drawn after each action:</p>
+<ol class="steps">
+<li>Starts at <strong>B</strong>, which is clean, so the rule says go left. <span class="world"><span class="sq dirty">A</span><span class="sq clean here">B</span><span style="color:var(--muted);font-size:11px">&nbsp;agent at B</span></span></li>
+<li>Now at <strong>A</strong>, which is dirty &rarr; <code>Suck</code>. The world is now spotless. <span class="world"><span class="sq clean here">A</span><span class="sq clean">B</span><span style="color:var(--muted);font-size:11px">&nbsp;agent at A</span></span></li>
+<li>At <strong>A</strong>, clean &rarr; the rule says go right. Cost: &minus;1.</li>
+<li>At <strong>B</strong>, clean &rarr; go left. Cost: &minus;1.</li>
+<li>&hellip;and it paces back and forth until the step budget runs out.</li>
+</ol>
+<div class="warn"><span class="tag">The failure</span>
+<p>From step 3 onward this agent is <em>doing damage</em> &mdash; four wasted moves, &minus;4 points,
+in a world that has been clean since step 2. It cannot stop, and the reason is precise: stopping
+requires knowing that <em>both</em> squares are clean, and it can only ever see one. Final score:
+<strong>+10 &minus; 5 = 5</strong>.</p></div></section><section id="model"><h2><span class="snum">05</span><span>Architecture 2 — Model-based reflex</span></h2>
+<p class="lede">The same reflex rules, plus one dictionary of memory. That dictionary is worth four
+points.</p>
+<p class="codecap">Cell 6 &mdash; model-based reflex agent</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">model_based_reflex_agent</span>():</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    model = {<span class="s">"A"</span>: <span class="k">None</span>, <span class="s">"B"</span>: <span class="k">None</span>}   <span class="c"># internal state: what we believe about each location</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        model[location] = status              <span class="c"># update our internal model with what we just observed</span></span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">        <span class="k">if</span> model[<span class="s">"A"</span>] == <span class="s">"Clean"</span> <span class="k">and</span> model[<span class="s">"B"</span>] == <span class="s">"Clean"</span>:</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span>                          <span class="c"># we believe the job is done — stop wasting moves</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">        <span class="k">return</span> <span class="s">"Right"</span> <span class="k">if</span> location == <span class="s">"A"</span> <span class="k">else</span> <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">    <span class="k">return</span> program</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">Same factory shape as before.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt"><strong>The internal state.</strong> One dict holding what the agent believes about each square, starting at <code>None</code> for &ldquo;never looked&rdquo;. Because it lives in the enclosing function, it persists across calls to <code>program</code> &mdash; this is a closure doing the work an object would do.</div></div><div class="ann-row"><div class="lref">L4&ndash;5</div><div class="atxt">The program and the same unpacking as before.</div></div><div class="ann-row"><div class="lref">L6</div><div class="atxt"><strong>Update the model.</strong> Record what was just observed, keyed by location. The <code>None</code> for the other square is what stops the agent claiming knowledge it does not have.</div></div><div class="ann-row"><div class="lref">L7&ndash;8</div><div class="atxt">Unchanged reflex rule: dirt under me gets sucked immediately.</div></div><div class="ann-row"><div class="lref">L9&ndash;10</div><div class="atxt"><strong>The new capability.</strong> If the model says both squares are clean, emit <code>NoOp</code> and stop burning move penalties. This condition is literally inexpressible for the previous agent &mdash; it mentions a square the agent is not standing on.</div></div><div class="ann-row"><div class="lref">L11</div><div class="atxt">Otherwise fall back to the reflex move. Reaching this line means at least one square is still <code>None</code> or <code>Dirty</code>, so there is a reason to travel.</div></div><div class="ann-row"><div class="lref">L12</div><div class="atxt">Return the program &mdash; this time <em>with</em> <code>model</code> captured in its closure.</div></div></div><p class="codecap">Cell 7 &mdash; trace, same seed=3</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc">_, _, trace = <span class="f">run</span>(<span class="f">model_based_reflex_agent</span>(), seed=<span class="n">3</span>)</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="k">for</span> step, (loc, action, state) <span class="k">in</span> <span class="b">enumerate</span>(trace, <span class="n">1</span>):</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="b">print</span>(f<span class="s">"Step {step}: at {loc} -&gt; action={action:6s} -&gt; world={state}"</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;3</div><div class="atxt">Identical to the previous trace cell, with the agent swapped. Same world, same seed, same harness &mdash; so any difference in output is caused by architecture alone. That is the experiment.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Step 1: at B -&gt; action=Left   -&gt; world={'A': 'Dirty', 'B': 'Clean'}
+Step 2: at A -&gt; action=Suck   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 3: at A -&gt; action=NoOp   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 4: at A -&gt; action=NoOp   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 5: at A -&gt; action=NoOp   -&gt; world={'A': 'Clean', 'B': 'Clean'}
+Step 6: at A -&gt; action=NoOp   -&gt; world={'A': 'Clean', 'B': 'Clean'}</pre></div>
+<p>The first two steps are identical to the reflex agent's. Step 3 is where they part:</p>
+<div class="tablewrap"><table><thead><tr><th>Step</th><th>Simple reflex</th><th>Model-based</th><th>Why</th></tr></thead><tbody><tr><td>1</td><td><code>Left</code></td><td><code>Left</code></td><td>Both see a clean B, both move</td></tr><tr><td>2</td><td><code>Suck</code></td><td><code>Suck</code></td><td>Both see dirt at A</td></tr><tr><td>3</td><td><code>Right</code></td><td><strong><code>NoOp</code></strong></td><td>The model now holds A=Clean <em>and</em> B=Clean, from step 1</td></tr><tr><td>4&ndash;6</td><td>pacing</td><td><code>NoOp</code></td><td>&minus;3 versus 0</td></tr></tbody></table></div><div class="note"><span class="tag">The lesson</span>
+<p><strong>5 &rarr; 9 points, from one dictionary.</strong> The model-based agent is not smarter about
+cleaning &mdash; it cleans exactly the same dirt on the same step. It is smarter about
+<em>stopping</em>. Memory did not buy better actions, it bought the ability to know the job was
+finished. Keep that distinction; Exercise 1 is about what happens when that belief goes stale.</p></div></section><section id="goal"><h2><span class="snum">06</span><span>Architecture 3 — Goal-based</span></h2>
+<p class="lede">Instead of firing rules, the agent holds an explicit goal &mdash; &ldquo;both squares
+clean&rdquo; &mdash; and forms a small plan to reach it.</p>
+<p class="codecap">Cell 8 &mdash; goal-based agent</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">goal_based_agent</span>():</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    goal_reached_plan = []                <span class="c"># a tiny plan: where to go next once the current square is clean</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        <span class="k">nonlocal</span> goal_reached_plan</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span>                       <span class="c"># always satisfy the immediate sub-goal first</span></span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">        <span class="k">if</span> <span class="k">not</span> goal_reached_plan:</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">            move = <span class="s">"Right"</span> <span class="k">if</span> location == <span class="s">"A"</span> <span class="k">else</span> <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">            goal_reached_plan = [move]           <span class="c"># plan: go check the other square next</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">        <span class="k">return</span> goal_reached_plan.<span class="f">pop</span>(<span class="n">0</span>)</span>
+<span class="ln" aria-hidden="true">13</span><span class="lc">    <span class="k">return</span> program</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">Same factory shape.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt">The plan: a list of queued actions. Empty means &ldquo;no plan right now, make one&rdquo;. In a real goal-based agent this is where a search algorithm's output would land; here the world is small enough that the plan is one move long.</div></div><div class="ann-row"><div class="lref">L4&ndash;5</div><div class="atxt">The program and the usual unpacking.</div></div><div class="ann-row"><div class="lref">L6</div><div class="atxt"><code>nonlocal</code> lets line 11 <em>rebind</em> <code>goal_reached_plan</code> to a new list. Without it, that assignment would create a fresh local variable and the plan would silently vanish between calls. (Line 6 is not needed for the <code>.pop()</code> on line 12, which mutates rather than rebinds &mdash; it is needed specifically because of line 11.)</div></div><div class="ann-row"><div class="lref">L7&ndash;8</div><div class="atxt">Dirt under the agent is an immediate sub-goal, satisfied before any planning happens.</div></div><div class="ann-row"><div class="lref">L9&ndash;11</div><div class="atxt">If there is no plan, make one: the only useful thing to do on a clean square is go check the other one.</div></div><div class="ann-row"><div class="lref">L12</div><div class="atxt">Pop the front of the plan and execute it. With a one-step plan this is the same as returning the move &mdash; but the <em>shape</em> is the point: decide a sequence, then follow it.</div></div><div class="ann-row"><div class="lref">L13</div><div class="atxt">Return the program, with the plan captured in the closure.</div></div></div><div class="warn"><span class="tag">Read the code, not the label</span>
+<p>This agent has a goal in its name but nowhere in its logic. There is no check for
+&ldquo;is the goal satisfied?&rdquo; and therefore <strong>no <code>NoOp</code> branch anywhere</strong>.
+It always returns <code>Suck</code> or a move, so it paces forever exactly like the simple reflex
+agent &mdash; and scores exactly the same, <strong>5</strong>. Watch for this in the comparison table;
+it is the tutorial's most useful trap. The architecture is only as good as the goal test you
+actually write.</p></div></section><section id="utility"><h2><span class="snum">07</span><span>Architecture 4 — Utility-based</span></h2>
+<p class="lede">A goal is binary: reached or not. A utility function is a number, so it can
+<em>trade off</em> competing concerns &mdash; here, cleanliness against a battery budget.</p>
+<p class="codecap">Cell 9 &mdash; utility-based agent</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">utility_based_agent</span>(battery_start=<span class="n">6</span>):</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    battery = {<span class="s">"level"</span>: battery_start}</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">    <span class="k">def</span> <span class="f">utility</span>(action, status, battery_level):</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        u = <span class="n">0</span></span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        <span class="k">if</span> action == <span class="s">"Suck"</span> <span class="k">and</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">            u += <span class="n">10</span></span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">        <span class="k">if</span> action <span class="k">in</span> (<span class="s">"Left"</span>, <span class="s">"Right"</span>):</span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">            u -= <span class="n">2</span>                                           <span class="c"># moving costs energy</span></span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">        <span class="k">if</span> battery_level &lt;= <span class="n">2</span> <span class="k">and</span> action <span class="k">in</span> (<span class="s">"Left"</span>, <span class="s">"Right"</span>):</span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">            u -= <span class="n">5</span>                                           <span class="c"># heavily discourage moving on low battery</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">        <span class="k">return</span> u</span>
+<span class="ln" aria-hidden="true">13</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">        <span class="k">if</span> battery[<span class="s">"level"</span>] &lt;= <span class="n">0</span>:</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span>                            <span class="c"># out of battery — must stop</span></span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">        candidates = [<span class="s">"Suck"</span>, <span class="s">"Left"</span>, <span class="s">"Right"</span>, <span class="s">"NoOp"</span>]</span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">        action = <span class="b">max</span>(candidates, key=<span class="k">lambda</span> a: <span class="f">utility</span>(a, status, battery[<span class="s">"level"</span>]))</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc">        <span class="k">if</span> action <span class="k">in</span> (<span class="s">"Left"</span>, <span class="s">"Right"</span>, <span class="s">"Suck"</span>):</span>
+<span class="ln" aria-hidden="true">21</span><span class="lc">            battery[<span class="s">"level"</span>] -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">        <span class="k">return</span> action</span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">    <span class="k">return</span> program</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1</div><div class="atxt">The battery budget is a parameter, so you can experiment with scarcity.</div></div><div class="ann-row"><div class="lref">L2</div><div class="atxt">The battery is wrapped in a dict rather than a bare number for the same reason as before: rebinding a plain <code>int</code> inside the nested function would need <code>nonlocal</code>, while mutating a dict entry does not.</div></div><div class="ann-row"><div class="lref">L4</div><div class="atxt"><strong>The utility function.</strong> It scores a hypothetical action &mdash; nothing is applied to the world. This is the key move of the architecture: the agent can compare options it will not take.</div></div><div class="ann-row"><div class="lref">L5</div><div class="atxt">Every action starts at zero utility.</div></div><div class="ann-row"><div class="lref">L6&ndash;7</div><div class="atxt"><code>+10</code> for sucking actual dirt &mdash; deliberately mirroring the environment's own reward on line 24. Note this only fires when the square <em>is</em> dirty; <code>Suck</code> on a clean square scores 0.</div></div><div class="ann-row"><div class="lref">L8&ndash;9</div><div class="atxt"><code>&minus;2</code> for any move. Note this is <em>harsher</em> than the environment's real &minus;1 &mdash; the agent's preferences do not have to match the true performance measure, and the mismatch has consequences.</div></div><div class="ann-row"><div class="lref">L10&ndash;11</div><div class="atxt">A further &minus;5 for moving on a nearly flat battery. This is the actual trade-off: at full charge a move is a minor cost, at low charge it is close to unthinkable.</div></div><div class="ann-row"><div class="lref">L12</div><div class="atxt">Return the score.</div></div><div class="ann-row"><div class="lref">L14&ndash;15</div><div class="atxt">The program proper.</div></div><div class="ann-row"><div class="lref">L16&ndash;17</div><div class="atxt">A hard constraint that overrides the arithmetic: no battery, no action. Some limits should not be negotiable in utility terms.</div></div><div class="ann-row"><div class="lref">L18</div><div class="atxt">All four legal actions become candidates &mdash; including <code>NoOp</code>, which always scores exactly 0 and therefore acts as the <strong>do-nothing baseline</strong>. Any action scoring below 0 is worse than idling.</div></div><div class="ann-row"><div class="lref">L19</div><div class="atxt"><code>max</code> with a <code>key</code> scores every candidate and picks the best. On a tie Python keeps the <em>first</em> maximum in list order, so the order on line 18 is a silent tie-breaker &mdash; <code>Suck</code> wins ties over <code>NoOp</code>.</div></div><div class="ann-row"><div class="lref">L20&ndash;21</div><div class="atxt">Any real action drains one unit of battery; <code>NoOp</code> is free.</div></div><div class="ann-row"><div class="lref">L22&ndash;23</div><div class="atxt">Return the action, then the program.</div></div></div><div class="note"><span class="tag">Where this scores 10</span>
+<p>In the standard six-step run this is the joint best agent. On a clean square, <code>Suck</code>
+and <code>NoOp</code> both score 0 while moving scores &minus;2, so the tie on line 19 goes to
+<code>Suck</code> &mdash; a harmless no-op in the environment. It cleans what is under it and never
+wastes a move.</p></div><div class="warn"><span class="tag">…and where it is quietly broken</span>
+<p>Read that again: <strong>moving is never worth it.</strong> A move always scores &minus;2, and the
+utility function has no term for &ldquo;there might be dirt over there.&rdquo; This agent only ever
+scores 10 because it happens to start on the dirty square. Exercise 1 puts it in a world where it has
+to travel, and it parks on one square forever. The bug is invisible in the tutorial's own test.</p></div></section><section id="learning"><h2><span class="snum">08</span><span>Architecture 5 — Learning</span></h2>
+<p class="lede">A learning element that edits the agent's own policy from observed reward &mdash; a
+toy version of the feedback loop behind RLHF.</p>
+<p class="codecap">Cell 10 &mdash; learning agent</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">learning_agent</span>():</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    q = {}                                  <span class="c"># (state, action) -&gt; learned value</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    last = {<span class="s">"state"</span>: <span class="k">None</span>, <span class="s">"action"</span>: <span class="k">None</span>}</span>
+<span class="ln" aria-hidden="true">4</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        state = percept</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">        actions = [<span class="s">"Suck"</span>, <span class="s">"Left"</span>, <span class="s">"Right"</span>]</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc">        <span class="k">for</span> a <span class="k">in</span> actions:</span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">            q.<span class="f">setdefault</span>((state, a), <span class="n">0.0</span>)</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">        <span class="c"># Learning element: update the value of the last (state, action) using the reward we just saw</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">        <span class="k">if</span> last[<span class="s">"state"</span>] <span class="k">is</span> <span class="k">not</span> <span class="k">None</span>:</span>
+<span class="ln" aria-hidden="true">13</span><span class="lc">            reward = <span class="n">10</span> <span class="k">if</span> state[<span class="n">1</span>] == <span class="s">"Clean"</span> <span class="k">and</span> last[<span class="s">"action"</span>] == <span class="s">"Suck"</span> <span class="k">else</span> -<span class="n">1</span></span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">            key = (last[<span class="s">"state"</span>], last[<span class="s">"action"</span>])</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">            q[key] += <span class="n">0.5</span> * (reward - q[key])       <span class="c"># simple running-average update</span></span>
+<span class="ln" aria-hidden="true">16</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">        <span class="c"># Performance element: mostly exploit the best known action, occasionally explore</span></span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">        <span class="k">if</span> random.<span class="f">random</span>() &lt; <span class="n">0.1</span>:</span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">            action = random.<span class="f">choice</span>(actions)</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc">        <span class="k">else</span>:</span>
+<span class="ln" aria-hidden="true">21</span><span class="lc">            action = <span class="b">max</span>(actions, key=<span class="k">lambda</span> a: q[(state, a)])</span>
+<span class="ln" aria-hidden="true">22</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">        last[<span class="s">"state"</span>], last[<span class="s">"action"</span>] = state, action</span>
+<span class="ln" aria-hidden="true">24</span><span class="lc">        <span class="k">return</span> action</span>
+<span class="ln" aria-hidden="true">25</span><span class="lc">    <span class="k">return</span> program</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;2</div><div class="atxt"><code>q</code> maps a <code>(state, action)</code> pair to a learned value &mdash; the agent's policy, and the thing that changes over time. This is a miniature Q-table.</div></div><div class="ann-row"><div class="lref">L3</div><div class="atxt">Remembers the previous step, because the reward for an action only becomes visible on the <em>next</em> percept. This one-step delay is the central difficulty of reinforcement learning in miniature.</div></div><div class="ann-row"><div class="lref">L5&ndash;6</div><div class="atxt">The percept is used directly as the state.</div></div><div class="ann-row"><div class="lref">L7</div><div class="atxt"><code>NoOp</code> is deliberately excluded from the action set &mdash; the agent is never allowed to learn to idle.</div></div><div class="ann-row"><div class="lref">L8&ndash;9</div><div class="atxt"><code>setdefault</code> lazily initialises unseen pairs to 0.0, so line 21's lookup can never raise.</div></div><div class="ann-row"><div class="lref">L11&ndash;12</div><div class="atxt">The <strong>learning element</strong>, skipped on the very first step when there is no previous action to credit.</div></div><div class="ann-row"><div class="lref">L13</div><div class="atxt">The reward signal: <code>+10</code> if the square is now clean <em>and</em> the last action was <code>Suck</code>, otherwise <code>&minus;1</code>. Note what this cannot distinguish &mdash; sucking dirt and sucking an already-clean square both look like success.</div></div><div class="ann-row"><div class="lref">L14&ndash;15</div><div class="atxt">The update: move the stored value <em>halfway</em> toward the observed reward. <code>0.5</code> is the learning rate &mdash; high, so it adapts within six steps, but it also means the value never settles.</div></div><div class="ann-row"><div class="lref">L17&ndash;19</div><div class="atxt"><strong>Exploration.</strong> 10% of the time, act randomly. Without this the agent would lock onto whatever it tried first and never discover anything better.</div></div><div class="ann-row"><div class="lref">L20&ndash;21</div><div class="atxt"><strong>Exploitation.</strong> The other 90%: take the highest-valued action for this state. Together, lines 18&ndash;21 are the classic epsilon-greedy policy.</div></div><div class="ann-row"><div class="lref">L23&ndash;25</div><div class="atxt">Record this step as &ldquo;last&rdquo; so the next call can score it, return the action, return the program.</div></div></div><div class="warn"><span class="tag">Why it uses the global random</span>
+<p>Lines 18&ndash;19 call <code>random</code> directly, not a seeded private generator. That is why
+the comparison cell has to call <code>random.seed(0)</code> before running &mdash; without it, this
+agent's score changes between runs and the table stops being reproducible. It is also why Exercise 1
+re-seeds inside its loop.</p></div><div class="note"><span class="tag">Six steps is not learning</span>
+<p>It scores 10 here, but do not read that as the learning working. With six steps and a
+learning rate of 0.5 it barely fills its table. What this cell demonstrates is the <em>shape</em> of a
+learning agent &mdash; policy, reward, update, explore/exploit &mdash; not its competence.</p></div></section><section id="compare"><h2><span class="snum">09</span><span>Running all five side by side</span></h2>
+<p class="lede">Same world, same seed, same six steps. Every difference in the table is caused by
+architecture and nothing else.</p>
+<p class="codecap">Cell 11 &mdash; the comparison</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="k">def</span> <span class="f">run</span>(agent_program, steps=<span class="n">6</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">2</span><span class="lc">    env = <span class="f">VacuumEnvironment</span>(seed=seed)</span>
+<span class="ln" aria-hidden="true">3</span><span class="lc">    <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(steps):</span>
+<span class="ln" aria-hidden="true">4</span><span class="lc">        p = env.<span class="f">percept</span>()</span>
+<span class="ln" aria-hidden="true">5</span><span class="lc">        a = <span class="f">agent_program</span>(p)</span>
+<span class="ln" aria-hidden="true">6</span><span class="lc">        env.<span class="f">execute</span>(a)</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">    <span class="k">return</span> env.performance, env.<span class="f">is_clean</span>(), env.history</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">9</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">random.<span class="f">seed</span>(<span class="n">0</span>)  <span class="c"># for reproducibility of the learning agent's exploration</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">agents = [</span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">    (<span class="s">"Simple Reflex"</span>, simple_reflex_agent),</span>
+<span class="ln" aria-hidden="true">13</span><span class="lc">    (<span class="s">"Model-Based Reflex"</span>, model_based_reflex_agent),</span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">    (<span class="s">"Goal-Based"</span>, goal_based_agent),</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">    (<span class="s">"Utility-Based"</span>, utility_based_agent),</span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">    (<span class="s">"Learning"</span>, learning_agent),</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">]</span>
+<span class="ln" aria-hidden="true">18</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">19</span><span class="lc"><span class="b">print</span>(f<span class="s">"{'Architecture':22s}{'Performance':&gt;12s}{'All Clean?':&gt;12s}"</span>)</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc"><span class="b">print</span>(<span class="s">"-"</span> * <span class="n">46</span>)</span>
+<span class="ln" aria-hidden="true">21</span><span class="lc"><span class="k">for</span> name, factory <span class="k">in</span> agents:</span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">    perf, clean, _ = <span class="f">run</span>(<span class="f">factory</span>())</span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{name:22s}{perf:12d}{str(clean):&gt;12s}"</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;7</div><div class="atxt"><code>run</code> defined a second time, character for character identical to cell 4. Harmless &mdash; it just makes this cell runnable on its own &mdash; but worth noticing so you do not go hunting for a difference that is not there.</div></div><div class="ann-row"><div class="lref">L10</div><div class="atxt">Seed the <em>global</em> generator. This exists solely for the learning agent's exploration on line 18 of the previous cell; without it the last row of the table would wobble.</div></div><div class="ann-row"><div class="lref">L11&ndash;17</div><div class="atxt">A list of <code>(name, factory)</code> pairs. Storing the <em>factory</em> rather than a built program is what guarantees each agent starts with fresh internal state.</div></div><div class="ann-row"><div class="lref">L19</div><div class="atxt">The header row. <code>{'Architecture':22s}</code> left-aligns in 22 columns, <code>{'Performance':&gt;12s}</code> right-aligns in 12 &mdash; that is what makes the columns line up.</div></div><div class="ann-row"><div class="lref">L20</div><div class="atxt">A rule of 46 dashes, matching 22+12+12.</div></div><div class="ann-row"><div class="lref">L21&ndash;22</div><div class="atxt">For each entry, call the factory to build a fresh program and run it. <code>_</code> discards the trace.</div></div><div class="ann-row"><div class="lref">L23</div><div class="atxt">Print the row. <code>{perf:12d}</code> formats the score as a right-aligned integer; <code>str(clean)</code> converts the bool before padding it, since <code>:&gt;12s</code> requires a string.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Architecture           Performance  All Clean?
+----------------------------------------------
+Simple Reflex                    5        True
+Model-Based Reflex               9        True
+Goal-Based                       5        True
+Utility-Based                   10        True
+Learning                        10        True</pre></div>
+<h3>How to read this table</h3>
+<div class="tablewrap"><table><thead><tr><th>Architecture</th><th>Score</th><th>What actually happened</th></tr></thead><tbody><tr><td>Simple Reflex</td><td class="num">5</td><td>Cleans on step 2, then paces for four steps at &minus;1 each.</td></tr><tr><td>Model-Based Reflex</td><td class="num">9</td><td>Same clean, then <code>NoOp</code> &mdash; it knows the job is done.</td></tr><tr><td>Goal-Based</td><td class="num">5</td><td>Identical to simple reflex: no goal test, so no stopping.</td></tr><tr><td>Utility-Based</td><td class="num">10</td><td>Starts on the dirty square, sucks, then never pays to move.</td></tr><tr><td>Learning</td><td class="num">10</td><td>Explores into the same behaviour. Six steps is not enough to call this learned.</td></tr></tbody></table></div><div class="note"><span class="tag">The honest reading</span>
+<p>The scores do <strong>not</strong> rank the architectures. Utility-based ties for first here by
+being lucky about where it started, goal-based ties for last because of a missing branch, and the
+learning agent's 10 is barely distinguishable from noise. A six-step, two-square, fully observable,
+episodic world is simply too easy to separate them.</p>
+<p>That is exactly why the exercises exist. Each one breaks a different assumption in the PEAS spec,
+and each one produces a <em>different</em> ranking.</p></div></section><section id="ex1"><h2><span class="snum">10</span><span>Exercise 1 — Dirt that comes back</span></h2>
+<p class="lede"><strong>The task:</strong> make dirt reappear at random after being cleaned, turning
+the world <em>stochastic</em> and <em>non-episodic</em>. Which architecture degrades least?</p>
+
+<p><strong>My hypothesis before running it:</strong> the agents that <em>stop</em> once they believe
+the job is done (model-based, goal-based) should suffer most, because their belief goes stale. The
+simple reflex agent, which never stops, should suffer least.</p>
+<p class="codecap">Solution &mdash; stochastic environment and the fix</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="c"># Exercise 1 — Stochastic, non-episodic dirt</span></span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="c">#</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"><span class="c"># Dirt can reappear after being cleaned, so the world never "ends".</span></span>
+<span class="ln" aria-hidden="true">4</span><span class="lc"><span class="c"># Hypothesis: the architectures that STOP once they believe the job is done</span></span>
+<span class="ln" aria-hidden="true">5</span><span class="lc"><span class="c"># (Model-Based, Goal-Based) degrade the most, because their belief goes stale.</span></span>
+<span class="ln" aria-hidden="true">6</span><span class="lc"><span class="c"># The Simple Reflex Agent, which never stops patrolling, degrades the least.</span></span>
+<span class="ln" aria-hidden="true">7</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"><span class="k">class</span> <span class="f">StochasticVacuumEnvironment</span>(VacuumEnvironment):</span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">    <span class="s">"""Same world, but each Clean square can get dirty again every time step."""</span></span>
+<span class="ln" aria-hidden="true">10</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">    <span class="k">def</span> <span class="f">__init__</span>(<span class="se">self</span>, dirt_prob=<span class="n">0.5</span>, respawn_prob=<span class="n">0.15</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">12</span><span class="lc">        <span class="b">super</span>().<span class="f">__init__</span>(dirt_prob=dirt_prob, seed=seed)</span>
+<span class="ln" aria-hidden="true">13</span><span class="lc">        <span class="se">self</span>.respawn_prob = respawn_prob</span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">        <span class="se">self</span>.rng = random.<span class="f">Random</span>(seed + <span class="n">1000</span>)   <span class="c"># separate stream, so respawns don't shift the start state</span></span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">        <span class="se">self</span>.steps = <span class="n">0</span></span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">        <span class="se">self</span>.clean_square_steps = <span class="n">0</span>             <span class="c"># for measuring "how clean was the world, on average"</span></span>
+<span class="ln" aria-hidden="true">17</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">    <span class="k">def</span> <span class="f">execute</span>(<span class="se">self</span>, action):</span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">        <span class="b">super</span>().<span class="f">execute</span>(action)</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc">        <span class="k">for</span> loc <span class="k">in</span> LOCATIONS:                                <span class="c"># the environment acts on its own now</span></span>
+<span class="ln" aria-hidden="true">21</span><span class="lc">            <span class="k">if</span> <span class="se">self</span>.status[loc] == <span class="s">"Clean"</span> <span class="k">and</span> <span class="se">self</span>.rng.<span class="f">random</span>() &lt; <span class="se">self</span>.respawn_prob:</span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">                <span class="se">self</span>.status[loc] = <span class="s">"Dirty"</span></span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">        <span class="se">self</span>.steps += <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">24</span><span class="lc">        <span class="se">self</span>.clean_square_steps += <span class="b">sum</span>(<span class="n">1</span> <span class="k">for</span> v <span class="k">in</span> <span class="se">self</span>.status.<span class="f">values</span>() <span class="k">if</span> v == <span class="s">"Clean"</span>)</span>
+<span class="ln" aria-hidden="true">25</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.<span class="f">percept</span>()</span>
+<span class="ln" aria-hidden="true">26</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">27</span><span class="lc">    <span class="k">def</span> <span class="f">cleanliness</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">28</span><span class="lc">        <span class="s">"""Fraction of (square, time step) pairs that were clean. The right metric</span></span>
+<span class="ln" aria-hidden="true">29</span><span class="lc"><span class="s">        for a non-episodic task: there is no final state to score."""</span></span>
+<span class="ln" aria-hidden="true">30</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.clean_square_steps / (<span class="se">self</span>.steps * <span class="b">len</span>(LOCATIONS))</span>
+<span class="ln" aria-hidden="true">31</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">32</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">33</span><span class="lc"><span class="k">def</span> <span class="f">run_stochastic</span>(agent_program, steps=<span class="n">40</span>, seed=<span class="n">42</span>, respawn_prob=<span class="n">0.15</span>):</span>
+<span class="ln" aria-hidden="true">34</span><span class="lc">    env = <span class="f">StochasticVacuumEnvironment</span>(seed=seed, respawn_prob=respawn_prob)</span>
+<span class="ln" aria-hidden="true">35</span><span class="lc">    <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(steps):</span>
+<span class="ln" aria-hidden="true">36</span><span class="lc">        env.<span class="f">execute</span>(<span class="f">agent_program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">37</span><span class="lc">    <span class="k">return</span> env.performance, env.<span class="f">cleanliness</span>()</span>
+<span class="ln" aria-hidden="true">38</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">39</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">40</span><span class="lc">STEPS, SEEDS = <span class="n">40</span>, <span class="b">range</span>(<span class="n">8</span>)</span>
+<span class="ln" aria-hidden="true">41</span><span class="lc">stochastic_agents = [</span>
+<span class="ln" aria-hidden="true">42</span><span class="lc">    (<span class="s">"Simple Reflex"</span>,      simple_reflex_agent),</span>
+<span class="ln" aria-hidden="true">43</span><span class="lc">    (<span class="s">"Model-Based Reflex"</span>, model_based_reflex_agent),</span>
+<span class="ln" aria-hidden="true">44</span><span class="lc">    (<span class="s">"Goal-Based"</span>,         goal_based_agent),</span>
+<span class="ln" aria-hidden="true">45</span><span class="lc">    (<span class="s">"Utility-Based"</span>,      <span class="k">lambda</span>: <span class="f">utility_based_agent</span>(battery_start=STEPS)),  <span class="c"># battery scaled to the longer run</span></span>
+<span class="ln" aria-hidden="true">46</span><span class="lc">    (<span class="s">"Learning"</span>,           learning_agent),</span>
+<span class="ln" aria-hidden="true">47</span><span class="lc">]</span>
+<span class="ln" aria-hidden="true">48</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">49</span><span class="lc"><span class="b">print</span>(f<span class="s">"{'Architecture':22s}{'Avg performance':&gt;17s}{'Avg cleanliness':&gt;17s}"</span>)</span>
+<span class="ln" aria-hidden="true">50</span><span class="lc"><span class="b">print</span>(<span class="s">"-"</span> * <span class="n">56</span>)</span>
+<span class="ln" aria-hidden="true">51</span><span class="lc"><span class="k">for</span> name, factory <span class="k">in</span> stochastic_agents:</span>
+<span class="ln" aria-hidden="true">52</span><span class="lc">    results = []</span>
+<span class="ln" aria-hidden="true">53</span><span class="lc">    <span class="k">for</span> s <span class="k">in</span> SEEDS:</span>
+<span class="ln" aria-hidden="true">54</span><span class="lc">        random.<span class="f">seed</span>(<span class="n">0</span>)                       <span class="c"># keep the learning agent's exploration reproducible</span></span>
+<span class="ln" aria-hidden="true">55</span><span class="lc">        results.<span class="f">append</span>(<span class="f">run_stochastic</span>(<span class="f">factory</span>(), steps=STEPS, seed=s))</span>
+<span class="ln" aria-hidden="true">56</span><span class="lc">    perf = <span class="b">sum</span>(r[<span class="n">0</span>] <span class="k">for</span> r <span class="k">in</span> results) / <span class="b">len</span>(results)</span>
+<span class="ln" aria-hidden="true">57</span><span class="lc">    clean = <span class="b">sum</span>(r[<span class="n">1</span>] <span class="k">for</span> r <span class="k">in</span> results) / <span class="b">len</span>(results)</span>
+<span class="ln" aria-hidden="true">58</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{name:22s}{perf:17.1f}{clean:16.0%}"</span>)</span>
+<span class="ln" aria-hidden="true">59</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">60</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">61</span><span class="lc"><span class="s">Reading the table:</span></span>
+<span class="ln" aria-hidden="true">62</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">63</span><span class="lc"><span class="s">* Simple Reflex and Goal-Based tie at the top. Neither ever stops: the goal-</span></span>
+<span class="ln" aria-hidden="true">64</span><span class="lc"><span class="s">  based agent as written has no NoOp branch, so in this world it degenerates</span></span>
+<span class="ln" aria-hidden="true">65</span><span class="lc"><span class="s">  into the same patrol loop as the reflex agent. Constant re-sensing is</span></span>
+<span class="ln" aria-hidden="true">66</span><span class="lc"><span class="s">  exactly the right behaviour when dirt keeps coming back.</span></span>
+<span class="ln" aria-hidden="true">67</span><span class="lc"><span class="s">* Model-Based Reflex drops. It latches onto "both squares are Clean", emits</span></span>
+<span class="ln" aria-hidden="true">68</span><span class="lc"><span class="s">  NoOp forever, and never looks again - its model is a snapshot of a world</span></span>
+<span class="ln" aria-hidden="true">69</span><span class="lc"><span class="s">  that has since changed.</span></span>
+<span class="ln" aria-hidden="true">70</span><span class="lc"><span class="s">* Utility-Based drops furthest. Moving costs -2 while Suck-on-a-clean-square</span></span>
+<span class="ln" aria-hidden="true">71</span><span class="lc"><span class="s">  costs 0, so it never pays to walk to the other square. It parks on one</span></span>
+<span class="ln" aria-hidden="true">72</span><span class="lc"><span class="s">  square, cleans that one forever, and lets the other rot.</span></span>
+<span class="ln" aria-hidden="true">73</span><span class="lc"><span class="s">* Learning does no better: its reward signal only rewards Suck, so it learns</span></span>
+<span class="ln" aria-hidden="true">74</span><span class="lc"><span class="s">  the same park-and-suck policy.</span></span>
+<span class="ln" aria-hidden="true">75</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">76</span><span class="lc"><span class="s">So the hypothesis was half right. The thing that degrades is not "having a</span></span>
+<span class="ln" aria-hidden="true">77</span><span class="lc"><span class="s">model" - it is *trusting a stale model* (Model-Based) or *pricing movement</span></span>
+<span class="ln" aria-hidden="true">78</span><span class="lc"><span class="s">without pricing neglect* (Utility-Based). The fix for the first is to make</span></span>
+<span class="ln" aria-hidden="true">79</span><span class="lc"><span class="s">beliefs expire:"""</span>)</span>
+<span class="ln" aria-hidden="true">80</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">81</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">82</span><span class="lc"><span class="k">def</span> <span class="f">decaying_model_based_agent</span>(staleness_limit=<span class="n">3</span>):</span>
+<span class="ln" aria-hidden="true">83</span><span class="lc">    <span class="s">"""Model-based, but a belief older than `staleness_limit` steps is not trusted."""</span></span>
+<span class="ln" aria-hidden="true">84</span><span class="lc">    model = {loc: <span class="k">None</span> <span class="k">for</span> loc <span class="k">in</span> LOCATIONS}</span>
+<span class="ln" aria-hidden="true">85</span><span class="lc">    last_seen = {loc: -<span class="n">10</span>**<span class="n">9</span> <span class="k">for</span> loc <span class="k">in</span> LOCATIONS}</span>
+<span class="ln" aria-hidden="true">86</span><span class="lc">    t = {<span class="s">"step"</span>: <span class="n">0</span>}</span>
+<span class="ln" aria-hidden="true">87</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">88</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">89</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">90</span><span class="lc">        t[<span class="s">"step"</span>] += <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">91</span><span class="lc">        model[location] = status</span>
+<span class="ln" aria-hidden="true">92</span><span class="lc">        last_seen[location] = t[<span class="s">"step"</span>]</span>
+<span class="ln" aria-hidden="true">93</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">94</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">95</span><span class="lc">        believed_clean = <span class="b">all</span>(</span>
+<span class="ln" aria-hidden="true">96</span><span class="lc">            model[loc] == <span class="s">"Clean"</span> <span class="k">and</span> t[<span class="s">"step"</span>] - last_seen[loc] &lt;= staleness_limit</span>
+<span class="ln" aria-hidden="true">97</span><span class="lc">            <span class="k">for</span> loc <span class="k">in</span> LOCATIONS</span>
+<span class="ln" aria-hidden="true">98</span><span class="lc">        )</span>
+<span class="ln" aria-hidden="true">99</span><span class="lc">        <span class="k">if</span> believed_clean:</span>
+<span class="ln" aria-hidden="true">100</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span></span>
+<span class="ln" aria-hidden="true">101</span><span class="lc">        <span class="k">return</span> <span class="s">"Right"</span> <span class="k">if</span> location == <span class="s">"A"</span> <span class="k">else</span> <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">102</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">103</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">104</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">105</span><span class="lc">results = [<span class="f">run_stochastic</span>(<span class="f">decaying_model_based_agent</span>(), steps=STEPS, seed=s) <span class="k">for</span> s <span class="k">in</span> SEEDS]</span>
+<span class="ln" aria-hidden="true">106</span><span class="lc"><span class="b">print</span>(f<span class="s">"\n{'Model-Based + decay':22s}"</span></span>
+<span class="ln" aria-hidden="true">107</span><span class="lc">      f<span class="s">"{sum(r[0] for r in results)/len(results):17.1f}"</span></span>
+<span class="ln" aria-hidden="true">108</span><span class="lc">      f<span class="s">"{sum(r[1] for r in results)/len(results):16.0%}"</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;6</div><div class="atxt">The hypothesis, written down before the code runs. Worth doing: half of it turns out to be wrong, and that is the interesting part.</div></div><div class="ann-row"><div class="lref">L8&ndash;9</div><div class="atxt">Subclass rather than edit the original, so every earlier cell still works and the two worlds can be compared directly.</div></div><div class="ann-row"><div class="lref">L11&ndash;12</div><div class="atxt"><code>super().__init__</code> builds the ordinary starting world, so the only difference is what happens afterwards.</div></div><div class="ann-row"><div class="lref">L13</div><div class="atxt">How likely a clean square is to become dirty again, each step.</div></div><div class="ann-row"><div class="lref">L14</div><div class="atxt">A <em>separate</em> random stream, offset by 1000. Without this, respawn draws would consume numbers from the same generator that built the starting world, and changing <code>respawn_prob</code> would silently change the starting layout too &mdash; you could no longer tell which variable caused a difference.</div></div><div class="ann-row"><div class="lref">L15&ndash;16</div><div class="atxt">Counters for the new metric.</div></div><div class="ann-row"><div class="lref">L18&ndash;19</div><div class="atxt">Override <code>execute</code>; delegate the action's normal effects to the parent.</div></div><div class="ann-row"><div class="lref">L20&ndash;22</div><div class="atxt"><strong>The change that matters.</strong> After the agent acts, the environment acts on its own: each clean square may become dirty again. The world is no longer something that only changes when the agent touches it.</div></div><div class="ann-row"><div class="lref">L23&ndash;24</div><div class="atxt">Accumulate how many squares were clean at each step.</div></div><div class="ann-row"><div class="lref">L25</div><div class="atxt">Return the fresh percept, matching the parent's contract.</div></div><div class="ann-row"><div class="lref">L27&ndash;30</div><div class="atxt"><strong>A new performance measure.</strong> <code>is_clean()</code> is meaningless now &mdash; there is no final state, and whether the world happens to be clean on the last step is luck. Instead: what fraction of (square, time step) pairs were clean? Changing the environment forced changing the metric, which is the deeper lesson of this exercise.</div></div><div class="ann-row"><div class="lref">L33&ndash;37</div><div class="atxt">A runner for the new world, structured like the original but returning the new metric.</div></div><div class="ann-row"><div class="lref">L40</div><div class="atxt">40 steps and 8 seeds &mdash; long enough for respawns to matter, repeated enough to average out lucky worlds.</div></div><div class="ann-row"><div class="lref">L41&ndash;47</div><div class="atxt">The same five architectures. Line 45 wraps the utility agent in a <code>lambda</code> to give it a battery of 40 instead of 6 &mdash; otherwise it would simply run flat at step 6 and the comparison would measure battery size, not architecture.</div></div><div class="ann-row"><div class="lref">L49&ndash;50</div><div class="atxt">Header and rule, same formatting trick as the original comparison.</div></div><div class="ann-row"><div class="lref">L51&ndash;55</div><div class="atxt">For each agent, run every seed. <code>random.seed(0)</code> inside the loop keeps the learning agent reproducible.</div></div><div class="ann-row"><div class="lref">L56&ndash;58</div><div class="atxt">Average both metrics and print the row. <code>{clean:16.0%}</code> formats a fraction as a whole-number percentage.</div></div><div class="ann-row"><div class="lref">L60&ndash;79</div><div class="atxt">The written analysis, printed with the results so the conclusion never drifts from the numbers it describes.</div></div><div class="ann-row"><div class="lref">L82&ndash;83</div><div class="atxt"><strong>The fix.</strong> A model-based agent whose beliefs expire.</div></div><div class="ann-row"><div class="lref">L84&ndash;86</div><div class="atxt">Same model as before, plus a record of <em>when</em> each square was last observed, and a step counter. Line 85's <code>-10**9</code> is a sentinel meaning &ldquo;never seen&rdquo;, guaranteed to look infinitely stale.</div></div><div class="ann-row"><div class="lref">L88&ndash;92</div><div class="atxt">Advance the clock, record the observation and its timestamp.</div></div><div class="ann-row"><div class="lref">L93&ndash;94</div><div class="atxt">Unchanged reflex rule.</div></div><div class="ann-row"><div class="lref">L95&ndash;98</div><div class="atxt"><strong>The key condition.</strong> The agent now believes the world is clean only if every square is <em>both</em> believed clean <em>and</em> was observed within the last <code>staleness_limit</code> steps. Knowledge has an expiry date.</div></div><div class="ann-row"><div class="lref">L99&ndash;101</div><div class="atxt">Idle if that holds; otherwise patrol.</div></div><div class="ann-row"><div class="lref">L105&ndash;108</div><div class="atxt">Run the fixed agent on the same seeds and print its row under the table for comparison.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Architecture            Avg performance  Avg cleanliness
+--------------------------------------------------------
+Simple Reflex                      93.4             73%
+Model-Based Reflex                 67.8             52%
+Goal-Based                         93.4             73%
+Utility-Based                      58.8             45%
+Learning                           58.9             45%
+
+Reading the table:
+
+* Simple Reflex and Goal-Based tie at the top. Neither ever stops: the goal-
+  based agent as written has no NoOp branch, so in this world it degenerates
+  into the same patrol loop as the reflex agent. Constant re-sensing is
+  exactly the right behaviour when dirt keeps coming back.
+* Model-Based Reflex drops. It latches onto "both squares are Clean", emits
+  NoOp forever, and never looks again - its model is a snapshot of a world
+  that has since changed.
+* Utility-Based drops furthest. Moving costs -2 while Suck-on-a-clean-square
+  costs 0, so it never pays to walk to the other square. It parks on one
+  square, cleans that one forever, and lets the other rot.
+* Learning does no better: its reward signal only rewards Suck, so it learns
+  the same park-and-suck policy.
+
+So the hypothesis was half right. The thing that degrades is not "having a
+model" - it is *trusting a stale model* (Model-Based) or *pricing movement
+without pricing neglect* (Utility-Based). The fix for the first is to make
+beliefs expire:
+
+Model-Based + decay               100.1             69%</pre></div>
+<h3>What the numbers actually said</h3>
+<p>The hypothesis was <strong>half right</strong>, and being wrong about the other half is the most
+useful thing in this exercise.</p>
+<div class="tablewrap"><table><thead><tr><th>Architecture</th><th>Perf.</th><th>Clean</th><th>What happened</th></tr></thead><tbody><tr><td>Simple Reflex</td><td class="num">93.4</td><td class="num">73%</td><td>Never stops, so it re-senses constantly. Memorylessness is now an <em>advantage</em>.</td></tr><tr><td>Goal-Based</td><td class="num">93.4</td><td class="num">73%</td><td><strong>Did not collapse.</strong> It has no <code>NoOp</code> branch, so it degenerates into the same patrol loop.</td></tr><tr><td>Model-Based</td><td class="num">67.8</td><td class="num">52%</td><td>Latches onto &ldquo;both clean&rdquo; and idles forever on a snapshot of a world that has moved on.</td></tr><tr><td>Utility-Based</td><td class="num">58.8</td><td class="num">45%</td><td>Worst. Moving scores &minus;2, sucking a clean square scores 0 &mdash; so it parks on one square and lets the other rot.</td></tr><tr><td>Learning</td><td class="num">58.9</td><td class="num">45%</td><td>Its reward only credits <code>Suck</code>, so it learns the same park-and-suck policy.</td></tr><tr><td><strong>Model-Based + decay</strong></td><td class="num"><strong>100.1</strong></td><td class="num">69%</td><td>Best performance of all: patrols like the reflex agent but skips pointless moves.</td></tr></tbody></table></div><div class="note"><span class="tag">The real answer</span>
+<p>What degrades is not <em>having a model</em>. It is <strong>trusting a stale model</strong>
+(model-based) or <strong>pricing movement without pricing neglect</strong> (utility-based). Note the
+fix does not remove the memory &mdash; it adds an expiry date to it, and comes out ahead of every
+original agent.</p>
+<p>Also note the utility agent's bug was invisible in the original tutorial. Its 10/10 score there
+came from starting on the dirty square. This exercise is what exposed it.</p></div></section><section id="ex2"><h2><span class="snum">11</span><span>Exercise 2 — Taking away the location sensor</span></h2>
+<p class="lede"><strong>The task:</strong> <code>percept()</code> returns only the dirt status, never
+the location. Which architectures still work, which break, and why?</p>
+<p class="codecap">Solution &mdash; three agents under partial observability</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="c"># Exercise 2 — Partial observability: the agent can no longer see WHERE it is</span></span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="c">#</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"><span class="c"># percept() now returns only the dirt status of the current square.</span></span>
+<span class="ln" aria-hidden="true">4</span><span class="lc"><span class="c"># Question: which architectures survive?</span></span>
+<span class="ln" aria-hidden="true">5</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">6</span><span class="lc"><span class="k">class</span> <span class="f">BlindVacuumEnvironment</span>(VacuumEnvironment):</span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">    <span class="s">"""Sensors are degraded: dirt status only, no location."""</span></span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">9</span><span class="lc">    <span class="k">def</span> <span class="f">percept</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">10</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.status[<span class="se">self</span>.agent_location]      <span class="c"># a bare "Dirty"/"Clean", no location</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">12</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">13</span><span class="lc"><span class="k">def</span> <span class="f">run_blind</span>(agent_program, steps=<span class="n">6</span>, seed=<span class="n">3</span>):</span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">    env = <span class="f">BlindVacuumEnvironment</span>(seed=seed)</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">    <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(steps):</span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">        env.<span class="f">execute</span>(<span class="f">agent_program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">    <span class="k">return</span> env.performance, env.<span class="f">is_clean</span>(), env.history</span>
+<span class="ln" aria-hidden="true">18</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">19</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">20</span><span class="lc"><span class="c"># --- (a) Simple reflex with a fixed rule: BREAKS -------------------------------</span></span>
+<span class="ln" aria-hidden="true">21</span><span class="lc"><span class="k">def</span> <span class="f">blind_fixed_reflex_agent</span>():</span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">    <span class="s">"""No memory, no location. The best it can do is one fixed move direction."""</span></span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(status):</span>
+<span class="ln" aria-hidden="true">24</span><span class="lc">        <span class="k">return</span> <span class="s">"Suck"</span> <span class="k">if</span> status == <span class="s">"Dirty"</span> <span class="k">else</span> <span class="s">"Right"</span></span>
+<span class="ln" aria-hidden="true">25</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">26</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">27</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">28</span><span class="lc"><span class="c"># --- (b) Simple reflex + randomisation: WORKS, eventually ----------------------</span></span>
+<span class="ln" aria-hidden="true">29</span><span class="lc"><span class="k">def</span> <span class="f">blind_random_reflex_agent</span>(seed=<span class="n">7</span>):</span>
+<span class="ln" aria-hidden="true">30</span><span class="lc">    <span class="s">"""AIMA's answer to unobservable location: randomise the move.</span></span>
+<span class="ln" aria-hidden="true">31</span><span class="lc"><span class="s">    Still memoryless, but no longer trapped in a corner."""</span></span>
+<span class="ln" aria-hidden="true">32</span><span class="lc">    rng = random.<span class="f">Random</span>(seed)</span>
+<span class="ln" aria-hidden="true">33</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(status):</span>
+<span class="ln" aria-hidden="true">34</span><span class="lc">        <span class="k">return</span> <span class="s">"Suck"</span> <span class="k">if</span> status == <span class="s">"Dirty"</span> <span class="k">else</span> rng.<span class="f">choice</span>([<span class="s">"Left"</span>, <span class="s">"Right"</span>])</span>
+<span class="ln" aria-hidden="true">35</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">36</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">37</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">38</span><span class="lc"><span class="c"># --- (c) Model-based: WORKS, and works perfectly -------------------------------</span></span>
+<span class="ln" aria-hidden="true">39</span><span class="lc"><span class="k">def</span> <span class="f">blind_model_based_agent</span>():</span>
+<span class="ln" aria-hidden="true">40</span><span class="lc">    <span class="s">"""Key insight: the ACTUATORS are absolute and deterministic - "Left" always</span></span>
+<span class="ln" aria-hidden="true">41</span><span class="lc"><span class="s">    lands on A, "Right" always lands on B. So after the agent's first move it</span></span>
+<span class="ln" aria-hidden="true">42</span><span class="lc"><span class="s">    knows exactly where it is, even though the sensors never tell it.</span></span>
+<span class="ln" aria-hidden="true">43</span><span class="lc"><span class="s">    Internal state has *reconstructed* the observability the sensors lost."""</span></span>
+<span class="ln" aria-hidden="true">44</span><span class="lc">    belief = {<span class="s">"location"</span>: <span class="k">None</span>, <span class="s">"A"</span>: <span class="k">None</span>, <span class="s">"B"</span>: <span class="k">None</span>}</span>
+<span class="ln" aria-hidden="true">45</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">46</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(status):</span>
+<span class="ln" aria-hidden="true">47</span><span class="lc">        loc = belief[<span class="s">"location"</span>]</span>
+<span class="ln" aria-hidden="true">48</span><span class="lc">        <span class="k">if</span> loc <span class="k">is</span> <span class="k">not</span> <span class="k">None</span>:</span>
+<span class="ln" aria-hidden="true">49</span><span class="lc">            belief[loc] = status                       <span class="c"># we know where this reading came from</span></span>
+<span class="ln" aria-hidden="true">50</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">51</span><span class="lc">            <span class="k">if</span> loc <span class="k">is</span> <span class="k">not</span> <span class="k">None</span>:</span>
+<span class="ln" aria-hidden="true">52</span><span class="lc">                belief[loc] = <span class="s">"Clean"</span>                  <span class="c"># Suck will succeed</span></span>
+<span class="ln" aria-hidden="true">53</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">54</span><span class="lc">        <span class="k">if</span> loc <span class="k">is</span> <span class="k">None</span>:                                <span class="c"># first clean percept: localise ourselves</span></span>
+<span class="ln" aria-hidden="true">55</span><span class="lc">            belief[<span class="s">"location"</span>] = <span class="s">"A"</span></span>
+<span class="ln" aria-hidden="true">56</span><span class="lc">            <span class="k">return</span> <span class="s">"Left"</span>                              <span class="c"># "Left" is a teleport-to-A, so this is a self-locate</span></span>
+<span class="ln" aria-hidden="true">57</span><span class="lc">        <span class="k">if</span> belief[<span class="s">"A"</span>] == <span class="s">"Clean"</span> <span class="k">and</span> belief[<span class="s">"B"</span>] == <span class="s">"Clean"</span>:</span>
+<span class="ln" aria-hidden="true">58</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span></span>
+<span class="ln" aria-hidden="true">59</span><span class="lc">        belief[<span class="s">"location"</span>] = <span class="s">"B"</span> <span class="k">if</span> loc == <span class="s">"A"</span> <span class="k">else</span> <span class="s">"A"</span></span>
+<span class="ln" aria-hidden="true">60</span><span class="lc">        <span class="k">return</span> <span class="s">"Right"</span> <span class="k">if</span> loc == <span class="s">"A"</span> <span class="k">else</span> <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">61</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">62</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">63</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">64</span><span class="lc"><span class="k">for</span> label, factory <span class="k">in</span> [(<span class="s">"(a) fixed reflex  "</span>, blind_fixed_reflex_agent),</span>
+<span class="ln" aria-hidden="true">65</span><span class="lc">                       (<span class="s">"(b) random reflex "</span>, blind_random_reflex_agent),</span>
+<span class="ln" aria-hidden="true">66</span><span class="lc">                       (<span class="s">"(c) model-based   "</span>, blind_model_based_agent)]:</span>
+<span class="ln" aria-hidden="true">67</span><span class="lc">    perf, clean, trace = <span class="f">run_blind</span>(<span class="f">factory</span>())</span>
+<span class="ln" aria-hidden="true">68</span><span class="lc">    actions = <span class="s">" "</span>.<span class="f">join</span>(a <span class="k">for</span> _, a, _ <span class="k">in</span> trace)</span>
+<span class="ln" aria-hidden="true">69</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{label} perf={perf:4d}  all clean={str(clean):5s}  actions: {actions}"</span>)</span>
+<span class="ln" aria-hidden="true">70</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">71</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">72</span><span class="lc"><span class="s">* (a) Fixed reflex BREAKS. With no location in the percept it cannot choose a</span></span>
+<span class="ln" aria-hidden="true">73</span><span class="lc"><span class="s">  direction, so it commits to one - "Right" - forever. In this run it starts</span></span>
+<span class="ln" aria-hidden="true">74</span><span class="lc"><span class="s">  on a clean B and simply re-enters B six times, paying the move penalty each</span></span>
+<span class="ln" aria-hidden="true">75</span><span class="lc"><span class="s">  step while the dirt in A is never found (perf -6, world never clean). Note</span></span>
+<span class="ln" aria-hidden="true">76</span><span class="lc"><span class="s">  it does not fail loudly; it just quietly stops making progress.</span></span>
+<span class="ln" aria-hidden="true">77</span><span class="lc"><span class="s">* (b) Randomised reflex WORKS, in expectation. Still no memory, but a coin flip</span></span>
+<span class="ln" aria-hidden="true">78</span><span class="lc"><span class="s">  guarantees it visits both squares eventually. This is the classic result:</span></span>
+<span class="ln" aria-hidden="true">79</span><span class="lc"><span class="s">  when you cannot sense, randomise.</span></span>
+<span class="ln" aria-hidden="true">80</span><span class="lc"><span class="s">* (c) Model-based WORKS, and cleanly. Because Left/Right are absolute moves,</span></span>
+<span class="ln" aria-hidden="true">81</span><span class="lc"><span class="s">  one deliberate "Left" tells the agent it is now at A - it has localised</span></span>
+<span class="ln" aria-hidden="true">82</span><span class="lc"><span class="s">  itself using its own action history rather than its sensors. From there it</span></span>
+<span class="ln" aria-hidden="true">83</span><span class="lc"><span class="s">  tracks position by dead reckoning and can still emit NoOp when done.</span></span>
+<span class="ln" aria-hidden="true">84</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">85</span><span class="lc"><span class="s">The general rule: partial observability breaks memoryless agents, and internal</span></span>
+<span class="ln" aria-hidden="true">86</span><span class="lc"><span class="s">state is what buys the observability back. That is precisely why the</span></span>
+<span class="ln" aria-hidden="true">87</span><span class="lc"><span class="s">model-based box exists in the AIMA hierarchy."""</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;4</div><div class="atxt">The setup: this is a <em>sensor</em> downgrade, breaking the S in PEAS.</div></div><div class="ann-row"><div class="lref">L6&ndash;10</div><div class="atxt">Subclass overriding one method. <code>percept</code> now returns a bare <code>&quot;Dirty&quot;</code>/<code>&quot;Clean&quot;</code> string instead of a tuple. That is the entire change &mdash; one line, and it invalidates most of the agents written so far.</div></div><div class="ann-row"><div class="lref">L13&ndash;17</div><div class="atxt">A runner for the blind world, otherwise identical to the original.</div></div><div class="ann-row"><div class="lref">L21&ndash;25</div><div class="atxt"><strong>(a) The memoryless agent.</strong> Its program now takes <code>status</code> directly, since there is no tuple to unpack. With no location it cannot choose a direction, so line 24 hard-codes one: suck dirt, otherwise always go right.</div></div><div class="ann-row"><div class="lref">L29&ndash;35</div><div class="atxt"><strong>(b) Randomised.</strong> Identical, except line 34 flips a coin instead of committing to a direction. Still completely memoryless &mdash; the <code>rng</code> is not state about the world, just a source of variety.</div></div><div class="ann-row"><div class="lref">L39&ndash;43</div><div class="atxt"><strong>(c) Model-based &mdash; the interesting one.</strong> The docstring holds the insight: the <em>actuators</em> are absolute and deterministic. <code>Left</code> always lands on A regardless of where you were. So the agent can learn its position from its own <em>actions</em>, even though its sensors will never tell it.</div></div><div class="ann-row"><div class="lref">L44</div><div class="atxt">Belief state: where I think I am, plus what I have seen at each square.</div></div><div class="ann-row"><div class="lref">L46&ndash;49</div><div class="atxt">If the agent knows where it is, it can attribute the reading to that square. If it does not, the reading is unattributable and must be discarded.</div></div><div class="ann-row"><div class="lref">L50&ndash;53</div><div class="atxt">Dirt gets sucked regardless of whether the agent knows where it is &mdash; that rule never needed a location. Line 52 pre-records the result, since <code>Suck</code> is guaranteed to succeed on a dirty square.</div></div><div class="ann-row"><div class="lref">L54&ndash;56</div><div class="atxt"><strong>The self-localisation move.</strong> Lost, on a clean square: deliberately go <code>Left</code>. Because that is a teleport-to-A, the agent <em>now knows</em> it is at A. It has spent one move to convert &ldquo;I am lost&rdquo; into &ldquo;I am at A&rdquo;.</div></div><div class="ann-row"><div class="lref">L57&ndash;58</div><div class="atxt">Once both squares are known clean, idle &mdash; a capability the blind reflex agents cannot express at all.</div></div><div class="ann-row"><div class="lref">L59&ndash;60</div><div class="atxt">Otherwise move to the other square, updating the belief about position <em>before</em> moving. This is dead reckoning: tracking position by remembering your own actions.</div></div><div class="ann-row"><div class="lref">L64&ndash;69</div><div class="atxt">Run all three and print each one's full action sequence, which is what makes the failure visible.</div></div><div class="ann-row"><div class="lref">L71&ndash;87</div><div class="atxt">The analysis, printed alongside.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">(a) fixed reflex   perf=  -6  all clean=False  actions: Right Right Right Right Right Right
+(b) random reflex  perf=   5  all clean=True   actions: Right Left Suck Right Left Left
+(c) model-based    perf=   8  all clean=True   actions: Left Suck Right NoOp NoOp NoOp
+
+* (a) Fixed reflex BREAKS. With no location in the percept it cannot choose a
+  direction, so it commits to one - "Right" - forever. In this run it starts
+  on a clean B and simply re-enters B six times, paying the move penalty each
+  step while the dirt in A is never found (perf -6, world never clean). Note
+  it does not fail loudly; it just quietly stops making progress.
+* (b) Randomised reflex WORKS, in expectation. Still no memory, but a coin flip
+  guarantees it visits both squares eventually. This is the classic result:
+  when you cannot sense, randomise.
+* (c) Model-based WORKS, and cleanly. Because Left/Right are absolute moves,
+  one deliberate "Left" tells the agent it is now at A - it has localised
+  itself using its own action history rather than its sensors. From there it
+  tracks position by dead reckoning and can still emit NoOp when done.
+
+The general rule: partial observability breaks memoryless agents, and internal
+state is what buys the observability back. That is precisely why the
+model-based box exists in the AIMA hierarchy.</pre></div>
+<h3>The verdict</h3>
+<div class="tablewrap"><table><thead><tr><th>Agent</th><th>Result</th><th>Why</th></tr></thead><tbody><tr><td>(a) Fixed reflex</td><td><strong>Breaks</strong> (&minus;6, never clean)</td><td>Committed to <code>Right</code>, started on a clean B, and re-entered B six times. The dirt in A was never found.</td></tr><tr><td>(b) Random reflex</td><td>Works, eventually (+5)</td><td>A coin flip guarantees it visits both squares given enough steps. When you cannot sense, randomise.</td></tr><tr><td>(c) Model-based</td><td><strong>Works perfectly</strong> (+8)</td><td><code>Left</code> &rarr; <code>Suck</code> &rarr; <code>Right</code> &rarr; <code>NoOp</code>. It localised itself, cleaned, verified, and stopped.</td></tr></tbody></table></div><div class="warn"><span class="tag">The most important detail</span>
+<p>Agent (a) does not crash. It raises nothing, logs nothing, and returns a legal action every single
+step. It just quietly stops making progress while paying a penalty. Degraded sensors produce
+<em>silent</em> failures, which is precisely why you cannot catch this class of bug by checking that
+the code runs.</p></div><div class="note"><span class="tag">The general rule</span>
+<p>Partial observability breaks memoryless agents, and internal state is what buys the observability
+back. Agent (c) never gains a location sensor &mdash; it <em>reconstructs</em> location from its own
+action history. That is the whole reason the model-based box exists in the hierarchy.</p></div></section><section id="ex3"><h2><span class="snum">12</span><span>Exercise 3 — Scaling to a row of four</span></h2>
+<p class="lede"><strong>The task:</strong> extend <code>LOCATIONS</code> to
+<code>[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;]</code> in a row, update the movement
+logic, and ask whether the simple reflex agent still reaches <code>NoOp</code> sensibly.</p>
+
+<div class="note"><span class="tag">Scaling forces a semantic change</span>
+<p>With two squares, <code>Left</code> could be <em>absolute</em> &mdash; &ldquo;go left&rdquo; and
+&ldquo;go to A&rdquo; were the same instruction. In a row of four they are not. Movement has to become
+<em>relative</em>, and that single change is what makes this exercise more than bookkeeping. (It is
+also what Exercise 2's agent (c) was quietly exploiting.)</p></div><p class="codecap">Solution &mdash; an n-square row</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="c"># Exercise 3 — Scale up to a row of four squares: A - B - C - D</span></span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="c">#</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"><span class="c"># Note the change of semantics: with two squares "Left"/"Right" could be</span></span>
+<span class="ln" aria-hidden="true">4</span><span class="lc"><span class="c"># absolute (teleport to A / teleport to B). In a row of four they must become</span></span>
+<span class="ln" aria-hidden="true">5</span><span class="lc"><span class="c"># RELATIVE moves, which is what makes the exercise interesting.</span></span>
+<span class="ln" aria-hidden="true">6</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">7</span><span class="lc">ROW = [<span class="s">"A"</span>, <span class="s">"B"</span>, <span class="s">"C"</span>, <span class="s">"D"</span>]</span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">9</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">10</span><span class="lc"><span class="k">class</span> RowVacuumEnvironment:</span>
+<span class="ln" aria-hidden="true">11</span><span class="lc">    <span class="s">"""Same PEAS, but n squares in a row and Left/Right are one step, clamped at the ends."""</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">13</span><span class="lc">    <span class="k">def</span> <span class="f">__init__</span>(<span class="se">self</span>, locations=ROW, dirt_prob=<span class="n">0.5</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">14</span><span class="lc">        rng = random.<span class="f">Random</span>(seed)</span>
+<span class="ln" aria-hidden="true">15</span><span class="lc">        <span class="se">self</span>.locations = <span class="b">list</span>(locations)</span>
+<span class="ln" aria-hidden="true">16</span><span class="lc">        <span class="se">self</span>.status = {loc: (<span class="s">"Dirty"</span> <span class="k">if</span> rng.<span class="f">random</span>() &lt; dirt_prob <span class="k">else</span> <span class="s">"Clean"</span>) <span class="k">for</span> loc <span class="k">in</span> <span class="se">self</span>.locations}</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">        <span class="se">self</span>.index = rng.<span class="f">randrange</span>(<span class="b">len</span>(<span class="se">self</span>.locations))</span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">        <span class="se">self</span>.performance = <span class="n">0</span></span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">        <span class="se">self</span>.history = []</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">21</span><span class="lc">    @<span class="b">property</span></span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">    <span class="k">def</span> <span class="f">agent_location</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.locations[<span class="se">self</span>.index]</span>
+<span class="ln" aria-hidden="true">24</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">25</span><span class="lc">    <span class="k">def</span> <span class="f">percept</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">26</span><span class="lc">        <span class="k">return</span> (<span class="se">self</span>.agent_location, <span class="se">self</span>.status[<span class="se">self</span>.agent_location])</span>
+<span class="ln" aria-hidden="true">27</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">28</span><span class="lc">    <span class="k">def</span> <span class="f">execute</span>(<span class="se">self</span>, action):</span>
+<span class="ln" aria-hidden="true">29</span><span class="lc">        loc = <span class="se">self</span>.agent_location</span>
+<span class="ln" aria-hidden="true">30</span><span class="lc">        <span class="k">if</span> action == <span class="s">"Suck"</span>:</span>
+<span class="ln" aria-hidden="true">31</span><span class="lc">            <span class="k">if</span> <span class="se">self</span>.status[loc] == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">32</span><span class="lc">                <span class="se">self</span>.status[loc] = <span class="s">"Clean"</span></span>
+<span class="ln" aria-hidden="true">33</span><span class="lc">                <span class="se">self</span>.performance += <span class="n">10</span></span>
+<span class="ln" aria-hidden="true">34</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"Left"</span>:</span>
+<span class="ln" aria-hidden="true">35</span><span class="lc">            <span class="se">self</span>.index = <span class="b">max</span>(<span class="n">0</span>, <span class="se">self</span>.index - <span class="n">1</span>)          <span class="c"># clamp: bumping into the wall still costs a move</span></span>
+<span class="ln" aria-hidden="true">36</span><span class="lc">            <span class="se">self</span>.performance -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">37</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"Right"</span>:</span>
+<span class="ln" aria-hidden="true">38</span><span class="lc">            <span class="se">self</span>.index = <span class="b">min</span>(<span class="b">len</span>(<span class="se">self</span>.locations) - <span class="n">1</span>, <span class="se">self</span>.index + <span class="n">1</span>)</span>
+<span class="ln" aria-hidden="true">39</span><span class="lc">            <span class="se">self</span>.performance -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">40</span><span class="lc">        <span class="k">elif</span> action == <span class="s">"NoOp"</span>:</span>
+<span class="ln" aria-hidden="true">41</span><span class="lc">            <span class="k">pass</span></span>
+<span class="ln" aria-hidden="true">42</span><span class="lc">        <span class="k">else</span>:</span>
+<span class="ln" aria-hidden="true">43</span><span class="lc">            <span class="k">raise</span> <span class="f">ValueError</span>(f<span class="s">"Unknown action: {action}"</span>)</span>
+<span class="ln" aria-hidden="true">44</span><span class="lc">        <span class="se">self</span>.history.<span class="f">append</span>((loc, action, <span class="b">dict</span>(<span class="se">self</span>.status)))</span>
+<span class="ln" aria-hidden="true">45</span><span class="lc">        <span class="k">return</span> <span class="se">self</span>.<span class="f">percept</span>()</span>
+<span class="ln" aria-hidden="true">46</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">47</span><span class="lc">    <span class="k">def</span> <span class="f">is_clean</span>(<span class="se">self</span>):</span>
+<span class="ln" aria-hidden="true">48</span><span class="lc">        <span class="k">return</span> <span class="b">all</span>(v == <span class="s">"Clean"</span> <span class="k">for</span> v <span class="k">in</span> <span class="se">self</span>.status.<span class="f">values</span>())</span>
+<span class="ln" aria-hidden="true">49</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">50</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">51</span><span class="lc"><span class="k">def</span> <span class="f">run_row</span>(agent_program, steps=<span class="n">14</span>, seed=<span class="n">42</span>):</span>
+<span class="ln" aria-hidden="true">52</span><span class="lc">    env = <span class="f">RowVacuumEnvironment</span>(seed=seed)</span>
+<span class="ln" aria-hidden="true">53</span><span class="lc">    <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(steps):</span>
+<span class="ln" aria-hidden="true">54</span><span class="lc">        env.<span class="f">execute</span>(<span class="f">agent_program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">55</span><span class="lc">    <span class="k">return</span> env.performance, env.<span class="f">is_clean</span>(), env.history</span>
+<span class="ln" aria-hidden="true">56</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">57</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">58</span><span class="lc"><span class="k">def</span> <span class="f">row_simple_reflex_agent</span>(locations=ROW):</span>
+<span class="ln" aria-hidden="true">59</span><span class="lc">    <span class="s">"""Memoryless. The only thing it can key off is (location, status), so the</span></span>
+<span class="ln" aria-hidden="true">60</span><span class="lc"><span class="s">    best fixed rule is: sweep right, and at the right wall sweep left."""</span></span>
+<span class="ln" aria-hidden="true">61</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">62</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">63</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">64</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">65</span><span class="lc">        <span class="k">return</span> <span class="s">"Left"</span> <span class="k">if</span> location == locations[-<span class="n">1</span>] <span class="k">else</span> <span class="s">"Right"</span></span>
+<span class="ln" aria-hidden="true">66</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">67</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">68</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">69</span><span class="lc"><span class="k">def</span> <span class="f">row_model_based_agent</span>(locations=ROW):</span>
+<span class="ln" aria-hidden="true">70</span><span class="lc">    <span class="s">"""Internal state: what we have seen at every square. Sweep right to the wall,</span></span>
+<span class="ln" aria-hidden="true">71</span><span class="lc"><span class="s">    then left, and stop once all four are believed clean."""</span></span>
+<span class="ln" aria-hidden="true">72</span><span class="lc">    model = {loc: <span class="k">None</span> <span class="k">for</span> loc <span class="k">in</span> locations}</span>
+<span class="ln" aria-hidden="true">73</span><span class="lc">    direction = {<span class="s">"d"</span>: <span class="s">"Right"</span>}</span>
+<span class="ln" aria-hidden="true">74</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">75</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">76</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">77</span><span class="lc">        model[location] = status</span>
+<span class="ln" aria-hidden="true">78</span><span class="lc">        <span class="k">if</span> status == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">79</span><span class="lc">            model[location] = <span class="s">"Clean"</span></span>
+<span class="ln" aria-hidden="true">80</span><span class="lc">            <span class="k">return</span> <span class="s">"Suck"</span></span>
+<span class="ln" aria-hidden="true">81</span><span class="lc">        <span class="k">if</span> <span class="b">all</span>(v == <span class="s">"Clean"</span> <span class="k">for</span> v <span class="k">in</span> model.<span class="f">values</span>()):</span>
+<span class="ln" aria-hidden="true">82</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span>                                  <span class="c"># every square seen, every square clean</span></span>
+<span class="ln" aria-hidden="true">83</span><span class="lc">        <span class="k">if</span> location == locations[-<span class="n">1</span>]:</span>
+<span class="ln" aria-hidden="true">84</span><span class="lc">            direction[<span class="s">"d"</span>] = <span class="s">"Left"</span></span>
+<span class="ln" aria-hidden="true">85</span><span class="lc">        <span class="k">elif</span> location == locations[<span class="n">0</span>]:</span>
+<span class="ln" aria-hidden="true">86</span><span class="lc">            direction[<span class="s">"d"</span>] = <span class="s">"Right"</span></span>
+<span class="ln" aria-hidden="true">87</span><span class="lc">        <span class="k">return</span> direction[<span class="s">"d"</span>]</span>
+<span class="ln" aria-hidden="true">88</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">89</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">90</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">91</span><span class="lc"><span class="k">for</span> label, factory <span class="k">in</span> [(<span class="s">"Simple Reflex     "</span>, row_simple_reflex_agent),</span>
+<span class="ln" aria-hidden="true">92</span><span class="lc">                       (<span class="s">"Model-Based Reflex"</span>, row_model_based_agent)]:</span>
+<span class="ln" aria-hidden="true">93</span><span class="lc">    perf, clean, trace = <span class="f">run_row</span>(<span class="f">factory</span>())</span>
+<span class="ln" aria-hidden="true">94</span><span class="lc">    actions = <span class="s">" "</span>.<span class="f">join</span>(a <span class="k">for</span> _, a, _ <span class="k">in</span> trace)</span>
+<span class="ln" aria-hidden="true">95</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{label}  perf={perf:4d}  all clean={str(clean):5s}"</span>)</span>
+<span class="ln" aria-hidden="true">96</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{'':20s}actions: {actions}"</span>)</span>
+<span class="ln" aria-hidden="true">97</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">98</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">99</span><span class="lc"><span class="s">Does the Simple Reflex Agent still reach NoOp sensibly? No - and it is worse</span></span>
+<span class="ln" aria-hidden="true">100</span><span class="lc"><span class="s">than that. Look at its action trace: after cleaning its way right it settles</span></span>
+<span class="ln" aria-hidden="true">101</span><span class="lc"><span class="s">into "Left Right Left Right ..." - it is not patrolling the row, it is stuck</span></span>
+<span class="ln" aria-hidden="true">102</span><span class="lc"><span class="s">oscillating between the last two squares.</span></span>
+<span class="ln" aria-hidden="true">103</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">104</span><span class="lc"><span class="s">Why: the rule "Left at the right wall, otherwise Right" makes the right wall a</span></span>
+<span class="ln" aria-hidden="true">105</span><span class="lc"><span class="s">2-cycle. Direction of travel is *state*, and a memoryless agent has nowhere to</span></span>
+<span class="ln" aria-hidden="true">106</span><span class="lc"><span class="s">keep it, so it cannot commit to a leftward sweep. With n=4 it gets away with</span></span>
+<span class="ln" aria-hidden="true">107</span><span class="lc"><span class="s">this, because it cleaned A-D on the way out. With n=8 it does not - it strands</span></span>
+<span class="ln" aria-hidden="true">108</span><span class="lc"><span class="s">itself at the far end while dirt sits behind it:"""</span>)</span>
+<span class="ln" aria-hidden="true">109</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">110</span><span class="lc"><span class="k">for</span> n <span class="k">in</span> (<span class="n">2</span>, <span class="n">4</span>, <span class="n">8</span>):</span>
+<span class="ln" aria-hidden="true">111</span><span class="lc">    locations = [<span class="b">chr</span>(<span class="b">ord</span>(<span class="s">"A"</span>) + i) <span class="k">for</span> i <span class="k">in</span> <span class="b">range</span>(n)]</span>
+<span class="ln" aria-hidden="true">112</span><span class="lc">    <span class="k">for</span> label, factory <span class="k">in</span> [(<span class="s">"Simple Reflex"</span>, row_simple_reflex_agent),</span>
+<span class="ln" aria-hidden="true">113</span><span class="lc">                           (<span class="s">"Model-Based "</span>, row_model_based_agent)]:</span>
+<span class="ln" aria-hidden="true">114</span><span class="lc">        env = <span class="f">RowVacuumEnvironment</span>(locations=locations, seed=<span class="n">42</span>)</span>
+<span class="ln" aria-hidden="true">115</span><span class="lc">        program = <span class="f">factory</span>(locations)</span>
+<span class="ln" aria-hidden="true">116</span><span class="lc">        <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(<span class="n">4</span> * n):</span>
+<span class="ln" aria-hidden="true">117</span><span class="lc">            env.<span class="f">execute</span>(<span class="f">program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">118</span><span class="lc">        <span class="b">print</span>(f<span class="s">"  n={n}  {label}  perf={env.performance:4d}  clean={env.is_clean()}"</span>)</span>
+<span class="ln" aria-hidden="true">119</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">120</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">121</span><span class="lc"><span class="s">And NoOp is out of reach for a second, independent reason: NoOp is only</span></span>
+<span class="ln" aria-hidden="true">122</span><span class="lc"><span class="s">rational once you know *every* square is clean, and "every square" is a fact</span></span>
+<span class="ln" aria-hidden="true">123</span><span class="lc"><span class="s">about squares you are not standing on. A memoryless agent has no place to put</span></span>
+<span class="ln" aria-hidden="true">124</span><span class="lc"><span class="s">that fact, so its rule set cannot even express the NoOp condition. The</span></span>
+<span class="ln" aria-hidden="true">125</span><span class="lc"><span class="s">model-based agent keeps both pieces of state - direction of travel and what it</span></span>
+<span class="ln" aria-hidden="true">126</span><span class="lc"><span class="s">has seen where - so it sweeps properly and then stops.</span></span>
+<span class="ln" aria-hidden="true">127</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">128</span><span class="lc"><span class="s">Exercise 2's lesson applies here too: if you must stay memoryless, randomise."""</span>)</span>
+<span class="ln" aria-hidden="true">129</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">130</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">131</span><span class="lc"><span class="k">def</span> <span class="f">row_random_reflex_agent</span>(locations=ROW, seed=<span class="n">7</span>):</span>
+<span class="ln" aria-hidden="true">132</span><span class="lc">    <span class="s">"""Memoryless, but breaks the oscillation trap with a coin flip."""</span></span>
+<span class="ln" aria-hidden="true">133</span><span class="lc">    rng = random.<span class="f">Random</span>(seed)</span>
+<span class="ln" aria-hidden="true">134</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">135</span><span class="lc">        _, status = percept</span>
+<span class="ln" aria-hidden="true">136</span><span class="lc">        <span class="k">return</span> <span class="s">"Suck"</span> <span class="k">if</span> status == <span class="s">"Dirty"</span> <span class="k">else</span> rng.<span class="f">choice</span>([<span class="s">"Left"</span>, <span class="s">"Right"</span>])</span>
+<span class="ln" aria-hidden="true">137</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">138</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">139</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">140</span><span class="lc"><span class="k">for</span> n <span class="k">in</span> (<span class="n">4</span>, <span class="n">8</span>):</span>
+<span class="ln" aria-hidden="true">141</span><span class="lc">    locations = [<span class="b">chr</span>(<span class="b">ord</span>(<span class="s">"A"</span>) + i) <span class="k">for</span> i <span class="k">in</span> <span class="b">range</span>(n)]</span>
+<span class="ln" aria-hidden="true">142</span><span class="lc">    cleaned, perfs = <span class="n">0</span>, []</span>
+<span class="ln" aria-hidden="true">143</span><span class="lc">    <span class="k">for</span> trial <span class="k">in</span> <span class="b">range</span>(<span class="n">20</span>):</span>
+<span class="ln" aria-hidden="true">144</span><span class="lc">        env = <span class="f">RowVacuumEnvironment</span>(locations=locations, seed=<span class="n">42</span>)</span>
+<span class="ln" aria-hidden="true">145</span><span class="lc">        program = <span class="f">row_random_reflex_agent</span>(locations, seed=trial)</span>
+<span class="ln" aria-hidden="true">146</span><span class="lc">        <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(<span class="n">4</span> * n):</span>
+<span class="ln" aria-hidden="true">147</span><span class="lc">            env.<span class="f">execute</span>(<span class="f">program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">148</span><span class="lc">        cleaned += env.<span class="f">is_clean</span>()</span>
+<span class="ln" aria-hidden="true">149</span><span class="lc">        perfs.<span class="f">append</span>(env.performance)</span>
+<span class="ln" aria-hidden="true">150</span><span class="lc">    <span class="b">print</span>(f<span class="s">"  n={n}  Random Reflex over {4*n} steps: cleaned the row in "</span></span>
+<span class="ln" aria-hidden="true">151</span><span class="lc">          f<span class="s">"{cleaned}/20 trials, avg perf {sum(perfs)/len(perfs):.1f}"</span>)</span>
+<span class="ln" aria-hidden="true">152</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">153</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">154</span><span class="lc"><span class="s">Randomising escapes the trap but is slow: a random walk's cover time grows</span></span>
+<span class="ln" aria-hidden="true">155</span><span class="lc"><span class="s">like n-squared, so within a fixed step budget it often has not visited</span></span>
+<span class="ln" aria-hidden="true">156</span><span class="lc"><span class="s">everything yet. Memorylessness is survivable, not free - which is the point of</span></span>
+<span class="ln" aria-hidden="true">157</span><span class="lc"><span class="s">the exercise."""</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;7</div><div class="atxt">The setup and the new world: four squares in a row.</div></div><div class="ann-row"><div class="lref">L10&ndash;11</div><div class="atxt">A fresh class rather than a subclass &mdash; the movement model differs too much to inherit cleanly.</div></div><div class="ann-row"><div class="lref">L13&ndash;16</div><div class="atxt">As before, but the world size is now a parameter. Line 16's comprehension is unchanged except that it iterates over <code>self.locations</code>.</div></div><div class="ann-row"><div class="lref">L17</div><div class="atxt">Position is now an <strong>index</strong>, not a name. That is the core representational change: in a row you need to know how far along you are, not just which label you are on.</div></div><div class="ann-row"><div class="lref">L18&ndash;19</div><div class="atxt">Scorecard and trace, unchanged.</div></div><div class="ann-row"><div class="lref">L21&ndash;23</div><div class="atxt">A <code>@property</code> so <code>agent_location</code> still reads like an attribute, keeping every agent's <code>percept</code> unpacking working unchanged. The old interface is preserved over a new representation.</div></div><div class="ann-row"><div class="lref">L25&ndash;26</div><div class="atxt">Identical percept contract: current location and its status.</div></div><div class="ann-row"><div class="lref">L28&ndash;33</div><div class="atxt"><code>Suck</code> is unchanged &mdash; it never depended on the world's shape.</div></div><div class="ann-row"><div class="lref">L34&ndash;36</div><div class="atxt"><strong><code>Left</code> is now relative:</strong> one step back, <code>max(0, ...)</code> clamping at the wall. Note the &minus;1 is charged <em>even when the move is blocked</em> &mdash; walking into a wall costs you.</div></div><div class="ann-row"><div class="lref">L37&ndash;39</div><div class="atxt"><code>Right</code> mirrors it, clamped at the far end.</div></div><div class="ann-row"><div class="lref">L40&ndash;43</div><div class="atxt"><code>NoOp</code> and the error branch, unchanged.</div></div><div class="ann-row"><div class="lref">L44&ndash;45</div><div class="atxt"><code>dict(self.status)</code> is a shallow copy &mdash; sufficient here, because the values are immutable strings.</div></div><div class="ann-row"><div class="lref">L47&ndash;55</div><div class="atxt"><code>is_clean</code> and the runner, unchanged in structure.</div></div><div class="ann-row"><div class="lref">L58&ndash;66</div><div class="atxt"><strong>The reflex agent, scaled.</strong> Memoryless, so its rule can only key off <code>(location, status)</code>. Line 65 is the best fixed rule available: sweep right, and reverse at the right wall.</div></div><div class="ann-row"><div class="lref">L69&ndash;73</div><div class="atxt"><strong>The model-based agent, scaled.</strong> Two pieces of state now: what it has seen at every square (line 72) <em>and</em> which way it is travelling (line 73). That second one is new &mdash; it did not need it with two squares.</div></div><div class="ann-row"><div class="lref">L75&ndash;80</div><div class="atxt">Observe, then suck dirt. Line 79 pre-records the success.</div></div><div class="ann-row"><div class="lref">L81&ndash;82</div><div class="atxt">Idle once every square is known clean. <code>all(...)</code> over the model is <code>False</code> while any entry is still <code>None</code>, so the agent cannot stop before visiting everywhere &mdash; the unvisited state is doing real work.</div></div><div class="ann-row"><div class="lref">L83&ndash;87</div><div class="atxt">Reverse direction at either wall, then travel that way. This is the sweep the reflex agent cannot perform.</div></div><div class="ann-row"><div class="lref">L91&ndash;96</div><div class="atxt">Run both and print their action sequences.</div></div><div class="ann-row"><div class="lref">L98&ndash;108</div><div class="atxt">The analysis of what those sequences show.</div></div><div class="ann-row"><div class="lref">L110&ndash;118</div><div class="atxt"><strong>The scaling test.</strong> Same agents at n=2, 4 and 8, with a step budget of <code>4n</code> so the budget scales with the problem. Line 111 generates location names with <code>chr(ord('A') + i)</code>.</div></div><div class="ann-row"><div class="lref">L120&ndash;128</div><div class="atxt">The second half of the analysis: the independent reason <code>NoOp</code> is unreachable.</div></div><div class="ann-row"><div class="lref">L131&ndash;137</div><div class="atxt">A randomised memoryless agent, applying Exercise 2's lesson to this problem.</div></div><div class="ann-row"><div class="lref">L140&ndash;151</div><div class="atxt">20 trials per size, since a random agent's single run tells you nothing. Line 148 exploits <code>True == 1</code> to count successes.</div></div><div class="ann-row"><div class="lref">L153&ndash;157</div><div class="atxt">The closing caveat about how slow random search actually is.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">Simple Reflex       perf=  19  all clean=True 
+                    actions: Right Suck Right Suck Right Suck Left Right Left Right Left Right Left Right
+Model-Based Reflex  perf=  27  all clean=True 
+                    actions: Right Suck Right Suck Right Suck NoOp NoOp NoOp NoOp NoOp NoOp NoOp NoOp
+
+Does the Simple Reflex Agent still reach NoOp sensibly? No - and it is worse
+than that. Look at its action trace: after cleaning its way right it settles
+into "Left Right Left Right ..." - it is not patrolling the row, it is stuck
+oscillating between the last two squares.
+
+Why: the rule "Left at the right wall, otherwise Right" makes the right wall a
+2-cycle. Direction of travel is *state*, and a memoryless agent has nowhere to
+keep it, so it cannot commit to a leftward sweep. With n=4 it gets away with
+this, because it cleaned A-D on the way out. With n=8 it does not - it strands
+itself at the far end while dirt sits behind it:
+  n=2  Simple Reflex  perf=   3  clean=True
+  n=2  Model-Based   perf=   9  clean=True
+  n=4  Simple Reflex  perf=  17  clean=True
+  n=4  Model-Based   perf=  27  clean=True
+  n=8  Simple Reflex  perf= -21  clean=False
+  n=8  Model-Based   perf=  32  clean=True
+
+And NoOp is out of reach for a second, independent reason: NoOp is only
+rational once you know *every* square is clean, and "every square" is a fact
+about squares you are not standing on. A memoryless agent has no place to put
+that fact, so its rule set cannot even express the NoOp condition. The
+model-based agent keeps both pieces of state - direction of travel and what it
+has seen where - so it sweeps properly and then stops.
+
+Exercise 2's lesson applies here too: if you must stay memoryless, randomise.
+  n=4  Random Reflex over 16 steps: cleaned the row in 14/20 trials, avg perf 13.7
+  n=8  Random Reflex over 32 steps: cleaned the row in 13/20 trials, avg perf 4.8
+
+Randomising escapes the trap but is slow: a random walk's cover time grows
+like n-squared, so within a fixed step budget it often has not visited
+everything yet. Memorylessness is survivable, not free - which is the point of
+the exercise.</pre></div>
+<h3>The answer: no, and worse than you would expect</h3>
+<p>Look at the reflex agent's trace: after cleaning its way right it settles into
+<code>Left Right Left Right ...</code>. It is not patrolling the row &mdash; it is
+<strong>stuck oscillating between the last two squares</strong>.</p>
+<p>The rule &ldquo;<code>Left</code> at the right wall, otherwise <code>Right</code>&rdquo; makes that
+wall a 2-cycle: step left off the wall, and the rule immediately sends you back. <strong>Direction of
+travel is state</strong>, and a memoryless agent has nowhere to keep it, so it cannot commit to a
+leftward sweep. At n=4 it gets away with this because it cleaned everything on the way out. At n=8 it
+does not:</p>
+<div class="tablewrap"><table><thead><tr><th>Row size</th><th>Simple reflex</th><th>Model-based</th><th>Random reflex (20 trials)</th></tr></thead><tbody><tr><td>n = 2</td><td>3, clean</td><td>9, clean</td><td>&mdash;</td></tr><tr><td>n = 4</td><td>17, clean</td><td>27, clean</td><td>cleaned 14/20, avg 13.7</td></tr><tr><td>n = 8</td><td><strong>&minus;21, never clean</strong></td><td>32, clean</td><td>cleaned 13/20, avg 4.8</td></tr></tbody></table></div>
+<p>And <code>NoOp</code> is out of reach for a second, independent reason: it is only rational once
+you know <em>every</em> square is clean &mdash; a fact about squares you are not standing on. A
+memoryless agent has no place to put that fact, so its rule set cannot even express the stopping
+condition.</p>
+<div class="warn"><span class="tag">Randomising is survivable, not free</span>
+<p>The coin flip escapes the oscillation trap, but a random walk's cover time grows like
+<em>n</em>&sup2;, so inside a fixed step budget it frequently has not visited everything yet &mdash;
+it fails to clean the row in about a third of trials at both sizes. Memory is not a luxury here;
+it is the difference between <em>O(n)</em> and <em>O(n&sup2;)</em>.</p></div></section><section id="ex4"><h2><span class="snum">13</span><span>Exercise 4 — Adding time pressure</span></h2>
+<p class="lede"><strong>The task:</strong> add a time-pressure term to
+<code>utility_based_agent</code> &mdash; a deadline after which <code>Suck</code> is worth less
+&mdash; and observe how the agent's choices shift.</p>
+
+<p>Two supporting repairs are needed first, both diagnosed in Exercise 1. The original utility agent
+prices a move at a flat &minus;2 with no term for what it might find, so <strong>travel is never
+worth it</strong>; and its beliefs never expire, so a square it cleaned long ago still looks clean.
+Adding a deadline to an agent that refuses to move would demonstrate nothing.</p>
+<p class="codecap">Solution &mdash; deadline, lookahead and decaying belief</p><div class="codewrap"><pre class="code"><code><span class="ln" aria-hidden="true">1</span><span class="lc"><span class="c"># Exercise 4 — Add time pressure to the utility function</span></span>
+<span class="ln" aria-hidden="true">2</span><span class="lc"><span class="c">#</span></span>
+<span class="ln" aria-hidden="true">3</span><span class="lc"><span class="c"># Three changes to `utility_based_agent`:</span></span>
+<span class="ln" aria-hidden="true">4</span><span class="lc"><span class="c">#   1. A DEADLINE term: a clean square is worth full value up to the deadline</span></span>
+<span class="ln" aria-hidden="true">5</span><span class="lc"><span class="c">#      and decays afterwards ("the shift is ending, cleaning matters less").</span></span>
+<span class="ln" aria-hidden="true">6</span><span class="lc"><span class="c">#   2. A one-step LOOKAHEAD, so moving can be worth something. In the original,</span></span>
+<span class="ln" aria-hidden="true">7</span><span class="lc"><span class="c">#      moving scored a flat -2 while Suck-on-a-clean-square scored 0, so the</span></span>
+<span class="ln" aria-hidden="true">8</span><span class="lc"><span class="c">#      agent could never justify walking anywhere - the parking bug Exercise 1</span></span>
+<span class="ln" aria-hidden="true">9</span><span class="lc"><span class="c">#      exposed.</span></span>
+<span class="ln" aria-hidden="true">10</span><span class="lc"><span class="c">#   3. A DECAYING BELIEF, so a square we cleaned long ago looks suspicious</span></span>
+<span class="ln" aria-hidden="true">11</span><span class="lc"><span class="c">#      again - Exercise 1's staleness fix, expressed as a probability instead</span></span>
+<span class="ln" aria-hidden="true">12</span><span class="lc"><span class="c">#      of a hard cutoff.</span></span>
+<span class="ln" aria-hidden="true">13</span><span class="lc"><span class="c">#</span></span>
+<span class="ln" aria-hidden="true">14</span><span class="lc"><span class="c"># Runs in Exercise 1's StochasticVacuumEnvironment, so run that cell first.</span></span>
+<span class="ln" aria-hidden="true">15</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">16</span><span class="lc"><span class="k">def</span> <span class="f">utility_agent_with_deadline</span>(battery_start=<span class="n">6</span>, deadline=<span class="n">4</span>, decay=<span class="n">0.6</span>,</span>
+<span class="ln" aria-hidden="true">17</span><span class="lc">                                respawn_belief=<span class="n">0.15</span>, verbose=<span class="k">False</span>):</span>
+<span class="ln" aria-hidden="true">18</span><span class="lc">    state = {<span class="s">"battery"</span>: battery_start, <span class="s">"t"</span>: <span class="n">0</span>}</span>
+<span class="ln" aria-hidden="true">19</span><span class="lc">    belief = {loc: <span class="s">"Unknown"</span> <span class="k">for</span> loc <span class="k">in</span> LOCATIONS}</span>
+<span class="ln" aria-hidden="true">20</span><span class="lc">    last_seen = {loc: <span class="n">0</span> <span class="k">for</span> loc <span class="k">in</span> LOCATIONS}</span>
+<span class="ln" aria-hidden="true">21</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">22</span><span class="lc">    <span class="k">def</span> <span class="f">time_factor</span>(t):</span>
+<span class="ln" aria-hidden="true">23</span><span class="lc">        <span class="s">"""What a clean square is worth at time t: full value up to the deadline, then decaying."""</span></span>
+<span class="ln" aria-hidden="true">24</span><span class="lc">        <span class="k">return</span> <span class="n">1.0</span> <span class="k">if</span> t &lt;= deadline <span class="k">else</span> decay ** (t - deadline)</span>
+<span class="ln" aria-hidden="true">25</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">26</span><span class="lc">    <span class="k">def</span> <span class="f">p_dirty</span>(dest, t):</span>
+<span class="ln" aria-hidden="true">27</span><span class="lc">        <span class="s">"""How likely is the square over there to be dirty, given what we last saw?"""</span></span>
+<span class="ln" aria-hidden="true">28</span><span class="lc">        <span class="k">if</span> belief[dest] == <span class="s">"Dirty"</span>:</span>
+<span class="ln" aria-hidden="true">29</span><span class="lc">            <span class="k">return</span> <span class="n">1.0</span></span>
+<span class="ln" aria-hidden="true">30</span><span class="lc">        <span class="k">if</span> belief[dest] == <span class="s">"Unknown"</span>:</span>
+<span class="ln" aria-hidden="true">31</span><span class="lc">            <span class="k">return</span> <span class="n">0.5</span></span>
+<span class="ln" aria-hidden="true">32</span><span class="lc">        age = t - last_seen[dest]                             <span class="c"># the longer ago we looked, the less we know</span></span>
+<span class="ln" aria-hidden="true">33</span><span class="lc">        <span class="k">return</span> <span class="n">1</span> - (<span class="n">1</span> - respawn_belief) ** age</span>
+<span class="ln" aria-hidden="true">34</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">35</span><span class="lc">    <span class="k">def</span> <span class="f">utility</span>(action, location, status, t, battery):</span>
+<span class="ln" aria-hidden="true">36</span><span class="lc">        <span class="k">if</span> action == <span class="s">"Suck"</span>:</span>
+<span class="ln" aria-hidden="true">37</span><span class="lc">            <span class="k">return</span> <span class="n">10</span> * <span class="f">time_factor</span>(t) <span class="k">if</span> status == <span class="s">"Dirty"</span> <span class="k">else</span> -<span class="n">0.5</span>   <span class="c"># sucking a clean square wastes an actuation</span></span>
+<span class="ln" aria-hidden="true">38</span><span class="lc">        <span class="k">if</span> action <span class="k">in</span> (<span class="s">"Left"</span>, <span class="s">"Right"</span>):</span>
+<span class="ln" aria-hidden="true">39</span><span class="lc">            dest = <span class="s">"A"</span> <span class="k">if</span> action == <span class="s">"Left"</span> <span class="k">else</span> <span class="s">"B"</span></span>
+<span class="ln" aria-hidden="true">40</span><span class="lc">            <span class="k">if</span> dest == location:</span>
+<span class="ln" aria-hidden="true">41</span><span class="lc">                <span class="k">return</span> -<span class="n">5.0</span>                                   <span class="c"># a move that goes nowhere</span></span>
+<span class="ln" aria-hidden="true">42</span><span class="lc">            u = <span class="f">p_dirty</span>(dest, t) * <span class="n">10</span> * <span class="f">time_factor</span>(t + <span class="n">1</span>) - <span class="n">2</span></span>
+<span class="ln" aria-hidden="true">43</span><span class="lc">            <span class="k">if</span> battery &lt;= <span class="n">2</span>:</span>
+<span class="ln" aria-hidden="true">44</span><span class="lc">                u -= <span class="n">5</span>                                        <span class="c"># hoard energy when nearly flat</span></span>
+<span class="ln" aria-hidden="true">45</span><span class="lc">            <span class="k">return</span> u</span>
+<span class="ln" aria-hidden="true">46</span><span class="lc">        <span class="k">return</span> <span class="n">0.0</span>                                            <span class="c"># NoOp: the do-nothing baseline</span></span>
+<span class="ln" aria-hidden="true">47</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">48</span><span class="lc">    <span class="k">def</span> <span class="f">program</span>(percept):</span>
+<span class="ln" aria-hidden="true">49</span><span class="lc">        location, status = percept</span>
+<span class="ln" aria-hidden="true">50</span><span class="lc">        state[<span class="s">"t"</span>] += <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">51</span><span class="lc">        belief[location] = status</span>
+<span class="ln" aria-hidden="true">52</span><span class="lc">        last_seen[location] = state[<span class="s">"t"</span>]</span>
+<span class="ln" aria-hidden="true">53</span><span class="lc">        <span class="k">if</span> state[<span class="s">"battery"</span>] &lt;= <span class="n">0</span>:</span>
+<span class="ln" aria-hidden="true">54</span><span class="lc">            <span class="k">return</span> <span class="s">"NoOp"</span></span>
+<span class="ln" aria-hidden="true">55</span><span class="lc">        scores = {a: <span class="f">utility</span>(a, location, status, state[<span class="s">"t"</span>], state[<span class="s">"battery"</span>])</span>
+<span class="ln" aria-hidden="true">56</span><span class="lc">                  <span class="k">for</span> a <span class="k">in</span> (<span class="s">"Suck"</span>, <span class="s">"Left"</span>, <span class="s">"Right"</span>, <span class="s">"NoOp"</span>)}</span>
+<span class="ln" aria-hidden="true">57</span><span class="lc">        action = <span class="b">max</span>(scores, key=scores.get)</span>
+<span class="ln" aria-hidden="true">58</span><span class="lc">        <span class="k">if</span> verbose:</span>
+<span class="ln" aria-hidden="true">59</span><span class="lc">            pretty = <span class="s">"  "</span>.<span class="f">join</span>(f<span class="s">"{a}={scores[a]:+6.1f}"</span> <span class="k">for</span> a <span class="k">in</span> (<span class="s">"Suck"</span>, <span class="s">"Left"</span>, <span class="s">"Right"</span>, <span class="s">"NoOp"</span>))</span>
+<span class="ln" aria-hidden="true">60</span><span class="lc">            flag = <span class="s">""</span> <span class="k">if</span> state[<span class="s">"t"</span>] &lt;= deadline <span class="k">else</span> <span class="s">"  (past deadline)"</span></span>
+<span class="ln" aria-hidden="true">61</span><span class="lc">            <span class="b">print</span>(f<span class="s">"  t={state['t']:2d} at {location} ({status:5s})  {pretty}  -&gt; {action}{flag}"</span>)</span>
+<span class="ln" aria-hidden="true">62</span><span class="lc">        <span class="k">if</span> action == <span class="s">"Suck"</span>:</span>
+<span class="ln" aria-hidden="true">63</span><span class="lc">            belief[location] = <span class="s">"Clean"</span></span>
+<span class="ln" aria-hidden="true">64</span><span class="lc">        <span class="k">if</span> action <span class="k">in</span> (<span class="s">"Left"</span>, <span class="s">"Right"</span>, <span class="s">"Suck"</span>):</span>
+<span class="ln" aria-hidden="true">65</span><span class="lc">            state[<span class="s">"battery"</span>] -= <span class="n">1</span></span>
+<span class="ln" aria-hidden="true">66</span><span class="lc">        <span class="k">return</span> action</span>
+<span class="ln" aria-hidden="true">67</span><span class="lc">    <span class="k">return</span> program</span>
+<span class="ln" aria-hidden="true">68</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">69</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">70</span><span class="lc">STEPS = <span class="n">18</span></span>
+<span class="ln" aria-hidden="true">71</span><span class="lc"><span class="b">print</span>(f<span class="s">"One run, deadline=6 — watch the agent give up as the clock runs out:\n"</span>)</span>
+<span class="ln" aria-hidden="true">72</span><span class="lc">env = <span class="f">StochasticVacuumEnvironment</span>(seed=<span class="n">5</span>, respawn_prob=<span class="n">0.15</span>)</span>
+<span class="ln" aria-hidden="true">73</span><span class="lc">program = <span class="f">utility_agent_with_deadline</span>(battery_start=STEPS, deadline=<span class="n">6</span>, verbose=<span class="k">True</span>)</span>
+<span class="ln" aria-hidden="true">74</span><span class="lc"><span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(STEPS):</span>
+<span class="ln" aria-hidden="true">75</span><span class="lc">    env.<span class="f">execute</span>(<span class="f">program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">76</span><span class="lc"><span class="b">print</span>(f<span class="s">"\n  -&gt; performance={env.performance}, cleanliness={env.cleanliness():.0%}\n"</span>)</span>
+<span class="ln" aria-hidden="true">77</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">78</span><span class="lc"><span class="b">print</span>(f<span class="s">"{'deadline':&gt;10s}{'avg performance':&gt;18s}{'avg cleanliness':&gt;18s}"</span>)</span>
+<span class="ln" aria-hidden="true">79</span><span class="lc"><span class="b">print</span>(<span class="s">"-"</span> * <span class="n">46</span>)</span>
+<span class="ln" aria-hidden="true">80</span><span class="lc"><span class="k">for</span> deadline <span class="k">in</span> (STEPS, <span class="n">14</span>, <span class="n">12</span>, <span class="n">10</span>, <span class="n">8</span>, <span class="n">6</span>, <span class="n">4</span>, <span class="n">2</span>, <span class="n">0</span>):</span>
+<span class="ln" aria-hidden="true">81</span><span class="lc">    results = []</span>
+<span class="ln" aria-hidden="true">82</span><span class="lc">    <span class="k">for</span> s <span class="k">in</span> <span class="b">range</span>(<span class="n">60</span>):</span>
+<span class="ln" aria-hidden="true">83</span><span class="lc">        env = <span class="f">StochasticVacuumEnvironment</span>(seed=s, respawn_prob=<span class="n">0.15</span>)</span>
+<span class="ln" aria-hidden="true">84</span><span class="lc">        program = <span class="f">utility_agent_with_deadline</span>(battery_start=STEPS, deadline=deadline)</span>
+<span class="ln" aria-hidden="true">85</span><span class="lc">        <span class="k">for</span> _ <span class="k">in</span> <span class="b">range</span>(STEPS):</span>
+<span class="ln" aria-hidden="true">86</span><span class="lc">            env.<span class="f">execute</span>(<span class="f">program</span>(env.<span class="f">percept</span>()))</span>
+<span class="ln" aria-hidden="true">87</span><span class="lc">        results.<span class="f">append</span>((env.performance, env.<span class="f">cleanliness</span>()))</span>
+<span class="ln" aria-hidden="true">88</span><span class="lc">    <span class="b">print</span>(f<span class="s">"{deadline:&gt;10d}{sum(r[0] for r in results)/len(results):&gt;18.1f}"</span></span>
+<span class="ln" aria-hidden="true">89</span><span class="lc">          f<span class="s">"{sum(r[1] for r in results)/len(results):&gt;17.0%}"</span>)</span>
+<span class="ln" aria-hidden="true">90</span><span class="lc"> </span>
+<span class="ln" aria-hidden="true">91</span><span class="lc"><span class="b">print</span>(<span class="s">"""</span></span>
+<span class="ln" aria-hidden="true">92</span><span class="lc"><span class="s">How the choices shift: early in the run a trip to the other square is worth</span></span>
+<span class="ln" aria-hidden="true">93</span><span class="lc"><span class="s">roughly p_dirty x 10 minus the -2 travel cost, so the agent patrols and cleans.</span></span>
+<span class="ln" aria-hidden="true">94</span><span class="lc"><span class="s">Once t passes the deadline, time_factor shrinks that payoff geometrically while</span></span>
+<span class="ln" aria-hidden="true">95</span><span class="lc"><span class="s">the travel cost stays at -2. The move term crosses below NoOp's flat 0 and the</span></span>
+<span class="ln" aria-hidden="true">96</span><span class="lc"><span class="s">agent stops travelling; a little later even Suck-on-dirt falls under 0 and it</span></span>
+<span class="ln" aria-hidden="true">97</span><span class="lc"><span class="s">stops cleaning altogether. Tighten the deadline and that crossover simply</span></span>
+<span class="ln" aria-hidden="true">98</span><span class="lc"><span class="s">happens sooner, so the table slides down gradually instead of flipping at one</span></span>
+<span class="ln" aria-hidden="true">99</span><span class="lc"><span class="s">value - cleanliness falls monotonically from 76% to 50%, and performance</span></span>
+<span class="ln" aria-hidden="true">100</span><span class="lc"><span class="s">tracks it (the 6-vs-4 blip is seed noise, not a real reversal).</span></span>
+<span class="ln" aria-hidden="true">101</span><span class="lc"><span class="s"></span></span>
+<span class="ln" aria-hidden="true">102</span><span class="lc"><span class="s">That is what makes utility agents worth the extra machinery: nobody wrote</span></span>
+<span class="ln" aria-hidden="true">103</span><span class="lc"><span class="s">"if late, stop cleaning". The behaviour falls out of arithmetic between</span></span>
+<span class="ln" aria-hidden="true">104</span><span class="lc"><span class="s">competing terms. It is also why they are the hardest to debug - Exercise 1's</span></span>
+<span class="ln" aria-hidden="true">105</span><span class="lc"><span class="s">failure (parking on one square forever) was not a broken rule, it was two</span></span>
+<span class="ln" aria-hidden="true">106</span><span class="lc"><span class="s">terms priced wrong."""</span>)</span></code></pre></div><div class="ann"><div class="ann-row"><div class="lref">L1&ndash;14</div><div class="atxt">The three changes, and a note that this cell reuses Exercise 1's stochastic world &mdash; a static world has no time dimension worth pressuring.</div></div><div class="ann-row"><div class="lref">L16&ndash;17</div><div class="atxt">Every knob is a parameter, so the behaviour can be swept rather than argued about.</div></div><div class="ann-row"><div class="lref">L18&ndash;20</div><div class="atxt">State: battery and clock together, beliefs about each square, and when each was last observed. Squares start <code>&quot;Unknown&quot;</code>, which is distinct from clean or dirty.</div></div><div class="ann-row"><div class="lref">L22&ndash;24</div><div class="atxt"><strong>The deadline term.</strong> A clean square is worth full value up to the deadline; afterwards its worth decays geometrically at <code>decay ** (t - deadline)</code>. At <code>decay=0.6</code> that is a fast fade &mdash; five steps past the deadline, value is down to about 8%.</div></div><div class="ann-row"><div class="lref">L26&ndash;33</div><div class="atxt"><strong>The decaying belief.</strong> Known dirty is certainty (1.0); never visited is a coin flip (0.5); otherwise the probability it has become dirty again grows with how long ago you looked: <code>1 - (1 - respawn_belief) ** age</code>. This is Exercise 1's staleness fix expressed as a probability rather than a hard cutoff &mdash; and it is <em>calibrated to the true respawn rate</em>, which is what makes it a model rather than a guess.</div></div><div class="ann-row"><div class="lref">L35&ndash;37</div><div class="atxt"><code>Suck</code> on dirt is worth 10, scaled by the deadline. On a clean square it now scores <strong>&minus;0.5</strong> rather than 0 &mdash; a small explicit penalty that breaks the original's tie with <code>NoOp</code> and stops the agent burning battery on pointless sucking.</div></div><div class="ann-row"><div class="lref">L38&ndash;42</div><div class="atxt"><strong>The lookahead.</strong> A move is worth the probability of finding dirt, times its deadline-scaled value, minus the travel cost. Line 40 catches a move to the square you are already on. This is the line that makes travel rational &mdash; and it is only possible because line 26 gives the agent an opinion about a square it cannot see.</div></div><div class="ann-row"><div class="lref">L43&ndash;45</div><div class="atxt">The low-battery penalty, carried over unchanged.</div></div><div class="ann-row"><div class="lref">L46</div><div class="atxt"><code>NoOp</code> is still exactly 0 &mdash; the fixed baseline every other option is measured against. This is what makes the crossover meaningful.</div></div><div class="ann-row"><div class="lref">L48&ndash;52</div><div class="atxt">Advance the clock, record the observation and its timestamp.</div></div><div class="ann-row"><div class="lref">L53&ndash;54</div><div class="atxt">The hard battery constraint still overrides everything.</div></div><div class="ann-row"><div class="lref">L55&ndash;57</div><div class="atxt">Score all four actions into a dict, then take the best. <code>max(scores, key=scores.get)</code> returns the winning <em>key</em>.</div></div><div class="ann-row"><div class="lref">L58&ndash;61</div><div class="atxt">Optional per-step tracing of every score. This is how you debug a utility agent: you cannot tell why it chose something without seeing the numbers it rejected.</div></div><div class="ann-row"><div class="lref">L62&ndash;66</div><div class="atxt">Update belief after sucking, drain battery for real actions, return.</div></div><div class="ann-row"><div class="lref">L70&ndash;76</div><div class="atxt">One verbose run: 18 steps, deadline at 6, so you can watch the transition happen live.</div></div><div class="ann-row"><div class="lref">L78&ndash;89</div><div class="atxt">The sweep: nine deadline settings &times; 60 seeds each. Sixty is not decoration &mdash; at 8 seeds the ordering was noisy enough to be misread as a real reversal.</div></div><div class="ann-row"><div class="lref">L91&ndash;106</div><div class="atxt">The analysis, including an explicit note that the small 6-versus-4 wobble is seed noise, not a finding.</div></div></div><div class="outwrap"><div class="outlabel">Output</div><pre class="out">One run, deadline=6 — watch the agent give up as the clock runs out:
+
+  t= 1 at A (Clean)  Suck=  -0.5  Left=  -5.0  Right=  +3.0  NoOp=  +0.0  -&gt; Right
+  t= 2 at B (Clean)  Suck=  -0.5  Left=  -0.5  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp
+  t= 3 at B (Clean)  Suck=  -0.5  Left=  +0.8  Right=  -5.0  NoOp=  +0.0  -&gt; Left
+  t= 4 at A (Clean)  Suck=  -0.5  Left=  -5.0  Right=  -0.5  NoOp=  +0.0  -&gt; NoOp
+  t= 5 at A (Clean)  Suck=  -0.5  Left=  -5.0  Right=  +0.8  NoOp=  +0.0  -&gt; Right
+  t= 6 at B (Clean)  Suck=  -0.5  Left=  -1.1  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp
+  t= 7 at B (Clean)  Suck=  -0.5  Left=  -1.0  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t= 8 at B (Clean)  Suck=  -0.5  Left=  -1.2  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t= 9 at B (Dirty)  Suck=  +2.2  Left=  -1.4  Right=  -5.0  NoOp=  +0.0  -&gt; Suck  (past deadline)
+  t=10 at B (Clean)  Suck=  -0.5  Left=  -1.6  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=11 at B (Clean)  Suck=  -0.5  Left=  -1.7  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=12 at B (Clean)  Suck=  -0.5  Left=  -1.8  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=13 at B (Dirty)  Suck=  +0.3  Left=  -1.9  Right=  -5.0  NoOp=  +0.0  -&gt; Suck  (past deadline)
+  t=14 at B (Clean)  Suck=  -0.5  Left=  -1.9  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=15 at B (Clean)  Suck=  -0.5  Left=  -2.0  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=16 at B (Clean)  Suck=  -0.5  Left=  -2.0  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=17 at B (Clean)  Suck=  -0.5  Left=  -2.0  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+  t=18 at B (Clean)  Suck=  -0.5  Left=  -2.0  Right=  -5.0  NoOp=  +0.0  -&gt; NoOp  (past deadline)
+
+  -&gt; performance=17, cleanliness=69%
+
+  deadline   avg performance   avg cleanliness
+----------------------------------------------
+        18              43.6              76%
+        14              41.6              74%
+        12              40.8              71%
+        10              38.2              67%
+         8              36.1              64%
+         6              34.6              61%
+         4              34.8              60%
+         2              33.7              57%
+         0              29.0              50%
+
+How the choices shift: early in the run a trip to the other square is worth
+roughly p_dirty x 10 minus the -2 travel cost, so the agent patrols and cleans.
+Once t passes the deadline, time_factor shrinks that payoff geometrically while
+the travel cost stays at -2. The move term crosses below NoOp's flat 0 and the
+agent stops travelling; a little later even Suck-on-dirt falls under 0 and it
+stops cleaning altogether. Tighten the deadline and that crossover simply
+happens sooner, so the table slides down gradually instead of flipping at one
+value - cleanliness falls monotonically from 76% to 50%, and performance
+tracks it (the 6-vs-4 blip is seed noise, not a real reversal).
+
+That is what makes utility agents worth the extra machinery: nobody wrote
+"if late, stop cleaning". The behaviour falls out of arithmetic between
+competing terms. It is also why they are the hardest to debug - Exercise 1's
+failure (parking on one square forever) was not a broken rule, it was two
+terms priced wrong.</pre></div>
+<h3>What the trace shows</h3>
+<p>Follow the <code>Suck</code> column down the verbose run &mdash; the agent's own valuation of
+cleaning, decaying in real time:</p>
+<div class="tablewrap"><table><thead><tr><th>Step</th><th>Value of Suck on dirt</th><th>What the agent does</th></tr></thead><tbody><tr><td>t &le; 6 (before deadline)</td><td class="num">+10.0</td><td>Patrols: <code>Right</code>, <code>Left</code>, <code>Right</code> &mdash; travel is clearly worth it</td></tr><tr><td>t = 9</td><td class="num">+2.2</td><td>Still sucks dirt under it, but no longer travels for it</td></tr><tr><td>t = 13</td><td class="num">+0.3</td><td>Barely worth the actuation</td></tr><tr><td>t &ge; 14</td><td class="num">&mdash;</td><td>Idles. <code>NoOp</code>'s flat 0 now beats everything</td></tr></tbody></table></div>
+<p>The move column tells the same story from the other side: <code>Left</code> starts at <code>+3.0</code>
+and sinks to <code>&minus;2.0</code>. Once it crosses below <code>NoOp</code>'s zero, travelling stops.
+A little later <code>Suck</code> crosses too, and cleaning stops.</p>
+
+<h3>The sweep</h3>
+<p>Tighten the deadline and the crossover simply happens earlier, so the table slides rather than
+flipping at some threshold &mdash; cleanliness falls monotonically from <strong>76%</strong> at no
+pressure to <strong>50%</strong> at maximum pressure.</p>
+<div class="note"><span class="tag">Why this is the payoff exercise</span>
+<p><strong>Nobody wrote &ldquo;if late, stop cleaning.&rdquo;</strong> There is no such branch anywhere
+in the code. The behaviour emerges from arithmetic between competing terms &mdash; which is exactly
+what utility-based agents are for, and exactly why they are the hardest to debug. Exercise 1's failure
+was not a broken rule; it was two terms priced wrong. A reflex agent's bugs are in its rules, where you
+can read them. A utility agent's bugs are in its <em>numbers</em>.</p></div></section><section id="lands"><h2><span class="snum">14</span><span>Where this lands</span></h2>
+<p class="lede">Across four exercises the same pattern keeps surfacing: <strong>an architecture is not
+better or worse in the abstract &mdash; it is better or worse for an environment.</strong></p>
+<div class="tablewrap"><table><thead><tr><th>Environment property</th><th>What it breaks</th><th>What it rewards</th></tr></thead><tbody><tr><td>Dirt reappears (non-episodic)</td><td>Beliefs that never expire</td><td>Re-sensing, or beliefs with a decay policy</td></tr><tr><td>Location not observable</td><td>Memoryless rules</td><td>Internal state &mdash; or randomisation as a cheap substitute</td></tr><tr><td>More than two squares</td><td>Fixed direction rules (the oscillation trap)</td><td>State for <em>direction</em>, not just contents</td></tr><tr><td>A deadline</td><td>Fixed goals</td><td>A utility function that can trade goals off</td></tr></tbody></table></div>
+<h3>The through-line</h3>
+<p>Notice that every exercise found a bug the original six-step, two-square, fully observable episode
+could not surface:</p>
+<ul class="plain">
+<li>The <strong>goal-based agent has no goal test</strong> &mdash; hidden in the original because
+scoring 5 looked like a reasonable result rather than a missing branch.</li>
+<li>The <strong>utility agent never travels</strong> &mdash; hidden because it happened to start on
+the dirty square and scored top marks.</li>
+<li>The <strong>model-based agent trusts stale beliefs</strong> &mdash; hidden because in an episodic
+world beliefs cannot go stale.</li>
+<li>The <strong>reflex agent oscillates at walls</strong> &mdash; hidden because with two squares
+there is no wall to get stuck against.</li>
+</ul>
+<p>The agents did not change. The environment got honest.</p>
+<div class="note"><span class="tag">Carry this into Lecture 2</span>
+<p><strong>Most agent failures are environment assumptions that stopped holding.</strong> Not bad
+algorithms &mdash; correct algorithms, still running correctly, in a world that no longer matches the
+PEAS spec they were written against.</p>
+<p>That is why serious agent work is dominated by <em>evaluation</em> rather than by architecture, and
+it is the same reason LLM agents are hard: the environment is the open world, and it never stops
+drifting away from the spec you built for.</p></div>
+<h3>If you want to go further</h3>
+<ol class="steps">
+<li>Combine Exercises 1 and 3: dirt that respawns in a row of eight. Does the decaying model-based
+agent still hold up, or does the row get too long to keep beliefs fresh?</li>
+<li>Give the learning agent a reward that credits cleanliness rather than the <code>Suck</code>
+action, and see whether it stops parking.</li>
+<li>Make movement stochastic &mdash; a 10% chance a move fails &mdash; and watch dead reckoning
+break. That is the step from a model to a <em>probabilistic</em> model, and it is where the next
+part of the course goes.</li>
+</ol>
+</section>
+<footer>
+  <p>Every code block on this page was executed in order in a single Python 3.11 kernel, and every
+  output block is the real stdout from that run &mdash; nothing here is transcribed by hand. To
+  save this as a PDF, use your browser's Print command; the page has a print stylesheet that drops
+  the sidebar and keeps code blocks from splitting across pages.</p>
+</footer>
+</main>
+</div>
