@@ -137,6 +137,11 @@ pre.out{margin:0; padding:16px; font-family:"IBM Plex Mono",monospace; font-size
 .ann-row .atxt{font-size:14.6px; line-height:1.56; color:var(--ink-2)}
 .ann-row .atxt strong{color:var(--ink)}
 .ann-row .atxt code{font-size:.86em}
+.pynote{margin-top:9px; padding:9px 12px; background:var(--panel-2); border-radius:6px;
+  border-left:2px solid var(--dirt); font-size:13.6px; line-height:1.52; color:var(--ink-2)}
+.pynote .pytag{font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--dirt); display:block; margin-bottom:3px}
+.pynote code{background:transparent; padding:0; color:var(--ink)}
 
 /* ---- callouts ---- */
 .note{border-left:3px solid var(--clean); background:var(--clean-soft); padding:15px 18px;

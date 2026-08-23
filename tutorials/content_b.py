@@ -17,7 +17,7 @@ clean&rdquo; &mdash; and forms a small plan to reach it.</p>
         ("L9&ndash;11", "If there is no plan, make one: the only useful thing to do on a clean square is go check the other one."),
         ("L12", "Pop the front of the plan and execute it. With a one-step plan this is the same as returning the move &mdash; but the <em>shape</em> is the point: decide a sequence, then follow it."),
         ("L13", "Return the program, with the plan captured in the closure."),
-    ]) + warn("Read the code, not the label", """
+    ], sec=13) + warn("Read the code, not the label", """
 <p>This agent has a goal in its name but nowhere in its logic. There is no check for
 &ldquo;is the goal satisfied?&rdquo; and therefore <strong>no <code>NoOp</code> branch anywhere</strong>.
 It always returns <code>Suck</code> or a move, so it paces forever exactly like the simple reflex
@@ -44,7 +44,7 @@ actually write.</p>""")))
         ("L19", "<code>max</code> with a <code>key</code> scores every candidate and picks the best. On a tie Python keeps the <em>first</em> maximum in list order, so the order on line 18 is a silent tie-breaker &mdash; <code>Suck</code> wins ties over <code>NoOp</code>."),
         ("L20&ndash;21", "Any real action drains one unit of battery; <code>NoOp</code> is free."),
         ("L22&ndash;23", "Return the action, then the program."),
-    ]) + note("Where this scores 10", """
+    ], sec=15) + note("Where this scores 10", """
 <p>In the standard six-step run this is the joint best agent. On a clean square, <code>Suck</code>
 and <code>NoOp</code> both score 0 while moving scores &minus;2, so the tie on line 19 goes to
 <code>Suck</code> &mdash; a harmless no-op in the environment. It cleans what is under it and never
@@ -70,7 +70,7 @@ toy version of the feedback loop behind RLHF.</p>
         ("L17&ndash;19", "<strong>Exploration.</strong> 10% of the time, act randomly. Without this the agent would lock onto whatever it tried first and never discover anything better."),
         ("L20&ndash;21", "<strong>Exploitation.</strong> The other 90%: take the highest-valued action for this state. Together, lines 18&ndash;21 are the classic epsilon-greedy policy."),
         ("L23&ndash;25", "Record this step as &ldquo;last&rdquo; so the next call can score it, return the action, return the program."),
-    ]) + warn("Why it uses the global random", """
+    ], sec=17) + warn("Why it uses the global random", """
 <p>Lines 18&ndash;19 call <code>random</code> directly, not a seeded private generator. That is why
 the comparison cell has to call <code>random.seed(0)</code> before running &mdash; without it, this
 agent's score changes between runs and the table stops being reproducible. It is also why Exercise 1
@@ -91,7 +91,7 @@ architecture and nothing else.</p>
         ("L20", "A rule of 46 dashes, matching 22+12+12."),
         ("L21&ndash;22", "For each entry, call the factory to build a fresh program and run it. <code>_</code> discards the trace."),
         ("L23", "Print the row. <code>{perf:12d}</code> formats the score as a right-aligned integer; <code>str(clean)</code> converts the bool before padding it, since <code>:&gt;12s</code> requires a string."),
-    ]) + outp(19) + """
+    ], sec=19) + outp(19) + """
 <h3>How to read this table</h3>
 """ + table(
         ["Architecture", "Score", "What actually happened"],

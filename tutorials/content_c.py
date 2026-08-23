@@ -38,7 +38,7 @@ simple reflex agent, which never stops, should suffer least.</p>
         ("L95&ndash;98", "<strong>The key condition.</strong> The agent now believes the world is clean only if every square is <em>both</em> believed clean <em>and</em> was observed within the last <code>staleness_limit</code> steps. Knowledge has an expiry date."),
         ("L99&ndash;101", "Idle if that holds; otherwise patrol."),
         ("L105&ndash;108", "Run the fixed agent on the same seeds and print its row under the table for comparison."),
-    ]) + outp(24) + """
+    ], sec=24) + outp(24) + """
 <h3>What the numbers actually said</h3>
 <p>The hypothesis was <strong>half right</strong>, and being wrong about the other half is the most
 useful thing in this exercise.</p>
@@ -77,7 +77,7 @@ the location. Which architectures still work, which break, and why?</p>
         ("L59&ndash;60", "Otherwise move to the other square, updating the belief about position <em>before</em> moving. This is dead reckoning: tracking position by remembering your own actions."),
         ("L64&ndash;69", "Run all three and print each one's full action sequence, which is what makes the failure visible."),
         ("L71&ndash;87", "The analysis, printed alongside."),
-    ]) + outp(26) + """
+    ], sec=26) + outp(26) + """
 <h3>The verdict</h3>
 """ + table(
         ["Agent", "Result", "Why"],
@@ -132,7 +132,7 @@ also what Exercise 2's agent (c) was quietly exploiting.)</p>""") + code(28, "So
         ("L131&ndash;137", "A randomised memoryless agent, applying Exercise 2's lesson to this problem."),
         ("L140&ndash;151", "20 trials per size, since a random agent's single run tells you nothing. Line 148 exploits <code>True == 1</code> to count successes."),
         ("L153&ndash;157", "The closing caveat about how slow random search actually is."),
-    ]) + outp(28) + """
+    ], sec=28) + outp(28) + """
 <h3>The answer: no, and worse than you would expect</h3>
 <p>Look at the reflex agent's trace: after cleaning its way right it settles into
 <code>Left Right Left Right ...</code>. It is not patrolling the row &mdash; it is
@@ -186,7 +186,7 @@ Adding a deadline to an agent that refuses to move would demonstrate nothing.</p
         ("L70&ndash;76", "One verbose run: 18 steps, deadline at 6, so you can watch the transition happen live."),
         ("L78&ndash;89", "The sweep: nine deadline settings &times; 60 seeds each. Sixty is not decoration &mdash; at 8 seeds the ordering was noisy enough to be misread as a real reversal."),
         ("L91&ndash;106", "The analysis, including an explicit note that the small 6-versus-4 wobble is seed noise, not a finding."),
-    ]) + outp(30) + """
+    ], sec=30) + outp(30) + """
 <h3>What the trace shows</h3>
 <p>Follow the <code>Suck</code> column down the verbose run &mdash; the agent's own valuation of
 cleaning, decaying in real time:</p>

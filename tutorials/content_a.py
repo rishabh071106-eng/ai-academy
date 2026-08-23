@@ -65,7 +65,7 @@ contract: it defines exactly what the agent is allowed to know and exactly what 
         ("L37", "Return the fresh percept as a convenience. The runner ignores it and calls <code>percept()</code> itself, so this is belt-and-braces."),
         ("L39&ndash;40", "A god's-eye check on whether the whole world is clean. Note carefully: <strong>this is a method on the environment, not the agent.</strong> The agent can never call it &mdash; it would be cheating. Knowing when to stop is something each architecture must earn for itself."),
         ("L43&ndash;46", "A sanity check. Build a world with <code>seed=1</code>, print the true state, then print what the agent would actually perceive."),
-    ]) + outp(2) + """
+    ], sec=2) + outp(2) + """
 <p>Look at those two output lines together. The world is
 """ + world(True, False, "A") + """ &mdash; but the percept is just
 <code>('A', 'Dirty')</code>. The fact that <code>B</code> is already clean exists in the environment
@@ -83,7 +83,7 @@ pinning down a task precisely enough to build for it. Here it is written out as 
         ("L4", "<strong>Actuators</strong>: the four legal action strings, matching the branches of <code>execute()</code> exactly."),
         ("L5", "<strong>Sensors</strong>: current location and dirt status <em>of the current location</em>. The phrasing carries the limitation."),
         ("L8&ndash;9", "Print each pair. <code>f&quot;{k:12s}&quot;</code> left-pads the key to 12 characters so the colons line up into a column."),
-    ]) + outp(4) + note("Why this cell earns its place", """
+    ], sec=4) + outp(4) + note("Why this cell earns its place", """
 <p>Every failure in the exercise section is a PEAS assumption that stopped being true. Dirt that
 reappears breaks <em>Environment</em>. Hiding the location breaks <em>Sensors</em>. A deadline breaks
 <em>Performance</em>. Writing PEAS down is what makes those failures legible instead of mysterious.</p>""")))
@@ -100,7 +100,7 @@ form. Every score in this tutorial comes out of this function.</p>
         ("L5", "<strong>Decide.</strong> Hand that percept to the agent program and receive an action string. This line is the entire agent interface."),
         ("L6", "<strong>Act.</strong> Apply the action to the environment, which updates the world, the score and the trace."),
         ("L7", "Return final score, whether the world ended up clean, and the full trace."),
-    ]) + warn("A detail worth noticing", """
+    ], sec=7) + warn("A detail worth noticing", """
 <p>Six steps is a tight budget for a world that needs at most one move and two sucks. That tightness
 is why <code>NoOp</code> is worth points: an agent that keeps pacing after the job is done burns
 &minus;1 per step, and there are only six steps to spend.</p>""")))
@@ -117,14 +117,14 @@ is why <code>NoOp</code> is worth points: an agent that keeps pacing after the j
         ("L7&ndash;8", "Rule two: a clean square at <code>A</code> means go right."),
         ("L9&ndash;10", "Rule three: otherwise (clean, at <code>B</code>) go left."),
         ("L11", "Return the program. Nothing is captured in the closure &mdash; <strong>there is no state to capture.</strong> That absence is the definition of this architecture."),
-    ]) + """
+    ], sec=6) + """
 <h3>Watching it run</h3>
 <p>The trace cell runs the agent and prints one line per step.</p>
 """ + code(8, "Cell 5 &mdash; trace, seed=3") + ann([
         ("L1", "Run the agent and keep only the trace; <code>_, _,</code> discards score and cleanliness. Note <code>seed=3</code> &mdash; a different world from the default."),
         ("L2", "<code>enumerate(trace, 1)</code> numbers the steps from 1, and each entry unpacks into the triple stored on line 36 of the environment."),
         ("L3", "<code>{action:6s}</code> pads the action to six characters so the arrows line up into a readable column."),
-    ]) + outp(8) + """
+    ], sec=8) + outp(8) + """
 <p>Step by step, with the world drawn after each action:</p>
 <ol class="steps">
 <li>Starts at <strong>B</strong>, which is clean, so the rule says go left. """ + world(True, False, "B") + """</li>
@@ -152,9 +152,9 @@ points.</p>
         ("L9&ndash;10", "<strong>The new capability.</strong> If the model says both squares are clean, emit <code>NoOp</code> and stop burning move penalties. This condition is literally inexpressible for the previous agent &mdash; it mentions a square the agent is not standing on."),
         ("L11", "Otherwise fall back to the reflex move. Reaching this line means at least one square is still <code>None</code> or <code>Dirty</code>, so there is a reason to travel."),
         ("L12", "Return the program &mdash; this time <em>with</em> <code>model</code> captured in its closure."),
-    ]) + code(11, "Cell 7 &mdash; trace, same seed=3") + ann([
+    ], sec=10) + code(11, "Cell 7 &mdash; trace, same seed=3") + ann([
         ("L1&ndash;3", "Identical to the previous trace cell, with the agent swapped. Same world, same seed, same harness &mdash; so any difference in output is caused by architecture alone. That is the experiment."),
-    ]) + outp(11) + """
+    ], sec=11) + outp(11) + """
 <p>The first two steps are identical to the reflex agent's. Step 3 is where they part:</p>
 """ + table(
         ["Step", "Simple reflex", "Model-based", "Why"],

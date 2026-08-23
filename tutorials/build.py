@@ -1,6 +1,7 @@
 import nbformat, html
 from hl import code_block, out_block, esc
 from shell import CSS
+from pynotes import PYNOTES
 
 NB = nbformat.read('Tutorial_1_Agents_Hands_On_solved.ipynb', as_version=4)
 
@@ -19,11 +20,15 @@ def code(i, cap=None):
     return head + code_block(src(i))
 
 
-def ann(rows):
-    body = "".join(
-        '<div class="ann-row"><div class="lref">%s</div><div class="atxt">%s</div></div>'
-        % (r[0], r[1]) for r in rows)
-    return '<div class="ann">%s</div>' % body
+def ann(rows, sec=None):
+    notes = PYNOTES.get(sec, {}) if sec else {}
+    out = []
+    for r in rows:
+        py = r[2] if len(r) > 2 else notes.get(r[0])
+        extra = ('<div class="pynote"><span class="pytag">Python</span>%s</div>' % py) if py else ''
+        out.append('<div class="ann-row"><div class="lref">%s</div>'
+                   '<div class="atxt">%s%s</div></div>' % (r[0], r[1], extra))
+    return '<div class="ann">%s</div>' % "".join(out)
 
 
 def outp(i, label="Output"):
