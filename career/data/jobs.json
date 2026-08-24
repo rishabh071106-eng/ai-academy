@@ -1859,5 +1859,23 @@
     "verified": false,
     "category": "fintech-india",
     "id": 121
+  },
+  {
+    "company": "Intuit",
+    "title": "Group Product Manager — Marketing GenAI & Content Management",
+    "location": "Bengaluru",
+    "seniority": "GPM",
+    "apply_url": "https://jobs.intuit.com/job/bengaluru/gpm-marketing-genai-and-content-management/27595/98425590560",
+    "platform": "careers-site",
+    "posted_date": "2026-08-22",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "GPM on Intuit's Data, Growth & Experiences platform owning marketing GenAI + content systems — GenAI platform charter at big-tech comp; marketing domain is adjacent rather than core fintech.",
+    "notes": "Req 98425590560 is materially newer than Intuit's other live Bengaluru reqs — freshly opened ~22 Aug. Sixth Intuit role tracked.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-08-24",
+    "category": "bigtech",
+    "id": 122
   }
 ]
