@@ -1,0 +1,160 @@
+<title>Job Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F5F7F4; --surface:#FFFFFF; --ink:#182320; --muted:#5C6A64;
+  --accent:#0E6E5C; --accent-ink:#FFFFFF; --amber:#95690A; --line:#DCE3DE;
+  --chip:#EAF0EC; --fit10:#0E6E5C; --fit9:#3E7D6E; --warn-bg:#F7EFDC;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1619; --surface:#172226; --ink:#E7EDEA; --muted:#92A29B;
+    --accent:#41C2A2; --accent-ink:#0C1512; --amber:#E0B34C; --line:#243239;
+    --chip:#1E2C31; --fit10:#41C2A2; --fit9:#66A896; --warn-bg:#2B2618;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1619; --surface:#172226; --ink:#E7EDEA; --muted:#92A29B;
+  --accent:#41C2A2; --accent-ink:#0C1512; --amber:#E0B34C; --line:#243239;
+  --chip:#1E2C31; --fit10:#41C2A2; --fit9:#66A896; --warn-bg:#2B2618;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 64px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;margin-bottom:6px}
+h1{font:700 30px/1.1 Archivo,system-ui,sans-serif;letter-spacing:-.01em;margin:0}
+.meta{color:var(--muted);font-size:13.5px}
+.meta b{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:18px 0 30px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.stat .n{font:600 26px/1 Archivo,sans-serif;font-variant-numeric:tabular-nums}
+.stat .l{color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+h2{font:600 19px/1.2 Archivo,sans-serif;margin:34px 0 4px;text-wrap:balance}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.card .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card h3{font:600 15.5px/1.35 "IBM Plex Sans",sans-serif;margin:0}
+.card .co{color:var(--muted);font-size:13px}
+.fit{flex:none;font:600 13px/1 Archivo,sans-serif;padding:6px 8px;border-radius:5px;
+  border:1.5px solid var(--fit9);color:var(--fit9);font-variant-numeric:tabular-nums}
+.fit.f10{background:var(--fit10);border-color:var(--fit10);color:var(--accent-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11.5px;padding:3px 8px;border-radius:99px;background:var(--chip);color:var(--muted)}
+.chip.go{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.chip.warn{background:var(--warn-bg);color:var(--amber);font-weight:500}
+.why{font-size:13px;color:var(--muted);margin:0}
+.card a.apply{margin-top:auto;align-self:flex-start;font-weight:600;font-size:13.5px;
+  color:var(--accent);text-decoration:none;border-bottom:1.5px solid var(--accent);padding-bottom:1px}
+.card a.apply:hover{opacity:.8}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;align-items:center}
+.filters input{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+  color:var(--ink);padding:7px 10px;font:inherit;font-size:13.5px;min-width:200px}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:99px;color:var(--muted);
+  padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.fbtn:focus-visible,.card a:focus-visible,.filters input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th{font:600 11.5px/1.3 "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.fitcell{font-variant-numeric:tabular-nums;font-weight:600}
+td a{color:var(--accent);text-decoration:none;font-weight:500}
+td a:hover{text-decoration:underline}
+footer{margin-top:36px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--accent)}}
+</style>
+<div class="wrap">
+<header>
+  <h1>Job Console</h1>
+  <span class="meta">Rishabh Sharma · ask <b>₹95L</b> / target <b>₹1Cr</b> · available <b>12 Sep 2026</b> (~2.5 wks — counts as near-immediate at senior level)</span>
+</header>
+<div class="meta">Updated __UPDATED__ · resume: <b>Rishabh_Sharma_Resume_Product_Leader.pdf</b> for every application</div>
+<div class="stats" id="stats"></div>
+
+<h2>Apply first — immediate-joiner mandates</h2>
+<p class="sub">Roles with explicit immediate/urgent-joiner signals, ranked by fit. Status chips show the 24 Aug live-check.</p>
+<div class="cards" id="ij"></div>
+
+<h2>Top fits still hiring (fit 9–10)</h2>
+<p class="sub">No immediate-joiner language, but the strongest matches on the board — several re-confirmed hiring within the last week.</p>
+<div class="cards" id="top"></div>
+
+<h2>Full board</h2>
+<div class="filters">
+  <input id="q" type="search" placeholder="Search company, title, city…" aria-label="Search jobs">
+  <button class="fbtn on" data-f="all">All</button>
+  <button class="fbtn" data-f="ij">Immediate joiner</button>
+  <button class="fbtn" data-f="f9">Fit ≥ 9</button>
+  <button class="fbtn" data-f="f8">Fit ≥ 8</button>
+  <button class="fbtn" data-f="lending">Lending</button>
+  <button class="fbtn" data-f="ai">AI / agentic</button>
+</div>
+<div class="tablebox"><table>
+  <thead><tr><th>Fit</th><th>Company</th><th>Role</th><th>Location</th><th>Platform</th><th>Signals</th><th></th></tr></thead>
+  <tbody id="rows"></tbody>
+</table></div>
+<footer>Data: <code>career/data/jobs.json</code> (daily agent refresh). Apply flow: robot in <code>career/apply/autofill</code> types everything; OTP, CAPTCHA and Submit stay yours. Status chips reflect search-index evidence, not opened pages — always confirm a req is live before a long Workday flow.</footer>
+</div>
+<script>
+const JOBS = __JOBS__;
+const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const status = j => j.status || '';
+const statusChip = j => {
+  const s = status(j);
+  if (s === 'live' || s === 'likely_live') return '<span class="chip go">still hiring ✓</span>';
+  if (s === 'likely_closed') return '<span class="chip warn">may be closed</span>';
+  const n = (j.notes||'').toLowerCase();
+  if (n.includes('still hiring') || n.includes('still open')) return '<span class="chip go">re-bumped recently</span>';
+  if (n.includes('caution') || n.includes('stale')) return '<span class="chip warn">verify before applying</span>';
+  return '';
+};
+const card = j => `<div class="card">
+  <div class="top"><div><h3>${esc(j.title)}</h3><div class="co">${esc(j.company)} · ${esc(j.location)}</div></div>
+  <span class="fit ${j.fit_score>=10?'f10':''}">${j.fit_score}</span></div>
+  <div class="chips">${j.immediate_joiner?'<span class="chip go">immediate joiner</span>':''}${statusChip(j)}
+    <span class="chip">${esc(j.platform)}</span>${j.posted_date?`<span class="chip">${esc(j.posted_date)}</span>`:''}</div>
+  <p class="why">${esc(j.fit_reason||'')}</p>
+  <a class="apply" href="${esc(j.apply_url)}" target="_blank" rel="noopener">Open &amp; apply →</a></div>`;
+const byFit = (a,b) => (b.fit_score||0)-(a.fit_score||0);
+const ij = JOBS.filter(j=>j.immediate_joiner && status(j)!=='likely_closed').sort(byFit);
+const top = JOBS.filter(j=>!j.immediate_joiner && (j.fit_score||0)>=9 && status(j)!=='likely_closed').sort(byFit);
+document.getElementById('ij').innerHTML = ij.map(card).join('');
+document.getElementById('top').innerHTML = top.map(card).join('');
+const live = JOBS.filter(j=>['live','likely_live'].includes(status(j))).length;
+document.getElementById('stats').innerHTML = [
+  [JOBS.length,'roles tracked'],[ij.length,'immediate joiner'],
+  [JOBS.filter(j=>(j.fit_score||0)>=9).length,'fit 9–10'],[live,'re-verified live 24 Aug']
+].map(([n,l])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+const rows = document.getElementById('rows');
+const matches = (j,f,q) => {
+  const t = (j.company+' '+j.title+' '+j.location).toLowerCase();
+  if (q && !t.includes(q)) return false;
+  if (f==='ij') return !!j.immediate_joiner;
+  if (f==='f9') return (j.fit_score||0)>=9;
+  if (f==='f8') return (j.fit_score||0)>=8;
+  if (f==='lending') return /lend|credit|loan|bnpl|borrow/i.test(j.title+' '+(j.fit_reason||''));
+  if (f==='ai') return /\bai\b|agentic|llm|genai|ml\b|machine learning/i.test(j.title+' '+(j.fit_reason||''));
+  return true;
+};
+let curF='all';
+const render = () => {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  rows.innerHTML = JOBS.filter(j=>matches(j,curF,q)).sort(byFit).map(j=>`<tr>
+    <td class="fitcell">${j.fit_score??''}</td><td>${esc(j.company)}</td><td>${esc(j.title)}</td>
+    <td>${esc(j.location)}</td><td>${esc(j.platform)}</td>
+    <td>${j.immediate_joiner?'<span class="chip go">IJ</span> ':''}${statusChip(j)}</td>
+    <td><a href="${esc(j.apply_url)}" target="_blank" rel="noopener">apply</a></td></tr>`).join('')
+    || '<tr><td colspan="7" style="color:var(--muted)">No roles match — clear the search or pick another filter.</td></tr>';
+};
+document.getElementById('q').addEventListener('input', render);
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); curF=b.dataset.f; render();
+}));
+render();
+</script>
