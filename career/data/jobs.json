@@ -167,10 +167,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Payments/fintech-infra; leads entire India PM org reporting directly to the CPO.",
-    "notes": "",
+    "notes": "Live-check 24 Aug: Greenhouse listing indexed with full JD.",
     "verified": true,
     "category": "saas-ai",
-    "id": 10
+    "id": 10,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Cashfree Payments",
@@ -183,10 +185,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Director PM at a payments/API-infra fintech asking 12–18 yrs — squarely the level, API/platform experience directly relevant, Bengaluru-based.",
-    "notes": "Also check cashfree.com/careers for native listing",
+    "notes": "Also check cashfree.com/careers for native listing Live-check 24 Aug: gone from Cashfree careers/current indexes; only stale May naukri post remains.",
     "verified": false,
     "category": "fintech-india",
-    "id": 11
+    "id": 11,
+    "status": "likely_closed",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Confidential digital lending platform (via iimjobs)",
@@ -199,10 +203,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP owning digital lending lifecycle — lead gen, onboarding, KYC, underwriting, disbursal, collections — direct match.",
-    "notes": "Also older id 1695365 (May 2026) Re-bumped on iimjobs (1695365) 'posted 2 days ago' as of 23 Aug — mandate still open.",
-    "verified": false,
+    "notes": "Also older id 1695365 (May 2026) Re-bumped on iimjobs (1695365) 'posted 2 days ago' as of 23 Aug — mandate still open. Live-check 24 Aug: iimjobs 1695365 still in current index (86-99 LPA).",
+    "verified": true,
     "category": "exec-search",
-    "id": 12
+    "id": 12,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Elevation Capital (portfolio fintech)",
@@ -214,10 +220,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "India's top fintech VC hiring the most senior product leader for a portfolio fintech — one application gets fitment checks across 30+ portfolio companies.",
-    "notes": "Cross-listed: builtin.com/job/head-director-vp-cpo-product-management/6186256 Re-posted on LinkedIn ~15 Aug (job 4394463247) — mandate still actively hiring.",
-    "verified": false,
+    "notes": "Cross-listed: builtin.com/job/head-director-vp-cpo-product-management/6186256 Re-posted on LinkedIn ~15 Aug (job 4394463247) — mandate still actively hiring. Live-check 24 Aug: LinkedIn 4394463247 still indexed, no closed signal.",
+    "verified": true,
     "category": "exec-search",
-    "id": 13
+    "id": 13,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Fincent",
@@ -230,10 +238,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "CPO of an AI-first fintech (neo-banking + SMB financial hub); 'AI-first fintech platform' evolution matches agentic-AI work.",
-    "notes": "'Early Applicant' flag; also check fincent.com/jobs",
-    "verified": false,
+    "notes": "'Early Applicant' flag; also check fincent.com/jobs Live-check 24 Aug: on Foundit (~1 month old), no Position Closed flag.",
+    "verified": true,
     "category": "exec-search",
-    "id": 14
+    "id": 14,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "finsagex Technologies (ex-Lendingkart founder)",
@@ -245,10 +255,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "AI-first financial-services product leadership under the Lendingkart founder — lending domain + AI/agentic experience, 0-to-1 mandate.",
-    "notes": "",
-    "verified": false,
+    "notes": "Live-check 24 Aug: Wellfound 3844075 still indexed with full details.",
+    "verified": true,
     "category": "exec-search",
-    "id": 15
+    "id": 15,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Glean",
@@ -260,10 +272,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Leads Glean's Bangalore product org at an AI-native Work-AI/agents company — CPO-track with people leadership.",
-    "notes": "Also PM Agent Security & Governance 4525297005",
+    "notes": "Also PM Agent Security & Governance 4525297005 Live-check 24 Aug: Glean Greenhouse 4524775005 indexed with full JD.",
     "verified": true,
     "category": "saas-ai",
-    "id": 16
+    "id": 16,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Google",
@@ -275,10 +289,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "GPM over agentic AI workloads on enterprise cloud — closest big-tech analogue to multi-agent LLM/RAG/MCP platform work.",
-    "notes": "",
+    "notes": "Live-check 24 Aug: live on Google Careers (89132078100030150).",
     "verified": true,
     "category": "bigtech",
-    "id": 17
+    "id": 17,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Google",
@@ -290,10 +306,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Requires 10 yrs PM + 5 yrs AI/ML product — AI platform delivery plus ongoing M.Tech AI line up well.",
-    "notes": "",
+    "notes": "Live-check 24 Aug: live on Google Careers (74909976144814790), Bengaluru listed.",
     "verified": true,
     "category": "bigtech",
-    "id": 18
+    "id": 18,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Intuit",
@@ -305,10 +323,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Director-level PM at a fintech with heavy GenAI investment — strong fintech+AI leadership match.",
-    "notes": "",
+    "notes": "Live-check 24 Aug: live on jobs.intuit.com (74422402032).",
     "verified": true,
     "category": "saas-ai",
-    "id": 19
+    "id": 19,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Intuit",
@@ -320,10 +340,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP-level PM at an AI-first fintech in Bengaluru — lateral title move matching VP-at-JPM almost exactly.",
-    "notes": "GenOS/GenAI-first org",
+    "notes": "GenOS/GenAI-first org Live-check 24 Aug: live on jobs.intuit.com (74656409088).",
     "verified": true,
     "category": "bigtech",
-    "id": 20
+    "id": 20,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Mastercard",
@@ -336,10 +358,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Directly combines multi-agent AI/STP delivery and M.Tech AI with director-level payments product leadership in India.",
-    "notes": "Workday tenant: mastercard.wd1.myworkdayjobs.com/CorporateCareers",
-    "verified": false,
+    "notes": "Workday tenant: mastercard.wd1.myworkdayjobs.com/CorporateCareers Live-check 24 Aug: R-275770 still in Mastercard's own careers index.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 21
+    "id": 21,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Paytm",
@@ -351,10 +375,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP owning an end-to-end tech-enabled credit platform (digital onboarding, real-time offers) — near-exact match for JPM digital lending platform experience.",
-    "notes": "Lever board indexed live July 2026; one-page no-login apply",
-    "verified": false,
+    "notes": "Lever board indexed live July 2026; one-page no-login apply Live-check 24 Aug: active Paytm Lever listing (fd08ba17).",
+    "verified": true,
     "category": "fintech-india",
-    "id": 22
+    "id": 22,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Salesforce",
@@ -367,17 +393,19 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Leads next-gen AI initiatives across the Employee Service portfolio at Director level in Bengaluru.",
-    "notes": "Req JR335366",
+    "notes": "Req JR335366 Live-check 24 Aug: absent from careers.salesforce.com index in two searches.",
     "verified": true,
     "category": "saas-ai",
-    "id": 23
+    "id": 23,
+    "status": "likely_closed",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Stripe",
     "title": "Staff Product Manager, Global Expansion (India business lead)",
     "location": "Bengaluru",
     "seniority": "Staff PM (India product lead)",
-    "apply_url": "https://stripe.com/jobs/listing/staff-product-manager-global-expansion/7570242",
+    "apply_url": "https://stripe.com/careers/listing/staff-product-manager-global-expansion/7570242",
     "platform": "greenhouse",
     "immediate_joiner": false,
     "fit_score": 9,
@@ -398,10 +426,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Hands-on Director enabling AI-driven product management across product/platform/engineering — near-perfect AI + platform + payments blend.",
-    "notes": "Confirm city on posting",
+    "notes": "Confirm city on posting Live-check 24 Aug: absent from Visa SmartRecruiters index; similar Foundit listing shows 'Position Closed'.",
     "verified": false,
     "category": "workday-banks",
-    "id": 25
+    "id": 25,
+    "status": "likely_closed",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Visa",
@@ -414,10 +444,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Leading B2B payments modernization mirrors corporate/wholesale banking platform modernization record.",
-    "notes": "Workday: visa.wd5.myworkdayjobs.com Muse mirror c1de6a (VCS Hub B2B Payables, Bangalore) still live 16 Aug — likely the same req.",
-    "verified": false,
+    "notes": "Workday: visa.wd5.myworkdayjobs.com Muse mirror c1de6a (VCS Hub B2B Payables, Bangalore) still live 16 Aug — likely the same req. Live-check 24 Aug: VCS Hub B2B Payables still actively listed via SmartRecruiters/Muse.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 26
+    "id": 26,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Adobe",
@@ -1261,10 +1293,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Leads GenAI/ML Innovation Lab for working-capital/lending fintech, reports to CPTO — direct hit on lending + AI/agentic background",
-    "notes": "Strongest recency signal this sweep (posted ~1 day ago); periodically reposted evergreen req — confirm still open Re-bumped on LinkedIn 'Actively Hiring, 1 day ago' as of 15 Aug — mandate still open.",
-    "verified": false,
+    "notes": "Strongest recency signal this sweep (posted ~1 day ago); periodically reposted evergreen req — confirm still open Re-bumped on LinkedIn 'Actively Hiring, 1 day ago' as of 15 Aug — mandate still open. Live-check 24 Aug: page up on credable.in but may be evergreen (LinkedIn companion from 2024).",
+    "verified": true,
     "category": "fintech-india",
-    "id": 87
+    "id": 87,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Paytm",
@@ -1335,16 +1369,18 @@
     "title": "Platform Lead, Director (req R-00277564)",
     "location": "Bengaluru / Gurugram / Chennai",
     "seniority": "Director",
-    "apply_url": "https://jobs.natwestgroup.com/search/?q=R-00277564",
+    "apply_url": "https://jobs.natwestgroup.com/jobs/17681104-platform-lead-director",
     "platform": "workday",
     "posted_date": "2026-08-03",
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Director-level platform product leadership at NatWest Digital X — same Product & Proposition family as the high-fit Broker Platform (Lending) req already tracked.",
-    "notes": "Distinct req from tracked R-00277563 (id 3, Broker Platform Lending); posted ~1 day ago. Confirm charter on the req page before applying.",
-    "verified": false,
+    "notes": "Distinct req from tracked R-00277563 (id 3, Broker Platform Lending); posted ~1 day ago. Confirm charter on the req page before applying. Live-check 24 Aug: R-00277564 active on jobs.natwestgroup.com (17681104).",
+    "verified": true,
     "category": "workday-banks",
-    "id": 92
+    "id": 92,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Jupiter",
@@ -1357,10 +1393,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Director-level consumer-banking AI product charter at a neobank — direct overlap with the multi-agent AI / LLM digital-banking record.",
-    "notes": "Live on Jupiter's Lever board 6 Aug; exact post date not exposed and page fetch blocked from sandbox — confirm live before applying. Third Jupiter role on the board.",
-    "verified": false,
+    "notes": "Live on Jupiter's Lever board 6 Aug; exact post date not exposed and page fetch blocked from sandbox — confirm live before applying. Third Jupiter role on the board. Live-check 24 Aug: exact Lever URL indexed with full JD.",
+    "verified": true,
     "category": "fintech-india",
-    "id": 93
+    "id": 93,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1407,10 +1445,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director owning Agentforce (agentic AI platform) product — the strongest possible match for the multi-agent AI architecture record outside banking.",
-    "notes": "Surfaced 'posted 2 days ago' on 7 Aug; req JR299317 is an older number so possibly a refresh/repost — still distinct from the three tracked Salesforce reqs.",
-    "verified": false,
+    "notes": "Surfaced 'posted 2 days ago' on 7 Aug; req JR299317 is an older number so possibly a refresh/repost — still distinct from the three tracked Salesforce reqs. Live-check 24 Aug: JR299317 present in Salesforce Workday index.",
+    "verified": true,
     "category": "saas-ai",
-    "id": 96
+    "id": 96,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Visa",
@@ -1535,10 +1575,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Credit-platform / LMS product ownership (8–13 yrs) at India's largest lending distributor — direct overlap with the digital loan-booking platform record.",
-    "notes": "Newly indexed on Paytm's Lever board 9 Aug; posting date not exposed, freshness unconfirmed. Distinct req from tracked VP Lending (EMI).",
-    "verified": false,
+    "notes": "Newly indexed on Paytm's Lever board 9 Aug; posting date not exposed, freshness unconfirmed. Distinct req from tracked VP Lending (EMI). Live-check 24 Aug: exact Lever URL indexed with full JD.",
+    "verified": true,
     "category": "fintech-india",
-    "id": 104
+    "id": 104,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Paytm",
@@ -1567,10 +1609,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP-level lending (LOS/LMS) product leadership at a banking-infrastructure fintech, 16–21 yrs band — seniority and domain both line up with the ₹95L ask.",
-    "notes": "Active Instahyre listing 9 Aug; posting date not exposed. Distinct from tracked mid-level M2P Banking Domain role (id 68).",
-    "verified": false,
+    "notes": "Active Instahyre listing 9 Aug; posting date not exposed. Distinct from tracked mid-level M2P Banking Domain role (id 68). Live-check 24 Aug: Instahyre 326747 still in index, no expired signal.",
+    "verified": true,
     "category": "fintech-india",
-    "id": 106
+    "id": 106,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Flexmoney Technologies",
@@ -1711,10 +1755,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director (15+ yrs) leading a Bengaluru GCC product organization with an AI mandate at Visa — seniority, location, and AI-platform emphasis all line up with the profile and the ₹95L–1Cr band.",
-    "notes": "LinkedIn showed '~4 days old' on 18 Aug (slightly outside the 48h bar but new to the tracker); find the req on Visa's SmartRecruiters/careers site to apply — page fetch blocked from sandbox.",
-    "verified": false,
+    "notes": "LinkedIn showed '~4 days old' on 18 Aug (slightly outside the 48h bar but new to the tracker); find the req on Visa's SmartRecruiters/careers site to apply — page fetch blocked from sandbox. Live-check 24 Aug: LinkedIn 4446063251 still indexed; details thin.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 115
+    "id": 115,
+    "status": "likely_live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "Atlassian",
@@ -1743,10 +1789,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director owning the MLX/GenAI platform product team at a top US bank's India GCC — a level up from the tracked Capital One Directors and squarely on the multi-agent AI + banking record.",
-    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91).",
-    "verified": false,
+    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91). Live-check 24 Aug: live on capitalonecareers.com; also on eFinancialCareers.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 117
+    "id": 117,
+    "status": "live",
+    "last_checked": "2026-08-24"
   },
   {
     "company": "BNY",
