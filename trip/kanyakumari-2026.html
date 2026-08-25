@@ -3,523 +3,636 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Kanyakumari &amp; Padmanabhaswamy &mdash; 30 Aug to 6 Sep 2026</title>
-<meta name="description" content="Sunday-to-Sunday train itinerary from Bengaluru to Kanyakumari and Thiruvananthapuram, built around Vivekananda Rock, Padmanabhapuram Palace and Sree Padmanabhaswamy Temple.">
+<meta name="description" content="Sunday-to-Sunday rail itinerary from Bengaluru, run from a single base in Thiruvananthapuram, with Kanyakumari, Padmanabhapuram Palace and Varkala as day trips.">
 <meta name="robots" content="noindex">
+<title>Kanyakumari by Train</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#0b0f14; --bg-2:#121821; --card:#151d28; --line:#243040;
-    --ink:#e8eef6; --ink-2:#a7b4c4; --ink-3:#7b8798;
-    --accent:#f6b45a; --accent-2:#4fd1c5; --warn:#ff8a7a;
-    --radius:14px;
+/* ---------- tokens: light is the base ---------- */
+:root{
+  --ground:#ECF1F0;
+  --panel:#F8FAF9;
+  --panel-2:#E3EAE8;
+  --edge:#D2DCDA;
+  --ink:#132229;
+  --ink-2:#42565C;
+  --ink-3:#6E8288;
+  --brass:#8C6111;
+  --brass-bg:#F3E9D2;
+  --brass-edge:#DFC894;
+  --laterite:#98391F;
+  --laterite-bg:#F7E5DE;
+  --laterite-edge:#E2BCAF;
+  --sea:#1B6068;
+  --shadow:0 1px 2px rgba(19,34,41,.05), 0 10px 26px -20px rgba(19,34,41,.5);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B161B;
+    --panel:#111F26;
+    --panel-2:#16272F;
+    --edge:#20353D;
+    --ink:#E5EDEC;
+    --ink-2:#A0B4B5;
+    --ink-3:#72898D;
+    --brass:#D8A64A;
+    --brass-bg:#241D0F;
+    --brass-edge:#4A3A19;
+    --laterite:#E08A6C;
+    --laterite-bg:#26140F;
+    --laterite-edge:#4C271C;
+    --sea:#5FBDBF;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -20px rgba(0,0,0,.9);
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    line-height:1.65; -webkit-text-size-adjust:100%;
-  }
-  .wrap{max-width:860px;margin:0 auto;padding:0 1.15rem}
-  a{color:var(--accent-2)}
+}
+:root[data-theme="dark"]{
+  --ground:#0B161B;
+  --panel:#111F26;
+  --panel-2:#16272F;
+  --edge:#20353D;
+  --ink:#E5EDEC;
+  --ink-2:#A0B4B5;
+  --ink-3:#72898D;
+  --brass:#D8A64A;
+  --brass-bg:#241D0F;
+  --brass-edge:#4A3A19;
+  --laterite:#E08A6C;
+  --laterite-bg:#26140F;
+  --laterite-edge:#4C271C;
+  --sea:#5FBDBF;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -20px rgba(0,0,0,.9);
+}
 
-  /* ---------- header ---------- */
-  header.hero{
-    padding:3.2rem 0 2.2rem;
-    background:radial-gradient(120% 100% at 50% 0%,#1a2432 0%,var(--bg) 65%);
-    border-bottom:1px solid var(--line);
-  }
-  .kicker{
-    display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent);border:1px solid #4a3a20;background:#1e1810;
-    padding:.3rem .7rem;border-radius:999px;margin-bottom:1rem;
-  }
-  h1{font-size:clamp(1.9rem,6vw,2.9rem);line-height:1.12;margin:0 0 .7rem;letter-spacing:-.02em}
-  .sub{color:var(--ink-2);font-size:1.02rem;margin:0 0 1.4rem;max-width:46rem}
-  .facts{display:flex;flex-wrap:wrap;gap:.5rem}
-  .fact{
-    background:var(--bg-2);border:1px solid var(--line);border-radius:999px;
-    padding:.35rem .8rem;font-size:.84rem;color:var(--ink-2);
-  }
-  .fact b{color:var(--ink);font-weight:600}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'Karla',ui-sans-serif,-apple-system,'Segoe UI',Roboto,sans-serif;
+  font-size:16.5px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:44rem;margin:0 auto;padding:0 1.25rem}
 
-  /* ---------- blocks ---------- */
-  section{padding:2.4rem 0;border-bottom:1px solid var(--line)}
-  h2{font-size:1.35rem;margin:0 0 .4rem;letter-spacing:-.01em}
-  h2 .num{color:var(--ink-3);font-weight:600;margin-right:.5rem}
-  .lede{color:var(--ink-2);margin:0 0 1.4rem;font-size:.96rem}
-  h3{font-size:1.02rem;margin:1.6rem 0 .5rem}
+/* ---------- type ---------- */
+h1,h2,h3{font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:0}
+h1{font-size:clamp(2.6rem,9vw,4.1rem);line-height:1.02;margin:0 0 1rem;text-wrap:balance}
+h1 em{font-style:italic;color:var(--sea)}
+h2{font-size:clamp(1.7rem,4.6vw,2.2rem);line-height:1.12;margin:0 0 .3rem;text-wrap:balance}
+h3{font-size:1.28rem;line-height:1.2;margin:0 0 .5rem}
+p{margin:0 0 1rem}
+a{color:var(--sea)}
+.eyebrow{
+  font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);
+  display:block;margin:0 0 .7rem;
+}
+.lede{color:var(--ink-2);font-size:1.02rem;margin:0 0 1.7rem;max-width:38rem}
 
-  .alert{
-    background:#20160f;border:1px solid #55381d;border-left:4px solid var(--accent);
-    border-radius:var(--radius);padding:1.05rem 1.15rem;margin:0 0 1.3rem;
-  }
-  .alert h3{margin:0 0 .45rem;color:var(--accent);font-size:1rem}
-  .alert p{margin:.35rem 0;font-size:.93rem;color:#e5d9c8}
+/* ---------- hero ---------- */
+.hero{padding:4rem 0 2.6rem}
+.hero .sub{
+  font-size:1.12rem;line-height:1.6;color:var(--ink-2);max-width:36rem;margin:0 0 2rem;
+}
+.route{
+  display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
+  border:1px solid var(--edge);border-radius:3px;background:var(--panel);
+  overflow:hidden;box-shadow:var(--shadow);
+}
+.leg{
+  flex:1 1 9rem;padding:.85rem 1rem;border-right:1px solid var(--edge);
+  display:flex;flex-direction:column;gap:.1rem;
+}
+.leg:last-child{border-right:none}
+.leg .k{
+  font-family:'IBM Plex Mono',monospace;font-size:.63rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.leg .v{font-weight:600;font-size:.95rem;line-height:1.3}
+.leg .n{font-size:.78rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
 
-  .note{
-    background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--accent-2);
-    border-radius:10px;padding:.75rem .95rem;margin:.9rem 0;font-size:.9rem;color:var(--ink-2);
-  }
-  .note b{color:var(--ink)}
-  .note.warn{border-left-color:var(--warn)}
+/* ---------- sections ---------- */
+section{padding:3rem 0;border-top:1px solid var(--edge)}
 
-  /* ---------- day cards ---------- */
-  .day{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:1.2rem 1.25rem;margin:0 0 1rem;
-  }
-  .day-head{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin-bottom:.15rem}
-  .day-tag{
-    font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
-    color:#0b0f14;background:var(--accent);padding:.2rem .55rem;border-radius:5px;
-  }
-  .day-date{font-size:.85rem;color:var(--ink-3)}
-  .day h3{margin:.15rem 0 .75rem;font-size:1.12rem;color:var(--ink)}
-  .day .base{font-size:.82rem;color:var(--ink-3);margin:-.55rem 0 .8rem}
+/* ---------- alert + notes ---------- */
+.alert{
+  border:1px solid var(--brass-edge);background:var(--brass-bg);
+  border-radius:3px;padding:1.15rem 1.25rem;margin:0 0 1.6rem;
+}
+.alert h3{color:var(--brass);font-size:1.1rem;margin:0 0 .5rem}
+.alert p{margin:.5rem 0;font-size:.95rem;color:var(--ink-2)}
+.alert p:last-child{margin-bottom:0}
+.alert b{color:var(--ink)}
 
-  ul.plan{list-style:none;padding:0;margin:0}
-  ul.plan li{
-    display:grid;grid-template-columns:5.2rem 1fr;gap:.7rem;
-    padding:.5rem 0;border-top:1px dashed #222d3c;font-size:.94rem;
-  }
-  ul.plan li:first-child{border-top:none}
-  ul.plan .t{color:var(--accent-2);font-weight:600;font-size:.83rem;padding-top:.12rem}
-  ul.plan .d strong{color:var(--ink)}
-  ul.plan .d small{display:block;color:var(--ink-3);font-size:.83rem;margin-top:.15rem}
+.note{
+  border-left:2px solid var(--sea);background:var(--panel);
+  padding:.8rem 1rem;margin:1.1rem 0;font-size:.93rem;color:var(--ink-2);border-radius:0 3px 3px 0;
+}
+.note.caution{border-left-color:var(--laterite);background:var(--laterite-bg)}
+.note b{color:var(--ink)}
 
-  /* ---------- tables ---------- */
-  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.9rem 0;
-    border:1px solid var(--line);border-radius:var(--radius)}
-  table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
-  th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  th{background:var(--bg-2);color:var(--ink-2);font-weight:600;font-size:.78rem;
-     letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-  tr:last-child td{border-bottom:none}
-  td b{color:var(--ink)}
-  .muted{color:var(--ink-3)}
+/* ---------- day cards ---------- */
+.day{
+  background:var(--panel);border:1px solid var(--edge);border-radius:3px;
+  padding:1.3rem 1.35rem;margin:0 0 1.1rem;box-shadow:var(--shadow);
+}
+.day-head{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.55rem}
+.daynum{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brass);border:1px solid var(--brass-edge);
+  background:var(--brass-bg);padding:.15rem .5rem;border-radius:2px;font-variant-numeric:tabular-nums;
+}
+.daydate{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;
+  color:var(--ink-3);text-transform:uppercase;
+}
+.sleep{
+  display:inline-block;font-size:.76rem;color:var(--ink-3);
+  border-bottom:1px dotted var(--edge);padding-bottom:.55rem;margin:0 0 .85rem;width:100%;
+}
+.sleep b{color:var(--ink-2);font-weight:600}
 
-  ul.bullets{padding-left:1.1rem;margin:.5rem 0}
-  ul.bullets li{margin:.35rem 0;font-size:.94rem;color:var(--ink-2)}
-  ul.bullets li b{color:var(--ink)}
+.plan{list-style:none;padding:0;margin:0;display:flex;flex-direction:column}
+.plan li{
+  display:grid;grid-template-columns:4.3rem 1fr;gap:.9rem;
+  padding:.65rem 0;border-top:1px solid var(--edge);
+}
+.plan li:first-child{border-top:none;padding-top:0}
+.plan .t{
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--brass);
+  font-variant-numeric:tabular-nums;padding-top:.16rem;letter-spacing:-.01em;
+}
+.plan .d{font-size:.96rem}
+.plan .d strong{font-weight:600}
+.plan .d small{display:block;color:var(--ink-2);font-size:.87rem;line-height:1.55;margin-top:.2rem}
 
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-  @media(max-width:620px){
-    .cols{grid-template-columns:1fr}
-    ul.plan li{grid-template-columns:1fr;gap:.15rem}
-    ul.plan .t{padding-top:0}
-  }
-  footer{padding:2rem 0 3rem;color:var(--ink-3);font-size:.85rem}
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0;
+  border:1px solid var(--edge);border-radius:3px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.9rem}
+th,td{padding:.7rem .85rem;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}
+th{
+  background:var(--panel-2);color:var(--ink-3);font-weight:600;
+  font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;white-space:nowrap;
+}
+tr:last-child td{border-bottom:none}
+td{color:var(--ink-2)}
+td b{color:var(--ink);font-weight:600}
+.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-size:.85rem}
+.closed{
+  display:inline-block;font-size:.72rem;font-weight:600;color:var(--laterite);
+  background:var(--laterite-bg);border:1px solid var(--laterite-edge);
+  padding:.05rem .4rem;border-radius:2px;
+}
+.free{
+  display:inline-block;font-size:.72rem;font-weight:600;color:var(--sea);
+  border:1px solid var(--edge);padding:.05rem .4rem;border-radius:2px;
+}
 
-  @media print{
-    body{background:#fff;color:#111}
-    .day,.scroller,.note,.alert{break-inside:avoid}
-    section{border-color:#ddd}
-  }
+ul.b{padding-left:1.05rem;margin:.6rem 0 0}
+ul.b li{margin:.45rem 0;font-size:.95rem;color:var(--ink-2)}
+ul.b li b{color:var(--ink)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+@media(max-width:640px){
+  .two{grid-template-columns:1fr;gap:1.2rem}
+  .plan li{grid-template-columns:1fr;gap:.1rem}
+  .plan .t{padding-top:0}
+  .leg{flex:1 1 100%;border-right:none;border-bottom:1px solid var(--edge)}
+  .leg:last-child{border-bottom:none}
+}
+footer{padding:2.4rem 0 4rem;color:var(--ink-3);font-size:.85rem;border-top:1px solid var(--edge)}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 </style>
+
 </head>
 <body>
 
+<div class="wrap">
+
 <header class="hero">
-  <div class="wrap">
-    <span class="kicker">Sunday to Sunday &middot; by train</span>
-    <h1>Kanyakumari &amp;<br>Sree Padmanabhaswamy</h1>
-    <p class="sub">
-      Eight days from Bengaluru: two nights on the rails, two at the tip of India,
-      three in Thiruvananthapuram. Built around the two things you actually came for &mdash;
-      standing where three seas meet, and darshan at Padmanabhaswamy &mdash; with the
-      Padmanabhapuram Palace slotted in on the one day it is open to you.
-    </p>
-    <div class="facts">
-      <span class="fact"><b>Sun 30 Aug</b> &rarr; <b>Sun 6 Sep 2026</b></span>
-      <span class="fact">Bengaluru &rarr; Kanyakumari &rarr; Trivandrum &rarr; Bengaluru</span>
-      <span class="fact">6 full days on the ground</span>
-      <span class="fact">~&#8377;18k&ndash;28k per person</span>
-    </div>
+  <span class="eyebrow">30 Aug &ndash; 6 Sep 2026 &middot; Bengaluru &middot; by rail</span>
+  <h1>Where three seas<br><em>meet</em>.</h1>
+  <p class="sub">
+    Eight days to the tip of India and back, run from a single room in Thiruvananthapuram.
+    Unpack once on Monday, pack once on Saturday, and reach everything else &mdash; the cape,
+    the palace, the cliff &mdash; as a day out and back.
+  </p>
+  <div class="route">
+    <div class="leg"><span class="k">Sun 30 Aug</span><span class="v">Night train south</span><span class="n">16526 &middot; 20:10</span></div>
+    <div class="leg"><span class="k">Mon 31 Aug</span><span class="v">Arrive Trivandrum</span><span class="n">~12:00</span></div>
+    <div class="leg"><span class="k">Mon &rarr; Sat</span><span class="v">One base, East Fort</span><span class="n">5 nights</span></div>
+    <div class="leg"><span class="k">Sat 5 Sep</span><span class="v">Night train home</span><span class="n">16316 &middot; 16:45</span></div>
   </div>
 </header>
 
-<!-- ============ BOOK NOW ============ -->
+<!-- ================= BOOKING ================= -->
 <section>
-  <div class="wrap">
-    <h2><span class="num">00</span>Book this week &mdash; in this order</h2>
-    <p class="lede">You are five days out. Two of these have hard deadlines; the rest can wait.</p>
+  <span class="eyebrow">Before you go</span>
+  <h2>Book this week, in this order</h2>
+  <p class="lede">You are five days out. Two of these have hard deadlines. The rest can wait.</p>
 
-    <div class="alert">
-      <h3>&#9888; Do these two today</h3>
-      <p><b>1. Train tickets, both legs.</b> Sleeper and 3AC on the Bengaluru&ndash;Kerala corridor sell out days ahead, and the post-Onam return rush (Onam was 26 Aug; Kerala's holidays ran 25&ndash;28 Aug) is still clearing the system. Book outbound <b>Sun 30 Aug</b> and return <b>Sat 5 Sep</b> in the same sitting on IRCTC. If both are waitlisted, jump straight to the bus fallback below rather than gambling on confirmation.</p>
-      <p><b>2. Padmanabhaswamy darshan slot.</b> Book a dated slot at <b>booking.sreepadmanabhaswamytemple.org</b> for the morning of <b>Thu 3 Sep</b>. Same visit, sort out the clothes &mdash; see the dress code section; turning up in jeans means you do not get in, full stop.</p>
-    </div>
+  <div class="alert">
+    <h3>Do these two today</h3>
+    <p><b>Train tickets, both legs.</b> Sleeper and 3AC on the Bengaluru&ndash;Kerala corridor sell out days ahead, and the post-Onam return traffic is still clearing the system &mdash; Thiruvonam was 26 August and Kerala's holidays ran through the 28th. Book the outbound <b>Sun 30 Aug</b> and the return <b>Sat 5 Sep</b> in one sitting. If both come back waitlisted, go to the bus rather than gambling on confirmation.</p>
+    <p><b>Padmanabhaswamy darshan slot.</b> Book a dated morning slot for <b>Thu 3 Sep</b> at booking.sreepadmanabhaswamytemple.org. In the same sitting, sort out what you will wear &mdash; jeans at that gate means you do not go in, and there is no arguing it.</p>
+  </div>
 
-    <h3>Getting there &mdash; trains out of Bengaluru</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Train</th><th>Leaves Bengaluru</th><th>Arrives</th><th>Good for</th></tr>
-        <tr>
-          <td><b>16526</b> Kanniyakumari Exp<br><span class="muted">daily</span></td>
-          <td>KSR Bengaluru (SBC)<br><b>~20:10</b> Sun</td>
-          <td>Trivandrum Central ~12:00<br><b>Kanyakumari ~14:50</b> Mon</td>
-          <td><b>The one to take.</b> Single train, straight to the tip, no changes.</td>
-        </tr>
-        <tr>
-          <td><b>16315</b> Kochuveli Exp<br><span class="muted">daily</span></td>
-          <td>SBC <b>~16:40</b> Sun</td>
-          <td>Kochuveli ~09:15 Mon</td>
-          <td>Backup if 16526 is full &mdash; but it lands you in Trivandrum, so you would flip the itinerary (Trivandrum first, Kanyakumari second).</td>
-        </tr>
-        <tr>
-          <td><b>Bus</b> &mdash; KSRTC / KeRTC / private Volvo sleeper</td>
-          <td>Majestic, Madiwala, Electronic City<br><b>17:00&ndash;21:00</b></td>
-          <td>Nagercoil / Kanyakumari 09:00&ndash;12:00<br>Trivandrum ~08:00</td>
-          <td>Your fallback. Books on redbus / KSRTC site right up to departure. 14&ndash;16 hrs, &#8377;1,200&ndash;2,200.</td>
-        </tr>
-      </table>
-    </div>
+  <h3>Going south</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Service</th><th>Departs</th><th>Arrives</th><th>Verdict</th></tr>
+      <tr>
+        <td><b>16526</b><br>Kanniyakumari Exp<br><span class="num">daily</span></td>
+        <td>KSR Bengaluru<br><span class="num">~20:10 Sun</span></td>
+        <td><b>Trivandrum Central <span class="num">~12:00</span></b> Mon<br><span class="num">(runs on to Kanyakumari 14:50)</span></td>
+        <td><b>Get off at Trivandrum Central.</b> Do not ride it to the cape &mdash; that is now a day trip, not your bed.</td>
+      </tr>
+      <tr>
+        <td><b>16315</b><br>Kochuveli Exp<br><span class="num">daily</span></td>
+        <td>SBC <span class="num">~16:40 Sun</span></td>
+        <td>Kochuveli <span class="num">~09:15 Mon</span></td>
+        <td><b>Arguably the better pick now.</b> Lands nearly three hours earlier, which buys back most of your first day. Kochuveli is ~10 km north of the centre.</td>
+      </tr>
+      <tr>
+        <td><b>Bus</b><br>KSRTC / KeRTC / Volvo sleeper</td>
+        <td>Majestic, Madiwala, E-City<br><span class="num">17:00&ndash;21:00</span></td>
+        <td>Nagercoil <span class="num">~09:00</span><br>Trivandrum <span class="num">~08:00</span></td>
+        <td>The fallback. Books until departure on redbus. 14&ndash;16 hrs, &#8377;1,200&ndash;2,200.</td>
+      </tr>
+    </table>
+  </div>
 
-    <h3>Coming back &mdash; from Trivandrum Central (TVC)</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Train</th><th>Leaves TVC</th><th>Arrives Bengaluru</th><th>Notes</th></tr>
-        <tr><td><b>16316</b> TVC&ndash;Mysuru Exp</td><td><b>~16:45</b> Sat</td><td>~08:50 Sun</td><td>Lands you home Sunday morning with the day to spare.</td></tr>
-        <tr><td><b>12258</b> Garib Rath (AC)</td><td><b>~17:00</b> Sat</td><td>Yesvantpur ~09:45 Sun</td><td>All-AC, cheap for what it is. Yesvantpur, not city station.</td></tr>
-        <tr><td><b>16525</b> Kanniyakumari&ndash;SBC</td><td>&mdash;</td><td>&mdash;</td><td>Only relevant if you decide to end the trip back at Kanyakumari instead.</td></tr>
-      </table>
-    </div>
+  <h3>Coming home, from Trivandrum Central</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Service</th><th>Departs</th><th>Into Bengaluru</th><th>Notes</th></tr>
+      <tr><td><b>16316</b> TVC&ndash;Mysuru</td><td class="num">~16:45 Sat</td><td class="num">~08:50 Sun</td><td>Home with the Sunday still ahead of you.</td></tr>
+      <tr><td><b>12258</b> Garib Rath</td><td class="num">~17:00 Sat</td><td class="num">~09:45 Sun</td><td>All-AC and cheap for it. Arrives Yesvantpur, not city station.</td></tr>
+    </table>
+  </div>
 
-    <div class="note warn">
-      <b>Timings are indicative.</b> Train numbers are stable; departure times shift with timetable revisions. Confirm every one on IRCTC or NTES before you pay. If everything is waitlisted, <b>Tatkal opens one day before departure</b> &mdash; 10:00 for AC classes, 11:00 for sleeper &mdash; be logged in and ready at 09:58.
-    </div>
+  <div class="note caution">
+    <b>Times are indicative; numbers are not.</b> Train numbers stay put, departure times shift with timetable revisions &mdash; confirm each on IRCTC or NTES before paying. If everything is waitlisted, <b>Tatkal opens one day before departure</b>: 10:00 for AC, 11:00 for sleeper. Be logged in at 09:58.
+  </div>
 
-    <h3>Beds</h3>
-    <ul class="bullets">
-      <li><b>Kanyakumari, 2 nights (31 Aug, 1 Sep).</b> Stay near the Sunset Point / Beach Road cluster &mdash; the whole town is walkable and you want to be able to roll out for sunrise. &#8377;1,200&ndash;2,500. Sea-facing rooms cost more and are worth it here.</li>
-      <li><b>Thiruvananthapuram, 3 nights (2, 3, 4 Sep).</b> Base yourself in <b>East Fort / Thampanoor</b> &mdash; walking distance to the temple, the bus stand and the railway station, which is the whole trick to this leg. &#8377;1,500&ndash;3,000.</li>
-      <li>Book refundable rates. Early September is the monsoon tail and you may want to swap a beach day for an indoor one.</li>
-    </ul>
+  <h3>The one booking</h3>
+  <ul class="b">
+    <li><b>Five nights in Thiruvananthapuram</b> &mdash; 31 Aug through 4 Sep, checking out Saturday afternoon. One reservation, one room, no moving.</li>
+    <li><b>Stay in East Fort or Thampanoor.</b> This is the whole trick to a single-base trip: the temple, the long-distance bus stand and the railway station are all within walking distance of each other, and every day of this plan starts at one of the three. &#8377;1,500&ndash;3,000 a night.</li>
+    <li>A five-night stay is worth negotiating directly with the property &mdash; it usually beats the nightly rate you see online, and it is the one saving a single base hands you outright.</li>
+    <li>Book refundable, and ask for a room away from the road. Thampanoor is a transport hub and it sounds like one at 05:00.</li>
+  </ul>
+</section>
+
+<!-- ================= LOGIC ================= -->
+<section>
+  <span class="eyebrow">The shape of it</span>
+  <h2>Why Thiruvananthapuram is the base</h2>
+  <p class="lede">You asked for one bed for the whole week. Of the three candidates, this one is not close.</p>
+  <div class="scroll">
+    <table>
+      <tr><th>Base</th><th>Case for it</th><th>Why it loses</th></tr>
+      <tr>
+        <td><b>Thiruvananthapuram</b></td>
+        <td>Padmanabhaswamy is a ten-minute walk. Every other target is a day trip and back. Real choice of rooms, food and indoor fallbacks.</td>
+        <td><b>It wins.</b></td>
+      </tr>
+      <tr>
+        <td><b>Kanyakumari</b></td>
+        <td>You wake up at the cape. Sunrise and sunset are free.</td>
+        <td>Padmanabhaswamy is 2.5 hrs away and shuts at noon &mdash; darshan becomes a 05:00 start with no margin. Varkala goes to 3.5 hrs. Thin on rooms and food.</td>
+      </tr>
+      <tr>
+        <td><b>Nagercoil</b></td>
+        <td>Sits between the cape and the palace, an hour from each.</td>
+        <td>Splits the difference and wins neither end: still 2 hrs from the temple, and nothing to come home to.</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>The real prize, and the real cost</h3>
+  <p>Worth being straight about both, because they are the whole trade.</p>
+  <ul class="b">
+    <li><b>What you gain, beyond not moving:</b> five consecutive mornings within walking distance of Padmanabhaswamy. You named that temple as the point of the trip &mdash; and if the slot fails, the queue is impossible, the dress code trips you up, or you simply oversleep, <b>you have four more mornings to try again</b>. In the two-base version you had exactly one attempt. That is the strongest argument here and it is not close either.</li>
+    <li><b>What it costs you:</b> the cape at dawn and at dusk in the same visit. Kanyakumari is 2 to 2.5 hrs each way, so a day trip cannot hold both ends of the day. The plan below <b>keeps sunset</b> &mdash; the better bet in September anyway, since the famous sea-sunrise is an October-to-March event and often cloud-blocked now &mdash; and accepts a late return.</li>
+    <li><b>If the sunrise is the thing you actually came for</b>, one 03:30 departure by car buys it: you are at the cape by 06:00, ahead of a 06:10 sunrise. Brutal, but it is on the table, and it is the only way to get it from here.</li>
+    <li><b>You also lose the cape after dark</b> &mdash; the lit bazaar, the Bhagavathy Amman evening, the town once the buses leave. That is a genuine loss and there is no way around it from Trivandrum.</li>
+  </ul>
+  <div class="note">
+    <b>Two Padmanabhas. Do not conflate them.</b> <b>Sree Padmanabhaswamy Temple</b> is the great Vishnu temple here in Thiruvananthapuram &mdash; the vaults, the reclining deity, the unbending dress code. <b>Padmanabhapuram Palace</b> is the wooden Travancore royal seat at Thuckalay in Tamil Nadu, 55 km south, still administered by Kerala. Different days, both in this week.
   </div>
 </section>
 
-<!-- ============ THE ROUTE ============ -->
+<!-- ================= DAYS ================= -->
 <section>
-  <div class="wrap">
-    <h2><span class="num">01</span>Why the days fall this way</h2>
-    <p class="lede">Three fixed constraints decided the shape of this trip. Everything else moves around them.</p>
-    <ul class="bullets">
-      <li><b>Padmanabhapuram Palace is closed on Mondays</b> &mdash; and you arrive on a Monday. So the palace goes on Wednesday, on the drive out of Kanyakumari, which is also the geographically correct day for it: Thuckalay sits directly on the Kanyakumari&ndash;Trivandrum road.</li>
-      <li><b>Padmanabhaswamy shuts 12:00&ndash;17:00</b> every day. Darshan is a morning commitment, not something you slot in after lunch. It gets Thursday morning to itself.</li>
-      <li><b>Sleeping on the train both ways</b> converts two travel days into two nights, which is what turns a Sunday-to-Sunday week into six usable days instead of four.</li>
+  <span class="eyebrow">Day by day</span>
+  <h2>The week, from one room</h2>
+  <p class="lede">Every day below leaves East Fort in the morning and comes back to the same bed. Timings are realistic rather than aspirational, and each afternoon carries slack, because it will rain in at least one of them.</p>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 0</span><span class="daydate">Sun 30 Aug</span></div>
+    <h3>Board, and sleep</h3>
+    <span class="sleep">Night: <b>on the train</b></span>
+    <ul class="plan">
+      <li><span class="t">Evening</span><span class="d"><strong>Eat before you board</strong><small>Pantry food on this route is survivable, not good. Pick up dinner at Majestic.</small></span></li>
+      <li><span class="t">19:30</span><span class="d"><strong>At KSR Bengaluru, platform confirmed</strong><small>Check the coach position board &mdash; on a 24-coach rake your coach is never where you assume.</small></span></li>
+      <li><span class="t">20:10</span><span class="d"><strong>16526 pulls out</strong><small>Light sheet, power bank, water. Charging points get contested after dark.</small></span></li>
     </ul>
-    <div class="note">
-      <b>Two Padmanabhas, do not mix them up.</b> <b>Sree Padmanabhaswamy Temple</b> is the great Vishnu temple in Thiruvananthapuram &mdash; the one with the vaults, the reclining deity, the strict dress code. <b>Padmanabhapuram Palace</b> is the wooden Travancore royal palace at Thuckalay in Tamil Nadu, 37 km from Kanyakumari, owned and run by Kerala. This itinerary gets you both.
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 1</span><span class="daydate">Mon 31 Aug</span></div>
+    <h3>Arrive, unpack once</h3>
+    <span class="sleep">Base: <b>Thiruvananthapuram</b> &mdash; and for the next five nights</span>
+    <ul class="plan">
+      <li><span class="t">12:00</span><span class="d"><strong>Off at Trivandrum Central</strong><small>Do not stay on to the cape. If you took the 16315 instead you have been here since 09:15, and the whole afternoon opens up.</small></span></li>
+      <li><span class="t">13:00</span><span class="d"><strong>Check in at East Fort. Unpack properly.</strong><small>This is the only time you will do this. Hang everything; nothing dries fast at 80% humidity, so start the clock early.</small></span></li>
+      <li><span class="t">15:30</span><span class="d"><strong>Walk the neighbourhood you have just bought into</strong><small>East Fort bazaar, the temple tank, the outer wall of Padmanabhaswamy at its quietest. <b>Monday closes Kuthiramalika and the Napier</b> &mdash; which is exactly why today is the do-nothing day.</small></span></li>
+      <li><span class="t">17:00</span><span class="d"><strong>Ask at the temple gate about Thursday</strong><small>Confirm your slot, the entry queue, and what they will actually accept you wearing. Doing this on Monday, with nothing at stake, is worth more than any website.</small></span></li>
+      <li><span class="t">18:00</span><span class="d"><strong>Shanghumugham for sunset</strong><small>Fifteen minutes out, by the airport. Watch, do not swim.</small></span></li>
+      <li><span class="t">20:30</span><span class="d"><strong>Lock tomorrow down</strong><small>Book the car, or check seats on the 05:15. Tomorrow is the long one and it starts before dawn.</small></span></li>
+    </ul>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 2</span><span class="daydate">Tue 1 Sep</span></div>
+    <h3>Kanyakumari &mdash; the long day</h3>
+    <span class="sleep">Base: <b>Thiruvananthapuram</b> &middot; out ~15 hrs</span>
+    <ul class="plan">
+      <li><span class="t">04:45</span><span class="d"><strong>Up, and out</strong><small><b>By train:</b> the 16128 leaves Trivandrum at 05:15 and is in Nagercoil by 06:30 &mdash; then a bus or auto for the last 30 minutes to the cape. Cheap, and you watch the sun come up through the window. <b>By car:</b> leave at 05:00 for a 07:30 arrival. Round trip runs &#8377;4,500&ndash;6,300 and buys you the evening back.</small></span></li>
+      <li><span class="t">08:00</span><span class="d"><strong>Straight into the ferry queue</strong><small>Ferries run roughly 08:00&ndash;16:00. Being early is the entire game &mdash; by ten it is an hour standing in the sun. Entry ~&#8377;30 plus ferry ~&#8377;50&ndash;150.</small></span></li>
+      <li><span class="t">08:45</span><span class="d"><strong>Vivekananda Rock, then the Thiruvalluvar statue</strong><small>Same ferry loop; 2&ndash;3 hrs for both. Sit ten minutes in the meditation hall &mdash; the only genuinely still place in a very loud town.</small></span></li>
+      <li><span class="t">11:30</span><span class="d"><strong>The Triveni Sangam viewpoint</strong><small>Arabian Sea, Bay of Bengal, Indian Ocean, visibly meeting. Do nothing else for a while. This is the thing you came for.</small></span></li>
+      <li><span class="t">12:30</span><span class="d"><strong>Lunch, Nagercoil style</strong><small>Fish curry and red rice, if you eat it. This coast does it better than anywhere inland.</small></span></li>
+      <li><span class="t">14:00</span><span class="d"><strong>Suchindram Thanumalayan Temple</strong><small>13 km back inland &mdash; it belongs to this day, not the palace day. Musical pillars, an 18-foot Hanuman, and a rare joint dedication to Shiva, Vishnu and Brahma. Dress code applies; men bare-chested; phones stay outside.</small></span></li>
+      <li><span class="t">16:00</span><span class="d"><strong>Back at the cape: Gandhi Mandapam, Our Lady of Ransom</strong><small>The Gandhi memorial is built so that on his birthday the sun falls exactly where his ashes were kept. The white Gothic church is five minutes on.</small></span></li>
+      <li><span class="t">18:30</span><span class="d"><strong>Sunset over the water &mdash; the payoff</strong><small>The reason this day runs so long. Sunset Point is crowded and loud; the rocks slightly south are neither.</small></span></li>
+      <li><span class="t">19:15</span><span class="d"><strong>Leave for home</strong><small>Back in Trivandrum around 21:45 by car. If you came by train, check the evening Nagercoil departures on NTES before you commit to staying for sunset &mdash; services run late, but confirm rather than assume.</small></span></li>
+    </ul>
+    <div class="note caution"><b>Do not swim here.</b> The sangam has real currents and this is a rough-water month. Wade at the shore and no further.</div>
+    <div class="note"><b>If the sunrise is what you actually want</b>, this is the day to leave at 03:30 by car instead &mdash; at the cape by 06:00, ahead of a 06:10 sunrise. You would then head home in the early afternoon rather than staying for sunset. One or the other; a day trip cannot hold both.</div>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 3</span><span class="daydate">Wed 2 Sep</span></div>
+    <h3>The wooden palace</h3>
+    <span class="sleep">Base: <b>Thiruvananthapuram</b> &middot; out ~9 hrs</span>
+    <ul class="plan">
+      <li><span class="t">08:00</span><span class="d"><strong>South again, 55 km</strong><small>Car round trip &#8377;3,500&ndash;4,500, or buses via Neyyattinkara and Marthandam for a fraction of it. A gentler start than yesterday, deliberately.</small></span></li>
+      <li><span class="t">09:30</span><span class="d"><strong>Padmanabhapuram Palace, Thuckalay</strong><small>Open 09:00&ndash;17:00 &mdash; <b>and closed Mondays, which is why this sits on a Wednesday.</b> The finest wooden palace in India: the black mirror floor, the mother-of-pearl, the clock tower still keeping time. Give it two full hours. Ring 04651 250255 that morning to confirm it is open.</small></span></li>
+      <li><span class="t">12:00</span><span class="d"><strong>Mathur Hanging Trough</strong><small>Fifteen minutes away. An aqueduct on 28 pillars, a kilometre long, 115 feet up &mdash; and in the monsoon tail it is actually carrying water, which is the whole difference. You can walk the length of it.</small></span></li>
+      <li><span class="t">13:30</span><span class="d"><strong>Lunch at Thuckalay or Marthandam</strong><small>Unremarkable towns, entirely decent food.</small></span></li>
+      <li><span class="t">16:30</span><span class="d"><strong>Back in Trivandrum, with the evening free</strong><small>Deliberate. Tomorrow starts early and matters more than anything else this week.</small></span></li>
+      <li><span class="t">20:00</span><span class="d"><strong>Lay out tomorrow's clothes tonight</strong><small>Mundu, or saree or set-mundu. Nothing else gets you in.</small></span></li>
+    </ul>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 4</span><span class="daydate">Thu 3 Sep</span></div>
+    <h3>Darshan, and the Travancore court</h3>
+    <span class="sleep">Base: <b>Thiruvananthapuram</b> &middot; all of it on foot</span>
+    <ul class="plan">
+      <li><span class="t">04:30</span><span class="d"><strong>Optional: Nirmalya Darshanam</strong><small>The first darshan of the day, the deity still dressed in the previous night's flowers. The quietest, and the one worth losing sleep over &mdash; and from East Fort it costs you a ten-minute walk rather than a two-hour drive.</small></span></li>
+      <li><span class="t">08:00</span><span class="d"><strong>Sree Padmanabhaswamy Temple</strong><small>Arrive 20&ndash;30 minutes before your slot. Phones, cameras, bags and footwear all go to the cloakroom. Anantha Padmanabha reclines across three doorways &mdash; you see him in three parts, never at once, and that is deliberate.</small></span></li>
+      <li><span class="t">10:30</span><span class="d"><strong>Kuthiramalika Palace Museum</strong><small>Directly next door. The Horse Palace: 122 carved horses under the eaves, built by Swathi Thirunal, who was a composer before he was a king. Roughly 08:30&ndash;13:00 and 15:00&ndash;17:30, closed Mondays.</small></span></li>
+      <li><span class="t">12:30</span><span class="d"><strong>Lunch, then wait out the heat</strong><small>A sadya if anywhere near East Fort is serving one.</small></span></li>
+      <li><span class="t">15:30</span><span class="d"><strong>Napier Museum and the gallery grounds</strong><small>An Indo-Saracenic building better than most of what it houses, with the Sree Chitra Art Gallery in the same park. Closed Mondays and Wednesday mornings &mdash; Thursday afternoon is clean.</small></span></li>
+      <li><span class="t">18:00</span><span class="d"><strong>An evening with nothing in it</strong><small>You have earned one. If the morning went wrong for any reason, note that you still have Friday and Saturday mornings to try the temple again &mdash; the single best thing about basing here.</small></span></li>
+    </ul>
+    <div class="note caution">
+      <b>The dress code is enforced at the gate, not negotiated.</b> Men: mundu or dhoti, <b>no shirt</b>. Women: saree, set-mundu, or a long skirt with a wrap &mdash; the line on salwar varies by day and by doorkeeper, so carry a mundu to wrap over it. No jeans, leggings, shorts or western wear on anybody. Wraps can be bought or rented at the entrance, but do not build the morning around that. Entry is for Hindus only and ID may be asked for.
     </div>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 5</span><span class="daydate">Fri 4 Sep</span></div>
+    <h3>Varkala, and the red cliff</h3>
+    <span class="sleep">Base: <b>Thiruvananthapuram</b> &middot; out ~10 hrs</span>
+    <ul class="plan">
+      <li><span class="t">07:30</span><span class="d"><strong>Train to Varkala Sivagiri</strong><small>About an hour from Trivandrum Central, unreserved, under &#8377;40. Several morning services &mdash; check NTES the night before. Auto up to the cliff, ~&#8377;150.</small></span></li>
+      <li><span class="t">09:00</span><span class="d"><strong>Walk the North Cliff, end to end</strong><small>Red laterite dropping straight into the Arabian Sea &mdash; the only formation like it on this coast. Breakfast at the cliff edge; in the off season you will have half of it to yourself.</small></span></li>
+      <li><span class="t">11:00</span><span class="d"><strong>Papanasam Beach and Janardanaswamy Temple</strong><small>A two-thousand-year-old temple above the beach where families perform rites for their dead. Watch quietly from the edge, and take no photographs of them.</small></span></li>
+      <li><span class="t">13:30</span><span class="d"><strong>Sivagiri Mutt</strong><small>Sree Narayana Guru's ashram on the hill &mdash; the centre of the most consequential social reform movement in Kerala's history.</small></span></li>
+      <li><span class="t">17:00</span><span class="d"><strong>Train back</strong><small>Home before dark.</small></span></li>
+    </ul>
+    <div class="note caution"><b>This is the day to keep loose.</b> Varkala is the wettest stop on the route and the cliff path gets genuinely slippery. If Friday morning looks bad, trade it with Saturday's Kovalam plan &mdash; neither is booked, so the swap is free.</div>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 6</span><span class="daydate">Sat 5 Sep</span></div>
+    <h3>One last coast, then the night train</h3>
+    <span class="sleep">Night: <b>on the train</b></span>
+    <ul class="plan">
+      <li><span class="t">08:30</span><span class="d"><strong>Pick one, and keep it close</strong><small><b>Kovalam</b>, 16 km, for the lighthouse beach and a long slow morning &mdash; the default, and the right one on a departure day. <b>Poovar</b>, 30 km, for the boat ride where the backwater meets the sea. <b>Ponmudi</b>, 60 km of hairpins, only if the sky is clear and you leave at seven.</small></span></li>
+      <li><span class="t">13:00</span><span class="d"><strong>Back, and check out</strong><small>Five nights in one room means one bag, already packed, waiting at reception. This is the day that choice pays off.</small></span></li>
+      <li><span class="t">15:45</span><span class="d"><strong>At Trivandrum Central</strong><small>Buy dinner here. You will want it around eight, and the options later are worse.</small></span></li>
+      <li><span class="t">16:45</span><span class="d"><strong>16316 departs</strong><small>Or the 12258 Garib Rath at 17:00 into Yesvantpur.</small></span></li>
+    </ul>
+  </article>
+
+  <article class="day">
+    <div class="day-head"><span class="daynum">Day 7</span><span class="daydate">Sun 6 Sep</span></div>
+    <h3>Home</h3>
+    <span class="sleep">Night: <b>your own bed</b></span>
+    <ul class="plan">
+      <li><span class="t">08:50</span><span class="d"><strong>Bengaluru</strong><small>Into KSR Bengaluru on the 16316, or Yesvantpur at 09:45 on the Garib Rath. The Sunday survives.</small></span></li>
+    </ul>
+  </article>
+
+  <div class="note"><b>Two days out of six are long.</b> Tuesday (the cape) and Wednesday (the palace) carry the driving; Thursday is entirely on foot, and Friday and Saturday are as easy as you want them. That is the trade for never packing a bag mid-week.</div>
+</section>
+
+<!-- ================= REFERENCE ================= -->
+<section>
+  <span class="eyebrow">Reference</span>
+  <h2>Hours, closed days, costs</h2>
+  <p class="lede">The closed days are what wreck an itinerary. Each of these is worth a phone check on the morning.</p>
+  <div class="scroll">
+    <table>
+      <tr><th>Place</th><th>Hours</th><th>Closed</th><th>Cost</th></tr>
+      <tr><td><b>Vivekananda Rock Memorial</b><br>Kanyakumari, 94 km from base</td><td class="num">ferry ~08:00&ndash;16:00</td><td>Rough seas suspend ferries</td><td class="num">~&#8377;30 + ferry &#8377;50&ndash;150</td></tr>
+      <tr><td><b>Bhagavathy Amman Temple</b><br>Kanyakumari</td><td class="num">~04:30&ndash;12:15<br>16:00&ndash;20:15</td><td>&mdash;</td><td><span class="free">Free</span> no phones</td></tr>
+      <tr><td><b>Padmanabhapuram Palace</b><br>Thuckalay, 55 km from base</td><td class="num">09:00&ndash;17:00<br>last entry ~16:30</td><td><span class="closed">Mondays</span> + national holidays</td><td>Modest entry; camera extra</td></tr>
+      <tr><td><b>Sree Padmanabhaswamy</b><br>Thiruvananthapuram</td><td class="num">slots from ~03:30<br><b>shut 12:00&ndash;17:00</b><br>~17:00&ndash;19:20</td><td>&mdash;</td><td>Free darshan, paid slots online<br>Hindus only &middot; dress code</td></tr>
+      <tr><td><b>Kuthiramalika Palace</b></td><td class="num">~08:30&ndash;13:00<br>15:00&ndash;17:30</td><td><span class="closed">Mondays</span></td><td>Small entry fee</td></tr>
+      <tr><td><b>Napier Museum &amp; Zoo</b></td><td class="num">~10:00&ndash;16:45</td><td><span class="closed">Mondays</span> + Wed mornings</td><td>Small entry fee</td></tr>
+      <tr><td><b>Suchindram Temple</b></td><td class="num">~06:00&ndash;12:00<br>17:00&ndash;20:30</td><td>&mdash;</td><td><span class="free">Free</span> no phones</td></tr>
+    </table>
+  </div>
+
+  <h3>Rough budget, per person</h3>
+  <div class="scroll">
+    <table>
+      <tr><th></th><th>Lean</th><th>Comfortable</th></tr>
+      <tr><td><b>Trains, return</b></td><td class="num">&#8377;900 sleeper</td><td class="num">&#8377;3,000 3AC</td></tr>
+      <tr><td><b>Stay, 5 nights</b></td><td class="num">&#8377;5,000</td><td class="num">&#8377;12,000</td></tr>
+      <tr><td><b>Food, 7 days</b></td><td class="num">&#8377;2,800</td><td class="num">&#8377;5,500</td></tr>
+      <tr><td><b>Palace-day car</b></td><td class="num">&#8377;400 by bus</td><td class="num">&#8377;4,000 shared</td></tr>
+      <tr><td><b>Local transport &amp; entries</b></td><td class="num">&#8377;2,000</td><td class="num">&#8377;3,500</td></tr>
+      <tr><td><b>Total</b></td><td class="num"><b>~&#8377;11,000</b></td><td class="num"><b>~&#8377;28,000</b></td></tr>
+    </table>
   </div>
 </section>
 
-<!-- ============ DAY BY DAY ============ -->
+<!-- ================= WEATHER ================= -->
 <section>
-  <div class="wrap">
-    <h2><span class="num">02</span>Day by day</h2>
-    <p class="lede">Times are realistic, not aspirational. There is slack in every afternoon because it will rain in at least one of them.</p>
+  <span class="eyebrow">Weather &amp; the sea &middot; checked 25 Aug</span>
+  <h2>What the sky is actually doing</h2>
+  <p class="lede">Read this part with its expiry date attached. A genuine day-by-day forecast for your window does not exist yet, so what follows is the live signal, the long-run normals for each stop, and a schedule for when to look again.</p>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 0</span><span class="day-date">Sunday 30 August &middot; on the rails</span></div>
-      <h3>Board and sleep</h3>
-      <p class="base">Bengaluru &rarr; overnight</p>
-      <ul class="plan">
-        <li><span class="t">Evening</span><span class="d"><strong>Eat before you board.</strong><small>Pantry food on this route is edible but grim. Pick up dinner at Majestic.</small></span></li>
-        <li><span class="t">19:30</span><span class="d"><strong>At KSR Bengaluru (SBC), platform confirmed</strong><small>Check the coach position display &mdash; the reservation chart position is not where you think it is on a 24-coach rake.</small></span></li>
-        <li><span class="t">~20:10</span><span class="d"><strong>16526 departs</strong><small>Carry a light sheet and a power bank; charging points get contested.</small></span></li>
-      </ul>
-    </div>
+  <div class="alert">
+    <h3>What is known today, and what is not</h3>
+    <p><b>Your trip starts on forecast day 5 and ends on day 12.</b> Beyond about seven days, daily forecasts stop being forecasts and become averages with decoration. Anyone showing you an hour-by-hour picture of 6 September today is showing you a model artefact.</p>
+    <p><b>The live signal is good, though.</b> IMD's press release of <b>25 August</b> says subdued rainfall activity is likely to continue over Peninsular India for the next week &mdash; that covers your arrival. The heavy spell now running over Kerala (widespread rain 24&ndash;28 August, with isolated very heavy falls on the 24th) is forecast to taper before you get there. Over Tamil Nadu, only isolated to scattered rain is expected 24&ndash;30 August.</p>
+    <p><b>Read that as a favourable lean, not a promise.</b> A monsoon break can end in 48 hours.</p>
+  </div>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 1</span><span class="day-date">Monday 31 August</span></div>
-      <h3>Arrive at the end of the country</h3>
-      <p class="base">Kanyakumari &middot; night 1</p>
-      <ul class="plan">
-        <li><span class="t">Morning</span><span class="d"><strong>The good part of the journey</strong><small>Palakkad gap, then the coconut belt. Keep the window seat side of the coach after Coimbatore.</small></span></li>
-        <li><span class="t">~14:50</span><span class="d"><strong>Kanyakumari (CAPE). Check in, shower, eat.</strong><small>The station is ~1.5 km from the beach cluster; autos, &#8377;60&ndash;100, agree the fare first.</small></span></li>
-        <li><span class="t">17:00</span><span class="d"><strong>Walk to the Triveni Sangam viewpoint</strong><small>Arabian Sea, Bay of Bengal, Indian Ocean. Do nothing else. Just stand there for a while.</small></span></li>
-        <li><span class="t">~18:30</span><span class="d"><strong>Sunset over the water</strong><small>Sunset Point gets crowded and loud; the rocks slightly south are quieter.</small></span></li>
-        <li><span class="t">19:30</span><span class="d"><strong>Bhagavathy Amman Temple, then the bazaar</strong><small>Men enter bare-chested (shirt off). Phones and cameras are not allowed inside &mdash; leave them at the hotel.</small></span></li>
-      </ul>
-    </div>
+  <h3>Kanyakumari &mdash; day trip, Tue 1 Sep</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Measure</th><th>September normal</th><th>What that means on the ground</th></tr>
+      <tr><td><b>Day / night</b></td><td class="num">30&deg;C / 26&deg;C</td><td>Warm rather than hot. The humidity, not the number, is what tires you.</td></tr>
+      <tr><td><b>Humidity</b></td><td class="num">~82%</td><td>Muggy from dawn. Two shirts a day.</td></tr>
+      <tr><td><b>Rain</b></td><td class="num">~54 mm over ~4 days</td><td><b>The driest stop on this trip.</b> The Ghats wring the monsoon out on the Kerala side; the cape sits in the lee of it. Rain here comes in short bursts, not grey days.</td></tr>
+      <tr><td><b>Wind</b></td><td class="num">~26 kph average</td><td><b>The windiest place you will stand all week.</b> This is the Aralvaimozhi wind gap &mdash; it is why the turbines are here. Hats, hoods and loose paper all go.</td></tr>
+      <tr><td><b>Sun</b></td><td class="num">rise ~06:10 &middot; set ~18:30</td><td>Be at the viewpoint by 05:50 and 18:00 respectively.</td></tr>
+    </table>
+  </div>
+  <div class="note"><b>The wind is your ferry risk, not the rain.</b> A dry, bright, blowing day can still stop the Vivekananda Rock service. If the sea looks up on the morning of Day 2, do the palace loop instead and take the ferry on the following morning &mdash; the swap works because the palace is shut only on Mondays.</div>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 2</span><span class="day-date">Tuesday 1 September</span></div>
-      <h3>The rock, the poet, the memorials</h3>
-      <p class="base">Kanyakumari &middot; night 2</p>
-      <ul class="plan">
-        <li><span class="t">05:45</span><span class="d"><strong>Sunrise attempt</strong><small>Sunrise is ~06:10. Be in place by 05:50. See the reality check below &mdash; September clouds may eat it, and that is fine, you have two mornings.</small></span></li>
-        <li><span class="t">08:00</span><span class="d"><strong>Ferry queue for Vivekananda Rock Memorial</strong><small>Ferries run roughly 08:00&ndash;16:00. Be in the queue at opening &mdash; by 10:00 it is an hour of standing in the sun. Entry ~&#8377;30 plus ferry ~&#8377;50&ndash;150 depending on the ticket class.</small></span></li>
-        <li><span class="t">08:45</span><span class="d"><strong>The rock, and the Thiruvalluvar statue</strong><small>Same ferry loop. Sit in the meditation hall for ten minutes &mdash; it is the one genuinely still place in a very noisy town. Allow 2&ndash;3 hrs total.</small></span></li>
-        <li><span class="t">12:00</span><span class="d"><strong>Lunch &mdash; a proper Nagercoil-style meal</strong><small>Fish curry and red rice if you eat it. This coast does it better than anywhere inland.</small></span></li>
-        <li><span class="t">15:30</span><span class="d"><strong>Gandhi Mandapam &amp; Kamarajar Mandapam</strong><small>The Gandhi memorial is built so the sun falls on the spot where his ashes were kept, on his birthday. Five minutes' walk apart.</small></span></li>
-        <li><span class="t">17:00</span><span class="d"><strong>Our Lady of Ransom Church</strong><small>White Gothic pile facing the sea. Free, quick, worth the detour.</small></span></li>
-        <li><span class="t">18:30</span><span class="d"><strong>Second sunset. Pack tonight.</strong><small>Tomorrow you check out with bags and do not come back.</small></span></li>
-      </ul>
-      <div class="note warn"><b>The sea here is not for swimming.</b> The sangam point has real currents and it is a rough-water month. Wade at the shore, no further.</div>
-    </div>
+  <h3>Inland &mdash; Suchindram Tue, Thuckalay Wed</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Measure</th><th>September normal</th><th>What that means on the ground</th></tr>
+      <tr><td><b>Day / night</b></td><td class="num">~31&deg;C / 25&deg;C</td><td>A degree hotter and much stiller than the cape. Feels heavier without the sea wind.</td></tr>
+      <tr><td><b>Rain</b></td><td class="num">Higher than the coast</td><td>You are moving back toward the gap in the Ghats. Afternoon build-up is likelier here than at Kanyakumari.</td></tr>
+      <tr><td><b>Upside</b></td><td>&mdash;</td><td>The Mathur aqueduct only impresses when it is carrying water. The 24&ndash;28 August spell is filling it for you.</td></tr>
+    </table>
+  </div>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 3</span><span class="day-date">Wednesday 2 September</span></div>
-      <h3>Palace day &mdash; and the transfer to Trivandrum</h3>
-      <p class="base">Kanyakumari &rarr; Thiruvananthapuram &middot; night 3</p>
-      <ul class="plan">
-        <li><span class="t">08:30</span><span class="d"><strong>Check out. Hire a car for the day, one way, with stops.</strong><small>&#8377;3,000&ndash;4,500 for Kanyakumari &rarr; Suchindram &rarr; Mathur &rarr; Thuckalay &rarr; Trivandrum drop. Fix the route and the price in writing before you start. Doable by bus for ~&#8377;150 total, but with bags it will cost you the whole day.</small></span></li>
-        <li><span class="t">09:15</span><span class="d"><strong>Suchindram Thanumalayan Temple</strong><small>13 km. Musical pillars, an 18-ft Hanuman, and the rare Shiva&ndash;Vishnu&ndash;Brahma trinity dedication. Dress code applies; men bare-chested. No phones inside.</small></span></li>
-        <li><span class="t">10:45</span><span class="d"><strong>Mathur Hanging Trough</strong><small>An aqueduct on 28 pillars, ~1 km long, 115 ft up. In the monsoon tail it is actually running &mdash; this is the best month of the year to see it. You can walk the length of it.</small></span></li>
-        <li><span class="t">12:30</span><span class="d"><strong>Padmanabhapuram Palace, Thuckalay</strong><small>Open 09:00&ndash;17:00, last entry ~16:30. <b>The reason today is Wednesday.</b> India's finest wooden palace &mdash; the black polished floor, the mother-of-pearl, the clock tower. Allow 2 hrs. Modest entry fee, camera charged separately. Verify open status on 04651&nbsp;250255 the morning you go.</small></span></li>
-        <li><span class="t">15:30</span><span class="d"><strong>Drive on to Thiruvananthapuram</strong><small>~55 km from the palace, 1.5&ndash;2 hrs. You cross back into Kerala; the road narrows and the greenery doubles.</small></span></li>
-        <li><span class="t">18:00</span><span class="d"><strong>Check in at East Fort / Thampanoor</strong><small>Walk to the temple tank at dusk and confirm tomorrow's slot and dress requirements at the gate.</small></span></li>
-      </ul>
-    </div>
+  <h3>Thiruvananthapuram &amp; Kovalam &mdash; your base, Mon 31 Aug to Sat 5 Sep</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Measure</th><th>September normal</th><th>What that means on the ground</th></tr>
+      <tr><td><b>Day / night</b></td><td class="num">29&ndash;30&deg;C / 25&deg;C</td><td>Narrow range. It never really cools off at night.</td></tr>
+      <tr><td><b>Rain</b></td><td class="num">~4.6 mm/day<br>~10 wet days in the first 10</td><td>Expect rain on most days, but as <b>30&ndash;60 minute bursts</b> that pass, not a washout. Mornings are reliably the better half of the day.</td></tr>
+      <tr><td><b>Humidity</b></td><td class="num">67&ndash;85%</td><td>Cotton and linen only. Nothing dries overnight; pack accordingly.</td></tr>
+      <tr><td><b>Sea temp</b></td><td class="num">~28&deg;C</td><td>Bath-warm. Which is exactly what lulls people into the water they should not be in &mdash; see below.</td></tr>
+    </table>
+  </div>
+  <div class="note"><b>This is why darshan and the palace sit in the mornings.</b> The itinerary was already built that way; the rainfall pattern confirms it. Keep afternoons for things with a roof.</div>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 4</span><span class="day-date">Thursday 3 September</span></div>
-      <h3>Darshan, and the Travancore court</h3>
-      <p class="base">Thiruvananthapuram &middot; night 4</p>
-      <ul class="plan">
-        <li><span class="t">04:30</span><span class="d"><strong>Optional: Nirmalya Darshanam</strong><small>The first darshan of the day, the deity still in the previous night's flowers. Quietest, and the one worth losing sleep for.</small></span></li>
-        <li><span class="t">08:00</span><span class="d"><strong>Sree Padmanabhaswamy Temple</strong><small>Arrive 20&ndash;30 min before your slot. Phones, cameras, bags, footwear all go to the cloakroom. Anantha Padmanabha reclining across three doors &mdash; you see him in three parts, and that is the point.</small></span></li>
-        <li><span class="t">10:30</span><span class="d"><strong>Kuthiramalika Palace Museum</strong><small>Immediately next door. The Horse Palace &mdash; 122 carved horses under the eaves, built by Swathi Thirunal. Closed Mondays; roughly 08:30&ndash;13:00 and 15:00&ndash;17:30.</small></span></li>
-        <li><span class="t">12:30</span><span class="d"><strong>Lunch, then wait out the heat</strong><small>Kerala sadya if any place near East Fort is serving one.</small></span></li>
-        <li><span class="t">15:30</span><span class="d"><strong>Napier Museum &amp; the gallery grounds</strong><small>Indo-Saracenic building that is better than most of what is in it, plus the Sree Chitra Art Gallery in the same park. Closed Mondays, and Wednesday mornings.</small></span></li>
-        <li><span class="t">18:00</span><span class="d"><strong>Shanghumugham Beach for sunset</strong><small>15 min from the centre, near the airport. The giant reclining mermaid sculpture is there. Do not swim.</small></span></li>
-      </ul>
-      <div class="note warn">
-        <b>Padmanabhaswamy dress code is enforced at the gate, not negotiated.</b> Men: mundu or dhoti, <b>no shirt</b>. Women: saree, set-mundu, or a long skirt with a wrap &mdash; policy on salwar varies, so carry a mundu to wrap over it. No jeans, leggings, shorts or western wear on anyone. Wraps can be bought or rented at the entrance if you turn up wrong, but do not plan around that. Entry is for Hindus only, and ID may be asked for.
-      </div>
-    </div>
+  <h3>Varkala &mdash; day trip, Fri 4 Sep</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Measure</th><th>September normal</th><th>What that means on the ground</th></tr>
+      <tr><td><b>Rain</b></td><td class="num">~200 mm over ~11 days</td><td><b>The wettest stop of the four</b> &mdash; roughly four times Kanyakumari's monthly total. Highest chance of the day being rearranged by weather.</td></tr>
+      <tr><td><b>Day / night</b></td><td class="num">~29&deg;C / 24&deg;C</td><td>Slightly cooler than the cape, and greener for the same reason.</td></tr>
+      <tr><td><b>Exposure</b></td><td>&mdash;</td><td>You are walking a laterite cliff edge in the wet. It gets genuinely slippery, and there is no railing for most of it.</td></tr>
+    </table>
+  </div>
+  <div class="note caution"><b>Varkala is the day to keep flexible.</b> If Friday morning looks bad, swap it with Saturday&rsquo;s Kovalam plan &mdash; nothing in either day is booked, so the trade costs you nothing.</div>
+</section>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 5</span><span class="day-date">Friday 4 September</span></div>
-      <h3>Varkala &mdash; the cliff</h3>
-      <p class="base">Day trip &middot; back to Trivandrum, night 5</p>
-      <ul class="plan">
-        <li><span class="t">07:30</span><span class="d"><strong>Train to Varkala Sivagiri</strong><small>~1 hr from Trivandrum Central, unreserved, under &#8377;40. Several morning services; check NTES the night before. Auto from Varkala station to the cliff, ~&#8377;150.</small></span></li>
-        <li><span class="t">09:00</span><span class="d"><strong>Walk the North Cliff end to end</strong><small>Red laterite cliffs dropping straight into the Arabian Sea &mdash; the only formation like it on this coast. Breakfast at a cliff-edge cafe; in the off season you will have it half to yourself.</small></span></li>
-        <li><span class="t">11:00</span><span class="d"><strong>Papanasam Beach and Janardanaswamy Temple</strong><small>The 2,000-year-old temple sits above the beach where ancestral rites are performed. Watch, quietly, from the edge.</small></span></li>
-        <li><span class="t">13:30</span><span class="d"><strong>Sivagiri Mutt</strong><small>Sree Narayana Guru's ashram on the hill &mdash; the centre of one of the most consequential social reform movements in Kerala's history.</small></span></li>
-        <li><span class="t">17:00</span><span class="d"><strong>Train back</strong><small>Home before dark.</small></span></li>
-      </ul>
-      <div class="note warn"><b>Monsoon rules at Varkala:</b> the cliff path gets genuinely slippery, the sea is rough, and lifeguards may fly the red flag all day. Enjoy it as a viewpoint, not a swim.</div>
-    </div>
+<!-- ================= SEA SAFETY ================= -->
+<section>
+  <span class="eyebrow">Sea safety</span>
+  <h2>Is Kovalam safe right now</h2>
+  <p class="lede">Short answer: yes, with one condition &mdash; you swim only where a lifeguard is standing, and you get out when the flag says so. The hazard here is not the weather you can see.</p>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 6</span><span class="day-date">Saturday 5 September</span></div>
-      <h3>One last coast, then the night train</h3>
-      <p class="base">Thiruvananthapuram &rarr; overnight</p>
-      <ul class="plan">
-        <li><span class="t">08:30</span><span class="d"><strong>Pick one:</strong><small><b>Kovalam</b> (16 km) for the lighthouse beach and a long lazy morning &mdash; the default. <b>Poovar</b> (30 km) for the estuary boat ride where the backwater meets the sea. <b>Ponmudi</b> (60 km) for tea-slope hills and hairpins &mdash; only if the sky is clear, and leave at 07:00.</small></span></li>
-        <li><span class="t">13:30</span><span class="d"><strong>Back in the city. Late lunch, collect bags.</strong><small>Keep this loose. Trains out of TVC leave from mid-afternoon.</small></span></li>
-        <li><span class="t">15:45</span><span class="d"><strong>At Trivandrum Central</strong><small>Grab dinner for the train here &mdash; you will want it around 20:00 and the options later are worse.</small></span></li>
-        <li><span class="t">~16:45</span><span class="d"><strong>16316 departs</strong><small>Or 12258 Garib Rath at ~17:00 into Yesvantpur.</small></span></li>
-      </ul>
-    </div>
+  <div class="alert">
+    <h3>Kovalam, specifically</h3>
+    <p><b>Lifeguards are stationed at six points along the beach</b>, each marked with a coloured flag installed for exactly this purpose, and each carrying a first-aid kit. Swimming is safe <b>inside those supervised zones and nowhere else</b>.</p>
+    <p><b>The undercurrents are the actual danger.</b> Authorities issued an alert after three tourists had to be rescued from them. The specific warning worth memorising: <b>the surface can look completely calm while a sudden undercurrent runs right up to the shoreline.</b> How the sea looks from your table is not information.</p>
+    <p><b>In the monsoon season the red flag is common and it is not advisory.</b> Red means out of the water, whatever anyone else on the beach is doing.</p>
+  </div>
 
-    <div class="day">
-      <div class="day-head"><span class="day-tag">Day 7</span><span class="day-date">Sunday 6 September</span></div>
-      <h3>Home</h3>
-      <p class="base">Bengaluru</p>
-      <ul class="plan">
-        <li><span class="t">~08:50</span><span class="d"><strong>Bengaluru</strong><small>16316 into KSR Bengaluru, or 12258 into Yesvantpur at ~09:45. Sunday intact.</small></span></li>
-      </ul>
-    </div>
+  <h3>Kallakkadal &mdash; the swell that arrives without a storm</h3>
+  <p>This is the south Kerala hazard nobody warns tourists about, because it does not look like weather. Long-period swells generated thousands of kilometres away in the southern Indian Ocean arrive at this coast under a clear sky and a still breeze, and surge over the beach.</p>
+  <p>INCOIS issued exactly such a <b>Swell Surge (Kallakkadal) Warning for Kerala, south Tamil Nadu and Lakshadweep on 19&ndash;20 August 2026</b> &mdash; swells to 2.1 m with a 21-second peak period, enough to cause intermittent coastal flooding in low-lying areas at high tide. That warning has expired, but these events recur through the season and are issued at a day or two's notice.</p>
+  <div class="note caution"><b>So check INCOIS, daily, while you are there.</b> incois.gov.in carries the High Wave and Swell Surge advisory. It is the one bulletin that will tell you something the sky will not.</div>
+
+  <h3>Beach by beach</h3>
+  <div class="scroll">
+    <table>
+      <tr><th>Where</th><th>Swim?</th><th>Why</th></tr>
+      <tr><td><b>Kanyakumari</b><br>Triveni Sangam</td><td><span class="closed">Never</span></td><td>Converging currents at the confluence, with rock. Not a swimming beach in any season. Wade at the edge, no further.</td></tr>
+      <tr><td><b>Kovalam</b><br>Lighthouse Beach</td><td><span class="free">Zones only</span></td><td>The one properly patrolled beach on your route &mdash; six lifeguard stations, flagged. Undercurrents reach close inshore. Obey the flag.</td></tr>
+      <tr><td><b>Varkala</b><br>Papanasam</td><td><span class="closed">Not this season</span></td><td>Rough water, likely red flag, and families are performing funeral rites on the sand. Go for the cliff and the view.</td></tr>
+      <tr><td><b>Shanghumugham</b></td><td><span class="closed">No</span></td><td>A sunset promenade beach, not a bathing one. Steep shelving.</td></tr>
+      <tr><td><b>Poovar</b><br>estuary boat ride</td><td><span class="free">Boat, not swim</span></td><td>The backwater ride is the point and is fine. The sandbar mouth is not for swimming.</td></tr>
+    </table>
   </div>
 </section>
 
-<!-- ============ REFERENCE ============ -->
+<!-- ================= RECHECK ================= -->
 <section>
-  <div class="wrap">
-    <h2><span class="num">03</span>Opening hours, closed days, costs</h2>
-    <p class="lede">The closed days are the ones that can wreck a day. Everything here is worth a phone check the morning of.</p>
-    <div class="scroller">
-      <table>
-        <tr><th>Place</th><th>Hours</th><th>Closed</th><th>Cost</th></tr>
-        <tr><td><b>Vivekananda Rock Memorial</b><br><span class="muted">Kanyakumari</span></td><td>Ferry ~08:00&ndash;16:00</td><td>Rough seas can suspend ferries</td><td>Entry ~&#8377;30 + ferry ~&#8377;50&ndash;150</td></tr>
-        <tr><td><b>Bhagavathy Amman Temple</b></td><td>~04:30&ndash;12:15, 16:00&ndash;20:15</td><td>&mdash;</td><td>Free &middot; no phones, men bare-chested</td></tr>
-        <tr><td><b>Padmanabhapuram Palace</b><br><span class="muted">Thuckalay, 37 km</span></td><td>09:00&ndash;17:00<br>last entry ~16:30</td><td><b>Mondays</b> + national holidays</td><td>Modest entry; camera extra<br>Ph. 04651 250255</td></tr>
-        <tr><td><b>Sree Padmanabhaswamy</b><br><span class="muted">Thiruvananthapuram</span></td><td>Morning slots from ~03:30<br><b>shut 12:00&ndash;17:00</b><br>evening ~17:00&ndash;19:20</td><td>&mdash;</td><td>Free darshan; paid slots online<br>Hindus only &middot; strict dress code</td></tr>
-        <tr><td><b>Kuthiramalika Palace</b></td><td>~08:30&ndash;13:00, 15:00&ndash;17:30</td><td><b>Mondays</b></td><td>Small entry fee</td></tr>
-        <tr><td><b>Napier Museum &amp; Zoo</b></td><td>~10:00&ndash;16:45</td><td><b>Mondays</b>, Wednesday mornings</td><td>Small entry fee</td></tr>
-        <tr><td><b>Suchindram Temple</b></td><td>~06:00&ndash;12:00, 17:00&ndash;20:30</td><td>&mdash;</td><td>Free &middot; dress code, no phones</td></tr>
-      </table>
-    </div>
-
-    <h3>Rough budget, per person</h3>
-    <div class="scroller">
-      <table>
-        <tr><th></th><th>Lean</th><th>Comfortable</th></tr>
-        <tr><td>Trains, return</td><td>&#8377;900 <span class="muted">sleeper</span></td><td>&#8377;3,000 <span class="muted">3AC</span></td></tr>
-        <tr><td>Stay, 5 nights</td><td>&#8377;5,000</td><td>&#8377;12,000</td></tr>
-        <tr><td>Food, 7 days</td><td>&#8377;2,800</td><td>&#8377;5,500</td></tr>
-        <tr><td>Palace-day car</td><td>&#8377;400 <span class="muted">by bus</span></td><td>&#8377;4,000 <span class="muted">shared</span></td></tr>
-        <tr><td>Local transport &amp; entries</td><td>&#8377;2,000</td><td>&#8377;3,500</td></tr>
-        <tr><td><b>Total</b></td><td><b>~&#8377;11,000</b></td><td><b>~&#8377;28,000</b></td></tr>
-      </table>
-    </div>
+  <span class="eyebrow">Before you leave</span>
+  <h2>When to look again</h2>
+  <p class="lede">Three checks, on three dates. Each one is timed so that a real five-day forecast finally covers the leg you are deciding about.</p>
+  <div class="scroll">
+    <table>
+      <tr><th>Check on</th><th>It will finally cover</th><th>What you decide with it</th></tr>
+      <tr><td><b>Thu 27 Aug</b></td><td class="num">30&ndash;31 Aug</td><td>Departure and arrival day. First real look at whether the break is holding.</td></tr>
+      <tr><td><b>Sat 29 Aug</b></td><td class="num">30 Aug &ndash; 2 Sep</td><td>The whole Kanyakumari leg. Pick your ferry morning here, and your sunrise morning.</td></tr>
+      <tr><td><b>Tue 1 Sep</b></td><td class="num">1&ndash;5 Sep</td><td>The Trivandrum leg. Decide Varkala vs Kovalam order, and whether Ponmudi is on at all.</td></tr>
+    </table>
   </div>
+  <h3>The four sources worth using</h3>
+  <ul class="b">
+    <li><b>mausam.imd.gov.in</b> &mdash; the Kerala district rainfall forecast, with the red / orange / yellow district colour codes. The authoritative one for rain.</li>
+    <li><b>city.imd.gov.in</b> &mdash; IMD's own city page for Kanyakumari, for the point forecast at the cape.</li>
+    <li><b>incois.gov.in</b> &mdash; High Wave and Swell Surge advisory. Check this every morning of the trip, not just before it.</li>
+    <li><b>Kerala SDMA</b> &mdash; district-level alerts and any local restrictions, including beach closures.</li>
+  </ul>
+  <div class="note"><b>One habit worth keeping:</b> an orange or red district alert for Thiruvananthapuram is not a reason to cancel a day &mdash; it is a reason to move the outdoor half of it to the morning and put the museums in the afternoon.</div>
 </section>
 
-<!-- ============ WEATHER ============ -->
+<!-- ================= KNOW ================= -->
 <section>
-  <div class="wrap">
-    <h2><span class="num">04</span>Weather, per region</h2>
-    <p class="lede">Checked 25 August 2026. Read this with its expiry date attached &mdash; a genuine day-by-day forecast for your window does not exist yet.</p>
+  <span class="eyebrow">Ground truth</span>
+  <h2>Things worth knowing first</h2>
 
-    <div class="alert">
-      <h3>&#9888; What is known today, and what is not</h3>
-      <p><b>Your trip starts on forecast day 5 and ends on day 12.</b> Past about seven days, daily forecasts stop being forecasts and become averages with decoration. Anything showing you hour-by-hour detail for 6 September today is a model artefact, not information.</p>
-      <p><b>The live signal is favourable.</b> IMD's press release of <b>25 August</b> says subdued rainfall activity is likely to continue over Peninsular India for the next week &mdash; that reaches your arrival. The current spell over Kerala (widespread rain 24&ndash;28 August, isolated very heavy on the 24th) is forecast to taper before you get there. Tamil Nadu sees only isolated to scattered rain 24&ndash;30 August.</p>
-      <p><b>A lean, not a promise.</b> A monsoon break can close in 48 hours.</p>
-    </div>
+  <h3>Pack for that</h3>
+  <ul class="b">
+    <li><b>A mundu or dhoti</b> (men), <b>saree or set-mundu</b> (women). Non-negotiable at Padmanabhaswamy, useful at Suchindram and Bhagavathy Amman.</li>
+    <li>Sandals you can pull off in a second and are willing to leave outside a hundred times.</li>
+    <li>A rain shell, not an umbrella. The wind at the cape will invert an umbrella, and 26 kph is the average, not the gust.</li>
+    <li>A dry bag or ziplocks for phone and documents, and a second pair of shoes &mdash; nothing dries overnight at 80% humidity.</li>
+    <li>Power bank, and cash &mdash; temple towns still run on it, and Kanyakumari's ATMs go dry over weekends.</li>
+  </ul>
 
-    <h3>Kanyakumari &mdash; Mon 31 Aug to Wed 2 Sep</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Measure</th><th>September normal</th><th>On the ground</th></tr>
-        <tr><td><b>Day / night</b></td><td>30&deg;C / 26&deg;C</td><td>Warm rather than hot. The humidity is what tires you, not the number.</td></tr>
-        <tr><td><b>Humidity</b></td><td>~82%</td><td>Muggy from dawn. Two shirts a day.</td></tr>
-        <tr><td><b>Rain</b></td><td>~54 mm over ~4 days</td><td><b>The driest stop of the trip.</b> The Ghats wring the monsoon out on the Kerala side and the cape sits in its lee. Short bursts, not grey days.</td></tr>
-        <tr><td><b>Wind</b></td><td>~26 kph average</td><td><b>The windiest place you will stand all week</b> &mdash; the Aralvaimozhi wind gap, which is why the turbines are here.</td></tr>
-        <tr><td><b>Sun</b></td><td>rise ~06:10 &middot; set ~18:30</td><td>In place by 05:50 and 18:00.</td></tr>
-      </table>
-    </div>
-    <div class="note"><b>Wind is the ferry risk, not rain.</b> A dry, bright, blowing day can still stop the Vivekananda Rock service. If the sea is up on Day 2, do the palace loop instead and take the ferry the next morning &mdash; the palace is shut only on Mondays, so the swap is safe.</div>
+  <h3>Etiquette that will actually come up</h3>
+  <ul class="b">
+    <li><b>Phones are surrendered, not tolerated</b>, at Padmanabhaswamy, Bhagavathy Amman and Suchindram. Plan on having no camera in exactly the places you would most want one. Look instead.</li>
+    <li><b>Men go shirtless</b> in the Tamil and Travancore temple tradition. This is normal and it is not optional, Padmanabhaswamy included.</li>
+    <li>Padmanabhaswamy admits <b>Hindus only</b> and may ask for ID. There is no talking past it.</li>
+    <li>Agree the auto fare before you get in. Everywhere, all week.</li>
+  </ul>
 
-    <h3>Thuckalay &amp; Suchindram, inland &mdash; Wed 2 Sep</h3>
-    <ul class="bullets">
-      <li><b>~31&deg;C day, 25&deg;C night.</b> A degree hotter and much stiller than the cape; heavier without the sea wind.</li>
-      <li><b>Rain risk above the coast</b> &mdash; you are moving back toward the gap in the Ghats, so afternoon build-up is likelier here.</li>
-      <li><b>The upside:</b> the Mathur aqueduct only impresses when it is carrying water, and the 24&ndash;28 August spell is filling it for you.</li>
-    </ul>
-
-    <h3>Thiruvananthapuram &amp; Kovalam &mdash; Wed 2 Sep to Sat 5 Sep</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Measure</th><th>September normal</th><th>On the ground</th></tr>
-        <tr><td><b>Day / night</b></td><td>29&ndash;30&deg;C / 25&deg;C</td><td>Narrow range; it never really cools at night.</td></tr>
-        <tr><td><b>Rain</b></td><td>~4.6 mm/day, ~10 wet days in the first 10</td><td>Rain most days, but as <b>30&ndash;60 minute bursts</b> that pass. Mornings are reliably the better half of the day.</td></tr>
-        <tr><td><b>Humidity</b></td><td>67&ndash;85%</td><td>Cotton and linen only. Nothing dries overnight.</td></tr>
-        <tr><td><b>Sea temp</b></td><td>~28&deg;C</td><td>Bath-warm &mdash; which is exactly what lulls people into water they should not be in.</td></tr>
-      </table>
-    </div>
-    <div class="note"><b>This is why darshan and the palace sit in the mornings.</b> The rainfall pattern confirms the shape the itinerary already had. Keep afternoons for things with a roof.</div>
-
-    <h3>Varkala &mdash; Fri 4 Sep</h3>
-    <ul class="bullets">
-      <li><b>~200 mm over ~11 days in September</b> &mdash; roughly four times Kanyakumari's monthly total, and <b>the wettest stop of the four</b>.</li>
-      <li><b>~29&deg;C day, 24&deg;C night.</b> Slightly cooler than the cape, and greener for the same reason.</li>
-      <li><b>Exposure:</b> a laterite cliff edge in the wet, genuinely slippery, with no railing for most of its length.</li>
-    </ul>
-    <div class="note warn"><b>Keep Varkala flexible.</b> If Friday morning looks bad, swap it with the Kovalam day &mdash; nothing in either is booked, so the trade is free.</div>
-  </div>
-</section>
-
-<!-- ============ SEA SAFETY ============ -->
-<section>
-  <div class="wrap">
-    <h2><span class="num">05</span>Is Kovalam safe right now</h2>
-    <p class="lede">Short answer: yes, with one condition &mdash; swim only where a lifeguard is standing, and get out when the flag says so. The hazard here is not the weather you can see.</p>
-
-    <div class="alert">
-      <h3>&#9888; Kovalam, specifically</h3>
-      <p><b>Lifeguards are stationed at six points along the beach</b>, each marked by a coloured flag installed for that purpose and each carrying a first-aid kit. Swimming is safe <b>inside those supervised zones and nowhere else</b>.</p>
-      <p><b>Undercurrents are the actual danger.</b> Authorities issued an alert after three tourists had to be rescued from them. The line worth memorising: <b>the surface can look completely calm while a sudden undercurrent runs right up to the shoreline.</b> How the sea looks from your table is not information.</p>
-      <p><b>In monsoon season the red flag is common, and it is not advisory.</b> Red means out of the water, whatever anyone else on the beach is doing.</p>
-    </div>
-
-    <h3>Kallakkadal &mdash; the swell that arrives without a storm</h3>
-    <p style="color:var(--ink-2);font-size:.95rem">Long-period swells generated thousands of kilometres away in the southern Indian Ocean reach this coast under a clear sky and a still breeze, then surge over the beach. INCOIS issued exactly that &mdash; a <b>Swell Surge (Kallakkadal) Warning for Kerala, south Tamil Nadu and Lakshadweep on 19&ndash;20 August 2026</b>, swells to 2.1 m with a 21-second peak period, enough for intermittent coastal flooding in low-lying areas at high tide. That warning has expired, but these events recur through the season on a day or two's notice.</p>
-    <div class="note warn"><b>So check INCOIS daily while you are there</b> &mdash; incois.gov.in carries the High Wave and Swell Surge advisory. It is the one bulletin that tells you something the sky will not.</div>
-
-    <h3>Beach by beach</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Where</th><th>Swim?</th><th>Why</th></tr>
-        <tr><td><b>Kanyakumari</b><br><span class="muted">Triveni Sangam</span></td><td><b>Never</b></td><td>Converging currents at the confluence, with rock. Not a swimming beach in any season.</td></tr>
-        <tr><td><b>Kovalam</b><br><span class="muted">Lighthouse Beach</span></td><td><b>Zones only</b></td><td>The one properly patrolled beach on your route &mdash; six flagged lifeguard stations. Undercurrents reach close inshore.</td></tr>
-        <tr><td><b>Varkala</b><br><span class="muted">Papanasam</span></td><td><b>Not this season</b></td><td>Rough water, likely red flag, and funeral rites on the sand. Go for the cliff and the view.</td></tr>
-        <tr><td><b>Shanghumugham</b></td><td><b>No</b></td><td>A sunset promenade, not a bathing beach. Steep shelving.</td></tr>
-        <tr><td><b>Poovar</b></td><td><b>Boat, not swim</b></td><td>The estuary ride is the point and is fine. The sandbar mouth is not for swimming.</td></tr>
-      </table>
-    </div>
-
-    <h3>When to look again</h3>
-    <div class="scroller">
-      <table>
-        <tr><th>Check on</th><th>Finally covers</th><th>What you decide</th></tr>
-        <tr><td><b>Thu 27 Aug</b></td><td>30&ndash;31 Aug</td><td>Departure and arrival. First real look at whether the break holds.</td></tr>
-        <tr><td><b>Sat 29 Aug</b></td><td>30 Aug &ndash; 2 Sep</td><td>The Kanyakumari leg &mdash; pick your ferry morning and your sunrise morning.</td></tr>
-        <tr><td><b>Tue 1 Sep</b></td><td>1&ndash;5 Sep</td><td>The Trivandrum leg &mdash; Varkala vs Kovalam order, and whether Ponmudi is on at all.</td></tr>
-      </table>
-    </div>
-    <ul class="bullets">
-      <li><b>mausam.imd.gov.in</b> &mdash; Kerala district rainfall forecast with red / orange / yellow district codes. Authoritative for rain.</li>
-      <li><b>city.imd.gov.in</b> &mdash; IMD's city page for Kanyakumari, for the point forecast at the cape.</li>
-      <li><b>incois.gov.in</b> &mdash; High Wave and Swell Surge advisory. Every morning of the trip, not just before it.</li>
-      <li><b>Kerala SDMA</b> &mdash; district alerts and any local restrictions, including beach closures.</li>
-    </ul>
-    <div class="note"><b>One habit worth keeping:</b> an orange or red alert for Thiruvananthapuram district is not a reason to cancel a day &mdash; it is a reason to move the outdoor half of it to the morning and put the museums in the afternoon.</div>
-  </div>
-</section>
-
-<!-- ============ KNOW ============ -->
-<section>
-  <div class="wrap">
-    <h2><span class="num">06</span>Things worth knowing before you go</h2>
-
-    <div class="cols">
-      <div>
-        <h3>Weather, in short</h3>
-        <ul class="bullets">
-          <li>Full per-region detail is in <b>section 04</b> above. The headline: Kanyakumari is the driest and windiest stop, Varkala the wettest, and rain arrives as bursts rather than washouts.</li>
-          <li><b>The sunrise, plainly:</b> Kanyakumari's famous sea-sunrise is an October-to-March event. In September the sun rises further north and often behind cloud. Go both mornings and treat a clear one as a gift.</li>
-          <li>The compensation nobody mentions: everything is green, the Mathur aqueduct is actually flowing, and Varkala is nearly empty.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Pack for it</h3>
-        <ul class="bullets">
-          <li><b>A mundu/dhoti</b> (men) or <b>saree / set-mundu</b> (women) &mdash; non-negotiable for Padmanabhaswamy, useful at Suchindram and Bhagavathy Amman.</li>
-          <li>Sandals you can pull off fast, and are willing to leave outside a hundred times.</li>
-          <li>Rain shell, not an umbrella &mdash; the wind at the coast will invert it.</li>
-          <li>Dry bag or ziplocks for phone and documents.</li>
-          <li>Power bank, and cash &mdash; small temple towns still run on it, and ATMs at Kanyakumari run dry on weekends.</li>
-        </ul>
-      </div>
-    </div>
-
-    <h3>Etiquette that will actually come up</h3>
-    <ul class="bullets">
-      <li><b>Phones are confiscated, not tolerated,</b> at Padmanabhaswamy, Bhagavathy Amman and Suchindram. Plan to have no camera in the places you would most want one, and just look instead.</li>
-      <li><b>Men go shirtless</b> in the Tamil and Travancore temple tradition &mdash; this is normal, not optional, and includes Padmanabhaswamy.</li>
-      <li>Padmanabhaswamy admits <b>Hindus only</b>, and may ask for ID. Do not turn up expecting to talk your way past it.</li>
-      <li>At Varkala's Papanasam beach, families are performing rites for their dead. No photographs of them.</li>
-      <li>Agree auto fares before getting in, everywhere on this trip.</li>
-    </ul>
-
-    <h3>If something falls through</h3>
-    <ul class="bullets">
-      <li><b>No train out on Sunday</b> &rarr; take the overnight Volvo to Nagercoil, then a 30-min local bus to Kanyakumari. Costs a few hours of comfort, nothing else.</li>
-      <li><b>No train back on Saturday</b> &rarr; buses run Trivandrum &rarr; Bengaluru all evening; book on redbus the moment you know.</li>
-      <li><b>Ferry to the rock cancelled for weather</b> &rarr; flip Day 2 and Day 3, do the palace loop instead and try the ferry the next morning. The palace is closed only on Monday, so this swap is safe.</li>
-      <li><b>Rained out entirely in Trivandrum</b> &rarr; Napier Museum, Sree Chitra gallery, Kuthiramalika and the Priyadarshini planetarium are all indoors and all in the same city.</li>
-      <li><b>Darshan slot missed</b> &rarr; the temple reopens at 17:00; the evening darshan is shorter but real.</li>
-    </ul>
-  </div>
+  <h3>If something falls through</h3>
+  <ul class="b">
+    <li><b>No train out on Sunday</b> &rarr; overnight Volvo to Nagercoil, then a 30-minute local bus to Kanyakumari. Costs comfort, nothing else.</li>
+    <li><b>No train back on Saturday</b> &rarr; buses to Bengaluru run all evening; book on redbus the moment you know.</li>
+    <li><b>Ferry cancelled for weather</b> &rarr; swap Day 2 and Day 3: do the palace loop instead and try the rock the next morning. The palace is shut only on Monday, so the swap is safe.</li>
+    <li><b>Rained out in Trivandrum</b> &rarr; Napier Museum, Sree Chitra gallery, Kuthiramalika and the planetarium are all indoors, all in the same city.</li>
+    <li><b>Darshan slot missed</b> &rarr; the temple reopens at 17:00. The evening darshan is shorter, but it is real.</li>
+  </ul>
 </section>
 
 <footer>
-  <div class="wrap">
-    Planned for 30 Aug &ndash; 6 Sep 2026 &middot; Bengaluru &rarr; Kanyakumari &rarr; Thiruvananthapuram.<br>
-    Train times, ferry hours, fees and darshan slots change &mdash; verify on IRCTC, NTES and
-    padmanabhaswamytemple.org before you commit money to any of them.
-  </div>
+  Planned for 30 August &ndash; 6 September 2026 &middot; Bengaluru &rarr; Thiruvananthapuram &rarr; Bengaluru, with the cape, the palace and the cliff as days out.<br>
+  Train times, ferry hours, entry fees and darshan slots all change. Verify on IRCTC, NTES and
+  padmanabhaswamytemple.org before committing money to any of them.
 </footer>
+
+</div>
 
 </body>
 </html>
