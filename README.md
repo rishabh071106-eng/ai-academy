@@ -9,6 +9,7 @@ A static site that teaches AI, one chapter at a time. A new chapter is auto-gene
 ```
 ai-academy/
 ├─ index.html                  ← homepage (chapter grid)
+├─ headshot.html               ← Headshot Studio (in-browser portrait tool)
 ├─ chapters/                   ← one HTML file per chapter (shareable URLs)
 │  ├─ what-is-ai-really.html
 │  ├─ how-llms-work-without-math.html
@@ -24,6 +25,20 @@ ai-academy/
 ├─ .github/workflows/daily.yml ← daily cron (GitHub Actions)
 └─ package.json
 ```
+
+---
+
+## Headshot Studio
+
+`headshot.html` is a standalone tool at `/headshot` — drop in a selfie and it gives you a
+professional headshot for LinkedIn, Slack and org charts: portrait-proportion framing guides
+(eye line, chin line, circular crop), exposure/contrast/warmth/clarity adjustments, a
+depth-of-field background blur with optional studio backdrop tint, and one-click export at
+800px, 400px, 1600px or as a 512px circular PNG. It also ships copy-ready prompts for
+generating a headshot with an image model.
+
+Everything runs on the Canvas API in the browser — the photo is never uploaded, and the page
+makes no network calls beyond the shared stylesheet and font.
 
 ---
 
