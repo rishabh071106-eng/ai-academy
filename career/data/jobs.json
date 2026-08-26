@@ -1637,16 +1637,18 @@
     "title": "Head of Product — Bureau",
     "location": "Mumbai",
     "seniority": "Head",
-    "apply_url": "https://jobs.experian.com/job/head-of-product-bureau-in-mumbai-india-jid-3729",
+    "apply_url": "https://jobs.smartrecruiters.com/Experian/744000120326248-head-of-product-bureau",
     "platform": "careers-site",
     "posted_date": "2026-08-08",
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Head-level ownership of all bureau, analytics and decisioning products, explicitly requiring deep lending/payments understanding — credit-data leadership adjacent to the lending-platform record; Mumbai-based.",
-    "notes": "'Posted 2 days ago' via Muse as of 10 Aug (jid 3729); page fetch blocked from sandbox — confirm live before applying.",
-    "verified": false,
+    "notes": "'Posted 2 days ago' via Muse as of 10 Aug (jid 3729); page fetch blocked from sandbox — confirm live before applying. Re-bumped 'posted 2 days ago' on Muse as of 26 Aug — still hiring; apply_url upgraded to direct SmartRecruiters req.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 108
+    "id": 108,
+    "status": "likely_live",
+    "last_checked": "2026-08-26"
   },
   {
     "company": "PayU",
