@@ -1897,5 +1897,23 @@
     "last_checked": "2026-08-25",
     "category": "fintech-india",
     "id": 123
+  },
+  {
+    "company": "Intuit",
+    "title": "Group Product Manager — Payroll Tax",
+    "location": "Bengaluru",
+    "seniority": "GPM",
+    "apply_url": "https://jobs.intuit.com/job/bengaluru/group-product-manager/27595/16035661",
+    "platform": "careers-site",
+    "posted_date": "2026-08-27",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "GPM leading PMs (8+ yrs, 3+ leading) on Intuit's payroll-tax compliance products — regulated-domain platform work at big-tech comp; tax/payroll is adjacent rather than core fintech.",
+    "notes": "'Posted 24 hours ago' on Indeed as of 28 Aug (Glassdoor ~4 days); seventh Intuit role tracked.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-08-28",
+    "category": "bigtech",
+    "id": 124
   }
 ]
