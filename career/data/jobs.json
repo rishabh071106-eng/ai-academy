@@ -10,12 +10,12 @@
     "immediate_joiner": true,
     "fit_score": 10,
     "fit_reason": "End-to-end consumer lending product ownership (journeys, underwriting, pricing, risk, portfolio growth) at 13–19 yrs — mirrors the JPM digital-lending VP role.",
-    "notes": "₹79–96 LPA; posted ~5 days ago — very fresh Live-check 24 Aug: still indexed on iimjobs, full JD served, no closure signal.",
+    "notes": "₹79–96 LPA; posted ~5 days ago — very fresh Live-check 24 Aug: still indexed on iimjobs, full JD served, no closure signal. 31 Aug check: still indexed on iimjobs with full JD.",
     "verified": true,
     "category": "exec-search",
     "id": 1,
     "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Confidential leading payments company (via iimjobs)",
@@ -28,12 +28,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "CPO reporting to CEO at a Bengaluru payments company; 15 yrs sits just under the band but JPM VP + EMBA pedigree justifies applying.",
-    "notes": "Fresh posting (~1 week) Live-check 24 Aug: iimjobs shows 'posted 1 week ago' — re-bumped mid-Aug, still open.",
+    "notes": "Fresh posting (~1 week) Live-check 24 Aug: iimjobs shows 'posted 1 week ago' — re-bumped mid-Aug, still open. 31 Aug check: 'posted 1 week ago' — re-bumped again, still open.",
     "verified": true,
     "category": "exec-search",
     "id": 2,
     "status": "live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "NatWest Group (Digital X)",
@@ -46,12 +46,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "Director-level lending-platform product leadership at a digital banking unit — closest match to the digital loan booking platform record.",
-    "notes": "Posted within ~1 day of search — act fast. URL is the filtered search page; pick the specific req there. Live-check 24 Aug: R-00277563 on jobs.natwestgroup.com shown 'posted 1 day ago' — actively re-bumped.",
+    "notes": "Posted within ~1 day of search — act fast. URL is the filtered search page; pick the specific req there. Live-check 24 Aug: R-00277563 on jobs.natwestgroup.com shown 'posted 1 day ago' — actively re-bumped. 31 Aug check: R-00277563 still in NatWest Product & Proposition index.",
     "verified": true,
     "category": "workday-banks",
     "id": 3,
-    "status": "live",
-    "last_checked": "2026-08-24"
+    "status": "likely_live",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "SAP Labs India",
@@ -64,12 +64,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "Head-of-Product leading a global PM org for a B2B network platform with explicit AI-native/agentic charter — maps to multi-agent AI + org leadership.",
-    "notes": "Freshest posting (~last week of July 2026); hiring/scaling the PM org is part of the role. Live-check 24 Aug: still on jobs.sap.com (req 1418522833), no closure evidence.",
+    "notes": "Freshest posting (~last week of July 2026); hiring/scaling the PM org is part of the role. Live-check 24 Aug: still on jobs.sap.com (req 1418522833), no closure evidence. 31 Aug check: still on jobs.sap.com with current JD.",
     "verified": true,
     "category": "bigtech",
     "id": 4,
     "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Confidential (UPI/payments platform, via iimjobs)",
@@ -81,12 +81,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "Fintech Head of Product in Bengaluru; posting explicitly asks 'immediate to 30 days notice period'.",
-    "notes": "Immediate-joiner evidence quoted in listing Live-check 24 Aug: iimjobs listing still indexed with full JD.",
+    "notes": "Immediate-joiner evidence quoted in listing Live-check 24 Aug: iimjobs listing still indexed with full JD. 31 Aug check: still listed on iimjobs (~1 month old).",
     "verified": true,
     "category": "exec-search",
     "id": 5,
     "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Freshworks",
@@ -98,12 +98,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "Director PM at India's flagship SaaS (Freddy AI); 10-14 yrs band fits.",
-    "notes": "Sr Director req in Chennai has apply-by Aug 7 2026 — urgency. Confirm on Freshworks SmartRecruiters. Live-check 24 Aug: only aggregator mirrors remain; NOT found in current SmartRecruiters index — verify before applying.",
+    "notes": "Sr Director req in Chennai has apply-by Aug 7 2026 — urgency. Confirm on Freshworks SmartRecruiters. Live-check 24 Aug: only aggregator mirrors remain; NOT found in current SmartRecruiters index — verify before applying. 31 Aug check: Instahyre says no longer accepting applications; absent from SmartRecruiters — treat as closed.",
     "verified": false,
     "category": "saas-ai",
     "id": 6,
-    "status": "unknown",
-    "last_checked": "2026-08-24"
+    "status": "likely_closed",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Intuit",
@@ -115,12 +115,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "Owns multi-quarter AI/conversational-intelligence vision at a fintech — direct hit on LLM/RAG/agentic work.",
-    "notes": "Newest job-ID series — recent posting Live-check 24 Aug: still on jobs.intuit.com (req 97499178672).",
+    "notes": "Newest job-ID series — recent posting Live-check 24 Aug: still on jobs.intuit.com (req 97499178672). 31 Aug check: active JD on jobs.intuit.com.",
     "verified": true,
     "category": "bigtech",
     "id": 7,
-    "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "status": "live",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Visa",
@@ -133,12 +133,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "End-to-end P&L-style accountability for two open-banking product domains — Head-of-Product scope.",
-    "notes": "Very recent REF number — act fast Live-check 24 Aug: REF085043W live on Visa Workday incl. /apply page.",
+    "notes": "Very recent REF number — act fast Live-check 24 Aug: REF085043W live on Visa Workday incl. /apply page. 31 Aug check: job + /apply pages live on Visa Workday (posted 22 Jul).",
     "verified": true,
     "category": "workday-banks",
     "id": 8,
-    "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "status": "live",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Salesforce",
@@ -150,12 +150,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Owns the AI Platform powering Einstein/Agentforce — near-exact overlap with multi-agent LLM/RAG platform work at enterprise scale.",
-    "notes": "Req JR208713 Live-check 24 Aug: jr208713 active on careers.salesforce.com.",
+    "notes": "Req JR208713 Live-check 24 Aug: jr208713 active on careers.salesforce.com. 31 Aug check: jr208713 still indexed on careers.salesforce.com.",
     "verified": true,
     "category": "saas-ai",
     "id": 9,
-    "status": "live",
-    "last_checked": "2026-08-24"
+    "status": "likely_live",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Bottomline Technologies",
@@ -203,12 +203,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP owning digital lending lifecycle — lead gen, onboarding, KYC, underwriting, disbursal, collections — direct match.",
-    "notes": "Also older id 1695365 (May 2026) Re-bumped on iimjobs (1695365) 'posted 2 days ago' as of 23 Aug — mandate still open. Live-check 24 Aug: iimjobs 1695365 still in current index (86-99 LPA).",
+    "notes": "Also older id 1695365 (May 2026) Re-bumped on iimjobs (1695365) 'posted 2 days ago' as of 23 Aug — mandate still open. Live-check 24 Aug: iimjobs 1695365 still in current index (86-99 LPA). 31 Aug check: 'posted 2 days ago' — fresh re-bump, very active.",
     "verified": true,
     "category": "exec-search",
     "id": 12,
     "status": "live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Elevation Capital (portfolio fintech)",
@@ -1275,12 +1275,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "India Leadership Team payments-product head; 15–17 yrs asked, regulator/C-level facing — near-perfect match for an 18-yr global-bank VP in payments",
-    "notes": "Exec comp supports ₹95L+; exact post date unverifiable from sandbox — confirm freshness on the board before applying Reposted again ~19 Aug (Built In) — still hiring as of 22 Aug. Live-check 24 Aug: Greenhouse 7739832 and careers.adyen.com both live.",
+    "notes": "Exec comp supports ₹95L+; exact post date unverifiable from sandbox — confirm freshness on the board before applying Reposted again ~19 Aug (Built In) — still hiring as of 22 Aug. Live-check 24 Aug: Greenhouse 7739832 and careers.adyen.com both live. 31 Aug check: active on Adyen Greenhouse + careers site.",
     "verified": true,
     "category": "fintech-india",
     "id": 86,
     "status": "live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "CredAble",
@@ -1411,12 +1411,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Agentic commercial-lending platform (LLMs, cloud-native replacing legacy core) — near-exact mirror of the JPM digital loan booking + multi-agent AI mandate. Top-priority apply.",
-    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64. Live-check 24 Aug: listed on NatWest Digital X Product & Proposition page, adjacent reqs 'posted 1 day ago'.",
+    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64. Live-check 24 Aug: listed on NatWest Digital X Product & Proposition page, adjacent reqs 'posted 1 day ago'. 31 Aug check: Matrix agentic commercial-lending JD still in NatWest index.",
     "verified": true,
     "category": "workday-banks",
     "id": 94,
     "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1575,12 +1575,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Credit-platform / LMS product ownership (8–13 yrs) at India's largest lending distributor — direct overlap with the digital loan-booking platform record.",
-    "notes": "Newly indexed on Paytm's Lever board 9 Aug; posting date not exposed, freshness unconfirmed. Distinct req from tracked VP Lending (EMI). Live-check 24 Aug: exact Lever URL indexed with full JD.",
+    "notes": "Newly indexed on Paytm's Lever board 9 Aug; posting date not exposed, freshness unconfirmed. Distinct req from tracked VP Lending (EMI). Live-check 24 Aug: exact Lever URL indexed with full JD. 31 Aug check: Lever req still indexed with full JD.",
     "verified": true,
     "category": "fintech-india",
     "id": 104,
-    "status": "live",
-    "last_checked": "2026-08-24"
+    "status": "likely_live",
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Paytm",
@@ -1609,12 +1609,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP-level lending (LOS/LMS) product leadership at a banking-infrastructure fintech, 16–21 yrs band — seniority and domain both line up with the ₹95L ask.",
-    "notes": "Active Instahyre listing 9 Aug; posting date not exposed. Distinct from tracked mid-level M2P Banking Domain role (id 68). Live-check 24 Aug: Instahyre 326747 still in index, no expired signal.",
+    "notes": "Active Instahyre listing 9 Aug; posting date not exposed. Distinct from tracked mid-level M2P Banking Domain role (id 68). Live-check 24 Aug: Instahyre 326747 still in index, no expired signal. 31 Aug check: Instahyre 326747 still active-style.",
     "verified": true,
     "category": "fintech-india",
     "id": 106,
     "status": "likely_live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "Flexmoney Technologies",
@@ -1791,12 +1791,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director owning the MLX/GenAI platform product team at a top US bank's India GCC — a level up from the tracked Capital One Directors and squarely on the multi-agent AI + banking record.",
-    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91). Live-check 24 Aug: live on capitalonecareers.com; also on eFinancialCareers.",
+    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91). Live-check 24 Aug: live on capitalonecareers.com; also on eFinancialCareers. 31 Aug check: full JD live on capitalonecareers.com.",
     "verified": true,
     "category": "workday-banks",
     "id": 117,
     "status": "live",
-    "last_checked": "2026-08-24"
+    "last_checked": "2026-08-31"
   },
   {
     "company": "BNY",
