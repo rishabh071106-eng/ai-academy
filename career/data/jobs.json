@@ -2059,5 +2059,41 @@
     "last_checked": "2026-09-09",
     "category": "saas-ai",
     "id": 132
+  },
+  {
+    "company": "Google",
+    "title": "Lead Group Product Manager — Payments (Google Pay expansion)",
+    "location": "Bengaluru / Hyderabad",
+    "seniority": "Lead GPM",
+    "apply_url": "https://www.google.com/about/careers/applications/jobs/results/91973600294118086-lead-group-product-manager-payments",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "Lead GPM driving Google Pay's payments expansion with a PM team — consumer payments leadership at big-tech comp, one of the strongest payments matches on the board.",
+    "notes": "Newly indexed on Google Careers as of 10 Sep (Google listings undated). Eleventh Google req tracked.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-09-10",
+    "category": "bigtech",
+    "id": 133
+  },
+  {
+    "company": "Google",
+    "title": "Lead Group Product Manager — Ads & Commerce, Payments Risk",
+    "location": "Bengaluru / Hyderabad",
+    "seniority": "Lead GPM",
+    "apply_url": "https://www.google.com/about/careers/applications/jobs/results/89758602260030150-lead-group-product-manager-ads-and-commerce-payments-risk",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Lead GPM for payments risk (10+ yrs across issuers, banks, networks) — risk + payments-ecosystem depth maps directly to the banking record.",
+    "notes": "Newly indexed on Google Careers as of 10 Sep (undated).",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-09-10",
+    "category": "bigtech",
+    "id": 134
   }
 ]
