@@ -31,8 +31,10 @@ st.caption(f"As of business date {AS_OF}. Sample data, fictional clients.")
 
 # ---- identity: who is logged in decides what every query below can return ----
 users = q("SELECT u.user_key, u.user_name, u.job_role, c.client_name FROM dim_user u JOIN dim_client c ON c.client_key=u.client_key WHERE u.status='ACTIVE' ORDER BY c.client_name, u.user_name")
-choice = st.sidebar.selectbox("Signed in as", users.apply(lambda r: f"{r.user_name} · {r.job_role} · {r.client_name}", axis=1))
-user_key = users.iloc[users.apply(lambda r: f"{r.user_name} · {r.job_role} · {r.client_name}", axis=1).tolist().index(choice)].user_key
+labels = users.apply(lambda r: f"{r.user_name} · {r.job_role} · {r.client_name}", axis=1).tolist()
+default = next((i for i, l in enumerate(labels) if l.startswith("Hannah Okafor")), 0)
+choice = st.sidebar.selectbox("Signed in as", labels, index=default)
+user_key = users.iloc[labels.index(choice)].user_key
 ent = q("SELECT account_key, permission FROM fact_user_entitlements WHERE user_key=?", (user_key,))
 accounts = tuple(ent.account_key.unique().tolist()) or ("NONE",)
 ph = ",".join("?" * len(accounts))

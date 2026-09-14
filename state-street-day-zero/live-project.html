@@ -1,0 +1,953 @@
+<title>Custody DX Live Build</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#F3F5F7; --surface:#FFFFFF; --ink:#16232F; --muted:#5C6B79; --line:#D3DBE2; --rule:#B9C4CE;
+    --accent:#1E6B55; --accent-ink:#0F4A39; --accent-soft:#E3F0EA;
+    --copper:#B4622B; --copper-soft:#F6E8DE;
+    --code-bg:#1B2631; --code-ink:#E6EDF3; --code-dim:#8FA3B5;
+    --ui-bg:#F7F8FA; --ui-panel:#FFFFFF; --ui-line:#DADFE5; --ui-ink:#1F2933; --ui-muted:#6B7683; --ui-dark:#1F2A37; --ui-blue:#2563EB; --ui-blue-soft:#E8F0FE; --ui-orange:#EC7211; --ui-sf:#29B5E8;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+      --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+      --copper:#E08A55; --copper-soft:#3A2519;
+      --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+    --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+    --copper:#E08A55; --copper-soft:#3A2519;
+    --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.62;padding-inline:16px;padding-block:0 80px}
+  h1,h2,h3,h4{font-family:var(--serif);letter-spacing:-.005em;line-height:1.2;margin:0;text-wrap:balance}
+  p{margin:0 0 .9em;max-width:70ch}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+  button{font:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+  .num,.tab-num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:.05em .35em;border-radius:3px}
+  pre{margin:0}
+  small,.small{font-size:.86em;color:var(--muted)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .mast{max-width:1160px;margin:0 auto;padding-block:38px 26px;border-bottom:1px solid var(--rule)}
+  .mast h1{font-size:clamp(32px,5vw,52px);margin:8px 0 12px}
+  .mast .lede{font-size:19px;max-width:64ch}
+  .mast .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:16px;font-size:14px;color:var(--muted)}
+  .mast .meta b{color:var(--ink);font-weight:600}
+  .shell{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:232px minmax(0,1fr);gap:40px;padding-top:26px}
+  .rail{position:sticky;top:14px;align-self:start;min-width:0}
+  main{min-width:0}
+  .rail .eyebrow{margin-bottom:10px}
+  .rail ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+  .rail li a{display:grid;grid-template-columns:28px 1fr;gap:6px;padding:6px 10px;text-decoration:none;color:var(--muted);font-size:13.5px;line-height:1.3;margin-left:-2px;border-left:2px solid transparent}
+  .rail li a:hover{color:var(--ink);border-left-color:var(--rule)}
+  .rail li a.on{color:var(--accent-ink);border-left-color:var(--accent);font-weight:500}
+  .rail .tab-num{font-size:12px;padding-top:2px;color:inherit}
+  .rail .links{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px;display:grid;gap:8px}
+  @media (max-width:860px){
+    .shell{grid-template-columns:minmax(0,1fr);gap:18px}
+    .rail{position:sticky;top:0;background:var(--paper);z-index:5;padding:10px 0;border-bottom:1px solid var(--line)}
+    .rail .eyebrow,.rail .links{display:none}
+    .rail ol{display:flex;overflow-x:auto;border-left:none;gap:6px;padding-bottom:4px;scrollbar-width:thin}
+    .rail li{flex:0 0 auto;margin:0}
+    .rail li a{display:inline-flex;white-space:nowrap;border:1px solid var(--line);border-radius:99px;padding:6px 12px;margin:0;gap:6px}
+    .rail li a.on{background:var(--accent-soft);border-color:var(--accent)}
+  }
+  .step{padding-block:34px 14px;border-bottom:1px solid var(--rule)}
+  .step:last-of-type{border-bottom:none}
+  .step-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:baseline;margin-bottom:8px}
+  .step-head .num{font-size:15px;color:var(--accent);border:1.5px solid var(--accent);border-radius:99px;padding:2px 10px}
+  .step-head h2{font-size:clamp(24px,3vw,31px)}
+  .step .why{color:var(--muted);font-size:16px;margin:0 0 20px;max-width:68ch}
+  h3{font-size:20px;margin:30px 0 8px}
+  h4{font-family:var(--sans);font-weight:600;font-size:15.5px;margin:14px 0 4px}
+  ul,ol{padding-left:22px;margin:0 0 .9em;max-width:68ch}
+  li{margin:.3em 0}
+  li::marker{color:var(--muted)}
+  .tw{overflow-x:auto;margin:10px 0 18px}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.45}
+  th{text-align:left;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--rule);padding:8px 10px 8px 0;vertical-align:bottom}
+  td{border-bottom:1px solid var(--line);padding:9px 10px 9px 0;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;margin:14px 0 18px;border-radius:0 4px 4px 0;font-size:15px;max-width:72ch}
+  .note.warn{border-left-color:var(--copper);background:var(--copper-soft)}
+  .note p:last-child{margin-bottom:0}
+  .code{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:14px 16px;margin:10px 0 16px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.55}
+  .code .c{color:var(--code-dim)}
+  .code .cp{position:absolute;top:8px;right:8px;background:transparent;color:var(--code-dim);border:1px solid var(--code-dim);border-radius:3px;font-family:var(--mono);font-size:11.5px;padding:2px 8px}
+  .code .cp:hover{color:var(--code-ink);border-color:var(--code-ink)}
+  .out{font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 12px;overflow-x:auto;margin:-8px 0 16px;color:var(--ink);white-space:pre}
+  /* the four-part step block */
+  .do{display:grid;grid-template-columns:120px minmax(0,1fr);gap:4px 16px;margin:14px 0 22px;max-width:100%}
+  .do .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:11px;border-top:1px solid var(--line)}
+  .do .k.plain{color:var(--copper)}
+  .do .v{padding:9px 0 4px;border-top:1px solid var(--line);min-width:0}
+  .do .v p{margin-bottom:.5em}
+  .do .v ol,.do .v ul{margin-bottom:.4em}
+  @media (max-width:560px){.do{grid-template-columns:1fr;gap:0}.do .v{border-top:none;padding-top:2px}}
+  /* recreated screens */
+  .screen{background:var(--ui-bg);color:var(--ui-ink);border:1px solid var(--ui-line);border-radius:8px;overflow:hidden;margin:10px 0 6px;font-family:var(--sans);font-size:13px;line-height:1.4;box-shadow:0 8px 24px rgba(15,23,42,.12);max-width:100%}
+  .screen *{color:inherit}
+  .cap{font-size:12.5px;color:var(--muted);margin:0 0 18px;font-family:var(--mono)}
+  .cap b{color:var(--accent-ink);font-weight:500}
+  .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#E9EDF2;border-bottom:1px solid var(--ui-line);color:#5B6572}
+  .bar i{width:10px;height:10px;border-radius:50%;background:#C8CFD8;display:inline-block}
+  .bar .url{margin-left:8px;background:#fff;border:1px solid var(--ui-line);border-radius:4px;padding:2px 10px;font-family:var(--mono);font-size:11.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3B4550}
+  .app{display:grid;grid-template-columns:170px minmax(0,1fr);min-height:300px}
+  .app.nosb{grid-template-columns:minmax(0,1fr);min-height:0}
+  @media (max-width:640px){.app{grid-template-columns:minmax(0,1fr)}.app .side{display:none}}
+  .side{background:var(--ui-panel);border-right:1px solid var(--ui-line);padding:10px 0}
+  .side.dark{background:var(--ui-dark);color:#DCE3EA}
+  .side .brand{font-weight:600;padding:6px 14px 12px;font-size:14px}
+  .side .it{padding:7px 14px;font-size:13px;display:flex;gap:8px;align-items:center}
+  .side .it.on{background:var(--ui-blue-soft);color:var(--ui-blue);font-weight:500}
+  .side.dark .it.on{background:#2C3A4B;color:#fff}
+  .side .sec{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px 4px;color:var(--ui-muted)}
+  .side.dark .sec{color:#9AA8B8}
+  .tree .it{padding:4px 14px;font-size:12.5px}
+  .tree .in1{padding-left:26px}.tree .in2{padding-left:38px}.tree .in3{padding-left:50px}
+  .main{padding:14px 16px;min-width:0;overflow-x:auto}
+  .top{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--ui-panel);border-bottom:1px solid var(--ui-line);flex-wrap:wrap}
+  .top .sp{flex:1}
+  .pill{border:1px solid var(--ui-line);border-radius:4px;padding:3px 9px;font-size:12px;background:#fff}
+  .pill.sel{background:var(--ui-blue-soft);border-color:var(--ui-blue)}
+  .btn{display:inline-block;border:1px solid var(--ui-line);background:#fff;border-radius:5px;padding:5px 12px;font-size:12.5px;font-weight:500}
+  .btn.pri{background:var(--ui-blue);border-color:var(--ui-blue);color:#fff}
+  .btn.aws{background:var(--ui-orange);border-color:var(--ui-orange);color:#fff}
+  .btn.sf{background:var(--ui-sf);border-color:var(--ui-sf);color:#fff}
+  .form{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 14px;align-items:center;max-width:560px}
+  .form label{font-size:12.5px;color:var(--ui-muted)}
+  .fld{border:1px solid var(--ui-line);background:#fff;border-radius:4px;padding:5px 9px;font-family:var(--mono);font-size:12.5px;min-height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fld.ph{color:#9AA4AF;font-family:var(--sans)}
+  .chk{display:flex;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+  .chk i{width:14px;height:14px;border:1px solid #6B7683;border-radius:3px;display:inline-block;background:#fff;position:relative}
+  .chk i.on{background:var(--ui-blue);border-color:var(--ui-blue)}
+  .chk i.on::after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .ttl{font-size:16px;font-weight:600;margin:0 0 4px}
+  .sub{color:var(--ui-muted);font-size:12.5px;margin-bottom:12px}
+  .card{background:var(--ui-panel);border:1px solid var(--ui-line);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--ui-line);margin-bottom:10px}
+  .tabs span{padding:6px 12px;font-size:12.5px;color:var(--ui-muted);border-bottom:2px solid transparent}
+  .tabs span.on{color:var(--ui-blue);border-bottom-color:var(--ui-blue);font-weight:500}
+  .editor{background:#fff;border:1px solid var(--ui-line);border-radius:4px;padding:10px 12px;font-family:var(--mono);font-size:12px;line-height:1.5;white-space:pre;overflow-x:auto;color:#243040}
+  .editor .kw{color:#1D4ED8;font-weight:500}.editor .st{color:#0F7B4A}.editor .cm{color:#8A96A3}
+  .grid{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px;background:#fff;margin-top:8px}
+  .grid th{background:#EEF1F5;color:#3B4550;font-size:10.5px;letter-spacing:.04em;text-transform:none;padding:5px 8px;border:1px solid var(--ui-line);text-align:left}
+  .grid td{padding:4px 8px;border:1px solid var(--ui-line);white-space:nowrap;color:#243040}
+  .grid td.r{text-align:right}
+  .grid tr.hl td{background:#FFF4E5}
+  .status{font-size:11.5px;color:var(--ui-muted);margin-top:6px;font-family:var(--mono)}
+  .ok{color:#15803D;font-weight:500}.bad{color:#B91C1C;font-weight:500}
+  .awsbar{background:#232F3E;color:#fff;padding:8px 14px;display:flex;gap:16px;align-items:center;font-size:12.5px}
+  .awsbar b{color:#FF9900;font-weight:700}
+  .crumb{font-size:12px;color:var(--ui-muted);padding:8px 16px 0}
+  .shot{display:block;max-width:100%;border:1px solid var(--ui-line);border-radius:8px;box-shadow:0 8px 24px rgba(15,23,42,.12);margin:10px 0 6px}
+  .real{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:1px 7px;border-radius:3px;border:1px solid var(--accent);color:var(--accent-ink);background:var(--accent-soft);vertical-align:middle;margin-left:6px}
+  .recreated{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);vertical-align:middle;margin-left:6px}
+  .arch{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 8px}
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-size:13.5px}
+  .box b{display:block;font-size:14px;margin-bottom:2px}
+  .box.you{border-color:var(--accent);background:var(--accent-soft)}
+  .flowline{font-family:var(--mono);font-size:12.5px;color:var(--muted);text-align:center;margin:2px 0 14px}
+  .gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 22px;margin:10px 0 16px}
+  .gl div{font-size:14.5px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .gl b{font-weight:600}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+  .toast.show{opacity:1}
+  @media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+
+<header class="mast">
+  <div class="eyebrow">Live project · one custodian, one dataset, every tool in the job description · nothing external required</div>
+  <h1>Custody DX Live Build</h1>
+  <p class="lede">A single project built step by step: custody data on your laptop, loaded into Snowflake through Amazon S3, turned into governed client-facing data products, read by Python, Sigma and Tableau, catalogued the Collibra way, and surfaced in a composed client portal. Every step shows the screen you will be looking at, what to click, what it means in plain words, and what to do when it fails.</p>
+  <div class="meta">
+    <span><b>10 phases</b> in build order</span>
+    <span><b>Screens</b> recreated for every tool, real screenshots where the tool runs locally</span>
+    <span><b>Cost</b> free tiers and trials only</span>
+    <span><b>Time</b> two weekends, or one long one</span>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="rail" aria-label="Phases">
+  <div class="eyebrow">Phases</div>
+  <ol>
+    <li><a href="#p0"><span class="tab-num">00</span><span>What you are building</span></a></li>
+    <li><a href="#p1"><span class="tab-num">01</span><span>Workstation and local database</span></a></li>
+    <li><a href="#p2"><span class="tab-num">02</span><span>Snowflake account and setup</span></a></li>
+    <li><a href="#p3"><span class="tab-num">03</span><span>Load data, then load from S3</span></a></li>
+    <li><a href="#p4"><span class="tab-num">04</span><span>Marts, secure views, sharing</span></a></li>
+    <li><a href="#p5"><span class="tab-num">05</span><span>Python: analysis, write-back, prototype</span></a></li>
+    <li><a href="#p6"><span class="tab-num">06</span><span>Sigma and Tableau on Snowflake</span></a></li>
+    <li><a href="#p7"><span class="tab-num">07</span><span>Governance the Collibra way</span></a></li>
+    <li><a href="#p8"><span class="tab-num">08</span><span>The client portal on top</span></a></li>
+    <li><a href="#p9"><span class="tab-num">09</span><span>Cost, security, clean-up, and the story</span></a></li>
+  </ol>
+  <div class="links">
+    <a href="https://claude.ai/code/artifact/e4957d68-ff7b-443a-ac05-8ca54feb7abf" target="_blank" rel="noopener">Expert Track (JD training) ↗</a>
+    <a href="https://claude.ai/code/artifact/87418623-4d01-4540-9c0b-f1890fdc0651" target="_blank" rel="noopener">Day Zero briefing ↗</a>
+    <a href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/amazing-darwin-l6c0mg/state-street-day-zero" target="_blank" rel="noopener">All project files ↗</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ====================== 00 ====================== -->
+<section class="step" id="p0">
+  <div class="step-head"><span class="num">00</span><h2>What you are building</h2></div>
+  <p class="why">A miniature of the data platform behind a custodian's client portal. The client names are fictional. The shapes of the data, the tools and the problems are real.</p>
+  <div class="arch">
+    <div class="box"><b>Your laptop</b>SQLite or PostgreSQL holding the custody star schema. Python for analysis. DBeaver to look at tables.</div>
+    <div class="box"><b>Amazon S3</b>A bucket of CSV files: the drop-box where files land between systems.</div>
+    <div class="box"><b>Snowflake</b>The cloud data warehouse. Raw, core and mart schemas. Roles and secure views enforce who sees what.</div>
+    <div class="box you"><b>Data products</b>The scorecard mart, entitlement-filtered views, a share. This is what the job calls "data-driven".</div>
+    <div class="box"><b>Sigma and Tableau</b>Business tools that read the marts and make dashboards without SQL.</div>
+    <div class="box"><b>Governance</b>Glossary, dictionary, quality rules, lineage. In a bank this lives in Collibra.</div>
+    <div class="box you"><b>Client portal</b>A shell composing alerts and documents widgets. What the client actually sees.</div>
+  </div>
+  <div class="flowline">laptop → S3 → Snowflake RAW → CORE → MART → Sigma, Tableau, Python, portal &nbsp;·&nbsp; governance alongside every hop</div>
+
+  <h3>Words you will meet, in plain language</h3>
+  <div class="gl">
+    <div><b>Account</b> Your own walled-off space inside a cloud service. Snowflake and AWS each give you one. Nothing you do in it touches anyone else.</div>
+    <div><b>Region</b> The physical place the service runs your account, such as Mumbai, Frankfurt or Virginia. Pick one and use the same one in AWS and Snowflake, or the two will be slow and cost more to talk to each other.</div>
+    <div><b>Trial and free tier</b> Snowflake gives thirty days and a credit allowance. AWS gives a year of small resources at no charge. Both ask for a card or an email; both can be cleaned up so nothing is billed.</div>
+    <div><b>Credit</b> Snowflake's unit of compute billing. A running extra-small warehouse burns one credit an hour. A trial includes a few hundred.</div>
+    <div><b>Role</b> A named bundle of permissions. You act "as" a role. Switching role is how you test what a client would see.</div>
+    <div><b>Warehouse (Snowflake)</b> Not a building: a cluster of computers that runs your queries. It sleeps when idle and wakes when asked.</div>
+    <div><b>Database, schema, table</b> A database contains schemas; a schema contains tables. Think building, floor, room.</div>
+    <div><b>Terminal</b> The text window where you type commands. Windows: PowerShell. macOS: Terminal. Every command block on this page is typed there.</div>
+    <div><b>localhost</b> The address of your own computer. A program "on localhost port 8501" is running on your machine and only you can see it.</div>
+    <div><b>Environment variable</b> A named value the terminal keeps for you, used to hand a password to a program without typing it into the code.</div>
+    <div><b>Access key</b> A username and password for a program rather than a person. AWS issues them to let Snowflake read your bucket. Treat them like a bank card.</div>
+    <div><b>Bucket</b> A folder in Amazon S3 with a globally unique name. Files in it are called objects.</div>
+    <div><b>Stage</b> Snowflake's word for a pointer to a place files live, such as your bucket.</div>
+    <div><b>Mart</b> A table or view built for a specific audience, with agreed definitions. The only thing clients and dashboards should read.</div>
+    <div><b>Secure view</b> A saved query whose definition is hidden and which can filter rows by who is asking.</div>
+    <div><b>Share</b> Snowflake's way of letting another account query your view live, without copying data.</div>
+  </div>
+  <div class="note"><p><b>How to read each phase.</b> Every step has the same four parts: <b>Do</b> (the clicks or commands), <b>Screen</b> (what it looks like), <b>Plain words</b> (what just happened and why the bank cares), and <b>If it fails</b> (the usual cause). Screens marked <span class="real">real</span> are screenshots of the project running; screens marked <span class="recreated">recreated</span> are drawn from the tool's layout and may differ in small details from the current version of the product.</p></div>
+</section>
+
+<!-- ====================== 01 ====================== -->
+<section class="step" id="p1">
+  <div class="step-head"><span class="num">01</span><h2>Workstation and local database</h2></div>
+  <p class="why">Everything starts on your laptop. By the end of this phase the custody data exists as a database you can open, and you have run a query and seen a result grid.</p>
+
+  <h3>1.1 Install Python</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Go to python.org, Downloads, and download the installer for your operating system. Any 3.11 or 3.12 version is fine.</li>
+      <li><b>Windows:</b> run it. On the first screen tick <b>Add python.exe to PATH</b> before clicking Install Now. This is the step people miss; without it the terminal cannot find Python.</li>
+      <li><b>macOS:</b> run the .pkg installer, or in Terminal type <code>brew install python</code> if you have Homebrew.</li>
+      <li>Open a new terminal and type <code>python3 --version</code> (Windows: <code>py --version</code>). You should see a version number.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span style="font-size:12px">Python 3.12 (64-bit) Setup</span></div>
+        <div class="app nosb"><div class="main" style="padding:22px 26px">
+          <div class="ttl">Install Python 3.12 (64-bit)</div>
+          <div class="sub">Select Install Now to install Python with default settings, or choose Customize to enable or disable features.</div>
+          <div class="card"><b>→ Install Now</b><div class="sub" style="margin:2px 0 0">C:\Users\rishabh\AppData\Local\Programs\Python\Python312<br>Includes IDLE, pip and documentation. Creates shortcuts and file associations.</div></div>
+          <div class="card"><b>→ Customize installation</b><div class="sub" style="margin:2px 0 0">Choose location and features</div></div>
+          <div class="chk"><i class="on"></i> Use admin privileges when installing py.exe</div>
+          <div class="chk"><i class="on"></i> <b>Add python.exe to PATH</b> &nbsp;<span style="color:#B45309">← tick this</span></div>
+        </div></div></div>
+      <p class="cap">Windows installer, first screen <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Python is the language every data team prototypes in. "PATH" is the list of folders the terminal searches when you type a command; adding Python to it means typing <code>python3</code> works from anywhere.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"python is not recognized": you skipped the PATH tick. Re-run the installer, choose Modify, and tick it. Or use <code>py</code> instead of <code>python3</code> on Windows.</p></div>
+  </div>
+
+  <h3>1.2 Get the project files</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v">
+      <p>Install Git from git-scm.com (defaults are fine), then in a terminal:</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>git clone -b claude/amazing-darwin-l6c0mg https://github.com/rishabh071106-eng/ai-academy.git
+cd ai-academy/state-street-day-zero
+python3 sql-lab/run_sqlite.py 5</pre></div>
+      <p>No Git? On the GitHub page for the folder choose Code, Download ZIP, unzip, and open a terminal in the unzipped folder.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span style="font-size:12px">Terminal — state-street-day-zero</span></div>
+        <div class="editor" style="border:none;border-radius:0;background:#0F1720;color:#D7E0EA;padding:14px 16px"><span style="color:#7DD3A8">rishabh@laptop</span>:<span style="color:#7FB3F0">~/ai-academy/state-street-day-zero</span>$ python3 sql-lab/run_sqlite.py 5
+
+====================================================================================================
+Q5  The exceptions screen: every trade that has NOT settled, with why  (T+1 world)
+====================================================================================================
+  trade_id | account_name             | security_name         | side | quantity | trade_date | intended_settle_date | status   | fail_reason
+  ---------+--------------------------+-----------------------+------+----------+------------+----------------------+----------+-------------------------------------
+  T-90003  | Meridian Global Equity   | SAP SE                | BUY  |     2000 | 2026-09-09 | 2026-09-11           | FAILED   | COUNTERPARTY_INSUFFICIENT_SECURITIES
+  T-90006  | Meridian Global Bond     | Bund 0.5% 2031        | BUY  |  5000000 | 2026-09-10 | 2026-09-11           | FAILED   | INSUFFICIENT_CASH_EUR
+  T-90011  | Orient General Account   | Toyota Motor Corp     | BUY  |   100000 | 2026-09-10 | 2026-09-12           | FAILED   | SSI_MISMATCH
+  T-90009  | Halcyon US Large Cap ETF | Microsoft Corp        | BUY  |     5000 | 2026-09-11 | 2026-09-14           | PENDING  |
+  T-90012  | Orient General Account   | US Treasury 2.5% 2034 | BUY  |  5000000 | 2026-09-11 | 2026-09-14           | PENDING  |
+  T-90004  | Meridian Global Equity   | Toyota Motor Corp     | SELL |    20000 | 2026-09-11 | 2026-09-14           | AFFIRMED |
+  T-90007  | Meridian Global Bond     | UK Gilt 4.25% 2035    | SELL |  3000000 | 2026-09-11 | 2026-09-14           | MATCHED  |
+
+Database saved at .../sql-lab/custody_lab.db</div></div>
+      <p class="cap">Terminal output of the exceptions query <span class="real">real</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>You just built a database from two text files (the table definitions and the data) and ran the query that powers a portal's "what needs attention" screen. Three trades failed to settle, each for a different reason, and each reason has a different owner: the other bank, the client's own cash, and a settlement-instruction mismatch that is probably the custodian's own reference data.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"No such file": you are not in the right folder; type <code>cd</code> to the project folder first. Windows: use <code>py</code> in place of <code>python3</code>.</p></div>
+  </div>
+
+  <h3>1.3 A proper SQL client: DBeaver</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Download DBeaver Community from dbeaver.io and install it.</li>
+      <li>Database menu, New Database Connection, choose <b>SQLite</b>, Next.</li>
+      <li>Path: click Open and choose <code>sql-lab/custody_lab.db</code> inside your project folder. Click <b>Test Connection</b>; accept the driver download when asked. Finish.</li>
+      <li>In the left tree expand the connection, Tables, and double-click <code>fact_trades</code> to see rows. Then SQL Editor menu, New SQL script, paste Q5 from <code>queries.sql</code>, press Ctrl+Enter.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span style="font-size:12px">DBeaver — Connect to a database</span></div>
+        <div class="app nosb"><div class="main" style="padding:16px 22px">
+          <div class="tabs"><span class="on">Main</span><span>Driver properties</span><span>SSH</span><span>Proxy</span></div>
+          <div class="form">
+            <label>Connect by</label><div><span class="pill sel">Host</span> <span class="pill">URL</span></div>
+            <label>Host</label><div class="fld">localhost</div>
+            <label>Port</label><div class="fld">5432</div>
+            <label>Database</label><div class="fld">custody_lab</div>
+            <label>Authentication</label><div class="fld">Database Native</div>
+            <label>Username</label><div class="fld">lab</div>
+            <label>Password</label><div class="fld">•••</div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px"><span class="btn">Test Connection ...</span><span class="btn">&lt; Back</span><span class="btn pri">Finish</span></div>
+          <div class="status ok">Connected (PostgreSQL 16.4, driver 42.7.x)</div>
+        </div></div></div>
+      <p class="cap">DBeaver connection dialog, shown for the PostgreSQL route; for SQLite the only field is the file path <span class="recreated">recreated</span></p>
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">DBeaver — custody_lab · Script-1</span></div>
+        <div class="app"><div class="side tree">
+          <div class="brand">Database Navigator</div>
+          <div class="it">▾ custody_lab</div><div class="it in1">▾ Tables</div>
+          <div class="it in2">dim_account</div><div class="it in2">dim_client</div><div class="it in2">dim_security</div><div class="it in2">dim_user</div>
+          <div class="it in2">fact_alerts</div><div class="it in2">fact_documents</div><div class="it in2">fact_positions</div><div class="it in2 on">fact_trades</div><div class="it in2">fact_user_entitlements</div>
+          <div class="it in1">▸ Views</div></div>
+        <div class="main">
+          <div class="editor"><span class="kw">SELECT</span> t.trade_id, a.account_name, s.security_name, t.status, t.fail_reason
+<span class="kw">FROM</span> fact_trades t
+<span class="kw">JOIN</span> dim_account  a <span class="kw">ON</span> a.account_key  = t.account_key
+<span class="kw">JOIN</span> dim_security s <span class="kw">ON</span> s.security_key = t.security_key
+<span class="kw">WHERE</span> t.status &lt;&gt; <span class="st">'SETTLED'</span>
+<span class="kw">ORDER BY CASE</span> t.status <span class="kw">WHEN</span> <span class="st">'FAILED'</span> <span class="kw">THEN</span> 0 <span class="kw">ELSE</span> 1 <span class="kw">END</span>;</div>
+          <table class="grid"><tr><th>trade_id</th><th>account_name</th><th>security_name</th><th>status</th><th>fail_reason</th></tr>
+            <tr class="hl"><td>T-90003</td><td>Meridian Global Equity</td><td>SAP SE</td><td>FAILED</td><td>COUNTERPARTY_INSUFFICIENT_SECURITIES</td></tr>
+            <tr class="hl"><td>T-90006</td><td>Meridian Global Bond</td><td>Bund 0.5% 2031</td><td>FAILED</td><td>INSUFFICIENT_CASH_EUR</td></tr>
+            <tr class="hl"><td>T-90011</td><td>Orient General Account</td><td>Toyota Motor Corp</td><td>FAILED</td><td>SSI_MISMATCH</td></tr>
+            <tr><td>T-90009</td><td>Halcyon US Large Cap ETF</td><td>Microsoft Corp</td><td>PENDING</td><td>[NULL]</td></tr>
+            <tr><td>T-90012</td><td>Orient General Account</td><td>US Treasury 2.5% 2034</td><td>PENDING</td><td>[NULL]</td></tr></table>
+          <div class="status">7 row(s) fetched — 12 ms &nbsp;·&nbsp; Export data ▾ &nbsp;·&nbsp; 💾</div>
+        </div></div></div>
+      <p class="cap">DBeaver SQL editor with the result grid; the three failed rows are what a portal shows first <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>DBeaver is the window analysts use to look inside any database. The left tree is the building directory: connection, database, tables. The editor is where you ask questions; the grid is the answer. The Export button turns any grid into Excel, which is how most "can you send me the data" requests are actually fulfilled.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>Driver download blocked by a corporate proxy: on a personal laptop use home Wi-Fi. Table list empty: you connected before running <code>run_sqlite.py</code>; run it and press F5 in DBeaver.</p></div>
+  </div>
+
+  <h3>1.4 Optional: a real PostgreSQL server</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v">
+      <p>Docker Desktop from docker.com, then in the <code>sql-lab</code> folder:</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>docker compose up -d
+docker compose exec postgres psql -U lab -d custody_lab -c "SELECT COUNT(*) FROM fact_positions;"   <span class="c"># 90</span></pre></div>
+      <p>Then repeat 1.3 with the PostgreSQL connection shown in the dialog above: host localhost, port 5432, database custody_lab, user lab, password lab.</p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>SQLite is a database in a file; PostgreSQL is a database server, which is what real systems use. Docker runs the server in a box on your laptop with the data already loaded, and removes it cleanly with <code>docker compose down -v</code>.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 02 ====================== -->
+<section class="step" id="p2">
+  <div class="step-head"><span class="num">02</span><h2>Snowflake account and setup</h2></div>
+  <p class="why">Snowflake is the cloud data warehouse the job description names. In this phase you get an account, learn the one screen you will use for everything, and run the setup script that creates your role, compute, storage and a cost guard rail.</p>
+
+  <h3>2.1 Create the trial account</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Open signup.snowflake.com. Fill in name, work or personal email, company (anything), role.</li>
+      <li>Edition: <b>Standard</b>. Cloud provider: <b>Amazon Web Services</b>. Region: the one nearest you. Write the region down; you will pick the same one in AWS in Phase 3.</li>
+      <li>Click Get Started. Open the activation email, set a username and password. You land in <b>Snowsight</b>, the web interface.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">signup.snowflake.com</span></div>
+        <div class="app nosb"><div class="main" style="padding:20px 26px">
+          <div class="ttl">Start your 30-day free trial</div>
+          <div class="sub">Includes $400 of free usage. No credit card required.</div>
+          <div class="form">
+            <label>Choose your Snowflake edition</label><div><span class="pill sel">Standard</span> <span class="pill">Enterprise</span> <span class="pill">Business Critical</span></div>
+            <label>Choose your cloud provider</label><div><span class="pill sel">Amazon Web Services</span> <span class="pill">Microsoft Azure</span> <span class="pill">Google Cloud Platform</span></div>
+            <label>Choose your region</label><div class="fld">Asia Pacific (Mumbai) — ap-south-1 ▾</div>
+          </div>
+          <div class="chk" style="margin-top:12px"><i class="on"></i> I agree to the Terms of Service and Privacy Notice</div>
+          <div style="margin-top:12px"><span class="btn sf">Get Started</span></div>
+        </div></div></div>
+      <p class="cap">Snowflake trial sign-up, second screen <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Snowflake does not own data centres. It rents them from AWS, Azure or Google and runs on top. Choosing AWS and a region means your Snowflake account physically lives in Amazon's Mumbai (or wherever) data centre, which is why the S3 bucket in Phase 3 should be in the same place. The 400 dollars is a usage allowance, not a charge; this whole project uses a few dollars of it.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>No activation email: check spam, or the company field was rejected (use any real-looking name). Already have an account with that email: sign in at app.snowflake.com instead.</p></div>
+  </div>
+
+  <h3>2.2 Learn the Snowsight screen</h3>
+  <div class="do">
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com/ap-south-1/xy12345/#/homepage</span></div>
+        <div class="app"><div class="side dark">
+          <div class="brand">❄ Snowflake</div>
+          <div class="it on">⌂ Home</div>
+          <div class="sec">Projects</div><div class="it">Worksheets</div><div class="it">Notebooks</div><div class="it">Dashboards</div>
+          <div class="sec">Data</div><div class="it">Databases</div><div class="it">Private Sharing</div><div class="it">Data Products</div>
+          <div class="sec">Monitoring</div><div class="it">Query History</div>
+          <div class="sec">Admin</div><div class="it">Warehouses</div><div class="it">Cost Management</div><div class="it">Users &amp; Roles</div><div class="it">Accounts</div>
+          <div class="sec" style="margin-top:18px">Account</div><div class="it">RISHABH · ACCOUNTADMIN ▾</div></div>
+        <div class="main">
+          <div class="ttl">Welcome, Rishabh</div>
+          <div class="sub">Trial: 29 days remaining · 398.6 credits remaining</div>
+          <div class="card"><b>Quick actions</b><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="btn pri">+ SQL Worksheet</span><span class="btn">+ Python Worksheet</span><span class="btn">Load Data</span></div></div>
+          <div class="card"><b>Recently viewed</b><div class="sub" style="margin:4px 0 0">Nothing yet. Create a worksheet to begin.</div></div>
+        </div></div></div>
+      <p class="cap">Snowsight home. Left navigation: Worksheets is where SQL runs; Databases shows tables; Admin holds warehouses, cost and users <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Six things on that left bar matter for this project. <b>Worksheets</b>: where you type and run SQL. <b>Databases</b>: browse tables. <b>Private Sharing</b>: give another account access. <b>Query History</b>: every query anyone ran, with cost. <b>Warehouses</b>: the compute clusters and whether they are running. <b>Cost Management</b>: the bill. The bottom-left shows who you are and which role you are acting as; you will change that role in Phase 4.</p></div>
+  </div>
+
+  <h3>2.3 Run the setup script</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Click <b>+ SQL Worksheet</b>. A blank editor opens with a role and warehouse selector at the top right.</li>
+      <li>Open <code>snowflake/01_setup.sql</code> from the project on your laptop, copy all of it, paste into the worksheet.</li>
+      <li>Click the small arrow next to the ▶ Run button and choose <b>Run All</b>. Each statement runs in order; the results pane shows the last one.</li>
+      <li>Rename the worksheet (click its name tab) to "01 setup" so you can find it again.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Worksheets › 01 setup</span></div>
+        <div class="top"><span class="pill">01 setup ✎</span><span class="sp"></span><span class="pill">ACCOUNTADMIN ▾</span><span class="pill">LAB_WH (XS) ▾</span><span class="btn pri">▶ Run All ▾</span></div>
+        <div class="app"><div class="side tree">
+          <div class="brand">Databases</div>
+          <div class="it">▾ CUSTODY_LAB</div><div class="it in1">▸ CORE</div><div class="it in1">▸ MART</div><div class="it in1">▸ RAW</div>
+          <div class="it">▸ SNOWFLAKE</div><div class="it">▸ SNOWFLAKE_SAMPLE_DATA</div></div>
+        <div class="main">
+          <div class="editor"><span class="cm">-- 1b. Compute. XSMALL = 1 credit/hour. AUTO_SUSPEND = 60 switches it off after 60 idle seconds.</span>
+<span class="kw">CREATE WAREHOUSE IF NOT EXISTS</span> LAB_WH
+  <span class="kw">WITH</span> WAREHOUSE_SIZE = <span class="st">'XSMALL'</span> AUTO_SUSPEND = 60 AUTO_RESUME = TRUE INITIALLY_SUSPENDED = TRUE;
+
+<span class="kw">CREATE DATABASE IF NOT EXISTS</span> CUSTODY_LAB;
+<span class="kw">CREATE SCHEMA IF NOT EXISTS</span> CUSTODY_LAB.CORE;
+<span class="kw">CREATE SCHEMA IF NOT EXISTS</span> CUSTODY_LAB.MART;
+<span class="cm">... (grants, resource monitor) ...</span>
+<span class="kw">USE ROLE</span> DX_ENGINEER; <span class="kw">USE WAREHOUSE</span> LAB_WH; <span class="kw">USE DATABASE</span> CUSTODY_LAB; <span class="kw">USE SCHEMA</span> CORE;
+<span class="kw">SELECT</span> CURRENT_ROLE() <span class="kw">AS</span> role, CURRENT_WAREHOUSE() <span class="kw">AS</span> warehouse, CURRENT_DATABASE() <span class="kw">AS</span> db, CURRENT_SCHEMA() <span class="kw">AS</span> schema;</div>
+          <div class="tabs"><span class="on">Results</span><span>Chart</span><span>Query Details</span></div>
+          <table class="grid"><tr><th>ROLE</th><th>WAREHOUSE</th><th>DB</th><th>SCHEMA</th></tr><tr><td>DX_ENGINEER</td><td>LAB_WH</td><td>CUSTODY_LAB</td><td>CORE</td></tr></table>
+          <div class="status ok">✓ 14 statements executed · 3.1s · Query ID 01b8…</div>
+        </div></div></div>
+      <p class="cap">The setup worksheet after Run All. The object tree on the left now shows CUSTODY_LAB with three schemas <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v">
+      <p>Fourteen statements did five things:</p>
+      <ul>
+        <li><b>A role called DX_ENGINEER.</b> You will work as this role, not as the all-powerful ACCOUNTADMIN. In a bank nobody works as admin; it is the first thing an auditor checks.</li>
+        <li><b>A warehouse called LAB_WH,</b> the smallest size, that turns itself off after a minute of silence. This is the habit that keeps cloud bills small.</li>
+        <li><b>A database with three schemas.</b> RAW is where files land untouched. CORE is the cleaned, modelled tables. MART is what clients and dashboards read. Keeping them apart is the difference between a platform and a swamp.</li>
+        <li><b>Grants,</b> the permissions that let DX_ENGINEER use the warehouse and the database.</li>
+        <li><b>A resource monitor</b> that suspends the warehouse if the lab ever burns more than twenty credits in a month. A guard rail you set before you need it.</li></ul></div>
+    <div class="k">If it fails</div><div class="v"><p>"Insufficient privileges": the role selector at the top right is not ACCOUNTADMIN; change it and rerun. "Object already exists": harmless, the script uses IF NOT EXISTS. "SQL compilation error at line N": you pasted only part of the file; select all and paste again.</p></div>
+  </div>
+
+  <h3>2.4 See what you created</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>Left bar, Admin, <b>Warehouses</b>. You should see LAB_WH, size X-Small, status Suspended, auto-suspend 1 minute. Click it to see the "Started" and "Suspended" events. Then Admin, <b>Cost Management</b>, which will show a near-zero number.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Admin › Warehouses</span></div>
+        <div class="app"><div class="side dark"><div class="brand">❄ Snowflake</div><div class="it">⌂ Home</div><div class="sec">Projects</div><div class="it">Worksheets</div><div class="sec">Admin</div><div class="it on">Warehouses</div><div class="it">Cost Management</div><div class="it">Users &amp; Roles</div></div>
+        <div class="main">
+          <div class="ttl">Warehouses</div><div class="sub">1 warehouse</div>
+          <table class="grid"><tr><th>Name</th><th>Status</th><th>Size</th><th>Clusters</th><th>Auto suspend</th><th>Auto resume</th><th>Resource monitor</th><th>Owner</th></tr>
+            <tr><td>LAB_WH</td><td><span class="ok">● Suspended</span></td><td>X-Small</td><td>1</td><td>1 minute</td><td>Yes</td><td>LAB_MONITOR</td><td>ACCOUNTADMIN</td></tr>
+            <tr><td>COMPUTE_WH</td><td>● Suspended</td><td>X-Small</td><td>1</td><td>10 minutes</td><td>Yes</td><td>—</td><td>ACCOUNTADMIN</td></tr></table>
+          <div class="status">COMPUTE_WH is the trial's default warehouse. Leave it, or drop it, but never let a warehouse exist with auto suspend "Never".</div>
+        </div></div></div>
+      <p class="cap">Admin › Warehouses after setup <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>"Suspended" is good. It means nothing is being billed. The moment you run a query the warehouse resumes in under a second, does the work, and suspends a minute later. On this screen, a VP looks for exactly one thing on a real estate: any warehouse whose auto suspend is long or "never".</p></div>
+  </div>
+</section>
+
+<!-- ====================== 03 ====================== -->
+<section class="step" id="p3">
+  <div class="step-head"><span class="num">03</span><h2>Load data, then load from S3</h2></div>
+  <p class="why">Two ways to get the custody data into Snowflake. The quick way takes three minutes and is fine for a lab. The S3 way is how a bank's pipeline actually works: files land in a bucket and the warehouse pulls them in.</p>
+
+  <h3>3.1 The quick way: paste and run</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>New SQL Worksheet, name it "02 load". Top right: role DX_ENGINEER, warehouse LAB_WH.</li>
+      <li>Paste the first lines of <code>snowflake/02_load.sql</code> (the USE statements), then paste all of <code>sql-lab/schema.sql</code> below them. Run All. Fifteen tables appear under CUSTODY_LAB, CORE in the tree.</li>
+      <li>Clear the editor, paste the USE lines again, then all of <code>sql-lab/seed.sql</code> (293 INSERT statements). Run All. About twenty seconds.</li>
+      <li>Paste and run the count check from the file.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Worksheets › 02 load</span></div>
+        <div class="top"><span class="pill">02 load</span><span class="sp"></span><span class="pill sel">DX_ENGINEER ▾</span><span class="pill">LAB_WH (XS) ▾</span><span class="btn pri">▶ Run All ▾</span></div>
+        <div class="app"><div class="side tree"><div class="brand">Databases</div><div class="it">▾ CUSTODY_LAB</div><div class="it in1">▾ CORE</div><div class="it in2">▾ Tables (15)</div><div class="it in3">DIM_ACCOUNT</div><div class="it in3">DIM_CLIENT</div><div class="it in3">DIM_DATE</div><div class="it in3">DIM_FUND</div><div class="it in3">DIM_SECURITY</div><div class="it in3">DIM_USER</div><div class="it in3">FACT_ALERTS</div><div class="it in3">FACT_CORPORATE_ACTIONS</div><div class="it in3">FACT_DOCUMENTS</div><div class="it in3">FACT_NAV</div><div class="it in3">FACT_POSITIONS</div><div class="it in3">…</div></div>
+        <div class="main">
+          <div class="editor"><span class="kw">SELECT</span> <span class="st">'dim_client'</span> <span class="kw">AS</span> t, COUNT(*) <span class="kw">AS</span> n <span class="kw">FROM</span> dim_client
+<span class="kw">UNION ALL SELECT</span> <span class="st">'fact_positions'</span>, COUNT(*) <span class="kw">FROM</span> fact_positions
+<span class="kw">UNION ALL SELECT</span> <span class="st">'fact_trades'</span>, COUNT(*) <span class="kw">FROM</span> fact_trades
+<span class="kw">UNION ALL SELECT</span> <span class="st">'fact_alerts'</span>, COUNT(*) <span class="kw">FROM</span> fact_alerts
+<span class="kw">UNION ALL SELECT</span> <span class="st">'fact_report_runs'</span>, COUNT(*) <span class="kw">FROM</span> fact_report_runs;</div>
+          <div class="tabs"><span class="on">Results</span><span>Chart</span><span>Query Details</span></div>
+          <table class="grid"><tr><th>T</th><th>N</th></tr><tr><td>dim_client</td><td class="r">3</td></tr><tr><td>fact_positions</td><td class="r">90</td></tr><tr><td>fact_trades</td><td class="r">12</td></tr><tr><td>fact_alerts</td><td class="r">25</td></tr><tr><td>fact_report_runs</td><td class="r">34</td></tr></table>
+          <div class="status ok">✓ 5 rows · 0.4s</div>
+        </div></div></div>
+      <p class="cap">Count check after the load; the tree shows fifteen tables in CORE <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>The same two text files that built your laptop database built the cloud one. That is the point of portable SQL: the definitions are the asset, the engine is interchangeable. The counts are your first data-quality check; if positions is not 90, something was skipped.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"Table does not exist" during the seed: schema.sql did not run fully; check the tree has 15 tables. Statement limit warning: Snowsight caps very large pastes; paste the seed in two halves.</p></div>
+  </div>
+
+  <h3>3.2 The real way: a bucket in Amazon S3</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>On your laptop: <code>python3 sql-lab/export_csv.py</code>. This writes fifteen CSV files into folders under <code>sql-lab/csv/</code>, one folder per table.</li>
+      <li>aws.amazon.com, Create an AWS Account (email, password, card for identity, Basic support which is free). Sign in to the console.</li>
+      <li>Top right, set the region to the same one as Snowflake. Search bar, <b>S3</b>, <b>Create bucket</b>.</li>
+      <li>Bucket name must be unique across all of AWS: <code>custody-lab-yourname-2026</code>. Leave "Block all public access" ticked. Create bucket.</li>
+      <li>Open the bucket, <b>Upload</b>, <b>Add folder</b>, choose the <code>csv</code> folder, Upload. Folders keep their names.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="awsbar"><b>aws</b><span>Services ▾</span><span>🔍 Search</span><span class="sp" style="flex:1"></span><span>Asia Pacific (Mumbai) ▾</span><span>rishabh ▾</span></div>
+        <div class="crumb">Amazon S3 › Buckets › custody-lab-rishabh-2026</div>
+        <div class="app nosb"><div class="main">
+          <div class="ttl">custody-lab-rishabh-2026</div>
+          <div class="tabs"><span class="on">Objects</span><span>Properties</span><span>Permissions</span><span>Metrics</span></div>
+          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap"><span class="btn">Copy S3 URI</span><span class="btn">Download</span><span class="btn">Delete</span><span class="btn aws">Upload</span><span class="btn">Create folder</span></div>
+          <table class="grid"><tr><th></th><th>Name</th><th>Type</th><th>Last modified</th><th>Size</th></tr>
+            <tr><td>☐</td><td>📁 accounts/</td><td>Folder</td><td>—</td><td>—</td></tr>
+            <tr><td>☐</td><td>📁 alerts/</td><td>Folder</td><td>—</td><td>—</td></tr>
+            <tr><td>☐</td><td>📁 clients/</td><td>Folder</td><td>—</td><td>—</td></tr>
+            <tr><td>☐</td><td>📁 positions/</td><td>Folder</td><td>—</td><td>—</td></tr>
+            <tr><td>☐</td><td>📁 trades/</td><td>Folder</td><td>—</td><td>—</td></tr>
+            <tr><td>☐</td><td>📁 … 10 more folders</td><td>Folder</td><td>—</td><td>—</td></tr></table>
+          <div class="status">Upload succeeded · 15 files, 84.2 KB</div>
+        </div></div></div>
+      <p class="cap">The S3 bucket after uploading the csv folder; one sub-folder per table <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>S3 is the filing cabinet of the cloud. Almost every feed between a bank and its vendors is "a file lands in a bucket". The folder-per-table layout matters because Snowflake (and Athena, and most tools) load a folder, not a file, so tomorrow's file can drop into the same folder and be picked up by the same command.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"Bucket name already exists": someone else in the world has it; add more characters. Region mismatch: check the top-right region selector before creating.</p></div>
+  </div>
+
+  <h3>3.3 An access key so Snowflake can read the bucket</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Search bar, <b>IAM</b>, Users, <b>Create user</b>. Name: <code>snowflake-reader</code>. Do not tick console access. Next.</li>
+      <li>Permissions: Attach policies directly, search <code>AmazonS3ReadOnlyAccess</code>, tick it. Next, Create user.</li>
+      <li>Open the user, <b>Security credentials</b> tab, <b>Create access key</b>. Use case: "Third-party service". Tick the confirmation. Create.</li>
+      <li>You see an Access key ID and a Secret access key. Copy both now into a private note; the secret is shown once only.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="awsbar"><b>aws</b><span>Services ▾</span><span class="sp" style="flex:1"></span><span>Asia Pacific (Mumbai) ▾</span></div>
+        <div class="crumb">IAM › Users › snowflake-reader › Create access key</div>
+        <div class="app nosb"><div class="main">
+          <div class="ttl">Retrieve access keys</div>
+          <div class="card" style="border-color:#F59E0B;background:#FFFBEB"><b>This is the only time that the secret access key can be viewed or downloaded.</b> You cannot recover it later. However, you can create a new access key any time.</div>
+          <div class="form">
+            <label>Access key</label><div class="fld">AKIA2EXAMPLE7XQ4M3NB</div>
+            <label>Secret access key</label><div class="fld">•••••••••••••••••••••••••••••••••••• <span style="color:#2563EB;font-family:var(--sans)">Show</span></div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px"><span class="btn">Download .csv file</span><span class="btn aws">Done</span></div>
+        </div></div></div>
+      <p class="cap">IAM access key screen; the secret is visible once <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>IAM is AWS's identity system: users, groups, roles and policies. You made a "user" that is not a person, gave it one ability (read files), and issued it a key pair. Snowflake will present that key to read your bucket. Least privilege, one purpose, revocable in one click: that is the model your bank's security team will insist on, and this is the smallest example of it.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>Lost the secret: delete the key and create a new one. Never paste keys into a file you commit to git; the step file has placeholders on purpose.</p></div>
+  </div>
+
+  <h3>3.4 Stage and COPY INTO</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>New worksheet "03 s3 stage". Paste <code>snowflake/03_s3_stage.sql</code>. Replace the bucket name and the two key placeholders.</li>
+      <li>Run the FILE FORMAT and STAGE statements, then <code>LIST @LAB_S3;</code> on its own. You should see fifteen files.</li>
+      <li>Run the rest: the TRUNCATEs empty the tables, the COPY INTO statements reload them from the bucket. Each COPY returns one row per file with status LOADED.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Worksheets › 03 s3 stage</span></div>
+        <div class="top"><span class="pill">03 s3 stage</span><span class="sp"></span><span class="pill sel">DX_ENGINEER ▾</span><span class="pill">LAB_WH (XS) ▾</span><span class="btn pri">▶ Run</span></div>
+        <div class="app nosb"><div class="main">
+          <div class="editor"><span class="kw">COPY INTO</span> fact_positions <span class="kw">FROM</span> @RAW.LAB_S3/positions/;</div>
+          <div class="tabs"><span class="on">Results</span><span>Query Details</span></div>
+          <table class="grid"><tr><th>file</th><th>status</th><th>rows_parsed</th><th>rows_loaded</th><th>error_limit</th><th>errors_seen</th><th>first_error</th></tr>
+            <tr><td>s3://custody-lab-rishabh-2026/positions/fact_positions.csv</td><td class="ok">LOADED</td><td class="r">90</td><td class="r">90</td><td class="r">1</td><td class="r">0</td><td>NULL</td></tr></table>
+          <div class="status ok">✓ 1 row · 1.2s</div>
+        </div></div></div>
+      <p class="cap">One COPY INTO result: the file, LOADED, 90 rows parsed and loaded, zero errors <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>A stage is a named pointer to your bucket plus the credentials to read it. COPY INTO is the load command: read every file in that folder, parse it with the file format, insert the rows, and report per file. Snowflake remembers which files it has loaded, so running COPY INTO again tomorrow loads only the new file. That memory is what turns a command into a pipeline.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>LIST returns an error: wrong bucket name, wrong key, or the bucket is in a different region than you think. "Number of columns in file does not match": a CSV was edited in Excel and saved with extra columns; re-run export_csv.py and re-upload.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 04 ====================== -->
+<section class="step" id="p4">
+  <div class="step-head"><span class="num">04</span><h2>Marts, secure views, sharing</h2></div>
+  <p class="why">Tables are not products. This phase turns the CORE tables into three client-facing things: a scorecard mart, a view that shows each client only its own rows, and a share that would let a client query it live from their own account.</p>
+
+  <h3>4.1 The scorecard mart</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>New worksheet "04 marts". Paste <code>snowflake/04_marts_and_sharing.sql</code>. Run section 4a: the CREATE TABLE and the SELECT.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Worksheets › 04 marts</span></div>
+        <div class="app nosb"><div class="main">
+          <div class="editor"><span class="kw">SELECT</span> * <span class="kw">FROM</span> MART.DX_SCORECARD <span class="kw">ORDER BY</span> client_name;</div>
+          <table class="grid"><tr><th>CLIENT_KEY</th><th>CLIENT_NAME</th><th>ACTIVE_USERS</th><th>ACTIONABLE_ALERT_ACK_PCT</th><th>DOCS_OPENED_PCT</th><th>SELF_SERVICE_PCT</th><th>REFRESHED_AT</th></tr>
+            <tr><td>C-HALCYON</td><td>Halcyon Asset Management</td><td class="r">3</td><td class="r">33</td><td class="r">75</td><td class="r">25</td><td>2026-09-14 09:12:41</td></tr>
+            <tr><td>C-MERIDIAN</td><td>Meridian Pension Trust</td><td class="r">4</td><td class="r">33</td><td class="r">50</td><td class="r">86</td><td>2026-09-14 09:12:41</td></tr>
+            <tr><td>C-ORIENT</td><td>Orient Mutual Insurance</td><td class="r">3</td><td class="r">100</td><td class="r">67</td><td class="r">75</td><td>2026-09-14 09:12:41</td></tr></table>
+          <div class="status ok">✓ 3 rows · 0.6s</div>
+        </div></div></div>
+      <p class="cap">The DX scorecard mart: one row per client, four capability metrics, and when it was refreshed <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>This one table is the JD's "outcomes" section as numbers: acknowledgement rate for alerts, documents opened, self-service ratio, active users. It has a refresh timestamp because a number without its as-of time starts arguments. Everything downstream (Sigma, Tableau, the portal tile) reads this table and therefore agrees.</p></div>
+  </div>
+
+  <h3>4.2 Entitlements in the data: the secure view</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Run section 4b: the ROLE_CLIENT_MAP table and the secure view.</li>
+      <li>Run section 4c as ACCOUNTADMIN: it creates a role CLIENT_HALCYON with access to the view only.</li>
+      <li>Change the role selector at the top right of the worksheet to <b>CLIENT_HALCYON</b> and run the final SELECT. Only Halcyon's accounts appear.</li>
+      <li>Still as CLIENT_HALCYON, try <code>SELECT * FROM CUSTODY_LAB.CORE.FACT_POSITIONS;</code>. It is refused.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Worksheets › 04 marts</span></div>
+        <div class="top"><span class="pill">04 marts</span><span class="sp"></span><span class="pill sel" style="border-color:#B45309;background:#FEF3C7">CLIENT_HALCYON ▾</span><span class="pill">LAB_WH (XS) ▾</span><span class="btn pri">▶ Run</span></div>
+        <div class="app nosb"><div class="main">
+          <div class="editor"><span class="kw">SELECT</span> client_key, account_name, COUNT(*) <span class="kw">AS</span> rows_visible, SUM(market_value_usd) <span class="kw">AS</span> mv
+<span class="kw">FROM</span> CUSTODY_LAB.MART.V_CLIENT_POSITIONS <span class="kw">WHERE</span> position_date = <span class="st">'2026-09-11'</span> <span class="kw">GROUP BY</span> 1,2;</div>
+          <table class="grid"><tr><th>CLIENT_KEY</th><th>ACCOUNT_NAME</th><th>ROWS_VISIBLE</th><th>MV</th></tr>
+            <tr><td>C-HALCYON</td><td>Halcyon US Large Cap ETF</td><td class="r">2</td><td class="r">193,507,478.00</td></tr>
+            <tr><td>C-HALCYON</td><td>Halcyon Income Fund</td><td class="r">3</td><td class="r">263,550,635.60</td></tr></table>
+          <div class="status ok">✓ 2 rows · 0.5s</div>
+          <div class="editor" style="margin-top:12px"><span class="kw">SELECT</span> * <span class="kw">FROM</span> CUSTODY_LAB.CORE.FACT_POSITIONS;</div>
+          <div class="status bad">✗ SQL compilation error: Object 'CUSTODY_LAB.CORE.FACT_POSITIONS' does not exist or not authorized.</div>
+        </div></div></div>
+      <p class="cap">Same worksheet, role switched to CLIENT_HALCYON: the view shows two accounts; the underlying table is invisible <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>The view contains a WHERE clause that asks "which client does the current role belong to" and filters accordingly. The client role was never given access to the raw tables. So even if someone writes a clever query, there is nothing to leak: the entitlement is enforced where the data lives, not in a screen that can be bypassed. This is the single most important sentence in the JD's IAM line, and you have just demonstrated it.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>The client role sees no rows: the ROLE_CLIENT_MAP insert did not run, or the role name is misspelled. Cannot switch role: the GRANT ROLE ... TO USER line ran as the wrong role; rerun 4c as ACCOUNTADMIN.</p></div>
+  </div>
+
+  <h3>4.3 Sharing with a client account</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>Run section 4d as ACCOUNTADMIN. It creates a share containing only the secure view. To actually connect it to a client you would need their account locator; if you want to see the receiving side, make a second trial account and add its locator. Otherwise look at the share in Data, <b>Private Sharing</b>, Shared by my account.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Data › Private Sharing</span></div>
+        <div class="app"><div class="side dark"><div class="brand">❄ Snowflake</div><div class="sec">Data</div><div class="it">Databases</div><div class="it on">Private Sharing</div><div class="it">Data Products</div></div>
+        <div class="main">
+          <div class="tabs"><span>Shared with me</span><span class="on">Shared by my account</span><span>Reader accounts</span></div>
+          <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b>HALCYON_DATA_SHARE</b><div class="sub" style="margin:2px 0 0">Direct share · 1 object · CUSTODY_LAB.MART.V_CLIENT_POSITIONS (secure view)</div></div><span class="btn">+ Add consumers</span></div>
+            <div class="sub" style="margin-top:8px">Consumer accounts: none yet. Adding an account gives it live, read-only access to the objects in this share. Removing it revokes access immediately.</div></div>
+        </div></div></div>
+      <p class="cap">The share, waiting for a consumer account <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Today most custodians send clients a file every night over SFTP. The client writes code to load it, it breaks when a column changes, and "did you get the file" is a daily ticket. A share replaces all of that: the client points their own tools at your view and always sees the current data, filtered to them, with nothing copied. It is a premium product idea; not every client has Snowflake, so the file stays alongside. Being able to explain this in a client meeting is worth the whole phase.</p></div>
+  </div>
+
+  <h3>4.4 Two features for incident reviews</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>Run section 4e: a Time Travel query and a zero-copy clone.</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>SELECT COUNT(*) FROM CORE.fact_positions AT (OFFSET =&gt; -60*10);          <span class="c">-- the table as it was 10 minutes ago</span>
+CREATE OR REPLACE TABLE CORE.fact_positions_test CLONE CORE.fact_positions;  <span class="c">-- full-size copy, instantly, no extra storage</span></pre></div></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Time Travel lets you ask "what did the client's number look like on Tuesday" exactly, which ends the argument in a dispute. Cloning gives your engineers a full-size test copy of production in seconds, which ends the excuse "we tested on a small sample". Both exist because Snowflake never overwrites files, only adds new ones.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 05 ====================== -->
+<section class="step" id="p5">
+  <div class="step-head"><span class="num">05</span><h2>Python: analysis, write-back, prototype</h2></div>
+  <p class="why">Python is where the numbers SQL cannot easily produce get made, where results go back into the warehouse, and where a working prototype gets built before a designer draws anything.</p>
+
+  <h3>5.1 The environment</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v">
+      <div class="code"><button class="cp" type="button">Copy</button><pre>cd python-lab
+python3 -m venv .venv
+source .venv/bin/activate                  <span class="c"># Windows PowerShell: .venv\Scripts\Activate.ps1</span>
+pip install pandas matplotlib streamlit plotly "snowflake-connector-python[pandas]"</pre></div></div>
+    <div class="k plain">Plain words</div><div class="v"><p>A virtual environment is a private folder of Python packages for this one project, so installing something here cannot break anything else on your laptop. "pip" is Python's app store. The prompt shows <code>(.venv)</code> when it is active.</p></div>
+  </div>
+
+  <h3>5.2 Analysis that SQL cannot do neatly</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><div class="code"><button class="cp" type="button">Copy</button><pre>python3 analyze.py</pre></div></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="out">1. Time to acknowledge, by severity
+          sent  acknowledged  median_hours_to_ack  p90_hours_to_ack
+severity
+CRITICAL     8             4                 1.27             11.26
+HIGH        10             4                 0.38              1.73
+INFO         7             3                 3.33             26.93
+
+2. Channel effectiveness
+         sent  delivery_failed  acked  ack_rate_pct
+channel
+WEBHOOK     1                0      1         100.0
+PORTAL     14                0      8          57.0
+EMAIL       9                0      2          22.0
+SMS         1                1      0           0.0
+
+4. Report runs by type (pivot)
+run_type                  SCHEDULED  SELF_SERVICE  SERVICE_DESK  self_service_pct  desk_minutes_spent
+Halcyon Asset Management          5             2             6              25.0                26.0
+Meridian Pension Trust            5             6             1              86.0                 2.0
+Orient Mutual Insurance           5             3             1              75.0                 2.0
+
+Saved chart: python-lab/dx_scorecard.png</div>
+      <p class="cap">Terminal output of analyze.py, abridged <span class="real">real</span></p>
+      <img class="shot" src="img/dx_scorecard.png" alt="Horizontal bar chart of four Digital Experience metrics for three clients">
+      <p class="cap">The chart the script saves <span class="real">real</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Half of critical alerts get acknowledged, and when they do it takes over an hour at the median and eleven hours at the ninetieth percentile. Email is acknowledged one time in five; the portal one time in two; the one machine-to-machine webhook instantly. This is the paragraph you would put in front of the Digital Experience Lead in week two, and it came from forty lines of pandas.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"No module named pandas": the virtual environment is not active, or pip install did not finish. Run the activate line again and reinstall.</p></div>
+  </div>
+
+  <h3>5.3 Write the result back into Snowflake</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v">
+      <p>Find your account identifier: Snowsight, bottom-left account menu, Account, hover the account name, copy the identifier (looks like <code>ABCDEFG-XY12345</code>). Then:</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>export SNOWFLAKE_ACCOUNT=ABCDEFG-XY12345      <span class="c"># Windows PowerShell: $env:SNOWFLAKE_ACCOUNT="ABCDEFG-XY12345"</span>
+export SNOWFLAKE_USER=rishabh
+export SNOWFLAKE_PASSWORD='your password'
+python3 to_snowflake.py</pre></div></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="out">CLIENT_KEY               CLIENT_NAME  ACTIVE_USERS  FEDERATED_PCT  ACTIONABLE_ALERT_ACK_PCT  DOCS_OPENED_PCT  SELF_SERVICE_PCT REFRESHED_AT
+ C-HALCYON  Halcyon Asset Management             3            0.0                      33.0             75.0              25.0 2026-09-14 ...
+C-MERIDIAN    Meridian Pension Trust             4          100.0                      33.0             50.0              86.0 2026-09-14 ...
+  C-ORIENT   Orient Mutual Insurance             3           67.0                     100.0             67.0              75.0 2026-09-14 ...
+write_pandas ok=True rows=3
+('Halcyon Asset Management', Decimal('25'), 25.0)
+('Meridian Pension Trust', Decimal('86'), 86.0)
+('Orient Mutual Insurance', Decimal('75'), 75.0)</div>
+      <p class="cap">Expected output: the pandas scorecard, the write, and a read-back comparing the SQL mart with the Python one. Values match. <span class="recreated">expected</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>This closes the loop. Analysis done on a laptop became a table in the governed platform, next to the SQL version, and the two agree. In a real team this script would run on a schedule and the mart would be what everyone reads. The comparison line is a data-quality control: two independent computations of one metric should match, and when they stop matching you have found a definition drift.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"250001: Could not connect": the account identifier is wrong, usually a region suffix issue; copy it from Snowsight rather than typing it. "Object does not exist": the MART schema was not created; rerun 01_setup.</p></div>
+  </div>
+
+  <h3>5.4 A working prototype of the portal</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><div class="code"><button class="cp" type="button">Copy</button><pre>streamlit run dashboard.py        <span class="c"># opens http://localhost:8501 in your browser</span></pre></div>
+      <p>In the left panel, change "Signed in as" to a different user. Everything below changes because every query is filtered by that user's entitlements.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <img class="shot" src="img/dashboard.png" alt="Streamlit dashboard: sidebar with signed-in user and entitled accounts, metric tiles for failed trades, elections due and money at stake, tables of unsettled trades and corporate-action deadlines, a cash balance chart and a holdings treemap">
+      <p class="cap">The prototype running on localhost <span class="real">real</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Streamlit turns a Python script into a web page. This one is a portal in miniature, built the custody way: exceptions first (fails, deadlines, money at stake), then cash, then holdings, with a download button. The sidebar is the identity layer from Phase 4 in a different costume: pick a user, and the queries only return accounts that user is entitled to. When you brief a design team, this is what you show them, and the conversation moves from "what should it look like" to "why is this number here".</p></div>
+    <div class="k">If it fails</div><div class="v"><p>Port already in use: <code>streamlit run dashboard.py --server.port 8502</code>. Blank page: wait five seconds; it loads data on first run.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 06 ====================== -->
+<section class="step" id="p6">
+  <div class="step-head"><span class="num">06</span><h2>Sigma and Tableau on Snowflake</h2></div>
+  <p class="why">Business users do not write SQL. Sigma and Tableau are how they reach the marts. Sigma lives in the browser and sits directly on Snowflake; Tableau is the desktop tool most banks already own.</p>
+
+  <h3>6.1 Sigma: connect and build without SQL</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>sigmacomputing.com, Start free trial, sign up with the same email. Sigma is entirely in the browser.</li>
+      <li>Administration (gear icon), Connections, <b>Create connection</b>, type Snowflake. Name: Custody lab. Account: your account identifier. Warehouse: LAB_WH. User and password: yours. Role: DX_ENGINEER. Test, Create.</li>
+      <li>Home, <b>Create new</b>, Workbook. Left panel: Add new element, Table, Tables and datasets, browse Custody lab, CUSTODY_LAB, CORE, <b>FACT_ALERTS</b>. Select.</li>
+      <li>In the element panel, Groupings: drag ALERT_TYPE then SEVERITY into Group by. Add a calculation column named Acknowledged with formula <code>IsNotNull([ACKNOWLEDGED_AT])</code>. Add Count of ALERT_ID and Sum of Acknowledged.</li>
+      <li>Save as "DX alerts". Then click the element's menu, <b>Show SQL</b>, and read the query Sigma wrote.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.sigmacomputing.com — DX alerts</span></div>
+        <div class="app"><div class="side">
+          <div class="brand">Element</div>
+          <div class="sec">Source</div><div class="it">CUSTODY_LAB.CORE.FACT_ALERTS</div>
+          <div class="sec">Groupings</div><div class="it">▾ ALERT_TYPE</div><div class="it">&nbsp;&nbsp;▾ SEVERITY</div>
+          <div class="sec">Calculations</div><div class="it">Count of ALERT_ID</div><div class="it">Sum of Acknowledged</div><div class="it">Ack rate = [Sum of Acknowledged]/[Count of ALERT_ID]</div>
+          <div class="sec">Columns</div><div class="it">Acknowledged = IsNotNull([ACKNOWLEDGED_AT])</div></div>
+        <div class="main">
+          <div class="top" style="padding:0 0 8px;background:none;border:none"><span class="pill">DX alerts</span><span class="pill">Custody lab · LAB_WH</span><span class="sp"></span><span class="btn">Show SQL</span><span class="btn pri">Publish</span></div>
+          <table class="grid"><tr><th>ALERT_TYPE</th><th>SEVERITY</th><th>Count of ALERT_ID</th><th>Sum of Acknowledged</th><th>Ack rate</th></tr>
+            <tr><td>▾ CA_DEADLINE</td><td>CRITICAL</td><td class="r">2</td><td class="r">0</td><td class="r">0%</td></tr>
+            <tr><td></td><td>HIGH</td><td class="r">7</td><td class="r">2</td><td class="r">29%</td></tr>
+            <tr><td>▾ SETTLEMENT_FAIL</td><td>CRITICAL</td><td class="r">5</td><td class="r">3</td><td class="r">60%</td></tr>
+            <tr><td></td><td>HIGH</td><td class="r">1</td><td class="r">1</td><td class="r">100%</td></tr>
+            <tr><td>▾ NAV_DELAY</td><td>HIGH</td><td class="r">2</td><td class="r">1</td><td class="r">50%</td></tr>
+            <tr><td>▾ DOC_AVAILABLE</td><td>INFO</td><td class="r">5</td><td class="r">3</td><td class="r">60%</td></tr></table>
+          <div class="status">Live on Snowflake · last refreshed just now · 25 rows in source</div>
+        </div></div></div>
+      <p class="cap">A Sigma workbook grouped by alert type and severity, reproducing query Q16 with no SQL typed <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Sigma looks like a spreadsheet but every cell is a live query against Snowflake; nothing is downloaded. An operations manager can group, filter and add a column, and you can press Show SQL to see exactly what they did. That is governed self-service: freedom for the user, auditability for you, and one source of truth underneath. The "Acknowledged" formula is a definition; in Phase 7 it goes in the glossary so the portal and this workbook cannot drift apart.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>Connection test fails: the DX_ENGINEER role has no USAGE on the warehouse, or the account identifier is missing its organisation prefix. Tables not visible: the role lacks SELECT; rerun the grants in 01_setup as ACCOUNTADMIN.</p></div>
+  </div>
+
+  <h3>6.2 Tableau: connect to Snowflake and build the fails board</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ol>
+      <li>Tableau Desktop trial from tableau.com (Tableau Public cannot connect to Snowflake; use it with the CSVs from <code>tableau/export_flat.py</code> instead, following <code>tableau/BUILD.md</code>).</li>
+      <li>Connect, To a Server, <b>Snowflake</b>. Server: <code>&lt;account identifier&gt;.snowflakecomputing.com</code>. Role: DX_ENGINEER. Warehouse: LAB_WH. Authentication: username and password. Sign In. It may ask to install the Snowflake driver; accept.</li>
+      <li>Data source page: Database CUSTODY_LAB, Schema CORE. Drag <b>FACT_TRADES</b> to the canvas, then DIM_ACCOUNT and DIM_SECURITY; Tableau proposes the joins on the key columns. Accept.</li>
+      <li>Go to Sheet 1. Drag Account Name to Rows, Status to Columns, Trade Id to the Marks card as Count. Drag Status to Filters and exclude SETTLED. Drag Fail Reason to Colour.</li></ol></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span style="font-size:12px">Tableau Desktop — Custody DX — Sheet 1 (Fails board)</span></div>
+        <div class="app"><div class="side">
+          <div class="brand">Data</div><div class="it">▾ Custody lab (Snowflake)</div>
+          <div class="sec">Tables</div><div class="it">▾ Fact Trades</div><div class="it in1">Abc Trade Id</div><div class="it in1">Abc Status</div><div class="it in1">Abc Fail Reason</div><div class="it in1">📅 Intended Settle Date</div><div class="it in1"># Quantity</div>
+          <div class="it">▾ Dim Account</div><div class="it in1">Abc Account Name</div><div class="it">▾ Dim Security</div><div class="it in1">Abc Security Name</div></div>
+        <div class="main">
+          <div class="card" style="padding:8px 12px"><div style="display:grid;grid-template-columns:70px 1fr;gap:4px 10px;font-size:12px"><b>Filters</b><span class="pill">Status: exclude SETTLED</span><b>Columns</b><span class="pill">Status</span><b>Rows</b><span class="pill">Account Name</span><b>Marks</b><span><span class="pill">Bar</span> <span class="pill">Colour: Fail Reason</span> <span class="pill">Label: CNT(Trade Id)</span></span></div></div>
+          <table class="grid"><tr><th>Account Name</th><th>FAILED</th><th>PENDING</th><th>AFFIRMED</th><th>MATCHED</th></tr>
+            <tr><td>Meridian Global Equity</td><td>▇ 1 · counterparty short</td><td></td><td>▇ 1</td><td></td></tr>
+            <tr><td>Meridian Global Bond</td><td>▇ 1 · insufficient EUR cash</td><td></td><td></td><td>▇ 1</td></tr>
+            <tr><td>Orient General Account</td><td>▇ 1 · SSI mismatch</td><td>▇ 1</td><td></td><td></td></tr>
+            <tr><td>Halcyon US Large Cap ETF</td><td></td><td>▇ 1</td><td></td><td></td></tr></table>
+          <div class="status">4 marks · 1 row by 4 columns · live connection to Snowflake</div>
+        </div></div></div>
+      <p class="cap">Tableau sheet with the shelves set as listed; the fails board from Q5 as a picture <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Tableau's model is shelves: put a field on Rows, a field on Columns, a measure on the Marks card, and the chart appears. "Live connection" means every change sends a query to Snowflake and briefly wakes LAB_WH; an "extract" instead copies the data into Tableau on a schedule. The VP question about any Tableau estate is which dashboards are live against client-facing warehouses during the morning rush, and which extracts refresh overnight for nobody.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>"Driver not found": install the Snowflake ODBC driver Tableau links to in the error. "Warehouse LAB_WH is suspended": harmless, it resumes on first query; if not, the role lacks USAGE.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 07 ====================== -->
+<section class="step" id="p7">
+  <div class="step-head"><span class="num">07</span><h2>Governance the Collibra way</h2></div>
+  <p class="why">Collibra is the catalogue where a bank records what each term means, who owns it, where the data comes from and whether it passed its quality checks. There is no free download, so you build the same four artefacts by hand and see what the Collibra screen for one of them looks like.</p>
+
+  <h3>7.1 Run the quality rules</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><div class="code"><button class="cp" type="button">Copy</button><pre>python3 governance/run_dq.py</pre></div></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="out">RULE                                       DIMENSION    SEVERITY RESULT
+--------------------------------------------------------------------------------
+positions_unique_grain                     uniqueness   BLOCK    PASS
+positions_market_value_recomputes          accuracy     BLOCK    PASS
+positions_freshness_0600                   timeliness   WARN     FAIL (1 violation)
+                                                                   e.g. position_date=2026-09-11, account_key=A-3001, loaded_at=2026-09-11 06:52:00
+trades_fail_reason_present                 completeness BLOCK    PASS
+trades_status_in_set                       validity     BLOCK    PASS
+ca_client_deadline_before_market           consistency  BLOCK    PASS
+nav_recomputes                             accuracy     BLOCK    PASS
+entitlements_no_cross_client               consistency  BLOCK    FAIL (1 violation)
+                                                                   e.g. user_key=U-303, account_key=A-1001, permission=VIEW
+entitlements_have_expiry                   completeness WARN     FAIL (16 violations)
+alerts_ack_after_create                    consistency  BLOCK    PASS
+alerts_delivered                           timeliness   WARN     FAIL (1 violation)
+documents_published_after_generated        consistency  BLOCK    PASS
+documents_retention_set                    completeness BLOCK    PASS
+--------------------------------------------------------------------------------
+Publish decision: HOLD the mart — blocking rules failed</div>
+      <p class="cap">The data-quality scorecard and its decision <span class="real">real</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Thirteen rules, each a question with a yes or no answer, each tagged with one of the six quality dimensions and a severity. One blocking rule failed: a user has access to another client's account. So the platform says hold: do not publish this morning's data to clients until it is fixed. Three warnings passed through with a flag: a late feed, an undelivered text message, grants that never expire. Deciding which rules block and which warn is your decision as the data owner, and you should be able to defend each one.</p></div>
+  </div>
+
+  <h3>7.2 What the same thing looks like in Collibra</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>Open <code>governance/glossary.csv</code> and find the term "Acknowledged alert". In Collibra, that row becomes an asset page like the one below. Sign up at university.collibra.com for the free Fundamentals course, which walks through these screens on a demo environment.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">collibra — Business Glossary › Digital Experience › Acknowledged alert</span></div>
+        <div class="app"><div class="side"><div class="brand">Digital Experience</div><div class="sec">Business terms</div><div class="it">Alert</div><div class="it on">Acknowledged alert</div><div class="it">Entitlement</div><div class="it">Federated user</div><div class="it">Published document</div><div class="it">Self-service ratio</div><div class="sec">Data assets</div><div class="it">FACT_ALERTS</div><div class="it">DX_SCORECARD</div></div>
+        <div class="main">
+          <div class="ttl">Acknowledged alert <span class="pill sel" style="font-size:11px">Approved</span></div>
+          <div class="tabs"><span class="on">Overview</span><span>Relations</span><span>Lineage</span><span>Data quality</span><span>History</span></div>
+          <div class="form" style="max-width:none">
+            <label>Definition</label><div>An alert a user has explicitly actioned in the portal or via API; delivery alone is not acknowledgement.</div>
+            <label>Data owner</label><div>VP Digital Experience (Rishabh Sharma)</div>
+            <label>Data steward</label><div>Notifications product owner</div>
+            <label>Golden source</label><div>Notification framework</div>
+            <label>Represented by</label><div><span class="pill">FACT_ALERTS.ACKNOWLEDGED_AT</span></div>
+            <label>Used in</label><div><span class="pill">MART.DX_SCORECARD</span> <span class="pill">Sigma: DX alerts</span> <span class="pill">Portal scorecard tile</span></div>
+            <label>Data quality</label><div><span class="ok">alerts_ack_after_create: PASS</span> · <span style="color:#B45309">alerts_delivered: WARN (1)</span></div>
+            <label>Why it matters</label><div>The only measure of whether alerting works.</div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px"><span class="btn">Propose change</span><span class="btn">Ask the steward</span></div>
+        </div></div></div>
+      <p class="cap">A Collibra business-term asset page built from one glossary row: definition, owner, steward, the column it lives in, where it is used, and its quality status <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Everything on that page exists in your governance folder as a CSV row, a diagram or a rule. Collibra's value is that all of it is in one place, linked, searchable, and changes go through an approval workflow: "Propose change" routes to the owner, which is you. When an auditor or a client asks "what does acknowledged mean and who decided", the answer is one click. When an engineer wants to rename the column, the Lineage tab shows the three things that would break.</p></div>
+  </div>
+
+  <h3>7.3 The lineage exercise</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>Open <code>governance/lineage.md</code>. It traces self-service ratio from the reporting platform to the portal tile. Draw the same for acknowledged alert rate, on paper, then answer its question: which upstream change would make the portal and Sigma disagree without anyone noticing?</p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Lineage is a map of where a number came from. Regulators ask for it (the rule is called BCBS 239); clients ask for it when they dispute a figure; engineers need it before they change anything. Being able to draw it for your own scorecard from memory is what "communicate data concepts clearly" looks like in practice.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 08 ====================== -->
+<section class="step" id="p8">
+  <div class="step-head"><span class="num">08</span><h2>The client portal on top</h2></div>
+  <p class="why">Everything so far is invisible to a client. This phase is what they see: a shell that composes independent widgets, each owned by a different team, reading the marts through APIs.</p>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><div class="code"><button class="cp" type="button">Copy</button><pre>cd microfrontend-lab
+python3 -m http.server 8080          <span class="c"># then open http://localhost:8080/shell/ in your browser</span></pre></div>
+      <p>Change the signed-in user in the header. Click Acknowledge on an alert. Use the Alerts and Documents links to load one widget at a time. Then open the browser's developer tools (F12), Sources tab, and see that <code>alerts.js</code> and <code>documents.js</code> are separate files with nothing in common except <code>tokens.css</code>.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <img class="shot" src="img/shell.png" alt="Portal shell with header navigation and user selector, an Alerts widget listing critical and high alerts with an Acknowledge button, and a Documents widget table with a NEW marker">
+      <p class="cap">The composed portal on localhost <span class="real">real</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>A "micro front-end" estate is a page assembled from pieces that are built, tested and released separately. The header and the user selector are the shell, owned by the platform team. The Alerts box is owned by the notifications team and the Documents box by the documents team; they can ship on different days without touching each other. The shared tokens file is why it still looks like one product. This is the practical answer to "unified client experience across fragmented platforms": you do not rewrite five portals, you put one shell in front and move pages into it one at a time.</p>
+      <p>How it connects to the rest of the project: in production each widget calls an API that reads a MART view with the caller's entitlements, exactly the secure view from Phase 4. The Streamlit prototype from Phase 5 is what you build first to agree the content; the widgets are what engineering builds properly afterwards.</p></div>
+    <div class="k">If it fails</div><div class="v"><p>Blank page: you opened the file directly instead of through the server; modules need http. Port in use: pick another, <code>python3 -m http.server 8081</code>.</p></div>
+  </div>
+</section>
+
+<!-- ====================== 09 ====================== -->
+<section class="step" id="p9">
+  <div class="step-head"><span class="num">09</span><h2>Cost, security, clean-up, and the story</h2></div>
+  <p class="why">A platform you cannot explain the cost and controls of is not finished. This phase reads the bill, checks who can see what, removes what should not be left running, and turns the project into a ninety-second story.</p>
+
+  <h3>9.1 Read the bill</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><p>New worksheet "05 cost", role ACCOUNTADMIN. Paste <code>snowflake/05_cost_and_monitoring.sql</code> and run 5a, 5b and 5c. Then Admin, Cost Management, to see the same in the UI.</p></div>
+    <div class="k">Screen</div><div class="v">
+      <div class="screen"><div class="bar"><i></i><i></i><i></i><span class="url">app.snowflake.com — Admin › Cost Management</span></div>
+        <div class="app"><div class="side dark"><div class="brand">❄ Snowflake</div><div class="sec">Admin</div><div class="it">Warehouses</div><div class="it on">Cost Management</div><div class="it">Users &amp; Roles</div></div>
+        <div class="main">
+          <div class="tabs"><span class="on">Consumption</span><span>Budgets</span><span>Resource Monitors</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:10px">
+            <div class="card"><div class="sub" style="margin:0">Credits used (7 days)</div><div style="font-size:22px;font-weight:600">1.42</div></div>
+            <div class="card"><div class="sub" style="margin:0">Compute</div><div style="font-size:22px;font-weight:600">1.38</div></div>
+            <div class="card"><div class="sub" style="margin:0">Storage</div><div style="font-size:22px;font-weight:600">0.04</div></div>
+            <div class="card"><div class="sub" style="margin:0">Trial remaining</div><div style="font-size:22px;font-weight:600">398.6</div></div></div>
+          <table class="grid"><tr><th>Warehouse</th><th>Credits</th><th>Queries</th><th>Avg queued</th><th>Top user</th></tr>
+            <tr><td>LAB_WH</td><td class="r">1.31</td><td class="r">212</td><td class="r">0.0s</td><td>RISHABH</td></tr>
+            <tr><td>COMPUTE_WH</td><td class="r">0.07</td><td class="r">4</td><td class="r">0.0s</td><td>RISHABH</td></tr></table>
+        </div></div></div>
+      <p class="cap">Cost Management after the whole project: under two credits, a few dollars <span class="recreated">recreated</span></p></div>
+    <div class="k plain">Plain words</div><div class="v"><p>The entire project cost about one and a half credits because the warehouse slept whenever you were not querying. The experiment in 5e of the file shows the alternative: set auto-suspend to never for an hour and watch a credit vanish for nothing. Scaled to a bank with forty warehouses, that habit is the difference between a controlled bill and a surprise. The 5c query is your platform's own entitlement review: which roles can read which objects, the same question Q15 asks about client users.</p></div>
+  </div>
+
+  <h3>9.2 Clean up</h3>
+  <div class="do">
+    <div class="k">Do</div><div class="v"><ul>
+      <li><b>AWS:</b> IAM, Users, snowflake-reader, Security credentials, deactivate and delete the access key, then delete the user. S3, open the bucket, Empty, then Delete. Billing, check the estimated charges page reads zero.</li>
+      <li><b>Snowflake:</b> nothing is billed while suspended, and the trial ends by itself. If you want it tidy: <code>DROP WAREHOUSE COMPUTE_WH;</code> and drop the test share.</li>
+      <li><b>Laptop:</b> <code>docker compose down -v</code> if you used Docker; <code>deactivate</code> to leave the Python environment.</li></ul></div>
+    <div class="k plain">Plain words</div><div class="v"><p>Nothing here should cost money after you stop. The access key is the one thing to delete on principle: a credential that no longer has a purpose is a liability, which is a sentence you will hear from information security in your first month.</p></div>
+  </div>
+
+  <h3>9.3 The story, for someone who will never open Snowflake</h3>
+  <div class="do">
+    <div class="k plain">Plain words</div><div class="v">
+      <p>Say this aloud. It should take ninety seconds.</p>
+      <p>"Our clients' data about their own assets sits in our core systems. Every night it lands as files in a secure cloud folder. A warehouse loads those files, checks them against quality rules, and if anything blocking fails we hold the release and tell the client honestly rather than publishing partial numbers. From the clean tables we build a small number of agreed views: what a client holds, what failed, what is due, and a scorecard of how well our digital service is working for them. Each client can only ever see their own rows, and that rule is enforced in the data itself, not in the screen. The same views feed the portal, the dashboards our relationship managers use, and, for clients who want it, a live share into their own systems instead of a nightly file. Every number has a definition, an owner and a traceable path back to its source, so when a client disputes a figure or an auditor asks how it was produced, the answer is one click. And because the compute switches itself off when idle, the whole platform costs a fraction of the old one."</p>
+      <p>Every sentence in that paragraph is something you built in this project and can show on a screen.</p></div>
+  </div>
+
+  <h3>9.4 What to say on Day 1 about all of this</h3>
+  <div class="do">
+    <div class="k plain">Plain words</div><div class="v"><ul>
+      <li>Do not say "I built a Snowflake platform". Say "I ran a small end-to-end lab to learn how our stack fits together, and I'd like to see how ours differs."</li>
+      <li>Ask which of these exist internally and by what names: the raw/core/mart layering, the secure-view entitlement pattern, data-quality gates before publishing, the glossary owner for Digital Experience terms, the cost review.</li>
+      <li>Ask to see one real number's lineage, end to end, in your first two weeks.</li>
+      <li>Keep this page. Rebuild the project with one real (non-confidential, anonymised) metric from work once you have access, and you will have learned the actual estate.</li></ul></div>
+  </div>
+</section>
+
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var toastEl=document.getElementById('toast'), toastT;
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove('show');},1600); }
+  document.querySelectorAll('.code .cp').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.parentElement.querySelector('pre').innerText;
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast('Copied');},function(){toast('Select and copy manually');}); }
+      else{ toast('Select and copy manually'); }
+    });
+  });
+  var links=document.querySelectorAll('.rail a[href^="#"]'), steps=document.querySelectorAll('.step');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){
+      links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href')==='#'+e.target.id); }); } }); },{rootMargin:'-20% 0px -70% 0px'});
+    steps.forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
