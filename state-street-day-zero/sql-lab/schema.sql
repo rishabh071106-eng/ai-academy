@@ -136,3 +136,81 @@ CREATE TABLE fact_nav (
   benchmark_move_pct NUMERIC(8,4) NOT NULL,-- what the fund's market did that day
   PRIMARY KEY (fund_key, valuation_date)
 );
+
+-- =====================================================================
+--  DIGITAL EXPERIENCE EXTENSION — the four capabilities named in JD R-790937
+--    dim_user + fact_user_entitlements   Identity & Access Management
+--    fact_alerts                          Alerts & Notifications
+--    fact_documents                       Document Management
+--    fact_report_runs                     Self-Service Reporting
+--  Grain: one row per user; per (user, account, permission); per alert; per document; per report run.
+-- =====================================================================
+
+DROP TABLE IF EXISTS fact_report_runs;
+DROP TABLE IF EXISTS fact_documents;
+DROP TABLE IF EXISTS fact_alerts;
+DROP TABLE IF EXISTS fact_user_entitlements;
+DROP TABLE IF EXISTS dim_user;
+
+CREATE TABLE dim_user (
+  user_key       VARCHAR(20)  PRIMARY KEY,
+  client_key     VARCHAR(20)  NOT NULL REFERENCES dim_client(client_key),
+  user_name      VARCHAR(80)  NOT NULL,
+  job_role       VARCHAR(40)  NOT NULL,   -- Ops analyst / Portfolio manager / Treasurer / Executive / Client admin
+  region         VARCHAR(10)  NOT NULL,   -- EMEA / AMER / APAC
+  sso_provider   VARCHAR(30)  NOT NULL,   -- CLIENT_IDP (federated) / STATE_STREET_LOCAL (we issue credentials)
+  mfa_enabled    BOOLEAN      NOT NULL,
+  status         VARCHAR(12)  NOT NULL,   -- ACTIVE / DORMANT / DISABLED
+  last_login_at  TIMESTAMP
+);
+
+CREATE TABLE fact_user_entitlements (
+  user_key       VARCHAR(20)  NOT NULL REFERENCES dim_user(user_key),
+  account_key    VARCHAR(20)  NOT NULL REFERENCES dim_account(account_key),
+  permission     VARCHAR(12)  NOT NULL,   -- VIEW / INSTRUCT / ADMIN
+  granted_at     TIMESTAMP    NOT NULL,
+  granted_by     VARCHAR(20)  NOT NULL,   -- user_key of the client admin, or 'ONBOARDING'
+  expires_at     DATE,                    -- NULL = no expiry (a finding in itself)
+  PRIMARY KEY (user_key, account_key, permission)
+);
+
+CREATE TABLE fact_alerts (
+  alert_id        INTEGER      PRIMARY KEY,
+  client_key      VARCHAR(20)  NOT NULL REFERENCES dim_client(client_key),
+  user_key        VARCHAR(20)  NOT NULL REFERENCES dim_user(user_key),
+  account_key     VARCHAR(20)  REFERENCES dim_account(account_key),
+  alert_type      VARCHAR(30)  NOT NULL,  -- SETTLEMENT_FAIL / CA_DEADLINE / NAV_DELAY / CASH_SHORTFALL / DOC_AVAILABLE / LOGIN_NEW_DEVICE
+  severity        VARCHAR(10)  NOT NULL,  -- CRITICAL / HIGH / INFO
+  channel         VARCHAR(12)  NOT NULL,  -- PORTAL / EMAIL / SMS / WEBHOOK
+  related_ref     VARCHAR(20),            -- trade_id, event_id, fund_key or doc_id
+  created_at      TIMESTAMP    NOT NULL,
+  delivered_at    TIMESTAMP,              -- NULL = delivery failed
+  acknowledged_at TIMESTAMP               -- NULL = nobody has acted on it
+);
+
+CREATE TABLE fact_documents (
+  doc_id          VARCHAR(20)  PRIMARY KEY,
+  client_key      VARCHAR(20)  NOT NULL REFERENCES dim_client(client_key),
+  account_key     VARCHAR(20)  REFERENCES dim_account(account_key),
+  doc_type        VARCHAR(20)  NOT NULL,  -- STATEMENT / CONFIRMATION / NAV_REPORT / CA_NOTICE / TAX_RECLAIM / FEE_INVOICE
+  period_end      DATE         NOT NULL,
+  generated_at    TIMESTAMP    NOT NULL,
+  published_at    TIMESTAMP,              -- visible on the portal from this moment
+  first_opened_at TIMESTAMP,              -- NULL = never opened by anyone
+  download_count  INTEGER      NOT NULL,
+  size_kb         INTEGER      NOT NULL,
+  retention_until DATE         NOT NULL   -- regulatory retention: nothing may be deleted before this
+);
+
+CREATE TABLE fact_report_runs (
+  run_id          INTEGER      PRIMARY KEY,
+  user_key        VARCHAR(20)  NOT NULL REFERENCES dim_user(user_key),
+  client_key      VARCHAR(20)  NOT NULL REFERENCES dim_client(client_key),
+  report_name     VARCHAR(60)  NOT NULL,  -- Holdings / Cash Projection / Settlement Status / CA Calendar / NAV Pack / Custom Query
+  run_type        VARCHAR(15)  NOT NULL,  -- SELF_SERVICE / SCHEDULED / SERVICE_DESK  (service desk = a person ran it for the client)
+  run_at          TIMESTAMP    NOT NULL,
+  duration_ms     INTEGER      NOT NULL,
+  rows_returned   INTEGER      NOT NULL,
+  export_format   VARCHAR(8)   NOT NULL,  -- SCREEN / XLSX / CSV / PDF / API
+  as_of_date      DATE         NOT NULL
+);

@@ -26,9 +26,14 @@ COPY INTO FACT_TRANSACTIONS       FROM @LAB_S3/transactions/;
 COPY INTO FACT_TRADES             FROM @LAB_S3/trades/;
 COPY INTO FACT_CORPORATE_ACTIONS  FROM @LAB_S3/corporate_actions/;
 COPY INTO FACT_NAV                FROM @LAB_S3/nav/;
+COPY INTO DIM_USER                FROM @LAB_S3/users/;
+COPY INTO FACT_USER_ENTITLEMENTS  FROM @LAB_S3/entitlements/;
+COPY INTO FACT_ALERTS             FROM @LAB_S3/alerts/;
+COPY INTO FACT_DOCUMENTS          FROM @LAB_S3/documents/;
+COPY INTO FACT_REPORT_RUNS        FROM @LAB_S3/report_runs/;
 SELECT 'positions' AS t, COUNT(*) FROM FACT_POSITIONS UNION ALL SELECT 'trades', COUNT(*) FROM FACT_TRADES;
 
--- 4. Queries: paste ../queries.sql — all 13 run unchanged.  Snowflake-native version of Q11:
+-- 4. Queries: paste ../queries.sql — all 20 run unchanged.  Snowflake-native version of Q11:
 SELECT s.asset_class, s.security_name, SUM(p.market_value_usd) AS mv_usd,
        RANK() OVER (PARTITION BY s.asset_class ORDER BY SUM(p.market_value_usd) DESC) AS rnk
 FROM FACT_POSITIONS p

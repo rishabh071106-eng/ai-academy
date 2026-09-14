@@ -138,3 +138,97 @@ FROM v_positions_meridian
 WHERE position_date = '2026-09-11'
 GROUP BY account_name
 ORDER BY account_name;
+
+-- =====================================================================
+--  DIGITAL EXPERIENCE QUERIES — one per capability named in JD R-790937
+-- =====================================================================
+
+-- ==== Q14 IAM: who can see or act on account A-1001, and at what level  (the entitlement review screen)
+SELECT u.user_name, u.job_role, c.client_name AS user_belongs_to, e.permission, e.granted_by, e.expires_at,
+       u.mfa_enabled, u.status
+FROM fact_user_entitlements e
+JOIN dim_user   u ON u.user_key   = e.user_key
+JOIN dim_client c ON c.client_key = u.client_key
+WHERE e.account_key = 'A-1001'
+ORDER BY CASE e.permission WHEN 'ADMIN' THEN 0 WHEN 'INSTRUCT' THEN 1 ELSE 2 END, u.user_name;
+
+-- ==== Q15 IAM findings: cross-client grants, admins without MFA, dormant users still entitled, expired grants
+SELECT 'CROSS_CLIENT_ACCESS' AS finding, u.user_name, e.account_key, e.permission
+FROM fact_user_entitlements e
+JOIN dim_user u ON u.user_key = e.user_key
+JOIN dim_account a ON a.account_key = e.account_key
+WHERE a.client_key <> u.client_key
+UNION ALL
+SELECT 'PRIVILEGED_NO_MFA', u.user_name, e.account_key, e.permission
+FROM fact_user_entitlements e JOIN dim_user u ON u.user_key = e.user_key
+WHERE e.permission IN ('ADMIN','INSTRUCT') AND u.mfa_enabled = FALSE
+UNION ALL
+SELECT 'DORMANT_OR_DISABLED_STILL_ENTITLED', u.user_name, e.account_key, e.permission
+FROM fact_user_entitlements e JOIN dim_user u ON u.user_key = e.user_key
+WHERE u.status <> 'ACTIVE'
+UNION ALL
+SELECT 'GRANT_EXPIRED', u.user_name, e.account_key, e.permission
+FROM fact_user_entitlements e JOIN dim_user u ON u.user_key = e.user_key
+WHERE e.expires_at IS NOT NULL AND e.expires_at < '2026-09-11'
+ORDER BY finding, user_name;
+
+-- ==== Q16 Alerts: volume, delivery and acknowledgement rate by type and severity  (is the notification framework working?)
+SELECT alert_type, severity,
+       COUNT(*)                                            AS sent,
+       SUM(CASE WHEN delivered_at IS NULL THEN 1 ELSE 0 END)     AS delivery_failed,
+       SUM(CASE WHEN acknowledged_at IS NOT NULL THEN 1 ELSE 0 END) AS acknowledged,
+       ROUND(100.0 * SUM(CASE WHEN acknowledged_at IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*), 1) AS ack_pct
+FROM fact_alerts
+GROUP BY alert_type, severity
+ORDER BY CASE severity WHEN 'CRITICAL' THEN 0 WHEN 'HIGH' THEN 1 ELSE 2 END, alert_type;
+
+-- ==== Q17 Alerts: the escalation list — unacknowledged CRITICAL/HIGH alerts about money at stake, with every channel tried
+SELECT a.related_ref, a.alert_type, c.client_name, u.user_name,
+       COUNT(*) AS attempts,
+       MIN(a.created_at) AS first_sent, MAX(a.created_at) AS last_sent,
+       SUM(CASE WHEN a.delivered_at IS NULL THEN 1 ELSE 0 END) AS failed_deliveries
+FROM fact_alerts a
+JOIN dim_client c ON c.client_key = a.client_key
+JOIN dim_user   u ON u.user_key   = a.user_key
+WHERE a.severity IN ('CRITICAL','HIGH') AND a.related_ref IS NOT NULL
+GROUP BY a.related_ref, a.alert_type, c.client_name, u.user_name
+HAVING SUM(CASE WHEN a.acknowledged_at IS NOT NULL THEN 1 ELSE 0 END) = 0
+ORDER BY attempts DESC, first_sent;
+
+-- ==== Q18 Documents: published but never opened, by client and type  (what we generate that nobody reads, and the one they should have)
+SELECT c.client_name, d.doc_type,
+       COUNT(*) AS published,
+       SUM(CASE WHEN d.first_opened_at IS NULL THEN 1 ELSE 0 END) AS never_opened,
+       SUM(d.download_count) AS downloads
+FROM fact_documents d
+JOIN dim_client c ON c.client_key = d.client_key
+WHERE d.published_at IS NOT NULL
+GROUP BY c.client_name, d.doc_type
+ORDER BY never_opened DESC, c.client_name;
+
+-- ==== Q19 Self-service reporting: self-service ratio per client  (the JD's "adoption through self-service" outcome, as a number)
+SELECT c.client_name,
+       SUM(CASE WHEN r.run_type = 'SELF_SERVICE' THEN 1 ELSE 0 END) AS self_service,
+       SUM(CASE WHEN r.run_type = 'SCHEDULED'    THEN 1 ELSE 0 END) AS scheduled,
+       SUM(CASE WHEN r.run_type = 'SERVICE_DESK' THEN 1 ELSE 0 END) AS service_desk,
+       ROUND(100.0 * SUM(CASE WHEN r.run_type = 'SELF_SERVICE' THEN 1 ELSE 0 END)
+             / SUM(CASE WHEN r.run_type <> 'SCHEDULED' THEN 1 ELSE 0 END), 1) AS self_service_pct_of_adhoc,
+       ROUND(AVG(CASE WHEN r.run_type = 'SERVICE_DESK' THEN r.duration_ms END) / 60000.0, 1) AS avg_desk_minutes
+FROM fact_report_runs r
+JOIN dim_client c ON c.client_key = r.client_key
+GROUP BY c.client_name
+ORDER BY self_service_pct_of_adhoc;
+
+-- ==== Q20 The Digital Experience scorecard: one row per client across all four capabilities
+SELECT c.client_name,
+       (SELECT COUNT(*) FROM dim_user u WHERE u.client_key = c.client_key AND u.status = 'ACTIVE') AS active_users,
+       (SELECT COUNT(*) FROM dim_user u WHERE u.client_key = c.client_key AND u.sso_provider = 'CLIENT_IDP') AS federated_users,
+       (SELECT ROUND(100.0 * SUM(CASE WHEN a.acknowledged_at IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*), 0)
+          FROM fact_alerts a WHERE a.client_key = c.client_key AND a.severity <> 'INFO') AS actionable_alert_ack_pct,
+       (SELECT ROUND(100.0 * SUM(CASE WHEN d.first_opened_at IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*), 0)
+          FROM fact_documents d WHERE d.client_key = c.client_key AND d.published_at IS NOT NULL) AS docs_opened_pct,
+       (SELECT ROUND(100.0 * SUM(CASE WHEN r.run_type = 'SELF_SERVICE' THEN 1 ELSE 0 END)
+                     / SUM(CASE WHEN r.run_type <> 'SCHEDULED' THEN 1 ELSE 0 END), 0)
+          FROM fact_report_runs r WHERE r.client_key = c.client_key) AS self_service_pct
+FROM dim_client c
+ORDER BY c.client_name;

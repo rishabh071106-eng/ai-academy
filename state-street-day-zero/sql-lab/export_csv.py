@@ -12,7 +12,9 @@ con = sqlite3.connect(DB)
 FOLDERS = {"dim_client": "clients", "dim_account": "accounts", "dim_security": "securities",
            "dim_date": "dates", "dim_fund": "funds", "fact_positions": "positions",
            "fact_transactions": "transactions", "fact_trades": "trades",
-           "fact_corporate_actions": "corporate_actions", "fact_nav": "nav"}
+           "fact_corporate_actions": "corporate_actions", "fact_nav": "nav",
+           "dim_user": "users", "fact_user_entitlements": "entitlements", "fact_alerts": "alerts",
+           "fact_documents": "documents", "fact_report_runs": "report_runs"}
 for t, folder in FOLDERS.items():
     cur = con.execute(f"SELECT * FROM {t}")
     os.makedirs(os.path.join(HERE, "csv", folder), exist_ok=True)

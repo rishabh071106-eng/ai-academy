@@ -1,0 +1,8 @@
+/* Shared design tokens: the ONLY styling contract between the shell and the micro front-ends.
+   Widgets never import each other's CSS; they read these variables so the portal looks like one product. */
+:root{
+  --font:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --paper:#f2f5f8; --card:#ffffff; --ink:#1b2a3d; --muted:#516378; --line:#dbe3ea;
+  --navy:#0d3b66; --gold:#e3a92c; --teal:#0f8b8d; --bad:#c0392b; --warn:#b4622b; --good:#1d8a4e;
+  --radius:10px;
+}

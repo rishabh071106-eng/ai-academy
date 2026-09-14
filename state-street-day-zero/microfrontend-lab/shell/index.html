@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal shell (micro front-end demo)</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body{margin:0;font-family:var(--font);background:var(--paper);color:var(--ink)}
+  header{display:flex;gap:18px;align-items:center;padding:12px 20px;background:var(--navy);color:#fff}
+  header b{font-size:17px}
+  nav a{color:#cfe0ef;text-decoration:none;margin-right:14px;padding:6px 0;border-bottom:2px solid transparent}
+  nav a.on{color:#fff;border-bottom-color:var(--gold)}
+  main{max-width:1000px;margin:0 auto;padding:20px}
+  .who{margin-left:auto;font-size:13px;color:#cfe0ef}
+  .who select{font:inherit}
+  #outlet{display:grid;gap:18px}
+</style>
+</head>
+<body>
+<header>
+  <b>Custody Portal</b>
+  <nav id="nav"><a href="#/alerts">Alerts</a><a href="#/documents">Documents</a><a href="#/both">Home (both)</a></nav>
+  <span class="who">Signed in as <select id="user"><option value="U-101">Hannah Okafor (Meridian)</option><option value="U-201">Miguel Alvarez (Halcyon)</option><option value="U-301">Kenji Watanabe (Orient)</option></select></span>
+</header>
+<main><div id="outlet"></div></main>
+
+<script type="module">
+  // ---- The SHELL: owns identity, routing and design tokens. It knows nothing about what a widget renders. ----
+  // Each micro front-end is an independently deployable ES module that registers a custom element.
+  // In production the URLs below would point at separately built and deployed bundles (Module Federation / import maps).
+  const registry = {
+    alerts:    { url: '../mfe-alerts/alerts.js',       tag: 'dx-alerts' },
+    documents: { url: '../mfe-documents/documents.js', tag: 'dx-documents' },
+  };
+  const outlet = document.getElementById('outlet');
+  const userSel = document.getElementById('user');
+
+  // The shell exposes ONE contract to every widget: the current user, and an event bus.
+  window.portal = {
+    get user(){ return userSel.value; },
+    bus: new EventTarget(),
+  };
+  userSel.addEventListener('change', () => window.portal.bus.dispatchEvent(new CustomEvent('user-changed', { detail: userSel.value })));
+
+  const loaded = new Set();
+  async function mount(names){
+    outlet.innerHTML = '';
+    for (const n of names){
+      const { url, tag } = registry[n];
+      if (!loaded.has(n)) { await import(url); loaded.add(n); }   // lazy-load the widget's code on first use
+      outlet.appendChild(document.createElement(tag));
+    }
+  }
+  function route(){
+    const r = (location.hash || '#/both').slice(2);
+    document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#/' + r));
+    mount(r === 'both' ? ['alerts', 'documents'] : [r]);
+  }
+  addEventListener('hashchange', route); route();
+</script>
+</body>
+</html>

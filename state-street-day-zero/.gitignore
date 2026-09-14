@@ -1,0 +1,7 @@
+sql-lab/custody_lab.db
+sql-lab/csv/
+tableau/data/
+python-lab/dx_scorecard.png
+python-lab/exceptions_today.csv
+**/__pycache__/
+.venv/

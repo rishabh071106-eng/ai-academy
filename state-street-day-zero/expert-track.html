@@ -1,0 +1,605 @@
+<title>Digital Experience Expert Track</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#F3F5F7; --surface:#FFFFFF; --ink:#16232F; --muted:#5C6B79; --line:#D3DBE2; --rule:#B9C4CE;
+    --accent:#1E6B55; --accent-ink:#0F4A39; --accent-soft:#E3F0EA;
+    --copper:#B4622B; --copper-soft:#F6E8DE;
+    --code-bg:#1B2631; --code-ink:#E6EDF3; --code-dim:#8FA3B5;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+      --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+      --copper:#E08A55; --copper-soft:#3A2519;
+      --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+    --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+    --copper:#E08A55; --copper-soft:#3A2519;
+    --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.62;padding-inline:16px;padding-block:0 80px}
+  h1,h2,h3,h4{font-family:var(--serif);letter-spacing:-.005em;line-height:1.2;margin:0;text-wrap:balance}
+  p{margin:0 0 .9em;max-width:68ch}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+  button{font:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+  .num,.tab-num,td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:.05em .35em;border-radius:3px}
+  pre{margin:0}
+  small,.small{font-size:.86em;color:var(--muted)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .mast{max-width:1120px;margin:0 auto;padding-block:38px 26px;border-bottom:1px solid var(--rule)}
+  .mast h1{font-size:clamp(32px,5vw,52px);margin:8px 0 12px}
+  .mast .lede{font-size:19px;max-width:62ch}
+  .mast .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:16px;font-size:14px;color:var(--muted)}
+  .mast .meta b{color:var(--ink);font-weight:600}
+  .shell{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:232px minmax(0,1fr);gap:40px;padding-top:26px}
+  .rail{position:sticky;top:14px;align-self:start;min-width:0}
+  main{min-width:0}
+  .rail .eyebrow{margin-bottom:10px}
+  .rail ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+  .rail li a{display:grid;grid-template-columns:28px 1fr;gap:6px;padding:6px 10px;text-decoration:none;color:var(--muted);font-size:13.5px;line-height:1.3;margin-left:-2px;border-left:2px solid transparent}
+  .rail li a:hover{color:var(--ink);border-left-color:var(--rule)}
+  .rail li a.on{color:var(--accent-ink);border-left-color:var(--accent);font-weight:500}
+  .rail .tab-num{font-size:12px;padding-top:2px;color:inherit}
+  .rail .links{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px;display:grid;gap:8px}
+  @media (max-width:860px){
+    .shell{grid-template-columns:minmax(0,1fr);gap:18px}
+    .rail{position:sticky;top:0;background:var(--paper);z-index:5;padding:10px 0;border-bottom:1px solid var(--line)}
+    .rail .eyebrow,.rail .links{display:none}
+    .rail ol{display:flex;overflow-x:auto;border-left:none;gap:6px;padding-bottom:4px;scrollbar-width:thin}
+    .rail li{flex:0 0 auto;margin:0}
+    .rail li a{display:inline-flex;white-space:nowrap;border:1px solid var(--line);border-radius:99px;padding:6px 12px;margin:0;gap:6px}
+    .rail li a.on{background:var(--accent-soft);border-color:var(--accent)}
+  }
+  .step{padding-block:34px 14px;border-bottom:1px solid var(--rule)}
+  .step:last-of-type{border-bottom:none}
+  .step-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:baseline;margin-bottom:8px}
+  .step-head .num{font-size:15px;color:var(--accent);border:1.5px solid var(--accent);border-radius:99px;padding:2px 10px}
+  .step-head h2{font-size:clamp(24px,3vw,31px)}
+  .step .why{color:var(--muted);font-size:16px;margin:0 0 20px;max-width:66ch}
+  h3{font-size:19px;margin:26px 0 8px}
+  h4{font-family:var(--sans);font-weight:600;font-size:15.5px;margin:14px 0 4px}
+  ul,ol{padding-left:22px;margin:0 0 .9em;max-width:66ch}
+  li{margin:.3em 0}
+  li::marker{color:var(--muted)}
+  .tw{overflow-x:auto;margin:10px 0 18px}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.45}
+  th{text-align:left;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--rule);padding:8px 10px 8px 0;vertical-align:bottom}
+  td{border-bottom:1px solid var(--line);padding:9px 10px 9px 0;vertical-align:top}
+  td.n,th.n{text-align:right;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td.jd{font-style:italic;color:var(--ink);min-width:220px}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+  .tag.m{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;margin:14px 0 18px;border-radius:0 4px 4px 0;font-size:15px;max-width:70ch}
+  .note.warn{border-left-color:var(--copper);background:var(--copper-soft)}
+  .note p:last-child{margin-bottom:0}
+  .code{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:14px 16px;margin:10px 0 16px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.55}
+  .code .c{color:var(--code-dim)}
+  .code .cp{position:absolute;top:8px;right:8px;background:transparent;color:var(--code-dim);border:1px solid var(--code-dim);border-radius:3px;font-family:var(--mono);font-size:11.5px;padding:2px 8px}
+  .code .cp:hover{color:var(--code-ink);border-color:var(--code-ink)}
+  /* module frame */
+  .mod{display:grid;grid-template-columns:150px 1fr;gap:6px 18px;margin:14px 0 18px;max-width:76ch}
+  .mod .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:12px;border-top:1px solid var(--line)}
+  .mod .v{padding:10px 0 4px;border-top:1px solid var(--line)}
+  .mod .v p{margin-bottom:.5em}
+  .mod .v ul,.mod .v ol{margin-bottom:.4em}
+  @media (max-width:560px){.mod{grid-template-columns:1fr;gap:0}.mod .k{border-top:1px solid var(--line);padding-top:10px}.mod .v{border-top:none;padding-top:2px}}
+  /* ladder */
+  .ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+  .rung{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-size:14px}
+  .rung b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:4px}
+  @media (max-width:640px){.ladder{grid-template-columns:1fr}}
+  /* plan */
+  .plan{display:grid;grid-template-columns:110px 1fr;gap:0 18px;max-width:76ch;margin:12px 0}
+  .plan .t{font-family:var(--mono);font-size:13px;color:var(--muted);padding:10px 0;border-top:1px solid var(--line)}
+  .plan .d{padding:10px 0;border-top:1px solid var(--line)}
+  .plan .d b{font-weight:600}
+  .check{list-style:none;padding:0;margin:8px 0 14px;max-width:72ch}
+  .check li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line);margin:0}
+  .check input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--accent)}
+  .check label{cursor:pointer}
+  .check label small{display:block}
+  .check input:checked + label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .progress{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:6px}
+  .qs{padding:0;list-style:none;max-width:72ch;counter-reset:q}
+  .qs li{counter-increment:q;display:grid;grid-template-columns:30px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);margin:0}
+  .qs li::before{content:counter(q,decimal-leading-zero);font-family:var(--mono);font-size:12.5px;color:var(--accent);padding-top:3px}
+  details{margin:6px 0 10px;max-width:72ch}
+  summary{cursor:pointer;font-weight:500;color:var(--accent-ink)}
+  details p{margin-top:8px;font-size:15px}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+  .toast.show{opacity:1}
+  @media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+
+<header class="mast">
+  <div class="eyebrow">Training plan · Job R-790937 · Vice President, Product Development (Digital Experience)</div>
+  <h1>Digital Experience Expert Track</h1>
+  <p class="lede">Every line of the job description decoded, and a module for every tool it names: install it, run the lab in your repository on custody data, climb from conversant to expert, and leave a proof artifact you can show. Six weeks of evenings, or faster if you push.</p>
+  <div class="meta">
+    <span><b>13 modules</b> mapped to the JD</span>
+    <span><b>9 tools</b> with download steps</span>
+    <span><b>1 dataset</b> shared by every lab</span>
+    <span><b>Repo</b> state-street-day-zero</span>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="rail" aria-label="Modules">
+  <div class="eyebrow">Modules</div>
+  <ol>
+    <li><a href="#m0"><span class="tab-num">00</span><span>How this track works</span></a></li>
+    <li><a href="#m1"><span class="tab-num">01</span><span>The JD, line by line</span></a></li>
+    <li><a href="#m2"><span class="tab-num">02</span><span>Custody and accounting domain</span></a></li>
+    <li><a href="#m3"><span class="tab-num">03</span><span>SQL and data modelling</span></a></li>
+    <li><a href="#m4"><span class="tab-num">04</span><span>Python for data products</span></a></li>
+    <li><a href="#m5"><span class="tab-num">05</span><span>Snowflake and Sigma</span></a></li>
+    <li><a href="#m6"><span class="tab-num">06</span><span>Tableau and visualisation</span></a></li>
+    <li><a href="#m7"><span class="tab-num">07</span><span>Collibra and data governance</span></a></li>
+    <li><a href="#m8"><span class="tab-num">08</span><span>The four capabilities</span></a></li>
+    <li><a href="#m9"><span class="tab-num">09</span><span>Micro front-ends</span></a></li>
+    <li><a href="#m10"><span class="tab-num">10</span><span>Process modelling and Agile</span></a></li>
+    <li><a href="#m11"><span class="tab-num">11</span><span>Storytelling and stakeholders</span></a></li>
+    <li><a href="#m12"><span class="tab-num">12</span><span>Six-week plan and proof</span></a></li>
+  </ol>
+  <div class="links">
+    <a href="https://claude.ai/code/artifact/87418623-4d01-4540-9c0b-f1890fdc0651" target="_blank" rel="noopener">Day Zero briefing ↗</a>
+    <a href="https://claude.ai/code/artifact/057f237f-ec16-405a-bd97-94db0af1b861" target="_blank" rel="noopener">30-day journey ↗</a>
+    <a href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/amazing-darwin-l6c0mg/state-street-day-zero" target="_blank" rel="noopener">All lab files ↗</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- 00 -->
+<section class="step" id="m0">
+  <div class="step-head"><span class="num">00</span><h2>How this track works</h2></div>
+  <p class="why">The job is 75% product leadership and delivery, 25% client and stakeholder engagement. Expertise here means two things: you can read and question any data artefact your teams produce, and you can design the four capabilities the JD names. Each module is built the same way.</p>
+  <div class="mod">
+    <div class="k">Why the JD asks</div><div class="v"><p>Which line of the posting the module serves, and what the hiring manager is really checking.</p></div>
+    <div class="k">Install</div><div class="v"><p>Exact download and setup steps for the tool, Windows and macOS, free tier or trial wherever one exists.</p></div>
+    <div class="k">Lab</div><div class="v"><p>A hands-on exercise in your repository. Every lab uses one dataset: a fictional custodian's clients, positions, trades, corporate actions, NAVs, and the Digital Experience tables for users, entitlements, alerts, documents and report runs.</p></div>
+    <div class="k">Ladder</div><div class="v"><p>Three rungs. <b>Conversant</b> means you can follow a meeting and ask one sharp question. <b>Practitioner</b> means you can do the thing yourself on the lab. <b>Expert</b> means you can design it, govern it and teach it.</p></div>
+    <div class="k">Proof</div><div class="v"><p>An artefact you leave behind: a query, a dashboard link, a diagram, a one-page decision. Proof is what you show a stakeholder or an interviewer, and what convinces you that you know it.</p></div>
+  </div>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>git clone -b claude/amazing-darwin-l6c0mg https://github.com/rishabh071106-eng/ai-academy.git
+cd ai-academy/state-street-day-zero
+python3 sql-lab/run_sqlite.py        <span class="c"># builds the shared dataset every module uses</span></pre></div>
+  <div class="note"><p><b>One rule.</b> Do the lab before reading the theory. Fifteen minutes with real rows beats an hour of slides, and every explanation below assumes you have seen the output.</p></div>
+</section>
+
+<!-- 01 -->
+<section class="step" id="m1">
+  <div class="step-head"><span class="num">01</span><h2>The JD, line by line</h2></div>
+  <p class="why">Each line of the posting, what it means in a custodian, what evidence they will look for, and which module trains it.</p>
+
+  <h3>Role summary</h3>
+  <div class="tw"><table>
+    <tr><th>The posting says</th><th>What it means</th><th>Evidence they will look for</th><th>Module</th></tr>
+    <tr><td class="jd">Support the Digital Experience Lead on a global basis</td><td>You are the Lead's delivery arm and deputy, across regions. You will run workstreams the Lead sponsors, and represent them in rooms they cannot be in.</td><td>Can you take an ambiguous mandate and turn it into a plan with owners and dates?</td><td><span class="tag m">11, 12</span></td></tr>
+    <tr><td class="jd">Drive the design, development, and continuous enhancement of our client-facing digital ecosystem</td><td>Not one portal: the ecosystem is portals, APIs, alerts, documents, dashboards and the identity layer that spans them. "Continuous" means a backlog you own for years, not a project.</td><td>Have you owned a platform through multiple releases, not just launched one?</td><td><span class="tag m">08, 09</span></td></tr>
+    <tr><td class="jd">Partnership with Product, Global Delivery (Operations), Technology, Architecture, and Enterprise Data</td><td>Five named counterparts. Operations own the truth; Technology builds; Architecture sets standards; Enterprise Data owns the marts and governance. You own none of them and need all of them.</td><td>Can you name what each partner wants from you and what you need from them?</td><td><span class="tag m">11</span></td></tr>
+    <tr><td class="jd">Bridge client needs, product strategy, and technical execution</td><td>Translate in both directions: client pain into backlog items with data definitions, and technical constraints into client-facing language.</td><td>A story where you turned a vague client complaint into a shipped, measured change.</td><td><span class="tag m">02, 08, 11</span></td></tr>
+    <tr><td class="jd">Translating complex client use cases into intuitive, data-driven visual experiences</td><td>The product is largely screens full of numbers. You must understand where the numbers come from and how to present exceptions first.</td><td>Can you read a query and critique a dashboard in the same meeting?</td><td><span class="tag m">03, 06</span></td></tr>
+  </table></div>
+
+  <h3>Function and responsibilities</h3>
+  <div class="tw"><table>
+    <tr><th>The posting says</th><th>What it means</th><th>Evidence they will look for</th><th>Module</th></tr>
+    <tr><td class="jd">Seamless, unified client experience across platforms</td><td>The estate is fragmented (they say so in the outcomes). Unification is the multi-year programme: shared identity, shared design tokens, shared data layer, composed front-ends.</td><td>Do you know the difference between a redesign and a platform consolidation?</td><td><span class="tag m">08, 09</span></td></tr>
+    <tr><td class="jd">Identity &amp; Access Management (IAM)</td><td>SSO and federation, entitlements per account and permission, delegated client administration, recertification. Enforced in the data layer, not the UI.</td><td>Can you explain federated versus local identity, and why a cross-client grant is an incident?</td><td><span class="tag m">08</span></td></tr>
+    <tr><td class="jd">Alerts &amp; Notifications: standardized framework with intelligent alerting</td><td>One event-to-delivery pipeline for every alert type, with subscriptions, channels, severity, escalation and acknowledgement. "Intelligent" means fewer, better alerts: dedupe, suppression, escalation when ignored.</td><td>Can you define acknowledgement and explain why delivery is not the metric?</td><td><span class="tag m">08</span></td></tr>
+    <tr><td class="jd">Document management and collaboration aligned with content management strategy</td><td>Generation, publication, entitled access, search, retention, and the enterprise content platform it must sit on. Nothing is deleted before its retention date.</td><td>Do you know the lifecycle timestamps and the regulatory constraint?</td><td><span class="tag m">08</span></td></tr>
+    <tr><td class="jd">Self-Service Reporting</td><td>Clients run and schedule their own reports and exports instead of asking the service desk. The metric is the self-service ratio.</td><td>Can you turn "adoption" into a number and a target?</td><td><span class="tag m">03, 08</span></td></tr>
+    <tr><td class="jd">Translation of workflow and pain points into intuitive UX solutions and visualizations</td><td>Journey mapping with operations users, exception-first layouts, dense tables done well.</td><td>A journey map and a before/after screen.</td><td><span class="tag m">06, 08, 10</span></td></tr>
+    <tr><td class="jd">Partner with design teams to deliver high-fidelity prototypes and demonstrations</td><td>You brief designers with data and flows, and you demo to stakeholders. A working data prototype often beats a static mock.</td><td>Can you show a prototype, not describe one?</td><td><span class="tag m">04, 06</span></td></tr>
+    <tr><td class="jd">Work with Technology through iterative delivery cycles; architectural standards; fit for purpose</td><td>Scaled agile: increments, dependencies, architecture review boards, non-functional requirements.</td><td>Do you know what an architecture review will ask of your feature?</td><td><span class="tag m">09, 10</span></td></tr>
+    <tr><td class="jd">Present updates and outcomes to senior stakeholders; lead defined initiatives or workstreams</td><td>Executive communication: answer first, evidence second, ask last. Own a workstream end to end.</td><td>A one-page update that a Managing Director can read in ninety seconds.</td><td><span class="tag m">11</span></td></tr>
+  </table></div>
+
+  <h3>Skills and experience</h3>
+  <div class="tw"><table>
+    <tr><th>The posting says</th><th>What it means</th><th>Evidence they will look for</th><th>Module</th></tr>
+    <tr><td class="jd">Data product development, data modelling, analytics, and visualization</td><td>You can define a data product (grain, definitions, SLA, entitlements), read a star schema, and judge a chart.</td><td>Can you draw the schema behind a screen?</td><td><span class="tag m">03, 04, 06</span></td></tr>
+    <tr><td class="jd">Understanding of the custody and accounting domain and servicing lifecycle</td><td>Custody, settlement, corporate actions, fund accounting and NAV, cash, documents, and the daily cycle that connects them.</td><td>Can you follow one trade from order to a client screen?</td><td><span class="tag m">02</span></td></tr>
+    <tr><td class="jd">Communicate data concepts clearly to technical and non-technical stakeholders</td><td>Explain grain, freshness and lineage to an operations manager without jargon, and to an engineer with precision.</td><td>Two versions of the same explanation.</td><td><span class="tag m">07, 11</span></td></tr>
+    <tr><td class="jd">Delivering change in complex, regulated environments</td><td>Change control, access reviews, audit evidence, model risk. You ship with controls, not around them.</td><td>Do you involve risk early? Can you name the gates?</td><td><span class="tag m">07, 10</span></td></tr>
+    <tr><td class="jd">Modern data management, BI, dashboarding, visualization approaches</td><td>Warehouse and marts, ELT with tests, governed self-service BI, embedded analytics.</td><td>Can you explain why every channel must read one mart?</td><td><span class="tag m">05, 06, 07</span></td></tr>
+    <tr><td class="jd">Stakeholder management within global, matrixed organizations</td><td>Nobody reports to you who builds your product. Influence, forums, written decisions.</td><td>A stakeholder map with what each person wants.</td><td><span class="tag m">11</span></td></tr>
+    <tr><td class="jd">Agile or hybrid delivery models</td><td>Scaled agile with quarterly planning and waterfall-style gates for regulated releases.</td><td>Can you run a planning increment and a change ticket?</td><td><span class="tag m">10</span></td></tr>
+    <tr><td class="jd">Business and system process modelling</td><td>BPMN for business flows, sequence diagrams for system flows. Models are how you find the broken step.</td><td>A process model with the failure point marked.</td><td><span class="tag m">10</span></td></tr>
+    <tr><td class="jd">SQL, Python, Snowflake, BI tools (Tableau, Sigma), data governance tooling (Collibra), micro front-end frameworks</td><td>The named toolset. Practitioner level in SQL and one BI tool; conversant in the rest with hands-on exposure.</td><td>Have you actually run them?</td><td><span class="tag m">03 to 09</span></td></tr>
+    <tr><td class="jd">8+ years in Securities Services or Financial Services; operating across regions</td><td>The gap you are closing. Regional experience means you know the follow-the-sun handoffs and time-zone cutoffs.</td><td>Honesty about the gap and a visible plan to close it.</td><td><span class="tag m">02, 12</span></td></tr>
+    <tr><td class="jd">Consultative mindset; storytelling and client engagement</td><td>The 25%. You sit with clients, listen, and come back with a story that has a number in it.</td><td>A client narrative with a before, a change and an after.</td><td><span class="tag m">11</span></td></tr>
+  </table></div>
+
+  <h3>Outcomes: what "success" is measured as</h3>
+  <div class="tw"><table>
+    <tr><th>Outcome in the posting</th><th>The number behind it (all four exist in the lab)</th></tr>
+    <tr><td class="jd">Unified client experience across fragmented platforms</td><td>Share of client sessions through the single sign-on shell; number of portals a client needs for their daily workflow (target: one).</td></tr>
+    <tr><td class="jd">Improved quality, accessibility, and usability</td><td>Data-quality pass rate on client-facing marts; accessibility conformance; task completion time for the top five journeys.</td></tr>
+    <tr><td class="jd">Client adoption and satisfaction through self-service and transparency</td><td>Self-service ratio (Q19), actionable-alert acknowledgement rate (Q16), documents opened rate (Q18), client satisfaction from QBRs.</td></tr>
+    <tr><td class="jd">Clear communication and documentation of key data decisions</td><td>Decision log entries with owner, date and rationale; glossary terms with a named owner (Module 07).</td></tr>
+  </table></div>
+</section>
+
+<!-- 02 -->
+<section class="step" id="m2">
+  <div class="step-head"><span class="num">02</span><h2>Custody and accounting domain</h2></div>
+  <p class="why">The posting says "good understanding of the custody and accounting domain and servicing lifecycle". This is the gap. It closes with daily reading plus the lab data, which was designed to contain every lifecycle event.</p>
+  <div class="mod">
+    <div class="k">Material</div><div class="v"><p>The 30-day journey, Days 1 to 7, fifteen minutes each. Then the deep chapters for Days 1 to 6 as the level-two reference. The Day Zero briefing, Step 02, is the one-screen summary.</p></div>
+    <div class="k">Lab</div><div class="v"><p>Run queries Q1 to Q13 and narrate each result aloud as if to a client: "You hold this. This failed because. This election is due. Tonight's NAV is in review because it moved more than its market."</p>
+    <div class="code"><button class="cp" type="button">Copy</button><pre>python3 sql-lab/run_sqlite.py 5 7 8 12</pre></div></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can define custody, T+1, DvP, NAV, corporate action election, SWIFT, sub-custodian without notes.</div>
+      <div class="rung"><b>Practitioner</b>Can follow one trade from order to settlement to the client screen and name every system it touches and every timestamp it leaves.</div>
+      <div class="rung"><b>Expert</b>Can say where the process breaks, what it costs, and which digital control prevents it. Can reconcile a client's number against the book of record.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>A one-page "servicing lifecycle" diagram in your own hand, with the six timestamps a client cares about marked. Redraw it from memory after a week.</p></div>
+    <div class="k">Self-test</div><div class="v"><details><summary>Five questions</summary><p>1. A US trade on Tuesday must settle when, and be affirmed by when? 2. Why is a wrong NAV a compensation event and not a report correction? 3. Why is the custodian's election deadline earlier than the market's? 4. What does SWIFT move, and what does it not move? 5. Why do middle-office clients need intraday data when custody clients live with end-of-day?</p></details></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="step" id="m3">
+  <div class="step-head"><span class="num">03</span><h2>SQL and data modelling</h2></div>
+  <p class="why">SQL is the first tool the posting names and the one that unlocks every other module. You will read far more SQL than you write, but writing it on the lab is the fastest way to learn to read it.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v">
+      <p><b>Zero install:</b> Python's built-in SQLite runs the whole lab. <b>Real server:</b> PostgreSQL 16 via <code>winget install PostgreSQL.PostgreSQL.16</code> on Windows or <code>brew install postgresql@16</code> on macOS, or <code>docker compose up -d</code> in the lab folder. <b>Client:</b> DBeaver Community from dbeaver.io connects to all of them, plus Snowflake, Athena and RDS. Full steps are in the Day Zero briefing, Step 06.</p></div>
+    <div class="k">Lab</div><div class="v">
+      <p>The lab has fifteen tables. Five dimensions, five custody facts, and five Digital Experience tables that model the JD's capabilities: users, entitlements, alerts, documents and report runs. Twenty queries, each labelled with the screen it powers.</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>python3 sql-lab/run_sqlite.py             <span class="c"># all 20 queries</span>
+python3 sql-lab/run_sqlite.py 14 15 16 17 18 19 20   <span class="c"># the Digital Experience set</span>
+python3 sql-lab/run_sqlite.py --shell     <span class="c"># write your own</span></pre></div>
+      <p>Then write these five yourself, in the shell, without looking at the answers:</p>
+      <ol>
+        <li>Every user who can INSTRUCT on any Meridian account, with their MFA status.</li>
+        <li>Alerts per user, ordered by unacknowledged count, for CRITICAL only.</li>
+        <li>For each document type, the share opened within 24 hours of publication. (Hint: compare timestamp strings, or do it in Python in Module 04.)</li>
+        <li>Report runs per report name split by run type, as a pivot using CASE.</li>
+        <li>The DX scorecard (Q20) rewritten with JOINs and GROUP BY instead of subqueries.</li>
+      </ol></div>
+    <div class="k">Data modelling</div><div class="v">
+      <p>Open <code>sql-lab/schema.sql</code>. For each fact table, say the grain aloud. Then design one new table for a capability the lab lacks: <b>user subscriptions</b> (which user wants which alert types on which channels, with quiet hours). Decide the grain, the keys, the dimension it needs, and which existing query changes because of it. Write the CREATE TABLE, add three rows to the seed, and rewrite Q16 to use it.</p>
+      <p>Rules of good modelling you can apply in any review: one grain per fact table; facts are numeric and additive; dimensions carry the vocabulary; surrogate keys, never business identifiers that get reused; every client-facing table has an entitlement path; every row has a load timestamp.</p></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Reads SELECT, JOIN, WHERE, GROUP BY, HAVING. Asks about grain, join keys, date filters and entitlements in a review.</div>
+      <div class="rung"><b>Practitioner</b>Writes multi-join aggregates, CASE pivots, window functions (RANK, LAG, running sums), CTEs. Can design a fact and dimension table from a screen.</div>
+      <div class="rung"><b>Expert</b>Reasons about performance and cost (columnar scans, partition pruning), sets data SLAs, defines marts, and can spot double counting from the grain alone.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>Your five queries and the new subscriptions table committed to the repo, plus a one-paragraph note: "what this model can and cannot answer".</p></div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="step" id="m4">
+  <div class="step-head"><span class="num">04</span><h2>Python for data products</h2></div>
+  <p class="why">Python appears in the posting because analysts, data engineers and increasingly designers prototype with it. You need enough to read a notebook, reshape a dataset, and build a throwaway prototype that makes a design conversation concrete.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v">
+      <p>Python 3.12 from python.org (Windows: tick "Add python.exe to PATH") or <code>brew install python</code>. Then a virtual environment so nothing collides:</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>cd state-street-day-zero/python-lab
+python3 -m venv .venv
+source .venv/bin/activate          <span class="c"># Windows PowerShell: .venv\Scripts\Activate.ps1</span>
+pip install pandas matplotlib streamlit plotly sqlalchemy psycopg2-binary</pre></div>
+      <p>Editor: VS Code from code.visualstudio.com with the Python and Jupyter extensions. Notebooks: <code>pip install jupyterlab</code> then <code>jupyter lab</code>.</p></div>
+    <div class="k">Lab</div><div class="v">
+      <p><b>analyze.py</b> is pandas for a product leader: time-to-acknowledge by severity (SQL cannot do date arithmetic portably; pandas can), channel effectiveness, hours from publish to first open, a self-service pivot, and the DX scorecard joined from four frames and charted.</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>python3 analyze.py                 <span class="c"># prints five analyses, saves dx_scorecard.png</span></pre></div>
+      <p><b>dashboard.py</b> is a working portal prototype in about 120 lines: pick a signed-in user, and every query is filtered by their entitlements. Exceptions first, then cash, then holdings, with a CSV download. This is what you show a design team before anyone opens Figma.</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>streamlit run dashboard.py         <span class="c"># opens http://localhost:8501</span></pre></div>
+      <p>Then change one thing: add a "Documents" section that lists unread documents for the signed-in user, using Q18's logic. Twenty lines.</p></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can read a notebook: imports, a query into a dataframe, groupby, a plot. Knows what pandas, Jupyter and a virtual environment are.</div>
+      <div class="rung"><b>Practitioner</b>Can load data from SQL, reshape it (groupby, pivot, merge), compute date differences, chart it, and build a Streamlit prototype.</div>
+      <div class="rung"><b>Expert</b>Can judge when a notebook should become a governed pipeline, set standards for prototypes versus products, and read a data engineer's transformation code in review.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>A screenshot of your modified dashboard with the Documents section, and the scorecard chart, both in the repo.</p></div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="step" id="m5">
+  <div class="step-head"><span class="num">05</span><h2>Snowflake and Sigma</h2></div>
+  <p class="why">Snowflake is the data platform named in the posting, and Sigma is a BI tool built to sit on it. Together they are the "modern data management" the skills list refers to. Both have free trials that are enough to become a practitioner.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v">
+      <ol>
+        <li><b>Snowflake:</b> signup.snowflake.com, Standard edition, cloud AWS, pick the region nearest you. Thirty days and 400 dollars of credits. Snowsight, the web UI, is the whole tool; nothing to install. Optional: <code>pip install snowflake-connector-python</code> for Python.</li>
+        <li><b>Sigma:</b> sigmacomputing.com, free trial. During setup, connect it to your Snowflake trial account (Admin, Connections, Snowflake: account identifier, a user, a warehouse). Sigma then browses your tables in a spreadsheet-like interface.</li>
+      </ol></div>
+    <div class="k">Lab</div><div class="v">
+      <p>Follow <code>sql-lab/aws/README.md</code>, Exercise 3, and <code>sql-lab/aws/snowflake.sql</code>. In order:</p>
+      <ol>
+        <li>Create a tiny warehouse with 60-second auto-suspend. Cost governance is a habit from the first minute.</li>
+        <li>Paste the schema, paste the seed, run all twenty queries unchanged. Note Snowflake's native version of Q11 with QUALIFY.</li>
+        <li>Create a <b>secure view</b> filtered to one client. That view is what Secure Data Sharing shares: the client queries it live, nothing is copied, and entitlements live in the data layer.</li>
+        <li>Run the Time Travel and zero-copy clone lines. Explain to yourself why "we cannot reproduce what the client saw" is no longer an acceptable incident answer.</li>
+        <li>Check credits used in the account usage view. Then leave the warehouse running overnight by mistake, on purpose, and check again. That number is the cost-governance conversation.</li>
+        <li>Optional, the real-world path: export CSVs, put them in an S3 bucket, and load with COPY INTO from an external stage.</li>
+      </ol>
+      <p><b>Sigma:</b> open the connection, drag <code>FACT_ALERTS</code> into a workbook, group by alert type and severity, add a calculated column "Acknowledged" as acknowledged_at is not null, and build the Q16 table without writing SQL. Then open the SQL Sigma generated. That is the whole point of the tool: business users make governed tables into analyses, and you can inspect what they did.</p></div>
+    <div class="k">What to know cold</div><div class="v"><ul>
+      <li>Storage and compute are separate. Warehouses are independent compute clusters that suspend when idle; storage is one shared copy.</li>
+      <li>Isolation is free: the overnight ELT warehouse can never slow the client-API warehouse.</li>
+      <li>Cost is behavioural: auto-suspend, resource monitors, statement timeouts, tagging and monthly review.</li>
+      <li>Secure Data Sharing replaces nightly SFTP files with live, governed, revocable access. Premium channel, not an immediate replacement for every client.</li>
+      <li>Time Travel and cloning come from immutable storage, which is why they are cheap.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can explain the architecture and why it changes economics, and knows what a share, a secure view and a warehouse are.</div>
+      <div class="rung"><b>Practitioner</b>Has loaded data, run queries, built a secure view, read a cost report, and connected a BI tool.</div>
+      <div class="rung"><b>Expert</b>Can propose a data-sharing product with pricing and design partners, set per-mart SLAs, and run a cost-governance review that finds 20 to 30 percent.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>A screenshot of the secure view's results as a second role, and a one-page "Snowflake data delivery product" proposal: audience, what is shared, entitlement model, SLA, price basis, risks.</p></div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="step" id="m6">
+  <div class="step-head"><span class="num">06</span><h2>Tableau and visualisation</h2></div>
+  <p class="why">"Intuitive, data-driven visual experiences" is the posting's phrase for what your screens are. Tableau is where you learn the craft fast, because every chart is a decision about what a client should notice first.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v">
+      <p><b>Tableau Public</b> (free, full authoring, file sources only, publishes to a public profile so never use real data) or <b>Tableau Desktop</b> (14-day trial, connects to PostgreSQL and Snowflake). Both from tableau.com. Windows and macOS installers; no command line.</p></div>
+    <div class="k">Lab</div><div class="v">
+      <p><code>tableau/BUILD.md</code> is a sheet-by-sheet recipe for a seven-sheet Digital Experience dashboard: fails board, deadline calendar, alert funnel, time to acknowledge, documents nobody reads, self-service ratio, entitlement review. Data comes from one script:</p>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>python3 tableau/export_flat.py     <span class="c"># seven wide CSVs into tableau/data/</span></pre></div>
+      <p>Build it, add a client filter that applies to every sheet, publish to Tableau Public, and send yourself the link. Then the harder exercise: <b>delete two sheets</b>. Decide which two a client operations analyst would not miss at 08:00, and write down why.</p></div>
+    <div class="k">Principles</div><div class="v"><ul>
+      <li>Exceptions first. The screen's top-left answers "what needs me now".</li>
+      <li>One number, one definition. Every calculated field in Tableau must match the glossary in Module 07.</li>
+      <li>As-of date on every view. A number without its business date is a dispute waiting to happen.</li>
+      <li>Tables are not failures. Institutional users want dense, sortable, exportable tables; charts summarise, tables act.</li>
+      <li>Colour means state (critical, warning, good), not decoration.</li>
+      <li>Governed self-service: analysts build on certified data sources; nobody builds on a private extract of positions.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can critique a dashboard: what is the question, what is the as-of, what is the definition, what would the user do next.</div>
+      <div class="rung"><b>Practitioner</b>Builds calculated fields, filters, parameters and a multi-sheet dashboard with actions, and publishes it.</div>
+      <div class="rung"><b>Expert</b>Sets BI governance: certified sources, extract refresh policy tied to usage, embedded analytics in the portal, and a rule for when a dashboard becomes a product feature.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>Your Tableau Public link and a paragraph on the two sheets you removed.</p></div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="step" id="m7">
+  <div class="step-head"><span class="num">07</span><h2>Collibra and data governance</h2></div>
+  <p class="why">Collibra has no free download, so this module teaches the artefacts Collibra manages by making you build them by hand, then points you at the free courses. In a G-SIB, governance is not hygiene; a client-facing number without lineage is a regulatory finding.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v">
+      <ol>
+        <li><b>Collibra University</b> (university.collibra.com): free account, self-paced courses. Take "Collibra Fundamentals" and the Data Governance and Data Quality tracks. Six to eight hours total.</li>
+        <li><b>Open-source stand-in</b> to see a catalogue UI: OpenMetadata quick start with Docker (docs.open-metadata.org, "Quickstart"). Ingest the lab's PostgreSQL database, then add glossary terms and owners to the tables.</li>
+      </ol></div>
+    <div class="k">Lab</div><div class="v">
+      <p>The <code>governance/</code> folder is a governance pack for the Digital Experience domain, the same four artefacts Collibra holds:</p>
+      <ul>
+        <li><code>glossary.csv</code>: eighteen business terms with definition, owner, steward, golden source and related columns. Note that you are the named owner of every Digital Experience term.</li>
+        <li><code>data_dictionary.csv</code>: the catalogue entries, with a PII flag and a DQ rule per column.</li>
+        <li><code>dq_rules.sql</code> and <code>run_dq.py</code>: thirteen data-quality rules as queries that return violations. Run them:</li>
+      </ul>
+      <div class="code"><button class="cp" type="button">Copy</button><pre>python3 governance/run_dq.py       <span class="c"># scorecard, and a publish-or-hold decision</span></pre></div>
+      <p>The run finds a blocking failure (a cross-client entitlement) and three warnings (late feed, undelivered SMS, grants with no expiry) and says HOLD. Decide whether you agree with the severity of each rule, change one, and rerun. Then read <code>lineage.md</code> and do its exercise: draw the lineage for "acknowledged alert rate" and find the upstream change that would silently break it.</p></div>
+    <div class="k">What to know cold</div><div class="v"><ul>
+      <li>Roles: owner (accountable executive), steward (day-to-day), custodian (technology), council, CDO office.</li>
+      <li>Six quality dimensions: completeness, accuracy, timeliness, consistency, validity, uniqueness.</li>
+      <li>Block versus warn: a missing account is invisible until it burns someone, so completeness blocks; a late feed is visible, so it warns with a status.</li>
+      <li>Lineage answers the examiner's question "show me how this number was produced".</li>
+      <li>BCBS 239 is the regulatory root of all of this for a G-SIB.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Knows what a glossary, catalogue, lineage graph and DQ score are, and who the owner and steward of a domain are.</div>
+      <div class="rung"><b>Practitioner</b>Has written definitions, DQ rules and a lineage diagram for a real metric, and can run a governance workflow in a catalogue tool.</div>
+      <div class="rung"><b>Expert</b>Operates as a first-line data owner: sets the SLA sheet, chairs the domain's DQ review, defends definitions in a client dispute, and produces audit evidence on demand.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>Your amended DQ rule with the reasoning, and the lineage diagram for acknowledged alert rate.</p></div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="step" id="m8">
+  <div class="step-head"><span class="num">08</span><h2>The four capabilities</h2></div>
+  <p class="why">The Function paragraph names them: IAM, alerts and notifications, document management, self-service reporting. Each one below is a product brief you should be able to write from memory, with its data model, its metric and its classic failure, all of which exist in the lab.</p>
+
+  <h3>Identity and Access Management</h3>
+  <div class="mod">
+    <div class="k">Capability</div><div class="v"><p>Who a client user is (federated through the client's identity provider, or credentials we issue), what they may see or do per account (VIEW, INSTRUCT, ADMIN), who may grant it (delegated client administrators), and how it is recertified. Scalable and centralised means one identity service for every portal and API, not one per platform.</p></div>
+    <div class="k">Data</div><div class="v"><p><code>dim_user</code>, <code>fact_user_entitlements</code>. Q14 is the entitlement review screen; Q15 is the findings report every access review produces.</p></div>
+    <div class="k">Metrics</div><div class="v"><p>Federated share of users; privileged users without MFA (target zero); grants with no expiry; recertification completion; time from access request to grant.</p></div>
+    <div class="k">Classic failure</div><div class="v"><p>Q15 finds a relationship manager who granted herself VIEW on another client's account. Cross-client access is a security incident and a client-trust event. The control belongs in the entitlement service, which must refuse a grant where the user's client and the account's client differ.</p></div>
+    <div class="k">Design questions</div><div class="v"><p>Federate or issue? Per-account or role-based grants? Who approves an ADMIN grant? How does an API key inherit a user's entitlements? Where is the filter applied: in every query, or in a shared entitlement service the queries call?</p></div>
+  </div>
+
+  <h3>Alerts and Notifications</h3>
+  <div class="mod">
+    <div class="k">Capability</div><div class="v"><p>A single framework: events in (fail, deadline, NAV delay, cash shortfall, document published), subscription and entitlement resolution, channel delivery (portal, email, SMS, webhook), acknowledgement, and escalation when ignored. Intelligent alerting means dedupe across channels, quiet hours, severity-based escalation, and suppression of alerts nobody acts on.</p></div>
+    <div class="k">Data</div><div class="v"><p><code>fact_alerts</code>. Q16 is effectiveness by type; Q17 is the escalation list. The Python lab adds time-to-acknowledge and channel effectiveness. The process model in Module 10 is the sequence diagram.</p></div>
+    <div class="k">Metrics</div><div class="v"><p>Actionable-alert acknowledgement rate; median and p90 time to acknowledge for CRITICAL; delivery failure rate per channel; alerts per user per day (the spam number); escalations that reached a second person.</p></div>
+    <div class="k">Classic failure</div><div class="v"><p>Q17: the Halcyon tender offer had three alerts, zero acknowledgements, and defaulted with 2.7 million dollars at stake. Delivery worked. Attention failed. The fix is a process control: escalate to a named second user, then the relationship manager, before the deadline, and require acknowledgement for CRITICAL.</p></div>
+    <div class="k">Design questions</div><div class="v"><p>What counts as acknowledged? Who owns the subscription defaults? How does a webhook client acknowledge? What is suppressed when a fail resolves itself? How do you prove to an auditor that an alert was sent and seen?</p></div>
+  </div>
+
+  <h3>Document Management</h3>
+  <div class="mod">
+    <div class="k">Capability</div><div class="v"><p>Generation of statements, confirmations, notices, NAV packs, tax and fee documents; publication to entitled users; search and collaboration; retention and legal hold; alignment to the enterprise content platform so there is one repository, not one per product.</p></div>
+    <div class="k">Data</div><div class="v"><p><code>fact_documents</code>. Q18 is documents nobody reads; the Python lab adds hours from publish to first open.</p></div>
+    <div class="k">Metrics</div><div class="v"><p>Publish-to-open time for notices; never-opened rate by type; documents generated but not published (the pipeline gap); retention compliance; search success rate.</p></div>
+    <div class="k">Classic failure</div><div class="v"><p>Q18: the tender notice behind the defaulted election was published and never opened. Published is not read. A notice with a deadline and money at stake needs an alert, an acknowledgement, and a visible "unread" state on the portal home page.</p></div>
+    <div class="k">Design questions</div><div class="v"><p>Where does generation happen and where is the record of truth? What may never be deleted and who can place a legal hold? How do clients collaborate on a document without creating uncontrolled copies? What is the content platform standard you must align to?</p></div>
+  </div>
+
+  <h3>Self-Service Reporting</h3>
+  <div class="mod">
+    <div class="k">Capability</div><div class="v"><p>Clients run, schedule, customise and export reports and queries on their own data, in the portal and via API, instead of asking the service desk. Self-service also means transparency: the as-of date, the freshness status and the definition are visible next to the number.</p></div>
+    <div class="k">Data</div><div class="v"><p><code>fact_report_runs</code>. Q19 is the self-service ratio; Q20 is the scorecard.</p></div>
+    <div class="k">Metrics</div><div class="v"><p>Self-service ratio per client (target agreed in the QBR); service-desk minutes spent running reports; scheduled report failures; export formats used; p95 report duration.</p></div>
+    <div class="k">Classic failure</div><div class="v"><p>Q19: Halcyon's ratio is 25 percent. Their analyst asks the desk for the same settlement report daily. Either the report is missing, hard to find, untrusted, or the user was never onboarded. The answer is a conversation, then a number that moves.</p></div>
+    <div class="k">Design questions</div><div class="v"><p>Which reports cover 80 percent of desk requests? What can a client customise without creating a private definition? How do scheduled reports fail loudly? How does the same report exist in the portal, the API and the data share with one definition?</p></div>
+  </div>
+  <div class="note"><p><b>Unifying thread.</b> All four capabilities read the same identity, the same events and the same marts. That is what "unified client experience" is underneath the screens, and why the modules on SQL, Snowflake and governance come first.</p></div>
+</section>
+
+<!-- 09 -->
+<section class="step" id="m9">
+  <div class="step-head"><span class="num">09</span><h2>Micro front-ends</h2></div>
+  <p class="why">The experience list ends with "micro front-end frameworks". It is there because unifying fragmented platforms is done by composing independently deployable pieces behind one shell, not by rewriting everything at once.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v"><p>Nothing for the demo. For the real frameworks: Node.js LTS from nodejs.org, then <code>npx create-mf-app</code> for Module Federation or <code>npx create-single-spa</code> for single-spa. VS Code for editing.</p></div>
+    <div class="k">Lab</div><div class="v">
+      <div class="code"><button class="cp" type="button">Copy</button><pre>cd state-street-day-zero/microfrontend-lab
+python3 -m http.server 8080          <span class="c"># open http://localhost:8080/shell/</span></pre></div>
+      <p>The shell owns identity, routing and design tokens. Two widgets, alerts and documents, are separate Web Components with no shared code except the tokens file. Switch the signed-in user and both re-render; navigate and they lazy-load; acknowledge an alert and the state lives inside the widget. Then: add a third widget, <b>dx-reports</b>, that lists the signed-in user's recent report runs. Copy the documents widget, change the data and the table, register it in the shell.</p></div>
+    <div class="k">What to know cold</div><div class="v"><ul>
+      <li>Shell versus remotes; who owns the shell decides the estate.</li>
+      <li>Design tokens are the styling contract; versioning them is a product decision.</li>
+      <li>Module Federation loads separately built bundles at runtime; single-spa mounts framework-mixed apps; Web Components are the native minimum.</li>
+      <li>Error boundaries: a broken remote must not take down the page.</li>
+      <li>Shared data: two widgets needing positions should read one client-side store, not fetch twice.</li>
+      <li>Strangler fig: new widgets replace legacy pages one route at a time.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can explain shell, remote, tokens and why this is how you unify fragmented platforms.</div>
+      <div class="rung"><b>Practitioner</b>Has added a widget to the demo and scaffolded a Module Federation host and remote.</div>
+      <div class="rung"><b>Expert</b>Can set the estate's rules: shell ownership, token versioning, testing the composed page, performance budgets, and the migration sequence.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>Your third widget in the repo and a half-page "portal composition standard" with the five rules you would enforce.</p></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="step" id="m10">
+  <div class="step-head"><span class="num">10</span><h2>Process modelling and Agile</h2></div>
+  <p class="why">"Business and system process modelling" and "Agile or hybrid delivery" are how the work gets specified and shipped in a regulated bank. Models find the broken step; the delivery model gets the fix through the gates.</p>
+  <div class="mod">
+    <div class="k">Install</div><div class="v"><ul>
+      <li><b>BPMN:</b> demo.bpmn.io in the browser, nothing to install. Camunda Modeler (desktop, free) for saved files. draw.io has a BPMN shape library.</li>
+      <li><b>Sequence and flow diagrams:</b> Mermaid renders on GitHub; the VS Code Markdown Preview Mermaid extension shows it live.</li>
+      <li><b>Agile tooling:</b> Jira free tier (up to ten users) at atlassian.com. Confluence free tier for the decision log.</li></ul></div>
+    <div class="k">Lab</div><div class="v">
+      <p><code>process-models/README.md</code> has two models: the corporate-action election as a cross-organisation business process, and the alert lifecycle as a system sequence. Both are annotated with where the lab data shows the process breaking. Do the three exercises: redraw the election in real BPMN with a timer boundary event, model the document lifecycle, and model IAM onboarding with the point where Q15's findings would have been caught.</p>
+      <p><b>Agile:</b> in a free Jira project, create four epics, one per capability, and under "Alerts" write six stories from Module 08's design questions, each with acceptance criteria that name a query or a metric. Then add the hybrid part: a "Change record" issue type with the gates a regulated release needs (risk review, access review, rollback plan, evidence).</p></div>
+    <div class="k">What to know cold</div><div class="v"><ul>
+      <li>BPMN basics: pools and lanes, tasks, gateways, timer and message events.</li>
+      <li>System modelling: sequence diagrams for request flows, state diagrams for lifecycles.</li>
+      <li>Scaled agile vocabulary: increment planning, features and stories, dependencies, definition of done that includes controls.</li>
+      <li>Hybrid means iterative build with waterfall-style release gates; you plan for both.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can read a BPMN diagram and a sequence diagram, and knows the ceremonies of an increment.</div>
+      <div class="rung"><b>Practitioner</b>Has modelled a real process with the failure point marked, and run a backlog with stories, acceptance criteria and a change record.</div>
+      <div class="rung"><b>Expert</b>Uses models to negotiate scope with operations, designs the delivery model for a workstream, and gets releases through risk gates without surprises.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>Three exported diagrams in the repo and a screenshot of the Jira board.</p></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="step" id="m11">
+  <div class="step-head"><span class="num">11</span><h2>Storytelling and stakeholders</h2></div>
+  <p class="why">The 25 percent, and the part that decides whether the other 75 percent lands. "Present updates to senior stakeholders", "consultative mindset", "storytelling and client engagement", "stakeholder management in matrixed organisations". These are practised, not read.</p>
+  <div class="mod">
+    <div class="k">Material</div><div class="v"><p>Bootcamp Days 14, 23, 25 and 26. The Day Zero briefing's question bank.</p></div>
+    <div class="k">Lab</div><div class="v">
+      <p>Write three documents, each one page, from the lab data:</p>
+      <ol>
+        <li><b>An executive update</b> on the alerts capability. First line is the answer: "Actionable alerts are acknowledged 33 percent of the time; one missed election cost a client 2.7 million dollars; we will require acknowledgement and add escalation by the next increment." Then evidence (Q16, Q17), then the ask.</li>
+        <li><b>A client story</b> for Halcyon's QBR: what their analysts do today (the service desk runs their reports), what changes, what the number will be in a quarter, what you need from them (user onboarding).</li>
+        <li><b>A stakeholder map</b> for the four capabilities: for each of Product, Operations, Technology, Architecture, Enterprise Data, Risk and Client Coverage, what they want from you, what you need from them, and the forum where you meet.</li>
+      </ol>
+      <p>Then say the executive update aloud in under ninety seconds. Time it.</p></div>
+    <div class="k">Rules</div><div class="v"><ul>
+      <li>Answer first, then evidence, then the ask. Never the journey.</li>
+      <li>Every story has a number, a client and a date.</li>
+      <li>Two versions of every data explanation: one for the operations manager, one for the engineer.</li>
+      <li>Write decisions down: what, why, who, when, what would change it.</li>
+      <li>In a matrix, forums beat escalations. Create the prioritisation forum before you need it.</li></ul></div>
+    <div class="k">Ladder</div><div class="v"><div class="ladder">
+      <div class="rung"><b>Conversant</b>Can give a status update that leads with the answer.</div>
+      <div class="rung"><b>Practitioner</b>Runs a QBR segment, keeps a decision log, and has a stakeholder map that is current.</div>
+      <div class="rung"><b>Expert</b>Is the person executives ask to explain the data, clients ask for the plan, and partners ask to arbitrate.</div></div></div>
+    <div class="k">Proof</div><div class="v"><p>The three one-pagers in the repo. Redo the executive update after your first real month with real numbers.</p></div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="step" id="m12">
+  <div class="step-head"><span class="num">12</span><h2>Six-week plan and proof</h2></div>
+  <p class="why">One hour on weekday evenings, three hours on one weekend day. Modules are ordered so each tool builds on the previous one, and the job itself supplies the context from week one.</p>
+  <div class="plan">
+    <div class="t">Week 1</div><div class="d"><b>Domain and SQL.</b> 30-day journey Days 1 to 7 on weekdays. Weekend: Module 03 in full, including the subscriptions table. Install PostgreSQL and DBeaver.</div>
+    <div class="t">Week 2</div><div class="d"><b>Python and the four capabilities.</b> Module 04 labs on weekdays. Weekend: Module 08, write the four product briefs from memory, then check them against the page.</div>
+    <div class="t">Week 3</div><div class="d"><b>Snowflake and Sigma.</b> Start both trials on Monday. Module 05 in full, including the cost experiment. Journey Days 8 to 14 on the commute.</div>
+    <div class="t">Week 4</div><div class="d"><b>Tableau and governance.</b> Module 06 dashboard on the weekend. Module 07 DQ rules and lineage on weekdays. Enrol in Collibra University.</div>
+    <div class="t">Week 5</div><div class="d"><b>Micro front-ends, process and Agile.</b> Module 09 third widget. Module 10 diagrams and the Jira board. Journey Days 15 to 21.</div>
+    <div class="t">Week 6</div><div class="d"><b>Storytelling and proof.</b> Module 11's three one-pagers, now with real numbers from work where you can. Journey Days 22 to 30. Review every proof artefact against the ladder.</div>
+  </div>
+
+  <h3>Proof checklist</h3>
+  <div class="progress" id="ckp">0 of 14 done</div>
+  <ul class="check" id="cklist">
+    <li><input type="checkbox" id="p1"><label for="p1">Servicing lifecycle diagram with six client timestamps, drawn from memory</label></li>
+    <li><input type="checkbox" id="p2"><label for="p2">Five self-written SQL queries and the subscriptions table, committed</label></li>
+    <li><input type="checkbox" id="p3"><label for="p3">Dashboard prototype with the Documents section, screenshot in repo</label></li>
+    <li><input type="checkbox" id="p4"><label for="p4">Snowflake secure view screenshot as a second role</label></li>
+    <li><input type="checkbox" id="p5"><label for="p5">One-page Snowflake data delivery product proposal</label></li>
+    <li><input type="checkbox" id="p6"><label for="p6">Sigma workbook reproducing Q16 without SQL</label></li>
+    <li><input type="checkbox" id="p7"><label for="p7">Tableau Public dashboard link, and the two sheets you removed</label></li>
+    <li><input type="checkbox" id="p8"><label for="p8">Amended DQ rule with reasoning; lineage diagram for acknowledged alert rate</label></li>
+    <li><input type="checkbox" id="p9"><label for="p9">Collibra Fundamentals completed</label></li>
+    <li><input type="checkbox" id="p10"><label for="p10">Four capability briefs written from memory</label></li>
+    <li><input type="checkbox" id="p11"><label for="p11">Third micro front-end widget and a portal composition standard</label></li>
+    <li><input type="checkbox" id="p12"><label for="p12">Three BPMN or sequence diagrams exported; Jira board with four epics and a change record</label></li>
+    <li><input type="checkbox" id="p13"><label for="p13">Executive update, client story and stakeholder map, one page each</label></li>
+    <li><input type="checkbox" id="p14"><label for="p14">Executive update said aloud in under ninety seconds</label></li>
+  </ul>
+
+  <h3>Self-assessment: twelve questions an expert answers without notes</h3>
+  <ol class="qs">
+    <li>What is the grain of the positions table, and what goes wrong if you sum it without a date filter?</li>
+    <li>Why must entitlements be enforced in the query and not the screen?</li>
+    <li>What is the difference between delivered and acknowledged, and which one is the metric?</li>
+    <li>Why did the Halcyon tender default, in three steps, and which control fixes each?</li>
+    <li>How does Snowflake separate storage and compute, and what does that do to cost?</li>
+    <li>What is a secure view, and how does Secure Data Sharing change file delivery?</li>
+    <li>Name the six data-quality dimensions and give a block rule and a warn rule.</li>
+    <li>Trace self-service ratio from the reporting platform to the portal tile.</li>
+    <li>What does the shell own in a micro front-end estate, and what must it never own?</li>
+    <li>Draw the alert lifecycle as a sequence diagram from memory.</li>
+    <li>Give the executive update on alerts in three sentences.</li>
+    <li>For each of your five partner functions, what do they want from you this quarter?</li>
+  </ol>
+  <div class="note warn"><p><b>Stay honest about the ladder.</b> Practitioner in SQL, Python, Tableau and Snowflake is achievable in six weeks and is what the role needs. Expert in each comes from doing the job with real data and real stakeholders; the track gets you to the point where the job can teach you.</p></div>
+</section>
+
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var toastEl=document.getElementById('toast'), toastT;
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove('show');},1600); }
+  document.querySelectorAll('.code .cp').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.parentElement.querySelector('pre').innerText;
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast('Copied');},function(){toast('Select and copy manually');}); }
+      else{ toast('Select and copy manually'); }
+    });
+  });
+  var boxes=document.querySelectorAll('#cklist input'), prog=document.getElementById('ckp');
+  function update(){ var n=0; boxes.forEach(function(b){ if(b.checked) n++; }); prog.textContent=n+' of '+boxes.length+' done'; }
+  var saved={}; try{ saved=JSON.parse(localStorage.getItem('expert-track-proof')||'{}'); }catch(e){}
+  boxes.forEach(function(b){ if(saved[b.id]) b.checked=true; b.addEventListener('change',function(){
+    saved[b.id]=b.checked; try{ localStorage.setItem('expert-track-proof',JSON.stringify(saved)); }catch(e){} update(); }); });
+  update();
+  var links=document.querySelectorAll('.rail a[href^="#"]'), steps=document.querySelectorAll('.step');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){
+      links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href')==='#'+e.target.id); }); } }); },{rootMargin:'-20% 0px -70% 0px'});
+    steps.forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>

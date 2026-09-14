@@ -1,0 +1,21 @@
+table,column,type,description,pii,dq_rule
+dim_user,user_key,VARCHAR(20),Surrogate key for a portal user.,no,unique_not_null
+dim_user,user_name,VARCHAR(80),Display name of the user.,yes,not_null
+dim_user,sso_provider,VARCHAR(30),CLIENT_IDP (federated) or STATE_STREET_LOCAL.,no,in_set
+dim_user,mfa_enabled,BOOLEAN,Whether multi-factor authentication is enforced for the user.,no,not_null
+dim_user,status,VARCHAR(12),ACTIVE / DORMANT / DISABLED.,no,in_set
+fact_user_entitlements,permission,VARCHAR(12),VIEW / INSTRUCT / ADMIN.,no,in_set
+fact_user_entitlements,expires_at,DATE,Grant expiry; NULL means no expiry.,no,warn_if_null
+fact_alerts,alert_type,VARCHAR(30),Event class that produced the alert.,no,in_set
+fact_alerts,severity,VARCHAR(10),CRITICAL / HIGH / INFO.,no,in_set
+fact_alerts,delivered_at,TIMESTAMP,When the channel confirmed delivery; NULL is a failed delivery.,no,warn_if_null
+fact_alerts,acknowledged_at,TIMESTAMP,When a user actioned the alert; must not precede created_at.,no,gte_created
+fact_documents,published_at,TIMESTAMP,When the document became visible on the portal.,no,gte_generated
+fact_documents,retention_until,DATE,Regulatory retention end date.,no,not_null
+fact_report_runs,run_type,VARCHAR(15),SELF_SERVICE / SCHEDULED / SERVICE_DESK.,no,in_set
+fact_positions,market_value_usd,NUMERIC(18;2),Quantity x price x FX to USD.,no,recompute_within_tolerance
+fact_positions,loaded_at,TIMESTAMP,When the row landed in the platform.,no,freshness_0600
+fact_trades,status,VARCHAR(12),MATCHED / AFFIRMED / PENDING / SETTLED / FAILED.,no,in_set
+fact_trades,fail_reason,VARCHAR(60),Populated only when status = FAILED.,no,conditional_not_null
+fact_corporate_actions,client_deadline,DATE,Custodian cutoff; must precede market_deadline.,no,lt_market_deadline
+fact_nav,nav_per_share,NUMERIC(12;4),(assets - liabilities) / shares.,no,recompute_within_tolerance
