@@ -1,0 +1,26 @@
+# One command gives you a real PostgreSQL 16 server with the lab already loaded:
+#     docker compose up -d
+# Then connect (DBeaver, psql, Python) with:
+#     host=localhost  port=5432  database=custody_lab  user=lab  password=lab
+# Stop and wipe:  docker compose down -v
+services:
+  postgres:
+    image: postgres:16
+    container_name: custody_lab_pg
+    environment:
+      POSTGRES_DB: custody_lab
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+    ports:
+      - "5432:5432"
+    volumes:
+      # Files in this folder run automatically, in alphabetical order, on first start.
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab -d custody_lab"]
+      interval: 5s
+      retries: 10
+volumes:
+  pgdata:

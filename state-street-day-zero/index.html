@@ -1,0 +1,643 @@
+<title>Day Zero at State Street</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#F3F5F7; --surface:#FFFFFF; --ink:#16232F; --muted:#5C6B79; --line:#D3DBE2; --rule:#B9C4CE;
+    --accent:#1E6B55; --accent-ink:#0F4A39; --accent-soft:#E3F0EA;
+    --copper:#B4622B; --copper-soft:#F6E8DE;
+    --code-bg:#1B2631; --code-ink:#E6EDF3; --code-dim:#8FA3B5;
+    --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+    --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+      --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+      --copper:#E08A55; --copper-soft:#3A2519;
+      --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F171F; --surface:#172230; --ink:#E4EBF1; --muted:#9AAAB8; --line:#2A3846; --rule:#3A4A5A;
+    --accent:#46B592; --accent-ink:#8ED7BC; --accent-soft:#16302A;
+    --copper:#E08A55; --copper-soft:#3A2519;
+    --code-bg:#0B1218; --code-ink:#DCE5EE; --code-dim:#7F93A6;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.62;padding-inline:16px;padding-block:0 80px}
+  h1,h2,h3,h4{font-family:var(--serif);letter-spacing:-.005em;line-height:1.2;margin:0;text-wrap:balance}
+  p{margin:0 0 .9em;max-width:68ch}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+  button{font:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+  .num,.tab-num,td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:.05em .35em;border-radius:3px}
+  pre{margin:0}
+  small,.small{font-size:.86em;color:var(--muted)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  /* masthead */
+  .mast{max-width:1120px;margin:0 auto;padding-block:38px 26px;border-bottom:1px solid var(--rule)}
+  .mast h1{font-size:clamp(34px,5.2vw,54px);margin:8px 0 12px}
+  .mast .lede{font-size:19px;max-width:62ch;color:var(--ink)}
+  .mast .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:16px;font-size:14px;color:var(--muted)}
+  .mast .meta b{color:var(--ink);font-weight:600}
+
+  /* shell */
+  .shell{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:232px minmax(0,1fr);gap:40px;padding-top:26px}
+  .rail{position:sticky;top:14px;align-self:start;min-width:0}
+  main{min-width:0}
+  .rail .eyebrow{margin-bottom:10px}
+  .rail ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+  .rail li a{display:grid;grid-template-columns:28px 1fr;gap:6px;padding:7px 10px;text-decoration:none;color:var(--muted);font-size:14px;line-height:1.3;margin-left:-2px;border-left:2px solid transparent}
+  .rail li a:hover{color:var(--ink);border-left-color:var(--rule)}
+  .rail li a.on{color:var(--accent-ink);border-left-color:var(--accent);font-weight:500}
+  .rail .tab-num{font-size:12px;padding-top:2px;color:inherit}
+  .rail .links{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px;display:grid;gap:8px}
+  @media (max-width:860px){
+    .shell{grid-template-columns:minmax(0,1fr);gap:18px}
+    .rail{position:sticky;top:0;background:var(--paper);z-index:5;padding:10px 0;border-bottom:1px solid var(--line)}
+    .rail .eyebrow,.rail .links{display:none}
+    .rail ol{display:flex;overflow-x:auto;border-left:none;gap:6px;padding-bottom:4px;scrollbar-width:thin}
+    .rail li{flex:0 0 auto;margin:0}
+    .rail li a{display:inline-flex;white-space:nowrap;border:1px solid var(--line);border-radius:99px;padding:6px 12px;margin:0;gap:6px}
+    .rail li a.on{background:var(--accent-soft);border-color:var(--accent)}
+  }
+
+  /* steps */
+  .step{padding-block:34px 14px;border-bottom:1px solid var(--rule)}
+  .step:last-of-type{border-bottom:none}
+  .step-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:baseline;margin-bottom:8px}
+  .step-head .num{font-size:15px;color:var(--accent);border:1.5px solid var(--accent);border-radius:99px;padding:2px 10px}
+  .step-head h2{font-size:clamp(24px,3vw,31px)}
+  .step .why{color:var(--muted);font-size:16px;margin:0 0 20px;max-width:66ch}
+  h3{font-size:19px;margin:26px 0 8px}
+  h4{font-family:var(--sans);font-weight:600;font-size:15.5px;margin:14px 0 4px}
+  ul,ol{padding-left:22px;margin:0 0 .9em;max-width:66ch}
+  li{margin:.3em 0}
+  li::marker{color:var(--muted)}
+
+  /* tables */
+  .tw{overflow-x:auto;margin:10px 0 18px}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.45}
+  th{text-align:left;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--rule);padding:8px 10px 8px 0;vertical-align:bottom}
+  td{border-bottom:1px solid var(--line);padding:9px 10px 9px 0;vertical-align:top}
+  td.n,th.n{text-align:right;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+  .tag.verify{border-color:var(--copper);color:var(--copper)}
+  .tag.you{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+
+  /* schedule */
+  .sched{display:grid;grid-template-columns:96px 1fr;gap:0 18px;margin:12px 0 6px;max-width:70ch}
+  .sched .t{font-family:var(--mono);font-size:13.5px;color:var(--muted);padding:10px 0;border-top:1px solid var(--line)}
+  .sched .d{padding:10px 0;border-top:1px solid var(--line)}
+  .sched .d b{font-weight:600}
+  .sched .d small{display:block}
+
+  /* the machine (stack) */
+  .machine{display:grid;gap:6px;margin:14px 0 18px;max-width:70ch}
+  .layer{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 14px;border:1px solid var(--line);background:var(--surface);border-radius:4px}
+  .layer.you{border-color:var(--accent);background:var(--accent-soft)}
+  .layer .l{font-weight:600;font-size:14.5px}
+  .layer .r{font-size:14.5px;color:var(--muted)}
+  .layer.you .r{color:var(--ink)}
+  @media (max-width:520px){.layer{grid-template-columns:1fr;gap:2px}}
+
+  /* explainer grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:12px 0 18px}
+  .ex{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+  .ex h4{margin:0;font-size:15.5px}
+  .ex p{font-size:14.5px;margin:0}
+  .ex .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13.5px;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line)}
+  .ex .kv span:nth-child(odd){color:var(--muted)}
+  .ex .kv .num{color:var(--accent-ink);font-weight:500}
+
+  /* callouts */
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;margin:14px 0 18px;border-radius:0 4px 4px 0;font-size:15px;max-width:70ch}
+  .note.warn{border-left-color:var(--copper);background:var(--copper-soft)}
+  .note p:last-child{margin-bottom:0}
+
+  /* code */
+  .code{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:14px 16px;margin:10px 0 16px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.55;max-width:100%}
+  .code .c{color:var(--code-dim)}
+  .code .cp{position:absolute;top:8px;right:8px;background:transparent;color:var(--code-dim);border:1px solid var(--code-dim);border-radius:3px;font-family:var(--mono);font-size:11.5px;padding:2px 8px}
+  .code .cp:hover{color:var(--code-ink);border-color:var(--code-ink)}
+  .out{font-family:var(--mono);font-size:12.5px;line-height:1.5;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 12px;overflow-x:auto;margin:-8px 0 16px;color:var(--ink)}
+
+  /* os tabs */
+  .tabs{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--line)}
+  .tabs button{background:none;border:none;border-bottom:2px solid transparent;padding:8px 12px;color:var(--muted);font-weight:500;font-size:14.5px;margin-bottom:-1px}
+  .tabs button.on{color:var(--accent-ink);border-bottom-color:var(--accent)}
+  .pane{display:none}.pane.on{display:block}
+
+  /* checklist */
+  .check{list-style:none;padding:0;margin:8px 0 14px;max-width:70ch}
+  .check li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line);margin:0}
+  .check input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--accent)}
+  .check label{cursor:pointer}
+  .check label small{display:block}
+  .check input:checked + label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .progress{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:6px}
+
+  /* questions */
+  .qs{counter-reset:q;padding:0;list-style:none;max-width:70ch}
+  .qs li{counter-increment:q;display:grid;grid-template-columns:30px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);margin:0}
+  .qs li::before{content:counter(q,decimal-leading-zero);font-family:var(--mono);font-size:12.5px;color:var(--accent);padding-top:3px}
+  .qs li small{display:block}
+
+  .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:12px 0}
+  .lk{display:block;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:12px 14px;text-decoration:none;color:var(--ink)}
+  .lk:hover{border-color:var(--accent)}
+  .lk b{display:block;font-weight:600;margin-bottom:2px}
+  .lk span{font-size:13.5px;color:var(--muted)}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+  .toast.show{opacity:1}
+  @media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+
+<header class="mast">
+  <div class="eyebrow">Briefing · VP, Product Development (Digital Experience) · prepared 14 September 2026</div>
+  <h1>Day Zero at State Street</h1>
+  <p class="lede">You start tomorrow. This page is the shortest honest path through what the bank does, what your domain owns, which platforms people will name at you, and a working SQL lab on custody data that you can run tonight and take to the cloud on AWS.</p>
+  <div class="meta">
+    <span><b>Tonight</b> about 3½ hours of reading and one lab</span>
+    <span><b>Tomorrow</b> a 30-minute refresher and a checklist</span>
+    <span><b>Built on</b> your 30-day bootcamp, condensed</span>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="rail" aria-label="Steps">
+  <div class="eyebrow">Steps</div>
+  <ol>
+    <li><a href="#s0"><span class="tab-num">00</span><span>Plan the 24 hours</span></a></li>
+    <li><a href="#s1"><span class="tab-num">01</span><span>The company in one screen</span></a></li>
+    <li><a href="#s2"><span class="tab-num">02</span><span>The business you serve</span></a></li>
+    <li><a href="#s3"><span class="tab-num">03</span><span>Your domain: Digital Experience</span></a></li>
+    <li><a href="#s4"><span class="tab-num">04</span><span>Platforms and projects you'll hear named</span></a></li>
+    <li><a href="#s5"><span class="tab-num">05</span><span>Tech and data vocabulary</span></a></li>
+    <li><a href="#s6"><span class="tab-num">06</span><span>The data lab: SQL, Postgres, AWS</span></a></li>
+    <li><a href="#s7"><span class="tab-num">07</span><span>Day 1, hour by hour</span></a></li>
+    <li><a href="#s8"><span class="tab-num">08</span><span>After Day 1</span></a></li>
+  </ol>
+  <div class="links">
+    <a href="https://claude.ai/code/artifact/057f237f-ec16-405a-bd97-94db0af1b861" target="_blank" rel="noopener">30-day interactive journey ↗</a>
+    <a href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/state-street-vp-bootcamp-wu710b/state-street-vp-bootcamp" target="_blank" rel="noopener">Deep-dive chapters ↗</a>
+    <a href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/amazing-darwin-l6c0mg/state-street-day-zero/sql-lab" target="_blank" rel="noopener">SQL lab files ↗</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================ 00 ============================ -->
+<section class="step" id="s0">
+  <div class="step-head"><span class="num">00</span><h2>Plan the 24 hours</h2></div>
+  <p class="why">You cannot learn a 234-year-old bank in a day. You can learn enough to ask good questions, recognise every name in your first meetings, and prove you can read data. That is the whole goal.</p>
+  <div class="sched">
+    <div class="t">Tonight<br>0:00–0:20</div><div class="d"><b>Step 01</b> The company. Read once, memorise the six numbers in the table.</div>
+    <div class="t">0:20–1:10</div><div class="d"><b>Step 02</b> The business. The machine diagram plus six explainers. Say each explainer aloud in your own words.</div>
+    <div class="t">1:10–1:40</div><div class="d"><b>Steps 03–04</b> Your domain, and the platforms people will name. Note the ones tagged <span class="tag verify">verify</span> as questions for tomorrow.</div>
+    <div class="t">1:40–1:55</div><div class="d"><b>Step 05</b> Vocabulary. Skim; come back when a word shows up in a meeting.</div>
+    <div class="t">1:55–3:15</div><div class="d"><b>Step 06</b> The data lab. Run the SQLite version first (no install). Postgres and AWS only if you have time and energy left.<small>Skip the cloud track tonight if it is past 11pm. Sleep beats Athena.</small></div>
+    <div class="t">3:15–3:30</div><div class="d"><b>Step 07</b> Pick your ten questions and set out what you need for the morning.</div>
+    <div class="t">Tomorrow<br>morning</div><div class="d"><b>Steps 01, 03, 07</b> again over coffee. Twenty minutes. Then go.</div>
+  </div>
+  <div class="note"><p><b>Rule for the day:</b> you were hired to lead a product area, not to know custody. Nobody expects you to explain a corporate action on Day 1. They do expect you to listen precisely, ask sharp questions, and never bluff a number.</p></div>
+</section>
+
+<!-- ============================ 01 ============================ -->
+<section class="step" id="s1">
+  <div class="step-head"><span class="num">01</span><h2>The company in one screen</h2></div>
+  <p class="why">State Street is a custodian bank. It guards and administers other people's investments and charges tiny fees on enormous amounts. It almost never deals with individuals.</p>
+  <div class="tw"><table>
+    <tr><th>Fact</th><th>Value</th><th>Why it matters to you</th></tr>
+    <tr><td>Founded</td><td class="num">1792, Boston</td><td>One of the oldest banks in the United States. Expect mainframe cores, batch cycles and vendor systems layered over decades.</td></tr>
+    <tr><td>Headquarters</td><td>One Congress Street, Boston</td><td>Your leadership's clock is US Eastern time. Your day overlaps their morning.</td></tr>
+    <tr><td>Assets under custody and administration (AUC/A)</td><td class="num">≈ $46 trillion</td><td>The scale of what is being guarded. Not State Street's money. Off balance sheet. <span class="tag verify">check latest 10-K</span></td></tr>
+    <tr><td>Assets under management (SSGA)</td><td class="num">≈ $4.7 trillion</td><td>State Street Global Advisors, home of the SPDR ETFs. A different business from custody.</td></tr>
+    <tr><td>Annual revenue</td><td class="num">≈ $13 billion</td><td>Roughly 40% servicing fees, 20% net interest income, then management fees, FX, securities finance, software and data.</td></tr>
+    <tr><td>Employees</td><td class="num">≈ 50,000+</td><td>Large technology and operations hubs in India, Poland and Ireland as well as the US.</td></tr>
+    <tr><td>Regulatory status</td><td>G-SIB</td><td>Globally systemically important. Every change to a client-facing system carries control, audit and risk sign-off.</td></tr>
+    <tr><td>CEO</td><td>Ronald O'Hanley</td><td>Chairman and CEO since 2019. <span class="tag verify">confirm current leadership on Day 1</span></td></tr>
+  </table></div>
+
+  <h3>The four businesses</h3>
+  <div class="tw"><table>
+    <tr><th>Business</th><th>What it does</th><th>Relationship to you</th></tr>
+    <tr><td><b>Investment Servicing</b></td><td>Custody, fund accounting and administration, middle-office outsourcing, transfer agency, data. The largest business.</td><td><span class="tag you">your business</span> Digital Experience is the client-facing layer of this.</td></tr>
+    <tr><td><b>Investment Management (SSGA)</b></td><td>Manages money: index funds, SPDR ETFs.</td><td>A client of servicing, and a sibling. Different leadership.</td></tr>
+    <tr><td><b>Global Markets</b></td><td>FX trading, securities lending, financing, research.</td><td>Its platforms (GlobalLink) show up in the client experience conversation.</td></tr>
+    <tr><td><b>State Street Alpha and Charles River</b></td><td>The front-to-back platform strategy: front office (CRD) plus middle and back office on one data spine.</td><td>Your portals and APIs are where clients experience whether Alpha's promise is real.</td></tr>
+  </table></div>
+
+  <div class="note"><p><b>About the title.</b> At US banks, Vice President is a mid-senior band, not an executive officer. You will typically own a product area and a team, report to an SVP or Managing Director, and be one of many VPs in the building. Carry the title lightly and the accountability seriously.</p></div>
+</section>
+
+<!-- ============================ 02 ============================ -->
+<section class="step" id="s2">
+  <div class="step-head"><span class="num">02</span><h2>The business you serve</h2></div>
+  <p class="why">A custodian keeps perfect records of who owns what, moves assets safely when told to, handles every chore that ownership creates, and shows clients all of it. You own the showing.</p>
+
+  <h3>The machine, top to bottom</h3>
+  <div class="machine">
+    <div class="layer"><span class="l">Clients</span><span class="r">Pension funds, asset managers, insurers, sovereign funds. Their users are operations analysts, portfolio managers, treasurers and executives.</span></div>
+    <div class="layer you"><span class="l">Digital Experience</span><span class="r">Client portal, APIs and data delivery, alerts, documents and reports, dashboards, identity and entitlements. The windows into the machine. Yours.</span></div>
+    <div class="layer"><span class="l">Operations</span><span class="r">Thousands of people in settlements, corporate actions, reconciliations, fund accounting, client service. They own the truth your screens display.</span></div>
+    <div class="layer"><span class="l">Core systems</span><span class="r">Custody and accounting books of record, many on mainframes with end-of-day batch cycles of six to ten hours. Your "real-time" sits on a periodic heartbeat.</span></div>
+    <div class="layer"><span class="l">Market network</span><span class="r">Sub-custodians in 100+ markets, national depositories (CSDs), SWIFT messaging, payment rails such as Fedwire and TARGET2.</span></div>
+  </div>
+
+  <h3>Six things the machine does, each in three sentences</h3>
+  <div class="grid">
+    <div class="ex"><h4>Custody and safekeeping</h4><p>Assets are electronic records held in a chain: client, State Street, a local sub-custodian, the country's central securities depository. State Street never owns them. Perfect records are the entire product.</p><div class="kv"><span>Number</span><span class="num">1 bp on $46T ≈ $4.6B revenue</span><span>Your screen</span><span>Holdings, by account, as of a date</span></div></div>
+    <div class="ex"><h4>Trade settlement (T+1)</h4><p>Every trade is agreed, affirmed, then settled by a simultaneous swap of shares and cash (delivery versus payment). US markets settle one business day after trade since May 2024. When a side is not ready the trade fails and penalties and phone calls begin.</p><div class="kv"><span>Number</span><span class="num">Affirm by 21:00 ET on trade date</span><span>Your screen</span><span>Exceptions first, then status</span></div></div>
+    <div class="ex"><h4>Fund accounting and NAV</h4><p>Every night, for thousands of funds, the value of one share is computed: assets minus liabilities divided by shares. People buy and sell at that number. A wrong NAV means recalculating and compensating real money.</p><div class="kv"><span>Number</span><span class="num">Error threshold ≈ 0.5%</span><span>Your screen</span><span>Is tonight's NAV out, and why did it move</span></div></div>
+    <div class="ex"><h4>Corporate actions</h4><p>Companies announce dividends, splits, tender offers and rights issues. Some just happen; some require the client to choose by a deadline. A missed voluntary election is custody's classic multi-million loss, and it fails in the last mile of human attention.</p><div class="kv"><span>Number</span><span class="num">Custodian deadline &lt; market deadline</span><span>Your screen</span><span>Deadline tracker with escalating alerts</span></div></div>
+    <div class="ex"><h4>SWIFT and cash</h4><p>Banks instruct each other over SWIFT, a secure messaging network that moves messages, never money. Money moves through accounts banks hold at each other and national payment rails with hard cutoff times. The industry is migrating from MT messages to ISO 20022.</p><div class="kv"><span>Number</span><span class="num">11,000+ member institutions</span><span>Your screen</span><span>Cash by currency, today and projected</span></div></div>
+    <div class="ex"><h4>Asset servicing chores</h4><p>Owned assets generate income to collect, foreign tax to reclaim, votes to pass through, statements to produce. Each is small; multiplied by millions of holdings across 100 markets it is why custodians employ tens of thousands.</p><div class="kv"><span>Number</span><span class="num">100+ markets via sub-custodians</span><span>Your screen</span><span>Daily reports and document delivery</span></div></div>
+  </div>
+  <div class="note"><p><b>The pattern you will see all year:</b> the boring 99% takes care of itself. Products earn their keep on the painful 1%. Great custody screens show the exceptions first.</p></div>
+</section>
+
+<!-- ============================ 03 ============================ -->
+<section class="step" id="s3">
+  <div class="step-head"><span class="num">03</span><h2>Your domain: Digital Experience</h2></div>
+  <p class="why">You own the channel layer: every surface through which an institutional client sees, receives or instructs on their assets, and the standards that make those surfaces feel like one bank.</p>
+
+  <h3>The six surfaces</h3>
+  <div class="tw"><table>
+    <tr><th>Surface</th><th>What clients do there</th><th>What breaks trust</th></tr>
+    <tr><td>Client portal</td><td>Log in, see holdings, cash, trades, NAVs, corporate actions; instruct and elect.</td><td>A number that differs from the report; a status that lags the phone call.</td></tr>
+    <tr><td>APIs and data delivery</td><td>Pull the same data into their own systems: REST APIs, files over SFTP, increasingly live shares into their cloud warehouse.</td><td>Schema changes without notice; a nightly file that arrives late.</td></tr>
+    <tr><td>Alerts and notifications</td><td>Hear about fails, deadlines, NAV delays, cash shortfalls, in time to act.</td><td>Spam, so people mute it. Or silence, so they miss a deadline.</td></tr>
+    <tr><td>Documents and reporting</td><td>Statements, confirmations, regulatory reports, generated and retained for years.</td><td>Anything deleted; anything unsearchable.</td></tr>
+    <tr><td>Dashboards and analytics</td><td>Portfolio views, exposure, activity, embedded BI.</td><td>Three dashboards, three answers.</td></tr>
+    <tr><td>Identity and entitlements</td><td>Single sign-on, who may see which account, delegated administration.</td><td>One user seeing another client's account. Career-ending.</td></tr>
+  </table></div>
+
+  <h3>Your permanent stakeholders</h3>
+  <ul>
+    <li><b>Operations</b> own the truth your screens display. Befriend the settlements, corporate actions and fund accounting leads first.</li>
+    <li><b>Technology and enterprise architecture</b> build and run it. They decide what is possible this year.</li>
+    <li><b>Client coverage and service</b> sell it and field complaints. Their ticket queue is your best research.</li>
+    <li><b>Risk, compliance and information security</b> constrain it. Involve them early; late involvement is how releases die.</li>
+    <li><b>The Alpha platform team</b>, whose front-to-back story you make tangible.</li>
+  </ul>
+
+  <h3>Three tensions you will inherit</h3>
+  <ul>
+    <li><b>Parity versus progress.</b> Clients demand every feature of the old portal before adopting the new one. Agree a capacity split with your manager before the first escalation tests it.</li>
+    <li><b>One portal versus many.</b> Custodians accrete portals through acquisitions and product silos. Expect a consolidation programme, and expect it to be older than your tenure.</li>
+    <li><b>Whose backlog wins.</b> Custody, fund services, middle office and Alpha all want your team. Without an explicit prioritisation frame, the loudest business head wins.</li>
+  </ul>
+</section>
+
+<!-- ============================ 04 ============================ -->
+<section class="step" id="s4">
+  <div class="step-head"><span class="num">04</span><h2>Platforms and projects you'll hear named</h2></div>
+  <p class="why">These are from public sources: annual reports, press releases, product pages. Internal names, team ownership and current status change; anything tagged <span class="tag verify">verify</span> is a question to ask, not a fact to repeat.</p>
+  <div class="tw"><table>
+    <tr><th>Name</th><th>What it is</th><th>Why it matters to you</th></tr>
+    <tr><td><b>State Street Alpha</b></td><td>The front-to-back platform, launched 2019: portfolio management and trading (via CRD), middle-office services, custody, fund accounting and data on one spine. Sold as multi-year platform mandates.</td><td>The strategic story told to investors every quarter. Your portals and APIs are Alpha's shop window. <span class="tag you">core</span></td></tr>
+    <tr><td><b>Charles River Development (CRD)</b></td><td>Front-office order and portfolio management system, acquired in 2018 for about $2.6 billion. Used by asset managers to build portfolios, check compliance and route orders.</td><td>Where a client's trade begins before it reaches your settlement status screen. CRD has its own UI; consistency between it and your surfaces is a live topic.</td></tr>
+    <tr><td><b>Alpha Data Platform and Alpha Data Services</b></td><td>The cloud data layer under Alpha: a warehouse of positions, transactions, reference and market data, with managed data services on top. Publicly announced work with Snowflake for delivery into clients' own accounts.</td><td>The mart layer your dashboards, APIs and data shares should read from. One conformed layer, one number everywhere. <span class="tag verify">which teams own it today</span></td></tr>
+    <tr><td><b>my.statestreet.com</b></td><td>The long-standing client portal for servicing clients: reports, holdings, cash, corporate-action elections, document delivery.</td><td>Likely the surface with the most users, the most legacy and the most opinions. Ask which pages carry the most traffic and which depend on the oldest systems. <span class="tag verify">current portal estate</span></td></tr>
+    <tr><td><b>GlobalLink</b></td><td>Global Markets' electronic trading and liquidity platforms: FX Connect, Currenex, Fund Connect and related tools.</td><td>Sits in a different business, but clients experience "State Street" as one login. Expect single sign-on and design consistency questions.</td></tr>
+    <tr><td><b>State Street Digital</b></td><td>Division formed in 2021 for digital assets, tokenisation and crypto custody and fund administration.</td><td>Occasional, not daily. Know it exists so the acronym does not surprise you.</td></tr>
+    <tr><td><b>Middle-office outsourcing and IBOR</b></td><td>State Street running a client's post-trade middle office, maintaining the investment book of record that the client's front office trusts.</td><td>Middle-office clients need intraday data, not end-of-day. That drives event-driven feeds and near-real-time screens.</td></tr>
+    <tr><td><b>Cloud partnerships</b></td><td>Publicly reported work with Microsoft Azure (cloud platform) and Snowflake (data). Many partner and vendor feeds still arrive as files in object storage such as Amazon S3.</td><td>Confirm which cloud your team is approved to deploy to before assuming. The lab in Step 06 uses AWS because it is the most common place to practise; the concepts are identical. <span class="tag verify">approved cloud and tooling</span></td></tr>
+  </table></div>
+
+  <h3>Programmes you should expect to find in flight</h3>
+  <ul>
+    <li><b>Portal consolidation and modernisation</b>, usually a strangler-fig migration: new pages behind a routing facade, legacy retired page by page.</li>
+    <li><b>API marketplace and developer experience</b>: making data products self-serve for clients' engineers, with versioning and entitlements.</li>
+    <li><b>T+1 aftermath</b>: the US moved in May 2024; the UK and EU are targeting 2027. Same-day affirmation, real-time status and alerting are still being hardened.</li>
+    <li><b>ISO 20022 migration</b>: SWIFT's richer message standard replacing MT messages; your products must read both for years.</li>
+    <li><b>Cloud data delivery</b>: replacing nightly SFTP files with governed live shares into clients' warehouses.</li>
+    <li><b>Generative AI for client service</b>: copilots that answer "where is my report" from governed data. Model-risk sign-off is the gating factor, not the model.</li>
+  </ul>
+</section>
+
+<!-- ============================ 05 ============================ -->
+<section class="step" id="s5">
+  <div class="step-head"><span class="num">05</span><h2>Tech and data vocabulary</h2></div>
+  <p class="why">Twenty-four terms you will hear in the first week, each with the sentence you can safely say back.</p>
+  <div class="tw"><table>
+    <tr><th>Term</th><th>Meaning</th><th>Say it like this</th></tr>
+    <tr><td>Book of record</td><td>The system whose numbers are legally the truth (custody core, accounting core).</td><td>"Which book of record does this page read from?"</td></tr>
+    <tr><td>EOD batch</td><td>The overnight cycle that strikes balances and produces the day's files.</td><td>"What time does EOD complete, and what is the as-of stamp on the portal?"</td></tr>
+    <tr><td>As-of date</td><td>The business date a number is true for, which is not the time you looked at it.</td><td>"Is this intraday or as of last night's close?"</td></tr>
+    <tr><td>Read store</td><td>A copy of data kept for fast page loads so the portal never queries the mainframe per click.</td><td>"How fresh is the read store behind holdings?"</td></tr>
+    <tr><td>Anti-corruption layer</td><td>An adapter that translates core-system codes into clean domain terms so core changes break one component, not twelve.</td><td>"Do we have an ACL in front of the core, or do its codes leak into the UI?"</td></tr>
+    <tr><td>Strangler fig</td><td>Replacing a legacy system by routing traffic to new components page by page until nothing is left.</td><td>"What percentage of page views still hit the legacy portal?"</td></tr>
+    <tr><td>Event backbone (Kafka)</td><td>Systems publish facts ("trade settled") that others subscribe to, instead of being polled.</td><td>"Which events exist today, and who owns the schema?"</td></tr>
+    <tr><td>API product</td><td>An interface treated like a product: documented, versioned, entitled, measured on adoption.</td><td>"How many clients consume this API, and what is the deprecation policy?"</td></tr>
+    <tr><td>Entitlements</td><td>Who may see or do what, per account. Enforced in the data layer, not just the UI.</td><td>"Where is the entitlement filter applied, in the query or in the screen?"</td></tr>
+    <tr><td>Snowflake</td><td>Cloud data warehouse with separate storage and compute; supports live secure data sharing.</td><td>"Which warehouse runs client-facing queries, and what is its auto-suspend?"</td></tr>
+    <tr><td>Data mart</td><td>The governed, modelled layer a business domain reads from. Client-facing anything reads marts, never raw.</td><td>"Is this dashboard reading the mart or a private copy?"</td></tr>
+    <tr><td>Star schema</td><td>Fact tables of measurements joined to dimension tables of context.</td><td>"What is the grain of this fact table?"</td></tr>
+    <tr><td>Grain</td><td>What one row represents. The contract that decides what a table can answer.</td><td>"One row per account per security per date, or per lot?"</td></tr>
+    <tr><td>ELT and dbt</td><td>Load raw first, transform inside the warehouse with version-controlled SQL and tests.</td><td>"Are the transformations under version control with tests?"</td></tr>
+    <tr><td>Data lineage</td><td>The traceable path from book of record to a number on a screen.</td><td>"Can we trace this figure back to source for the auditor?"</td></tr>
+    <tr><td>Collibra</td><td>Data governance tool: glossary, catalogue, lineage, ownership, policy workflows.</td><td>"Is this field defined in Collibra, and who is the steward?"</td></tr>
+    <tr><td>Data quality dimensions</td><td>Completeness, accuracy, timeliness, consistency, validity, uniqueness.</td><td>"Which DQ checks block the load, and which only warn?"</td></tr>
+    <tr><td>Freshness SLA</td><td>A promise like "positions available by 06:00 on 99% of business days".</td><td>"What is the published SLA, and how do clients see a breach?"</td></tr>
+    <tr><td>Tableau</td><td>BI tool for dashboards; can be embedded in a portal.</td><td>"Which extracts refresh overnight, and are any unused?"</td></tr>
+    <tr><td>SSO and IAM</td><td>Single sign-on and identity and access management: how a client user gets in and what they get.</td><td>"Do clients federate their own identity provider, or do we issue credentials?"</td></tr>
+    <tr><td>SFTP delivery</td><td>Nightly files pushed to clients. Still the dominant channel at most custodians.</td><td>"How many files a night, and what is the failure rate?"</td></tr>
+    <tr><td>ISO 20022</td><td>The XML-based message standard replacing SWIFT MT messages.</td><td>"Which of our flows are on ISO 20022 already?"</td></tr>
+    <tr><td>Model risk (SR 11-7)</td><td>Bank rules for validating any model, including AI, before it influences decisions.</td><td>"Has this use case been through model-risk review?"</td></tr>
+    <tr><td>Change lead time</td><td>Time from merged code to production for the client-facing stack.</td><td>"What is our real change lead time, and what gate dominates it?"</td></tr>
+  </table></div>
+</section>
+
+<!-- ============================ 06 ============================ -->
+<section class="step" id="s6">
+  <div class="step-head"><span class="num">06</span><h2>The data lab: SQL, Postgres, AWS</h2></div>
+  <p class="why">You will never write production SQL. You will sit in reviews where a number is defended with a query, and the VP who can read it commands the room. This lab gives you a realistic custody dataset, thirteen queries that each power a portal screen, and three places to run them.</p>
+
+  <h3>A. Get the files</h3>
+  <p>The lab lives in your repository. Download it or clone the branch:</p>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>git clone -b claude/amazing-darwin-l6c0mg https://github.com/rishabh071106-eng/ai-academy.git
+cd ai-academy/state-street-day-zero/sql-lab</pre></div>
+  <p class="small">No git? Open the <a href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/amazing-darwin-l6c0mg/state-street-day-zero/sql-lab" target="_blank" rel="noopener">folder on GitHub</a>, use Code → Download ZIP, and unzip.</p>
+
+  <h3>B. Route 1: run it in sixty seconds, no install</h3>
+  <p>Python ships with SQLite, a full SQL engine in a file. macOS has Python; on Windows install it from python.org (tick "Add to PATH").</p>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>python3 run_sqlite.py          <span class="c"># builds custody_lab.db and prints all 13 results</span>
+python3 run_sqlite.py 5 7      <span class="c"># only Q5 (fails) and Q7 (corporate-action deadlines)</span>
+python3 run_sqlite.py --shell  <span class="c"># write your own SQL against the database</span></pre></div>
+  <p class="small">On Windows the command is <code>py run_sqlite.py</code> if <code>python3</code> is not recognised.</p>
+
+  <h3>C. Route 2: a real PostgreSQL server</h3>
+  <p>PostgreSQL is the database you will meet behind most internal tools, and its SQL is what Snowflake's is closest to. Pick your operating system.</p>
+  <div class="tabs" role="tablist">
+    <button class="on" type="button" data-pane="win">Windows</button>
+    <button type="button" data-pane="mac">macOS</button>
+    <button type="button" data-pane="docker">Docker (any OS)</button>
+  </div>
+  <div class="pane on" id="pane-win">
+    <ol>
+      <li>Open PowerShell and install PostgreSQL 16 with winget, or download the installer from enterprisedb.com. During install, set the password for the <code>postgres</code> superuser and keep port <code>5432</code>.</li>
+      <li>Create the lab database and user, then load the two files.</li>
+    </ol>
+    <div class="code"><button class="cp" type="button">Copy</button><pre>winget install PostgreSQL.PostgreSQL.16
+<span class="c"># close and reopen PowerShell so psql is on the PATH, then:</span>
+psql -U postgres -c "CREATE USER lab WITH PASSWORD 'lab';"
+psql -U postgres -c "CREATE DATABASE custody_lab OWNER lab;"
+psql -U lab -d custody_lab -f schema.sql
+psql -U lab -d custody_lab -f seed.sql
+psql -U lab -d custody_lab -f queries.sql</pre></div>
+  </div>
+  <div class="pane" id="pane-mac">
+    <ol>
+      <li>Install Homebrew from brew.sh if you do not have it, then PostgreSQL 16.</li>
+      <li>Create the lab database and user, then load the two files.</li>
+    </ol>
+    <div class="code"><button class="cp" type="button">Copy</button><pre>brew install postgresql@16
+brew services start postgresql@16
+echo 'export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+psql postgres -c "CREATE USER lab WITH PASSWORD 'lab';"
+psql postgres -c "CREATE DATABASE custody_lab OWNER lab;"
+psql -U lab -d custody_lab -f schema.sql
+psql -U lab -d custody_lab -f seed.sql
+psql -U lab -d custody_lab -f queries.sql</pre></div>
+  </div>
+  <div class="pane" id="pane-docker">
+    <ol>
+      <li>Install Docker Desktop from docker.com and start it.</li>
+      <li>One command starts PostgreSQL 16 with the schema and data already loaded.</li>
+    </ol>
+    <div class="code"><button class="cp" type="button">Copy</button><pre>docker compose up -d
+docker compose exec postgres psql -U lab -d custody_lab -f /docker-entrypoint-initdb.d/01_schema.sql   <span class="c"># only if you ever need to reset</span>
+docker compose exec postgres psql -U lab -d custody_lab -c "SELECT COUNT(*) FROM fact_positions;"     <span class="c"># expect 90</span>
+docker compose down -v   <span class="c"># stop and wipe when done</span></pre></div>
+  </div>
+
+  <h3>D. Connect a SQL client (DBeaver)</h3>
+  <p>DBeaver Community is free, runs everywhere, and connects to PostgreSQL, SQLite, Snowflake, Athena and RDS with the same screen. Download from dbeaver.io.</p>
+  <ol>
+    <li>Database → New Database Connection → <b>PostgreSQL</b> → Next.</li>
+    <li>Host <code>localhost</code>, Port <code>5432</code>, Database <code>custody_lab</code>, Username <code>lab</code>, Password <code>lab</code>. Click <b>Test Connection</b>; accept the driver download. Finish.</li>
+    <li>For the SQLite route instead: choose <b>SQLite</b> and point Path at <code>custody_lab.db</code>.</li>
+    <li>Open SQL Editor (Ctrl+]), paste a query, run with Ctrl+Enter. Results appear as a grid you can export to Excel.</li>
+  </ol>
+
+  <h3>E. Read the thirteen queries the way a VP reads them</h3>
+  <p>Each query in <code>queries.sql</code> is labelled with the portal screen it powers. Three of them, with what to notice:</p>
+
+  <h4>Q3. The portfolio pie: a client's value by asset class, across all its accounts</h4>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>SELECT s.asset_class,
+       ROUND(SUM(p.market_value_usd), 2) AS mv_usd,
+       COUNT(DISTINCT p.account_key)     AS accounts_holding
+FROM fact_positions p
+JOIN dim_security s ON s.security_key = p.security_key
+JOIN dim_account  a ON a.account_key  = p.account_key
+WHERE a.client_key = 'C-MERIDIAN' AND p.position_date = '2026-09-11'
+GROUP BY s.asset_class
+ORDER BY mv_usd DESC;</pre></div>
+  <div class="out">asset_class     |         mv_usd | accounts_holding
+Government Bond | 487,042,465.08 |                1
+Equity          | 112,662,416.00 |                1
+Corporate Bond  |  76,701,520.00 |                1
+Cash Equivalent |     936,746.88 |                2</div>
+  <p>Notice the two joins: the fact table only knows keys; the dimensions supply names and classes. Notice the date filter: without it you would sum five days of positions and quintuple the client's wealth. That mistake ships to production more often than anyone admits.</p>
+
+  <h4>Q5. The exceptions screen: every trade that has not settled, with why</h4>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>SELECT t.trade_id, a.account_name, s.security_name, t.side, t.quantity,
+       t.trade_date, t.intended_settle_date, t.status, t.fail_reason, t.counterparty
+FROM fact_trades t
+JOIN dim_account  a ON a.account_key  = t.account_key
+JOIN dim_security s ON s.security_key = t.security_key
+WHERE t.status &lt;&gt; 'SETTLED'
+ORDER BY CASE t.status WHEN 'FAILED' THEN 0 WHEN 'PENDING' THEN 1 ELSE 2 END,
+         t.intended_settle_date;</pre></div>
+  <div class="out">trade_id | account_name           | security_name  | status  | fail_reason
+T-90003  | Meridian Global Equity | SAP SE         | FAILED  | COUNTERPARTY_INSUFFICIENT_SECURITIES
+T-90006  | Meridian Global Bond   | Bund 0.5% 2031 | FAILED  | INSUFFICIENT_CASH_EUR
+T-90011  | Orient General Account | Toyota Motor   | FAILED  | SSI_MISMATCH
+T-90009  | Halcyon US Large Cap   | Microsoft Corp | PENDING |
+... (7 rows)</div>
+  <p>The ORDER BY is product design in SQL: failed first, then pending, then everything else. Three fail reasons, three different owners: the counterparty, the client's treasury, and a settlement-instruction mismatch that is probably the custodian's own reference data.</p>
+
+  <h4>Q7. The corporate-action deadline tracker</h4>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>SELECT ca.event_id, ca.event_type, c.client_name, s.security_name,
+       ca.client_deadline, ca.market_deadline, ca.election_status, ca.est_value_usd
+FROM fact_corporate_actions ca
+JOIN dim_account  a ON a.account_key  = ca.account_key
+JOIN dim_client   c ON c.client_key   = a.client_key
+JOIN dim_security s ON s.security_key = ca.security_key
+WHERE ca.election_required = TRUE AND ca.election_status IN ('PENDING', 'DEFAULTED')
+ORDER BY ca.client_deadline;</pre></div>
+  <div class="out">event_id | event_type      | client_name              | client_deadline | election_status | est_value_usd
+CA-5005  | TENDER_OFFER    | Halcyon Asset Management | 2026-09-10      | DEFAULTED       |     2,700,000
+CA-5003  | DIVIDEND_OPTION | Meridian Pension Trust   | 2026-09-12      | PENDING         |       360,000
+CA-5002  | TENDER_OFFER    | Meridian Pension Trust   | 2026-09-15      | PENDING         |     4,100,000
+CA-5007  | RIGHTS_ISSUE    | Meridian Pension Trust   | 2026-09-18      | PENDING         |       650,000</div>
+  <p>One event already defaulted with $2.7 million at stake. That row is the reason alerting is a platform, not a feature. The rest of the queries cover NAV sanity checks (Q8), running cash balances (Q9), day-over-day change (Q10), ranking within groups (Q11), a freshness SLA check (Q12) and an entitlement view that only ever shows one client's rows (Q13).</p>
+
+  <h3>F. Connect from Python</h3>
+  <p>The pattern every analyst notebook and Tableau prep script uses: connect, query into a dataframe, save.</p>
+  <div class="code"><button class="cp" type="button">Copy</button><pre>pip install psycopg2-binary pandas sqlalchemy
+python3 connect.py                              <span class="c"># local Postgres</span>
+PGHOST=&lt;endpoint&gt;.rds.amazonaws.com PGPASSWORD=&lt;pw&gt; python3 connect.py   <span class="c"># Amazon RDS, same script</span></pre></div>
+
+  <h3>G. The cloud track on Amazon Web Services</h3>
+  <p>Three exercises, each documented step by step in <code>sql-lab/aws/README.md</code>, all inside the free tier or a trial. Do them in order; each one is how a data team at a bank actually meets the cloud.</p>
+  <div class="tw"><table>
+    <tr><th>Exercise</th><th>What you build</th><th>The lesson</th><th class="n">Time</th></tr>
+    <tr><td><b>1. Amazon RDS for PostgreSQL</b></td><td>A managed Postgres in the cloud; load the same schema and seed; connect DBeaver and Python over SSL.</td><td>The client of a database never cares where the database lives. Network rules (security groups) are checked before any password.</td><td class="n">25 min</td></tr>
+    <tr><td><b>2. S3 + Athena</b></td><td>Export the tables to CSV, upload to a bucket, define external tables, query files in place with no server.</td><td>The data-lake pattern. The bill is bytes scanned; converting to Parquet cuts it roughly tenfold.</td><td class="n">20 min</td></tr>
+    <tr><td><b>3. Snowflake trial on AWS</b></td><td>A warehouse with auto-suspend, tables loaded from S3 with COPY INTO, a secure view row-filtered per client, Time Travel and a zero-copy clone.</td><td>The closest public thing to the data platform in your prep chapters. Secure views are entitlements in the data layer.</td><td class="n">30 min</td></tr>
+  </table></div>
+  <div class="note warn"><p><b>Clean up when done.</b> Delete the RDS instance, empty and delete the bucket, and delete the IAM access key. The guide ends with the exact clicks. Idle resources are the classic first cloud bill. Never load real client data into any of these.</p></div>
+
+  <h3>H. How to talk about data on Day 1</h3>
+  <p>Five questions that make engineers and analysts respect you immediately. Every one of them maps to a query above.</p>
+  <ul>
+    <li><b>Grain.</b> "What does one row represent?" If a fact table is per lot and the screen sums per security, numbers double.</li>
+    <li><b>Join keys.</b> "Joining on ticker or on security key?" Tickers get reused; ISINs and internal keys do not.</li>
+    <li><b>As-of and freshness.</b> "What business date is this, when did it land, and what is the promise?" Q12 is that promise as a query.</li>
+    <li><b>Entitlements.</b> "Where is the client filter applied?" If the answer is "in the front end", you have found your first risk item.</li>
+    <li><b>Cost.</b> "Which warehouse runs this, and does it auto-suspend?" A zombie warehouse over a long weekend burns four figures for nothing.</li>
+  </ul>
+</section>
+
+<!-- ============================ 07 ============================ -->
+<section class="step" id="s7">
+  <div class="step-head"><span class="num">07</span><h2>Day 1, hour by hour</h2></div>
+  <p class="why">A realistic first day at a large bank is mostly access, introductions and listening. Plan for that and use the gaps well.</p>
+  <div class="sched">
+    <div class="t">Before</div><div class="d"><b>Identity documents, offer letter, laptop instructions.</b> Government ID, bank details for payroll, and any onboarding portal steps completed the night before.</div>
+    <div class="t">09:00</div><div class="d"><b>HR and security onboarding.</b> Badge, laptop, VPN, mandatory training assignments. Expect this to take the morning. Read Steps 01 and 03 while things install.</div>
+    <div class="t">11:00</div><div class="d"><b>Your manager.</b> Ask the five manager questions below. Get the org chart, the team roster, the current quarter's commitments and the standing meetings. Ask which portal, which data platform and which cloud your team is actually on.</div>
+    <div class="t">13:00</div><div class="d"><b>Your team.</b> Introductions only. Ask what they are proudest of and what is stuck. Make no promises and no changes.</div>
+    <div class="t">15:00</div><div class="d"><b>Access requests.</b> Put them in today; approvals take days. See the checklist.</div>
+    <div class="t">16:30</div><div class="d"><b>Find the operational calendar.</b> EOD batch completion time, NAV cutoffs, corporate-action deadlines, release windows. Pin it.</div>
+    <div class="t">17:30</div><div class="d"><b>Write one page.</b> What you heard, what surprised you, ten questions you could not answer. That page becomes your 30-day plan.</div>
+  </div>
+
+  <h3>Checklist</h3>
+  <div class="progress" id="ckp">0 of 14 done</div>
+  <ul class="check" id="cklist">
+    <li><input type="checkbox" id="ck1"><label for="ck1">Read Steps 01 to 05 tonight</label></li>
+    <li><input type="checkbox" id="ck2"><label for="ck2">Run the SQLite lab and look at Q5 and Q7 output<small>python3 run_sqlite.py 5 7</small></label></li>
+    <li><input type="checkbox" id="ck3"><label for="ck3">Choose ten questions from the list below and write them down</label></li>
+    <li><input type="checkbox" id="ck4"><label for="ck4">Documents ready: ID, offer letter, onboarding portal completed</label></li>
+    <li><input type="checkbox" id="ck5"><label for="ck5">Day 1: get the org chart and team roster from your manager</label></li>
+    <li><input type="checkbox" id="ck6"><label for="ck6">Day 1: learn which portal(s), data platform and cloud your team owns or uses</label></li>
+    <li><input type="checkbox" id="ck7"><label for="ck7">Day 1: request read access to the client portal (a demo or UAT client login)</label></li>
+    <li><input type="checkbox" id="ck8"><label for="ck8">Day 1: request read access to the data platform, BI tool and data catalogue<small>Snowflake or equivalent, Tableau, Collibra: names may differ internally</small></label></li>
+    <li><input type="checkbox" id="ck9"><label for="ck9">Day 1: request access to Jira, Confluence, the roadmap and the incident log</label></li>
+    <li><input type="checkbox" id="ck10"><label for="ck10">Day 1: find the operational calendar (EOD, NAV cutoffs, CA deadlines, release windows)</label></li>
+    <li><input type="checkbox" id="ck11"><label for="ck11">Day 1: book 30 minutes each with settlements, corporate actions and client service leads for week 1</label></li>
+    <li><input type="checkbox" id="ck12"><label for="ck12">Day 1: ask for the last three client escalations about digital and read them</label></li>
+    <li><input type="checkbox" id="ck13"><label for="ck13">Day 1: write the one-page "what I heard" note</label></li>
+    <li><input type="checkbox" id="ck14"><label for="ck14">Week 1: shadow the client-service queue for an hour and count "where is my data" tickets</label></li>
+  </ul>
+
+  <h3>Questions worth asking (pick ten)</h3>
+  <h4>Your manager</h4>
+  <ol class="qs">
+    <li>What must be visibly different about digital experience in 12 months for you to call this hire a success?</li>
+    <li>What did my predecessor do well that I should keep, and what was the actual reason for the transition?</li>
+    <li>Which commitments to clients or executives am I inheriting that you consider at risk?</li>
+    <li>Where do you want me to spend political capital, and where should I conserve it?</li>
+    <li>Who, above and beside you, do I need to win over, and who will test me early?</li>
+  </ol>
+  <h4>Your team</h4>
+  <ol class="qs">
+    <li>What are you proudest of shipping here, and what did it take that outsiders never saw?</li>
+    <li>What have we promised that you privately doubt we can deliver?</li>
+    <li>Which decision has been stuck the longest, and what is it waiting on?</li>
+    <li>Where do you lose the most time to things that should not be hard?</li>
+    <li>What do you want from me in the first 90 days, and what should I not do?</li>
+  </ol>
+  <h4>Operations and client service</h4>
+  <ol class="qs">
+    <li>Walk me through yesterday's worst break. Where did the portal help, or make it worse?</li>
+    <li>What information do clients ask you for that they should be able to self-serve?</li>
+    <li>Of your last 100 tickets, how many were "where is my data, report or status" questions?</li>
+    <li>Which numbers do you give with low confidence because the data conflicts across systems?</li>
+    <li>What workaround have you built that product does not know about?</li>
+  </ol>
+  <h4>Engineering and architecture</h4>
+  <ol class="qs">
+    <li>What is the oldest system a portal page depends on, and what happens the day it breaks?</li>
+    <li>What is the real change lead time from merged code to production for the client-facing stack?</li>
+    <li>Which standard do teams route around most, and is that a team problem or a standard problem?</li>
+    <li>Where is the roadmap writing cheques the platform cannot cash?</li>
+    <li>If you had one quarter of my roadmap capacity for pure platform work, where would it go?</li>
+  </ol>
+
+  <div class="note warn"><p><b>Do not, on Day 1:</b> announce a reorganisation, promise a client anything, criticise the legacy portal in front of the people who built it, or quote a number from this page as fact. Say "I read that publicly, is it still right?"</p></div>
+</section>
+
+<!-- ============================ 08 ============================ -->
+<section class="step" id="s8">
+  <div class="step-head"><span class="num">08</span><h2>After Day 1</h2></div>
+  <p class="why">The bootcamp you already have becomes your next thirty days. Here is how it maps.</p>
+  <ul>
+    <li><b>Days 1 to 30: learn.</b> Listen, map stakeholders, shadow operations, read the incident log. Bootcamp Weeks 1 and 2, one day each morning.</li>
+    <li><b>Days 31 to 60: aim.</b> Pick two or three problems with named client pain and measurable outcomes. Baseline the metrics. Bootcamp Week 3 for the technical grounding.</li>
+    <li><b>Days 61 to 90: deliver.</b> Ship one visible improvement, stand up the prioritisation forum with operations, coverage and Alpha at the table, and present a 12-month view. Bootcamp Week 4 is written for exactly this.</li>
+  </ul>
+  <div class="links-grid">
+    <a class="lk" href="https://claude.ai/code/artifact/057f237f-ec16-405a-bd97-94db0af1b861" target="_blank" rel="noopener"><b>My 30-Day Journey</b><span>Interactive, 15 minutes a day, with quizzes and progress tracking. Start at Day 1 tomorrow evening.</span></a>
+    <a class="lk" href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/state-street-vp-bootcamp-wu710b/state-street-vp-bootcamp" target="_blank" rel="noopener"><b>Deep-dive chapters</b><span>Thirty 60-to-90-minute chapters with diagrams, a 500-term glossary and a PDF. Day 22 is your 90-day plan; Day 18 is the data platform.</span></a>
+    <a class="lk" href="https://github.com/rishabh071106-eng/ai-academy/tree/claude/amazing-darwin-l6c0mg/state-street-day-zero/sql-lab" target="_blank" rel="noopener"><b>Custody Data Lab</b><span>Schema, seed data, 13 queries, Docker, Python and the AWS track. Reuse it to explain grain and entitlements to your own team.</span></a>
+  </div>
+  <p class="small">Public figures on this page are from State Street's annual reports and press releases as of the 2024 filings and are rounded. Client names in the lab are fictional. Nothing here is internal information.</p>
+</section>
+
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var toastEl=document.getElementById('toast'), toastT;
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove('show');},1600); }
+
+  /* copy buttons */
+  document.querySelectorAll('.code .cp').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.parentElement.querySelector('pre').innerText;
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast('Copied');},function(){toast('Select and copy manually');}); }
+      else{ toast('Select and copy manually'); }
+    });
+  });
+
+  /* OS tabs */
+  var tabs=document.querySelectorAll('.tabs button');
+  tabs.forEach(function(t){ t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('on');}); t.classList.add('on');
+    document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});
+    document.getElementById('pane-'+t.dataset.pane).classList.add('on');
+    try{ localStorage.setItem('dayzero-os',t.dataset.pane); }catch(e){}
+  });});
+  try{ var os=localStorage.getItem('dayzero-os'); if(os){ var tb=document.querySelector('.tabs button[data-pane="'+os+'"]'); if(tb) tb.click(); } }catch(e){}
+
+  /* checklist persistence */
+  var boxes=document.querySelectorAll('#cklist input'), prog=document.getElementById('ckp');
+  function update(){ var n=0; boxes.forEach(function(b){ if(b.checked) n++; }); prog.textContent=n+' of '+boxes.length+' done'; }
+  var saved={}; try{ saved=JSON.parse(localStorage.getItem('dayzero-checks')||'{}'); }catch(e){}
+  boxes.forEach(function(b){ if(saved[b.id]) b.checked=true; b.addEventListener('change',function(){
+    saved[b.id]=b.checked; try{ localStorage.setItem('dayzero-checks',JSON.stringify(saved)); }catch(e){} update(); }); });
+  update();
+
+  /* rail highlight */
+  var links=document.querySelectorAll('.rail a[href^="#"]'), steps=document.querySelectorAll('.step');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){
+      links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href')==='#'+e.target.id); }); } }); },{rootMargin:'-20% 0px -70% 0px'});
+    steps.forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
