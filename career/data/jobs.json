@@ -1527,7 +1527,7 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "15–20 yrs mandate over corporate digital-banking channels, cash management and GenAI product investment at a core-banking software leader — squarely matches the core-banking modernization + GenAI record.",
-    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug.",
+    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug. Reposted again ~12 Sep (Built In) — still hiring.",
     "verified": false,
     "category": "saas-ai",
     "id": 101
@@ -2113,5 +2113,23 @@
     "last_checked": "2026-09-11",
     "category": "bigtech",
     "id": 135
+  },
+  {
+    "company": "BlackRock",
+    "title": "Vice President — Data Platform Product Management (Aladdin Data)",
+    "location": "Mumbai",
+    "seniority": "VP",
+    "apply_url": "https://careers.blackrock.com/job/mumbai/data-platform-product-management-aladdin-data-vice-president/45831/86173845536",
+    "platform": "careers-site",
+    "posted_date": "2026-09-12",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "VP owning data-platform product for Aladdin (BlackRock's core investment platform) — financial-data platform leadership with a listed comp band of ₹75L–1.2Cr that overlaps the ₹95L–1Cr target; Mumbai-based.",
+    "notes": "'Posted 3 days ago' on Built In Mumbai as of 15 Sep; first BlackRock role tracked. Confirm req live before a long application.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-09-15",
+    "category": "workday-banks",
+    "id": 136
   }
 ]
