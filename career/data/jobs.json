@@ -2131,5 +2131,23 @@
     "last_checked": "2026-09-15",
     "category": "workday-banks",
     "id": 136
+  },
+  {
+    "company": "Google",
+    "title": "Director, Product Management — AlloyDB",
+    "location": "Bengaluru / Hyderabad",
+    "seniority": "Director",
+    "apply_url": "https://www.google.com/about/careers/applications/jobs/results/128569413151400646-director-product-management-alloydb",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director-level PM at Google for AlloyDB (cloud database) — a level above the tracked GPM band with comp comfortably in range; domain is data infrastructure, adjacent via the API/platform record rather than core fintech.",
+    "notes": "Live on Google Careers 16 Sep, not previously tracked; Google listings undated so freshness unconfirmed. Thirteenth Google req tracked, first at Director level.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-09-16",
+    "category": "bigtech",
+    "id": 137
   }
 ]
