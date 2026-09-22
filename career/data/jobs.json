@@ -1463,10 +1463,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Director for Visa SRC / Click to Pay checkout platform — payments-platform product leadership squarely in band.",
-    "notes": "Cross-confirmed by two research lanes 7 Aug ('posted 2 days ago'); apply via SmartRecruiters.",
-    "verified": false,
+    "notes": "Cross-confirmed by two research lanes 7 Aug ('posted 2 days ago'); apply via SmartRecruiters. Re-bumped 'posted 2 days ago' as of 22 Sep — still hiring.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 97
+    "id": 97,
+    "status": "live",
+    "last_checked": "2026-09-22"
   },
   {
     "company": "Visa",
@@ -1527,7 +1529,7 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "15–20 yrs mandate over corporate digital-banking channels, cash management and GenAI product investment at a core-banking software leader — squarely matches the core-banking modernization + GenAI record.",
-    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug. Reposted again ~12 Sep (Built In) — still hiring.",
+    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug. Reposted again ~12 Sep (Built In) — still hiring. Reposted again ~19 Sep — fifth re-bump, still hiring.",
     "verified": false,
     "category": "saas-ai",
     "id": 101
@@ -2149,5 +2151,23 @@
     "last_checked": "2026-09-16",
     "category": "bigtech",
     "id": 137
+  },
+  {
+    "company": "Salesforce",
+    "title": "Senior Director, Product Management — Intelligent Component Layer",
+    "location": "Bengaluru",
+    "seniority": "Senior Director",
+    "apply_url": "https://careers.salesforce.com/en/jobs/jr317504/senior-director-product-management-intelligent-component-layer/",
+    "platform": "careers-site",
+    "posted_date": "2026-09-22",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Senior Director owning Salesforce's intelligent component platform layer — AI-infused platform product leadership at big-tech comp, fourth distinct Salesforce req tracked.",
+    "notes": "Reposted '6 hours ago' on Built In as of 22 Sep (req JR317504); very fresh.",
+    "verified": false,
+    "status": "likely_live",
+    "last_checked": "2026-09-22",
+    "category": "saas-ai",
+    "id": 138
   }
 ]
