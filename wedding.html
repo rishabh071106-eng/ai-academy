@@ -4,34 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smatav &amp; Priyanka &mdash; Wedding Invitation</title>
-<meta name="description" content="Smatav and Priyanka, together with their families, request the pleasure of your company. Saturday, 21 November 2026, Udaipur.">
-<meta property="og:title" content="Smatav &amp; Priyanka are getting married">
-<meta property="og:description" content="Saturday, 21 November 2026 &middot; Udaipur. Join us as we begin our forever.">
+<meta name="description" content="Smatav weds Priyanka. Ladies Sangeet on Sunday 29 November 2026 and the Dham on Friday 4 December 2026, at Lions Club Bhawan, Dharamshala.">
+<meta property="og:title" content="Smatav weds Priyanka">
+<meta property="og:description" content="Ladies Sangeet &middot; 29 November 2026. The Dham &middot; 4 December 2026. Lions Club Bhawan, Dharamshala.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#3a0a14">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
 <!--
   ══════════════════════════════════════════════════════════════════
    WEDDING_DETAILS
 
-   Every date, time and venue on this card comes from the WEDDING
-   object in the script at the bottom of this file. Edit it there and
-   the whole card follows: weekday names, the big date, the function
-   list and the countdown are all derived from the ISO dates, so the
-   weekday can never disagree with the date.
-
-   The text in the HTML below is the no-JavaScript fallback; if you
-   change the config, update those literals to match.
-
-   Names ......... search for  class="names"
-   Venue ......... search for  class="venue"
-   RSVP .......... search for  class="rsvp"
-
-   Dates, venue and RSVP contacts are PLACEHOLDERS.
+   Every date on this card comes from the WEDDING object in the
+   script at the bottom. Weekday names and the countdown are derived
+   from the ISO dates, so a weekday can never disagree with its date.
+   The text in the HTML is the no-JavaScript fallback — if you change
+   the config, update those literals to match.
   ══════════════════════════════════════════════════════════════════
 -->
 
@@ -42,14 +33,13 @@
     --card:#fbf6ea;
     --card-2:#f4ead6;
     --maroon:#6b1226;
-    --maroon-deep:#47091a;
     --ink:#4a2a1e;
     --gold:#a8822c;
     --gold-deep:#856618;
     --gold-pale:#d8c48a;
     --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
     --script:'Great Vibes',cursive;
-    --deva:'Tiro Devanagari Sanskrit',serif;
+    --deva:'Tiro Devanagari Hindi','Noto Serif Devanagari',serif;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -68,15 +58,14 @@
     text-rendering:optimizeLegibility;
   }
 
-  /* ── the card ─────────────────────────────────────────── */
   .card{
     position:relative;
-    max-width:800px;
+    max-width:720px;
     margin:0 auto;
     background:
       radial-gradient(ellipse at 50% 0%,#fffdf6 0%,transparent 55%),
       linear-gradient(170deg,var(--card) 0%,var(--card-2) 100%);
-    padding:clamp(30px,6vw,68px) clamp(20px,6vw,76px) clamp(34px,6vw,60px);
+    padding:clamp(30px,6vw,64px) clamp(20px,5.5vw,66px) clamp(32px,5.5vw,56px);
     text-align:center;
     box-shadow:
       0 0 0 1px rgba(168,130,44,.55),
@@ -87,171 +76,244 @@
   }
   @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
-  /* corner flourishes */
-  .corner{position:absolute;width:clamp(30px,6vw,52px);height:clamp(30px,6vw,52px);opacity:.85;pointer-events:none}
+  .corner{position:absolute;width:clamp(30px,6vw,50px);height:clamp(30px,6vw,50px);opacity:.85;pointer-events:none}
   .corner svg{width:100%;height:100%;display:block}
   .corner.tl{top:12px;left:12px}
   .corner.tr{top:12px;right:12px;transform:scaleX(-1)}
   .corner.bl{bottom:12px;left:12px;transform:scaleY(-1)}
   .corner.br{bottom:12px;right:12px;transform:scale(-1)}
 
-  /* ── Ganesh ji ────────────────────────────────────────── */
-  .ganesha{
-    width:clamp(112px,21vw,158px);
-    margin:0 auto clamp(10px,2vw,14px);
-  }
+  .ganesha{width:clamp(108px,20vw,150px);margin:0 auto clamp(10px,2vw,14px)}
   .ganesha svg{width:100%;height:auto;display:block}
+
+  .hi{font-family:var(--deva)}
 
   .invocation{
     font-family:var(--deva);
-    font-size:clamp(.92rem,2.7vw,1.18rem);
-    line-height:1.7;
-    color:var(--maroon);
-    letter-spacing:.01em;
-    margin-bottom:.3rem;
+    font-size:clamp(.95rem,2.7vw,1.15rem);
+    letter-spacing:.06em;
+    color:var(--gold-deep);
+    margin-bottom:.9rem;
   }
-  .invocation-en{
-    font-size:clamp(.72rem,1.9vw,.82rem);
+  .shloka{
+    font-family:var(--deva);
+    font-size:clamp(.88rem,2.4vw,1.02rem);
+    line-height:1.95;
+    color:var(--maroon);
+    max-width:32ch;
+    margin:0 auto;
+  }
+  .shloka-en{
+    font-size:clamp(.82rem,2.1vw,.94rem);
     font-style:italic;
-    font-weight:400;
+    line-height:1.6;
     color:var(--ink);
-    opacity:.75;
-    letter-spacing:.03em;
+    opacity:.78;
+    max-width:42ch;
+    margin:.55rem auto 0;
   }
 
-  /* ── ornamental rule ──────────────────────────────────── */
+  .shubh{
+    font-family:var(--deva);
+    font-size:clamp(1.05rem,3.2vw,1.3rem);
+    letter-spacing:.1em;
+    color:var(--maroon);
+    margin-top:clamp(18px,3.5vw,26px);
+  }
+
   .rule{
     display:flex;align-items:center;justify-content:center;gap:12px;
-    margin:clamp(20px,4vw,32px) auto;
-    max-width:380px;
+    margin:clamp(20px,4vw,30px) auto;
+    max-width:360px;
   }
   .rule .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
   .rule .orn{width:34px;height:14px;flex:none}
   .rule .orn svg{width:100%;height:100%;display:block}
 
-  /* ── type ─────────────────────────────────────────────── */
   .label{
-    font-size:clamp(.64rem,1.8vw,.76rem);
-    letter-spacing:.4em;
+    font-size:clamp(.62rem,1.75vw,.73rem);
+    letter-spacing:.34em;
     text-transform:uppercase;
     font-weight:600;
     color:var(--gold-deep);
-    margin-bottom:.55rem;
   }
-
-  .families{
-    font-size:clamp(1rem,2.7vw,1.22rem);
-    font-style:italic;
-    font-weight:300;
+  .label-hi{
+    font-family:var(--deva);
+    font-size:clamp(.78rem,2vw,.88rem);
     color:var(--ink);
-    margin-bottom:clamp(12px,2.5vw,18px);
+    opacity:.8;
+    margin-top:.3rem;
   }
 
-  .names{margin:0}
+  .names{margin:clamp(14px,2.5vw,20px) 0 0}
   .names .n{
     display:block;
     font-family:var(--script);
-    font-weight:400;
-    font-size:clamp(3.1rem,13.5vw,5.9rem);
+    font-size:clamp(3rem,13vw,5.4rem);
     line-height:1.04;
     padding:.04em 0;
     color:var(--maroon);
   }
-  .names .amp{
+  .names .n-hi{
     display:block;
-    font-family:var(--serif);
-    font-style:italic;
-    font-size:clamp(1.3rem,4vw,1.8rem);
-    color:var(--gold-deep);
-    margin:-.1em 0;
+    font-family:var(--deva);
+    font-size:clamp(.88rem,2.3vw,1rem);
+    color:var(--ink);
+    opacity:.8;
+    margin-top:.15rem;
   }
+  .weds{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    margin:clamp(12px,2.2vw,18px) 0;
+    font-style:italic;
+    font-size:clamp(1.15rem,3.2vw,1.45rem);
+    letter-spacing:.12em;
+    color:var(--gold-deep);
+  }
+  .weds::before,.weds::after{content:"";height:1px;width:46px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .weds::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .weds .hi{font-style:normal;font-size:.72em;letter-spacing:.03em}
 
-  .invite{
-    font-size:clamp(1.02rem,2.7vw,1.24rem);
+  .host{
+    font-size:clamp(1rem,2.6vw,1.18rem);
     font-weight:300;
-    line-height:1.85;
+    line-height:1.8;
     color:var(--ink);
     max-width:38ch;
-    margin:0 auto;
+    margin:clamp(16px,3vw,24px) auto 0;
+  }
+  .host-hi{
+    font-family:var(--deva);
+    font-size:clamp(.85rem,2.2vw,.95rem);
+    line-height:1.9;
+    color:var(--ink);
+    opacity:.8;
+    max-width:36ch;
+    margin:.6rem auto 0;
   }
 
-  /* ── date ─────────────────────────────────────────────── */
-  .date-bar{
-    display:flex;align-items:center;justify-content:center;
-    gap:clamp(12px,3.5vw,26px);
-    margin:clamp(22px,4vw,34px) auto clamp(4px,1vw,8px);
-    padding:clamp(13px,2.4vw,19px) 0;
-    border-top:1px solid rgba(168,130,44,.45);
-    border-bottom:1px solid rgba(168,130,44,.45);
-    max-width:470px;
+  /* ── the two occasions ── */
+  .events{
+    display:grid;
+    gap:clamp(12px,2.4vw,18px);
+    margin-top:clamp(6px,1.5vw,12px);
+    text-align:left;
   }
-  .date-bar .seg{
-    font-size:clamp(.6rem,1.9vw,.78rem);
+  .event{
+    display:grid;
+    grid-template-columns:clamp(84px,20vw,104px) 1fr;
+    border:1px solid rgba(168,130,44,.38);
+    background:rgba(255,255,255,.5);
+  }
+  .event .when{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:clamp(12px,2.2vw,16px) 8px;
+    border-right:1px solid rgba(168,130,44,.3);
+    background:rgba(168,130,44,.1);
+    text-align:center;
+  }
+  .event .d{
+    font-size:clamp(2.1rem,7vw,2.8rem);
+    line-height:1;
+    font-weight:500;
+    color:var(--maroon);
+    font-variant-numeric:tabular-nums;
+  }
+  .event .mo{
+    font-size:clamp(.55rem,1.6vw,.64rem);
     letter-spacing:.2em;
     text-transform:uppercase;
     font-weight:600;
-    color:var(--ink);
-    white-space:nowrap;
+    color:var(--gold-deep);
+    margin-top:.42rem;
   }
-  .date-bar .big{
-    font-size:clamp(2.5rem,9vw,3.7rem);
-    line-height:1;
+  .event .wk{
+    font-family:var(--deva);
+    font-size:clamp(.7rem,1.9vw,.8rem);
+    color:var(--ink);
+    opacity:.75;
+    margin-top:.2rem;
+  }
+  .event .body{padding:clamp(12px,2.4vw,17px)}
+  .event h3{
+    font-size:clamp(1.05rem,3vw,1.3rem);
+    font-weight:600;
+    line-height:1.2;
+    color:var(--maroon);
+  }
+  .event h3 .hi{font-weight:400;font-size:.74em;color:var(--gold-deep);margin-left:.5rem}
+  .event .desc{
+    font-style:italic;
+    font-size:clamp(.88rem,2.2vw,.98rem);
+    color:var(--ink);
+    opacity:.8;
+    margin-top:.2rem;
+  }
+  .event .desc .hi{display:block;font-style:normal;font-size:.94em;margin-top:.1rem}
+  .event .time{
+    font-size:clamp(.72rem,1.9vw,.8rem);
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--maroon);
+    margin-top:.65rem;
+    line-height:1.6;
+  }
+  .event .time .hi{
+    display:block;
+    font-family:var(--deva);
+    text-transform:none;
+    letter-spacing:0;
     font-weight:400;
-    color:var(--maroon);
-    white-space:nowrap;
-  }
-  .date-bar .big small{
-    display:block;
-    font-size:clamp(.55rem,1.7vw,.68rem);
-    letter-spacing:.32em;
-    text-transform:uppercase;
-    font-weight:600;
+    font-size:1.05em;
     color:var(--ink);
-    margin-top:.55rem;
+    opacity:.8;
   }
-  .date-bar .rule-v{width:1px;align-self:stretch;background:rgba(168,130,44,.4)}
 
+  /* ── venue ── */
+  .venue-label{margin-top:clamp(24px,4.5vw,34px)}
   .venue{
-    font-size:clamp(.98rem,2.5vw,1.14rem);
-    font-weight:300;
-    line-height:1.75;
-    color:var(--ink);
-    margin-top:clamp(13px,2.4vw,19px);
-  }
-  .venue strong{
-    display:block;
+    font-size:clamp(1.25rem,4vw,1.6rem);
     font-weight:600;
-    font-size:clamp(.82rem,2.1vw,.98rem);
-    letter-spacing:.14em;
-    text-transform:uppercase;
+    line-height:1.25;
     color:var(--maroon);
-    margin-bottom:.4rem;
+    margin-top:.6rem;
   }
+  .venue .hi{display:block;font-weight:400;font-size:.68em;color:var(--ink);opacity:.8;margin-top:.15rem}
+  .addr{
+    font-size:clamp(.95rem,2.4vw,1.06rem);
+    font-weight:300;
+    line-height:1.6;
+    color:var(--ink);
+    max-width:34ch;
+    margin:.65rem auto 0;
+  }
+  .addr .hi{display:block;font-size:.9em;line-height:1.85;opacity:.8;margin-top:.35rem}
 
-  /* ── countdown ────────────────────────────────────────── */
+  /* ── countdown ── */
   .countdown{
-    display:flex;justify-content:center;gap:clamp(7px,2vw,16px);
-    margin:clamp(24px,4.5vw,36px) auto 0;
+    display:flex;justify-content:center;gap:clamp(7px,2vw,15px);
+    margin:clamp(24px,4.5vw,34px) auto 0;
     flex-wrap:wrap;
   }
   .unit{
-    min-width:clamp(60px,14vw,80px);
-    padding:clamp(9px,1.8vw,13px) clamp(5px,1.4vw,9px);
+    min-width:clamp(58px,13.5vw,76px);
+    padding:clamp(9px,1.8vw,12px) clamp(5px,1.4vw,9px);
     border:1px solid rgba(168,130,44,.4);
     background:rgba(255,255,255,.45);
   }
   .unit b{
     display:block;
     font-weight:500;
-    font-size:clamp(1.4rem,5vw,1.9rem);
+    font-size:clamp(1.35rem,4.8vw,1.8rem);
     line-height:1;
     color:var(--maroon);
     font-variant-numeric:tabular-nums;
   }
   .unit span{
     display:block;
-    font-size:clamp(.5rem,1.5vw,.58rem);
-    letter-spacing:.24em;
+    font-size:clamp(.48rem,1.45vw,.56rem);
+    letter-spacing:.22em;
     text-transform:uppercase;
     font-weight:600;
     color:var(--ink);
@@ -259,76 +321,53 @@
     margin-top:.5rem;
   }
   .countdown-note{
-    margin:clamp(24px,4.5vw,36px) auto 0;
-    font-size:clamp(.95rem,2.4vw,1.1rem);
+    margin:clamp(24px,4.5vw,34px) auto 0;
+    font-size:clamp(.95rem,2.4vw,1.08rem);
     font-style:italic;
     font-weight:300;
     color:var(--ink);
   }
-
-  /* ── functions ────────────────────────────────────────── */
-  .events{
-    display:flex;flex-wrap:wrap;justify-content:center;
-    gap:clamp(11px,2.2vw,16px);
-    text-align:left;
-    margin-top:clamp(8px,1.8vw,14px);
-  }
-  .event{
-    flex:1 1 185px;
-    max-width:225px;
-    border:1px solid rgba(168,130,44,.38);
-    border-top:2px solid var(--gold);
-    background:rgba(255,255,255,.5);
-    padding:clamp(13px,2.2vw,17px);
-  }
-  .event h3{
-    font-weight:600;
-    font-size:clamp(.78rem,1.95vw,.88rem);
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:var(--maroon);
-    margin-bottom:.45rem;
-  }
-  .event p{
-    font-size:clamp(.94rem,2.2vw,1.02rem);
-    font-weight:300;
-    line-height:1.55;
-    color:var(--ink);
-  }
-  .event p em{display:block;font-style:italic;opacity:.8;margin-top:.3rem;font-size:.94em}
-
-  /* ── rsvp ─────────────────────────────────────────────── */
-  .rsvp{
-    margin-top:clamp(26px,4.5vw,40px);
-    font-size:clamp(.95rem,2.4vw,1.08rem);
-    font-weight:300;
-    line-height:1.85;
-    color:var(--ink);
-  }
-  .rsvp a{color:var(--maroon);text-decoration:none;border-bottom:1px solid rgba(168,130,44,.55)}
-  .rsvp a:hover,.rsvp a:focus{border-bottom-color:var(--maroon)}
 
   .blessing{
-    font-family:var(--script);
-    font-size:clamp(1.6rem,5.2vw,2.2rem);
+    font-family:var(--deva);
+    font-size:clamp(1rem,2.8vw,1.18rem);
+    line-height:1.75;
     color:var(--maroon);
-    margin-top:clamp(24px,4.5vw,38px);
-    line-height:1.45;
+    margin-top:clamp(24px,4.5vw,36px);
   }
-  .blessing small{
-    display:block;
-    font-family:var(--serif);
+  .blessing-en{
     font-style:italic;
-    font-size:clamp(.82rem,2vw,.94rem);
+    font-size:clamp(1rem,2.6vw,1.14rem);
     color:var(--ink);
-    opacity:.8;
-    margin-top:.65rem;
+    opacity:.82;
+    margin-top:.35rem;
+  }
+  .compliments{
+    margin-top:clamp(20px,3.5vw,28px);
+    font-size:clamp(.62rem,1.75vw,.72rem);
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--ink);
+    opacity:.75;
+    line-height:1.9;
+  }
+  .compliments b{
+    display:block;
+    font-family:var(--deva);
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:400;
+    font-size:1.4em;
+    color:var(--maroon);
+    opacity:1;
+    margin-top:.2rem;
   }
 
   .print-hint{
     text-align:center;
     margin:clamp(16px,3vw,24px) auto 0;
-    font-size:.64rem;
+    font-size:.63rem;
     letter-spacing:.3em;
     text-transform:uppercase;
     font-weight:600;
@@ -351,17 +390,17 @@
   }
 
   @media (max-width:420px){
-    .date-bar{gap:9px}
     .corner{display:none}
+    .event{grid-template-columns:76px 1fr}
   }
 
-  /* ── print ────────────────────────────────────────────── */
   @media print{
     body{background:#fff;padding:0}
     .print-hint,.countdown{display:none}
     .card{box-shadow:0 0 0 1px var(--gold),0 0 0 6px #fff,0 0 0 7px rgba(168,130,44,.5);max-width:100%}
     .event{break-inside:avoid}
     .reveal{opacity:1;transform:none}
+    @page{size:A4;margin:10mm}
   }
 </style>
 </head>
@@ -374,7 +413,6 @@
   <span class="corner bl" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none" stroke="#a8822c" stroke-width="1.2" stroke-linecap="round"><path d="M3 49V15C3 8 8 3 15 3h34"/><path d="M9 49V18c0-5 4-9 9-9h31" opacity=".5"/><path d="M15 15c0-4 3-7 7-7M15 15c-4 0-7 3-7 7"/><circle cx="15" cy="15" r="2.6"/><path d="M22 8c5 0 9-2 11-5M8 22c0 5-2 9-5 11" opacity=".7"/></svg></span>
   <span class="corner br" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none" stroke="#a8822c" stroke-width="1.2" stroke-linecap="round"><path d="M3 49V15C3 8 8 3 15 3h34"/><path d="M9 49V18c0-5 4-9 9-9h31" opacity=".5"/><path d="M15 15c0-4 3-7 7-7M15 15c-4 0-7 3-7 7"/><circle cx="15" cy="15" r="2.6"/><path d="M22 8c5 0 9-2 11-5M8 22c0 5-2 9-5 11" opacity=".7"/></svg></span>
 
-  <!-- ── Ganesh ji ── -->
   <div class="ganesha" role="img" aria-label="Line drawing of Lord Ganesha, seated with hands joined in namaste">
     <svg viewBox="0 0 240 282" fill="none" stroke="#a8822c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="120" cy="136" r="122" stroke-width="1" opacity=".22"/>
@@ -425,7 +463,10 @@
   </div>
 
   <p class="invocation">॥ श्री गणेशाय नमः ॥</p>
-  <p class="invocation-en">We begin with the blessings of Lord Ganesha</p>
+  <p class="shloka">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
+  <p class="shloka-en">O Lord of the curved trunk, radiant as a million suns &mdash; keep all our undertakings free of obstacles, always.</p>
+
+  <p class="shubh">॥ शुभ विवाह ॥</p>
 
   <div class="rule" aria-hidden="true">
     <span class="ln"></span>
@@ -433,43 +474,19 @@
     <span class="ln"></span>
   </div>
 
-  <p class="label">Save the Date</p>
-  <p class="families">Together with their families</p>
+  <p class="label">With the blessings of our elders</p>
+  <p class="label-hi">बड़ों के आशीर्वाद से</p>
 
   <h1 class="names">
     <span class="n">Smatav</span>
-    <span class="amp">and</span>
+    <span class="n-hi">चि. स्मतव</span>
+    <span class="weds">weds <span class="hi">एवं</span></span>
     <span class="n">Priyanka</span>
+    <span class="n-hi">सुश्री प्रियंका</span>
   </h1>
 
-  <div class="rule" aria-hidden="true">
-    <span class="ln"></span>
-    <span class="orn"><svg viewBox="0 0 34 14" fill="none" stroke="#a8822c" stroke-width="1.2" stroke-linecap="round"><path d="M17 2 C12 5 12 9 17 12 C22 9 22 5 17 2Z"/><path d="M8 7 C11 4 13 6 13 7 C13 8 11 10 8 7Z"/><path d="M26 7 C23 4 21 6 21 7 C21 8 23 10 26 7Z"/></svg></span>
-    <span class="ln"></span>
-  </div>
-
-  <p class="invite">request the pleasure of your company as they exchange vows and begin their forever.</p>
-
-  <div class="date-bar">
-    <span class="seg" data-ceremony-weekday>Saturday</span>
-    <span class="rule-v"></span>
-    <span class="big" data-ceremony-day>21<small data-ceremony-month>November</small></span>
-    <span class="rule-v"></span>
-    <span class="seg" data-ceremony-year>2026</span>
-  </div>
-
-  <p class="venue">
-    <strong>The Rose Garden Palace</strong>
-    Jaipur Road, Udaipur, Rajasthan<br>
-    <span data-ceremony-time>Wedding ceremony at 7:00 in the evening</span>
-  </p>
-
-  <div class="countdown" aria-label="Countdown to the wedding day">
-    <div class="unit"><b data-d>--</b><span>Days</span></div>
-    <div class="unit"><b data-h>--</b><span>Hours</span></div>
-    <div class="unit"><b data-m>--</b><span>Minutes</span></div>
-    <div class="unit"><b data-s>--</b><span>Seconds</span></div>
-  </div>
+  <p class="host">Our families would be honoured by your presence as the two of them begin their life together.</p>
+  <p class="host-hi">इस मंगल अवसर पर आप सपरिवार पधारकर वर-वधू को आशीर्वाद प्रदान करें।</p>
 
   <div class="rule reveal" aria-hidden="true">
     <span class="ln"></span>
@@ -478,26 +495,55 @@
   </div>
 
   <section class="reveal">
-    <h2 class="label">The Celebrations</h2>
     <div class="events" data-events>
-      <article class="event"><h3>Mehndi</h3><p>Thu 19 November<em>4:00 pm · Courtyard Lawn</em></p></article>
-      <article class="event"><h3>Haldi</h3><p>Fri 20 November<em>10:00 am · Poolside Terrace</em></p></article>
-      <article class="event"><h3>Sangeet</h3><p>Fri 20 November<em>7:30 pm · The Grand Ballroom</em></p></article>
-      <article class="event"><h3>Wedding</h3><p>Sat 21 November<em>7:00 pm · Rose Garden Mandap</em></p></article>
-      <article class="event"><h3>Reception</h3><p>Sun 22 November<em>8:00 pm · The Grand Ballroom</em></p></article>
+      <article class="event">
+        <div class="when">
+          <span class="d">29</span>
+          <span class="mo">November 2026</span>
+          <span class="wk hi">रविवार</span>
+        </div>
+        <div class="body">
+          <h3>Ladies Sangeet <span class="hi">महिला संगीत</span></h3>
+          <p class="desc">An evening of dholak, song and dancing.<span class="hi">ढोलक, गीत और नृत्य की सांझ</span></p>
+          <p class="time">Sunday &middot; 4:00 PM onwards<span class="hi">रविवार, २९ नवम्बर २०२६ · सायं ४:०० बजे से</span></p>
+        </div>
+      </article>
+      <article class="event">
+        <div class="when">
+          <span class="d">04</span>
+          <span class="mo">December 2026</span>
+          <span class="wk hi">शुक्रवार</span>
+        </div>
+        <div class="body">
+          <h3>The Dham <span class="hi">धाम</span></h3>
+          <p class="desc">The traditional Pahari feast, served to all.<span class="hi">पारम्परिक पहाड़ी भोज</span></p>
+          <p class="time">Friday &middot; 12:00 noon &ndash; 4:00 PM<span class="hi">शुक्रवार, ०४ दिसम्बर २०२६ · दोपहर १२:०० से सायं ४:०० बजे तक</span></p>
+        </div>
+      </article>
     </div>
   </section>
 
-  <p class="rsvp reveal">
-    <span class="label" style="display:block;margin-bottom:.6rem">RSVP</span>
-    Kindly confirm your presence by <strong style="font-weight:600;color:var(--maroon)">31 October 2026</strong><br>
-    <a href="tel:+910000000000">+91 00000 00000</a> &nbsp;&middot;&nbsp; <a href="mailto:hello@example.com">hello@example.com</a>
+  <p class="label venue-label">Both occasions at</p>
+  <p class="label-hi">दोनों कार्यक्रम स्थल</p>
+  <p class="venue">Lions Club Bhawan<span class="hi">लायंस क्लब भवन</span></p>
+  <p class="addr">
+    Chilgari, Shamnagar Road<br>
+    Dharamshala, District Kangra<br>
+    Himachal Pradesh 176215
+    <span class="hi">चिलगड़ी, शामनगर रोड, धर्मशाला<br>ज़िला काँगड़ा, हिमाचल प्रदेश — १७६२१५</span>
   </p>
 
-  <p class="blessing reveal">
-    Two souls, one journey
-    <small>Your presence and blessings are the greatest gift we could ask for.</small>
-  </p>
+  <div class="countdown" aria-label="Countdown to the first celebration">
+    <div class="unit"><b data-d>--</b><span>Days</span></div>
+    <div class="unit"><b data-h>--</b><span>Hours</span></div>
+    <div class="unit"><b data-m>--</b><span>Minutes</span></div>
+    <div class="unit"><b data-s>--</b><span>Seconds</span></div>
+  </div>
+
+  <p class="blessing reveal">आपकी उपस्थिति ही हमारा आशीर्वाद है</p>
+  <p class="blessing-en reveal">Your presence is our blessing.</p>
+
+  <p class="compliments reveal">With love, from both families<b>शुभाकांक्षी — दोनों परिवार</b></p>
 
 </main>
 
@@ -509,120 +555,134 @@
 
   /* ══════════════════════════════════════════════════════════════
      WEDDING_DETAILS — the single source of truth for every date.
-     Weekday names, the big date, the function list and the
-     countdown are all derived from these ISO dates, so a weekday
-     can never contradict its date.
+     English weekday names and the countdown are derived from the
+     ISO dates, so a weekday can never contradict its date. The
+     Devanagari lines are stored as written; if you change a date,
+     change its `whenHi` too.
      ══════════════════════════════════════════════════════════════ */
   var WEDDING = {
-    tz: '+05:30',                 // India Standard Time
-    ceremony: 'wedding',          // which function below is the main ceremony
-    ceremonyPhrase: 'Wedding ceremony at 7:00 in the evening',
+    tz: '+05:30',            /* India Standard Time */
+    countdownTo: 'sangeet',  /* which occasion the countdown runs to */
     events: [
-      { key:'mehndi',    name:'Mehndi',    date:'2026-11-19', time:'16:00', clock:'4:00 pm',  venue:'Courtyard Lawn' },
-      { key:'haldi',     name:'Haldi',     date:'2026-11-20', time:'10:00', clock:'10:00 am', venue:'Poolside Terrace' },
-      { key:'sangeet',   name:'Sangeet',   date:'2026-11-20', time:'19:30', clock:'7:30 pm',  venue:'The Grand Ballroom' },
-      { key:'wedding',   name:'Wedding',   date:'2026-11-21', time:'19:00', clock:'7:00 pm',  venue:'Rose Garden Mandap' },
-      { key:'reception', name:'Reception', date:'2026-11-22', time:'20:00', clock:'8:00 pm',  venue:'The Grand Ballroom' }
+      {
+        key: 'sangeet',
+        name: 'Ladies Sangeet', nameHi: 'महिला संगीत',
+        desc: 'An evening of dholak, song and dancing.', descHi: 'ढोलक, गीत और नृत्य की सांझ',
+        date: '2026-11-29', time: '16:00',
+        clock: '4:00 PM onwards',
+        whenHi: 'रविवार, २९ नवम्बर २०२६ · सायं ४:०० बजे से',
+        wkHi: 'रविवार'
+      },
+      {
+        key: 'dham',
+        name: 'The Dham', nameHi: 'धाम',
+        desc: 'The traditional Pahari feast, served to all.', descHi: 'पारम्परिक पहाड़ी भोज',
+        date: '2026-12-04', time: '12:00',
+        clock: '12:00 noon – 4:00 PM',
+        whenHi: 'शुक्रवार, ०४ दिसम्बर २०२६ · दोपहर १२:०० से सायं ४:०० बजे तक',
+        wkHi: 'शुक्रवार'
+      }
     ]
   };
 
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Parse 'YYYY-MM-DD' as a local calendar date (no UTC shift). */
   function calendarDate(iso){
     var b = String(iso).split('-');
     return new Date(+b[0], +b[1] - 1, +b[2]);
   }
-  /* Parse date + time in the wedding's own timezone. */
   function instant(ev){
     return new Date(ev.date + 'T' + ev.time + ':00' + WEDDING.tz);
   }
   function fmt(d, opts){
     try { return d.toLocaleDateString('en-GB', opts); } catch (e) { return ''; }
   }
-
-  var ceremony = null;
-  for (var i = 0; i < WEDDING.events.length; i++) {
-    if (WEDDING.events[i].key === WEDDING.ceremony) { ceremony = WEDDING.events[i]; }
+  function el(tag, cls, text){
+    var n = document.createElement(tag);
+    if (cls) { n.className = cls; }
+    if (text) { n.textContent = text; }
+    return n;
   }
 
-  /* ── the headline date, derived ── */
-  if (ceremony) {
-    var cd = calendarDate(ceremony.date);
-    var set = function(sel, text){
-      var el = document.querySelector(sel);
-      if (el && text) { el.textContent = text; }
-    };
-    set('[data-ceremony-weekday]', fmt(cd, { weekday: 'long' }));
-    set('[data-ceremony-month]',   fmt(cd, { month: 'long' }));
-    set('[data-ceremony-year]',    String(cd.getFullYear()));
-    var dayEl = document.querySelector('[data-ceremony-day]');
-    if (dayEl && dayEl.firstChild) { dayEl.firstChild.nodeValue = String(cd.getDate()); }
-    set('[data-ceremony-time]', WEDDING.ceremonyPhrase);
-  }
-
-  /* ── the function list, derived ── */
+  /* ── the occasions, derived ── */
   var wrap = document.querySelector('[data-events]');
   if (wrap && WEDDING.events.length) {
     var frag = document.createDocumentFragment();
+
     WEDDING.events.forEach(function(ev){
-      var when = fmt(calendarDate(ev.date), { weekday: 'short', day: 'numeric', month: 'long' });
+      var cd = calendarDate(ev.date);
 
-      var card = document.createElement('article');
-      card.className = 'event';
+      var when = el('div', 'when');
+      when.appendChild(el('span', 'd', ('0' + cd.getDate()).slice(-2)));
+      when.appendChild(el('span', 'mo', fmt(cd, { month: 'long', year: 'numeric' })));
+      when.appendChild(el('span', 'wk hi', ev.wkHi));
 
-      var h3 = document.createElement('h3');
-      h3.textContent = ev.name;
+      var h3 = el('h3', null, ev.name + ' ');
+      h3.appendChild(el('span', 'hi', ev.nameHi));
 
-      var p = document.createElement('p');
-      p.textContent = when;
-      var em = document.createElement('em');
-      em.textContent = ev.clock + ' · ' + ev.venue;
-      p.appendChild(em);
+      var desc = el('p', 'desc', ev.desc);
+      desc.appendChild(el('span', 'hi', ev.descHi));
 
-      card.appendChild(h3);
-      card.appendChild(p);
+      var time = el('p', 'time', fmt(cd, { weekday: 'long' }) + ' · ' + ev.clock);
+      time.appendChild(el('span', 'hi', ev.whenHi));
+
+      var body = el('div', 'body');
+      body.appendChild(h3);
+      body.appendChild(desc);
+      body.appendChild(time);
+
+      var card = el('article', 'event');
+      card.appendChild(when);
+      card.appendChild(body);
       frag.appendChild(card);
     });
+
     wrap.textContent = '';
     wrap.appendChild(frag);
   }
 
-  /* ── countdown ── */
+  /* ── countdown to the first occasion ── */
+  var target = null;
+  WEDDING.events.forEach(function(ev){
+    if (ev.key === WEDDING.countdownTo) { target = ev; }
+  });
+
   var box = document.querySelector('.countdown');
-  if (box && ceremony) {
-    var target = instant(ceremony).getTime();
+  if (box && target) {
+    var at = instant(target).getTime();
     var elD = box.querySelector('[data-d]'), elH = box.querySelector('[data-h]'),
         elM = box.querySelector('[data-m]'), elS = box.querySelector('[data-s]');
     var pad = function(n){ return String(n).padStart(2, '0'); };
     var timer = null;
 
     var replace = function(text){
-      var p = document.createElement('p');
-      p.className = 'countdown-note';
-      p.textContent = text;
+      var p = el('p', 'countdown-note', text);
       box.parentNode.replaceChild(p, box);
       if (timer) { clearInterval(timer); }
     };
 
+    var last = WEDDING.events[WEDDING.events.length - 1];
+    var lastEnd = instant(last).getTime() + 12 * 3600 * 1000;
+
     var tick = function(){
-      if (isNaN(target)) { replace(''); return; }
-      var diff = target - Date.now();
-      /* the day itself: the ceremony has begun */
-      if (diff <= 0 && diff > -12 * 3600 * 1000) {
-        replace('Today is the day — thank you for celebrating with us.');
+      if (isNaN(at)) { replace(''); return; }
+      var now = Date.now();
+      var diff = at - now;
+
+      if (diff > 0) {
+        var s = Math.floor(diff / 1000);
+        elD.textContent = Math.floor(s / 86400);
+        elH.textContent = pad(Math.floor(s / 3600) % 24);
+        elM.textContent = pad(Math.floor(s / 60) % 60);
+        elS.textContent = pad(s % 60);
         return;
       }
-      /* already past: no stale countdown, no wrong-looking numbers */
-      if (diff <= 0) {
-        replace('Married on ' + fmt(calendarDate(ceremony.date), { day: 'numeric', month: 'long', year: 'numeric' }) + '.');
+      /* the celebrations have begun, and run until the last occasion */
+      if (now < lastEnd) {
+        replace('The celebrations have begun — thank you for being with us.');
         return;
       }
-      var s = Math.floor(diff / 1000);
-      elD.textContent = Math.floor(s / 86400);
-      elH.textContent = pad(Math.floor(s / 3600) % 24);
-      elM.textContent = pad(Math.floor(s / 60) % 60);
-      elS.textContent = pad(s % 60);
+      replace('Celebrated in ' + fmt(calendarDate(target.date), { month: 'long', year: 'numeric' }) + '. Thank you for your blessings.');
     };
     tick();
     timer = setInterval(tick, 1000);
@@ -631,7 +691,7 @@
   /* ── reveal on scroll, with a failsafe so nothing stays hidden ── */
   var items = document.querySelectorAll('.reveal');
   var showAll = function(){
-    Array.prototype.forEach.call(items, function(el){ el.classList.add('in'); });
+    Array.prototype.forEach.call(items, function(n){ n.classList.add('in'); });
   };
   if (!('IntersectionObserver' in window) || reduced) {
     showAll();
@@ -641,7 +701,7 @@
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    Array.prototype.forEach.call(items, function(el){ io.observe(el); });
+    Array.prototype.forEach.call(items, function(n){ io.observe(n); });
     setTimeout(showAll, 4000);
   }
   window.addEventListener('beforeprint', showAll);
