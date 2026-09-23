@@ -83,7 +83,7 @@
   .corner.bl{bottom:12px;left:12px;transform:scaleY(-1)}
   .corner.br{bottom:12px;right:12px;transform:scale(-1)}
 
-  .ganesha{width:clamp(108px,20vw,150px);margin:0 auto clamp(10px,2vw,14px)}
+  .ganesha{width:clamp(136px,25vw,184px);margin:0 auto clamp(6px,1.4vw,10px)}
   .ganesha svg{width:100%;height:auto;display:block}
 
   .hi{font-family:var(--deva)}
@@ -413,52 +413,172 @@
   <span class="corner bl" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none" stroke="#a8822c" stroke-width="1.2" stroke-linecap="round"><path d="M3 49V15C3 8 8 3 15 3h34"/><path d="M9 49V18c0-5 4-9 9-9h31" opacity=".5"/><path d="M15 15c0-4 3-7 7-7M15 15c-4 0-7 3-7 7"/><circle cx="15" cy="15" r="2.6"/><path d="M22 8c5 0 9-2 11-5M8 22c0 5-2 9-5 11" opacity=".7"/></svg></span>
   <span class="corner br" aria-hidden="true"><svg viewBox="0 0 52 52" fill="none" stroke="#a8822c" stroke-width="1.2" stroke-linecap="round"><path d="M3 49V15C3 8 8 3 15 3h34"/><path d="M9 49V18c0-5 4-9 9-9h31" opacity=".5"/><path d="M15 15c0-4 3-7 7-7M15 15c-4 0-7 3-7 7"/><circle cx="15" cy="15" r="2.6"/><path d="M22 8c5 0 9-2 11-5M8 22c0 5-2 9-5 11" opacity=".7"/></svg></span>
 
-  <div class="ganesha" role="img" aria-label="Line drawing of Lord Ganesha, seated with hands joined in namaste">
-    <svg viewBox="0 0 240 282" fill="none" stroke="#a8822c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="120" cy="136" r="122" stroke-width="1" opacity=".22"/>
-      <circle cx="120" cy="136" r="113" stroke-width="1" opacity=".4" stroke-dasharray="1.5 9"/>
-      <g id="gj-ear">
-        <path d="M84 92 C68 82 50 84 41 96 C31 110 34 132 48 143 C58 151 72 150 80 140"/>
-        <path d="M81 102 C68 95 55 97 49 107 C42 119 47 133 58 139" stroke-width="1.1" opacity=".55"/>
+  <div class="ganesha" role="img" aria-label="Illustration of Lord Ganesha, seated on a lotus with a crown, four arms holding a lotus, an ankusha and a bowl of modaks, one hand raised in blessing, with his mushak beside him">
+    <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="gj-skin" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F2A25E"/><stop offset="1" stop-color="#DD7A32"/>
+        </linearGradient>
+        <linearGradient id="gj-gold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F6DC94"/><stop offset="1" stop-color="#D2A233"/>
+        </linearGradient>
+        <linearGradient id="gj-cloth" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F8D45E"/><stop offset="1" stop-color="#E8A92C"/>
+        </linearGradient>
+      </defs>
+
+      <g stroke="#7A3B10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <!-- halo -->
+        <g fill="none" stroke="#C9A227">
+          <circle cx="200" cy="212" r="182" stroke-width="2" opacity=".45"/>
+          <circle cx="200" cy="212" r="171" stroke-width="2" opacity=".6" stroke-dasharray="2 11"/>
+        </g>
+
+        <!-- lotus seat -->
+        <g fill="#F0A9B4">
+          <path d="M200 408 C178 420 178 452 200 468 C222 452 222 420 200 408Z"/>
+          <path d="M158 412 C134 424 134 452 158 465 C178 452 180 424 158 412Z"/>
+          <path d="M242 412 C266 424 266 452 242 465 C222 452 220 424 242 412Z"/>
+          <path d="M116 418 C94 429 94 452 116 463 C134 452 136 429 116 418Z" fill="#E68E9C"/>
+          <path d="M284 418 C306 429 306 452 284 463 C266 452 264 429 284 418Z" fill="#E68E9C"/>
+        </g>
+        <path d="M96 460 C140 474 260 474 304 460" fill="none"/>
+
+        <!-- mushak -->
+        <g fill="#9E9A93" stroke-width="2.5">
+          <ellipse cx="326" cy="438" rx="21" ry="14"/>
+          <circle cx="307" cy="432" r="10"/>
+          <ellipse cx="305" cy="423" rx="6" ry="7" fill="#C9C4BC"/>
+          <path d="M347 436 C359 432 361 422 353 418" fill="none"/>
+          <circle cx="301" cy="432" r="2" fill="#4A2408" stroke="none"/>
+        </g>
+
+        <!-- folded legs -->
+        <path d="M106 400 C112 378 150 368 178 382 C190 388 210 388 222 382 C250 368 288 378 294 400 C300 420 282 432 252 436 C216 441 184 441 148 436 C118 432 100 420 106 400Z" fill="url(#gj-cloth)"/>
+        <path d="M114 428 C158 440 242 440 286 428" fill="none" stroke="#C1272D" stroke-width="7"/>
+        <g fill="none" stroke="#C08A1E" stroke-width="2">
+          <path d="M152 380 C146 396 148 414 154 430"/>
+          <path d="M200 386 C198 400 198 416 200 432"/>
+          <path d="M248 380 C254 396 252 414 246 430"/>
+        </g>
+
+        <!-- torso and belly -->
+        <path d="M152 244 C164 226 236 226 248 244 C274 266 282 322 264 354 C250 382 222 394 200 394 C178 394 150 382 136 354 C118 322 126 266 152 244Z" fill="url(#gj-skin)"/>
+        <path d="M194 348 C198 354 202 354 206 348" fill="none" stroke="#B4661F" stroke-width="3"/>
+
+        <!-- snake belt -->
+        <path d="M124 338 C158 360 242 360 276 338" fill="none" stroke="#2E7D53" stroke-width="11"/>
+        <path d="M124 338 C158 360 242 360 276 338" fill="none" stroke="#5FAE7C" stroke-width="4"/>
+
+        <!-- necklaces -->
+        <g fill="none" stroke="url(#gj-gold)" stroke-width="6">
+          <path d="M166 248 C180 274 220 274 234 248"/>
+          <path d="M156 252 C174 296 226 296 244 252"/>
+        </g>
+        <circle cx="200" cy="296" r="9" fill="#C1272D"/>
+
+        <!-- ears -->
+        <g fill="#DD7A32">
+          <path d="M142 122 C108 102 62 114 50 146 C37 180 53 220 88 234 C110 242 136 232 144 210"/>
+          <path d="M258 122 C292 102 338 114 350 146 C363 180 347 220 312 234 C290 242 264 232 256 210"/>
+        </g>
+        <g fill="#C4631F" stroke-width="2">
+          <path d="M136 144 C112 131 80 140 72 163 C62 189 76 213 100 221"/>
+          <path d="M264 144 C288 131 320 140 328 163 C338 189 324 213 300 221"/>
+        </g>
+
+        <!-- head -->
+        <path d="M132 176 C130 122 160 94 200 94 C240 94 270 122 268 176 C266 216 244 244 200 244 C156 244 134 216 132 176Z" fill="url(#gj-skin)"/>
+
+        <!-- face -->
+        <path d="M200 126 C193 138 193 152 200 160 C207 152 207 138 200 126Z" fill="#C1272D" stroke-width="2"/>
+        <path d="M154 190 C161 178 179 178 186 190 C179 200 161 200 154 190Z" fill="#FFF8E7" stroke-width="2.5"/>
+        <path d="M214 190 C221 178 239 178 246 190 C239 200 221 200 214 190Z" fill="#FFF8E7" stroke-width="2.5"/>
+        <circle cx="170" cy="189" r="5" fill="#4A2408" stroke="none"/>
+        <circle cx="230" cy="189" r="5" fill="#4A2408" stroke="none"/>
+        <g fill="none" stroke-width="3">
+          <path d="M152 176 C162 168 180 168 188 175"/>
+          <path d="M212 175 C220 168 238 168 248 176"/>
+        </g>
+
+        <!-- crown -->
+        <path d="M158 100 C158 58 176 28 200 20 C224 28 242 58 242 100Z" fill="url(#gj-gold)"/>
+        <path d="M170 98 C170 64 184 42 200 34 C216 42 230 64 230 98Z" fill="#F6DC94" stroke-width="2"/>
+        <circle cx="200" cy="70" r="10" fill="#C1272D"/>
+        <path d="M200 20 L200 10" fill="none" stroke="#B8860B" stroke-width="4"/>
+        <circle cx="200" cy="7" r="6" fill="#C1272D"/>
+        <path d="M144 106 C160 92 240 92 256 106 C240 118 160 118 144 106Z" fill="url(#gj-gold)"/>
+        <circle cx="170" cy="105" r="5" fill="#2E7D53"/>
+        <circle cx="230" cy="105" r="5" fill="#2E7D53"/>
+        <circle cx="200" cy="105" r="5" fill="#C1272D"/>
+
+        <!-- arms, in front of body and ears -->
+        <g fill="none" stroke-linecap="round">
+          <path d="M170 254 C132 248 102 256 84 274" stroke="#7A3B10" stroke-width="27"/>
+          <path d="M170 254 C132 248 102 256 84 274" stroke="url(#gj-skin)" stroke-width="21"/>
+          <path d="M230 254 C268 248 298 256 316 274" stroke="#7A3B10" stroke-width="27"/>
+          <path d="M230 254 C268 248 298 256 316 274" stroke="url(#gj-skin)" stroke-width="21"/>
+          <path d="M162 288 C126 302 104 328 106 356" stroke="#7A3B10" stroke-width="27"/>
+          <path d="M162 288 C126 302 104 328 106 356" stroke="url(#gj-skin)" stroke-width="21"/>
+          <path d="M238 288 C274 302 296 328 294 356" stroke="#7A3B10" stroke-width="27"/>
+          <path d="M238 288 C274 302 296 328 294 356" stroke="url(#gj-skin)" stroke-width="21"/>
+        </g>
+
+        <!-- armlets -->
+        <g fill="none" stroke="url(#gj-gold)" stroke-width="8">
+          <path d="M132 250 C126 254 122 258 119 263"/>
+          <path d="M268 250 C274 254 278 258 281 263"/>
+          <path d="M133 300 C129 305 126 310 124 315"/>
+          <path d="M267 300 C271 305 274 310 276 315"/>
+        </g>
+
+        <!-- lower right hand, abhaya mudra -->
+        <ellipse cx="294" cy="362" rx="16" ry="19" fill="url(#gj-skin)"/>
+        <g fill="none" stroke="#B4661F" stroke-width="2.5">
+          <path d="M286 352 L285 341"/><path d="M294 350 L294 338"/><path d="M302 352 L304 342"/>
+        </g>
+
+        <!-- lower left hand with modaks -->
+        <ellipse cx="106" cy="362" rx="15" ry="16" fill="url(#gj-skin)"/>
+        <path d="M86 358 C86 347 126 347 126 358 C126 372 113 379 106 379 C99 379 86 372 86 358Z" fill="url(#gj-gold)"/>
+        <g fill="#F6DC94" stroke-width="2">
+          <circle cx="97" cy="353" r="7"/><circle cx="115" cy="353" r="7"/><circle cx="106" cy="344" r="7"/>
+        </g>
+
+        <!-- upper left hand with lotus -->
+        <ellipse cx="80" cy="280" rx="14" ry="15" fill="url(#gj-skin)"/>
+        <g fill="#F0A9B4">
+          <path d="M80 268 C66 256 64 238 80 228 C96 238 94 256 80 268Z"/>
+          <path d="M80 266 C64 262 52 250 58 236 C74 240 82 252 80 266Z"/>
+          <path d="M80 266 C96 262 108 250 102 236 C86 240 78 252 80 266Z"/>
+        </g>
+
+        <!-- upper right hand with ankusha -->
+        <ellipse cx="320" cy="280" rx="14" ry="15" fill="url(#gj-skin)"/>
+        <path d="M320 272 L320 222" fill="none" stroke="#B8860B" stroke-width="7"/>
+        <path d="M320 224 C320 210 306 206 302 217" fill="none" stroke="url(#gj-gold)" stroke-width="8"/>
+
+        <!-- tusks -->
+        <path d="M166 238 C156 254 154 272 160 286 C168 278 174 254 178 240Z" fill="#FFF8E7" stroke-width="2.5"/>
+        <path d="M234 238 C242 250 245 262 243 272 C237 264 230 248 226 240Z" fill="#FFF8E7" stroke-width="2.5"/>
+
+        <!-- trunk -->
+        <g fill="none" stroke-linecap="round">
+          <path d="M200 192 C210 228 209 258 196 278" stroke="#7A3B10" stroke-width="38"/>
+          <path d="M196 278 C185 298 161 307 146 298" stroke="#7A3B10" stroke-width="30"/>
+          <path d="M146 298 C133 290 136 275 148 276" stroke="#7A3B10" stroke-width="22"/>
+          <path d="M200 192 C210 228 209 258 196 278" stroke="url(#gj-skin)" stroke-width="32"/>
+          <path d="M196 278 C185 298 161 307 146 298" stroke="url(#gj-skin)" stroke-width="24"/>
+          <path d="M146 298 C133 290 136 275 148 276" stroke="#E08B41" stroke-width="16"/>
+        </g>
+        <g fill="none" stroke="#B4661F" stroke-width="2.5" opacity=".75">
+          <path d="M188 218 C198 220 210 218 214 214"/>
+          <path d="M188 240 C198 243 208 241 212 237"/>
+          <path d="M185 262 C194 266 203 264 207 260"/>
+        </g>
+
       </g>
-      <use href="#gj-ear" transform="translate(240,0) scale(-1,1)"/>
-      <path d="M100 74 C100 48 108 28 120 22 C132 28 140 48 140 74"/>
-      <path d="M107 72 C107 52 113 37 120 32 C127 37 133 52 133 72" stroke-width="1.2" opacity=".6"/>
-      <path d="M120 22 L120 12"/>
-      <circle cx="120" cy="8" r="4"/>
-      <path d="M92 77 C104 69 136 69 148 77"/>
-      <path d="M92 77 C104 84 136 84 148 77" opacity=".75"/>
-      <circle cx="99" cy="63" r="2.6" opacity=".75"/>
-      <circle cx="141" cy="63" r="2.6" opacity=".75"/>
-      <path d="M83 128 C81 96 97 70 120 70 C143 70 159 96 157 128 C155 148 142 162 120 162 C98 162 85 148 83 128"/>
-      <path d="M120 90 L120 101" stroke-width="1.5" opacity=".85"/>
-      <path d="M114 92 C114 99 117 104 120 105 C123 104 126 99 126 92" stroke-width="1.3" opacity=".6"/>
-      <path d="M98 119 C103 113 112 113 116 119" stroke-width="1.7"/>
-      <path d="M124 119 C128 113 137 113 142 119" stroke-width="1.7"/>
-      <circle cx="107" cy="120" r="1.7" fill="#a8822c" stroke="none"/>
-      <circle cx="133" cy="120" r="1.7" fill="#a8822c" stroke="none"/>
-      <path d="M93 174 C103 165 137 165 147 174"/>
-      <path d="M93 174 C84 198 84 224 96 238" opacity=".9"/>
-      <path d="M147 174 C156 198 156 224 144 238" opacity=".9"/>
-      <path d="M96 238 C110 244 130 244 144 238" opacity=".9"/>
-      <path d="M102 154 C97 159 96 165 99 170" stroke-width="1.7"/>
-      <path d="M138 154 C144 159 146 165 145 170" stroke-width="1.7" opacity=".85"/>
-      <path d="M120 130 C128 150 126 166 114 174 C102 182 88 178 87 169 C86 161 93 157 99 162"/>
-      <path d="M114 140 C118 155 117 166 111 172" stroke-width="1" opacity=".5"/>
-      <path d="M96 177 C83 187 76 202 80 212 C86 220 99 222 108 218"/>
-      <path d="M144 177 C157 187 164 202 160 212 C154 220 141 222 132 218"/>
-      <path d="M85 204 C89 207 92 209 96 210" stroke-width="1.1" opacity=".6"/>
-      <path d="M155 204 C151 207 148 209 144 210" stroke-width="1.1" opacity=".6"/>
-      <path d="M120 186 C111 193 107 205 107 218"/>
-      <path d="M120 186 C129 193 133 205 133 218"/>
-      <path d="M107 218 C112 224 128 224 133 218"/>
-      <path d="M120 189 L120 219" stroke-width="1" opacity=".45"/>
-      <path d="M120 242 C111 248 111 262 120 267 C129 262 129 248 120 242"/>
-      <path d="M100 244 C89 250 89 262 100 266 C109 262 110 250 100 244"/>
-      <path d="M80 247 C69 252 69 262 80 265 C88 262 89 252 80 247"/>
-      <path d="M140 244 C151 250 151 262 140 266 C131 262 130 250 140 244"/>
-      <path d="M160 247 C171 252 171 262 160 265 C152 262 151 252 160 247"/>
-      <path d="M58 266 C86 275 154 275 182 266" stroke-width="1.2" opacity=".7"/>
     </svg>
   </div>
 
