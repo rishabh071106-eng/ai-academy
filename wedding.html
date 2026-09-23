@@ -394,12 +394,37 @@
     .event{grid-template-columns:76px 1fr}
   }
 
+  /* ── print: two A4 sheets, the invitation then the details ── */
   @media print{
-    body{background:#fff;padding:0}
+    /* the dark page colour is set on <html>, which is what paints the print canvas */
+    html,body{background:#fff}
+    body{padding:0}
     .print-hint,.countdown{display:none}
-    .card{box-shadow:0 0 0 1px var(--gold),0 0 0 6px #fff,0 0 0 7px rgba(168,130,44,.5);max-width:100%}
-    .event{break-inside:avoid}
+    .card{
+      box-shadow:0 0 0 1px var(--gold),0 0 0 6px #fff,0 0 0 7px rgba(168,130,44,.5);
+      max-width:100%;
+      padding:34px 46px 28px;
+      animation:none;
+    }
     .reveal{opacity:1;transform:none}
+
+    /* sheet one has to hold the whole invitation face, so it runs tighter */
+    .ganesha{width:150px;margin-bottom:6px}
+    .shloka{margin-top:10px}
+    .shubh{margin-top:16px}
+    .rule{margin:18px auto}
+    .names .n{font-size:64px}
+    .names{margin-top:12px}
+    .host{margin-top:16px;max-width:46ch}
+    .host-hi{max-width:44ch}
+
+    /* sheet two: the occasions, the venue and the blessing */
+    .occasions{break-before:page;padding-top:4mm}
+    .occasions+.label{margin-top:26px}
+    .event{break-inside:avoid}
+    .blessing{margin-top:26px}
+    .compliments{margin-top:20px}
+
     @page{size:A4;margin:10mm}
   }
 </style>
@@ -614,7 +639,7 @@
     <span class="ln"></span>
   </div>
 
-  <section class="reveal">
+  <section class="reveal occasions">
     <div class="events" data-events>
       <article class="event">
         <div class="when">
