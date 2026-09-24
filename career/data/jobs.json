@@ -1695,10 +1695,12 @@
     "immediate_joiner": false,
     "fit_score": 7,
     "fit_reason": "Director owning debit-product GTM/CVP across 20+ issuing banks — payments product leadership at Mastercard, though more commercial/GTM-leaning than platform-building; Mumbai-based.",
-    "notes": "'Posted Today' via Muse on 12 Aug; original req on careers.mastercard.com (fetch blocked). Fifth distinct Mastercard role on the board.",
-    "verified": false,
+    "notes": "'Posted Today' via Muse on 12 Aug; original req on careers.mastercard.com (fetch blocked). Fifth distinct Mastercard role on the board. Re-bumped 'posted today' on Muse as of 24 Sep — still hiring.",
+    "verified": true,
     "category": "workday-banks",
-    "id": 111
+    "id": 111,
+    "status": "live",
+    "last_checked": "2026-09-24"
   },
   {
     "company": "American Express",
