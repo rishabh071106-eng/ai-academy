@@ -1,15 +1,20 @@
 """
-A devotional instrumental for the invitation film, synthesised from scratch:
-a tanpura drone, temple bells and a bansuri-like melody in Raga Yaman.
-Nothing here is sampled or copied — every sound is generated, so the track
-carries no third-party rights.
+Wedding music for the invitation film, synthesised from scratch.
+
+Shehnai lead over a dholak groove, with manjira, a tanpura bed and temple
+bells — the mangal-dhwani sound of a north Indian wedding procession.
+Bilawal (the major scale), 104 BPM, so it lifts rather than laments.
+Nothing is sampled: every sound is generated here, so the track carries no
+third-party rights.
 """
 import numpy as np
 from scipy.io import wavfile
 from scipy.signal import fftconvolve
 
 SR = 44100
-DUR = 42.2                      # matches the film exactly
+DUR = 42.2
+BPM = 104.0
+BEAT = 60.0 / BPM
 rng = np.random.default_rng(20261129)
 
 n_total = int(DUR * SR)
@@ -17,154 +22,232 @@ t_all = np.arange(n_total) / SR
 
 
 def place(buf, sig, t0):
-    """Mix sig into buf starting at t0 seconds, clipping at the end."""
     i = int(t0 * SR)
-    if i >= len(buf):
+    if i >= len(buf) or i < 0:
         return
     m = min(len(sig), len(buf) - i)
     buf[i:i + m] += sig[:m]
 
 
-def adsr(n, a, d, s, r, sus=0.7):
-    """Simple envelope; a/d/r in seconds, s the sustain level."""
-    a, d, r = int(a * SR), int(d * SR), int(r * SR)
-    s_len = max(0, n - a - d - r)
-    return np.concatenate([
-        np.linspace(0, 1, a, endpoint=False) ** 1.4,
-        np.linspace(1, sus, d, endpoint=False),
-        np.full(s_len, sus),
-        np.linspace(sus, 0, n - a - d - s_len) ** 1.2,
-    ])[:n]
+def env_ar(n, a, r, sus=1.0, curve=1.0):
+    a, r = int(a * SR), int(r * SR)
+    mid = max(0, n - a - r)
+    return np.concatenate([np.linspace(0, 1, a, endpoint=False) ** curve,
+                           np.full(mid, sus),
+                           np.linspace(sus, 0, n - a - mid) ** 1.3])[:n]
 
 
-# ── tanpura ───────────────────────────────────────────────────────────────
-# Additive, with the bright upper partials that give the jivari its shimmer.
-def tanpura_string(f, dur=5.2):
+# ── shehnai ───────────────────────────────────────────────────────────────
+# A double reed: far brighter than a flute, with strong formant peaks that
+# give it its nasal, carrying voice.
+FORMANTS = [(1100.0, 700.0, 1.00), (2400.0, 900.0, 0.62), (3600.0, 1100.0, 0.30)]
+
+
+def formant_gain(f):
+    g = 0.0
+    for fc, bw, amp in FORMANTS:
+        g += amp / (1.0 + ((f - fc) / bw) ** 2)
+    return g
+
+
+def shehnai(f, dur, prev=None, grace=None):
     n = int(dur * SR)
     t = np.arange(n) / SR
+
+    freq = np.full(n, float(f))
+    if grace:                                    # murki: a quick flick off a neighbour
+        g = min(n, int(0.055 * SR))
+        freq[:g] = np.linspace(grace, f, g)
+    elif prev:                                   # a short slur from the note before
+        g = min(n, int(0.035 * SR))
+        freq[:g] = np.linspace(prev, f, g)
+    vib = 1 + 0.006 * np.sin(2 * np.pi * 5.6 * t) * np.clip((t - 0.12) / 0.25, 0, 1)
+    phase = 2 * np.pi * np.cumsum(freq * vib) / SR
+
     out = np.zeros(n)
-    for k in range(1, 26):
-        # slight inharmonicity, as on a real string
-        fk = f * k * (1 + 0.00018 * k * k)
-        if fk > 11000:
+    for k in range(1, 34):
+        fk = f * k
+        if fk > 12000:
             break
-        amp = 1.0 / (k ** 0.78)
-        if 3 <= k <= 11:                      # the jivari buzz sits here
-            amp *= 1.45
-        decay = np.exp(-t * (0.55 + 0.30 * k))
-        phase = rng.uniform(0, 2 * np.pi)
-        out += amp * decay * np.sin(2 * np.pi * fk * t + phase)
-    out *= adsr(n, 0.004, 0.05, 0.0, 0.2, sus=0.85)
+        amp = (1.0 / k ** 0.62) * (0.30 + formant_gain(fk))
+        out += amp * np.sin(k * phase + rng.uniform(0, 0.6))
+
+    reed = rng.normal(0, 1, n)
+    reed = np.convolve(reed, np.ones(14) / 14, mode='same')      # keep it up in the reed band
+    out += reed * 0.05 * np.max(np.abs(out))
+
+    e = env_ar(n, 0.045, 0.085, sus=1.0, curve=0.75)
+    e *= 1 - 0.07 * np.clip((t - 0.2) / 0.6, 0, 1)               # slight breath decay
+    out *= e
     return out / (np.max(np.abs(out)) + 1e-9)
 
 
-SA = 261.63 / 2                               # Sa at C3
-drone = np.zeros(n_total)
-# the classic tanpura cycle: Pa, Sa, Sa, Sa an octave below
-cycle = [(SA * 3 / 4, 0.58), (SA, 0.72), (SA, 0.62), (SA / 2, 0.80)]
-strings = [(f, tanpura_string(f), g) for f, g in cycle]
-step, k = 0.94, 0
-t = 0.0
-while t < DUR:
-    f, sig, gain = strings[k % len(strings)]
-    place(drone, sig * gain, t)
-    t += step
-    k += 1
+# ── dholak, manjira, bell ────────────────────────────────────────────────
+def dholak_bass():
+    n = int(0.42 * SR)
+    t = np.arange(n) / SR
+    f = 132 * np.exp(-t * 22) + 74
+    body = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 7.5)
+    thump = np.convolve(rng.normal(0, 1, n), np.ones(40) / 40, mode='same') * np.exp(-t * 46) * 0.5
+    x = body + thump
+    return x / (np.max(np.abs(x)) + 1e-9)
 
-# ── temple bell ───────────────────────────────────────────────────────────
-def bell(f0=232.0, dur=7.0, amp=1.0):
+
+def dholak_tre():
+    n = int(0.22 * SR)
+    t = np.arange(n) / SR
+    body = (np.sin(2 * np.pi * 372 * t) + 0.5 * np.sin(2 * np.pi * 560 * t)) * np.exp(-t * 21)
+    click = np.convolve(rng.normal(0, 1, n), np.ones(5) / 5, mode='same') * np.exp(-t * 105) * 0.7
+    x = body + click
+    return x / (np.max(np.abs(x)) + 1e-9)
+
+
+def manjira():
+    n = int(0.55 * SR)
+    t = np.arange(n) / SR
+    x = np.zeros(n)
+    for r in (1.0, 1.62, 2.31, 3.17, 4.29, 5.71):
+        x += np.sin(2 * np.pi * 2650 * r * t + rng.uniform(0, 6.3)) * np.exp(-t * (5 + 2.4 * r))
+    x *= env_ar(n, 0.001, 0.06)
+    return x / (np.max(np.abs(x)) + 1e-9)
+
+
+def bell(f0=232.0, dur=6.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
-    partials = [(0.56, 1.00, 0.55), (1.00, 0.85, 0.62), (1.19, 0.55, 0.95),
-                (1.71, 0.40, 1.30), (2.00, 0.45, 1.05), (2.74, 0.25, 1.85),
-                (3.00, 0.20, 2.10), (3.76, 0.14, 2.60), (5.07, 0.09, 3.30)]
     out = np.zeros(n)
-    for ratio, a, dec in partials:
-        out += a * np.exp(-t * dec) * np.sin(2 * np.pi * f0 * ratio * t + rng.uniform(0, 6.28))
-    strike = np.exp(-t * 90) * rng.normal(0, 1, n) * 0.30   # the mallet itself
-    out = out + strike
-    out *= adsr(n, 0.002, 0.02, 0.0, 0.5, sus=0.9)
-    return amp * out / (np.max(np.abs(out)) + 1e-9)
+    for ratio, a, dec in [(0.56, 1.0, .55), (1.0, .85, .62), (1.19, .55, .95), (1.71, .40, 1.3),
+                          (2.0, .45, 1.05), (2.74, .25, 1.85), (3.0, .20, 2.1), (4.07, .11, 3.1)]:
+        out += a * np.exp(-t * dec) * np.sin(2 * np.pi * f0 * ratio * t + rng.uniform(0, 6.3))
+    out += np.exp(-t * 95) * rng.normal(0, 1, n) * 0.28
+    out *= env_ar(n, 0.002, 0.4)
+    return out / (np.max(np.abs(out)) + 1e-9)
 
 
-bells = np.zeros(n_total)
-for t0, a in [(0.15, 1.00), (9.2, 0.42), (23.4, 0.38), (36.8, 0.46)]:
-    place(bells, bell(amp=a), t0)
+BASS, TRE, MJ = dholak_bass(), dholak_tre(), manjira()
 
-# ── bansuri, Raga Yaman ───────────────────────────────────────────────────
-YAMAN = {'P.': 3 / 4, 'N.': 15 / 16, 'S': 1, 'R': 9 / 8, 'G': 5 / 4,
-         'M': 45 / 32, 'P': 3 / 2, 'D': 27 / 16, 'N': 15 / 8, "S'": 2}
-TONIC = 261.63
+# ── the tune: Raga Bilawal, four sixteen-beat phrases ─────────────────────
+SCALE = {'P.': 3/4, 'D.': 5/6, 'N.': 15/16, 'S': 1, 'R': 9/8, 'G': 5/4, 'M': 4/3,
+         'P': 3/2, 'D': 5/3, 'N': 15/8, "S'": 2, "R'": 9/4, "G'": 5/2}
+TONIC = 293.66          # Sa at D4 — shehnai sits bright
 
 PHRASE = [
-    (None, 3.0),
-    ('P.', 1.6), ('N.', 1.2), ('S', 2.4), (None, 0.5),
-    ('R', 1.2), ('G', 1.4), ('R', 0.8), ('S', 2.2), (None, 0.6),
-    ('G', 1.2), ('M', 1.4), ('P', 2.4), (None, 0.5),
-    ('M', 1.0), ('G', 1.2), ('R', 1.6), (None, 0.5),
-    ('P', 1.4), ('D', 1.2), ('N', 1.6), ("S'", 2.6), (None, 0.6),
-    ('N', 1.2), ('D', 1.2), ('P', 2.0), (None, 0.5),
-    ('G', 1.4), ('R', 1.4), ('S', 2.4),
+    # (note, beats, grace-note or None)
+    ('S', 1, None), ('R', 1, None), ('G', 2, 'M'),
+    ('G', 1, None), ('M', 1, None), ('G', 1, None), ('R', 1, None),
+    ('S', 1, None), ('R', 1, None), ('G', 1, None), ('P', 1, 'M'),
+    ('G', 2, None), ('R', 1, None), ('S', 1, None),
+
+    ('P', 1, None), ('D', 1, None), ('N', 2, "S'"),
+    ("S'", 2, None), ('N', 1, None), ('D', 1, None),
+    ('P', 1, None), ('M', 1, None), ('G', 1, None), ('M', 1, None),
+    ('P', 4, 'D'),
+
+    ("S'", 1, None), ('N', 1, None), ('D', 1, None), ('P', 1, None),
+    ('D', 1, None), ('N', 1, None), ("S'", 2, "R'"),
+    ('N', 1, None), ('D', 1, None), ('P', 1, None), ('M', 1, None),
+    ('G', 2, None), ('M', 2, None),
+
+    ('P', 1, None), ('M', 1, None), ('G', 1, None), ('R', 1, None),
+    ('G', 2, 'M'), ('R', 1, None), ('S', 1, None),
+    ('R', 1, None), ('G', 1, None), ('R', 1, None), ('S', 1, None),
+    ('S', 4, None),
 ]
 
+MEL_START = 4 * BEAT            # the groove and tune come in together after a pickup
 
-def flute(f, dur, prev_f=None):
+lead = np.zeros(n_total)
+# free pickup flourish over the opening bell
+t = 0.55
+for nm, d in [('P.', .38), ('S', .34), ('R', .30), ('G', .55)]:
+    f = TONIC * SCALE[nm]
+    place(lead, shehnai(f, d + 0.16) * 0.8, t)
+    t += d
+
+t, prev = MEL_START, None
+for nm, beats, grace in PHRASE:
+    f = TONIC * SCALE[nm]
+    gf = TONIC * SCALE[grace] if grace else None
+    place(lead, shehnai(f, beats * BEAT + 0.10, prev, gf), t)
+    prev = f
+    t += beats * BEAT
+MEL_END = t
+
+# ── groove ───────────────────────────────────────────────────────────────
+perc = np.zeros(n_total)
+bars = int(np.ceil((DUR - MEL_START) / (4 * BEAT)))
+KEHERWA = [(0.0, 'B', 1.0), (0.0, 'T', 0.5), (0.5, 'T', 0.6), (1.0, 'T', 0.75),
+           (1.5, 'B', 0.8), (2.0, 'B', 0.95), (2.5, 'T', 0.6), (3.0, 'T', 0.8), (3.5, 'T', 0.55)]
+for b in range(bars):
+    bar_t = MEL_START + b * 4 * BEAT
+    if bar_t > MEL_END + 0.1:
+        break
+    taper = 1.0 if bar_t < MEL_END - 4 * BEAT else 0.55      # ease off under the last note
+    for off, kind, amp in KEHERWA:
+        place(perc, (BASS if kind == 'B' else TRE) * amp * 0.9 * taper, bar_t + off * BEAT)
+    for off in (0.0, 2.0):
+        place(perc, MJ * 0.5 * taper, bar_t + off * BEAT)
+
+# ── tanpura bed and bells ────────────────────────────────────────────────
+def tanpura_string(f, dur=5.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
-    # meend: glide up from the previous note over the first 90 ms
-    freq = np.full(n, float(f))
-    if prev_f:
-        g = min(n, int(0.09 * SR))
-        freq[:g] = np.linspace(prev_f, f, g)
-    vib = 1 + 0.0035 * np.sin(2 * np.pi * 4.8 * t) * np.clip((t - 0.25) / 0.5, 0, 1)
-    phase = 2 * np.pi * np.cumsum(freq * vib) / SR
-    tone = (np.sin(phase) + 0.30 * np.sin(2 * phase) + 0.14 * np.sin(3 * phase)
-            + 0.05 * np.sin(4 * phase))
-    breath = rng.normal(0, 1, n)
-    breath = np.convolve(breath, np.ones(60) / 60, mode='same') * 0.16
-    env = adsr(n, 0.13, 0.18, 0.0, 0.30, sus=0.80)
-    return (tone + breath * env) * env
+    out = np.zeros(n)
+    for k in range(1, 22):
+        fk = f * k * (1 + 0.00018 * k * k)
+        if fk > 9000:
+            break
+        amp = (1.0 / k ** 0.85) * (1.35 if 3 <= k <= 9 else 1.0)
+        out += amp * np.exp(-t * (0.6 + 0.32 * k)) * np.sin(2 * np.pi * fk * t + rng.uniform(0, 6.3))
+    out *= env_ar(n, 0.004, 0.2, sus=0.9)
+    return out / (np.max(np.abs(out)) + 1e-9)
 
 
-melody = np.zeros(n_total)
-t, prev = 0.0, None
-for name, dur in PHRASE:
-    if name is None:
-        t += dur
-        prev = None
-        continue
-    f = TONIC * YAMAN[name]
-    place(melody, flute(f, dur + 0.25, prev), t)
-    prev = f
-    t += dur
+SA = TONIC / 2
+drone = np.zeros(n_total)
+cycle = [(SA * 3 / 4, .55), (SA, .70), (SA, .60), (SA / 2, .78)]
+strings = [(f, tanpura_string(f), g) for f, g in cycle]
+t, k = 0.0, 0
+while t < DUR:
+    f, sig, g = strings[k % 4]
+    place(drone, sig * g, t)
+    t += 1.02
+    k += 1
 
-# ── reverb, mix ───────────────────────────────────────────────────────────
-def reverb_ir(dur=2.4, seed=7):
-    r = np.random.default_rng(seed)
-    n = int(dur * SR)
-    tt = np.arange(n) / SR
-    ir = r.normal(0, 1, n) * np.exp(-tt * 2.6)
-    ir[:int(0.012 * SR)] = 0                      # pre-delay
-    return ir / np.sqrt(np.sum(ir ** 2))
+bells = np.zeros(n_total)
+for t0, a in [(0.05, 1.0), (MEL_START + 16 * BEAT, .30), (MEL_START + 32 * BEAT, .30), (MEL_END - 0.3, .55)]:
+    place(bells, bell() * a, t0)
 
-
+# ── mix ──────────────────────────────────────────────────────────────────
 def norm(x):
     return x / (np.max(np.abs(x)) + 1e-9)
 
 
-dry = norm(drone) * 0.26 + norm(bells) * 0.32 + norm(melody) * 0.48
+def reverb_ir(dur=1.5, seed=7):
+    r = np.random.default_rng(seed)
+    n = int(dur * SR)
+    tt = np.arange(n) / SR
+    ir = r.normal(0, 1, n) * np.exp(-tt * 4.2)
+    ir[:int(0.010 * SR)] = 0
+    return ir / np.sqrt(np.sum(ir ** 2))
+
+
+dry = norm(lead) * 0.50 + norm(perc) * 0.32 + norm(MJ.sum() * 0 + drone) * 0.17 + norm(bells) * 0.24
 wet_l = fftconvolve(dry, reverb_ir(seed=7))[:n_total]
 wet_r = fftconvolve(dry, reverb_ir(seed=23))[:n_total]
+left = norm(dry * 0.82 + norm(wet_l) * 0.18)
+right = norm(dry * 0.82 + norm(wet_r) * 0.18)
 
-left = norm(dry * 0.74 + norm(wet_l) * 0.26)
-right = norm(dry * 0.74 + norm(wet_r) * 0.26)
+env = np.clip(t_all / 0.5, 0, 1) * np.clip((DUR - t_all) / 2.0, 0, 1) ** 1.2
+stereo = np.stack([left * env, right * env], axis=1)
 
-fade_in = np.clip(t_all / 1.2, 0, 1)
-fade_out = np.clip((DUR - t_all) / 2.6, 0, 1) ** 1.3
-env = fade_in * fade_out
-stereo = np.stack([left * env, right * env], axis=1) * 0.89
+# gentle saturation: the drum transients alone were holding the peak down and
+# leaving the whole track quiet. A soft knee lifts the body without clipping.
+DRIVE = 1.9
+stereo = np.tanh(stereo * DRIVE) / np.tanh(DRIVE)
+stereo = stereo / (np.max(np.abs(stereo)) + 1e-9) * 0.90
 
 wavfile.write('music.wav', SR, (stereo * 32767).astype(np.int16))
-peak = np.max(np.abs(stereo))
-rms = np.sqrt(np.mean(stereo ** 2))
-print('music.wav  %.2fs  peak %.3f  rms %.3f (%.1f dBFS)' % (DUR, peak, rms, 20 * np.log10(rms)))
+print('music.wav  %.2fs  %.0f BPM  melody %.1f-%.1fs  peak %.3f  rms %.1f dBFS'
+      % (DUR, BPM, MEL_START, MEL_END, np.max(np.abs(stereo)),
+         20 * np.log10(np.sqrt(np.mean(stereo ** 2)))))
