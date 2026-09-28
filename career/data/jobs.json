@@ -15,7 +15,7 @@
     "category": "exec-search",
     "id": 1,
     "status": "live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Confidential leading payments company (via iimjobs)",
@@ -46,12 +46,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "Director-level lending-platform product leadership at a digital banking unit — closest match to the digital loan booking platform record.",
-    "notes": "Posted within ~1 day of search — act fast. URL is the filtered search page; pick the specific req there. Live-check 24 Aug: R-00277563 on jobs.natwestgroup.com shown 'posted 1 day ago' — actively re-bumped. 31 Aug check: R-00277563 still in NatWest Product & Proposition index. 8 Sep check: R-00277563 still posted on jobs.natwestgroup.com. 14 Sep check: re-bumped 'posted 1 day ago' on NatWest careers. 21 Sep check: re-bumped within 1-2 days on NatWest careers.",
+    "notes": "Live-check 28 Sep: fresh req R-00277563 (Broker Platform Lending Director, Bangalore/Gurugram) posted within days — still hiring.",
     "verified": true,
     "category": "workday-banks",
     "id": 3,
     "status": "live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "SAP Labs India",
@@ -68,8 +68,8 @@
     "verified": true,
     "category": "bigtech",
     "id": 4,
-    "status": "live",
-    "last_checked": "2026-09-21"
+    "status": "likely_live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Confidential (UPI/payments platform, via iimjobs)",
@@ -86,7 +86,7 @@
     "category": "exec-search",
     "id": 5,
     "status": "likely_live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Freshworks",
@@ -120,7 +120,7 @@
     "category": "bigtech",
     "id": 7,
     "status": "live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Visa",
@@ -137,8 +137,8 @@
     "verified": true,
     "category": "workday-banks",
     "id": 8,
-    "status": "live",
-    "last_checked": "2026-09-21"
+    "status": "likely_live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Salesforce",
@@ -150,12 +150,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Owns the AI Platform powering Einstein/Agentforce — near-exact overlap with multi-agent LLM/RAG platform work at enterprise scale.",
-    "notes": "Req JR208713 Live-check 24 Aug: jr208713 active on careers.salesforce.com. 31 Aug check: jr208713 still indexed on careers.salesforce.com. 8 Sep check: JR208713 still open but RETITLED 'Senior Manager/Director, PM — AI Platform' (re-leveled). 14 Sep check: jr208713 still on salesforce.com careers though absent from site search. 21 Sep check: jr208713 still on source ATS, no signal either way.",
+    "notes": "CAUTION 28 Sep: JR208713 no longer appears in careers.salesforce.com search (current reqs are JR300k+); verify before applying.",
     "verified": true,
     "category": "saas-ai",
     "id": 9,
-    "status": "likely_live",
-    "last_checked": "2026-09-21"
+    "status": "unknown",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Bottomline Technologies",
@@ -207,8 +207,8 @@
     "verified": true,
     "category": "exec-search",
     "id": 12,
-    "status": "likely_live",
-    "last_checked": "2026-09-21"
+    "status": "live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Elevation Capital (portfolio fintech)",
@@ -1280,7 +1280,7 @@
     "category": "fintech-india",
     "id": 86,
     "status": "live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "CredAble",
@@ -1411,12 +1411,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Agentic commercial-lending platform (LLMs, cloud-native replacing legacy core) — near-exact mirror of the JPM digital loan booking + multi-agent AI mandate. Top-priority apply.",
-    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64. Live-check 24 Aug: listed on NatWest Digital X Product & Proposition page, adjacent reqs 'posted 1 day ago'. 31 Aug check: Matrix agentic commercial-lending JD still in NatWest index. 8 Sep check: still on jobs.natwestgroup.com — req number is R-00276971 (Matrix agentic lending platform), Chennai/Gurugram. 14 Sep check: R-00276971 re-bumped '~21 hours ago' — very active. 21 Sep check: R-00276971 re-bumped ~21 hours ago — very active.",
+    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64. Live-check 28 Sep: re-bumped again ~21h ago — still hiring.",
     "verified": true,
     "category": "workday-banks",
     "id": 94,
-    "status": "live",
-    "last_checked": "2026-09-21"
+    "status": "likely_live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1583,8 +1583,8 @@
     "verified": true,
     "category": "fintech-india",
     "id": 104,
-    "status": "live",
-    "last_checked": "2026-09-21"
+    "status": "likely_live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Paytm",
@@ -1618,7 +1618,7 @@
     "category": "fintech-india",
     "id": 106,
     "status": "likely_live",
-    "last_checked": "2026-09-21"
+    "last_checked": "2026-09-28"
   },
   {
     "company": "Flexmoney Technologies",
@@ -1801,8 +1801,8 @@
     "verified": true,
     "category": "workday-banks",
     "id": 117,
-    "status": "likely_live",
-    "last_checked": "2026-09-21"
+    "status": "live",
+    "last_checked": "2026-09-28"
   },
   {
     "company": "BNY",
@@ -1936,7 +1936,7 @@
     "notes": "Built In job ID 9368097 is far above the newest otherwise-observed IDs — posted within days (as of 30 Aug). Earlier Director-level req (id 11) went closed ~24 Aug; this appears to be the same mandate re-opened at Sr Director level — apply to this one. 8 Sep check: Built In 9368097 still live at source URL. 14 Sep check: Built In listing still indexed. 21 Sep check: Built In listing still indexed.",
     "verified": true,
     "status": "likely_live",
-    "last_checked": "2026-09-21",
+    "last_checked": "2026-09-28",
     "category": "fintech-india",
     "id": 125
   },
@@ -2077,10 +2077,10 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Lead GPM driving Google Pay's payments expansion with a PM team — consumer payments leadership at big-tech comp, one of the strongest payments matches on the board.",
-    "notes": "Newly indexed on Google Careers as of 10 Sep (Google listings undated). Eleventh Google req tracked. 21 Sep check: live on Google Careers with active JD.",
+    "notes": "Live-check 28 Sep: req still indexed but snippet references GPay Brazil/Open Finance scope — confirm India scope before a long application.",
     "verified": true,
-    "status": "live",
-    "last_checked": "2026-09-21",
+    "status": "likely_live",
+    "last_checked": "2026-09-28",
     "category": "bigtech",
     "id": 133
   },
@@ -2134,7 +2134,7 @@
     "notes": "'Posted 3 days ago' on Built In Mumbai as of 15 Sep; first BlackRock role tracked. Confirm req live before a long application. 21 Sep check: still live (req R252097) — CORRECTION: original posting dates to Sep 2025, an older evergreen req, not a fresh Sep 2026 post.",
     "verified": true,
     "status": "likely_live",
-    "last_checked": "2026-09-21",
+    "last_checked": "2026-09-28",
     "category": "workday-banks",
     "id": 136
   },
@@ -2152,7 +2152,7 @@
     "notes": "Live on Google Careers 16 Sep, not previously tracked; Google listings undated so freshness unconfirmed. Thirteenth Google req tracked, first at Director level.",
     "verified": false,
     "status": "likely_live",
-    "last_checked": "2026-09-16",
+    "last_checked": "2026-09-28",
     "category": "bigtech",
     "id": 137
   },
@@ -2169,8 +2169,8 @@
     "fit_reason": "Senior Director owning Salesforce's intelligent component platform layer — AI-infused platform product leadership at big-tech comp, fourth distinct Salesforce req tracked.",
     "notes": "Reposted '6 hours ago' on Built In as of 22 Sep (req JR317504); very fresh.",
     "verified": false,
-    "status": "likely_live",
-    "last_checked": "2026-09-22",
+    "status": "live",
+    "last_checked": "2026-09-28",
     "category": "saas-ai",
     "id": 138
   },
@@ -2181,15 +2181,15 @@
     "seniority": "VP",
     "apply_url": "https://builtin.com/job/vice-president-product-management/10296441",
     "platform": "Built In",
-    "posted_date": "2026-09-26",
+    "posted_date": "",
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Pure lending mandate — mortgage originations/servicing and non-agency lending strategy, 10+ yrs bar. Direct overlap with your lending-platform ownership; US-lender GCC comp bands can reach the ask at VP level. Mumbai-based.",
-    "notes": "Surfaced 27 Sep in fresh Built In ID band (10296441), concurrently live on LinkedIn (4445189794). Page not opened (proxy) — confirm live before applying.",
+    "notes": "CAUTION 28 Sep: not fresh — originally posted Jul-Aug 2026, re-indexed by Built In; Mumbai location unconfirmed (JD reads as US housing-finance role). Verify location and req age before applying.",
     "verified": false,
     "category": "workday-banks",
     "id": 139,
-    "status": "unknown",
-    "last_checked": "2026-09-27"
+    "status": "likely_live",
+    "last_checked": "2026-09-28"
   }
 ]
