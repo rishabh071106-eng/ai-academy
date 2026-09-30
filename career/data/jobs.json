@@ -1847,10 +1847,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Director leading platform capabilities for Mastercard Network products — payments-infrastructure platform ownership close to the API/Kafka platform record; Pune-based.",
-    "notes": "'Actively hiring, 1 day ago' on Built In Pune as of 22 Aug; find the R-number on careers.mastercard.com to apply (fetch blocked). Possible overlap with undatable PM-Technical R-280362 — confirm distinct before applying to both.",
+    "notes": "'Actively hiring, 1 day ago' on Built In Pune as of 22 Aug; find the R-number on careers.mastercard.com to apply (fetch blocked). Possible overlap with undatable PM-Technical R-280362 — confirm distinct before applying to both. Re-bump 30 Sep: LinkedIn shows Mastercard Director PM Pune 'actively hiring 1 day ago' (~29 Sep), tracing to the same R-280362/Network Products req — still hiring.",
     "verified": false,
     "category": "workday-banks",
-    "id": 120
+    "id": 120,
+    "status": "likely_live",
+    "last_checked": "2026-09-30"
   },
   {
     "company": "Tide",
@@ -2191,5 +2193,23 @@
     "id": 139,
     "status": "likely_live",
     "last_checked": "2026-09-28"
+  },
+  {
+    "company": "Intuit",
+    "title": "Group Product Manager — Project Capability (AI-native products)",
+    "location": "Bengaluru",
+    "seniority": "Group PM",
+    "apply_url": "https://jobs.intuit.com/job/bengaluru/group-product-manager/27595/92049730672",
+    "platform": "native",
+    "posted_date": "2026-09-29",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "GPM building AI-native products at a fintech — LLM/agentic platform record plus fintech domain hit; GPM at Intuit sits in the target comp band.",
+    "notes": "Glassdoor shows the AI-native GPM posting ~24h old on 29 Sep; Intuit careers confirms a GPM Project Capability req in Bengaluru — confirm the req number on the page before applying.",
+    "verified": false,
+    "category": "bigtech",
+    "id": 140,
+    "status": "likely_live",
+    "last_checked": "2026-09-30"
   }
 ]
