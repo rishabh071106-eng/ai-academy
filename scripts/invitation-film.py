@@ -32,193 +32,297 @@ SPRAY = ('<svg class="spray" viewBox="0 0 120 120" fill="none">'
 
 import math
 
+W, H   = 1080, 1010
+HORIZ  = 430          # where water meets sky
+BANK   = 744          # the near bank the couple stand on
+SUNX   = 706
+
 _s = [987654321]
 def _r():
     _s[0] = (1103515245 * _s[0] + 12345) % 2147483648
     return _s[0] / 2147483648.0
 
-W, H   = 660, 800
-HORIZ  = 468          # where water meets sky
-BANK   = 690          # the near bank the couple stand on
+
+def _ridge(y0, amp, step, fill, op):
+    """A soft hill ridge drawn right across the frame."""
+    pts, x = [], -40.0
+    while x < W + 60:
+        pts.append((x, y0 + amp * math.sin(x / step + y0) + amp * 0.6 * _r()))
+        x += 120 + 60 * _r()
+    d = f'M-40 {HORIZ} L-40 {pts[0][1]:.0f} '
+    for i in range(1, len(pts)):
+        x0, py0 = pts[i - 1]; x1, py1 = pts[i]
+        d += f'C{(x0+x1)/2:.0f} {py0:.0f} {(x0+x1)/2:.0f} {py1:.0f} {x1:.0f} {py1:.0f} '
+    d += f'L{W+60} {HORIZ} Z'
+    return f'<path d="{d}" fill="{fill}" opacity="{op}"/>'
 
 
 def river_scene():
     _s[0] = 987654321
-    o = ['<svg class="river" viewBox="0 0 660 800" preserveAspectRatio="xMidYMid slice" fill="none">']
+    o = [f'<svg class="river" viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid slice" fill="none">']
     a = o.append
 
     a('<defs>'
       '<linearGradient id="rvSky" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#A98BC4"/><stop offset=".26" stop-color="#D3A3C0"/>'
-        '<stop offset=".55" stop-color="#F0B4AC"/><stop offset=".82" stop-color="#FBD2B4"/>'
-        '<stop offset="1" stop-color="#FDE7C9"/></linearGradient>'
+        '<stop offset="0" stop-color="#9F7FBE"/><stop offset=".28" stop-color="#CE9CBD"/>'
+        '<stop offset=".58" stop-color="#EFB2AA"/><stop offset=".84" stop-color="#FBD2B2"/>'
+        '<stop offset="1" stop-color="#FDE8CA"/></linearGradient>'
       '<linearGradient id="rvWat" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#F6D3B8"/><stop offset=".22" stop-color="#E0AEB2"/>'
-        '<stop offset=".58" stop-color="#B992AE"/><stop offset="1" stop-color="#8E73A0"/>'
-      '</linearGradient>'
+        '<stop offset="0" stop-color="#F7D4B8"/><stop offset=".24" stop-color="#E0ACB0"/>'
+        '<stop offset=".6" stop-color="#B790AC"/><stop offset="1" stop-color="#8A6F9E"/></linearGradient>'
       '<radialGradient id="rvGlow" cx=".5" cy=".5" r=".5">'
         '<stop offset="0" stop-color="#FFF0C8" stop-opacity=".95"/>'
-        '<stop offset=".45" stop-color="#FFD79A" stop-opacity=".45"/>'
+        '<stop offset=".45" stop-color="#FFD79A" stop-opacity=".42"/>'
         '<stop offset="1" stop-color="#FFC98A" stop-opacity="0"/></radialGradient>'
       '<linearGradient id="rvBank" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#97A672"/><stop offset=".5" stop-color="#798B5C"/>'
-        '<stop offset="1" stop-color="#5A6B42"/></linearGradient>'
+        '<stop offset="0" stop-color="#9CAB76"/><stop offset=".42" stop-color="#7E9060"/>'
+        '<stop offset="1" stop-color="#566843"/></linearGradient>'
       '<linearGradient id="rvWarm" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#FFB859" stop-opacity=".5"/>'
-        '<stop offset="1" stop-color="#FF7E4E" stop-opacity=".22"/></linearGradient>'
+        '<stop offset="0" stop-color="#FFB859" stop-opacity=".46"/>'
+        '<stop offset="1" stop-color="#FF7E4E" stop-opacity=".2"/></linearGradient>'
       '<radialGradient id="rvFly" cx=".5" cy=".5" r=".5">'
         '<stop offset="0" stop-color="#FFF3B0"/><stop offset=".4" stop-color="#FFE07A" stop-opacity=".7"/>'
         '<stop offset="1" stop-color="#FFD35C" stop-opacity="0"/></radialGradient>'
+      '<radialGradient id="rvFlame" cx=".5" cy=".62" r=".5">'
+        '<stop offset="0" stop-color="#FFF6D2"/><stop offset=".4" stop-color="#FFC95E"/>'
+        '<stop offset="1" stop-color="#F08A2E" stop-opacity="0"/></radialGradient>'
       '</defs>')
 
     # ── sky ──────────────────────────────────────────────────────────
     a(f'<rect width="{W}" height="{HORIZ+4}" fill="url(#rvSky)"/>')
+    for _ in range(64):
+        a(f'<circle class="rv-star" cx="{_r()*W:.0f}" cy="{_r()*250:.0f}" r="{0.9+_r()*1.7:.1f}" '
+          f'fill="#FFF6E2" opacity="{0.25+_r()*0.5:.2f}"/>')
+    a(f'<g class="rv-sun"><circle cx="{SUNX}" cy="250" r="190" fill="url(#rvGlow)"/>'
+      f'<circle cx="{SUNX}" cy="250" r="46" fill="#FFF2CE" opacity=".96"/>'
+      f'<circle cx="{SUNX}" cy="250" r="46" fill="none" stroke="#FFD89A" stroke-width="6" opacity=".5"/>'
+      f'<circle cx="{SUNX}" cy="250" r="68" fill="none" stroke="#FFE2AC" stroke-width="2" opacity=".28"/></g>')
 
-    # early stars, high up, which fade in as dusk falls
-    for _ in range(46):
-        x, y = _r() * W, _r() * 230
-        a(f'<circle class="rv-star" cx="{x:.0f}" cy="{y:.0f}" r="{0.8 + _r()*1.5:.1f}" '
-          f'fill="#FFF6E2" opacity="{0.25 + _r()*0.5:.2f}"/>')
-
-    # the low sun, and its halo
-    a('<g class="rv-sun"><circle cx="430" cy="300" r="165" fill="url(#rvGlow)"/>'
-      '<circle cx="430" cy="300" r="40" fill="#FFF2CE" opacity=".96"/>'
-      '<circle cx="430" cy="300" r="40" fill="none" stroke="#FFD89A" stroke-width="6" opacity=".55"/>'
-      '<circle cx="430" cy="300" r="58" fill="none" stroke="#FFE2AC" stroke-width="2" opacity=".3"/></g>')
-
-    # drifting cloud banks
     for i, (cx, cy, sc, op) in enumerate(
-            [(120, 150, 1.35, .40), (470, 108, 1.05, .32),
-             (300, 232, 1.75, .30), (575, 300, 1.15, .26), (90, 320, 1.0, .22)]):
-        a(f'<g class="rv-cloud" data-sp="{0.35 + i*0.22:.2f}" opacity="{op}">'
+            [(170, 120, 1.6, .38), (690, 90, 1.25, .30), (420, 206, 2.0, .28),
+             (930, 262, 1.35, .24), (90, 300, 1.2, .2), (560, 330, 1.5, .18)]):
+        a(f'<g class="rv-cloud" data-sp="{0.35+i*0.2:.2f}" opacity="{op}">'
           f'<g transform="translate({cx} {cy}) scale({sc})">'
           '<ellipse cx="0" cy="0" rx="76" ry="15" fill="#FFF2E0"/>'
           '<ellipse cx="-34" cy="-7" rx="38" ry="13" fill="#FFF2E0"/>'
           '<ellipse cx="30" cy="-9" rx="44" ry="15" fill="#FFF6E8"/>'
-          '<ellipse cx="4" cy="6" rx="60" ry="10" fill="#F6D8CE" opacity=".7"/>'
-          '</g></g>')
+          '<ellipse cx="4" cy="6" rx="60" ry="10" fill="#F6D8CE" opacity=".7"/></g></g>')
 
-    # birds returning home
-    for i, (bx, by, bs) in enumerate([(150, 196, 1.0), (196, 176, .78), (122, 166, .62),
-                                      (520, 214, .85), (556, 232, .66)]):
-        a(f'<g class="rv-bird" data-sp="{0.5 + i*0.3:.2f}">'
-          f'<path transform="translate({bx} {by}) scale({bs})" d="M-11 0 C-6 -7 -2 -7 0 -2 '
-          'C2 -7 6 -7 11 0" stroke="#7A5570" stroke-width="2.2" fill="none" '
-          'stroke-linecap="round" opacity=".6"/></g>')
+    for i, (bx, by, bs) in enumerate([(250, 180, 1.1), (320, 156, .85), (205, 146, .7),
+                                      (840, 196, .95), (900, 216, .72), (780, 230, .6)]):
+        a(f'<g class="rv-bird" data-sp="{0.5+i*0.26:.2f}">'
+          f'<path transform="translate({bx} {by}) scale({bs})" d="M-12 0 C-6 -8 -2 -8 0 -2 '
+          'C2 -8 6 -8 12 0" stroke="#7A5570" stroke-width="2.4" fill="none" '
+          'stroke-linecap="round" opacity=".55"/></g>')
 
-    # ── far hills, hazy with distance ────────────────────────────────
-    a(f'<path d="M0 {HORIZ} L0 372 C70 332 134 356 196 334 C262 310 318 344 384 330 '
-      f'C452 314 520 346 592 330 L{W} 324 L{W} {HORIZ} Z" fill="#B195C2" opacity=".62"/>')
-    a(f'<path d="M0 {HORIZ} L0 404 C84 378 150 398 226 384 C300 370 366 398 442 388 '
-      f'C520 378 586 400 {W} 392 L{W} {HORIZ} Z" fill="#9C7FB2" opacity=".72"/>')
-
-    # the far bank: a line of trees and little temple spires
-    a(f'<path d="M0 {HORIZ} L0 436 C60 428 96 440 140 432 C190 422 230 438 286 430 '
-      f'C340 422 392 438 448 430 C510 421 570 436 {W} 428 L{W} {HORIZ} Z" fill="#6E5A80" opacity=".8"/>')
-    for tx, th in [(84, 26), (212, 20), (356, 30), (498, 22), (602, 26)]:
-        a(f'<path d="M{tx-9} 438 L{tx} {438-th} L{tx+9} 438 Z" fill="#5E4A70" opacity=".85"/>'
-          f'<circle cx="{tx}" cy="{438-th-3}" r="2.6" fill="#E8C56A" opacity=".8"/>')
+    # ── hills, then the far bank with its little temple spires ───────
+    a(_ridge(336, 22, 230, '#B195C2', .6))
+    a(_ridge(374, 16, 180, '#9C7FB2', .72))
+    a(_ridge(404, 10, 150, '#6E5A80', .8))
+    for tx, th in [(132, 30), (318, 23), (520, 34), (742, 25), (928, 30), (1046, 22)]:
+        a(f'<path d="M{tx-10} 410 L{tx} {410-th} L{tx+10} 410 Z" fill="#5E4A70" opacity=".85"/>'
+          f'<circle cx="{tx}" cy="{410-th-3}" r="3" fill="#E8C56A" opacity=".8"/>')
 
     # ── the river ────────────────────────────────────────────────────
     a(f'<rect y="{HORIZ}" width="{W}" height="{BANK-HORIZ+6}" fill="url(#rvWat)"/>')
-    # the sun laid out on the water
-    a('<g class="rv-refl" opacity=".72">')
-    y = HORIZ + 4
-    i = 0
+    a('<g class="rv-refl" opacity=".7">')
+    y, i = HORIZ + 4, 0
     while y < BANK:
-        f  = (y - HORIZ) / (BANK - HORIZ)
-        rx = 16 + 54 * f + 10 * math.sin(i * 1.7)
-        a(f'<ellipse class="rv-rf" data-i="{i}" cx="430" cy="{y:.0f}" rx="{rx:.0f}" '
-          f'ry="{1.6 + 2.4*f:.1f}" fill="#FFE9BE" opacity="{0.55 - 0.3*f:.2f}"/>')
-        y += 7 + 9 * f
-        i += 1
+        f = (y - HORIZ) / (BANK - HORIZ)
+        a(f'<ellipse class="rv-rf" data-i="{i}" cx="{SUNX}" cy="{y:.0f}" '
+          f'rx="{20+78*f+14*math.sin(i*1.7):.0f}" ry="{1.8+2.8*f:.1f}" '
+          f'fill="#FFE9BE" opacity="{0.55-0.3*f:.2f}"/>')
+        y += 8 + 10 * f; i += 1
     a('</g>')
-    # ripple bands across the whole river, nearer ones longer and lazier
     y, i = HORIZ + 10, 0
     while y < BANK - 4:
-        f  = (y - HORIZ) / (BANK - HORIZ)
-        x0 = _r() * W
-        ln = 50 + 190 * f * (0.5 + _r())
-        a(f'<rect class="rv-shim" data-i="{i}" data-f="{f:.3f}" x="{x0:.0f}" y="{y:.0f}" '
-          f'width="{ln:.0f}" height="{1.2 + 2.2*f:.1f}" rx="{1 + f:.1f}" '
-          f'fill="#FFF3DE" opacity="{0.16 + 0.26*_r():.2f}"/>')
-        y += 9 + 11 * f
-        i += 1
+        f = (y - HORIZ) / (BANK - HORIZ)
+        a(f'<rect class="rv-shim" data-i="{i}" data-f="{f:.3f}" x="{_r()*W:.0f}" y="{y:.0f}" '
+          f'width="{90+300*f*(0.5+_r()):.0f}" height="{1.4+2.6*f:.1f}" rx="{1+f:.1f}" '
+          f'fill="#FFF3DE" opacity="{0.16+0.26*_r():.2f}"/>')
+        y += 10 + 12 * f; i += 1
 
-    # lotus pads and blooms afloat
-    for i, (lx, ly, ls) in enumerate([(96, 560, .85), (246, 616, 1.05), (556, 578, .9),
-                                      (392, 650, 1.2), (142, 664, 1.1), (610, 648, .95)]):
-        a(f'<g class="rv-lotus" data-i="{i}" transform="translate({lx} {ly})"><g class="sw" transform="scale({ls})">'
-          '<ellipse cx="0" cy="4" rx="30" ry="9" fill="#5E7E4E" opacity=".85"/>'
-          '<path d="M-30 4 L-6 2" stroke="#4A6A3C" stroke-width="2"/>'
-          '<ellipse cx="22" cy="9" rx="17" ry="5.5" fill="#6B8C58" opacity=".8"/>'
+    for i, (lx, ly, ls) in enumerate([(150, 540, .95), (400, 600, 1.15), (900, 556, 1.0),
+                                      (620, 660, 1.35), (250, 700, 1.25), (1010, 690, 1.1),
+                                      (760, 612, .9)]):
+        a(f'<g class="rv-lotus" data-i="{i}" transform="translate({lx} {ly})">'
+          f'<g class="sw" transform="scale({ls})">'
+          '<ellipse cx="0" cy="4" rx="32" ry="9" fill="#5E7E4E" opacity=".85"/>'
+          '<ellipse cx="24" cy="9" rx="18" ry="6" fill="#6B8C58" opacity=".8"/>'
           '<path d="M0 -2 C-11 -4 -13 -15 -5 -18 C-2 -24 4 -24 7 -18 C15 -15 13 -4 2 -2 Z" fill="#EE93AE"/>'
           '<path d="M0 -3 C-6 -5 -7 -13 -2 -16 C3 -13 4 -5 0 -3 Z" fill="#FBC3D2"/>'
-          '<circle cx="0" cy="-9" r="2.4" fill="#F5D777"/>'
+          '<circle cx="0" cy="-9" r="2.6" fill="#F5D777"/></g></g>')
+
+    # ── diyas set afloat, each with a flame of its own ───────────────
+    for i, (dx, dy, ds) in enumerate([(330, 572, 1.0), (560, 636, 1.2), (830, 594, 1.05),
+                                      (140, 648, 1.15), (690, 704, 1.3), (970, 640, 1.0)]):
+        a(f'<g class="rv-diya" data-i="{i}" transform="translate({dx} {dy})">'
+          f'<g class="sw" transform="scale({ds})">'
+          '<ellipse cx="0" cy="7" rx="21" ry="5" fill="#FFE4C0" opacity=".4"/>'
+          '<path d="M-15 0 C-13 8 -7 12 0 12 C7 12 13 8 15 0 Z" fill="#B5682E"/>'
+          '<path d="M-15 0 C-8 -3 8 -3 15 0 C8 3 -8 3 -15 0 Z" fill="#D88A46"/>'
+          '<g class="flame"><ellipse cx="0" cy="-9" rx="11" ry="15" fill="url(#rvFlame)"/>'
+          '<path d="M0 -20 C5 -14 5 -6 0 -3 C-5 -6 -5 -14 0 -20 Z" fill="#FFD36A"/>'
+          '<path d="M0 -15 C2.6 -11 2.6 -6 0 -4 C-2.6 -6 -2.6 -11 0 -15 Z" fill="#FFF6D2"/></g>'
           '</g></g>')
 
-    # reeds standing in the shallows
-    for i in range(14):
-        rx = 470 + _r() * 185
-        ry = BANK - 10 - _r() * 70
-        hh = 70 + _r() * 70
-        a(f'<g class="rv-reed" data-i="{i}" transform="translate({rx:.0f} {ry:.0f})">'
-          f'<g class="sw"><path d="M0 0 C{-4+_r()*8:.1f} {-hh*0.5:.0f} {-6+_r()*12:.1f} {-hh*0.8:.0f} '
-          f'{-8+_r()*16:.1f} {-hh:.0f}" stroke="#5E7A48" stroke-width="2.6" '
-          f'fill="none" stroke-linecap="round" opacity=".8"/></g></g>')
+    for i in range(20):
+        rx, ry = 790 + _r() * 300, BANK - 12 - _r() * 96
+        hh = 86 + _r() * 90
+        a(f'<g class="rv-reed" data-i="{i}" transform="translate({rx:.0f} {ry:.0f})"><g class="sw">'
+          f'<path d="M0 0 C{-5+_r()*10:.1f} {-hh*0.5:.0f} {-7+_r()*14:.1f} {-hh*0.8:.0f} '
+          f'{-10+_r()*20:.1f} {-hh:.0f}" stroke="#5E7A48" stroke-width="3" fill="none" '
+          'stroke-linecap="round" opacity=".8"/></g></g>')
 
     # ── the near bank ────────────────────────────────────────────────
-    a(f'<path d="M0 {BANK+16} C120 {BANK-8} 250 {BANK+4} 360 {BANK-6} '
-      f'C470 {BANK-16} 570 {BANK+2} {W} {BANK-8} L{W} 800 L0 800 Z" fill="url(#rvBank)"/>')
-    a(f'<path d="M0 {BANK+16} C120 {BANK-8} 250 {BANK+4} 360 {BANK-6} '
-      f'C470 {BANK-16} 570 {BANK+2} {W} {BANK-8}" stroke="#A8B578" stroke-width="3" opacity=".55"/>')
+    a(f'<path d="M0 {BANK+20} C200 {BANK-10} 420 {BANK+6} 620 {BANK-8} '
+      f'C820 {BANK-22} 960 {BANK+4} {W} {BANK-10} L{W} {H} L0 {H} Z" fill="url(#rvBank)"/>')
+    a(f'<path d="M0 {BANK+20} C200 {BANK-10} 420 {BANK+6} 620 {BANK-8} '
+      f'C820 {BANK-22} 960 {BANK+4} {W} {BANK-10}" stroke="#B4C184" stroke-width="3.4" opacity=".5"/>')
 
-    # ── the kadamba tree leaning in over the water ───────────────────
+    # ── the kadamba tree leaning in from the left ────────────────────
     a('<g class="rv-tree">'
-      '<path d="M-14 806 C8 706 26 606 32 506 C36 444 31 384 18 332 L50 324 '
-      'C62 380 67 444 64 508 C58 610 42 706 26 806 Z" fill="#6B4A2E"/>'
-      '<path d="M-8 640 C10 622 28 614 46 616" stroke="#5C3F26" stroke-width="7" '
+      f'<path d="M-18 {H+10} C10 880 34 740 42 600 C48 500 42 410 22 338 L68 326 '
+      f'C86 404 94 500 88 604 C80 746 56 884 38 {H+10} Z" fill="#6B4A2E"/>'
+      '<path d="M-6 760 C16 738 40 728 64 732" stroke="#5C3F26" stroke-width="9" '
       'fill="none" stroke-linecap="round" opacity=".9"/>'
-      '<path d="M34 466 C74 446 112 430 158 426 M38 392 C84 376 122 366 166 368" '
-      'stroke="#6B4A2E" stroke-width="7" fill="none" stroke-linecap="round"/>')
-    for cx, cy, rr in [(40, 252, 74), (124, 294, 58), (174, 348, 44), (102, 356, 42),
-                       (12, 322, 54), (166, 292, 38), (74, 200, 50)]:
+      '<path d="M40 524 C96 496 150 474 214 470 M44 414 C110 392 164 378 224 380" '
+      'stroke="#6B4A2E" stroke-width="9" fill="none" stroke-linecap="round"/>')
+    for cx, cy, rr in [(44, 252, 104), (164, 306, 80), (240, 380, 62), (130, 390, 58),
+                       (6, 336, 74), (224, 300, 54), (92, 176, 70)]:
         a(f'<ellipse cx="{cx}" cy="{cy}" rx="{rr}" ry="{rr*0.76:.0f}" fill="#44633A" opacity=".95"/>')
-    for cx, cy, rr in [(52, 236, 48), (132, 286, 34), (170, 340, 28), (22, 302, 34), (90, 194, 31)]:
+    for cx, cy, rr in [(58, 230, 66), (172, 292, 48), (232, 368, 38), (18, 310, 46), (108, 164, 44)]:
         a(f'<ellipse cx="{cx}" cy="{cy}" rx="{rr}" ry="{rr*0.72:.0f}" fill="#567A44" opacity=".85"/>')
-    for _ in range(30):                       # kadamba blossom
-        bx, by = _r() * 196 - 18, 158 + _r() * 212
-        a(f'<circle cx="{bx:.0f}" cy="{by:.0f}" r="{3.4 + _r()*3.2:.1f}" fill="#F2C14E" opacity=".9"/>')
-    # a few strands that sway on the breeze
-    for i in range(8):
-        vx, vy = 6 + _r() * 170, 290 + _r() * 86
-        vl = 40 + _r() * 46
-        a(f'<g class="rv-vine" data-i="{i}" transform="translate({vx:.0f} {vy:.0f})">'
-          f'<g class="sw">'
-          f'<path d="M0 0 C5 {vl*0.4:.0f} -3 {vl*0.72:.0f} 1 {vl:.0f}" stroke="#44633A" '
-          'stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"/>'
-          f'<ellipse cx="1" cy="{vl+7:.0f}" rx="6" ry="9" fill="#4E6E3E" opacity=".9"/>'
-          f'<circle cx="1" cy="{vl+18:.0f}" r="4" fill="#F2C14E" opacity=".85"/>'
-          '</g></g>')
+    for _ in range(40):
+        a(f'<circle cx="{_r()*290-24:.0f}" cy="{120+_r()*300:.0f}" r="{4+_r()*4:.1f}" '
+          'fill="#F2C14E" opacity=".9"/>')
+    for i in range(10):
+        vx, vy, vl = 10 + _r() * 230, 330 + _r() * 110, 50 + _r() * 60
+        a(f'<g class="rv-vine" data-i="{i}" transform="translate({vx:.0f} {vy:.0f})"><g class="sw">'
+          f'<path d="M0 0 C6 {vl*0.4:.0f} -4 {vl*0.72:.0f} 1 {vl:.0f}" stroke="#44633A" '
+          'stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".85"/>'
+          f'<ellipse cx="1" cy="{vl+8:.0f}" rx="7" ry="11" fill="#4E6E3E" opacity=".9"/>'
+          f'<circle cx="1" cy="{vl+22:.0f}" r="4.6" fill="#F2C14E" opacity=".85"/></g></g>')
     a('</g>')
 
-    # ── fireflies that come out as it darkens ────────────────────────
-    for i in range(22):
-        fx, fy = 60 + _r() * 560, 420 + _r() * 340
-        a(f'<circle class="rv-fly" data-i="{i}" cx="{fx:.0f}" cy="{fy:.0f}" '
-          f'r="{5 + _r()*5:.1f}" fill="url(#rvFly)" opacity="0"/>')
+    # ── Krishna's cows, come down to the water ───────────────────────
+    for i, (cx, foot, cs, body, patch) in enumerate([
+            (250, 906, 0.72, '#F4ECE1', '#C09060'),    # nearest, by the tree
+            (822, 838, 0.56, '#EADCC4', '#8E5A2E'),    # further along the bank
+            (986, 932, 0.44, '#FBF6EE', '#B8926A')]):  # a calf at her heel
+        # the drawing stands on y=154 in its own space, so lift it onto the grass
+        ty = foot - 154 * cs
+        a(f'<g class="rv-cow" data-i="{i}" data-x="{cx}" data-y="{ty:.1f}" '
+          f'transform="translate({cx} {ty:.1f})">'
+          f'<g class="sw" transform="scale({cs})">{cow(i, body, patch)}</g></g>')
 
-    # ── grass in the foreground, and a warm wash for the last act ────
-    for i in range(26):
-        gx = _r() * W
-        gh = 26 + _r() * 46
-        a(f'<g class="rv-grass" data-i="{i}" transform="translate({gx:.0f} 806)">'
-          f'<g class="sw"><path d="M0 0 C{-5+_r()*10:.1f} {-gh*0.6:.0f} {-8+_r()*16:.1f} {-gh*0.85:.0f} '
-          f'{-12+_r()*24:.1f} {-gh:.0f}" stroke="#55703C" stroke-width="3" fill="none" '
+    for i in range(30):
+        a(f'<circle class="rv-fly" data-i="{i}" cx="{40+_r()*1000:.0f}" cy="{430+_r()*520:.0f}" '
+          f'r="{6+_r()*6:.1f}" fill="url(#rvFly)" opacity="0"/>')
+
+    for i in range(40):
+        gh = 30 + _r() * 54
+        a(f'<g class="rv-grass" data-i="{i}" transform="translate({_r()*W:.0f} {H+8})"><g class="sw">'
+          f'<path d="M0 0 C{-6+_r()*12:.1f} {-gh*0.6:.0f} {-9+_r()*18:.1f} {-gh*0.85:.0f} '
+          f'{-14+_r()*28:.1f} {-gh:.0f}" stroke="#55703C" stroke-width="3.4" fill="none" '
           'stroke-linecap="round" opacity=".9"/></g></g>')
-    a(f'<rect class="rv-warm" width="{W}" height="800" fill="url(#rvWarm)" opacity="0"/>')
+    a(f'<rect class="rv-warm" width="{W}" height="{H}" fill="url(#rvWarm)" opacity="0"/>')
     a('</svg>')
     return ''.join(o)
+
+
+def cow(uid, body='#F4ECE1', patch='#C09060', horn='#EBDCBC'):
+    g = lambda n: f'{n}{uid}'
+    return (
+      f'<g class="cow" data-i="{uid}">'
+      '<defs>'
+        f'<linearGradient id="{g("cb")}" x1="0" y1="0" x2=".2" y2="1">'
+          f'<stop offset="0" stop-color="#FFFBF6"/><stop offset=".5" stop-color="{body}"/>'
+          f'<stop offset="1" stop-color="#CBBCA8"/></linearGradient>'
+      '</defs>'
+      '<ellipse cx="130" cy="156" rx="92" ry="9" fill="#3E5228" opacity=".2"/>'
+
+      # ── the off-side pair, set back and shaded ──────────────────────
+      '<g opacity=".62">'
+        '<g class="legBF" style="transform-origin:78px 104px">'
+          f'<path d="M78 104 L72 146" stroke="{body}" stroke-width="12" stroke-linecap="round"/>'
+          '<path d="M72 146 L71 152" stroke="#5B4428" stroke-width="13" stroke-linecap="round"/></g>'
+        '<g class="legFF" style="transform-origin:170px 104px">'
+          f'<path d="M170 104 L176 146" stroke="{body}" stroke-width="12" stroke-linecap="round"/>'
+          '<path d="M176 146 L177 152" stroke="#5B4428" stroke-width="13" stroke-linecap="round"/></g>'
+      '</g>'
+
+      # ── tail, hanging behind the rump ───────────────────────────────
+      '<g class="tail" style="transform-origin:54px 62px">'
+        f'<path d="M54 62 C40 80 40 108 48 128" stroke="{body}" stroke-width="7" '
+        'fill="none" stroke-linecap="round"/>'
+        '<path d="M48 124 C40 132 42 144 50 148 C58 143 57 132 48 124 Z" fill="#6B5230"/>'
+      '</g>'
+
+      # ── barrel ──────────────────────────────────────────────────────
+      f'<path d="M52 82 C50 60 66 50 96 48 L164 50 C186 54 194 70 192 90 '
+      f'C190 106 170 114 130 115 C86 115 56 104 52 82 Z" fill="url(#{g("cb")})"/>'
+      f'<path d="M86 66 C106 60 128 62 140 74 C124 88 96 84 86 66 Z" fill="{patch}" opacity=".9"/>'
+      f'<path d="M62 92 C74 88 86 90 92 99 C82 106 68 101 62 92 Z" fill="{patch}" opacity=".55"/>'
+      '<path d="M66 110 C92 118 140 118 176 108" stroke="#CBBCA8" stroke-width="2" '
+      'fill="none" opacity=".7"/>'
+
+      # ── the shoulder hump that marks the breed ──────────────────────
+      f'<path d="M150 52 C156 24 186 22 192 46 C196 60 194 74 190 84 '
+      f'C182 70 166 58 150 52 Z" fill="{body}" stroke="#D8CABA" stroke-width="1.4"/>'
+      f'<path d="M162 44 C172 32 184 34 187 46" stroke="#D8CABA" stroke-width="1.6" fill="none"/>'
+
+      # ── neck, dewlap, head ──────────────────────────────────────────
+      '<g class="cowHead" style="transform-origin:194px 62px">'
+        f'<path d="M186 54 C206 46 226 48 236 58 L240 76 C242 92 234 102 222 102 '
+        f'C206 102 196 90 192 74 Z" fill="url(#{g("cb")})"/>'
+        # dewlap
+        f'<path d="M192 76 C202 82 206 92 204 104 C198 100 192 92 190 84 Z" '
+        f'fill="{body}" stroke="#D8CABA" stroke-width="1.2"/>'
+        # skull and muzzle
+        f'<path d="M216 50 C236 44 254 52 258 68 C261 82 256 96 244 100 '
+        f'C232 103 220 94 216 78 Z" fill="{body}" stroke="#E0D2C0" stroke-width="1"/>'
+        f'<path d="M248 76 C262 76 270 84 268 93 C266 102 254 106 245 101 '
+        f'C239 97 240 80 248 76 Z" fill="#DCA9A2"/>'
+        '<ellipse cx="260" cy="87" rx="2.8" ry="3.6" fill="#8E5E58"/>'
+        f'<path d="M247 99 C254 103 263 101 266 97" stroke="#A8746C" stroke-width="1.7" '
+        'stroke-linecap="round" fill="none"/>'
+        # eye
+        '<ellipse cx="236" cy="68" rx="5.4" ry="6" fill="#FFF9F2"/>'
+        '<circle cx="236.6" cy="68.8" r="3.6" fill="#36220F"/>'
+        '<circle cx="238.2" cy="67" r="1.2" fill="#FFF"/>'
+        '<path d="M229 60 C233 56 240 56 244 60" stroke="#6B4A2E" stroke-width="1.8" '
+        'stroke-linecap="round" fill="none"/>'
+        # lyre horns
+        f'<path d="M224 46 C214 30 218 16 229 14 C226 26 227 38 234 48 Z" fill="{horn}" '
+        'stroke="#B89A66" stroke-width="1.2"/>'
+        f'<path d="M244 44 C252 28 249 15 238 13 C242 25 243 36 238 46 Z" fill="{horn}" '
+        'stroke="#B89A66" stroke-width="1.2"/>'
+        # ear, flicking back from behind the horn
+        '<g class="ear" style="transform-origin:222px 58px">'
+          f'<path d="M222 58 C206 50 194 56 196 66 C200 76 216 72 224 62 Z" '
+          f'fill="{patch}" stroke="#A8865A" stroke-width="1.1"/>'
+          f'<path d="M219 60 C210 57 203 59 200 64" stroke="#8E6B42" stroke-width="1" fill="none"/>'
+        '</g>'
+        # collar and bell, worn on the neck
+        '<path d="M200 60 C210 70 214 82 212 94" stroke="#A61E45" stroke-width="7" '
+        'fill="none" stroke-linecap="round"/>'
+        '<g class="bell" style="transform-origin:211px 92px">'
+          '<path d="M206 94 C200 100 199 112 211 114 C223 112 221 100 215 94 Z" fill="#DCAE3E" '
+          'stroke="#A8822C" stroke-width="1.3"/>'
+          '<path d="M203 112 C208 115 215 115 219 112" stroke="#A8822C" stroke-width="1.6" fill="none"/>'
+          '<circle cx="211" cy="118" r="2.8" fill="#A8822C"/>'
+        '</g>'
+      '</g>'
+
+      # ── the near pair ───────────────────────────────────────────────
+      '<g class="legBN" style="transform-origin:90px 106px">'
+        f'<path d="M90 106 L84 148" stroke="{body}" stroke-width="13" stroke-linecap="round"/>'
+        '<path d="M84 148 L83 154" stroke="#4A3620" stroke-width="14" stroke-linecap="round"/></g>'
+      '<g class="legFN" style="transform-origin:160px 108px">'
+        f'<path d="M160 108 L166 148" stroke="{body}" stroke-width="13" stroke-linecap="round"/>'
+        '<path d="M166 148 L167 154" stroke="#4A3620" stroke-width="14" stroke-linecap="round"/></g>'
+      '</g>')
 
 
 def nagada(side='L'):
@@ -420,7 +524,7 @@ print('pages %d | first %.1f | last %.1f | duration %.1f' % (len(PAGES), TIMES[1
 TPL = r'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Invitation film</title><style>
 @@FONTS@@
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:1920px;height:1080px;overflow:hidden;background:#FBEFE7}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#F7DED6}
 body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
   background:
     radial-gradient(ellipse at 12% 6%,rgba(224,154,60,.28) 0%,transparent 42%),
@@ -429,16 +533,16 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
     linear-gradient(168deg,#FDF4EE 0%,#F5DAD1 100%);}
 .deva{font-family:'Tiro Devanagari Hindi',serif}
 
-#nagL,#nagR{position:absolute;bottom:6px;width:228px;z-index:30}
-#nagL{left:2px} #nagR{right:2px}
+#nagL,#nagR{position:absolute;bottom:0;width:214px;z-index:8}
+#nagL{left:8px} #nagR{right:8px}
 .nag{width:100%;height:auto;display:block}
 #shower{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:40}
 .fl{position:absolute;top:0;left:0;will-change:transform,opacity}
 .petal{border-radius:60% 60% 50% 50% / 70% 70% 40% 40%}
 
 #intro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;z-index:20}
-#intro .pframe{width:400px}
-#intro .inv2{font-size:56px;letter-spacing:.05em;color:@@ROSE@@}
+#intro .pframe{width:620px}
+#intro .inv2{font-size:74px;letter-spacing:.05em;color:@@ROSE@@}
 .pframe{position:relative;padding:9px;margin:0 auto;
   background:linear-gradient(168deg,#FBEDC9 0%,#D8B771 52%,#8E6B13 100%);
   border-radius:999px 999px 16px 16px;
@@ -447,85 +551,89 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
   border-radius:999px 999px 13px 13px}
 .pframe img{display:block;width:100%;height:auto;border-radius:999px 999px 9px 9px}
 
-#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:25}
-#book{position:relative;width:1460px;height:880px;perspective:3000px}
-#stack{position:absolute;top:8px;right:-9px;bottom:8px;width:11px;z-index:1;
-  background:repeating-linear-gradient(90deg,#F3E2DC 0 2px,#E6CEC6 2px 3px);border-radius:0 5px 5px 0;
-  box-shadow:2px 0 8px -2px rgba(142,16,52,.3)}
-.pg{position:absolute;top:0;height:100%;width:730px;overflow:hidden;
-  background:linear-gradient(170deg,#FFFCFA 0%,#FBF0EA 100%);
-  box-shadow:0 30px 64px -28px rgba(142,16,52,.45)}
-#pL{left:0;border-radius:14px 2px 2px 14px;box-shadow:inset -30px 0 40px -28px rgba(142,16,52,.4),0 30px 64px -28px rgba(142,16,52,.45)}
-#pR{left:730px;border-radius:2px 14px 14px 2px;box-shadow:inset 30px 0 40px -28px rgba(142,16,52,.4),0 30px 64px -28px rgba(142,16,52,.45)}
-#leaf{position:absolute;top:0;left:730px;width:730px;height:100%;transform-origin:left center;transform-style:preserve-3d;z-index:6}
+#stage{position:absolute;inset:0;perspective:3200px;z-index:25}
+
+/* the picture fills the top of the frame, edge to edge */
+#art{position:absolute;top:0;left:0;width:1080px;height:1010px;overflow:hidden;z-index:2}
+#art .river{position:absolute;inset:0;width:100%;height:100%;display:block}
+.rk-fg{position:absolute;display:block;z-index:6;transform-origin:50% 82%;
+  will-change:transform,left,top,width}
+#artVg{position:absolute;inset:0;z-index:7;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 40%,transparent 58%,rgba(60,10,28,.3) 100%)}
+#artHem{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:10;
+  background:linear-gradient(90deg,transparent,#A8822C 18%,#E6C56A 50%,#A8822C 82%,transparent)}
+
+/* the page that is read sits under it, and turns on its left edge */
+#pagewrap{position:absolute;top:1010px;left:0;width:1080px;height:910px;
+  transform-style:preserve-3d;z-index:3;background:#F7DED6}
+.pg{position:absolute;inset:0;overflow:hidden;
+  background:linear-gradient(162deg,#FFFCFA 0%,#FDF3EF 100%)}
+#leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;z-index:6}
 #leaf .face{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden;
-  background:linear-gradient(170deg,#FFFCFA 0%,#FBF0EA 100%)}
-#lf{border-radius:2px 14px 14px 2px}
-#lb{transform:rotateY(180deg);border-radius:14px 2px 2px 14px}
+  background:linear-gradient(162deg,#FFFCFA 0%,#FDF3EF 100%)}
+#lb{transform:rotateY(180deg)}
 .sh{position:absolute;inset:0;opacity:0;pointer-events:none}
 #shF{background:linear-gradient(90deg,rgba(74,12,34,.72) 0%,rgba(74,12,34,.26) 38%,rgba(74,12,34,0) 72%)}
 #shB{background:linear-gradient(270deg,rgba(74,12,34,.68) 0%,rgba(74,12,34,.2) 42%,rgba(74,12,34,0) 76%)}
 #uShade{position:absolute;inset:0;opacity:0;pointer-events:none;z-index:5;
-  background:linear-gradient(90deg,rgba(74,12,34,.55) 0%,rgba(74,12,34,.16) 40%,rgba(74,12,34,0) 74%)}
-#edge{position:absolute;top:0;bottom:0;left:0;width:3px;z-index:8;opacity:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.9),rgba(255,255,255,0))}
+  background:linear-gradient(90deg,rgba(74,12,34,.5) 0%,rgba(74,12,34,.14) 34%,rgba(74,12,34,0) 64%)}
+#edge{position:absolute;top:0;bottom:0;left:0;width:4px;z-index:8;opacity:0;
+  background:linear-gradient(90deg,rgba(255,250,236,.95),rgba(255,250,236,0))}
 
-.photo{position:absolute;inset:0;overflow:hidden}
-.river{position:absolute;inset:0;width:100%;height:100%;display:block}
-.rk-fg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;will-change:transform}
-.rk-fg{transform-origin:50% 86%}
-.photo::after{content:"";position:absolute;inset:22px;border:2px solid rgba(255,248,230,.55);border-radius:6px;
-  box-shadow:0 0 0 1px rgba(142,107,19,.5) inset}
-.photo .vg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 52%,rgba(60,10,28,.3) 100%)}
+/* the cover, which swings open on its spine to begin */
+#cover{position:absolute;inset:0;z-index:12;transform-origin:left center;
+  backface-visibility:hidden;overflow:hidden;
+  background:linear-gradient(162deg,#FFFCFA 0%,#FBE7DE 100%);
+  box-shadow:0 40px 90px -40px rgba(142,16,52,.5)}
 
-.inner{position:absolute;inset:26px;border:1.5px solid rgba(168,130,44,.6);border-radius:8px;
+.inner{position:absolute;inset:34px 44px;border:1.5px solid rgba(168,130,44,.6);border-radius:8px;
   display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;text-align:center;padding:34px 38px}
 .inner::before{content:"";position:absolute;inset:8px;border:1px solid rgba(168,130,44,.3);border-radius:5px}
 
-.orn{width:210px;height:44px;margin:0}
+.orn{width:250px;height:52px;margin:0}
 .inner>*{margin-top:0}
-.spray{width:112px;height:112px}
+.spray{width:150px;height:150px}
 .cov{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
-.cov-tl{position:absolute;top:26px;left:26px}
-.cov-shubh{font-size:68px;letter-spacing:.1em;color:@@ROSE@@}
-.cov-names{font-family:'Great Vibes',cursive;font-size:104px;line-height:1.15;color:@@ROSE@@;margin-top:8px}
+.cov-tl{position:absolute;top:44px;left:44px}
+.cov-shubh{font-size:90px;letter-spacing:.1em;color:@@ROSE@@}
+.cov-names{font-family:'Great Vibes',cursive;font-size:137px;line-height:1.15;color:@@ROSE@@;margin-top:11px}
 .cov-names i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.48em;color:@@ROSE2@@}
-.cov-date{font-size:30px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:20px}
+.cov-date{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:26px}
 
-.inv{font-size:60px;letter-spacing:.05em;color:@@ROSE2@@}
-.shloka{font-size:42px;line-height:1.95;color:@@ROSE@@}
-.trans{font-size:30px;font-style:italic;line-height:1.55;color:@@INK@@}
-.shubh{font-size:70px;letter-spacing:.1em;color:@@ROSE@@}
-.label{font-size:24px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.sub{font-size:34px;color:@@INK@@}
-.fams{display:flex;gap:22px;align-items:flex-start;width:100%;margin-top:8px}
+.inv{font-size:79px;letter-spacing:.05em;color:@@ROSE2@@}
+.shloka{font-size:55px;line-height:1.95;color:@@ROSE@@}
+.trans{font-size:40px;font-style:italic;line-height:1.55;color:@@INK@@}
+.shubh{font-size:92px;letter-spacing:.1em;color:@@ROSE@@}
+.label{font-size:32px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.sub{font-size:45px;color:@@INK@@}
+.fams{display:flex;gap:29px;align-items:flex-start;width:100%;margin-top:11px}
 .fam{flex:1}
-.fam h3{font-size:21px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.fsub{font-size:27px;color:@@INK@@;margin-top:3px}
-.kin{font-size:29px;line-height:1.7;color:@@ROSE@@;white-space:nowrap}
-.bless{font-size:24px;font-style:italic;color:@@INK@@;margin-top:16px;line-height:1.5}
+.fam h3{font-size:28px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.fsub{font-size:36px;color:@@INK@@;margin-top:4px}
+.kin{font-size:38px;line-height:1.7;color:@@ROSE@@;white-space:nowrap}
+.bless{font-size:32px;font-style:italic;color:@@INK@@;margin-top:21px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.12em}
 .fdiv{width:1px;align-self:stretch;background:linear-gradient(180deg,transparent,rgba(168,130,44,.65),transparent)}
-.invite{font-size:36px;font-style:italic;line-height:1.65;color:@@INK@@}
-.name{font-family:'Great Vibes',cursive;font-size:144px;line-height:1.02;color:@@ROSE@@}
-.weds{font-size:40px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
+.invite{font-size:44px;font-style:italic;line-height:1.65;color:@@INK@@}
+.name{font-family:'Great Vibes',cursive;font-size:162px;line-height:1.02;color:@@ROSE@@}
+.weds{font-size:53px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
 .weds .deva{font-style:normal;font-size:.76em}
-.hi-note{font-size:30px;line-height:1.8;color:@@INK@@}
+.hi-note{font-size:37px;line-height:1.8;color:@@INK@@}
 .ev{display:flex;align-items:stretch;width:100%;border:1.5px solid rgba(168,130,44,.55);
   background:rgba(255,250,248,.88);text-align:left}
-.evd{width:186px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 8px;
+.evd{width:246px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 11px;
   background:rgba(224,154,60,.16);border-right:1.5px solid rgba(168,130,44,.5)}
-.evd b{font-size:72px;line-height:1;font-weight:500;color:@@ROSE@@}
-.evd span{font-size:15px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@;margin-top:9px}
-.evd i{font-size:20px;font-style:normal;color:@@INK@@;margin-top:4px}
-.evb{padding:18px 22px}
-.evb h3{font-size:36px;font-weight:600;color:@@ROSE@@}
+.evd b{font-size:95px;line-height:1;font-weight:500;color:@@ROSE@@}
+.evd span{font-size:20px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@;margin-top:12px}
+.evd i{font-size:26px;font-style:normal;color:@@INK@@;margin-top:5px}
+.evb{padding:24px 29px}
+.evb h3{font-size:48px;font-weight:600;color:@@ROSE@@}
 .evb h3 .deva{font-weight:400;font-size:.7em;color:@@ROSE2@@;margin-left:10px}
-.evx{font-size:27px;font-style:italic;color:@@INK@@;margin-top:5px}
-.evt{font-size:22px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:12px}
-.venue{font-size:66px;font-weight:600;color:@@ROSE@@}
-.addr{font-size:31px;line-height:1.55;color:@@INK@@}
-.blessing{font-size:54px;line-height:1.7;color:@@ROSE@@}
+.evx{font-size:36px;font-style:italic;color:@@INK@@;margin-top:7px}
+.evt{font-size:29px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:16px}
+.venue{font-size:87px;font-weight:600;color:@@ROSE@@}
+.addr{font-size:41px;line-height:1.55;color:@@INK@@}
+.blessing{font-size:71px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 
 <div id="intro">
@@ -533,17 +641,22 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
   <p class="deva inv2">॥ श्री गणेशाय नमः ॥</p>
 </div>
 
-<div id="nagL">@@NAGL@@</div><div id="nagR">@@NAGR@@</div>
-
-<div id="stage"><div id="book">
-  <div id="stack"></div>
-  <div class="pg" id="pL"><div class="photo">@@RIVER@@<img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna on the bank of the Yamuna"><div class="vg"></div></div></div>
-  <div class="pg" id="pR"><div class="inner" id="iR"></div><div id="uShade"></div></div>
-  <div id="leaf">
-    <div class="face" id="lf"><div class="inner" id="ilf"></div><div class="sh" id="shF"></div><div id="edge"></div></div>
-    <div class="face" id="lb"><div class="photo">@@RIVER@@<img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna on the bank of the Yamuna"><div class="vg"></div></div><div class="sh" id="shB"></div></div>
+<div id="stage">
+  <div id="art">
+    @@RIVER@@
+    <img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna on the bank of the Yamuna">
+    <div id="nagL">@@NAGL@@</div><div id="nagR">@@NAGR@@</div>
+    <div id="artVg"></div><div id="artHem"></div>
   </div>
-</div></div>
+  <div id="pagewrap">
+    <div class="pg" id="pR"><div class="inner" id="iR"></div><div id="uShade"></div></div>
+    <div id="leaf">
+      <div class="face" id="lf"><div class="inner" id="ilf"></div><div class="sh" id="shF"></div><div id="edge"></div></div>
+      <div class="face" id="lb"><div class="sh" id="shB"></div></div>
+    </div>
+  </div>
+  <div id="cover"><div class="inner" id="icv"></div></div>
+</div>
 
 <div id="shower"></div>
 
@@ -551,6 +664,8 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 const PAGEHTML = @@PAGES@@, TIMES = @@TIMES@@, DURATION = @@DUR@@;
 const HOLD = @@HOLD@@, TURN = @@TURN@@, OPEN_DUR = @@OPEN@@, COVER_HOLD = @@COVER_HOLD@@;
 const SCENE_B = @@SCENE_B@@, BOOK_IN = SCENE_B - 0.2, BEAT = 60/104, START = TIMES[1];
+/* the cut-out is 660x800 and its lowest pixel sits at 0.819 of that height */
+const CPW = 660, CPH = 800, FEET = 0.819, GROUND = 962;
 
 const RV=[...document.querySelectorAll('.river')].map(sv=>{
   const grab=c=>[...sv.querySelectorAll(c)].map(el=>{
@@ -563,7 +678,14 @@ const RV=[...document.querySelectorAll('.river')].map(sv=>{
     refl:[...sv.querySelectorAll('.rv-rf')].map(el=>({el,i:+el.dataset.i,r:+el.getAttribute('rx')})),
     clouds:grab('.rv-cloud'),birds:grab('.rv-bird'),shim:grab('.rv-shim'),
     lotus:grab('.rv-lotus'),reeds:grab('.rv-reed'),vines:grab('.rv-vine'),
-    grass:grab('.rv-grass'),flies:[...sv.querySelectorAll('.rv-fly')].map(el=>({el,i:+el.dataset.i}))};
+    grass:grab('.rv-grass'),flies:[...sv.querySelectorAll('.rv-fly')].map(el=>({el,i:+el.dataset.i})),
+    diyas:[...sv.querySelectorAll('.rv-diya')].map(el=>({el,i:+el.dataset.i,
+      b:el.getAttribute('transform')||'',flame:el.querySelector('.flame')})),
+    cows:[...sv.querySelectorAll('.rv-cow')].map(el=>({el,i:+el.dataset.i,
+      x:+el.dataset.x,y:+el.dataset.y,
+      head:el.querySelector('.cowHead'),tail:el.querySelector('.tail'),
+      ear:el.querySelector('.ear'),bell:el.querySelector('.bell'),
+      legs:['.legBN','.legFN','.legBF','.legFF'].map(c=>el.querySelector(c))}))};
 });
 const clamp=(v,a,b)=>v<a?a:v>b?b:v, easeIO=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2, easeOut=p=>1-Math.pow(1-p,3);
 
@@ -579,15 +701,17 @@ for(let i=0;i<62;i++){
        el.style.background=rnd()<0.5?'linear-gradient(140deg,#F4C285,#E09A3C)':'linear-gradient(140deg,#F0A9BC,#C94E72)';}
   if(near<0.3) el.style.filter='blur(1.6px)';            /* a little depth of field */
   shower.appendChild(el);
-  flakes.push({el,x:rnd()*1960-20,y0:rnd()*1500,sp:(40+rnd()*54)*(0.7+near*0.7),amp:26+rnd()*78,ph:rnd()*6.283,
+  flakes.push({el,x:rnd()*1120-20,y0:rnd()*2200,sp:(40+rnd()*54)*(0.7+near*0.7),amp:26+rnd()*78,ph:rnd()*6.283,
                spin:(rnd()<.5?-1:1)*(34+rnd()*96),flut:1.4+rnd()*2.2,op:(.5+rnd()*.42)*(0.6+near*0.5)});
 }
 
 const iR=document.getElementById('iR'),ilf=document.getElementById('ilf'),
       leaf=document.getElementById('leaf'),shF=document.getElementById('shF'),shB=document.getElementById('shB'),
       uShade=document.getElementById('uShade'),edge=document.getElementById('edge'),
-      book=document.getElementById('book'),stage=document.getElementById('stage'),
-      intro=document.getElementById('intro'),pL=document.getElementById('pL'),
+      stage=document.getElementById('stage'),art=document.getElementById('art'),
+      pagewrap=document.getElementById('pagewrap'),
+      cover=document.getElementById('cover'),icv=document.getElementById('icv'),
+      intro=document.getElementById('intro'),
       nags=[document.getElementById('nagL'),document.getElementById('nagR')],
       dancers=[...document.querySelectorAll('.rk-fg')];
 let last={};
@@ -595,7 +719,7 @@ const setHTML=(n,k,h)=>{ if(last[k]!==h){n.innerHTML=h;last[k]=h;} };
 
 function seek(t){
   for(const f of flakes){
-    const y=((f.y0+t*f.sp)%1460+1460)%1460-190;
+    const y=((f.y0+t*f.sp)%2180+2180)%2180-200;
     const x=f.x+Math.sin(t*0.42+f.ph)*f.amp;
     const sx=Math.cos(t*f.flut+f.ph)*0.72+0.28;      /* flutter, as a petal turns edge-on */
     f.el.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+(t*f.spin+f.ph*60).toFixed(1)+'deg) scaleX('+sx.toFixed(3)+')';
@@ -663,51 +787,94 @@ function seek(t){
     }
   }
 
+  /* Krishna's cows come down the bank, then settle to graze */
+  for(const R of RV){
+    for(const c of R.cows){
+      const wp=easeIO(clamp((ST-0.6-c.i*1.5)/8.0,0,1));
+      c.el.setAttribute('transform','translate('+(c.x+(1320-c.x)*(1-wp)).toFixed(1)+' '+c.y+')');
+      const walking=wp<0.999;
+      const step=2*Math.PI*(ST*1.55+c.i*0.37);
+      const sw=walking?20:0;
+      c.legs[0].style.transform='rotate('+( sw*Math.sin(step)).toFixed(2)+'deg)';
+      c.legs[1].style.transform='rotate('+(-sw*Math.sin(step)).toFixed(2)+'deg)';
+      c.legs[2].style.transform='rotate('+(-sw*Math.sin(step+0.5)).toFixed(2)+'deg)';
+      c.legs[3].style.transform='rotate('+( sw*Math.sin(step+0.5)).toFixed(2)+'deg)';
+      /* head high while she walks, down in the grass once she stops */
+      const graze=(1-wp)*0+clamp((ST-9.5-c.i*1.5)/2.2,0,1);
+      const chew=1.6*Math.sin(2*Math.PI*ST*2.6+c.i);
+      c.head.style.transform='rotate('+(30*graze+chew*graze+2*Math.sin(step)*(walking?1:0)).toFixed(2)+'deg)';
+      c.tail.style.transform='rotate('+(7*Math.sin(2*Math.PI*ST*0.75+c.i*1.9)).toFixed(2)+'deg)';
+      /* an ear flicks now and then */
+      const fl=Math.max(0,Math.sin(2*Math.PI*(ST*0.33+c.i*0.4))-0.93)/0.07;
+      c.ear.style.transform='rotate('+(-22*fl).toFixed(2)+'deg)';
+      c.bell.style.transform='rotate('+((walking?9:3)*Math.sin(step+0.9)).toFixed(2)+'deg)';
+    }
+    /* lamps set afloat: each bobs on the water and its flame gutters */
+    for(const d of R.diyas){
+      d.el.setAttribute('transform',d.b+' translate('+(7*Math.sin(ST*0.31+d.i*1.7)).toFixed(2)
+        +' '+(4.5*Math.sin(ST*0.86+d.i*2.3)).toFixed(2)+')');
+      const fk=0.86+0.14*Math.sin(ST*9.1+d.i*2.1)+0.07*Math.sin(ST*23.3+d.i);
+      d.flame.style.transformOrigin='0px 0px';
+      d.flame.style.transform='scale('+(0.94+0.1*fk).toFixed(3)+','+fk.toFixed(3)
+        +') rotate('+(3.5*Math.sin(ST*3.7+d.i)).toFixed(2)+'deg)';
+      d.flame.style.opacity=(0.82+0.18*fk).toFixed(3);
+    }
+  }
+
   /* Radha and Krishna: they come along the bank and meet, stand a while by
      the water, and then dance as the sky turns gold. */
-  let cx,cs,cy,cop=1,danceAmt;
+  let cw,dx,dy=0,cop=1,danceAmt;
   if(t<A2){
     const p=easeIO(clamp((t-START)/(A2-START),0,1));
-    cx=300-290*p; cs=0.68+0.02*p; danceAmt=0;
-    cy=-5.5*Math.abs(Math.sin(Math.PI*(t-START)/0.62))*(1-0.85*p);   /* the step of a walk */
+    cw=330+128*p; dx=440-440*p; danceAmt=0;
+    dy=-7*Math.abs(Math.sin(Math.PI*(t-START)/0.62))*(1-0.85*p);   /* the step of a walk */
     cop=clamp((t-START)/1.4,0,1);
   } else if(t<A3){
     const p=easeIO(clamp((t-A2)/(A3-A2),0,1));
-    cx=10-10*p; cs=0.70+0.06*p; danceAmt=0;
-    cy=-2.4*Math.sin(2*Math.PI*(t-A2)/3.1);                          /* at rest, breathing */
+    cw=458+54*p; dx=0; danceAmt=0;
+    dy=-3.4*Math.sin(2*Math.PI*(t-A2)/3.1);                        /* at rest, breathing */
   } else {
-    cx=0; cs=0.76+0.10*easeIO(clamp((t-A3)/(DURATION-A3),0,1));
-    danceAmt=easeIO(clamp((t-A3)/2.6,0,1)); cy=0;
+    cw=512+74*easeIO(clamp((t-A3)/(DURATION-A3),0,1)); dx=0;
+    danceAmt=easeIO(clamp((t-A3)/2.6,0,1));
   }
-  /* drop them so their feet meet the bank whatever the scale: the cut-out's
-     lowest pixel sits at 722px in the page, the grass line at 761px */
-  cy += 17 + 34.8*cs;
   const ph=t/BEAT;
-  const bounce=-9.5*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
-  const sway=2.3*Math.sin(2*Math.PI*ph/4)*(0.3+0.7*danceAmt);
-  const skew=1.1*Math.sin(2*Math.PI*ph/4+0.6)*danceAmt;
-  const pulse=1+0.016*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
-  const dT='translate('+cx.toFixed(1)+'px,'+(cy+bounce).toFixed(2)+'px) rotate('+sway.toFixed(2)
-    +'deg) skewX('+skew.toFixed(2)+'deg) scale('+(cs*pulse).toFixed(4)+')';
-  for(const d of dancers){ d.style.transform=dT; d.style.opacity=cop.toFixed(3); }
+  const bounce=-13*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
+  const sway=2.4*Math.sin(2*Math.PI*ph/4)*(0.3+0.7*danceAmt);
+  const skew=1.2*Math.sin(2*Math.PI*ph/4+0.6)*danceAmt;
+  const pulse=1+0.018*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
+  const chF=cw*CPH/CPW;                       /* the cut-out keeps its proportions */
+  for(const d of dancers){
+    d.style.width=cw.toFixed(1)+'px';
+    d.style.left=(540-cw/2+dx).toFixed(1)+'px';
+    d.style.top=(GROUND-FEET*chF+dy).toFixed(1)+'px';
+    d.style.transform='translateY('+bounce.toFixed(2)+'px) rotate('+sway.toFixed(2)
+      +'deg) skewX('+skew.toFixed(2)+'deg) scale('+pulse.toFixed(4)+')';
+    d.style.opacity=cop.toFixed(3);
+  }
 
   const iin=easeOut(clamp(t/1.0,0,1)), iout=1-easeIO(clamp((t-(SCENE_B-0.9))/0.9,0,1));
   intro.style.opacity=(iin*iout).toFixed(3);
   intro.style.transform='scale('+(0.94+0.06*iin).toFixed(4)+')';
   intro.style.visibility=(iin*iout)<0.004?'hidden':'visible';
 
-  const bin=easeOut(clamp((t-BOOK_IN)/1.0,0,1));
-  stage.style.opacity=(bin*clamp((DURATION-t)/1.4,0,1)).toFixed(3);
+  const bin=easeOut(clamp((t-BOOK_IN)/1.0,0,1)), tail=clamp((DURATION-t)/1.4,0,1);
+  stage.style.opacity=(bin*tail).toFixed(3);
   stage.style.visibility=bin<0.004?'hidden':'visible';
-  stage.style.transform='scale('+(1+0.014*Math.sin(t*0.17)).toFixed(4)+')';   /* the camera breathes */
+  art.style.transform='scale('+(1+0.016*Math.sin(t*0.17)).toFixed(4)+')';   /* the camera breathes */
 
-  let i=0; for(let k=0;k<TIMES.length;k++) if(t>=TIMES[k]) i=k;
-  const isCover=(i===0), dur=isCover?OPEN_DUR:TURN;
-  const tStart=TIMES[i]+(isCover?COVER_HOLD:HOLD);
-  let p=(i>=PAGEHTML.length-1)?0:clamp((t-tStart)/dur,0,1);
-  const nxt=Math.min(i+1,PAGEHTML.length-1);
+  /* the cover swings open on its spine to begin the reading */
+  setHTML(icv,'C',PAGEHTML[0]);
+  const cvIn=easeOut(clamp((t-TIMES[0]+0.2)/0.8,0,1));
+  const cvP=clamp((t-(TIMES[0]+COVER_HOLD))/OPEN_DUR,0,1), cvE=easeIO(cvP);
+  cover.style.transform='rotateY('+(-115*cvE).toFixed(2)+'deg)';
+  cover.style.opacity=(cvIn*(1-0.35*cvE)*tail).toFixed(3);
+  cover.style.visibility=(cvIn<0.004||cvP>=1)?'hidden':'visible';
 
-  setHTML(ilf,'F',PAGEHTML[i]); setHTML(iR,'R',PAGEHTML[nxt]);
+  /* and then the pages turn, one at a time, under the picture */
+  let i=1; for(let k=1;k<TIMES.length;k++) if(t>=TIMES[k]) i=k;
+  const last_=PAGEHTML.length-1;
+  const p=(i>=last_)?0:clamp((t-(TIMES[i]+HOLD))/TURN,0,1);
+  setHTML(ilf,'F',PAGEHTML[i]); setHTML(iR,'R',PAGEHTML[Math.min(i+1,last_)]);
 
   const e=easeIO(p);
   leaf.style.transform='rotateY('+(-180*e).toFixed(2)+'deg)';
@@ -717,12 +884,8 @@ function seek(t){
   shB.style.opacity=(0.70*clamp((1-p)*2.1,0,1)*(p>0.45?1:0)).toFixed(3);
   uShade.style.opacity=(0.55*lift).toFixed(3);
   edge.style.opacity=(0.75*lift).toFixed(3);
-
-  const closed=isCover?(1-e):0;
-  book.style.transform='translateX('+(-365*closed).toFixed(1)+'px)';
-  pL.style.opacity=(isCover?e:1).toFixed(3);
 }
-window.seek=seek; window.DURATION=DURATION; seek(0);
+window.PAGEHTML=PAGEHTML; window.seek=seek; window.DURATION=DURATION; seek(0);
 </script></body></html>'''
 
 BLOOM = flower(20, 20, 7.6, '#E09A3C', '#B35A1E', n=9)
