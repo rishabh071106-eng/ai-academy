@@ -20,7 +20,7 @@ export async function search(page, s, cfg) {
   const jobs = await page.$$eval(".srp-jobtuple-wrapper, article.jobTuple", (els) =>
     els.map((e) => {
       const a = e.querySelector("a.title, a[class*=title]");
-      return { jobId: e.getAttribute("data-job-id") || a?.href.match(/-(\d{9,})/)?.[1], url: a?.href };
+      return { jobId: e.getAttribute("data-job-id") || a?.href.match(/-(\d{9,})/)?.[1], url: a?.href, cardText: (e.innerText || "").replace(/\s+/g, " ").trim().slice(0, 300) };
     }).filter((j) => j.jobId && j.url));
   return jobs.slice(0, cfg.max);
 }
@@ -54,24 +54,27 @@ const CHAT = "[class*=chatbot_Drawer], [class*=chatbot_MessageContainer], .chatb
 
 /**
  * Replaces the resume on her Naukri profile (Naukri's Apply always sends the profile resume).
- * Uses a separate tab so the job page stays open. Returns true when Naukri confirms the upload.
+ * Done in the same tab (no extra windows); pass `returnTo` to come back to the job afterwards.
  */
-export async function uploadResume(context, pdfPath) {
-  const tab = await context.newPage();
+export async function uploadResume(page, pdfPath, returnTo) {
   try {
-    await tab.goto("https://www.naukri.com/mnjuser/profile", { waitUntil: "domcontentloaded" });
-    await tab.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
-    const input = tab.locator("input#attachCV, input[type=file][id*=attach i], input[type=file][accept*=pdf i], input[type=file]").first();
+    await page.goto("https://www.naukri.com/mnjuser/profile", { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+    const input = page.locator("input#attachCV, input[type=file][id*=attach i], input[type=file][accept*=pdf i], input[type=file]").first();
     await input.waitFor({ state: "attached", timeout: 15000 });
     await input.setInputFiles(pdfPath);
-    const ok = await firstVisible(tab, ["text=/successfully uploaded|uploaded successfully|resume has been (successfully )?(uploaded|updated)/i"], 20000);
+    const ok = await firstVisible(page, ["text=/successfully uploaded|uploaded successfully|resume has been (successfully )?(uploaded|updated)/i"], 20000);
     await sleep(1500);
     return !!ok;
   } catch (e) {
     log("warn", `   resume upload failed: ${e.message.split("\n")[0]}`);
     return false;
   } finally {
-    await tab.close().catch(() => {});
+    if (returnTo) {
+      await page.goto(returnTo, { waitUntil: "domcontentloaded" }).catch(() => {});
+      await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+      await sleep(1500);
+    }
   }
 }
 
@@ -85,15 +88,15 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
   let resumeNote = "profile resume";
   if (cfg.uploadTailoredResume !== false && resumePath) {
     log("dim", "   uploading tailored resume to your Naukri profile…");
-    if (await uploadResume(page.context(), resumePath)) {
+    if (await uploadResume(page, resumePath, job.url)) {
       resumeNote = "tailored resume";
       apply.uploaded = true;
     } else {
       log("warn", "   couldn't confirm the upload; applying with whatever resume is on the profile");
     }
-    await page.bringToFront().catch(() => {});
   }
-  await btn.click();
+  const applyBtn = (await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"], 8000)) ?? btn;
+  await applyBtn.click();
   await sleep(2500);
 
   for (let turn = 0; turn < 20; turn++) {

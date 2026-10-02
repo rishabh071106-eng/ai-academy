@@ -9,6 +9,29 @@
     "next.js",
     "nextjs"
   ],
+  "relevantKeywords": [
+    "magento",
+    "adobe commerce",
+    "react",
+    "reactjs",
+    "react.js",
+    "next.js",
+    "nextjs",
+    "php",
+    "full stack",
+    "fullstack",
+    "full-stack",
+    "front end",
+    "frontend",
+    "front-end",
+    "e-commerce",
+    "ecommerce",
+    "graphql",
+    "javascript",
+    "typescript",
+    "web developer",
+    "ui developer"
+  ],
   "maxApplicationsPerRun": 15,
   "maxJobsToScanPerSearch": 40,
   "delaySecondsBetweenApplications": [
@@ -22,24 +45,28 @@
   "platforms": {
     "linkedin": {
       "enabled": true,
-      "easyApplyOnly": false,
+      "easyApplyOnly": true,
       "postedWithinDays": 14,
       "searches": [
         {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
           "keywords": "Adobe Commerce Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "location": "India"
         },
         {
-          "keywords": "Senior Magento Developer",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
-          "keywords": "Magento 2 Developer",
+          "keywords": "Magento 2",
           "location": "India",
           "remote": true
         },
         {
-          "keywords": "React Next.js Developer",
+          "keywords": "React Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Next.js Developer",
           "location": "Bengaluru, Karnataka, India"
         },
         {
@@ -54,11 +81,11 @@
       "experienceYears": 9,
       "searches": [
         {
-          "keywords": "adobe commerce developer",
+          "keywords": "magento developer",
           "location": "bangalore"
         },
         {
-          "keywords": "senior magento developer",
+          "keywords": "adobe commerce",
           "location": "bangalore"
         },
         {
@@ -66,7 +93,11 @@
           "location": "remote"
         },
         {
-          "keywords": "react nextjs developer",
+          "keywords": "react developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "nextjs developer",
           "location": "bangalore"
         },
         {
@@ -90,7 +121,8 @@
     ".net",
     "android",
     "ios developer",
-    "data scientist"
+    "data scientist",
+    "react native"
   ],
   "excludeCompanies": []
 }

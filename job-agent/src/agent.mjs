@@ -36,7 +36,7 @@ try {
 const openPages = new Set();
 const shutdown = async () => {
   log("warn", "Stopping agent…");
-  for (const p of openPages) await p.close().catch(() => {});
+  // Leave the agent's tab open in Chrome; never close the user's browser.
   await closePdfBrowser().catch(() => {});
   process.exit(0);
 };
@@ -48,6 +48,9 @@ const mustApply = (config.alwaysApplyKeywords ?? []).map((k) => ({
   word: k,
   re: new RegExp(`(^|[^a-z])${k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`, "i"),
 }));
+// A job is worth reading only if it mentions at least one of her core areas.
+const relevantRe = new RegExp(`(^|[^a-z])(${(config.relevantKeywords ?? []).map((k) => k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})([^a-z]|$)`, "i");
+const isRelevant = (text) => !(config.relevantKeywords ?? []).length || relevantRe.test(text);
 const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job.description}`))?.word;
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
@@ -68,13 +71,17 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("err", `  search failed: ${e.message.split("\n")[0]}`);
         continue;
       }
-      log("dim", `  ${refs.length} jobs found`);
+      // Cheap relevance check on the result cards, before opening anything.
+      const offTopic = refs.filter((r) => r.cardText && !isRelevant(r.cardText));
+      refs = refs.filter((r) => !offTopic.includes(r));
+      log("dim", `  ${refs.length + offTopic.length} jobs found, ${refs.length} look relevant`);
+      if (offTopic.length) log("dim", `  ignoring off-topic: ${offTopic.slice(0, 6).map((r) => r.cardText.split(/ · |\n/)[0].slice(0, 45)).join(" | ")}${offTopic.length > 6 ? " …" : ""}`);
 
       for (const ref of refs) {
         if (applied >= maxApply) break;
         const existing = tracker.find(key, ref.jobId);
         // Low-score skips get a second look (matching rules may have changed); exclusions don't.
-        const retry = existing?.status === "skipped" && existing.skipReason !== "excluded";
+        const retry = existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason);
         if (existing && !retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
 
@@ -91,6 +98,12 @@ for (const [key, mod] of Object.entries(platforms)) {
           fs.mkdirSync(path.dirname(shot), { recursive: true });
           await page.screenshot({ path: shot }).catch(() => {});
           log("err", `  couldn't read the job page (${ref.url}) — screenshot saved to data/debug/`);
+          continue;
+        }
+        if (!isRelevant(`${job.title}\n${job.description}`)) {
+          log("dim", `• ${job.title || job.url} — not a Magento/PHP/React/front-end/full-stack role, skipping`);
+          tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: "Off-topic (none of her core skills mentioned)" });
+          stats.skipped++;
           continue;
         }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
@@ -173,7 +186,7 @@ for (const [key, mod] of Object.entries(platforms)) {
       }
     }
   } finally {
-    await page.close().catch(() => {});
+    // Keep the tab: closing the last tab of a window closes the window in her Chrome.
   }
 }
 
@@ -216,7 +229,8 @@ if (naukri.apply.uploaded && config.platforms.naukri?.restoreBaseResumeAfterRun 
     const custom = (config.platforms.naukri.baseResumePath || "").replace(/^~(?=\/)/, os.homedir());
     const base = custom && fs.existsSync(custom) ? custom : await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" });
     log("info", "\nRestoring your normal resume on Naukri…");
-    const ok = await naukri.uploadResume(context, base);
+    const tab = [...openPages].at(-1) ?? (await context.newPage());
+    const ok = await naukri.uploadResume(tab, base);
     log(ok ? "ok" : "warn", ok ? `  ${path.basename(base)} is back on your Naukri profile` : "  couldn't confirm; check your Naukri profile resume");
   } catch (e) {
     log("warn", `  couldn't restore the base resume: ${e.message}`);

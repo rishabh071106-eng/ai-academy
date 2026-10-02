@@ -12,26 +12,49 @@ export async function search(page, s, cfg) {
   if (cfg.postedWithinDays) params.set("f_TPR", `r${cfg.postedWithinDays * 86400}`);
   if (s.remote) params.set("f_WT", "2");
   await page.goto(`https://www.linkedin.com/jobs/search/?${params}`, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await sleep(3000);
-  if (page.url().includes("/login") || page.url().includes("/authwall")) throw new Error("LinkedIn is not logged in in this Chrome window");
+  if (/\/login|\/authwall|\/checkpoint/.test(page.url())) throw new Error("LinkedIn is not logged in in this Chrome window");
 
-  const ids = new Set();
-  for (let round = 0; round < 8 && ids.size < cfg.max; round++) {
-    const found = await page.$$eval("[data-occludable-job-id], [data-job-id]", (els) =>
-      els.map((e) => e.getAttribute("data-occludable-job-id") || e.getAttribute("data-job-id")).filter((x) => /^\d+$/.test(x)));
-    found.forEach((id) => ids.add(id));
+  // LinkedIn sometimes ignores URL keywords and shows "recommended" jobs; then type the search in.
+  const box = page.getByRole("combobox", { name: /title|skill|search/i }).or(page.getByRole("textbox", { name: /title|skill|search jobs/i })).filter({ visible: true }).first();
+  const current = (await box.inputValue({ timeout: 3000 }).catch(() => null)) ?? "";
+  if (!current.toLowerCase().includes(s.keywords.toLowerCase().split(/\s+/)[0])) {
+    log("dim", `  LinkedIn didn't apply the search ("${current}"); typing "${s.keywords}"`);
+    await box.fill(s.keywords).catch(() => {});
+    const loc = page.getByRole("combobox", { name: /city|location|state|zip/i }).filter({ visible: true }).first();
+    if (s.location) await loc.fill(s.location).catch(() => {});
+    await box.press("Enter").catch(() => {});
+    await sleep(4000);
+  }
+  log("dim", `  LinkedIn shows: ${(await page.title()).replace(/\s*\|\s*LinkedIn$/, "")}`);
+
+  const jobs = new Map();
+  for (let round = 0; round < 10 && jobs.size < cfg.max; round++) {
+    const found = await page.evaluate(() => {
+      const out = [];
+      const add = (id, el) => id && /^\d+$/.test(id) && out.push({ id, text: (el?.innerText || "").replace(/\s+/g, " ").trim().slice(0, 300) });
+      document.querySelectorAll("[data-occludable-job-id], [data-job-id]").forEach((e) => add(e.getAttribute("data-occludable-job-id") || e.getAttribute("data-job-id"), e));
+      document.querySelectorAll("a[href*='/jobs/view/'], a[href*='currentJobId=']").forEach((a) => {
+        const id = a.href.match(/jobs\/view\/(\d+)/)?.[1] || a.href.match(/currentJobId=(\d+)/)?.[1];
+        add(id, a.closest("li, [data-occludable-job-id], div[class*=card]") || a);
+      });
+      return out;
+    });
+    for (const f of found) if (!jobs.has(f.id) || (!jobs.get(f.id) && f.text)) jobs.set(f.id, f.text);
     // The results list lazy-loads as it scrolls.
     await page.evaluate(() => {
-      const list = document.querySelector(".jobs-search-results-list, .scaffold-layout__list > div, .scaffold-layout__list");
+      const list = document.querySelector(".jobs-search-results-list, .scaffold-layout__list > div, .scaffold-layout__list, [class*=results-list]");
       (list ?? document.scrollingElement).scrollBy(0, 1200);
     });
     await sleep(900);
   }
-  return [...ids].slice(0, cfg.max).map((id) => ({ jobId: id, url: `https://www.linkedin.com/jobs/view/${id}/` }));
+  return [...jobs].slice(0, cfg.max).map(([id, cardText]) => ({ jobId: id, url: `https://www.linkedin.com/jobs/view/${id}/`, cardText }));
 }
 
 // LinkedIn renders Easy Apply as a <button> on some layouts and as a link on others.
-const easyApplyControl = (page) => page.getByRole("button", { name: /easy apply/i }).or(page.getByRole("link", { name: /easy apply/i })).first();
+// There are often two (one hidden in a sticky header); always take a visible one.
+const easyApplyControl = (page) => page.getByRole("button", { name: /easy apply/i }).or(page.getByRole("link", { name: /easy apply/i })).filter({ visible: true }).first();
 
 export async function getJob(page, ref) {
   await page.goto(ref.url, { waitUntil: "domcontentloaded" });
@@ -49,7 +72,7 @@ export async function getJob(page, ref) {
   const company = (await textOf(page, [".job-details-jobs-unified-top-card__company-name a", ".job-details-jobs-unified-top-card__company-name", ".jobs-unified-top-card__company-name"])).split("\n")[0];
 
   const easy = await easyApplyControl(page).isVisible({ timeout: 3000 }).catch(() => false);
-  const other = !easy && (await page.getByRole("button", { name: /^apply/i }).or(page.getByRole("link", { name: /^apply/i })).first().isVisible().catch(() => false));
+  const other = !easy && (await page.getByRole("button", { name: /^apply/i }).or(page.getByRole("link", { name: /^apply/i })).filter({ visible: true }).first().isVisible().catch(() => false));
   return {
     ...ref,
     title: h1 || fromTitle.title || "",
@@ -158,11 +181,13 @@ async function applyRoot(page) {
   return null;
 }
 
-const button = (root, re) => root.getByRole("button", { name: re }).first();
+const button = (root, re) => root.getByRole("button", { name: re }).filter({ visible: true }).first();
 
 export async function apply(page, job, { resumePath, profile, mode }) {
   const ctl = easyApplyControl(page);
-  if (!(await ctl.isVisible({ timeout: 5000 }).catch(() => false))) return { status: "needs_attention", note: "Easy Apply button not found" };
+  await ctl.waitFor({ state: "visible", timeout: 8000 }).catch(() => {});
+  if (!(await ctl.isVisible().catch(() => false))) return stuck(page, null, job, mode, "I can't see the Easy Apply button");
+  await ctl.scrollIntoViewIfNeeded().catch(() => {});
   await ctl.click();
   const root = await applyRoot(page);
   if (!root) return stuck(page, null, job, mode, "the Easy Apply form didn't open");
