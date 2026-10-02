@@ -14,7 +14,7 @@ search ─► read job ─► Claude: match score + tailored resume ─► apply
 | **Scores them** | Claude rates each job against `profile.json`, treating her as full-stack (Magento/PHP back end and React/Next.js front end). Any job that mentions a word in `alwaysApplyKeywords` (Magento, Adobe Commerce, React, Next.js) is applied to whatever the score. Others need `minMatchScore` (55). |
 | **Tailors the resume** | Reorders and rewrites the summary, skills and bullets for each job. It never invents experience. The PDF is saved as `data/resumes/<job>/Aishwarya_Sharma_Resume.pdf`. |
 | **Applies** | LinkedIn: goes through Easy Apply, uploads the tailored PDF and answers the screening questions. Naukri: clicks Apply and answers the recruiter chatbot. |
-| **Messages the hiring team** | Writes a personal note to the recruiter or hiring manager for every matched job. On LinkedIn it sends it with the **Message** button on the "Meet the hiring team" card when LinkedIn allows that (after asking you). Otherwise the message is saved on the dashboard with a **Copy** button. |
+| **Messages the hiring team** | Writes a short, human-sounding note to the recruiter or hiring manager for every matched job. It names the role, one specific thing from the job post that matches her work, and a real project. With LinkedIn Premium it sends it as an InMail from the "Meet the hiring team" card (after asking you). On the dashboard you can **edit any message and press "Send on LinkedIn"**, or copy it. |
 | **Asks when unsure** | If a question needs data it doesn't have (notice period, CTC…) it **pauses and asks you** instead of guessing. |
 | **Tracks** | Dashboard at http://localhost:4321 shows KPIs, applications per day, the pipeline, status edits, notes, links to each tailored resume, and CSV export. |
 
@@ -65,7 +65,7 @@ Change searches, the match threshold, `alwaysApplyKeywords`, the per-run cap and
 
 - **Use it at a human pace.** Automating LinkedIn is against its user agreement, and heavy use can get an account restricted. The defaults are deliberately gentle: review mode, at most 15 applications per run, and a 25 to 70 s pause between applications. Keep them that way.
 - **Naukri uses the resume on your Naukri profile.** Naukri's one-click apply attaches that resume, not a per-job file. The tailored PDF is still saved for each Naukri job, for reference or to upload manually.
-- **Hiring-team messages:** LinkedIn only lets you message people you're connected to, people with open profiles, or anyone if you have Premium (InMail). When it won't, the message is kept as a draft on the dashboard; copy it, or use the short version as a connection-request note. Naukri has no candidate-to-recruiter messaging, so Naukri messages are always drafts.
+- **Hiring-team messages:** sending needs LinkedIn Premium (InMail) unless you're already connected. Each InMail uses a credit, so review messages in *Ask before submit* mode or send them from the dashboard. Jobs without a "Meet the hiring team" card stay as drafts; copy the message, or use the short version as a connection-request note. Naukri has no candidate-to-recruiter messaging, so Naukri messages are always drafts.
 - Site layouts change. If a selector stops matching, the job becomes *Needs attention* instead of a wrong submission. Selectors live in `src/linkedin.mjs` and `src/naukri.mjs`.
 - All data stays local: `data/applications.json`, `data/resumes/` and `profile.json` are git-ignored.
 - To preview the dashboard with sample rows, run `npm run demo-data`. Delete `data/applications.json` before real use.
@@ -81,6 +81,7 @@ src/llm.mjs            Claude calls: match + tailor, answer questions, import re
 src/resume.mjs         tailored resume → HTML → PDF
 src/tracker.mjs        data/applications.json store
 src/server.mjs         dashboard server + API
+src/send-message.mjs   sends one saved message (dashboard "Send on LinkedIn")
 src/runner.mjs         starts/stops the agent for the dashboard and relays its questions
 dashboard/index.html   the dashboard
 ```

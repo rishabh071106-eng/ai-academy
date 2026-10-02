@@ -1,5 +1,6 @@
 // Local dashboard: http://localhost:4321  (data stays on this machine)
 import fs from "node:fs";
+import { fork } from "node:child_process";
 import http from "node:http";
 import path from "node:path";
 import { DATA_DIR, ROOT, log, readJson } from "./util.mjs";
@@ -63,9 +64,28 @@ const server = http.createServer(async (req, res) => {
     const patch = {};
     if (b.status && tracker.STATUSES.includes(b.status)) patch.status = b.status;
     if (typeof b.notes === "string") patch.notes = b.notes;
+    if (b.hiringMessage && typeof b.hiringMessage.full === "string") {
+      const cur = tracker.loadAll().find((r) => r.id === m[1])?.hiringMessage ?? {};
+      patch.hiringMessage = { ...cur, ...b.hiringMessage };
+    }
     if (b.status) patch.historyNote = "Updated on dashboard";
     const row = tracker.update(m[1], patch);
     return row ? send(res, 200, row) : send(res, 404, { error: "not found" });
+  }
+  const sm = p.match(/^\/api\/applications\/(.+)\/send-message$/);
+  if (sm && req.method === "POST") {
+    const child = fork(path.join(ROOT, "src", "send-message.mjs"), [sm[1]], { cwd: ROOT, stdio: ["ignore", "pipe", "pipe", "ipc"] });
+    let out = "";
+    child.stdout.on("data", (d) => (out += d));
+    const timer = setTimeout(() => child.kill("SIGKILL"), 120000);
+    child.on("exit", () => {
+      clearTimeout(timer);
+      const last = out.trim().split("\n").reverse().find((l) => l.startsWith("{"));
+      let result = { status: "draft", note: "Sending failed" };
+      try { if (last) result = JSON.parse(last); } catch {}
+      send(res, 200, { result, row: tracker.loadAll().find((r) => r.id === sm[1]) });
+    });
+    return;
   }
   if (m && req.method === "DELETE") return send(res, tracker.remove(m[1]) ? 200 : 404, {});
   send(res, 404, { error: "not found" });

@@ -88,23 +88,32 @@ async function hiringContact(page) {
 export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
   const box = page.locator("[data-ja=hiring-team]").first();
   const btn = (await box.count()) ? await firstVisible(box, ["button:has-text('Message')", "a:has-text('Message')"]) : null;
-  if (!btn) return { status: "draft", note: "No Message button on LinkedIn (not connected / needs InMail)" };
-  if (mode === "auto" && !autoSend) return { status: "draft", note: "Auto-send of messages is off in config.json" };
+  if (!btn) return { status: "draft", note: "No Message button on the hiring-team card" };
+  if (mode === "auto" && !autoSend) return { status: "draft", note: "Auto-send is off; send it from the dashboard" };
 
   await btn.click();
-  await sleep(2500);
-  if (await firstVisible(page, ["text=/try premium|reactivate premium|inmail credits/i"], 1000)) {
+  // With Premium the composer opens as an InMail (it may also show "InMail credits"); only give up
+  // when no text box appears at all.
+  const box2 = await firstVisible(page, [".msg-form__contenteditable", "div[role=textbox][contenteditable=true]"], 8000);
+  if (!box2) {
+    const upsell = await firstVisible(page, ["text=/try premium|reactivate premium|buy inmail|out of inmail/i"], 500);
     await firstVisible(page, ["button[aria-label='Dismiss']", "button[aria-label*='Close' i]"]).then((b) => b?.click()).catch(() => {});
-    return { status: "draft", note: "LinkedIn wants Premium/InMail to message this person" };
+    return { status: "draft", note: upsell ? "LinkedIn needs Premium / more InMail credits to message this person" : "Message window didn't open" };
   }
-  const box2 = await firstVisible(page, [".msg-form__contenteditable", "div[role=textbox][contenteditable=true]"], 6000);
-  if (!box2) return { status: "draft", note: "Message window didn't open" };
-  const subject = await firstVisible(page, ["input[name=subject]", "input[placeholder*='Subject' i]"]);
+  const subject = await firstVisible(page, ["input[name=subject]", "input[placeholder*='Subject' i]", "input[aria-label*='Subject' i]"]);
   if (subject && msg.subject) await subject.fill(msg.subject);
   await box2.click();
-  await box2.pressSequentially(msg.full, { delay: 8 });
+  // Type paragraph by paragraph; Shift+Enter makes a new line without sending.
+  const paras = String(msg.full).split(/\n+/);
+  for (let i = 0; i < paras.length; i++) {
+    await box2.pressSequentially(paras[i], { delay: 6 });
+    if (i < paras.length - 1) {
+      await page.keyboard.press("Shift+Enter");
+      await page.keyboard.press("Shift+Enter");
+    }
+  }
 
-  const send = mode === "auto" ? true : await confirm(`Send this message to ${job.hiringContact?.name || "the hiring team"} at ${job.company}? (you can edit it in Chrome first)`);
+  const send = mode === "auto" || mode === "send" ? true : await confirm(`Send this message to ${job.hiringContact?.name || "the hiring team"} at ${job.company}? (you can edit it in Chrome first)`);
   const close = async () => {
     const c = await firstVisible(page, ["button:has-text('Close your conversation')", ".msg-overlay-bubble-header__controls button[aria-label*='Close' i]"]);
     await c?.click().catch(() => {});
@@ -195,4 +204,14 @@ async function discard(page, note, status = "needs_attention") {
   const discardBtn = await firstVisible(page, ["button[data-control-name='discard_application_confirm_btn']", "button:has-text('Discard')"], 3000);
   await discardBtn?.click().catch(() => {});
   return { status, note };
+}
+
+/** Opens a job again and sends (the possibly edited) message to its hiring contact. */
+export async function sendForJob(page, row) {
+  await page.goto(row.url, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+  await expandJob(page);
+  const contact = await hiringContact(page);
+  if (!contact) return { status: "draft", note: "This job has no hiring-team card to message" };
+  return messageHiringTeam(page, { ...row, hiringContact: contact }, row.hiringMessage, { mode: "send" });
 }

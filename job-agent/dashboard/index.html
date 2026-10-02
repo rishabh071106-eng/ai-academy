@@ -202,6 +202,9 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 .msg-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; }
 .msg-actions { display: flex; gap: 10px; align-items: center; margin-top: 6px; font-size: 12.5px; flex-wrap: wrap; }
 .msg-actions button { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 0; font-size: 12.5px; }
+.msg-edit { width: 100%; min-height: 150px; border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; background: var(--surface); resize: vertical; font-size: 13px; line-height: 1.5; }
+.msg-subject { width: 100%; border: 1px solid var(--border); border-radius: 9px; padding: 7px 10px; background: var(--surface); font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.msg-actions .btn.primary { padding: 5px 12px; font-size: 12.5px; color: #fff; }
 .badge-sent { color: var(--good); font-weight: 600; }
 .badge-draft { color: var(--muted); }
 
@@ -361,7 +364,8 @@ function render() {
   renderDaily();
   renderFunnel();
   renderChips();
-  renderTable();
+  // Don't redraw the table under someone typing a note or editing a message.
+  if (!document.activeElement?.matches("#rows textarea, #rows input")) renderTable();
 }
 
 function renderKpis() {
@@ -593,18 +597,62 @@ function messageBlock(r) {
   if (!m?.full) return "";
   const c = r.hiringContact;
   const who = c?.name ? (c.profileUrl ? `<a href="${esc(c.profileUrl)}" target="_blank" rel="noopener">${esc(c.name)} ↗</a>` : esc(c.name)) : "the hiring team";
-  const st = r.messageStatus === "sent" ? '<span class="badge-sent">✓ Sent on LinkedIn</span>' : `<span class="badge-draft">Draft${r.messageNote ? " · " + esc(r.messageNote) : ""}</span>`;
-  return `<h4 style="margin-top:14px">Message to ${who}</h4>
-    <div class="msg-box">${esc(m.full)}</div>
-    <div class="msg-actions">${st}<button data-copy="${esc(m.full)}">Copy message</button><button data-copy="${esc(m.short)}">Copy short note (connect)</button></div>`;
+  const sent = r.messageStatus === "sent";
+  const st = sent ? `<span class="badge-sent">✓ Sent on LinkedIn${r.messageSentAt ? " · " + fmtDate(r.messageSentAt) : ""}</span>`
+    : `<span class="badge-draft">Draft${r.messageNote ? " · " + esc(r.messageNote) : ""}</span>`;
+  const canSend = !sent && r.platform === "linkedin";
+  return `<h4 style="margin-top:14px">Message to ${who}${c?.title ? ` <span style="text-transform:none;letter-spacing:0">· ${esc(c.title)}</span>` : ""}</h4>
+    ${m.subject ? `<input class="msg-subject" data-id="${esc(r.id)}" value="${esc(m.subject)}" aria-label="Subject" ${sent ? "readonly" : ""}>` : ""}
+    <textarea class="msg-edit" data-id="${esc(r.id)}" ${sent ? "readonly" : ""} aria-label="Message">${esc(m.full)}</textarea>
+    <div class="msg-actions">${st}
+      ${canSend ? `<button class="btn primary send-msg" data-id="${esc(r.id)}">Send on LinkedIn</button>` : ""}
+      <button data-copy-from="${esc(r.id)}">Copy message</button>
+      ${m.short ? `<button data-copy="${esc(m.short)}">Copy short note</button>` : ""}
+      <span class="saved">✓ saved</span></div>`;
 }
 document.addEventListener("click", async (e) => {
-  const b = e.target.closest("[data-copy]");
-  if (!b) return;
+  const b = e.target.closest("[data-copy], [data-copy-from]");
+  if (b) {
+    e.stopPropagation();
+    const text = b.dataset.copy ?? document.querySelector(`textarea.msg-edit[data-id="${CSS.escape(b.dataset.copyFrom)}"]`)?.value ?? "";
+    const label = b.textContent;
+    try { await navigator.clipboard.writeText(text); b.textContent = "✓ Copied"; } catch { b.textContent = "Copy failed"; }
+    setTimeout(() => (b.textContent = label), 1500);
+    return;
+  }
+  const sendBtn = e.target.closest(".send-msg");
+  if (!sendBtn) return;
   e.stopPropagation();
-  const label = b.textContent;
-  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = "✓ Copied"; } catch { b.textContent = "Copy failed"; }
-  setTimeout(() => (b.textContent = label), 1500);
+  const id = sendBtn.dataset.id;
+  const row = state.rows.find((x) => x.id === id);
+  if (!confirm(`Send this message to ${row?.hiringContact?.name || "the hiring team"} at ${row?.company} on LinkedIn now?`)) return;
+  await flushMessageEdits();
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending… (watch the agent's Chrome)";
+  try {
+    const r = await (await fetch(`/api/applications/${encodeURIComponent(id)}/send-message`, { method: "POST" })).json();
+    if (r.result?.status !== "sent") alert(`Not sent: ${r.result?.note || "unknown error"}`);
+  } catch { alert("Couldn't reach the dashboard server"); }
+  load();
+});
+let msgTimer, pendingMsg = null;
+async function flushMessageEdits() {
+  clearTimeout(msgTimer);
+  if (!pendingMsg) return;
+  const { id, el } = pendingMsg;
+  pendingMsg = null;
+  const subject = document.querySelector(`input.msg-subject[data-id="${CSS.escape(id)}"]`)?.value;
+  const full = document.querySelector(`textarea.msg-edit[data-id="${CSS.escape(id)}"]`)?.value ?? "";
+  await patch(id, { hiringMessage: { full, ...(subject != null ? { subject } : {}) } }, false);
+  const ok = el.closest("td")?.querySelector(".msg-actions .saved");
+  if (ok) { ok.classList.add("show"); setTimeout(() => ok.classList.remove("show"), 1200); }
+}
+document.addEventListener("input", (e) => {
+  const el = e.target.closest("textarea.msg-edit, input.msg-subject");
+  if (!el) return;
+  pendingMsg = { id: el.dataset.id, el };
+  clearTimeout(msgTimer);
+  msgTimer = setTimeout(flushMessageEdits, 700);
 });
 
 // ---- Agent control -------------------------------------------------------

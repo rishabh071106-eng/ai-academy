@@ -58,7 +58,7 @@ const EVAL_SCHEMA = obj({
   hiringMessage: obj({
     subject: { type: "string", description: "Short subject line for an InMail/email" },
     short: { type: "string", description: "Connection-request note, at most 280 characters" },
-    full: { type: "string", description: "Message to the hiring manager/recruiter, 70-130 words" },
+    full: { type: "string", description: "Message to the hiring manager/recruiter, 60-110 words, use \\n between paragraphs" },
   }),
 });
 
@@ -82,7 +82,15 @@ Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjac
 ${HONESTY_RULES}
 Return every experience entry from the candidate's profile (same companies, roles and dates), with bullets rewritten/reordered for this job; older roles can have fewer bullets.
 
-Hiring message: warm, specific and human, not generic. Address the contact by first name if known, else "Hi there". Name the role, give 1-2 concrete achievements from her real experience that match this job, mention she is an Adobe Certified Expert when relevant, and her notice period. No flattery, no emojis, no placeholders like [Company]. Sign off with her first name.`,
+Hiring message — write it the way she would actually type it to a stranger on LinkedIn. It must read as genuine and human, not AI-written:
+- Open with "Hi <first name>," (or "Hi," if no contact name). Then get straight to the point; no pleasantries like "I hope this message finds you well".
+- Say she applied (or is applying) for the exact role, and pick ONE specific thing from this job description that matches her real work, and say it concretely (e.g. "you mention a headless Next.js storefront on Adobe Commerce, which is exactly what I'm building at Altimetrik for Blackhawk Network").
+- Add one more relevant proof point with a real project/client name from her experience. Mention Adobe Certified Expert only if the role is Magento/Adobe Commerce.
+- Close with a low-pressure ask (a quick chat, or whether they'd be the right person to speak to) and her notice period in passing.
+- Plain, warm, confident Indian-English professional tone. Short sentences, 2-3 short paragraphs, 60-110 words. Contractions are fine.
+- Banned: "I hope this finds you well", "I am excited/thrilled/delighted", "passionate", "leverage", "synergy", "esteemed", "dynamic", "I came across", "I am writing to", "perfect fit", "add value", "Looking forward to hearing from you", em dashes, emojis, exclamation marks, buzzword lists, flattering the company, placeholders.
+- Sign off with just "Aishwarya" (her first name) on its own line.
+- subject: 4-8 words, natural, e.g. "Senior Magento role – Adobe Commerce + Next.js". short: a connection note under 280 characters in the same voice.`,
     content: `CANDIDATE PROFILE (JSON):
 ${JSON.stringify(resume, null, 2)}
 

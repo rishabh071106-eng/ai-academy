@@ -159,6 +159,8 @@ for (const [key, mod] of Object.entries(platforms)) {
 
         if (job.applyType !== "easy") {
           tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on company site — apply manually with the tailored resume" });
+          // Can't apply here, but reaching the hiring team still helps.
+          if (mode !== "dry-run") await maybeMessage(mod, key, page, job);
           continue;
         }
         if (mode === "dry-run") {
