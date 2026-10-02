@@ -775,6 +775,7 @@ function renderAgent(k, s) {
   const modeName = MODE_NAME[s.options?.mode] ?? "";
   if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
   else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · applied ${appliedSince(k, s.startedAt)}/${s.options?.max ?? "?"}${s.restarts ? ` · restarted ${s.restarts}×` : ""} · keep the agent's Chrome open`; }
+  else if (s.endedAt && s.fatal) { el(k, "title").textContent = "stopped"; el(k, "sub").innerHTML = `<span style="color:var(--crit)">⚠ ${esc(s.fatal)}</span>`; }
   else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
   else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start"; }
   btn.className = "btn " + (s.running ? "stop" : "go");

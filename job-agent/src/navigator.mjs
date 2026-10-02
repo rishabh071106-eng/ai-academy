@@ -5,10 +5,11 @@
 // resume is uploaded through file inputs or the browser's file chooser.
 import Anthropic from "@anthropic-ai/sdk";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
-import { ask, confirm, loadConfig, log, sleep } from "./util.mjs";
+import { ask, confirm, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
 const client = new Anthropic();
-const MODEL = loadConfig().model || "claude-opus-5-5";
+// The click-by-click decisions can run on a cheaper model (config.navigatorModel).
+const MODEL = loadConfig().navigatorModel || loadConfig().model || "claude-opus-5-5";
 
 /** Numbers every visible interactive element (data-ja-ui) and returns a text snapshot. */
 export async function snapshot(page) {
@@ -134,6 +135,7 @@ export async function navigate(page, opts) {
     try {
       d = await decide({ goal, rules: opts.rules, snap, history, profile, job });
     } catch (e) {
+      stopIfFatalApiError(e);
       log("warn", `   navigator: ${e.message.split("\n")[0]}`);
       return { status: "needs_attention", note: `Couldn't decide the next step (${e.message.split("\n")[0]})` };
     }

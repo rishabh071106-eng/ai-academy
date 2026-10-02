@@ -96,3 +96,18 @@ export async function waitForUser(question, { allowSkip = true } = {}) {
   const r = await ask(question, choices);
   return r.toLowerCase() !== "s";
 }
+
+/**
+ * Claude API problems no retry can fix (no credit, bad key). The agent stops with a clear
+ * message and exit code 3 so the dashboard shows it and does not auto-restart.
+ */
+export function stopIfFatalApiError(e) {
+  const msg = String(e?.message ?? e);
+  let why = null;
+  if (/credit balance is too low|billing|purchase credits/i.test(msg)) why = "Your Anthropic API credit has run out. Add credit at console.anthropic.com → Settings → Billing, then press Start again.";
+  else if (/invalid x-api-key|authentication_error|401/i.test(msg)) why = "The Claude API key in job-agent/.env is not valid. Put a working key there, then press Start again.";
+  else if (/permission_error|403/i.test(msg) && /api/i.test(msg)) why = "The Claude API key doesn't have access to this model. Check the key's workspace in the Anthropic Console.";
+  if (!why) return;
+  log("err", `\n■ STOPPED: ${why}`);
+  process.exit(3);
+}

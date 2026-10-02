@@ -61,7 +61,8 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
     }
   });
   child.on("exit", (code, signal) => {
-    const crashed = !run.stopRequested && (code !== 0 || signal);
+    // Exit code 3 = Claude API unusable (no credit / bad key): restarting won't help.
+    const crashed = !run.stopRequested && code !== 3 && (code !== 0 || signal);
     Object.assign(run, { child: null, pending: null });
     // Keep-going runs come back by themselves after a crash (already-handled jobs are skipped).
     if (crashed && keepGoing && (run.restarts ?? 0) < 5) {
@@ -70,7 +71,8 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
       setTimeout(() => { if (!run.stopRequested && !run.child) start(run.options && { platform, ...run.options }, run.restarts); }, 10000);
       return;
     }
-    push(run, signal ? "■ Agent stopped" : `■ Agent finished (exit code ${code})`, "sys");
+    push(run, signal ? "■ Agent stopped" : code === 3 ? "■ Agent stopped: Claude API problem (see the line above)" : `■ Agent finished (exit code ${code})`, code === 3 ? "err" : "sys");
+    run.fatal = code === 3 ? (run.log.filter((l) => /STOPPED:/.test(l.text)).at(-1)?.text.replace(/^.*STOPPED:\s*/, "") ?? "Claude API problem") : null;
     Object.assign(run, { running: false, endedAt: Date.now(), exitCode: code });
   });
   return status();

@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { loadConfig } from "./util.mjs";
+import { loadConfig, stopIfFatalApiError } from "./util.mjs";
 
 const client = new Anthropic();
 const MODEL = loadConfig().model || "claude-opus-5-5";
@@ -23,6 +23,9 @@ async function jsonCall({ system, content, schema, effort = "medium", maxTokens 
     system,
     output_config: { effort, format: { type: "json_schema", schema } },
     messages: [{ role: "user", content }],
+  }).catch((e) => {
+    stopIfFatalApiError(e);
+    throw e;
   });
   if (response.stop_reason === "refusal") {
     throw new Error(`Claude declined: ${response.stop_details?.explanation ?? "no explanation"}`);
