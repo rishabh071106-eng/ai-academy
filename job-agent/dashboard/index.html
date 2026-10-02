@@ -130,6 +130,7 @@ tr.job:hover td { background: var(--surface-2); }
 tr.job { cursor: pointer; }
 .job-title { font-weight: 600; }
 .job-co { color: var(--text-2); font-size: 13px; }
+.why { color: var(--muted); font-size: 12px; margin-top: 2px; }
 .platform { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); }
 .platform i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 .score { display: flex; align-items: center; gap: 8px; min-width: 96px; }
@@ -172,6 +173,12 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 
 
 .agent { padding: 16px 18px; margin-bottom: 16px; }
+.agents { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.agents .agent { margin-bottom: 0; }
+.agent-title .pf { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
+.agents .seg button { padding: 6px 10px; font-size: 12.5px; }
+@media (max-width: 1080px) { .agents { grid-template-columns: 1fr; } }
+
 .agent-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
 .agent-state { display: flex; align-items: center; gap: 12px; }
 .agent-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); flex: none; }
@@ -235,26 +242,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     </div>
   </header>
 
-  <section class="card agent" id="agentPanel">
-    <div class="agent-top">
-      <div class="agent-state">
-        <span class="agent-dot" id="agentDot"></span>
-        <div><div class="agent-title" id="agentTitle">Agent is idle</div><div class="sub" id="agentSub">Choose a mode and press Start</div></div>
-      </div>
-      <div class="agent-controls">
-        <div class="seg" id="modeSeg" role="group" aria-label="Mode">
-          <button data-v="dry-run">Practice</button><button data-v="review" aria-pressed="true">Ask before submit</button><button data-v="auto">Fully automatic</button>
-        </div>
-        <select class="sel" id="agentPlatform" aria-label="Platform"><option value="">LinkedIn + Naukri</option><option value="linkedin">LinkedIn only</option><option value="naukri">Naukri only</option></select>
-        <label class="sub" title="Maximum applications this run">Max <input class="num-input" id="agentMax" type="number" min="1" max="50" value="15"></label>
-        <button class="btn go" id="agentBtn">▶ Start</button>
-      </div>
-    </div>
-    <div class="mode-hint" id="modeHint"></div>
-    <div id="askHost"></div>
-    <button class="log-toggle" id="logToggle">▸ Show live log</button>
-    <div class="logbox" id="logbox" hidden></div>
-  </section>
+  <section class="agents" id="agents"></section>
 
   <div class="banner" id="banner"></div>
 
@@ -502,6 +490,11 @@ function visibleRows() {
   return rows;
 }
 
+function lastNote(r) {
+  const h = [...(r.history ?? [])].reverse().find((x) => x.note);
+  const gaps = r.status === "skipped" && r.missingSkills?.length ? ` · missing ${r.missingSkills.slice(0, 3).join(", ")}` : "";
+  return (r.lastNote || h?.note || "") + gaps;
+}
 function scoreColor(s) { return s >= 85 ? "var(--seq-3)" : s >= 70 ? "var(--seq-2)" : "var(--seq-1)"; }
 
 function renderTable() {
@@ -518,7 +511,7 @@ function renderTable() {
     const open = state.open.has(r.id);
     const opts = state.statuses.map((s) => `<option value="${s}" ${s === r.status ? "selected" : ""}>${(STATUS[s] ?? { label: s }).label}</option>`).join("");
     return `<tr class="job" data-id="${esc(r.id)}" aria-expanded="${open}">
-      <td><div class="job-title">${esc(r.title)}</div><div class="job-co">${esc(r.company)}${r.location ? " · " + esc(r.location) : ""}</div></td>
+      <td><div class="job-title">${esc(r.title) || "<span class=sub>(untitled)</span>"}</div><div class="job-co">${esc(r.company)}${r.location ? " · " + esc(r.location) : ""}</div>${r.status === "skipped" || r.status === "needs_attention" ? `<div class="why">${esc(lastNote(r))}</div>` : ""}</td>
       <td class="hide-sm"><span class="platform"><i style="background:${p.color}"></i>${p.label}</span></td>
       <td class="hide-sm">${r.matchScore != null ? `<div class="score" title="Match ${r.matchScore}%"><div class="track"><div class="fill" style="width:${r.matchScore}%;background:${scoreColor(r.matchScore)}"></div></div><span>${r.matchScore}</span></div>` : '<span class="date">—</span>'}</td>
       <td><select class="pill status-select" data-id="${esc(r.id)}" style="color:${st.fg};background:${st.bg}" aria-label="Status">${opts}</select></td>
@@ -655,102 +648,150 @@ document.addEventListener("input", (e) => {
   msgTimer = setTimeout(flushMessageEdits, 700);
 });
 
-// ---- Agent control -------------------------------------------------------
+// ---- Agent control: one independent agent per platform ------------------
 const MODE_HINT = {
-  "dry-run": "Practice: finds jobs, scores them and writes tailored resumes + messages. Applies to nothing.",
-  review: "Ask before submit: fills every application, then waits for you to press Submit here.",
+  "dry-run": "Practice: finds jobs, scores them, writes tailored resumes and messages. Applies to nothing.",
+  review: "Ask before submit: fills each application, then waits for you to press Yes here.",
   auto: "Fully automatic: submits on its own. Still pauses if a question can't be answered truthfully.",
 };
-const agent = { mode: "review", since: 0, running: false, pending: null, logOpen: false, timer: null };
-try { const saved = JSON.parse(localStorage.getItem("ja-agent") || "{}"); if (saved.mode) agent.mode = saved.mode; if (saved.max) $("#agentMax").value = saved.max; if (saved.platform != null) $("#agentPlatform").value = saved.platform; } catch {}
-const savePrefs = () => { try { localStorage.setItem("ja-agent", JSON.stringify({ mode: agent.mode, max: $("#agentMax").value, platform: $("#agentPlatform").value })); } catch {} };
+const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
+const AG = {
+  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, since: 0, running: false, pending: null, logOpen: false },
+  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, since: 0, running: false, pending: null, logOpen: false },
+};
+try {
+  const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
+  for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
+} catch {}
+const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max }])))); } catch {} };
 
-function paintMode() {
-  $("#modeSeg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === agent.mode));
-  $("#modeHint").textContent = MODE_HINT[agent.mode];
+$("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
+  <div class="card agent" data-p="${k}">
+    <div class="agent-top">
+      <div class="agent-state">
+        <span class="agent-dot" data-el="dot"></span>
+        <div><div class="agent-title"><i class="pf" style="background:${a.color}"></i>${a.label} agent · <span data-el="title">idle</span></div><div class="sub" data-el="sub">Choose a mode and press Start</div></div>
+      </div>
+      <button class="btn go" data-el="btn">▶ Start</button>
+    </div>
+    <div class="agent-controls" style="margin-top:12px">
+      <div class="seg" data-el="seg" role="group" aria-label="${a.label} mode">
+        <button data-v="dry-run">Practice</button><button data-v="review">Ask before submit</button><button data-v="auto">Fully automatic</button>
+      </div>
+      <label class="sub" title="Maximum applications this run">Max <input class="num-input" data-el="max" type="number" min="1" max="50" value="${a.max}"></label>
+    </div>
+    <div class="mode-hint" data-el="hint"></div>
+    <div data-el="ask"></div>
+    <button class="log-toggle" data-el="logToggle">▸ Show live log</button>
+    <div class="logbox" data-el="log" hidden></div>
+  </div>`).join("");
+
+const el = (k, name) => document.querySelector(`.agent[data-p="${k}"] [data-el="${name}"]`);
+function paintMode(k) {
+  el(k, "seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === AG[k].mode));
+  el(k, "hint").textContent = MODE_HINT[AG[k].mode];
 }
-$("#modeSeg").onclick = (e) => { const b = e.target.closest("button"); if (!b || agent.running) return; agent.mode = b.dataset.v; paintMode(); savePrefs(); };
-$("#agentPlatform").onchange = savePrefs;
-$("#agentMax").onchange = savePrefs;
-$("#logToggle").onclick = () => { agent.logOpen = !agent.logOpen; $("#logbox").hidden = !agent.logOpen; $("#logToggle").textContent = (agent.logOpen ? "▾ Hide" : "▸ Show") + " live log"; if (agent.logOpen) $("#logbox").scrollTop = 1e9; };
-
-$("#agentBtn").onclick = async () => {
-  $("#agentBtn").disabled = true;
-  const url = agent.running ? "/api/agent/stop" : "/api/agent/start";
-  const body = agent.running ? {} : { mode: agent.mode, platform: $("#agentPlatform").value, max: $("#agentMax").value };
+for (const k of Object.keys(AG)) {
+  paintMode(k);
+  el(k, "seg").onclick = (e) => { const b = e.target.closest("button"); if (!b || AG[k].running) return; AG[k].mode = b.dataset.v; paintMode(k); savePrefs(); };
+  el(k, "max").onchange = (e) => { AG[k].max = Number(e.target.value) || 15; savePrefs(); };
+  el(k, "logToggle").onclick = () => toggleLog(k);
+  el(k, "btn").onclick = () => startStop(k);
+}
+function toggleLog(k, open = !AG[k].logOpen) {
+  AG[k].logOpen = open;
+  el(k, "log").hidden = !open;
+  el(k, "logToggle").textContent = (open ? "▾ Hide" : "▸ Show") + " live log";
+  if (open) el(k, "log").scrollTop = 1e9;
+}
+async function startStop(k) {
+  const btn = el(k, "btn");
+  btn.disabled = true;
+  const starting = !AG[k].running;
   try {
-    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max }) });
     const data = await r.json();
     if (!r.ok) alert(data.error || "Something went wrong");
-    if (!agent.running) { agent.since = 0; $("#logbox").innerHTML = ""; if (!agent.logOpen) $("#logToggle").click(); }
+    else if (starting) { AG[k].since = 0; el(k, "log").innerHTML = ""; toggleLog(k, true); }
   } finally {
-    $("#agentBtn").disabled = false;
+    btn.disabled = false;
     pollAgent();
   }
-};
+}
 
 function lineClass(t, kind) {
   if (kind === "sys") return "sys";
   if (kind === "ask") return "ask";
   if (kind === "err" || /failed|error|couldn't|needs_attention/i.test(t)) return "err";
-  if (/✔|applied \(|tailored resume|✉ Sent|Connected/i.test(t)) return "ok";
+  if (/✔|applied \(|tailored resume|✉ Sent|Connected|back on your Naukri/i.test(t)) return "ok";
   return "";
 }
 
+let pollTimer;
 async function pollAgent() {
-  clearTimeout(agent.timer);
+  clearTimeout(pollTimer);
+  let anyRunning = false;
   try {
-    const s = await (await fetch(`/api/agent?since=${agent.since}`, { cache: "no-store" })).json();
-    const wasRunning = agent.running;
-    agent.running = s.running;
-    if (s.log.length) {
-      agent.since = s.log[s.log.length - 1].n;
-      const box = $("#logbox");
-      const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
-      box.insertAdjacentHTML("beforeend", s.log.map((l) => `<div class="${lineClass(l.text, l.kind)}">${esc(new Date(l.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }))}  ${esc(l.text)}</div>`).join(""));
-      while (box.children.length > 600) box.firstChild.remove();
-      if (atBottom) box.scrollTop = box.scrollHeight;
-      load();
+    const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
+    const { runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    let newLines = false;
+    for (const [k, s] of Object.entries(runs)) {
+      if (!AG[k]) continue;
+      const wasRunning = AG[k].running;
+      AG[k].running = s.running;
+      anyRunning ||= s.running;
+      if (s.log.length) {
+        newLines = true;
+        AG[k].since = s.log[s.log.length - 1].n;
+        const box = el(k, "log");
+        const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+        box.insertAdjacentHTML("beforeend", s.log.map((l) => `<div class="${lineClass(l.text, l.kind)}">${esc(new Date(l.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }))}  ${esc(l.text)}</div>`).join(""));
+        while (box.children.length > 600) box.firstChild.remove();
+        if (atBottom) box.scrollTop = box.scrollHeight;
+      }
+      renderAgent(k, s);
+      if (wasRunning && !s.running) newLines = true;
     }
-    renderAgent(s);
-    if (wasRunning && !s.running) load();
+    if (newLines) load();
   } catch {}
-  agent.timer = setTimeout(pollAgent, agent.running ? 1500 : 6000);
+  const waiting = Object.values(AG).some((a) => a.pending != null);
+  document.title = (waiting ? "⚠ " : "") + document.title.replace(/^⚠ /, "");
+  pollTimer = setTimeout(pollAgent, anyRunning ? 1500 : 6000);
 }
 
-function renderAgent(s) {
-  const dot = $("#agentDot"), btn = $("#agentBtn");
-  dot.className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
+function renderAgent(k, s) {
+  const a = AG[k], btn = el(k, "btn");
+  el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
-  const modeName = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" }[s.options?.mode] ?? "";
-  if (s.pending) { $("#agentTitle").textContent = "Agent is waiting for you"; $("#agentSub").textContent = `${modeName} · running ${mins} min`; }
-  else if (s.running) { $("#agentTitle").textContent = "Agent is running"; $("#agentSub").textContent = `${modeName} · ${mins} min · keep the agent's Chrome window open`; }
-  else if (s.endedAt) { $("#agentTitle").textContent = "Agent is idle"; $("#agentSub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
-  else { $("#agentTitle").textContent = "Agent is idle"; $("#agentSub").textContent = "Choose a mode and press Start"; }
+  const modeName = MODE_NAME[s.options?.mode] ?? "";
+  if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
+  else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · keep the agent's Chrome open`; }
+  else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
+  else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start"; }
   btn.className = "btn " + (s.running ? "stop" : "go");
   btn.textContent = s.running ? "■ Stop" : "▶ Start";
-  $("#modeSeg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
-  $("#agentPlatform").disabled = $("#agentMax").disabled = s.running;
-  if (s.running && s.options?.mode && s.options.mode !== agent.mode) { agent.mode = s.options.mode; paintMode(); }
+  el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
+  el(k, "max").disabled = s.running;
+  if (s.running && s.options?.mode && s.options.mode !== a.mode) { a.mode = s.options.mode; paintMode(k); }
 
   const key = s.pending ? s.pending.id : null;
-  if (key !== agent.pending) {
-    agent.pending = key;
-    if (!s.pending) { $("#askHost").innerHTML = ""; document.title = document.title.replace(/^⚠ /, ""); return; }
-    const choices = s.pending.choices?.length ? s.pending.choices : [{ label: "Continue", value: "" }];
-    $("#askHost").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>Agent needs you</small>${esc(s.pending.question)}</div>
-      <div class="ask-btns">${choices.map((c, i) => `<button class="btn ${i === 0 ? "primary" : ""}" data-ans="${esc(c.value)}">${esc(c.label)}</button>`).join("")}</div></div>`;
-    $("#askHost").querySelectorAll("[data-ans]").forEach((b) => (b.onclick = async () => {
-      $("#askHost").querySelectorAll("button").forEach((x) => (x.disabled = true));
-      await fetch("/api/agent/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: s.pending.id, answer: b.dataset.ans }) });
-      pollAgent();
-    }));
-    if (!document.title.startsWith("⚠")) document.title = "⚠ " + document.title;
-    try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("Job agent needs you", { body: s.pending.question }); } catch {}
-  }
+  if (key === a.pending) return;
+  a.pending = key;
+  if (!s.pending) { el(k, "ask").innerHTML = ""; return; }
+  const choices = s.pending.choices?.length ? s.pending.choices : [{ label: "Continue", value: "" }];
+  el(k, "ask").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>${a.label} agent needs you</small>${esc(s.pending.question)}</div>
+    <div class="ask-btns">${choices.map((c, i) => `<button class="btn ${i === 0 ? "primary" : ""}" data-ans="${esc(c.value)}">${esc(c.label)}</button>`).join("")}</div></div>`;
+  el(k, "ask").querySelectorAll("[data-ans]").forEach((b) => (b.onclick = async () => {
+    el(k, "ask").querySelectorAll("button").forEach((x) => (x.disabled = true));
+    await fetch("/api/agent/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, id: s.pending.id, answer: b.dataset.ans }) });
+    pollAgent();
+  }));
+  try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification(`${a.label} agent needs you`, { body: s.pending.question }); } catch {}
 }
-try { if ("Notification" in window && Notification.permission === "default") $("#agentBtn").addEventListener("click", () => Notification.requestPermission(), { once: true }); } catch {}
-paintMode();
+try {
+  if ("Notification" in window && Notification.permission === "default")
+    document.querySelectorAll(".agent [data-el=btn]").forEach((b) => b.addEventListener("click", () => Notification.requestPermission(), { once: true }));
+} catch {}
 pollAgent();
 
 load();

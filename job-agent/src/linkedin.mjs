@@ -28,6 +28,9 @@ export async function search(page, s, cfg) {
   return [...ids].slice(0, cfg.max).map((id) => ({ jobId: id, url: `https://www.linkedin.com/jobs/view/${id}/` }));
 }
 
+// LinkedIn renders Easy Apply as a <button> on some layouts and as a link on others.
+const easyApplyControl = (page) => page.getByRole("button", { name: /easy apply/i }).or(page.getByRole("link", { name: /easy apply/i })).first();
+
 export async function getJob(page, ref) {
   await page.goto(ref.url, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
@@ -43,7 +46,7 @@ export async function getJob(page, ref) {
   const description = await textOf(page, ["#job-details", ".jobs-description__content", ".jobs-box__html-content", "[class*=jobs-description]"]);
   const company = (await textOf(page, [".job-details-jobs-unified-top-card__company-name a", ".job-details-jobs-unified-top-card__company-name", ".jobs-unified-top-card__company-name"])).split("\n")[0];
 
-  const easy = await page.getByRole("button", { name: /easy apply/i }).first().isVisible({ timeout: 3000 }).catch(() => false);
+  const easy = await easyApplyControl(page).isVisible({ timeout: 3000 }).catch(() => false);
   const other = !easy && (await page.getByRole("button", { name: /^apply/i }).or(page.getByRole("link", { name: /^apply/i })).first().isVisible().catch(() => false));
   return {
     ...ref,
@@ -138,7 +141,7 @@ export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
 const modalSel = ".jobs-easy-apply-modal, div[role=dialog][aria-labelledby*='easy-apply' i], div[role=dialog]";
 
 export async function apply(page, job, { resumePath, profile, mode }) {
-  const btn = page.getByRole("button", { name: /easy apply/i }).first();
+  const btn = easyApplyControl(page);
   if (!(await btn.isVisible({ timeout: 5000 }).catch(() => false))) return { status: "needs_attention", note: "Easy Apply button not found" };
   await btn.click();
   const modal = await firstVisible(page, [modalSel], 8000);

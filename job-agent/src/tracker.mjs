@@ -21,9 +21,34 @@ export function loadAll() {
 }
 
 function saveAll(rows) {
-  const tmp = TRACKER_FILE + ".tmp";
+  const tmp = `${TRACKER_FILE}.${process.pid}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(rows, null, 2));
   fs.renameSync(tmp, TRACKER_FILE);
+}
+
+// LinkedIn and Naukri agents (and the dashboard) can write at the same time; a lock file makes
+// each read-modify-write atomic across processes.
+const LOCK = TRACKER_FILE + ".lock";
+const pause = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+function withLock(fn) {
+  for (let i = 0; ; i++) {
+    try {
+      fs.closeSync(fs.openSync(LOCK, "wx"));
+      break;
+    } catch (e) {
+      if (e.code !== "EEXIST") throw e;
+      try {
+        if (Date.now() - fs.statSync(LOCK).mtimeMs > 10000) fs.rmSync(LOCK, { force: true }); // stale
+      } catch {}
+      if (i > 400) throw new Error("Tracker is locked");
+      pause(25);
+    }
+  }
+  try {
+    return fn();
+  } finally {
+    fs.rmSync(LOCK, { force: true });
+  }
 }
 
 export const keyOf = (platform, jobId) => `${platform}:${jobId}`;
@@ -34,6 +59,10 @@ export function find(platform, jobId) {
 
 /** Insert or merge a job record. Status changes are appended to history. */
 export function upsert(platform, jobId, patch) {
+  return withLock(() => upsertUnlocked(platform, jobId, patch));
+}
+
+function upsertUnlocked(platform, jobId, patch) {
   const rows = loadAll();
   const id = keyOf(platform, jobId);
   const now = new Date().toISOString();
@@ -59,10 +88,12 @@ export function update(id, patch) {
 }
 
 export function remove(id) {
-  const rows = loadAll();
-  const next = rows.filter((r) => r.id !== id);
-  saveAll(next);
-  return next.length !== rows.length;
+  return withLock(() => {
+    const rows = loadAll();
+    const next = rows.filter((r) => r.id !== id);
+    saveAll(next);
+    return next.length !== rows.length;
+  });
 }
 
 export function appliedToday() {

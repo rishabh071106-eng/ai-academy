@@ -10,7 +10,7 @@
     "nextjs"
   ],
   "maxApplicationsPerRun": 15,
-  "maxJobsToScanPerSearch": 25,
+  "maxJobsToScanPerSearch": 40,
   "delaySecondsBetweenApplications": [
     25,
     70
@@ -22,8 +22,8 @@
   "platforms": {
     "linkedin": {
       "enabled": true,
-      "easyApplyOnly": true,
-      "postedWithinDays": 7,
+      "easyApplyOnly": false,
+      "postedWithinDays": 14,
       "searches": [
         {
           "keywords": "Adobe Commerce Developer",
@@ -50,7 +50,7 @@
     },
     "naukri": {
       "enabled": true,
-      "postedWithinDays": 7,
+      "postedWithinDays": 15,
       "experienceYears": 9,
       "searches": [
         {
@@ -73,7 +73,10 @@
           "keywords": "full stack developer php react",
           "location": "bangalore"
         }
-      ]
+      ],
+      "uploadTailoredResume": true,
+      "restoreBaseResumeAfterRun": true,
+      "baseResumePath": ""
     }
   },
   "excludeTitleKeywords": [

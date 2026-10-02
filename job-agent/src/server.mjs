@@ -34,13 +34,10 @@ const server = http.createServer(async (req, res) => {
   if (p.startsWith("/files/")) return serveFile(res, DATA_DIR, p.slice("/files/".length));
 
   try {
-    if (p === "/api/agent" && req.method === "GET") return send(res, 200, runner.status(Number(url.searchParams.get("since") || 0)));
+    if (p === "/api/agent" && req.method === "GET") return send(res, 200, runner.status(Object.fromEntries(url.searchParams)));
     if (p === "/api/agent/start" && req.method === "POST") return send(res, 200, runner.start(await readBody(req)));
-    if (p === "/api/agent/stop" && req.method === "POST") return send(res, 200, runner.stop());
-    if (p === "/api/agent/answer" && req.method === "POST") {
-      const b = await readBody(req);
-      return send(res, 200, runner.answer(Number(b.id), String(b.answer ?? "")));
-    }
+    if (p === "/api/agent/stop" && req.method === "POST") return send(res, 200, runner.stop(await readBody(req)));
+    if (p === "/api/agent/answer" && req.method === "POST") return send(res, 200, runner.answer(await readBody(req)));
   } catch (e) {
     return send(res, 409, { error: e.message });
   }

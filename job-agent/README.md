@@ -39,7 +39,7 @@ npm run chrome        # if that Chrome window isn't already open
 npm run dashboard     # then open http://localhost:4321
 ```
 
-Start and stop the agent **from the dashboard**: pick a mode (Practice / Ask before submit / Fully automatic), the platforms and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
+Start and stop the agents **from the dashboard**. LinkedIn and Naukri each have their own agent card, so they run independently and can run at the same time. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
 
 You can also run it from a terminal; questions are then asked in the terminal. Modes:
 
@@ -64,7 +64,7 @@ Change searches, the match threshold, `alwaysApplyKeywords`, the per-run cap and
 ## Notes and limits
 
 - **Use it at a human pace.** Automating LinkedIn is against its user agreement, and heavy use can get an account restricted. The defaults are deliberately gentle: review mode, at most 15 applications per run, and a 25 to 70 s pause between applications. Keep them that way.
-- **Naukri uses the resume on your Naukri profile.** Naukri's one-click apply attaches that resume, not a per-job file. The tailored PDF is still saved for each Naukri job, for reference or to upload manually.
+- **Naukri tailored resumes:** Naukri's Apply always sends the resume on your Naukri profile, so before each Naukri application the agent uploads that job's tailored PDF to the profile, then applies. After the run it puts your normal resume back: set `platforms.naukri.baseResumePath` in `config.json` to your own PDF (e.g. `~/Downloads/Aishwarya-Sharma-Resume.pdf`), otherwise a generated standard version is used. Turn this off with `uploadTailoredResume: false`.
 - **Hiring-team messages:** sending needs LinkedIn Premium (InMail) unless you're already connected. Each InMail uses a credit, so review messages in *Ask before submit* mode or send them from the dashboard. Jobs without a "Meet the hiring team" card stay as drafts; copy the message, or use the short version as a connection-request note. Naukri has no candidate-to-recruiter messaging, so Naukri messages are always drafts.
 - Site layouts change. If a selector stops matching, the job becomes *Needs attention* instead of a wrong submission. Selectors live in `src/linkedin.mjs` and `src/naukri.mjs`.
 - All data stays local: `data/applications.json`, `data/resumes/` and `profile.json` are git-ignored.

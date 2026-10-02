@@ -50,17 +50,52 @@ export async function getJob(page, ref) {
 const SUCCESS = ["text=/successfully applied/i", "text=/applied to/i", "[class*=apply-message]:has-text('Applied')"];
 const CHAT = "[class*=chatbot_Drawer], [class*=chatbot_MessageContainer], .chatbot_DrawerContentWrapper";
 
-export async function apply(page, job, { profile, mode }) {
+/**
+ * Replaces the resume on her Naukri profile (Naukri's Apply always sends the profile resume).
+ * Uses a separate tab so the job page stays open. Returns true when Naukri confirms the upload.
+ */
+export async function uploadResume(context, pdfPath) {
+  const tab = await context.newPage();
+  try {
+    await tab.goto("https://www.naukri.com/mnjuser/profile", { waitUntil: "domcontentloaded" });
+    await tab.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+    const input = tab.locator("input#attachCV, input[type=file][id*=attach i], input[type=file][accept*=pdf i], input[type=file]").first();
+    await input.waitFor({ state: "attached", timeout: 15000 });
+    await input.setInputFiles(pdfPath);
+    const ok = await firstVisible(tab, ["text=/successfully uploaded|uploaded successfully|resume has been (successfully )?(uploaded|updated)/i"], 20000);
+    await sleep(1500);
+    return !!ok;
+  } catch (e) {
+    log("warn", `   resume upload failed: ${e.message.split("\n")[0]}`);
+    return false;
+  } finally {
+    await tab.close().catch(() => {});
+  }
+}
+
+export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) {
   const btn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"], 5000);
   if (!btn) return { status: "needs_attention", note: "Apply button not found" };
   if (mode !== "auto") {
-    if (!(await confirm(`Apply on Naukri to ${job.company} – ${job.title}? (uses the resume on your Naukri profile)`))) return { status: "skipped", note: "You chose not to apply" };
+    const which = cfg.uploadTailoredResume !== false && resumePath ? "with the resume tailored for this job" : "with the resume on your Naukri profile";
+    if (!(await confirm(`Apply on Naukri to ${job.company} – ${job.title} ${which}?`))) return { status: "skipped", note: "You chose not to apply" };
+  }
+  let resumeNote = "profile resume";
+  if (cfg.uploadTailoredResume !== false && resumePath) {
+    log("dim", "   uploading tailored resume to your Naukri profile…");
+    if (await uploadResume(page.context(), resumePath)) {
+      resumeNote = "tailored resume";
+      apply.uploaded = true;
+    } else {
+      log("warn", "   couldn't confirm the upload; applying with whatever resume is on the profile");
+    }
+    await page.bringToFront().catch(() => {});
   }
   await btn.click();
   await sleep(2500);
 
   for (let turn = 0; turn < 20; turn++) {
-    if (await firstVisible(page, SUCCESS, 1500)) return { status: "applied", note: "Naukri apply" };
+    if (await firstVisible(page, SUCCESS, 1500)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
     const chat = await firstVisible(page, [CHAT], 3000);
     if (!chat) break;
 
@@ -103,6 +138,6 @@ export async function apply(page, job, { profile, mode }) {
     await sleep(2000);
   }
   return (await firstVisible(page, SUCCESS, 4000))
-    ? { status: "applied", note: "Naukri apply" }
+    ? { status: "applied", note: `Naukri apply (${resumeNote})` }
     : { status: "needs_attention", note: "No confirmation after Apply — check Naukri > Applies" };
 }

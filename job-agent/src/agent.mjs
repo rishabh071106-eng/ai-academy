@@ -4,6 +4,7 @@
 //   npm run agent -- --mode=dry-run       # find, score and tailor resumes only; apply later yourself
 //   npm run agent -- --platform=naukri --max=5
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { connect } from "./browser.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
@@ -179,7 +180,7 @@ for (const [key, mod] of Object.entries(platforms)) {
 async function applyTo(mod, key, page, job, resumePath) {
   let result;
   try {
-    result = await mod.apply(page, job, { resumePath, profile, mode });
+    result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} });
   } catch (e) {
     result = { status: "needs_attention", note: `Error: ${e.message}` };
   }
@@ -206,6 +207,19 @@ async function maybeMessage(mod, key, page, job) {
     log(r.status === "sent" ? "ok" : "dim", `  ✉ ${r.note}`);
   } catch (e) {
     tracker.upsert(key, job.jobId, { messageStatus: "draft", messageNote: `Couldn't send: ${e.message}` });
+  }
+}
+
+// Put her normal resume back on Naukri after a run that uploaded tailored ones.
+if (naukri.apply.uploaded && config.platforms.naukri?.restoreBaseResumeAfterRun !== false) {
+  try {
+    const custom = (config.platforms.naukri.baseResumePath || "").replace(/^~(?=\/)/, os.homedir());
+    const base = custom && fs.existsSync(custom) ? custom : await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" });
+    log("info", "\nRestoring your normal resume on Naukri…");
+    const ok = await naukri.uploadResume(context, base);
+    log(ok ? "ok" : "warn", ok ? `  ${path.basename(base)} is back on your Naukri profile` : "  couldn't confirm; check your Naukri profile resume");
+  } catch (e) {
+    log("warn", `  couldn't restore the base resume: ${e.message}`);
   }
 }
 
