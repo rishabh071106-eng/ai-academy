@@ -1,6 +1,6 @@
 // Local dashboard: http://localhost:4321  (data stays on this machine)
 import fs from "node:fs";
-import { fork } from "node:child_process";
+import { execSync, fork } from "node:child_process";
 import http from "node:http";
 import path from "node:path";
 import { DATA_DIR, ROOT, log, readJson } from "./util.mjs";
@@ -88,4 +88,33 @@ const server = http.createServer(async (req, res) => {
   send(res, 404, { error: "not found" });
 });
 
-server.listen(PORT, "127.0.0.1", () => log("ok", `Dashboard: http://localhost:${PORT}`));
+// If an older dashboard is still running (e.g. in another Terminal window), replace it
+// so `git pull && npm run dashboard` always serves the new version.
+let replaced = false;
+server.on("error", (e) => {
+  if (e.code !== "EADDRINUSE" || replaced) {
+    log("err", e.code === "EADDRINUSE" ? `Port ${PORT} is still in use. Close the other dashboard window (or run: lsof -ti tcp:${PORT} | xargs kill) and try again.` : e.message);
+    process.exit(1);
+  }
+  replaced = true;
+  let pids = [];
+  try {
+    pids = execSync(`lsof -ti tcp:${PORT} -sTCP:LISTEN`).toString().trim().split(/\s+/).filter(Boolean);
+  } catch {}
+  const ours = pids.filter((pid) => {
+    try {
+      return /src\/server\.mjs/.test(execSync(`ps -p ${pid} -o command=`).toString());
+    } catch {
+      return false;
+    }
+  });
+  if (!ours.length) {
+    log("err", `Port ${PORT} is used by another program. Set DASHBOARD_PORT in .env to a different number.`);
+    process.exit(1);
+  }
+  log("warn", "An older dashboard was still running; replacing it with this one (any agent it was running is stopped)…");
+  ours.forEach((pid) => { try { process.kill(Number(pid), "SIGTERM"); } catch {} });
+  setTimeout(() => server.listen(PORT, "127.0.0.1"), 1500);
+});
+server.on("listening", () => log("ok", `Dashboard: http://localhost:${PORT}`));
+server.listen(PORT, "127.0.0.1");
