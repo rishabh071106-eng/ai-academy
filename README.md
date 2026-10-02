@@ -1,5 +1,28 @@
 # AI Academy
 
+Free NCERT textbooks (Class 1–12) and competitive-exam prep: swipe-based lectures you can read or
+listen to, quick quizzes, 10 years of previous papers (official sources) and a personal performance board.
+
+| Page | What it does |
+|---|---|
+| `index.html` | Home: School (NCERT), Exam Prep, My Progress |
+| `ncert.html` | Every current NCERT book for Classes 1–12, chapter PDFs from ncert.nic.in, tick chapters as read |
+| `exams.html` | Exam categories: Defence & SSB (NDA, CDS, AFCAT, SSB), Civil Services (UPSC CSE), Bank exams, IT placements (+ your own company list) |
+| `exam.html?id=<exam>` | Lectures by subject, exam pattern, previous papers 2016–2025, free resources |
+| `lecture.html?...` | Swipe card player with quizzes and audiobook mode (browser text-to-speech) |
+| `progress.html` | Performance board: chapters done, audio minutes, streak, quiz accuracy, badges, activity log, export/import |
+| `ai.html` + `chapters/` | The old AI chapters, kept as an archive (daily generation is paused) |
+
+All content is JSON in `data/` — see `data/SCHEMA.md` to add an exam or chapter, then run `npm run validate`.
+Progress is stored in the student's browser (`localStorage`); there are no accounts yet.
+
+Previous papers and NCERT PDFs are **linked** to the official sites (upsc.gov.in, ncert.nic.in, etc.), not
+re-hosted: NCERT and the exam bodies don't allow redistribution, and links always point at the latest copy.
+
+---
+
+## Archive: the daily AI chapter generator
+
 A static site that teaches AI, one chapter at a time. A new chapter is auto-generated every day by a GitHub Actions cron job that calls the Claude API, using a queue of topics and a set of RSS feeds as "what's happening now" signal.
 
 ---
