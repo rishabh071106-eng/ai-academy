@@ -1,0 +1,87 @@
+{
+  "name": "Your Name",
+  "headline": "Magento Developer \u00b7 Adobe Commerce (Magento 2) \u00b7 PHP",
+  "email": "you@example.com",
+  "phone": "9999999999",
+  "phoneCountryCode": "+91",
+  "city": "Bengaluru",
+  "address": "City, Country",
+  "linkedinUrl": "",
+  "totalExperienceYears": 7,
+  "summary": "Two to four lines about you.",
+  "skills": [
+    "Magento 2",
+    "Adobe Commerce",
+    "Magento 1",
+    "PHP",
+    "JavaScript",
+    "jQuery",
+    "Ajax",
+    "HTML",
+    "CSS",
+    "MySQL",
+    "REST APIs",
+    "Custom module development",
+    "Extension development",
+    "Theme customization",
+    "Payment gateway integration",
+    "Shipping method integration",
+    "Multi Source Inventory (MSI)",
+    "Multi-store configuration",
+    "Cache management",
+    "Performance optimization",
+    "ERP integration",
+    "PrestaShop",
+    "WordPress",
+    "Git",
+    "GitHub",
+    "Shell scripting",
+    "Fabric.js",
+    "Unit testing",
+    "Code review",
+    "SonarQube"
+  ],
+  "skillYears": {
+    "PHP": 5
+  },
+  "experience": [
+    {
+      "company": "Company",
+      "role": "Role",
+      "location": "City",
+      "start": "2022-01",
+      "end": "present",
+      "bullets": [
+        "What you built and the impact it had."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Tech",
+      "institution": "University",
+      "start": "2012",
+      "end": "2016"
+    }
+  ],
+  "certifications": [],
+  "applicationAnswers": {
+    "_note": "Used to answer screening questions. Fill the TODO values. Anything left as TODO makes the agent pause and ask instead of guessing.",
+    "noticePeriodDays": "TODO e.g. 0 (immediate joiner) / 15 / 30",
+    "currentCtcLpa": "TODO e.g. 12",
+    "expectedCtcLpa": "TODO e.g. 18",
+    "willingToRelocate": "Yes",
+    "preferredLocations": [
+      "Bengaluru",
+      "Remote"
+    ],
+    "authorizedToWorkInIndia": "Yes",
+    "requiresSponsorship": "No",
+    "gender": "Female",
+    "highestEducation": "B.Tech (Computer Science)",
+    "comfortableWithHybrid": "Yes",
+    "comfortableWithShifts": "TODO Yes/No",
+    "currentlyEmployed": "TODO Yes/No"
+  },
+  "tagline": "Skill \u00b7 Skill \u00b7 Certification"
+}

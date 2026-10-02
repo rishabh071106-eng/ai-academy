@@ -1,0 +1,21 @@
+{
+  "name": "job-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Finds jobs on LinkedIn and Naukri, tailors a resume per job with Claude, applies from your own logged-in Chrome, and tracks everything on a dashboard.",
+  "type": "module",
+  "scripts": {
+    "chrome": "node src/launch-chrome.mjs",
+    "agent": "node src/agent.mjs",
+    "dashboard": "node src/server.mjs",
+    "import-resume": "node src/import-resume.mjs",
+    "demo-data": "node src/demo-data.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "playwright-core": "^1.63.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

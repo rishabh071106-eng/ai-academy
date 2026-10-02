@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Hunt Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232a78d6'/><path d='M10 12h12v11H10z M13 12V9h6v3' fill='none' stroke='white' stroke-width='2.2' stroke-linejoin='round'/></svg>">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --surface-2: #f0efec;
+  --border: #e4e2dd;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --muted: #8a8883;
+  --accent: #2a78d6;
+  --accent-soft: #e6effb;
+  --series-1: #2a78d6; /* LinkedIn */
+  --series-2: #eb6834; /* Naukri */
+  --seq-1: #86b6ef; --seq-2: #3987e5; --seq-3: #1c5cab;
+  --good: #0f7b3f; --good-bg: #e3f4ea;
+  --warn: #9a6200; --warn-bg: #fdf1d8;
+  --crit: #b42318; --crit-bg: #fde8e7;
+  --info: #1c5cab; --info-bg: #e6effb;
+  --violet: #4a3aa7; --violet-bg: #ecebf8;
+  --aqua: #0b7a55; --aqua-bg: #e0f4ec;
+  --neutral-bg: #efeeeb;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #2f2f2c;
+    --text: #ffffff; --text-2: #c3c2b7; --muted: #8f8d85;
+    --accent: #3987e5; --accent-soft: #1d2a3b;
+    --series-1: #3987e5; --series-2: #d95926;
+    --seq-1: #184f95; --seq-2: #2a78d6; --seq-3: #6da7ec;
+    --good: #5fd08c; --good-bg: #183223; --warn: #f2bd4f; --warn-bg: #342a14;
+    --crit: #f08a83; --crit-bg: #3a1c1a; --info: #86b6ef; --info-bg: #1d2a3b;
+    --violet: #a99ff0; --violet-bg: #27243d; --aqua: #5ccfa3; --aqua-bg: #16302a;
+    --neutral-bg: #2a2a27;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #2f2f2c;
+  --text: #ffffff; --text-2: #c3c2b7; --muted: #8f8d85;
+  --accent: #3987e5; --accent-soft: #1d2a3b;
+  --series-1: #3987e5; --series-2: #d95926;
+  --seq-1: #184f95; --seq-2: #2a78d6; --seq-3: #6da7ec;
+  --good: #5fd08c; --good-bg: #183223; --warn: #f2bd4f; --warn-bg: #342a14;
+  --crit: #f08a83; --crit-bg: #3a1c1a; --info: #86b6ef; --info-bg: #1d2a3b;
+  --violet: #a99ff0; --violet-bg: #27243d; --aqua: #5ccfa3; --aqua-bg: #16302a;
+  --neutral-bg: #2a2a27;
+  --shadow: none;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 14px/1.45 ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, select, textarea { font: inherit; color: inherit; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { width: 40px; height: 40px; border-radius: 11px; background: linear-gradient(135deg, var(--series-1), #6c5ce7); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 17px; }
+h1 { font-size: 21px; margin: 0; letter-spacing: -.3px; }
+.sub { color: var(--text-2); font-size: 13px; }
+.actions { display: flex; gap: 8px; align-items: center; }
+.btn { border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 7px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { filter: brightness(1.07); }
+.icon-btn { width: 34px; height: 34px; padding: 0; justify-content: center; }
+.live { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.live i { width: 7px; height: 7px; border-radius: 50%; background: var(--good); display: inline-block; }
+
+.kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.kpi { padding: 14px 16px; }
+.kpi .label { color: var(--text-2); font-size: 12.5px; }
+.kpi .value { font-size: 28px; font-weight: 650; letter-spacing: -.5px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.kpi .hint { color: var(--muted); font-size: 12px; }
+.kpi.attention { cursor: pointer; }
+.kpi.attention .value { color: var(--warn); }
+
+.grid2 { display: grid; grid-template-columns: 1.7fr 1fr; gap: 12px; margin-bottom: 16px; }
+.panel { padding: 16px 18px; }
+.panel h2 { font-size: 14px; margin: 0; font-weight: 620; }
+.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--text-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis text { fill: var(--muted); font-size: 11px; }
+.gridline { stroke: var(--border); stroke-width: 1; }
+.tooltip { position: absolute; pointer-events: none; background: var(--text); color: var(--bg); padding: 7px 10px; border-radius: 8px; font-size: 12px; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); opacity: 0; transition: opacity .12s; z-index: 5; }
+.tooltip b { font-weight: 650; }
+
+.funnel { display: flex; flex-direction: column; gap: 11px; margin-top: 6px; }
+.funnel .row { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 10px; font-size: 13px; }
+.funnel .bar { height: 22px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+.funnel .bar > div { height: 100%; border-radius: 4px; min-width: 4px; transition: width .4s ease; }
+.funnel .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.funnel-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
+
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.search { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 7px 11px; background: var(--bg); }
+.search input { border: 0; outline: 0; background: transparent; width: 100%; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--border); background: var(--surface); padding: 5px 11px; border-radius: 999px; cursor: pointer; font-size: 12.5px; color: var(--text-2); }
+.chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.chip .n { opacity: .65; margin-left: 4px; font-variant-numeric: tabular-nums; }
+select.sel { border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 6px 10px; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 550; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr.job:hover td { background: var(--surface-2); }
+tr.job { cursor: pointer; }
+.job-title { font-weight: 600; }
+.job-co { color: var(--text-2); font-size: 13px; }
+.platform { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); }
+.platform i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.score { display: flex; align-items: center; gap: 8px; min-width: 96px; }
+.score .track { flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.score .fill { height: 100%; border-radius: 3px; }
+.score span { font-variant-numeric: tabular-nums; font-size: 12.5px; width: 30px; text-align: right; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 550; white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-select { appearance: none; border: 0; cursor: pointer; padding-right: 12px; }
+.date { color: var(--text-2); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.links { display: flex; gap: 10px; font-size: 13px; white-space: nowrap; }
+.empty { text-align: center; padding: 48px 16px; color: var(--text-2); }
+.empty b { display: block; color: var(--text); font-size: 15px; margin-bottom: 4px; }
+code { background: var(--surface-2); padding: 1px 6px; border-radius: 5px; font-size: 12.5px; }
+
+tr.detail td { background: var(--surface-2); padding: 14px 18px 18px; cursor: default; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+.detail-grid h4 { margin: 0 0 6px; font-size: 12px; color: var(--muted); font-weight: 550; text-transform: uppercase; letter-spacing: .6px; }
+.detail-grid ul { margin: 0; padding-left: 18px; }
+.tag { display: inline-block; background: var(--crit-bg); color: var(--crit); border-radius: 6px; padding: 1px 8px; margin: 0 4px 4px 0; font-size: 12.5px; }
+.timeline { list-style: none; padding: 0 !important; margin: 0; }
+.timeline li { padding-left: 14px; position: relative; margin-bottom: 6px; font-size: 13px; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.timeline time { color: var(--muted); font-size: 12px; margin-right: 6px; }
+textarea.notes { width: 100%; min-height: 76px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--surface); resize: vertical; }
+.saved { color: var(--good); font-size: 12px; opacity: 0; transition: opacity .2s; }
+.saved.show { opacity: 1; }
+
+.table-wrap { overflow-x: auto; }
+.foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+
+dialog { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); padding: 0; width: min(460px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+dialog::backdrop { background: rgba(0,0,0,.35); }
+dialog form { padding: 20px; display: grid; gap: 12px; }
+dialog h3 { margin: 0 0 4px; }
+dialog label { display: grid; gap: 4px; font-size: 13px; color: var(--text-2); }
+dialog input, dialog select { border: 1px solid var(--border); border-radius: 9px; padding: 8px 10px; background: var(--bg); }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.banner { background: var(--warn-bg); color: var(--warn); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; display: none; }
+
+@media (max-width: 1080px) { .kpis { grid-template-columns: repeat(3, 1fr); } .grid2 { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .hide-sm { display: none; }
+  .detail-grid { grid-template-columns: 1fr; }
+  td, th { padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo" id="initials">JA</div>
+      <div>
+        <h1 id="heading">Job Hunt Tracker</h1>
+        <div class="sub" id="subheading">Applications from the job agent · LinkedIn &amp; Naukri</div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
+      <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
+      <button class="btn primary" id="addBtn">+ Add job</button>
+      <button class="btn icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+    </div>
+  </header>
+
+  <div class="banner" id="banner"></div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="grid2">
+    <div class="card panel">
+      <div class="panel-head">
+        <h2>Applications per day <span class="sub">· last 21 days</span></h2>
+        <div class="legend"><span><i style="background:var(--series-1)"></i>LinkedIn</span><span><i style="background:var(--series-2)"></i>Naukri</span></div>
+      </div>
+      <div class="chart" id="daily"><div class="tooltip" id="tip"></div></div>
+    </div>
+    <div class="card panel">
+      <div class="panel-head"><h2>Pipeline</h2><span class="sub" id="pipelineSub"></span></div>
+      <div class="funnel" id="funnel"></div>
+      <div class="funnel-note" id="funnelNote"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="toolbar">
+      <label class="search"><span aria-hidden="true">⌕</span><input id="q" placeholder="Search company, title, location…" autocomplete="off"></label>
+      <div class="chips" id="statusChips"></div>
+      <select class="sel" id="platformSel" aria-label="Platform">
+        <option value="">All platforms</option><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="other">Other</option>
+      </select>
+      <select class="sel" id="sortSel" aria-label="Sort">
+        <option value="recent">Most recent</option><option value="score">Best match</option><option value="company">Company A–Z</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Job</th><th class="hide-sm">Platform</th><th class="hide-sm">Match</th><th>Status</th><th class="hide-sm">Date</th><th class="hide-sm">Links</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="foot"><span id="count"></span><span>Click a row for match details, history and notes.</span></div>
+  </section>
+</div>
+
+<dialog id="addDialog">
+  <form method="dialog" id="addForm">
+    <h3>Add a job you applied to yourself</h3>
+    <label>Company<input name="company" required></label>
+    <label>Job title<input name="title" required></label>
+    <label>Link<input name="url" type="url" placeholder="https://"></label>
+    <label>Platform<select name="platform"><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="other">Company site / other</option></select></label>
+    <label>Status<select name="status"></select></label>
+    <div class="dialog-actions"><button class="btn" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Add</button></div>
+  </form>
+</dialog>
+
+<script>
+const STATUS = {
+  applied:         { label: "Applied",         fg: "var(--info)",   bg: "var(--info-bg)" },
+  interview:       { label: "Interview",       fg: "var(--violet)", bg: "var(--violet-bg)" },
+  offer:           { label: "Offer",           fg: "var(--good)",   bg: "var(--good-bg)" },
+  rejected:        { label: "Rejected",        fg: "var(--crit)",   bg: "var(--crit-bg)" },
+  needs_attention: { label: "Needs attention", fg: "var(--warn)",   bg: "var(--warn-bg)" },
+  external:        { label: "Apply on site",   fg: "var(--aqua)",   bg: "var(--aqua-bg)" },
+  shortlisted:     { label: "Shortlisted",     fg: "var(--text-2)", bg: "var(--neutral-bg)" },
+  skipped:         { label: "Skipped",         fg: "var(--muted)",  bg: "var(--neutral-bg)" },
+  withdrawn:       { label: "Withdrawn",       fg: "var(--muted)",  bg: "var(--neutral-bg)" },
+};
+const PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, other: { label: "Other", color: "var(--muted)" } };
+const APPLIED_LIKE = new Set(["applied", "interview", "offer", "rejected", "withdrawn"]);
+
+const state = { rows: [], statuses: Object.keys(STATUS), filter: "active", q: "", platform: "", sort: "recent", open: new Set() };
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const day = (d) => new Date(d).toISOString().slice(0, 10);
+const fmtDate = (d) => d ? new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : "—";
+const ago = (d) => {
+  const s = (Date.now() - new Date(d)) / 1000;
+  if (s < 3600) return `${Math.max(1, Math.round(s / 60))}m ago`;
+  if (s < 86400) return `${Math.round(s / 3600)}h ago`;
+  return `${Math.round(s / 86400)}d ago`;
+};
+
+// Theme toggle (remembered per browser).
+try { const t = localStorage.getItem("ja-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+$("#themeBtn").onclick = () => {
+  const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("ja-theme", document.documentElement.dataset.theme); } catch {}
+};
+
+async function load() {
+  try {
+    const r = await fetch("/api/applications", { cache: "no-store" });
+    const data = await r.json();
+    state.rows = data.rows;
+    $("#banner").style.display = "none";
+    $("#updated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    $("#banner").style.display = "block";
+    $("#banner").textContent = "Can't reach the dashboard server. Start it with “npm run dashboard” in the job-agent folder.";
+  }
+  render();
+}
+
+function render() {
+  renderKpis();
+  renderDaily();
+  renderFunnel();
+  renderChips();
+  renderTable();
+}
+
+function renderKpis() {
+  const rows = state.rows;
+  const applied = rows.filter((r) => APPLIED_LIKE.has(r.status));
+  const weekAgo = Date.now() - 7 * 864e5;
+  const thisWeek = applied.filter((r) => r.appliedAt && new Date(r.appliedAt) > weekAgo).length;
+  const interviews = rows.filter((r) => r.status === "interview" || r.status === "offer").length;
+  const responded = rows.filter((r) => ["interview", "offer", "rejected"].includes(r.status)).length;
+  const attention = rows.filter((r) => r.status === "needs_attention" || r.status === "external").length;
+  const scored = applied.filter((r) => r.matchScore != null);
+  const avg = scored.length ? Math.round(scored.reduce((a, r) => a + r.matchScore, 0) / scored.length) : null;
+  const today = applied.filter((r) => r.appliedAt && day(r.appliedAt) === day(new Date())).length;
+  const k = [
+    { label: "Applied", value: applied.length, hint: `${today} today` },
+    { label: "This week", value: thisWeek, hint: "last 7 days" },
+    { label: "Interviews", value: interviews, hint: rows.some((r) => r.status === "offer") ? `${rows.filter((r) => r.status === "offer").length} offer 🎉` : "incl. offers" },
+    { label: "Response rate", value: applied.length ? Math.round((responded / applied.length) * 100) + "%" : "—", hint: `${responded} heard back` },
+    { label: "Avg. match", value: avg != null ? avg + "%" : "—", hint: "of applied jobs" },
+    { label: "To do", value: attention, hint: "needs you / apply on site", cls: "attention" },
+  ];
+  $("#kpis").innerHTML = k.map((x) => `<div class="card kpi ${x.cls ?? ""}" ${x.cls ? 'role="button" tabindex="0" title="Show these jobs"' : ""}>
+    <div class="label">${x.label}</div><div class="value">${x.value}</div><div class="hint">${x.hint}</div></div>`).join("");
+  const att = $("#kpis .attention");
+  att.onclick = att.onkeydown = (e) => { if (e.type === "keydown" && e.key !== "Enter") return; state.filter = "todo"; render(); document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth" }); };
+}
+
+function renderDaily() {
+  const days = 21;
+  const buckets = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 864e5);
+    buckets.push({ key: day(d), date: d, linkedin: 0, naukri: 0 });
+  }
+  const idx = Object.fromEntries(buckets.map((b, i) => [b.key, i]));
+  for (const r of state.rows) {
+    if (!r.appliedAt || !APPLIED_LIKE.has(r.status)) continue;
+    const i = idx[day(r.appliedAt)];
+    if (i != null) buckets[i][r.platform === "naukri" ? "naukri" : "linkedin"]++;
+  }
+  const W = 720, H = 220, L = 28, R = 8, T = 10, B = 26;
+  const max = Math.max(4, ...buckets.map((b) => b.linkedin + b.naukri));
+  const step = Math.ceil(max / 4);
+  const top = step * 4;
+  const bw = (W - L - R) / days;
+  const barW = Math.min(22, bw * 0.62);
+  const y = (v) => T + (H - T - B) * (1 - v / top);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Applications per day, last ${days} days"><g class="axis">`;
+  for (let v = 0; v <= top; v += step) svg += `<line class="gridline" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  buckets.forEach((b, i) => {
+    if (i % 3 === 0 || i === days - 1) svg += `<text x="${L + bw * i + bw / 2}" y="${H - 6}" text-anchor="middle">${b.date.toLocaleDateString(undefined, { day: "numeric", month: "short" })}</text>`;
+  });
+  svg += `</g>`;
+  buckets.forEach((b, i) => {
+    const x = L + bw * i + (bw - barW) / 2;
+    const segs = [["linkedin", "var(--series-1)"], ["naukri", "var(--series-2)"]].filter(([k]) => b[k] > 0);
+    let base = 0;
+    segs.forEach(([k, color], si) => {
+      const y0 = y(base), y1 = y(base + b[k]);
+      const isTop = si === segs.length - 1;
+      const h = Math.max(0, y0 - y1 - (si > 0 ? 2 : 0)); // 2px surface gap between stacked segments
+      const r = isTop ? Math.min(4, h / 2, barW / 2) : 0;
+      svg += `<path d="${roundedTop(x, y1, barW, h, r)}" fill="${color}"/>`;
+      base += b[k];
+    });
+    svg += `<rect class="hit" data-i="${i}" x="${L + bw * i}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent"/>`;
+  });
+  svg += `</svg>`;
+  const host = $("#daily");
+  host.querySelector("svg")?.remove();
+  host.insertAdjacentHTML("afterbegin", svg);
+  const tip = $("#tip");
+  host.querySelectorAll(".hit").forEach((el) => {
+    el.onmouseenter = () => {
+      const b = buckets[+el.dataset.i];
+      const rect = host.getBoundingClientRect(), r = el.getBoundingClientRect();
+      tip.innerHTML = `<b>${b.date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</b><br>LinkedIn ${b.linkedin} · Naukri ${b.naukri}`;
+      tip.style.left = r.left - rect.left + r.width / 2 + "px";
+      const total = b.linkedin + b.naukri;
+      tip.style.top = (y(total) / H) * rect.height + "px";
+      tip.style.opacity = 1;
+      el.setAttribute("fill", "rgba(127,127,127,.08)");
+    };
+    el.onmouseleave = () => { tip.style.opacity = 0; el.setAttribute("fill", "transparent"); };
+  });
+}
+function roundedTop(x, y, w, h, r) {
+  if (h <= 0) return "";
+  return `M${x},${y + h} V${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h} Z`;
+}
+
+function renderFunnel() {
+  const c = (f) => state.rows.filter(f).length;
+  const applied = c((r) => APPLIED_LIKE.has(r.status));
+  const stages = [
+    { label: "Matched", n: c((r) => r.status !== "skipped"), color: "var(--seq-1)" },
+    { label: "Applied", n: applied, color: "var(--seq-2)" },
+    { label: "Interview", n: c((r) => r.status === "interview" || r.status === "offer"), color: "var(--seq-3)" },
+    { label: "Offer", n: c((r) => r.status === "offer"), color: "var(--good)" },
+  ];
+  const max = Math.max(1, stages[0].n);
+  $("#funnel").innerHTML = stages.map((s) => `<div class="row"><span>${s.label}</span>
+    <div class="bar"><div style="width:${(s.n / max) * 100}%;background:${s.color}"></div></div><span class="num">${s.n}</span></div>`).join("");
+  const scanned = state.rows.length;
+  const skipped = c((r) => r.status === "skipped");
+  $("#pipelineSub").textContent = `${scanned} jobs reviewed`;
+  $("#funnelNote").textContent = scanned ? `${skipped} skipped as poor fits · ${c((r) => r.status === "rejected")} rejections so far` : "";
+}
+
+const FILTERS = [
+  { key: "active", label: "Active", test: (r) => r.status !== "skipped" && r.status !== "withdrawn" },
+  { key: "todo", label: "To do", test: (r) => r.status === "needs_attention" || r.status === "external" || r.status === "shortlisted" },
+  { key: "applied", label: "Applied", test: (r) => r.status === "applied" },
+  { key: "interview", label: "Interviews", test: (r) => r.status === "interview" || r.status === "offer" },
+  { key: "rejected", label: "Rejected", test: (r) => r.status === "rejected" },
+  { key: "skipped", label: "Skipped", test: (r) => r.status === "skipped" },
+  { key: "all", label: "All", test: () => true },
+];
+function renderChips() {
+  $("#statusChips").innerHTML = FILTERS.map((f) => `<button class="chip" aria-pressed="${state.filter === f.key}" data-k="${f.key}">${f.label}<span class="n">${state.rows.filter(f.test).length}</span></button>`).join("");
+  $("#statusChips").querySelectorAll(".chip").forEach((b) => (b.onclick = () => { state.filter = b.dataset.k; render(); }));
+}
+
+function visibleRows() {
+  const f = FILTERS.find((x) => x.key === state.filter) ?? FILTERS[0];
+  const q = state.q.toLowerCase();
+  const rows = state.rows.filter((r) => f.test(r)
+    && (!state.platform || r.platform === state.platform)
+    && (!q || `${r.company} ${r.title} ${r.location} ${r.notes}`.toLowerCase().includes(q)));
+  const when = (r) => new Date(r.appliedAt || r.updatedAt || r.foundAt).getTime();
+  rows.sort(state.sort === "score" ? (a, b) => (b.matchScore ?? -1) - (a.matchScore ?? -1)
+    : state.sort === "company" ? (a, b) => String(a.company).localeCompare(b.company)
+    : (a, b) => when(b) - when(a));
+  return rows;
+}
+
+function scoreColor(s) { return s >= 85 ? "var(--seq-3)" : s >= 70 ? "var(--seq-2)" : "var(--seq-1)"; }
+
+function renderTable() {
+  const rows = visibleRows();
+  $("#count").textContent = `${rows.length} of ${state.rows.length} jobs`;
+  if (!state.rows.length) {
+    $("#rows").innerHTML = `<tr><td colspan="6" class="empty"><b>No applications yet</b>Run <code>npm run agent</code> to start applying, or <code>npm run demo-data</code> to preview with sample data.</td></tr>`;
+    return;
+  }
+  if (!rows.length) { $("#rows").innerHTML = `<tr><td colspan="6" class="empty"><b>Nothing here</b>Try another filter.</td></tr>`; return; }
+  $("#rows").innerHTML = rows.map((r) => {
+    const st = STATUS[r.status] ?? STATUS.shortlisted;
+    const p = PLATFORM[r.platform] ?? PLATFORM.other;
+    const open = state.open.has(r.id);
+    const opts = state.statuses.map((s) => `<option value="${s}" ${s === r.status ? "selected" : ""}>${(STATUS[s] ?? { label: s }).label}</option>`).join("");
+    return `<tr class="job" data-id="${esc(r.id)}" aria-expanded="${open}">
+      <td><div class="job-title">${esc(r.title)}</div><div class="job-co">${esc(r.company)}${r.location ? " · " + esc(r.location) : ""}</div></td>
+      <td class="hide-sm"><span class="platform"><i style="background:${p.color}"></i>${p.label}</span></td>
+      <td class="hide-sm">${r.matchScore != null ? `<div class="score" title="Match ${r.matchScore}%"><div class="track"><div class="fill" style="width:${r.matchScore}%;background:${scoreColor(r.matchScore)}"></div></div><span>${r.matchScore}</span></div>` : '<span class="date">—</span>'}</td>
+      <td><select class="pill status-select" data-id="${esc(r.id)}" style="color:${st.fg};background:${st.bg}" aria-label="Status">${opts}</select></td>
+      <td class="hide-sm"><span class="date" title="${esc(r.appliedAt || r.foundAt)}">${fmtDate(r.appliedAt || r.foundAt)}</span></td>
+      <td class="hide-sm"><div class="links">${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">Job ↗</a>` : ""}${r.resumeFile ? `<a href="/files/${esc(r.resumeFile)}" target="_blank">Resume</a>` : ""}</div></td>
+    </tr>${open ? detailRow(r) : ""}`;
+  }).join("");
+
+  $("#rows").querySelectorAll("tr.job").forEach((tr) => (tr.onclick = (e) => {
+    if (e.target.closest("select, a")) return;
+    const id = tr.dataset.id;
+    state.open.has(id) ? state.open.delete(id) : state.open.add(id);
+    renderTable();
+  }));
+  $("#rows").querySelectorAll(".status-select").forEach((s) => (s.onchange = () => patch(s.dataset.id, { status: s.value })));
+  $("#rows").querySelectorAll("textarea.notes").forEach((t) => {
+    let timer;
+    t.oninput = () => { clearTimeout(timer); timer = setTimeout(async () => { await patch(t.dataset.id, { notes: t.value }, false); const ok = t.parentElement.querySelector(".saved"); ok.classList.add("show"); setTimeout(() => ok.classList.remove("show"), 1200); }, 600); };
+  });
+}
+
+function detailRow(r) {
+  const reasons = (r.matchReasons ?? []).map((x) => `<li>${esc(x)}</li>`).join("") || "<li>—</li>";
+  const missing = (r.missingSkills ?? []).map((x) => `<span class="tag">${esc(x)}</span>`).join("") || '<span class="sub">None flagged</span>';
+  const hist = [...(r.history ?? [])].reverse().map((h) => `<li><time>${fmtDate(h.at)} · ${ago(h.at)}</time>${esc((STATUS[h.status] ?? { label: h.status }).label)}${h.note ? ` — <span class="sub">${esc(h.note)}</span>` : ""}</li>`).join("");
+  return `<tr class="detail"><td colspan="6"><div class="detail-grid">
+    <div><h4>Why it matches</h4><ul>${reasons}</ul><h4 style="margin-top:12px">Gaps</h4>${missing}</div>
+    <div><h4>History</h4><ul class="timeline">${hist || "<li>—</li>"}</ul>${r.coverNote ? `<h4 style="margin-top:12px">Recruiter note draft</h4><div class="sub">${esc(r.coverNote)}</div>` : ""}</div>
+    <div><h4>Notes <span class="saved">✓ saved</span></h4><textarea class="notes" data-id="${esc(r.id)}" placeholder="Recruiter name, interview date, salary discussed…">${esc(r.notes)}</textarea>
+      <div class="links" style="margin-top:8px">${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">Open job ↗</a>` : ""}${r.resumeFile ? `<a href="/files/${esc(r.resumeFile)}" target="_blank">Tailored resume (PDF)</a>` : ""}</div></div>
+  </div></td></tr>`;
+}
+
+async function patch(id, body, rerender = true) {
+  const r = await fetch(`/api/applications/${encodeURIComponent(id)}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) return;
+  const row = await r.json();
+  state.rows = state.rows.map((x) => (x.id === id ? row : x));
+  if (rerender) render();
+}
+
+$("#q").oninput = (e) => { state.q = e.target.value; renderTable(); };
+$("#platformSel").onchange = (e) => { state.platform = e.target.value; renderTable(); };
+$("#sortSel").onchange = (e) => { state.sort = e.target.value; renderTable(); };
+
+$("#addForm").status.innerHTML = ["applied", "interview", "offer", "rejected", "shortlisted"].map((s) => `<option value="${s}">${STATUS[s].label}</option>`).join("");
+$("#addBtn").onclick = () => $("#addDialog").showModal();
+$("#addDialog").onclose = async () => {
+  if ($("#addDialog").returnValue !== "ok") return;
+  const body = Object.fromEntries(new FormData($("#addForm")));
+  await fetch("/api/applications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  $("#addForm").reset();
+  load();
+};
+
+$("#exportBtn").onclick = () => {
+  const cols = ["company", "title", "platform", "status", "matchScore", "appliedAt", "location", "url", "notes"];
+  const csv = [cols.join(","), ...visibleRows().map((r) => cols.map((c) => `"${String(r[c] ?? "").replace(/"/g, '""')}"`).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = `applications-${day(new Date())}.csv`;
+  a.click();
+};
+
+fetch("/api/profile").then((r) => r.json()).then((p) => {
+  if (!p.name) return;
+  const first = p.name.split(" ")[0];
+  $("#heading").textContent = `${first}'s Job Hunt`;
+  $("#initials").textContent = p.name.split(" ").map((w) => w[0]).slice(0, 2).join("");
+  if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn & Naukri`;
+  document.title = `${first}'s Job Hunt`;
+}).catch(() => {});
+
+load();
+setInterval(() => { if (!document.hidden && !document.activeElement?.matches("textarea, input")) load(); }, 15000);
+</script>
+</body>
+</html>

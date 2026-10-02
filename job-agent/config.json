@@ -1,0 +1,65 @@
+{
+  "model": "claude-opus-5-5",
+  "mode": "review",
+  "minMatchScore": 70,
+  "maxApplicationsPerRun": 15,
+  "maxJobsToScanPerSearch": 25,
+  "delaySecondsBetweenApplications": [
+    25,
+    70
+  ],
+  "platforms": {
+    "linkedin": {
+      "enabled": true,
+      "easyApplyOnly": true,
+      "postedWithinDays": 7,
+      "searches": [
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Senior Magento Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Magento 2 Developer",
+          "location": "India",
+          "remote": true
+        },
+        {
+          "keywords": "Magento Headless Next.js",
+          "location": "India"
+        }
+      ]
+    },
+    "naukri": {
+      "enabled": true,
+      "postedWithinDays": 7,
+      "experienceYears": 9,
+      "searches": [
+        {
+          "keywords": "adobe commerce developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "senior magento developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "magento 2",
+          "location": "remote"
+        }
+      ]
+    }
+  },
+  "excludeTitleKeywords": [
+    "intern",
+    "fresher",
+    "trainee",
+    "sales",
+    "marketing",
+    "manual testing"
+  ],
+  "excludeCompanies": []
+}
