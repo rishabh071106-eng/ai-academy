@@ -1,6 +1,8 @@
 import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { fillForm } from "./forms.mjs";
-import { confirm, humanPause, log, sleep, waitForUser } from "./util.mjs";
+import fs from "node:fs";
+import path from "node:path";
+import { ask, confirm, DATA_DIR, humanPause, log, sleep, waitForUser } from "./util.mjs";
 
 export const name = "linkedin";
 
@@ -138,74 +140,141 @@ export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
   return { status: "sent", note: `Sent to ${job.hiringContact?.name || "hiring team"} on LinkedIn` };
 }
 
-const modalSel = ".jobs-easy-apply-modal, div[role=dialog][aria-labelledby*='easy-apply' i], div[role=dialog]";
+/**
+ * After clicking Easy Apply, LinkedIn shows the form either in a dialog (sometimes inside a
+ * shadow root) or on its own /apply page. Returns a locator for whichever appeared.
+ */
+async function applyRoot(page) {
+  const deadline = Date.now() + 15000;
+  while (Date.now() < deadline) {
+    const dialog = page.getByRole("dialog").filter({ has: page.locator("input, select, textarea, button") }).filter({ hasText: /apply|contact info|resume|mobile|phone|email|question|review|submit/i }).last();
+    if (await dialog.isVisible().catch(() => false)) return dialog;
+    if (/\/apply\b|openSDUIApplyFlow/i.test(page.url())) {
+      const main = page.locator("main").first();
+      if (await main.locator("input, select, textarea").first().isVisible().catch(() => false)) return main;
+    }
+    await sleep(400);
+  }
+  return null;
+}
+
+const button = (root, re) => root.getByRole("button", { name: re }).first();
 
 export async function apply(page, job, { resumePath, profile, mode }) {
-  const btn = easyApplyControl(page);
-  if (!(await btn.isVisible({ timeout: 5000 }).catch(() => false))) return { status: "needs_attention", note: "Easy Apply button not found" };
-  await btn.click();
-  const modal = await firstVisible(page, [modalSel], 8000);
-  if (!modal) return { status: "needs_attention", note: "Easy Apply dialog did not open" };
+  const ctl = easyApplyControl(page);
+  if (!(await ctl.isVisible({ timeout: 5000 }).catch(() => false))) return { status: "needs_attention", note: "Easy Apply button not found" };
+  await ctl.click();
+  const root = await applyRoot(page);
+  if (!root) return stuck(page, null, job, mode, "the Easy Apply form didn't open");
+  log("dim", "   Easy Apply form opened");
 
+  let lastStep = "";
+  let sameStepCount = 0;
   for (let step = 0; step < 15; step++) {
-    await humanPause(900, 1600);
+    await humanPause(900, 1500);
+    const heading = ((await root.locator("h3, h2").first().innerText({ timeout: 1000 }).catch(() => "")) || "").trim().split("\n")[0];
+    log("dim", `   step ${step + 1}${heading ? `: ${heading}` : ""}`);
 
     // Upload the tailored resume when the step has a file input for it.
-    const file = modal.locator("input[type=file]");
-    if ((await file.count()) && resumePath) {
-      const accept = (await file.first().getAttribute("accept")) ?? "";
+    const file = root.locator("input[type=file]");
+    if ((await file.count().catch(() => 0)) && resumePath) {
+      const accept = (await file.first().getAttribute("accept").catch(() => "")) ?? "";
       if (!accept || /pdf/i.test(accept)) {
-        await file.first().setInputFiles(resumePath).catch(() => {});
+        await file.first().setInputFiles(resumePath).then(() => log("dim", "   ↳ uploaded tailored resume")).catch((e) => log("warn", `   resume upload failed: ${e.message.split("\n")[0]}`));
         await sleep(2500);
-        log("dim", "   ↳ uploaded tailored resume");
       }
     }
 
-    const unanswered = await fillForm(modal, profile, job);
+    let unanswered = await fillForm(root, profile, job);
     if (unanswered.length) {
-      log("warn", `   Couldn't answer: ${unanswered.map((f) => `"${f.label}"`).join(", ")}`);
+      log("warn", `   couldn't answer: ${unanswered.map((f) => `"${f.label}"`).join(", ")}`);
       if (mode === "auto") return discard(page, "Unanswered: " + unanswered.map((f) => f.label).join("; "));
-      const go = await waitForUser(`Couldn't answer ${unanswered.map((f) => `"${f.label}"`).join(", ")} for ${job.company}. Fill it in the Chrome dialog, then continue.`);
+      const go = await waitForUser(`${job.company}: please fill ${unanswered.map((f) => `"${f.label}"`).join(", ")} in the Chrome form, then press Done.`);
       if (!go) return discard(page, "Skipped by you at questions", "skipped");
     }
 
-    const submit = await firstVisible(modal, ["button[aria-label='Submit application']", "button:has-text('Submit application')"]);
-    if (submit) {
+    const submit = button(root, /submit application|^submit$/i);
+    if (await submit.isVisible().catch(() => false)) {
       // Don't auto-follow the company.
-      const follow = modal.locator("input#follow-company-checkbox");
-      if (await follow.isChecked().catch(() => false)) await modal.locator("label[for=follow-company-checkbox]").click().catch(() => {});
-      if (mode !== "auto") {
-        if (!(await confirm(`Submit application to ${job.company} – ${job.title}?`))) return discard(page, "You chose not to submit", "skipped");
-      }
+      const follow = root.getByRole("checkbox", { name: /follow/i }).first();
+      if (await follow.isChecked().catch(() => false)) await follow.uncheck({ force: true }).catch(() => {});
+      if (mode !== "auto" && !(await confirm(`Submit application to ${job.company} – ${job.title}?`))) return discard(page, "You chose not to submit", "skipped");
       await submit.click();
-      const done = await firstVisible(page, ["text=/application (was )?sent/i", "h3:has-text('Application sent')"], 10000);
-      await firstVisible(page, ["button[aria-label='Dismiss']"], 3000).then((b) => b?.click()).catch(() => {});
+      const done = await firstVisible(page, ["text=/application (was )?(sent|submitted)/i", "text=/your application was sent/i"], 12000);
+      await button(page, /dismiss|done|close/i).click({ timeout: 3000 }).catch(() => {});
       return done ? { status: "applied", note: "Easy Apply" } : { status: "needs_attention", note: "Clicked submit but no confirmation seen — check LinkedIn > My jobs" };
     }
 
-    const next = await firstVisible(modal, [
-      "button[aria-label='Continue to next step']", "button[aria-label='Review your application']",
-      "button:has-text('Next')", "button:has-text('Review')", "button:has-text('Continue')",
-    ]);
-    if (!next) return discard(page, "No Next/Submit button in the dialog");
-    await next.click();
-    await sleep(1200);
-    const err = await firstVisible(modal, [".artdeco-inline-feedback--error", "[data-test-form-element-error-messages]"]);
-    if (err && step > 0) {
-      const msg = (await err.innerText()).trim();
-      log("warn", `   Form error: ${msg}`);
-      if (mode === "auto") return discard(page, "Form error: " + msg);
-      await waitForUser(`Form error on ${job.company}: "${msg}". Fix it in Chrome, then continue.`, { allowSkip: false });
+    const next = [button(root, /review/i), button(root, /next|continue/i)];
+    let clicked = false;
+    for (const b of next) {
+      if (await b.isVisible().catch(() => false)) {
+        await b.click();
+        clicked = true;
+        break;
+      }
+    }
+    if (!clicked) {
+      const r = await stuck(page, root, job, mode, "there's no Next / Review / Submit button on this step", true);
+      if (r) return r;
+      continue;
+    }
+    await sleep(1500);
+
+    // Validation errors keep us on the same step: fill again once, then ask for help.
+    const err = root.locator(".artdeco-inline-feedback--error, [data-test-form-element-error-messages], [role=alert]").filter({ hasText: /\S/ }).first();
+    if (await err.isVisible().catch(() => false)) {
+      const msg = (await err.innerText().catch(() => "")).trim().split("\n")[0];
+      log("warn", `   form says: ${msg}`);
+      unanswered = await fillForm(root, profile, job);
+      const again = await button(root, /review|next|continue|submit application/i);
+      if (!unanswered.length && (await again.isVisible().catch(() => false)) && !/submit/i.test((await again.innerText().catch(() => "")) || "")) {
+        await again.click();
+        await sleep(1500);
+      }
+      if (await err.isVisible().catch(() => false)) {
+        const r = await stuck(page, root, job, mode, `the form says "${msg}"`, true);
+        if (r) return r;
+        continue;
+      }
+    }
+    // Guard against looping on a step that never advances.
+    sameStepCount = heading && heading === lastStep ? sameStepCount + 1 : 0;
+    lastStep = heading;
+    if (sameStepCount >= 2) {
+      sameStepCount = 0;
+      const r = await stuck(page, root, job, mode, "the form isn't moving to the next step", true);
+      if (r) return r;
     }
   }
-  return discard(page, "Too many steps in Easy Apply");
+  return stuck(page, root, job, mode, "too many steps");
+}
+
+/**
+ * The agent couldn't finish an application. Save a screenshot for debugging; in review mode
+ * hand over to the user instead of silently moving on.
+ */
+async function stuck(page, root, job, mode, reason, canContinue = false) {
+  const shot = path.join(DATA_DIR, "debug", `linkedin-${job.jobId}-apply.png`);
+  fs.mkdirSync(path.dirname(shot), { recursive: true });
+  await page.screenshot({ path: shot }).catch(() => {});
+  if (root) fs.writeFileSync(shot.replace(/\.png$/, ".html"), await root.innerHTML().catch(() => ""));
+  log("warn", `   stuck: ${reason} (screenshot: data/debug/${path.basename(shot)})`);
+  if (mode === "auto") return discard(page, `Stuck: ${reason}`);
+  const choices = [
+    ...(canContinue ? [{ label: "I fixed it, continue", value: "" }] : []),
+    { label: "I submitted it myself", value: "done" },
+    { label: "Skip this job", value: "s" },
+  ];
+  const r = await ask(`${job.company} – ${job.title}: I'm stuck because ${reason}. ${canContinue ? "Fix it in the Chrome form and I'll carry on, " : ""}finish it yourself, or skip it.`, choices);
+  if (r === "done") return { status: "applied", note: "Submitted by you after the agent got stuck" };
+  if (r === "" && canContinue) return null;
+  return discard(page, `Stuck: ${reason}`);
 }
 
 async function discard(page, note, status = "needs_attention") {
-  const close = await firstVisible(page, ["button[aria-label='Dismiss']"]);
-  await close?.click().catch(() => {});
-  const discardBtn = await firstVisible(page, ["button[data-control-name='discard_application_confirm_btn']", "button:has-text('Discard')"], 3000);
-  await discardBtn?.click().catch(() => {});
+  await button(page, /dismiss|close/i).click({ timeout: 2000 }).catch(() => {});
+  await button(page, /^discard$/i).click({ timeout: 3000 }).catch(() => {});
   return { status, note };
 }
 

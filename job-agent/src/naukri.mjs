@@ -1,6 +1,8 @@
 import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { answerQuestions } from "./llm.mjs";
-import { confirm, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
+import fs from "node:fs";
+import path from "node:path";
+import { ask, confirm, DATA_DIR, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
 
 export const name = "naukri";
 
@@ -137,7 +139,16 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
     await send?.click();
     await sleep(2000);
   }
-  return (await firstVisible(page, SUCCESS, 4000))
-    ? { status: "applied", note: `Naukri apply (${resumeNote})` }
-    : { status: "needs_attention", note: "No confirmation after Apply — check Naukri > Applies" };
+  if (await firstVisible(page, SUCCESS, 4000)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
+  // Naukri sent us somewhere unexpected (extra form, company page, login). Don't silently move on.
+  const shot = path.join(DATA_DIR, "debug", `naukri-${job.jobId}-apply.png`);
+  fs.mkdirSync(path.dirname(shot), { recursive: true });
+  await page.screenshot({ path: shot }).catch(() => {});
+  log("warn", `   no confirmation after Apply (screenshot: data/debug/${path.basename(shot)})`);
+  if (mode === "auto") return { status: "needs_attention", note: "No confirmation after Apply — check Naukri > Applies" };
+  const r = await ask(`${job.company} – ${job.title}: Naukri didn't confirm the application. Finish it in Chrome if something is asked, then tell me.`, [
+    { label: "It's applied", value: "done" },
+    { label: "Skip this job", value: "s" },
+  ]);
+  return r === "done" ? { status: "applied", note: `Naukri apply, finished by you (${resumeNote})` } : { status: "needs_attention", note: "No confirmation after Apply" };
 }

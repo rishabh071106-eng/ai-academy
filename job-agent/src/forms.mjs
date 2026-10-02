@@ -8,12 +8,19 @@ import { humanPause, log } from "./util.mjs";
  */
 export async function collectFields(root) {
   return root.evaluate((rootEl) => {
+    // querySelectorAll that also looks inside shadow roots (LinkedIn renders parts of the form in web components).
+    const deepAll = (node, sel) => {
+      const out = [...node.querySelectorAll(sel)];
+      for (const el of node.querySelectorAll("*")) if (el.shadowRoot) out.push(...deepAll(el.shadowRoot, sel));
+      return out;
+    };
+    const byId = (el, id) => el.getRootNode()?.getElementById?.(id) || document.getElementById(id);
     const visible = (el) => !!(el && (el.offsetParent || el.getClientRects().length));
     const clean = (s) => (s || "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
     const labelOf = (el) => {
       if (el.labels && el.labels[0]) return clean(el.labels[0].innerText);
       const by = el.getAttribute("aria-labelledby");
-      if (by) return clean(by.split(" ").map((id) => document.getElementById(id)?.innerText || "").join(" "));
+      if (by) return clean(by.split(" ").map((id) => byId(el, id)?.innerText || "").join(" "));
       if (el.getAttribute("aria-label")) return clean(el.getAttribute("aria-label"));
       const fs = el.closest("fieldset");
       if (fs && fs.querySelector("legend")) return clean(fs.querySelector("legend").innerText);
@@ -24,7 +31,7 @@ export async function collectFields(root) {
     const fields = [];
     let n = 0;
     const seenRadio = new Set();
-    for (const el of rootEl.querySelectorAll("input, select, textarea")) {
+    for (const el of deepAll(rootEl, "input, select, textarea")) {
       const type = (el.tagName === "INPUT" ? el.type || "text" : el.tagName).toLowerCase();
       if (["hidden", "submit", "button", "file", "search", "image", "reset"].includes(type)) continue;
       if (el.disabled || el.readOnly) continue;
@@ -32,7 +39,7 @@ export async function collectFields(root) {
         const name = el.name || el.id;
         if (seenRadio.has(name)) continue;
         seenRadio.add(name);
-        const group = [...rootEl.querySelectorAll(`input[type=radio][name="${CSS.escape(name)}"]`)];
+        const group = deepAll(el.getRootNode(), `input[type=radio][name="${CSS.escape(name)}"]`);
         if (!group.some((r) => visible(r) || visible(r.labels?.[0]))) continue;
         const fs = el.closest("fieldset");
         const key = `ja${n++}`;
@@ -70,8 +77,12 @@ function quickAnswer(field, profile) {
   const l = field.label.toLowerCase();
   const [first, ...rest] = profile.name.split(" ");
   if (/e-?mail/.test(l)) return profile.email;
-  if (/country code/.test(l)) return field.options?.find((o) => o.includes("India") || o.includes("+91")) ?? null;
-  if (/mobile|phone/.test(l)) return profile.phone;
+  if (/country code/.test(l) && !/(number|mobile).*country code/.test(l)) return field.options?.length ? field.options.find((o) => /india|\+91/i.test(o)) ?? null : profile.phoneCountryCode || "+91";
+  const cc = profile.phoneCountryCode || "+91";
+  const digits = String(profile.phone).replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+  if (/(mobile|phone).*(with|incl\w*).*(country|code)|international|e\.?164/.test(l)) return `${cc} ${digits}`;
+  if (/whatsapp|mobile|phone|contact number/.test(l)) return digits;
+  if (/^(country|country of residence)$/.test(l)) return field.options?.find((o) => /india/i.test(o)) ?? "India";
   if (/first name/.test(l)) return first;
   if (/last name|surname/.test(l)) return rest.join(" ");
   if (/^(full )?name$/.test(l)) return profile.name;
@@ -108,8 +119,11 @@ async function fillOne(root, field, answer) {
     if (/^(yes|true|agree|i agree)/i.test(answer)) await el.first().check({ force: true });
     return true;
   }
+  await el.first().click({ timeout: 2000 }).catch(() => {});
   await el.first().fill("");
   await el.first().pressSequentially(String(answer), { delay: 25 });
+  // React-controlled inputs sometimes drop typed text; check and retry once with a plain fill.
+  if (!(await el.first().inputValue().catch(() => "")).trim()) await el.first().fill(String(answer)).catch(() => {});
   // Typeahead fields (e.g. city) show a suggestion list; pick the first suggestion.
   const option = page.locator("[role=listbox] [role=option], .basic-typeahead__selectable, .search-typeahead-v2__hit").first();
   if (await option.isVisible({ timeout: 1200 }).catch(() => false)) await option.click();
@@ -131,17 +145,29 @@ function bestOption(options = [], answer) {
 export async function fillForm(root, profile, job) {
   const fields = await collectFields(root);
   const empty = fields.filter((f) => !String(f.value ?? "").trim());
+  const prefilled = fields.filter((f) => String(f.value ?? "").trim());
+  if (prefilled.length) log("dim", `   already filled: ${prefilled.map((f) => `${f.label.slice(0, 30)} = ${String(f.value).slice(0, 30)}`).join(" · ")}`);
+  if (!fields.length) log("dim", "   (no form fields on this step)");
   if (!empty.length) return [];
 
   const needLlm = [];
   for (const f of empty) {
     const q = quickAnswer(f, profile);
-    if (q) await fillOne(root, f, q).catch(() => needLlm.push(f));
+    if (q) {
+      const ok = await fillOne(root, f, q).catch(() => false);
+      if (ok) log("dim", `   ↳ ${f.label.slice(0, 70)} → ${q}`);
+      else needLlm.push(f);
+    }
     else if (f.required || f.type !== "checkbox") needLlm.push(f);
   }
   if (!needLlm.length) return [];
 
-  const answers = await answerQuestions(profile, job, needLlm.map(({ key, label, type, options, required }) => ({ key, label, type, options, required })));
+  let answers = {};
+  try {
+    answers = await answerQuestions(profile, job, needLlm.map(({ key, label, type, options, required }) => ({ key, label, type, options, required })));
+  } catch (e) {
+    log("warn", `   Claude couldn't answer the questions (${e.message.split("\n")[0]})`);
+  }
   const unanswered = [];
   for (const f of needLlm) {
     const ans = answers[f.key];
