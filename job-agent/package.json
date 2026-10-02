@@ -9,7 +9,8 @@
     "agent": "node src/agent.mjs",
     "dashboard": "node src/server.mjs",
     "import-resume": "node src/import-resume.mjs",
-    "demo-data": "node src/demo-data.mjs"
+    "demo-data": "node src/demo-data.mjs",
+    "inspect": "node src/inspect.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

@@ -68,7 +68,7 @@ Each agent card has **Apply to** (stop after this many applications), **Review**
 ## Google Forms and Alignerr
 
 - **Google Forms:** when a job's "apply" link, or a link written in the job post, is a Google Form (`forms.gle`, `docs.google.com/forms`), the agent fills it: name, email, phone, ranges like "8+ years", checkboxes, dropdowns, free-text answers written by Claude, and the resume where the form has a file question. It goes through every section and submits. Forms that require a Google sign-in need you to sign in to Google once in the agent's Chrome.
-- **Alignerr** (app.alignerr.com) has its own agent card. Log in to Alignerr once in the agent's Chrome. The agent lists the open roles, keeps the ones that fit her (software, coding, PHP, JavaScript, full stack…), creates the tailored resume, and applies. Skill assessments and AI interviews are for her to take herself: the agent tells you, and in fully automatic mode marks them "needs attention" and moves on.
+- **Alignerr** (app.alignerr.com) has its own agent card. Alignerr is an app rather than a classic job board, so this agent "looks" at each screen: it numbers the buttons, links and fields, Claude picks the next step (open the Opportunities tab, open a role, Apply, fill the form, upload the resume, Submit), and the agent does it. Every step is shown in the live log. Log in to Alignerr once in the agent's Chrome. The agent lists the open roles, keeps the ones that fit her (software, coding, PHP, JavaScript, full stack…), creates the tailored resume, and applies. Skill assessments and AI interviews are for her to take herself: the agent tells you, and in fully automatic mode marks them "needs attention" and moves on.
 
 ## Statuses on the dashboard
 
@@ -103,3 +103,6 @@ src/send-message.mjs   sends one saved message (dashboard "Send on LinkedIn")
 src/runner.mjs         starts/stops the agent for the dashboard and relays its questions
 dashboard/index.html   the dashboard
 ```
+
+## When a site gets stuck: `npm run inspect`
+Open the page where it got stuck in the agent's Chrome, then run `npm run inspect`. It saves a full screenshot and a text map of the page's buttons, links and fields (email and phone masked) to `data/debug/inspect/`. Send those two files to Claude to get the site fixed.
