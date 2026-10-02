@@ -12,7 +12,7 @@ from scipy.io import wavfile
 from scipy.signal import fftconvolve
 
 SR = 44100
-DUR = 49.0
+DUR = 45.0
 BPM = 104.0
 BEAT = 60.0 / BPM
 rng = np.random.default_rng(20261129)
@@ -154,8 +154,8 @@ PHRASE = [
     ('S', 4, None),
 ]
 
-# A(16) B(16) C(16) A(16) D(16) — the reprise keeps the piece ending on its resolve
-PHRASE = PHRASE[:38] + PHRASE[:14] + PHRASE[38:]
+# A(16) B(16) C(16) A(8) D(16) — a half reprise, so the piece still ends on its resolve
+PHRASE = PHRASE[:38] + PHRASE[:7] + PHRASE[38:]
 
 MEL_START = 4 * BEAT            # the groove and tune come in together after a pickup
 

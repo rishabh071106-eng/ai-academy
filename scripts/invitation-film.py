@@ -2,7 +2,7 @@ import pathlib, json, math
 
 fonts = pathlib.Path('fonts.css').read_text(encoding='utf-8')
 B = lambda n: pathlib.Path('/tmp/b64_%s.txt' % n).read_text().strip()
-IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green')}
+IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green', 'radha-krishna-wide')}
 
 def flower(cx, cy, r, petal, core, n=8, op=1.0):
     out = []
@@ -25,6 +25,39 @@ ORN = ('<svg class="orn" viewBox="0 0 120 26" fill="none">'
  '<path d="M80 13 H116" stroke="#B9912F" stroke-width="1.4" stroke-linecap="round"/>'
  + flower(60, 13, 8, '#EFA64E', '#C9742A')
  + flower(47, 13, 4.5, '#E8899F', '#C25270') + flower(73, 13, 4.5, '#E8899F', '#C25270') + '</svg>')
+
+
+def nagada(mirror=False):
+    """A drummer with a pair of nagada; the arms are groups the film rotates."""
+    flip = ' transform="translate(170,0) scale(-1,1)"' if mirror else ''
+    return (
+      '<svg class="nag" viewBox="0 0 170 215" fill="none"' + flip + '>'
+      '<ellipse cx="88" cy="203" rx="74" ry="11" fill="#C25270" opacity=".18"/>'
+      # figure behind the drums
+      '<path d="M64 132 C58 102 66 80 88 78 C110 80 118 102 112 132 Z" fill="#E8899F"/>'
+      '<path d="M88 78 L88 132" stroke="#C25270" stroke-width="2" opacity=".5"/>'
+      '<circle cx="88" cy="54" r="19" fill="#E9B183"/>'
+      '<path d="M67 52 C69 27 107 27 109 52 C100 43 76 43 67 52 Z" fill="#EFA64E"/>'
+      '<path d="M67 52 C76 46 100 46 109 52" stroke="#C9742A" stroke-width="2.4"/>'
+      '<circle cx="88" cy="30" r="4" fill="#C25270"/>'
+      '<circle cx="82" cy="54" r="1.9" fill="#5A3038"/><circle cx="94" cy="54" r="1.9" fill="#5A3038"/>'
+      '<path d="M80 63 C84 67 92 67 96 63" stroke="#5A3038" stroke-width="2.4" stroke-linecap="round"/>'
+      # the pair of drums
+      '<ellipse cx="54" cy="162" rx="40" ry="36" fill="#C9742A"/>'
+      '<ellipse cx="54" cy="131" rx="40" ry="14" fill="#F3E3C4" stroke="#8E6B13" stroke-width="2.2" class="headL"/>'
+      '<ellipse cx="120" cy="170" rx="31" ry="28" fill="#B9652020"/>'
+      '<ellipse cx="120" cy="170" rx="31" ry="28" fill="#B86A24"/>'
+      '<ellipse cx="120" cy="146" rx="31" ry="11" fill="#F3E3C4" stroke="#8E6B13" stroke-width="2" class="headR"/>'
+      '<path d="M18 140 L22 176 M34 134 L36 184 M54 132 L54 188 M74 134 L72 184 M90 140 L86 176" '
+      'stroke="#8E6B13" stroke-width="1.6" opacity=".55"/>'
+      '<path d="M94 150 L98 180 M110 147 L110 186 M130 147 L128 186 M146 151 L142 180" '
+      'stroke="#8E6B13" stroke-width="1.4" opacity=".5"/>'
+      # arms, rotated by the film
+      '<g class="armL"><path d="M70 88 L44 112" stroke="#E9B183" stroke-width="11" stroke-linecap="round"/>'
+      '<path d="M44 112 L50 126" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/></g>'
+      '<g class="armR"><path d="M106 88 L130 118" stroke="#E9B183" stroke-width="11" stroke-linecap="round"/>'
+      '<path d="M130 118 L126 140" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/></g>'
+      '</svg>')
 
 def page(*blocks):
     return ''.join(blocks)
@@ -85,12 +118,13 @@ SPREADS = [
                '<p class="deva sub">शुभाकांक्षी — दोनों परिवार</p>')},
 ]
 
-INTRO_OUT, BOOK_IN = 6.0, 6.2
-COVER_T, OPEN_DUR = 6.6, 1.8
-HOLD, TURN = 6.2, 1.4
-START = COVER_T + 1.2 + OPEN_DUR          # first inner spread
+SCENE_A, SCENE_B = 5.2, 10.2
+INTRO_OUT, BOOK_IN = 10.2, 10.0
+COVER_T, OPEN_DUR = 10.2, 1.6
+HOLD, TURN = 5.0, 1.3
+START = COVER_T + 1.0 + OPEN_DUR          # first inner spread
 TIMES = [COVER_T] + [START + i*(HOLD+TURN) for i in range(len(SPREADS)-1)]
-DURATION = TIMES[-1] + HOLD + 2.8
+DURATION = TIMES[-1] + HOLD + 2.0
 pathlib.Path('timing.json').write_text(json.dumps({'times': TIMES, 'dur': DURATION}))
 print('spreads %d | first %.1f | last %.1f | duration %.1f' % (len(SPREADS), TIMES[1], TIMES[-1], DURATION))
 
@@ -106,6 +140,16 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
     linear-gradient(168deg,#FDF4EE 0%,#F6DCD3 100%);}
 .deva{font-family:'Tiro Devanagari Hindi',serif}
 
+#opening{position:absolute;inset:0;z-index:15;overflow:hidden}
+#opening img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#opening .scrim{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,4,16,.14) 0%,transparent 26%,transparent 48%,rgba(50,8,26,.58) 100%)}
+.otitle{position:absolute;left:0;right:0;bottom:78px;text-align:center;color:#FFF6EE}
+.otitle .ot1{font-family:'Tiro Devanagari Hindi',serif;font-size:48px;letter-spacing:.1em;text-shadow:0 3px 20px rgba(40,6,20,.75)}
+.onames{font-family:'Great Vibes',cursive;font-size:96px;line-height:1.1;margin-top:10px;text-shadow:0 4px 24px rgba(40,6,20,.8)}
+.onames i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.48em;opacity:.92}
+#nagL,#nagR{position:absolute;bottom:8px;width:236px;z-index:30}
+#nagL{left:6px} #nagR{right:6px}
+.nag{width:100%;height:auto;display:block}
 #shower{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:40}
 .fl{position:absolute;top:0;left:0;will-change:transform,opacity}
 .petal{border-radius:60% 60% 50% 50% / 70% 70% 40% 40%}
@@ -123,13 +167,13 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
 .pframe img{display:block;width:100%;height:auto;border-radius:999px 999px 9px 9px}
 
 #stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:25}
-#book{position:relative;width:1540px;height:916px;perspective:2900px;}
-.pg{position:absolute;top:0;height:100%;width:770px;overflow:hidden;
+#book{position:relative;width:1430px;height:848px;perspective:2800px;}
+.pg{position:absolute;top:0;height:100%;width:715px;overflow:hidden;
   background:linear-gradient(170deg,#FFFCFA 0%,#FBF0EA 100%);
   box-shadow:0 26px 60px -26px rgba(138,31,67,.45)}
 #pL{left:0;border-radius:14px 2px 2px 14px;box-shadow:inset -26px 0 34px -26px rgba(138,31,67,.35),0 26px 60px -26px rgba(138,31,67,.45)}
-#pR{left:770px;border-radius:2px 14px 14px 2px;box-shadow:inset 26px 0 34px -26px rgba(138,31,67,.35),0 26px 60px -26px rgba(138,31,67,.45)}
-#leaf{position:absolute;top:0;left:770px;width:770px;height:100%;transform-origin:left center;transform-style:preserve-3d;z-index:6}
+#pR{left:715px;border-radius:2px 14px 14px 2px;box-shadow:inset 26px 0 34px -26px rgba(138,31,67,.35),0 26px 60px -26px rgba(138,31,67,.45)}
+#leaf{position:absolute;top:0;left:715px;width:715px;height:100%;transform-origin:left center;transform-style:preserve-3d;z-index:6}
 #leaf .face{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden;
   background:linear-gradient(170deg,#FFFCFA 0%,#FBF0EA 100%)}
 #lf{border-radius:2px 14px 14px 2px;box-shadow:inset 26px 0 34px -26px rgba(138,31,67,.3)}
@@ -185,6 +229,18 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
 .blessing{font-size:44px;line-height:1.75;color:#8A1F43}
 </style></head><body>
 
+<div id="opening">
+  <img src="@@WIDE@@" alt="Radha and Krishna dancing together among the clouds">
+  <div class="scrim"></div>
+  <div class="otitle">
+    <p class="ot1">॥ शुभ विवाह ॥</p>
+    <p class="onames">Smatav <i>&amp;</i> Priyanka</p>
+  </div>
+</div>
+
+<div id="nagL">@@NAGL@@</div>
+<div id="nagR">@@NAGR@@</div>
+
 <div id="intro">
   <div class="pframe"><img src="@@GREEN@@" alt="Lord Ganesha in green and gold at the family puja"></div>
   <p class="deva inv">॥ श्री गणेशाय नमः ॥</p>
@@ -205,6 +261,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
 const SPREADS = @@SPREADS@@, TIMES = @@TIMES@@, DURATION = @@DUR@@;
 const HOLD = @@HOLD@@, TURN = @@TURN@@, OPEN_DUR = @@OPEN@@;
 const INTRO_OUT = @@INTRO_OUT@@, BOOK_IN = @@BOOK_IN@@;
+const SCENE_A = @@SCENE_A@@, SCENE_B = @@SCENE_B@@, BEAT = 60/104;
 
 const clamp=(v,a,b)=>v<a?a:v>b?b:v, easeIO=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2, easeOut=p=>1-Math.pow(1-p,3);
 
@@ -227,7 +284,9 @@ const iL=document.getElementById('iL'),iR=document.getElementById('iR'),
       ilf=document.getElementById('ilf'),ilb=document.getElementById('ilb'),
       leaf=document.getElementById('leaf'),shade=document.getElementById('shade'),
       book=document.getElementById('book'),stage=document.getElementById('stage'),
-      intro=document.getElementById('intro');
+      intro=document.getElementById('intro'),
+      opening=document.getElementById('opening'),openImg=document.querySelector('#opening img'),
+      nags=[document.getElementById('nagL'),document.getElementById('nagR')];
 let last={};
 function setHTML(node,key,html){ if(last[key]!==html){node.innerHTML=html;last[key]=html;} }
 
@@ -240,8 +299,28 @@ function seek(t){
     f.el.style.opacity=(f.op*clamp(t/0.8,0,1)*clamp((DURATION-t)/1.6,0,1)).toFixed(3);
   }
 
-  /* the opening image, then the book */
-  const iin=easeOut(clamp(t/1.1,0,1)), iout=1-easeIO(clamp((t-INTRO_OUT)/0.9,0,1));
+  /* Radha and Krishna open the film */
+  const oin=easeOut(clamp(t/1.0,0,1)), oout=1-easeIO(clamp((t-(SCENE_A-0.8))/0.8,0,1));
+  opening.style.opacity=(oin*oout).toFixed(3);
+  opening.style.visibility=(oin*oout)<0.004?'hidden':'visible';
+  openImg.style.transform='scale('+(1.085-0.085*clamp(t/SCENE_A,0,1)).toFixed(4)+')';
+
+  /* the nagada players keep the beat the whole way through */
+  const nagIn=easeOut(clamp((t-(SCENE_A-1.2))/1.0,0,1))*clamp((DURATION-t)/1.2,0,1);
+  for(let d=0;d<2;d++){
+    const el=nags[d];
+    el.style.opacity=nagIn.toFixed(3);
+    el.style.visibility=nagIn<0.004?'hidden':'visible';
+    const pL=((t/BEAT + d*0.25)%1+1)%1, pR=((t/BEAT + d*0.25 + 0.5)%1+1)%1;
+    el.querySelector('.armL').setAttribute('transform','rotate('+(-46*Math.sin(Math.PI*pL)).toFixed(2)+' 70 88)');
+    el.querySelector('.armR').setAttribute('transform','rotate('+(-44*Math.sin(Math.PI*pR)).toFixed(2)+' 106 88)');
+    const hit=Math.max(Math.cos(Math.PI*pL),0);
+    el.querySelector('.headL').setAttribute('ry',(14+1.6*hit).toFixed(2));
+    el.style.transform='translateY('+(3*Math.sin(2*Math.PI*t/BEAT)).toFixed(2)+'px)';
+  }
+
+  /* Ganesh ji, then the book */
+  const iin=easeOut(clamp((t-SCENE_A+0.5)/1.0,0,1)), iout=1-easeIO(clamp((t-(SCENE_B-0.9))/0.9,0,1));
   intro.style.opacity=(iin*iout).toFixed(3);
   intro.style.transform='scale('+(0.94+0.06*iin).toFixed(4)+')';
   intro.style.visibility=(iin*iout)<0.004?'hidden':'visible';
@@ -267,7 +346,7 @@ function seek(t){
   shade.style.opacity=(0.30*Math.sin(Math.PI*p)).toFixed(3);
   /* while closed, the book sits on its cover; it slides open as the leaf lifts */
   const closed=(i===0)?(1-easeIO(p)):0;
-  book.style.transform='translateX('+(-385*closed).toFixed(1)+'px)';
+  book.style.transform='translateX('+(-358*closed).toFixed(1)+'px)';
   document.getElementById('pL').style.opacity=(i===0?easeIO(p):1).toFixed(3);
   void turning;
 }
@@ -283,6 +362,9 @@ html = (TPL.replace('@@FONTS@@', fonts)
            .replace('@@DUR@@', str(round(DURATION, 2)))
            .replace('@@HOLD@@', str(HOLD)).replace('@@TURN@@', str(TURN))
            .replace('@@OPEN@@', str(OPEN_DUR))
-           .replace('@@INTRO_OUT@@', str(INTRO_OUT)).replace('@@BOOK_IN@@', str(BOOK_IN)))
+           .replace('@@INTRO_OUT@@', str(INTRO_OUT)).replace('@@BOOK_IN@@', str(BOOK_IN))
+           .replace('@@SCENE_A@@', str(SCENE_A)).replace('@@SCENE_B@@', str(SCENE_B))
+           .replace('@@WIDE@@', IMG['radha-krishna-wide'])
+           .replace('@@NAGL@@', nagada()).replace('@@NAGR@@', nagada(mirror=True)))
 pathlib.Path('video.html').write_text(html, encoding='utf-8')
 print('video.html %.0f KB  duration %.1fs' % (len(html)/1024, DURATION))
