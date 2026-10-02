@@ -2,7 +2,8 @@ import pathlib, json, math
 
 fonts = pathlib.Path('fonts.css').read_text(encoding='utf-8')
 B = lambda n: pathlib.Path('/tmp/b64_%s.txt' % n).read_text().strip()
-IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green')}
+IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green', 'rk-sky')}
+IMG['rk-dancers'] = 'data:image/webp;base64,' + B('rk-dancers')
 
 ROSE, ROSE2, INK, GOLD = '#8E1034', '#A61E45', '#6B2436', '#A8822C'
 
@@ -162,8 +163,9 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 #edge{position:absolute;top:0;bottom:0;left:0;width:3px;z-index:8;opacity:0;
   background:linear-gradient(90deg,rgba(255,255,255,.9),rgba(255,255,255,0))}
 
-.photo{position:absolute;inset:0}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo{position:absolute;inset:0;overflow:hidden}
+.rk-sky,.rk-fg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;will-change:transform}
+.rk-fg{transform-origin:50% 86%}
 .photo::after{content:"";position:absolute;inset:22px;border:2px solid rgba(255,248,230,.55);border-radius:6px;
   box-shadow:0 0 0 1px rgba(142,107,19,.5) inset}
 .photo .vg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 52%,rgba(60,10,28,.3) 100%)}
@@ -227,11 +229,11 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 
 <div id="stage"><div id="book">
   <div id="stack"></div>
-  <div class="pg" id="pL"><div class="photo"><img src="@@RK@@" alt="Radha and Krishna dancing together among the clouds"><div class="vg"></div></div></div>
+  <div class="pg" id="pL"><div class="photo"><img class="rk-sky" src="@@SKY@@" alt=""><img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna dancing together among the clouds"><div class="vg"></div></div></div>
   <div class="pg" id="pR"><div class="inner" id="iR"></div><div id="uShade"></div></div>
   <div id="leaf">
     <div class="face" id="lf"><div class="inner" id="ilf"></div><div class="sh" id="shF"></div><div id="edge"></div></div>
-    <div class="face" id="lb"><div class="photo"><img src="@@RK@@" alt=""><div class="vg"></div></div><div class="sh" id="shB"></div></div>
+    <div class="face" id="lb"><div class="photo"><img class="rk-sky" src="@@SKY@@" alt=""><img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna dancing together among the clouds"><div class="vg"></div></div><div class="sh" id="shB"></div></div>
   </div>
 </div></div>
 
@@ -265,7 +267,8 @@ const iR=document.getElementById('iR'),ilf=document.getElementById('ilf'),
       uShade=document.getElementById('uShade'),edge=document.getElementById('edge'),
       book=document.getElementById('book'),stage=document.getElementById('stage'),
       intro=document.getElementById('intro'),pL=document.getElementById('pL'),
-      nags=[document.getElementById('nagL'),document.getElementById('nagR')];
+      nags=[document.getElementById('nagL'),document.getElementById('nagR')],
+      skies=[...document.querySelectorAll('.rk-sky')],dancers=[...document.querySelectorAll('.rk-fg')];
 let last={};
 const setHTML=(n,k,h)=>{ if(last[k]!==h){n.innerHTML=h;last[k]=h;} };
 
@@ -288,6 +291,19 @@ function seek(t){
     el.querySelector('.headL').setAttribute('ry',(14+1.7*Math.max(Math.cos(Math.PI*pA),0)).toFixed(2));
     el.style.transform='translateY('+(3*Math.sin(2*Math.PI*t/BEAT)).toFixed(2)+'px)';
   }
+
+  /* Radha and Krishna dance in the frame: a bounce on the beat, a slow sway,
+     and the sky drifting behind them */
+  const ph=t/BEAT;
+  const bounce=-8.5*Math.abs(Math.sin(Math.PI*ph));
+  const sway=2.1*Math.sin(2*Math.PI*ph/4);
+  const driftX=7*Math.sin(2*Math.PI*ph/6);
+  const pulse=1+0.014*Math.abs(Math.sin(Math.PI*ph));
+  const skew=1.0*Math.sin(2*Math.PI*ph/4+0.6);
+  const dT='translate('+driftX.toFixed(2)+'px,'+bounce.toFixed(2)+'px) rotate('+sway.toFixed(2)+'deg) skewX('+skew.toFixed(2)+'deg) scale('+pulse.toFixed(4)+')';
+  for(const d of dancers) d.style.transform=dT;
+  const sT='translate('+(4*Math.sin(t*0.07)).toFixed(2)+'px,'+(3*Math.sin(t*0.05)).toFixed(2)+'px) scale('+(1.07+0.015*Math.sin(t*0.09)).toFixed(4)+')';
+  for(const k of skies) k.style.transform=sT;
 
   const iin=easeOut(clamp(t/1.0,0,1)), iout=1-easeIO(clamp((t-(SCENE_B-0.9))/0.9,0,1));
   intro.style.opacity=(iin*iout).toFixed(3);
@@ -325,7 +341,8 @@ window.seek=seek; window.DURATION=DURATION; seek(0);
 
 BLOOM = flower(20, 20, 7.6, '#E09A3C', '#B35A1E', n=9)
 html = (TPL.replace('@@FONTS@@', fonts)
-           .replace('@@GREEN@@', IMG['ganesh-green']).replace('@@RK@@', IMG['radha-krishna'])
+           .replace('@@GREEN@@', IMG['ganesh-green'])
+           .replace('@@SKY@@', IMG['rk-sky']).replace('@@DANCERS@@', IMG['rk-dancers'])
            .replace('@@BLOOM@@', BLOOM)
            .replace('@@NAGL@@', nagada()).replace('@@NAGR@@', nagada(mirror=True))
            .replace('@@PAGES@@', json.dumps([COVER] + PAGES))
