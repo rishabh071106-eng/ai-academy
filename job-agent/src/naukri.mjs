@@ -1,6 +1,6 @@
 import { firstVisible, textOf } from "./browser.mjs";
 import { answerQuestions } from "./llm.mjs";
-import { ask, humanPause, log, sleep, slugify } from "./util.mjs";
+import { confirm, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
 
 export const name = "naukri";
 
@@ -48,8 +48,7 @@ export async function apply(page, job, { profile, mode }) {
   const btn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"], 5000);
   if (!btn) return { status: "needs_attention", note: "Apply button not found" };
   if (mode !== "auto") {
-    const r = await ask(`Apply on Naukri to ${job.company} – ${job.title}? (uses the resume on your Naukri profile) [Y/n]`);
-    if (/^n/i.test(r)) return { status: "skipped", note: "You chose not to apply" };
+    if (!(await confirm(`Apply on Naukri to ${job.company} – ${job.title}? (uses the resume on your Naukri profile)`))) return { status: "skipped", note: "You chose not to apply" };
   }
   await btn.click();
   await sleep(2500);
@@ -72,7 +71,7 @@ export async function apply(page, job, { profile, mode }) {
     if (!answer || answer === "__ASK__") {
       log("warn", `   Couldn't answer: "${question}"`);
       if (mode === "auto") return { status: "needs_attention", note: `Questionnaire: ${question}` };
-      await ask("Answer it in Chrome, then press Enter:");
+      if (!(await waitForUser(`Naukri question for ${job.company}: "${question}". Answer it in Chrome, then continue.`))) return { status: "skipped", note: "Skipped by you at questionnaire" };
       continue;
     }
     log("dim", `   ↳ ${question.slice(0, 70)} → ${answer}`);
@@ -82,7 +81,7 @@ export async function apply(page, job, { profile, mode }) {
       if (i < 0) i = options.findIndex((o) => o.toLowerCase().includes(a) || a.includes(o.toLowerCase()));
       if (i < 0) {
         if (mode === "auto") return { status: "needs_attention", note: `Questionnaire: ${question}` };
-        await ask(`Pick the answer for "${question}" in Chrome, then press Enter:`);
+        if (!(await waitForUser(`Pick the answer for "${question}" in Chrome, then continue.`))) return { status: "skipped", note: "Skipped by you at questionnaire" };
         continue;
       }
       await chips.nth(i).click().catch(() => {});

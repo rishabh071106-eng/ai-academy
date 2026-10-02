@@ -51,28 +51,43 @@ const EVAL_SCHEMA = obj({
       items: obj({ company: str, role: str, location: str, start: str, end: str, bullets: strArr }),
     },
   }),
-  coverNote: { ...strArr, description: "Unused if empty" },
+  hiringMessage: obj({
+    subject: { type: "string", description: "Short subject line for an InMail/email" },
+    short: { type: "string", description: "Connection-request note, at most 280 characters" },
+    full: { type: "string", description: "Message to the hiring manager/recruiter, 70-130 words" },
+  }),
 });
 
-/** Score a job against the profile and, if it fits, produce resume content tailored to it. */
+/** Score a job against the profile and, if it fits, produce resume content and a hiring-team message for it. */
 export async function evaluateAndTailor(profile, job) {
-  const { applicationAnswers, ...resume } = profile;
+  const { applicationAnswers = {}, ...resume } = profile;
+  const contact = job.hiringContact?.name ? `${job.hiringContact.name}${job.hiringContact.title ? ` (${job.hiringContact.title})` : ""}` : "unknown";
   const result = await jsonCall({
     effort: "medium",
     schema: EVAL_SCHEMA,
-    system: `You are a careful technical recruiter and resume writer. You decide whether a candidate should apply to a job and tailor their resume to it.
-Scoring: 85+ = strong fit on core stack and seniority; 70-84 = good fit with minor gaps; below 70 = core stack or seniority mismatch.
-Set shouldApply=false when the job's core technology is something the candidate has not used, or the role is clearly far more senior/junior.
+    system: `You are a careful technical recruiter and resume writer. You decide whether a candidate should apply to a job, tailor their resume to it, and write a short message to the hiring team.
+
+The candidate is a FULL-STACK engineer: back end (Adobe Commerce/Magento 2, PHP, MySQL, GraphQL, REST, RabbitMQ) AND front end (Next.js, React, TypeScript, JavaScript, HTML/CSS). Judge fit generously across both halves:
+- Any role whose stack includes Magento/Adobe Commerce, React, Next.js, PHP or general e-commerce web development is a fit, whether it is titled front-end, back-end, full-stack, e-commerce, platform or "software engineer".
+- Nice-to-have or secondary skills she lacks (e.g. Hyva, AWS, Docker, Vue, Node) lower the score a little but never make shouldApply false.
+- Seniority: she has 9+ years. Senior, Lead, Staff and mid-level (4+ yrs) roles are all fine; Architect/Manager roles are fine if hands-on.
+- shouldApply=false ONLY when the core stack is unrelated (e.g. Java/Spring-only, .NET, Python/data science, native iOS/Android, SAP, Salesforce, QA-only, DevOps-only) or the role is not a developer role.
+Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjacent but workable; below 55 = unrelated.
+
 ${HONESTY_RULES}
-For coverNote return 3-5 short sentences (as array items) for a recruiter message, or an empty array.
-Return every experience entry from the candidate's profile (same companies, roles and dates), with bullets rewritten/reordered for this job; older roles can have fewer bullets.`,
+Return every experience entry from the candidate's profile (same companies, roles and dates), with bullets rewritten/reordered for this job; older roles can have fewer bullets.
+
+Hiring message: warm, specific and human, not generic. Address the contact by first name if known, else "Hi there". Name the role, give 1-2 concrete achievements from her real experience that match this job, mention she is an Adobe Certified Expert when relevant, and her notice period. No flattery, no emojis, no placeholders like [Company]. Sign off with her first name.`,
     content: `CANDIDATE PROFILE (JSON):
 ${JSON.stringify(resume, null, 2)}
+
+Notice period: ${applicationAnswers.noticePeriod ?? applicationAnswers.noticePeriodDays ?? "not stated"}
 
 JOB:
 Title: ${job.title}
 Company: ${job.company}
 Location: ${job.location ?? ""}
+Hiring contact: ${contact}
 Description:
 ${(job.description ?? "").slice(0, 15000)}`,
   });

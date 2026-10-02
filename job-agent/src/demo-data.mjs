@@ -26,6 +26,16 @@ for (let i = 0; i < 46; i++) {
     matchReasons: ["7 yrs Magento 1 & 2", "Custom module + REST API work", "Payment gateway integrations"],
     missingSkills: score < 80 ? ["Hyvä themes", "GraphQL"] : [],
     notes: "", history: [{ at, status, note: "demo" }],
+    ...(platform === "linkedin" && status !== "skipped" ? {
+      hiringContact: { name: ["Priya Nair", "Rahul Menon", "Sneha Rao", "Arjun Iyer"][i % 4], title: "Engineering Manager", profileUrl: "https://www.linkedin.com/in/" },
+      hiringMessage: {
+        subject: "Senior Adobe Commerce engineer for your team",
+        short: "Hi! I've applied for the Magento role. 9+ yrs Adobe Commerce, now building headless Next.js storefronts on custom GraphQL. Adobe Certified Expert. Would love to connect.",
+        full: `Hi ${["Priya", "Rahul", "Sneha", "Arjun"][i % 4]},\n\nI've just applied for the ${titles[i % titles.length]} role. I have 9+ years on Magento/Adobe Commerce and currently build headless Next.js + React storefronts on custom GraphQL resolvers at Altimetrik (client: Blackhawk Network). Earlier I built two-way ERP sync and REST APIs for Peelworks and upgraded Tivoli Wines from 2.1 to 2.3 with Stripe. I'm an Adobe Certified Expert with a 1-month notice period.\n\nHappy to share more or jump on a quick call.\n\nAishwarya`,
+      },
+      messageStatus: i % 4 === 0 ? "sent" : "draft",
+      messageNote: i % 4 === 0 ? "Sent on LinkedIn" : "No Message button on LinkedIn (not connected / needs InMail)",
+    } : {}),
   });
 }
 fs.writeFileSync(TRACKER_FILE, JSON.stringify(rows, null, 2));

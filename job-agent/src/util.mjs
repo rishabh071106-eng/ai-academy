@@ -52,12 +52,47 @@ export function log(kind, ...msg) {
   console.log(`\x1b[90m${t}\x1b[0m \x1b[${c}m${msg.join(" ")}\x1b[0m`);
 }
 
-export async function ask(question) {
+let askSeq = 0;
+
+/**
+ * Ask the user something. When the agent was started from the dashboard it has an IPC
+ * channel to the server, so the question shows up there as buttons; otherwise it's asked
+ * in the terminal. `choices` = [{ label, value }].
+ */
+export async function ask(question, choices) {
+  if (process.send) {
+    const id = ++askSeq;
+    process.send({ type: "ask", id, question, choices });
+    return new Promise((resolve) => {
+      const onMsg = (m) => {
+        if (m?.type === "answer" && m.id === id) {
+          process.off("message", onMsg);
+          resolve(String(m.answer ?? "").trim());
+        }
+      };
+      process.on("message", onMsg);
+    });
+  }
   const readline = await import("node:readline/promises");
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const hint = choices?.length ? ` [${choices.map((c) => `${c.value || "Enter"}=${c.label}`).join(", ")}]` : "";
   try {
-    return (await rl.question(`\x1b[35m? ${question}\x1b[0m `)).trim();
+    return (await rl.question(`\x1b[35m? ${question}${hint}\x1b[0m `)).trim();
   } finally {
     rl.close();
   }
+}
+
+/** Yes/no question. Defaults to yes on a bare Enter in the terminal. */
+export async function confirm(question) {
+  const r = await ask(question, [{ label: "Yes", value: "y" }, { label: "No", value: "n" }]);
+  return !/^n/i.test(r);
+}
+
+/** Pause until the user has done something by hand in Chrome. Returns false if they chose to skip. */
+export async function waitForUser(question, { allowSkip = true } = {}) {
+  const choices = [{ label: "Done, continue", value: "" }];
+  if (allowSkip) choices.push({ label: "Skip this job", value: "s" });
+  const r = await ask(question, choices);
+  return r.toLowerCase() !== "s";
 }

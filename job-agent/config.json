@@ -1,13 +1,24 @@
 {
   "model": "claude-opus-5-5",
   "mode": "review",
-  "minMatchScore": 70,
+  "minMatchScore": 55,
+  "alwaysApplyKeywords": [
+    "magento",
+    "adobe commerce",
+    "react",
+    "next.js",
+    "nextjs"
+  ],
   "maxApplicationsPerRun": 15,
   "maxJobsToScanPerSearch": 25,
   "delaySecondsBetweenApplications": [
     25,
     70
   ],
+  "hiringMessage": {
+    "enabled": true,
+    "autoSend": false
+  },
   "platforms": {
     "linkedin": {
       "enabled": true,
@@ -28,8 +39,12 @@
           "remote": true
         },
         {
-          "keywords": "Magento Headless Next.js",
-          "location": "India"
+          "keywords": "React Next.js Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Full Stack Developer PHP React",
+          "location": "Bengaluru, Karnataka, India"
         }
       ]
     },
@@ -49,6 +64,14 @@
         {
           "keywords": "magento 2",
           "location": "remote"
+        },
+        {
+          "keywords": "react nextjs developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "full stack developer php react",
+          "location": "bangalore"
         }
       ]
     }
@@ -59,7 +82,12 @@
     "trainee",
     "sales",
     "marketing",
-    "manual testing"
+    "manual testing",
+    "java developer",
+    ".net",
+    "android",
+    "ios developer",
+    "data scientist"
   ],
   "excludeCompanies": []
 }

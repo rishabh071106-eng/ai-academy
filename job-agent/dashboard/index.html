@@ -170,6 +170,41 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 .banner { background: var(--warn-bg); color: var(--warn); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; display: none; }
 
+
+.agent { padding: 16px 18px; margin-bottom: 16px; }
+.agent-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.agent-state { display: flex; align-items: center; gap: 12px; }
+.agent-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); flex: none; }
+.agent-dot.run { background: var(--good); box-shadow: 0 0 0 0 var(--good); animation: pulse 1.6s infinite; }
+.agent-dot.wait { background: var(--warn); }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 55%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+.agent-title { font-weight: 620; }
+.agent-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface); padding: 7px 12px; cursor: pointer; color: var(--text-2); font-size: 13px; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+.seg button:disabled { cursor: not-allowed; opacity: .6; }
+.num-input { width: 64px; border: 1px solid var(--border); border-radius: 10px; padding: 6px 8px; background: var(--surface); }
+.btn.go { background: var(--good); border-color: var(--good); color: #fff; min-width: 96px; justify-content: center; }
+.btn.stop { background: var(--crit); border-color: var(--crit); color: #fff; min-width: 96px; justify-content: center; }
+.mode-hint { color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+.ask { margin-top: 14px; background: var(--warn-bg); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); border-radius: 12px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.ask-q { color: var(--text); font-weight: 560; }
+.ask-q small { display: block; color: var(--warn); font-weight: 600; font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 2px; }
+.ask-btns { display: flex; gap: 8px; }
+.logbox { margin-top: 12px; background: #0f1012; color: #d8d6cf; border-radius: 10px; font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 10px 12px; max-height: 240px; overflow: auto; white-space: pre-wrap; word-break: break-word; }
+.logbox .err, .logbox .warn { color: #f2bd4f; }
+.logbox .ok { color: #5fd08c; }
+.logbox .sys { color: #86b6ef; }
+.logbox .ask { all: unset; color: #f0a0c8; display: block; }
+.log-toggle { background: none; border: 0; color: var(--text-2); cursor: pointer; font-size: 12.5px; padding: 0; margin-top: 10px; }
+.msg-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; }
+.msg-actions { display: flex; gap: 10px; align-items: center; margin-top: 6px; font-size: 12.5px; flex-wrap: wrap; }
+.msg-actions button { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 0; font-size: 12.5px; }
+.badge-sent { color: var(--good); font-weight: 600; }
+.badge-draft { color: var(--muted); }
+
 @media (max-width: 1080px) { .kpis { grid-template-columns: repeat(3, 1fr); } .grid2 { grid-template-columns: 1fr; } }
 @media (max-width: 720px) {
   .kpis { grid-template-columns: repeat(2, 1fr); }
@@ -196,6 +231,27 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <button class="btn icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
     </div>
   </header>
+
+  <section class="card agent" id="agentPanel">
+    <div class="agent-top">
+      <div class="agent-state">
+        <span class="agent-dot" id="agentDot"></span>
+        <div><div class="agent-title" id="agentTitle">Agent is idle</div><div class="sub" id="agentSub">Choose a mode and press Start</div></div>
+      </div>
+      <div class="agent-controls">
+        <div class="seg" id="modeSeg" role="group" aria-label="Mode">
+          <button data-v="dry-run">Practice</button><button data-v="review" aria-pressed="true">Ask before submit</button><button data-v="auto">Fully automatic</button>
+        </div>
+        <select class="sel" id="agentPlatform" aria-label="Platform"><option value="">LinkedIn + Naukri</option><option value="linkedin">LinkedIn only</option><option value="naukri">Naukri only</option></select>
+        <label class="sub" title="Maximum applications this run">Max <input class="num-input" id="agentMax" type="number" min="1" max="50" value="15"></label>
+        <button class="btn go" id="agentBtn">▶ Start</button>
+      </div>
+    </div>
+    <div class="mode-hint" id="modeHint"></div>
+    <div id="askHost"></div>
+    <button class="log-toggle" id="logToggle">▸ Show live log</button>
+    <div class="logbox" id="logbox" hidden></div>
+  </section>
 
   <div class="banner" id="banner"></div>
 
@@ -486,7 +542,7 @@ function detailRow(r) {
   const hist = [...(r.history ?? [])].reverse().map((h) => `<li><time>${fmtDate(h.at)} · ${ago(h.at)}</time>${esc((STATUS[h.status] ?? { label: h.status }).label)}${h.note ? ` — <span class="sub">${esc(h.note)}</span>` : ""}</li>`).join("");
   return `<tr class="detail"><td colspan="6"><div class="detail-grid">
     <div><h4>Why it matches</h4><ul>${reasons}</ul><h4 style="margin-top:12px">Gaps</h4>${missing}</div>
-    <div><h4>History</h4><ul class="timeline">${hist || "<li>—</li>"}</ul>${r.coverNote ? `<h4 style="margin-top:12px">Recruiter note draft</h4><div class="sub">${esc(r.coverNote)}</div>` : ""}</div>
+    <div><h4>History</h4><ul class="timeline">${hist || "<li>—</li>"}</ul>${messageBlock(r)}</div>
     <div><h4>Notes <span class="saved">✓ saved</span></h4><textarea class="notes" data-id="${esc(r.id)}" placeholder="Recruiter name, interview date, salary discussed…">${esc(r.notes)}</textarea>
       <div class="links" style="margin-top:8px">${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">Open job ↗</a>` : ""}${r.resumeFile ? `<a href="/files/${esc(r.resumeFile)}" target="_blank">Tailored resume (PDF)</a>` : ""}</div></div>
   </div></td></tr>`;
@@ -531,6 +587,123 @@ fetch("/api/profile").then((r) => r.json()).then((p) => {
   if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn & Naukri`;
   document.title = `${first}'s Job Hunt`;
 }).catch(() => {});
+
+function messageBlock(r) {
+  const m = r.hiringMessage;
+  if (!m?.full) return "";
+  const c = r.hiringContact;
+  const who = c?.name ? (c.profileUrl ? `<a href="${esc(c.profileUrl)}" target="_blank" rel="noopener">${esc(c.name)} ↗</a>` : esc(c.name)) : "the hiring team";
+  const st = r.messageStatus === "sent" ? '<span class="badge-sent">✓ Sent on LinkedIn</span>' : `<span class="badge-draft">Draft${r.messageNote ? " · " + esc(r.messageNote) : ""}</span>`;
+  return `<h4 style="margin-top:14px">Message to ${who}</h4>
+    <div class="msg-box">${esc(m.full)}</div>
+    <div class="msg-actions">${st}<button data-copy="${esc(m.full)}">Copy message</button><button data-copy="${esc(m.short)}">Copy short note (connect)</button></div>`;
+}
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  e.stopPropagation();
+  const label = b.textContent;
+  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = "✓ Copied"; } catch { b.textContent = "Copy failed"; }
+  setTimeout(() => (b.textContent = label), 1500);
+});
+
+// ---- Agent control -------------------------------------------------------
+const MODE_HINT = {
+  "dry-run": "Practice: finds jobs, scores them and writes tailored resumes + messages. Applies to nothing.",
+  review: "Ask before submit: fills every application, then waits for you to press Submit here.",
+  auto: "Fully automatic: submits on its own. Still pauses if a question can't be answered truthfully.",
+};
+const agent = { mode: "review", since: 0, running: false, pending: null, logOpen: false, timer: null };
+try { const saved = JSON.parse(localStorage.getItem("ja-agent") || "{}"); if (saved.mode) agent.mode = saved.mode; if (saved.max) $("#agentMax").value = saved.max; if (saved.platform != null) $("#agentPlatform").value = saved.platform; } catch {}
+const savePrefs = () => { try { localStorage.setItem("ja-agent", JSON.stringify({ mode: agent.mode, max: $("#agentMax").value, platform: $("#agentPlatform").value })); } catch {} };
+
+function paintMode() {
+  $("#modeSeg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === agent.mode));
+  $("#modeHint").textContent = MODE_HINT[agent.mode];
+}
+$("#modeSeg").onclick = (e) => { const b = e.target.closest("button"); if (!b || agent.running) return; agent.mode = b.dataset.v; paintMode(); savePrefs(); };
+$("#agentPlatform").onchange = savePrefs;
+$("#agentMax").onchange = savePrefs;
+$("#logToggle").onclick = () => { agent.logOpen = !agent.logOpen; $("#logbox").hidden = !agent.logOpen; $("#logToggle").textContent = (agent.logOpen ? "▾ Hide" : "▸ Show") + " live log"; if (agent.logOpen) $("#logbox").scrollTop = 1e9; };
+
+$("#agentBtn").onclick = async () => {
+  $("#agentBtn").disabled = true;
+  const url = agent.running ? "/api/agent/stop" : "/api/agent/start";
+  const body = agent.running ? {} : { mode: agent.mode, platform: $("#agentPlatform").value, max: $("#agentMax").value };
+  try {
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await r.json();
+    if (!r.ok) alert(data.error || "Something went wrong");
+    if (!agent.running) { agent.since = 0; $("#logbox").innerHTML = ""; if (!agent.logOpen) $("#logToggle").click(); }
+  } finally {
+    $("#agentBtn").disabled = false;
+    pollAgent();
+  }
+};
+
+function lineClass(t, kind) {
+  if (kind === "sys") return "sys";
+  if (kind === "ask") return "ask";
+  if (kind === "err" || /failed|error|couldn't|needs_attention/i.test(t)) return "err";
+  if (/✔|applied \(|tailored resume|✉ Sent|Connected/i.test(t)) return "ok";
+  return "";
+}
+
+async function pollAgent() {
+  clearTimeout(agent.timer);
+  try {
+    const s = await (await fetch(`/api/agent?since=${agent.since}`, { cache: "no-store" })).json();
+    const wasRunning = agent.running;
+    agent.running = s.running;
+    if (s.log.length) {
+      agent.since = s.log[s.log.length - 1].n;
+      const box = $("#logbox");
+      const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+      box.insertAdjacentHTML("beforeend", s.log.map((l) => `<div class="${lineClass(l.text, l.kind)}">${esc(new Date(l.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }))}  ${esc(l.text)}</div>`).join(""));
+      while (box.children.length > 600) box.firstChild.remove();
+      if (atBottom) box.scrollTop = box.scrollHeight;
+      load();
+    }
+    renderAgent(s);
+    if (wasRunning && !s.running) load();
+  } catch {}
+  agent.timer = setTimeout(pollAgent, agent.running ? 1500 : 6000);
+}
+
+function renderAgent(s) {
+  const dot = $("#agentDot"), btn = $("#agentBtn");
+  dot.className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
+  const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
+  const modeName = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" }[s.options?.mode] ?? "";
+  if (s.pending) { $("#agentTitle").textContent = "Agent is waiting for you"; $("#agentSub").textContent = `${modeName} · running ${mins} min`; }
+  else if (s.running) { $("#agentTitle").textContent = "Agent is running"; $("#agentSub").textContent = `${modeName} · ${mins} min · keep the agent's Chrome window open`; }
+  else if (s.endedAt) { $("#agentTitle").textContent = "Agent is idle"; $("#agentSub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
+  else { $("#agentTitle").textContent = "Agent is idle"; $("#agentSub").textContent = "Choose a mode and press Start"; }
+  btn.className = "btn " + (s.running ? "stop" : "go");
+  btn.textContent = s.running ? "■ Stop" : "▶ Start";
+  $("#modeSeg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
+  $("#agentPlatform").disabled = $("#agentMax").disabled = s.running;
+  if (s.running && s.options?.mode && s.options.mode !== agent.mode) { agent.mode = s.options.mode; paintMode(); }
+
+  const key = s.pending ? s.pending.id : null;
+  if (key !== agent.pending) {
+    agent.pending = key;
+    if (!s.pending) { $("#askHost").innerHTML = ""; document.title = document.title.replace(/^⚠ /, ""); return; }
+    const choices = s.pending.choices?.length ? s.pending.choices : [{ label: "Continue", value: "" }];
+    $("#askHost").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>Agent needs you</small>${esc(s.pending.question)}</div>
+      <div class="ask-btns">${choices.map((c, i) => `<button class="btn ${i === 0 ? "primary" : ""}" data-ans="${esc(c.value)}">${esc(c.label)}</button>`).join("")}</div></div>`;
+    $("#askHost").querySelectorAll("[data-ans]").forEach((b) => (b.onclick = async () => {
+      $("#askHost").querySelectorAll("button").forEach((x) => (x.disabled = true));
+      await fetch("/api/agent/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: s.pending.id, answer: b.dataset.ans }) });
+      pollAgent();
+    }));
+    if (!document.title.startsWith("⚠")) document.title = "⚠ " + document.title;
+    try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("Job agent needs you", { body: s.pending.question }); } catch {}
+  }
+}
+try { if ("Notification" in window && Notification.permission === "default") $("#agentBtn").addEventListener("click", () => Notification.requestPermission(), { once: true }); } catch {}
+paintMode();
+pollAgent();
 
 load();
 setInterval(() => { if (!document.hidden && !document.activeElement?.matches("textarea, input")) load(); }, 15000);

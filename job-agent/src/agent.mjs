@@ -25,7 +25,29 @@ const todo = Object.values(profile.applicationAnswers ?? {}).filter((v) => typeo
 if (todo.length) log("warn", `profile.json has ${todo.length} TODO answers (notice period, CTC…). Questions needing them will pause for you.`);
 log("info", `Mode: ${mode} · max applications this run: ${maxApply}`);
 
-const { context } = await connect();
+let context;
+try {
+  ({ context } = await connect());
+} catch (e) {
+  log("err", e.message);
+  process.exit(1);
+}
+const openPages = new Set();
+const shutdown = async () => {
+  log("warn", "Stopping agent…");
+  for (const p of openPages) await p.close().catch(() => {});
+  await closePdfBrowser().catch(() => {});
+  process.exit(0);
+};
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
+
+// Jobs mentioning any of these are applied to even when Claude's score is low.
+const mustApply = (config.alwaysApplyKeywords ?? []).map((k) => ({
+  word: k,
+  re: new RegExp(`(^|[^a-z])${k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`, "i"),
+}));
+const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job.description}`))?.word;
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 
@@ -33,6 +55,7 @@ for (const [key, mod] of Object.entries(platforms)) {
   const pcfg = config.platforms[key];
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
   const page = await context.newPage();
+  openPages.add(page);
   try {
     for (const s of pcfg.searches) {
       if (applied >= maxApply) break;
@@ -41,7 +64,7 @@ for (const [key, mod] of Object.entries(platforms)) {
       try {
         refs = await mod.search(page, s, { ...pcfg, max: config.maxJobsToScanPerSearch });
       } catch (e) {
-        log("err", `  search failed: ${e.message}`);
+        log("err", `  search failed: ${e.message.split("\n")[0]}`);
         continue;
       }
       log("dim", `  ${refs.length} jobs found`);
@@ -49,14 +72,16 @@ for (const [key, mod] of Object.entries(platforms)) {
       for (const ref of refs) {
         if (applied >= maxApply) break;
         const existing = tracker.find(key, ref.jobId);
-        if (existing && (DONE.has(existing.status) || mode === "dry-run")) continue;
+        // Low-score skips get a second look (matching rules may have changed); exclusions don't.
+        const retry = existing?.status === "skipped" && existing.skipReason !== "excluded";
+        if (existing && !retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
 
         let job;
         try {
           job = { platform: key, ...(await mod.getJob(page, ref)) };
         } catch (e) {
-          log("err", `  could not read ${ref.url}: ${e.message}`);
+          log("err", `  could not read ${ref.url}: ${e.message.split("\n")[0]}`);
           continue;
         }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
@@ -69,7 +94,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         }
         const lower = `${job.title}`.toLowerCase();
         if (config.excludeTitleKeywords.some((k) => lower.includes(k)) || config.excludeCompanies.some((c) => job.company.toLowerCase().includes(c.toLowerCase()))) {
-          tracker.upsert(key, job.jobId, { ...base, status: "skipped", historyNote: "Excluded by config" });
+          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "excluded", historyNote: "Excluded by config" });
           stats.skipped++;
           continue;
         }
@@ -88,9 +113,16 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("err", `  Claude evaluation failed: ${e.message}`);
           continue;
         }
-        const scored = { ...base, matchScore: ev.matchScore, matchReasons: ev.matchReasons, missingSkills: ev.missingSkills, coverNote: ev.coverNote.join(" ") };
-        if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {
-          tracker.upsert(key, job.jobId, { ...scored, status: "skipped", historyNote: `Match ${ev.matchScore}% below threshold` });
+        const scored = {
+          ...base, matchScore: ev.matchScore, matchReasons: ev.matchReasons, missingSkills: ev.missingSkills,
+          hiringContact: job.hiringContact ?? null, hiringMessage: ev.hiringMessage, messageStatus: "draft",
+        };
+        const hit = keywordHit(job);
+        if ((!ev.shouldApply || ev.matchScore < config.minMatchScore) && hit) {
+          scored.matchReasons = [`Mentions ${hit}, which is in her core stack`, ...scored.matchReasons];
+          log("dim", `  score ${ev.matchScore}% but mentions "${hit}" — applying anyway`);
+        } else if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {
+          tracker.upsert(key, job.jobId, { ...scored, status: "skipped", skipReason: "score", historyNote: `Match ${ev.matchScore}% — not her stack` });
           log("dim", `  match ${ev.matchScore}% — skipping (${ev.missingSkills.slice(0, 3).join(", ") || "low fit"})`);
           stats.skipped++;
           continue;
@@ -126,6 +158,7 @@ async function applyTo(mod, key, page, job, resumePath) {
   }
   tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note });
   if (result.status === "applied") {
+    await maybeMessage(mod, key, page, job);
     applied++;
     stats.applied++;
     log("ok", `  ✔ applied (${applied}/${maxApply})`);
@@ -134,6 +167,18 @@ async function applyTo(mod, key, page, job, resumePath) {
   } else {
     if (result.status === "needs_attention") stats.attention++;
     log("warn", `  ${result.status}: ${result.note}`);
+  }
+}
+
+async function maybeMessage(mod, key, page, job) {
+  const row = tracker.find(key, job.jobId);
+  if (!config.hiringMessage?.enabled || !mod.messageHiringTeam || !row?.hiringMessage || !job.hiringContact) return;
+  try {
+    const r = await mod.messageHiringTeam(page, job, row.hiringMessage, { mode, autoSend: config.hiringMessage.autoSend });
+    tracker.upsert(key, job.jobId, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { historyNote: r.note, status: "applied" } : {}) });
+    log(r.status === "sent" ? "ok" : "dim", `  ✉ ${r.note}`);
+  } catch (e) {
+    tracker.upsert(key, job.jobId, { messageStatus: "draft", messageNote: `Couldn't send: ${e.message}` });
   }
 }
 
