@@ -127,7 +127,7 @@ function renderChapterPage({ ch, prevCh, nextCh }) {
     .replace(/{{PREV_HREF}}/g, prevCh ? `${prevCh.slug}.html` : '#')
     .replace(/{{PREV_TITLE}}/g, prevCh ? prevCh.title : 'This is the start')
     .replace(/{{PREV_STYLE}}/g, prevCh ? '' : 'style="opacity:0.5;pointer-events:none"')
-    .replace(/{{NEXT_HREF}}/g, nextCh ? `${nextCh.slug}.html` : '../index.html')
+    .replace(/{{NEXT_HREF}}/g, nextCh ? `${nextCh.slug}.html` : '../ai.html')
     .replace(/{{NEXT_TITLE}}/g, nextCh ? nextCh.title : 'Back to all chapters');
 
   return tpl(`<!DOCTYPE html>
@@ -146,9 +146,9 @@ function renderChapterPage({ ch, prevCh, nextCh }) {
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-<nav><div class="nav-inner"><a href="../index.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../index.html#chapters">Chapters</a><a href="../index.html#subscribe">Subscribe</a></div></div></nav>
+<nav><div class="nav-inner"><a href="../ai.html" class="logo"><span class="logo-dot"></span> AI Academy</a><div class="nav-links"><a href="../ai.html#chapters">Chapters</a><a href="../ai.html#subscribe">Subscribe</a></div></div></nav>
 <article class="reader">
-<a href="../index.html" class="back">&larr; All chapters</a>
+<a href="../ai.html" class="back">&larr; All chapters</a>
 <div class="meta-row"><span class="tag">{{TAG}}</span><span>{{NUMBER}}</span><span>&middot;</span><span>{{READTIME}} read</span><span>&middot;</span><span>{{DATE}}</span></div>
 <h1>{{TITLE}}</h1>
 <p class="subtitle">{{SUBTITLE}}</p>

@@ -1,9 +1,10 @@
 name: Daily chapter generator
 
 on:
-  schedule:
-    # Runs every day at 04:30 UTC (10:00 IST). Adjust as you like.
-    - cron: '30 4 * * *'
+  # Daily AI chapters are paused: the site now focuses on NCERT and exam prep.
+  # Re-enable by restoring the schedule below.
+  # schedule:
+  #   - cron: '30 4 * * *'
   workflow_dispatch:  # lets you trigger it manually from the Actions tab
 
 permissions:

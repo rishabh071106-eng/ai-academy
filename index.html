@@ -3,128 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AI Academy &mdash; Learn AI, one chapter at a time</title>
-<meta name="description" content="Clear, no-fluff chapters on AI, machine learning, LLMs, and agents. Updated daily by our content pipeline.">
-<meta property="og:title" content="AI Academy &mdash; Learn AI, one chapter at a time">
-<meta property="og:description" content="Clear, no-fluff AI chapters. Updated daily.">
+<title>AI Academy &mdash; NCERT books &amp; competitive exam prep</title>
+<meta name="description" content="Free NCERT textbooks for Classes 1–12 plus swipe-based lectures, audio lessons and 10 years of previous papers for NDA, CDS, AFCAT, SSB, UPSC IAS, bank exams and IT placements.">
+<meta property="og:title" content="AI Academy &mdash; NCERT books &amp; competitive exam prep">
+<meta property="og:description" content="NCERT 1–12, NDA, CDS, AFCAT, SSB, UPSC, Bank and IT prep. Swipe, listen, track progress.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="alternate" type="application/rss+xml" title="AI Academy RSS" href="rss.xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/learn.css">
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="logo"><span class="logo-dot"></span> AI Academy</a>
-    <div class="nav-links">
-      <a href="#chapters">Chapters</a>
-      <a href="#about">About</a>
-      <a href="#subscribe">Subscribe</a>
-    </div>
-  </div>
-</nav>
-
 <header class="hero">
-  <div class="hero-badge"><span class="pulse"></span> New chapter every day</div>
-  <h1>Learn AI,<br>one chapter at a time.</h1>
-  <p class="lead">
-    Short, clear, no-nonsense lessons on how modern AI actually works &mdash; from language models to agents. No PhD required. No hype.
-  </p>
+  <div class="hero-badge"><span class="pulse"></span> Free for every student</div>
+  <h1>Learn, swipe, listen.<br>Crack your exam.</h1>
+  <p class="lead">Every NCERT book from Class 1 to 12, plus bite-sized swipe lectures, audio lessons and 10 years of previous papers for NDA, CDS, AFCAT, SSB, UPSC, bank exams and IT placements.</p>
   <div class="cta-row">
-    <a href="#chapters" class="btn btn-primary">Start Reading &rarr;</a>
-    <a href="#subscribe" class="btn btn-ghost">Get daily chapters</a>
+    <a href="exams.html" class="btn btn-primary">Start exam prep &rarr;</a>
+    <a href="ncert.html" class="btn btn-ghost">NCERT books 1&ndash;12</a>
   </div>
 </header>
 
-<section class="stats container">
-  <div><strong id="statCount">5</strong> chapters published</div>
-  <div><strong>44 min</strong> of reading</div>
-  <div><strong>Daily</strong> new content</div>
-</section>
+<main class="page" style="padding-top:0">
+  <div id="resume"></div>
 
-<section id="chapters" class="container">
-  <div class="section-head">
-    <h2>The Curriculum</h2>
-    <p>Start from Chapter 01 or jump to what you need.</p>
+  <div class="grid">
+    <a class="tile big" href="ncert.html">
+      <div class="icon">📚</div>
+      <div class="kicker">School</div>
+      <h3>NCERT Books, Class 1&ndash;12</h3>
+      <p>Every current NCERT textbook, chapter by chapter, straight from NCERT's official servers. Tick off chapters as you read them.</p>
+    </a>
+    <a class="tile big" href="exams.html">
+      <div class="icon">🎯</div>
+      <div class="kicker">Competitive exams</div>
+      <h3>Exam Prep</h3>
+      <p>Defence &amp; SSB, UPSC Civil Services, bank exams and IT placements. Swipe lectures, quizzes and previous papers.</p>
+    </a>
+    <a class="tile big" href="progress.html">
+      <div class="icon">📈</div>
+      <div class="kicker">Your board</div>
+      <h3>My Progress</h3>
+      <p>Chapters completed, minutes listened, quiz scores, daily streak and a full activity log.</p>
+    </a>
   </div>
-  <div class="chapters-grid" id="chaptersGrid"></div>
-</section>
 
-<section id="about" class="container" style="margin-top:5rem;padding:0 1.5rem">
-  <div class="section-head">
-    <h2>Why this site?</h2>
-    <p style="max-width:580px;margin:0 auto">Because AI is the most consequential technology of our lifetime, and most writing about it is either sales copy or math-heavy papers. This is the middle path &mdash; written for curious humans.</p>
-  </div>
-</section>
+  <h2 class="section-title">Exam categories</h2>
+  <p class="section-sub">Pick a track. Every chapter is a short deck you can swipe through or listen to like an audiobook.</p>
+  <div class="grid" id="cats"></div>
+</main>
 
-<section id="subscribe" class="container" style="margin-top:4rem;padding:0 1.5rem">
-  <div style="max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center">
-    <h2 style="font-size:1.5rem;margin-bottom:0.5rem">Get tomorrow's chapter in your inbox</h2>
-    <p style="color:var(--muted);margin-bottom:1.5rem">One email a day. Zero spam. Unsubscribe any time.</p>
-    <!--
-      Replace YOUR_FORMSPREE_ID below with your Formspree form ID.
-      Sign up free at https://formspree.io, create a form, paste the ID (looks like 'xyzabcd').
-    -->
-    <form id="subForm" action="https://formspree.io/f/xaqaeven" method="POST">
-      <input type="email" name="email" required placeholder="you@example.com" style="width:100%;padding:0.85rem 1rem;border-radius:100px;border:1px solid var(--border);background:var(--card-2);color:var(--text);font-size:0.95rem;margin-bottom:0.75rem" />
-      <input type="hidden" name="_subject" value="New AI Academy subscriber">
-      <button class="btn btn-primary" style="width:100%" type="submit">Subscribe</button>
-      <div id="subMsg" style="color:#4ade80;font-size:0.85rem;margin-top:0.75rem"></div>
-    </form>
-    <script>
-      document.getElementById('subForm').addEventListener('submit', async (e) => {
-        const form = e.target;
-        if (form.action.includes('YOUR_FORMSPREE_ID')) {
-          e.preventDefault();
-          document.getElementById('subMsg').textContent = 'Form not configured yet. Edit index.html: replace YOUR_FORMSPREE_ID with your Formspree form ID.';
-          return;
-        }
-        e.preventDefault();
-        const data = new FormData(form);
-        const res = await fetch(form.action, { method:'POST', body:data, headers:{'Accept':'application/json'} });
-        if (res.ok) {
-          document.getElementById('subMsg').textContent = 'Thanks! You\u2019re subscribed.';
-          form.reset();
-        } else {
-          document.getElementById('subMsg').textContent = 'Something went wrong. Try again?';
-          document.getElementById('subMsg').style.color = '#ff6b6b';
-        }
-      });
-    </script>
-  </div>
-</section>
+<script type="module">
+import { renderNav, renderFooter, loadCatalog, store, esc, timeAgo } from './assets/js/app.js';
+renderNav('index.html');
+renderFooter();
 
-<footer>
-  <div class="logo"><span class="logo-dot"></span> AI Academy</div>
-  <p>Auto-generated daily. Built with &hearts; and Claude.</p>
-</footer>
+const cat = await loadCatalog();
+document.getElementById('cats').innerHTML = cat.categories.map(c => `
+  <a class="tile" href="exams.html#${c.id}">
+    <div class="icon">${c.icon}</div>
+    <h3>${esc(c.name)}</h3>
+    <p>${esc(c.blurb)}</p>
+    <div class="meta">${c.exams.map(e => esc(e.name)).join(' · ')}</div>
+  </a>`).join('');
 
-<script>
-fetch('assets/chapters.json')
-  .then(r=>r.json())
-  .then(data=>{
-    const grid=document.getElementById('chaptersGrid');
-    document.getElementById('statCount').textContent=data.chapters.length;
-    const reversed=[...data.chapters].reverse(); // newest first
-    reversed.forEach(ch=>{
-      const card=document.createElement('a');
-      card.href=`chapters/${ch.slug}.html`;
-      card.className='chapter-card';
-      card.innerHTML=`
-        <div class="chapter-num">${ch.number}</div>
-        <div class="chapter-title">${ch.title}</div>
-        <div class="chapter-excerpt">${ch.excerpt}</div>
-        <div class="chapter-meta">
-          <span class="tag">${ch.tag}</span>
-          <span>${ch.readTime} &middot; ${ch.date}</span>
-        </div>`;
-      grid.appendChild(card);
-    });
-  });
+const last = store.read().last;
+if (last) {
+  document.getElementById('resume').innerHTML = `
+    <a class="tile" href="${esc(last.href)}" style="margin-bottom:1.5rem;flex-direction:row;align-items:center;gap:1rem">
+      <div class="icon">▶️</div>
+      <div style="flex:1;min-width:0"><div class="kicker">Continue where you left off</div>
+      <h3>${esc(last.title || '')}</h3><div class="meta">${esc(last.exam || '')} · ${timeAgo(last.at)}</div></div>
+    </a>`;
+}
 </script>
-
 </body>
 </html>
