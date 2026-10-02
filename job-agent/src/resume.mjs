@@ -3,7 +3,16 @@ import path from "node:path";
 import { chromium } from "playwright-core";
 import { RESUME_DIR, slugify } from "./util.mjs";
 
-const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+// Text from Claude can carry markdown or stray symbols; clean it before it goes on the page.
+const tidy = (s) =>
+  String(s ?? "")
+    .replace(/\\n/g, " ")
+    .replace(/\*\*|__|`/g, "")
+    .replace(/^\s*([-*•▪▸►●]|\d+[.)])\s+/, "")
+    .replace(/[\u200B-\u200D\uFEFF\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFD]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+const esc = (s) => tidy(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const fmtDate = (d) => {
   if (!d) return "";
   if (/present/i.test(d)) return "Present";
@@ -13,7 +22,7 @@ const fmtDate = (d) => {
 
 // Bold lead-in like "Peelworks (Magento 2 Commerce, mobile + web): built …"
 const bullet = (b) => {
-  const m = String(b).match(/^([^:]{3,80}\)|[A-Z][^:]{2,40}):\s+(.*)$/s);
+  const m = tidy(b).match(/^([^:]{3,80}\)|[A-Z][^:]{2,40}):\s+(.*)$/s);
   return m ? `<b>${esc(m[1])}:</b> ${esc(m[2])}` : esc(b);
 };
 const role = (e) => `<div class="job">
@@ -60,7 +69,7 @@ export function renderResumeHtml(profile, t = {}) {
   .loc { color: var(--mute); font-size: 9pt; margin: 1px 0 3px; }
   ul { margin: 0; padding-left: 13px; }
   li { margin: 2.5px 0; padding-left: 2px; }
-  li::marker { color: var(--teal); content: "▸  "; font-size: 7pt; }
+  li::marker { color: var(--teal); font-size: 8pt; }
   .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .tile { background: var(--tint); border-radius: 4px; padding: 7px 8px; }
   .tile b { display: block; font: 600 17pt/1 Fraunces, Georgia, serif; color: var(--teal); }
@@ -68,12 +77,16 @@ export function renderResumeHtml(profile, t = {}) {
   .grp { margin-bottom: 8px; }
   .grp b { display: block; font-weight: 600; font-size: 9.6pt; margin-bottom: 1px; }
   .grp div { color: var(--mute); font-size: 9pt; }
+  h2 { break-after: avoid; }
+  .tile, .grp, .cert, .edu, .cred { break-inside: avoid; }
   .cert { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
   .cert span { color: var(--mute); display: block; font-size: 9pt; }
   .edu { margin-bottom: 8px; }
   .edu div { color: var(--mute); font-size: 9pt; }
   .edu.pursuing { border-left: 3px solid var(--teal); padding-left: 8px; }
-  .page2 { break-before: page; font-size: 9.3pt; }
+  .page2 { font-size: 9.3pt; margin-top: 4px; }
+  html, body { height: auto; }
+  body > :last-child, .page2 > :last-child { margin-bottom: 0; }
   .page2 h2 { margin-top: 12px; }
   .page2 .job { margin-bottom: 6px; }
   .creds { break-inside: avoid; }
@@ -135,20 +148,51 @@ async function getPdfBrowser() {
 }
 
 /** Writes data/resumes/<job>/<Name>_Resume.pdf (+ .html) and returns the absolute PDF path. */
+const countPages = (buf) => (buf.toString("latin1").match(/\/Type\s*\/Page[^s]/g) || []).length;
+
+/**
+ * Print, count the real PDF pages, and shrink the text slightly until it fits in
+ * `maxPages` (no spill-over page with a few lines on it). Returns the final PDF bytes.
+ */
+async function printToFit(page, maxPages = 2) {
+  let buf;
+  for (let zoom = 1; zoom >= 0.8; zoom = +(zoom - 0.03).toFixed(2)) {
+    await page.evaluate((z) => (document.body.style.zoom = String(z)), zoom);
+    buf = await page.pdf({ format: "A4", printBackground: true, preferCSSPageSize: true });
+    if (countPages(buf) <= maxPages) return buf;
+  }
+  return buf;
+}
+
 export async function buildResumePdf(profile, tailored, job) {
   // One folder per job; the file itself gets a recruiter-friendly name.
   const dir = path.join(RESUME_DIR, `${job.platform}-${job.jobId}-${slugify(job.company)}`.slice(0, 100));
   fs.mkdirSync(dir, { recursive: true });
   const fileBase = `${profile.name.trim().replace(/[^A-Za-z0-9]+/g, "-")}-Resume`;
-  const html = renderResumeHtml(profile, tailored ?? {});
   const htmlPath = path.join(dir, `${fileBase}.html`);
   const pdfPath = path.join(dir, `${fileBase}.pdf`);
-  fs.writeFileSync(htmlPath, html);
   const browser = await getPdfBrowser();
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: "networkidle", timeout: 20000 }).catch(() => page.setContent(html, { waitUntil: "load" }));
-  await page.evaluate(() => document.fonts?.ready).catch(() => {});
-  await page.pdf({ path: pdfPath, format: "A4", printBackground: true, preferCSSPageSize: true });
+  // If even slightly smaller text doesn't fit 2 pages, trim the least important content step by step.
+  const t = tailored ?? {};
+  const exp = t.experience?.length ? t.experience : profile.experience || [];
+  const cap = (older, recent) => exp.map((e, i) => ({ ...e, bullets: (e.bullets || []).slice(0, i < 2 ? recent : older) }));
+  const variants = [
+    [profile, t],
+    [profile, { ...t, experience: cap(3, 6) }],
+    [profile, { ...t, experience: cap(2, 5) }],
+    [{ ...profile, projects: [] }, { ...t, experience: cap(2, 5) }],
+  ];
+  let buf, html;
+  for (const [prof, tt] of variants) {
+    html = renderResumeHtml(prof, tt);
+    await page.setContent(html, { waitUntil: "networkidle", timeout: 20000 }).catch(() => page.setContent(html, { waitUntil: "load" }));
+    await page.evaluate(() => document.fonts?.ready).catch(() => {});
+    buf = await printToFit(page);
+    if (countPages(buf) <= 2) break;
+  }
+  fs.writeFileSync(htmlPath, html);
+  fs.writeFileSync(pdfPath, buf);
   await page.close();
   return pdfPath;
 }

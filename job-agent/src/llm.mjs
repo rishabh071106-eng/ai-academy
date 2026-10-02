@@ -87,6 +87,8 @@ Tailored resume: it must stay VERY close to her own resume, so a recruiter who h
 - Summary: keep her summary; you may adjust the first sentence and reorder clauses to match the job. Same length (±15%).
 - Experience: every role, same company/role/client/dates. Keep her bullet wording; reorder bullets so the most relevant come first and change at most a few words per bullet to mirror the job's terms where truthful. Keep bold lead-ins like "Peelworks (…):". Don't drop roles or bullets from the two most recent roles.
 - Skill groups: same groups and items as hers, reordered by relevance.
+- Plain text only: no markdown (no asterisks, underscores or backticks), no bullet symbols, no line breaks inside a bullet or the summary.
+- It must fit exactly 2 A4 pages like hers: at most 6 bullets for each of the two most recent roles, at most 4 for older roles, summary under 90 words.
 
 Hiring message — write it the way she would actually type it to a stranger on LinkedIn. It must read as genuine and human, not AI-written:
 - Open with "Hi <first name>," (or "Hi," if no contact name). Then get straight to the point; no pleasantries like "I hope this message finds you well".
