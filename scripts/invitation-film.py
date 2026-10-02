@@ -484,17 +484,16 @@ PAGES = [
 
     '<p class="label">With the blessings of our elders</p><p class="deva sub">बड़ों के आशीर्वाद से</p>'
     + ORN +
-    '<div class="fams">'
-    '<div class="fam"><h3>Bride&rsquo;s Family</h3><p class="deva fsub">वधू पक्ष</p>'
+    '<div class="fam1"><h3>Bride&rsquo;s Family <span class="deva">वधू पक्ष</span></h3>'
     '<p class="kin"><i>Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</p>'
     '<p class="kin"><i>Sister of</i>Miss Arushi Sharma</p></div>'
-    '<div class="fdiv"></div>'
-    '<div class="fam"><h3>Groom&rsquo;s Family</h3><p class="deva fsub">वर पक्ष</p>'
+    '<div class="famrule"></div>'
+    '<div class="fam1"><h3>Groom&rsquo;s Family <span class="deva">वर पक्ष</span></h3>'
     '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
     '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
     '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
     '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
-    '<p class="bless">with the blessings of Nana ji<br><b>O. P. Kaushal</b></p></div></div>',
+    '<p class="bless">with the blessings of Nana ji &mdash; <b>O. P. Kaushal</b></p></div>',
 
     '<p class="invite">request the pleasure of your company<br>at the wedding of</p>'
     '<p class="name">Smatav</p><p class="deva sub">चि. स्मतव</p>'
@@ -503,17 +502,20 @@ PAGES = [
     '<p class="deva hi-note">इस मंगल अवसर पर आप सपरिवार पधारकर<br>वर-वधू को आशीर्वाद प्रदान करें।</p>',
 
     '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
-    '<div class="ev"><div class="evd"><b>29</b><span>November 2026</span><i class="deva">रविवार</i></div>'
-    '<div class="evb"><h3>Ladies Sangeet <span class="deva">महिला संगीत</span></h3>'
+    '<div class="bigdate"><b>29</b><span>November 2026</span><i class="deva">रविवार &middot; Sunday</i></div>'
+    '<h2 class="evname">Ladies Sangeet</h2><p class="deva sub">महिला संगीत</p>'
     '<ul class="prog">'
-    '<li><b>12:15 PM</b> Welcome of Mama ji <span class="deva">मामा जी का स्वागत</span></li>'
-    '<li><b>4:00 PM</b> Ladies Sangeet <span class="deva">महिला संगीत</span></li>'
-    '<li><b>8:00 PM</b> Dinner <span class="deva">रात्रि भोज</span></li>'
-    '</ul></div></div>'
-    '<div class="ev"><div class="evd"><b>04</b><span>December 2026</span><i class="deva">शुक्रवार</i></div>'
-    '<div class="evb"><h3>The Dham <span class="deva">धाम</span></h3>'
-    '<p class="evx">The traditional Pahari feast, served to all.</p>'
-    '<p class="evt">Friday &middot; 12:00 noon &ndash; 4:00 PM</p></div></div>',
+    '<li><b>12:15 PM</b><span>Welcome of Mama ji<i class="deva">मामा जी का स्वागत</i></span></li>'
+    '<li><b>4:00 PM</b><span>Ladies Sangeet<i class="deva">महिला संगीत</i></span></li>'
+    '<li><b>8:00 PM</b><span>Dinner<i class="deva">रात्रि भोज</i></span></li>'
+    '</ul>',
+
+    '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
+    '<div class="bigdate"><b>04</b><span>December 2026</span><i class="deva">शुक्रवार &middot; Friday</i></div>'
+    '<h2 class="evname">The Dham</h2><p class="deva sub">धाम</p>'
+    '<p class="evx">The traditional Pahari feast,<br>served to all.</p>'
+    '<p class="deva sub">पारम्परिक पहाड़ी भोज</p>'
+    '<p class="evt">12:00 noon &ndash; 4:00 PM</p>',
 
     '<p class="label">Both occasions at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
     '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
@@ -527,7 +529,7 @@ PAGES = [
 
 SCENE_B = 5.2
 COVER_T, COVER_HOLD, OPEN_DUR = 5.2, 1.0, 1.7
-HOLD, TURN = 5.0, 1.5
+HOLD, TURN = 5.0, 1.4
 START = COVER_T + COVER_HOLD + OPEN_DUR
 TIMES = [COVER_T] + [START + i * (HOLD + TURN) for i in range(len(PAGES))]
 DURATION = TIMES[-1] + HOLD + 2.0
@@ -608,50 +610,52 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .cov{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px}
 .cov-tl{position:absolute;top:50px;left:50px}
 .cov-br{position:absolute;bottom:50px;right:50px;transform:rotate(180deg)}
-.cov-foot{font-size:34px;color:@@ROSE2@@;margin-top:26px;opacity:.9}
-.cov-shubh{font-size:99px;letter-spacing:.1em;color:@@ROSE@@}
-.cov-names{font-family:'Great Vibes',cursive;font-size:152px;line-height:1.0;color:@@ROSE@@;margin-top:14px}
+.cov-foot{font-size:40px;color:@@ROSE2@@;margin-top:26px;opacity:.9}
+.cov-shubh{font-size:86px;letter-spacing:.1em;color:@@ROSE@@}
+.cov-names{font-family:'Great Vibes',cursive;font-size:156px;line-height:1.0;color:@@ROSE@@;margin-top:14px}
 .cov-names i{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.33em;color:@@ROSE2@@;margin:10px 0;letter-spacing:.1em}
-.cov-date{font-size:36px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:30px;line-height:1.9}
+.cov-date{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:30px;line-height:1.9}
 
 .inv{font-size:86px;letter-spacing:.05em;color:@@ROSE2@@}
-.shloka{font-size:60px;line-height:1.95;color:@@ROSE@@}
+.shloka{font-size:56px;line-height:1.95;color:@@ROSE@@}
 .trans{font-size:44px;font-style:italic;line-height:1.55;color:@@INK@@}
-.shubh{font-size:101px;letter-spacing:.1em;color:@@ROSE@@}
-.label{font-size:30px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.sub{font-size:50px;color:@@INK@@}
-.fams{display:flex;gap:20px;align-items:flex-start;width:100%;margin-top:12px}
-.fam{flex:1}
-.fam h3{font-size:31px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.fsub{font-size:40px;color:@@INK@@;margin-top:4px}
-.kin{font-size:31px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
-.kin i{font-style:italic;font-size:.72em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
-.prog{list-style:none;margin-top:16px;display:grid;gap:13px;text-align:left}
-.prog li{font-size:27px;line-height:1.3;color:@@INK@@}
-.prog b{font-weight:600;color:@@ROSE@@;letter-spacing:.03em;margin-right:.55em;display:inline-block;min-width:4.3em}
-.prog .deva{color:@@ROSE2@@;font-size:.94em;margin-left:.35em}
+.shubh{font-size:96px;letter-spacing:.1em;color:@@ROSE@@}
+.label{font-size:38px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.sub{font-size:48px;color:@@INK@@}
+.fam1{width:100%}
+.fam1 h3{font-size:36px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.fam1 h3 .deva{letter-spacing:0;text-transform:none;font-weight:400;font-size:1.18em;
+  color:@@INK@@;margin-left:14px}
+.famrule{width:58%;height:1px;margin:26px auto;
+  background:linear-gradient(90deg,transparent,rgba(168,130,44,.7),transparent)}
+.bigdate{display:flex;flex-direction:column;align-items:center;margin-top:4px}
+.bigdate b{font-size:184px;line-height:.92;font-weight:500;color:@@ROSE@@}
+.bigdate span{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  color:@@ROSE2@@;margin-top:14px}
+.bigdate i{font-size:40px;font-style:normal;color:@@INK@@;margin-top:10px}
+.evname{font-size:88px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
+.prog{list-style:none;margin-top:30px;display:grid;gap:26px;width:100%}
+.prog li{display:flex;align-items:flex-start;justify-content:center;gap:26px;text-align:left}
+.prog li>b{flex:none;font-size:44px;font-weight:600;color:@@ROSE@@;min-width:4.7em;
+  text-align:right;line-height:1.26}
+.prog li>span{font-size:46px;color:@@INK@@;line-height:1.24;min-width:11.4em}
+.prog li>span i{display:block;font-size:.88em;font-style:normal;color:@@ROSE2@@;margin-top:5px}
+.bless{font-size:38px;font-style:italic;color:@@INK@@;margin-top:22px;line-height:1.5}
+.bless b{font-style:normal;color:@@ROSE@@;font-size:1.1em}
+.kin{font-size:44px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
+.kin i{font-style:italic;font-size:.74em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
 .bless{font-size:35px;font-style:italic;color:@@INK@@;margin-top:23px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.12em}
-.fdiv{width:1px;align-self:stretch;background:linear-gradient(180deg,transparent,rgba(168,130,44,.65),transparent)}
-.invite{font-size:49px;font-style:italic;line-height:1.65;color:@@INK@@}
-.name{font-family:'Great Vibes',cursive;font-size:178px;line-height:1.02;color:@@ROSE@@}
-.weds{font-size:58px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
+.invite{font-size:52px;font-style:italic;line-height:1.65;color:@@INK@@}
+.name{font-family:'Great Vibes',cursive;font-size:160px;line-height:1.02;color:@@ROSE@@}
+.weds{font-size:48px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
 .weds .deva{font-style:normal;font-size:.76em}
-.hi-note{font-size:40px;line-height:1.8;color:@@INK@@}
-.ev{display:flex;align-items:stretch;width:100%;border:1.5px solid rgba(168,130,44,.55);
-  background:rgba(255,250,248,.88);text-align:left}
-.evd{width:252px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:29px 13px;
-  background:rgba(224,154,60,.16);border-right:1.5px solid rgba(168,130,44,.5)}
-.evd b{font-size:96px;line-height:1;font-weight:500;color:@@ROSE@@}
-.evd span{font-size:22px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@;margin-top:14px}
-.evd i{font-size:29px;font-style:normal;color:@@INK@@;margin-top:5px}
-.evb{padding:30px 28px}
-.evb h3{white-space:nowrap;font-size:53px;font-weight:600;color:@@ROSE@@}
+.hi-note{font-size:44px;line-height:1.8;color:@@INK@@}
 .evb h3 .deva{font-weight:400;font-size:.7em;color:@@ROSE2@@;margin-left:10px}
-.evx{font-size:34px;font-style:italic;color:@@INK@@;margin-top:9px}
-.evt{font-size:28px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:18px}
-.venue{font-size:78px;font-weight:600;color:@@ROSE@@}
-.addr{font-size:40px;line-height:1.55;color:@@INK@@}
+.evx{font-size:50px;font-style:italic;color:@@INK@@;margin-top:9px}
+.evt{font-size:46px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:18px}
+.venue{font-size:82px;font-weight:600;color:@@ROSE@@}
+.addr{font-size:44px;line-height:1.55;color:@@INK@@}
 .blessing{font-size:68px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 

@@ -12,7 +12,7 @@ from scipy.io import wavfile
 from scipy.signal import fftconvolve
 
 SR = 44100
-DUR = 40.9
+DUR = 46.9
 BPM = 104.0
 BEAT = 60.0 / BPM
 rng = np.random.default_rng(20261129)
@@ -152,9 +152,13 @@ PHRASE = [
     ('G', 2, 'M'), ('R', 1, None), ('S', 1, None),
     ('R', 1, None), ('G', 1, None), ('R', 1, None), ('S', 1, None),
     ('S', 4, None),
+
+    # a closing descent home, for the two extra pages the film now holds
+    ('P', 1, None), ('M', 1, None), ('G', 1, None), ('R', 1, None),
+    ('G', 2, 'M'), ('R', 1, None), ('S', 1, None), ('S', 2, None),
 ]
 
-# A(16) B(16) C(16) D(16) — 64 beats, which fills the film exactly
+# A(16) B(16) C(16) D(16) + a 10-beat coda — 74 beats, which fills the film
 
 MEL_START = 4 * BEAT            # the groove and tune come in together after a pickup
 
