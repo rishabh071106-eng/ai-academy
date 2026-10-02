@@ -3,7 +3,7 @@ import { fork } from "node:child_process";
 import path from "node:path";
 import { ROOT } from "./util.mjs";
 
-export const PLATFORMS = ["linkedin", "naukri"];
+export const PLATFORMS = ["linkedin", "naukri", "alignerr"];
 const MAX_LOG = 600;
 const runs = Object.fromEntries(PLATFORMS.map((p) => [p, { platform: p, running: false, startedAt: null, endedAt: null, exitCode: null, options: null, pending: null, log: [], seq: 0, child: null }]));
 

@@ -33,8 +33,9 @@ const child = spawn(exe, [
   "--no-default-browser-check",
   "https://www.linkedin.com/jobs/",
   "https://www.naukri.com/mnjuser/homepage",
+  "https://app.alignerr.com/home",
 ], { detached: true, stdio: "ignore" });
 child.unref();
 
 log("ok", `Chrome started with DevTools on port ${port} (profile: .chrome-profile).`);
-log("info", "Log in to LinkedIn and Naukri in that window (first time only), then run: npm run agent");
+log("info", "Log in to LinkedIn, Naukri and Alignerr in that window (first time only), then run: npm run agent");

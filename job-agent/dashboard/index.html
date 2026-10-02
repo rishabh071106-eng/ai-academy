@@ -19,6 +19,7 @@
   --accent-soft: #e6effb;
   --series-1: #2a78d6; /* LinkedIn */
   --series-2: #eb6834; /* Naukri */
+  --series-3: #1baf7a; /* Alignerr */
   --seq-1: #86b6ef; --seq-2: #3987e5; --seq-3: #1c5cab;
   --good: #0f7b3f; --good-bg: #e3f4ea;
   --warn: #9a6200; --warn-bg: #fdf1d8;
@@ -36,7 +37,7 @@
     --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #2f2f2c;
     --text: #ffffff; --text-2: #c3c2b7; --muted: #8f8d85;
     --accent: #3987e5; --accent-soft: #1d2a3b;
-    --series-1: #3987e5; --series-2: #d95926;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
     --seq-1: #184f95; --seq-2: #2a78d6; --seq-3: #6da7ec;
     --good: #5fd08c; --good-bg: #183223; --warn: #f2bd4f; --warn-bg: #342a14;
     --crit: #f08a83; --crit-bg: #3a1c1a; --info: #86b6ef; --info-bg: #1d2a3b;
@@ -50,7 +51,7 @@
   --bg: #121211; --surface: #1a1a19; --surface-2: #232321; --border: #2f2f2c;
   --text: #ffffff; --text-2: #c3c2b7; --muted: #8f8d85;
   --accent: #3987e5; --accent-soft: #1d2a3b;
-  --series-1: #3987e5; --series-2: #d95926;
+  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
   --seq-1: #184f95; --seq-2: #2a78d6; --seq-3: #6da7ec;
   --good: #5fd08c; --good-bg: #183223; --warn: #f2bd4f; --warn-bg: #342a14;
   --crit: #f08a83; --crit-bg: #3a1c1a; --info: #86b6ef; --info-bg: #1d2a3b;
@@ -173,7 +174,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 
 
 .agent { padding: 16px 18px; margin-bottom: 16px; }
-.agents { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.agents { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .agents .agent { margin-bottom: 0; }
 .agent-title .pf { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
 .agents .seg button { padding: 6px 10px; font-size: 12.5px; }
@@ -232,7 +233,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <div class="logo" id="initials">JA</div>
       <div>
         <h1 id="heading">Job Hunt Tracker</h1>
-        <div class="sub" id="subheading">Applications from the job agent · LinkedIn &amp; Naukri</div>
+        <div class="sub" id="subheading">Applications from the job agent · LinkedIn, Naukri &amp; Alignerr</div>
       </div>
     </div>
     <div class="actions">
@@ -253,7 +254,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     <div class="card panel">
       <div class="panel-head">
         <h2>Applications per day <span class="sub">· last 21 days</span></h2>
-        <div class="legend"><span><i style="background:var(--series-1)"></i>LinkedIn</span><span><i style="background:var(--series-2)"></i>Naukri</span></div>
+        <div class="legend"><span><i style="background:var(--series-1)"></i>LinkedIn</span><span><i style="background:var(--series-2)"></i>Naukri</span><span><i style="background:var(--series-3)"></i>Alignerr</span></div>
       </div>
       <div class="chart" id="daily"><div class="tooltip" id="tip"></div></div>
     </div>
@@ -269,7 +270,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <label class="search"><span aria-hidden="true">⌕</span><input id="q" placeholder="Search company, title, location…" autocomplete="off"></label>
       <div class="chips" id="statusChips"></div>
       <select class="sel" id="platformSel" aria-label="Platform">
-        <option value="">All platforms</option><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="other">Other</option>
+        <option value="">All platforms</option><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="alignerr">Alignerr</option><option value="other">Other</option>
       </select>
       <select class="sel" id="sortSel" aria-label="Sort">
         <option value="recent">Most recent</option><option value="score">Best match</option><option value="company">Company A–Z</option>
@@ -293,7 +294,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     <label>Company<input name="company" required></label>
     <label>Job title<input name="title" required></label>
     <label>Link<input name="url" type="url" placeholder="https://"></label>
-    <label>Platform<select name="platform"><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="other">Company site / other</option></select></label>
+    <label>Platform<select name="platform"><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="alignerr">Alignerr</option><option value="other">Company site / other</option></select></label>
     <label>Status<select name="status"></select></label>
     <div class="dialog-actions"><button class="btn" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Add</button></div>
   </form>
@@ -311,7 +312,7 @@ const STATUS = {
   skipped:         { label: "Skipped",         fg: "var(--muted)",  bg: "var(--neutral-bg)" },
   withdrawn:       { label: "Withdrawn",       fg: "var(--muted)",  bg: "var(--neutral-bg)" },
 };
-const PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, other: { label: "Other", color: "var(--muted)" } };
+const PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, alignerr: { label: "Alignerr", color: "var(--series-3)" }, other: { label: "Other", color: "var(--muted)" } };
 const APPLIED_LIKE = new Set(["applied", "interview", "offer", "rejected", "withdrawn"]);
 
 const state = { rows: [], statuses: Object.keys(STATUS), filter: "active", q: "", platform: "", sort: "recent", open: new Set() };
@@ -387,16 +388,16 @@ function renderDaily() {
   const buckets = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(Date.now() - i * 864e5);
-    buckets.push({ key: day(d), date: d, linkedin: 0, naukri: 0 });
+    buckets.push({ key: day(d), date: d, linkedin: 0, naukri: 0, alignerr: 0 });
   }
   const idx = Object.fromEntries(buckets.map((b, i) => [b.key, i]));
   for (const r of state.rows) {
     if (!r.appliedAt || !APPLIED_LIKE.has(r.status)) continue;
     const i = idx[day(r.appliedAt)];
-    if (i != null) buckets[i][r.platform === "naukri" ? "naukri" : "linkedin"]++;
+    if (i != null) buckets[i][r.platform === "naukri" || r.platform === "alignerr" ? r.platform : "linkedin"]++;
   }
   const W = 720, H = 220, L = 28, R = 8, T = 10, B = 26;
-  const max = Math.max(4, ...buckets.map((b) => b.linkedin + b.naukri));
+  const max = Math.max(4, ...buckets.map((b) => b.linkedin + b.naukri + b.alignerr));
   const step = Math.ceil(max / 4);
   const top = step * 4;
   const bw = (W - L - R) / days;
@@ -410,7 +411,7 @@ function renderDaily() {
   svg += `</g>`;
   buckets.forEach((b, i) => {
     const x = L + bw * i + (bw - barW) / 2;
-    const segs = [["linkedin", "var(--series-1)"], ["naukri", "var(--series-2)"]].filter(([k]) => b[k] > 0);
+    const segs = [["linkedin", "var(--series-1)"], ["naukri", "var(--series-2)"], ["alignerr", "var(--series-3)"]].filter(([k]) => b[k] > 0);
     let base = 0;
     segs.forEach(([k, color], si) => {
       const y0 = y(base), y1 = y(base + b[k]);
@@ -431,9 +432,9 @@ function renderDaily() {
     el.onmouseenter = () => {
       const b = buckets[+el.dataset.i];
       const rect = host.getBoundingClientRect(), r = el.getBoundingClientRect();
-      tip.innerHTML = `<b>${b.date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</b><br>LinkedIn ${b.linkedin} · Naukri ${b.naukri}`;
+      tip.innerHTML = `<b>${b.date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</b><br>LinkedIn ${b.linkedin} · Naukri ${b.naukri} · Alignerr ${b.alignerr}`;
       tip.style.left = r.left - rect.left + r.width / 2 + "px";
-      const total = b.linkedin + b.naukri;
+      const total = b.linkedin + b.naukri + b.alignerr;
       tip.style.top = (y(total) / H) * rect.height + "px";
       tip.style.opacity = 1;
       el.setAttribute("fill", "rgba(127,127,127,.08)");
@@ -582,7 +583,7 @@ fetch("/api/profile").then((r) => r.json()).then((p) => {
   const first = p.name.split(" ")[0];
   $("#heading").textContent = `${first}'s Job Hunt`;
   $("#initials").textContent = p.name.split(" ").map((w) => w[0]).slice(0, 2).join("");
-  if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn & Naukri`;
+  if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn, Naukri & Alignerr`;
   if (p.sourceResume?.name) $("#subheading").textContent += ` · resume: ${p.sourceResume.name} (${new Date(p.sourceResume.mtimeMs).toLocaleDateString(undefined, { day: "numeric", month: "short" })})`;
   document.title = `${first}'s Job Hunt`;
 }).catch(() => {});
@@ -660,6 +661,7 @@ const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "F
 const AG = {
   linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
   naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
+  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
 };
 try {
   const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");

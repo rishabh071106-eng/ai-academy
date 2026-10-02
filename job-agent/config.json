@@ -109,6 +109,29 @@
       "uploadTailoredResume": true,
       "restoreBaseResumeAfterRun": true,
       "baseResumePath": ""
+    },
+    "alignerr": {
+      "enabled": true,
+      "url": "https://app.alignerr.com/home",
+      "searches": [
+        {
+          "keywords": "",
+          "location": "Remote"
+        }
+      ],
+      "relevantKeywords": [
+        "software engineer",
+        "software engineering",
+        "coding",
+        "programming",
+        "developer",
+        "web development",
+        "code review",
+        "full stack",
+        "php",
+        "javascript",
+        "typescript"
+      ]
     }
   },
   "excludeTitleKeywords": [

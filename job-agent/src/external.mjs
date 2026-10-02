@@ -306,3 +306,17 @@ export function applyLinkInText(text) {
   const m = String(text || "").match(/https?:\/\/(?:forms\.gle\/[\w-]+|docs\.google\.com\/forms\/[^\s)"'<>]+)/i);
   return m?.[0] ?? null;
 }
+
+/**
+ * Apply on the page that is already open (job boards whose own site is the application,
+ * e.g. Alignerr): click Apply if needed, fill every step, submit.
+ */
+export async function applyHere(page, job, { resumePath, profile, mode, coverLetter, label = "site" }) {
+  const ctx = { job, resumePath, profile, mode, coverLetter, ats: label };
+  try {
+    return (await generic(page, ctx)) ?? { status: "needs_attention", note: `${label}: unfinished` };
+  } catch (e) {
+    return (await handOver(page, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false)) ?? { status: "needs_attention", note: e.message };
+  }
+}
+export { handOver };

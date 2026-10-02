@@ -65,6 +65,11 @@ Change searches, the match threshold, `alwaysApplyKeywords`, the per-run cap and
 ### Long runs: "Apply to", "Review" and "Keep going until done"
 Each agent card has **Apply to** (stop after this many applications), **Review** (stop after looking at this many jobs; 0 = all) and **Keep going until done**. With Keep going on, the agent works through up to 5 result pages per search. When every current job has been reviewed and the target isn't reached, it checks again for new postings every 30 minutes (`recheckMinutes` in `config.json`) instead of stopping. An error on one job never ends the run, a closed tab is reopened, and if the agent process crashes the dashboard restarts it (up to 5 times). Jobs already handled are skipped, so it carries on where it left off. **■ Stop** always ends it.
 
+## Google Forms and Alignerr
+
+- **Google Forms:** when a job's "apply" link, or a link written in the job post, is a Google Form (`forms.gle`, `docs.google.com/forms`), the agent fills it: name, email, phone, ranges like "8+ years", checkboxes, dropdowns, free-text answers written by Claude, and the resume where the form has a file question. It goes through every section and submits. Forms that require a Google sign-in need you to sign in to Google once in the agent's Chrome.
+- **Alignerr** (app.alignerr.com) has its own agent card. Log in to Alignerr once in the agent's Chrome. The agent lists the open roles, keeps the ones that fit her (software, coding, PHP, JavaScript, full stack…), creates the tailored resume, and applies. Skill assessments and AI interviews are for her to take herself: the agent tells you, and in fully automatic mode marks them "needs attention" and moves on.
+
 ## Statuses on the dashboard
 
 - **Applied**: submitted by the agent, or already applied before.

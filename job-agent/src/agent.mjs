@@ -12,6 +12,7 @@ import { syncProfile } from "./profile-sync.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
+import * as alignerr from "./alignerr.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
 import { DATA_DIR, loadConfig, loadProfile, log, randomBetween, sleep } from "./util.mjs";
@@ -28,7 +29,7 @@ const reviewLimit = Number(args.review ?? config.maxJobsToReview ?? 0);
 const keepGoing = args["keep-going"] !== undefined ? args["keep-going"] !== "false" : !!config.keepGoing;
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
-const platforms = { linkedin, naukri };
+const platforms = { linkedin, naukri, alignerr };
 const DONE = new Set(["applied", "interview", "offer", "rejected", "withdrawn", "skipped", "external", "needs_attention"]);
 
 const todo = Object.values(profile.applicationAnswers ?? {}).filter((v) => typeof v === "string" && v.startsWith("TODO"));
@@ -63,7 +64,9 @@ const mustApply = (config.alwaysApplyKeywords ?? []).map((k) => ({
 }));
 // A job is worth reading only if it mentions at least one of her core areas.
 const relevantRe = new RegExp(`(^|[^a-z])(${(config.relevantKeywords ?? []).map((k) => k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})([^a-z]|$)`, "i");
-const isRelevant = (text) => !(config.relevantKeywords ?? []).length || relevantRe.test(text);
+const isRelevantGlobal = (text) => !(config.relevantKeywords ?? []).length || relevantRe.test(text);
+const reFor = (words) => new RegExp(`(^|[^a-z])(${words.map((k) => k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})([^a-z]|$)`, "i");
+let isRelevant = isRelevantGlobal;
 const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job.description}`))?.word;
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
@@ -71,6 +74,8 @@ const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 for (const [key, mod] of Object.entries(platforms)) {
   const pcfg = config.platforms[key];
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
+  // A platform can widen what counts as relevant (e.g. Alignerr's "AI trainer – coding" roles).
+  isRelevant = pcfg.relevantKeywords?.length ? ((re) => (t) => re.test(t) || isRelevantGlobal(t))(reFor(pcfg.relevantKeywords)) : isRelevantGlobal;
   let page = await context.newPage();
   openPages.add(page);
   // Reopen the tab / reconnect to Chrome if something closed it.
