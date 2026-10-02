@@ -59,7 +59,7 @@ def _ridge(y0, amp, step, fill, op):
 
 def river_scene():
     _s[0] = 987654321
-    o = [f'<svg class="river" viewBox="0 250 {W} 760" preserveAspectRatio="xMidYMid slice" fill="none">']
+    o = [f'<svg class="river" viewBox="80 0 860 {H}" preserveAspectRatio="xMidYMid slice" fill="none">']
     a = o.append
 
     a('<defs>'
@@ -83,6 +83,10 @@ def river_scene():
       '<radialGradient id="rvFly" cx=".5" cy=".5" r=".5">'
         '<stop offset="0" stop-color="#FFF3B0"/><stop offset=".4" stop-color="#FFE07A" stop-opacity=".7"/>'
         '<stop offset="1" stop-color="#FFD35C" stop-opacity="0"/></radialGradient>'
+      '<radialGradient id="rvMoonG" cx=".5" cy=".5" r=".5">'
+        '<stop offset="0" stop-color="#FFFBEC" stop-opacity=".8"/>'
+        '<stop offset=".45" stop-color="#E8E6FF" stop-opacity=".3"/>'
+        '<stop offset="1" stop-color="#C9CCFF" stop-opacity="0"/></radialGradient>'
       '<radialGradient id="rvFlame" cx=".5" cy=".62" r=".5">'
         '<stop offset="0" stop-color="#FFF6D2"/><stop offset=".4" stop-color="#FFC95E"/>'
         '<stop offset="1" stop-color="#F08A2E" stop-opacity="0"/></radialGradient>'
@@ -97,6 +101,12 @@ def river_scene():
       f'<circle cx="{SUNX}" cy="322" r="40" fill="#FFF2CE" opacity=".96"/>'
       f'<circle cx="{SUNX}" cy="322" r="40" fill="none" stroke="#FFD89A" stroke-width="6" opacity=".5"/>'
       f'<circle cx="{SUNX}" cy="322" r="58" fill="none" stroke="#FFE2AC" stroke-width="2" opacity=".28"/></g>')
+
+    a(f'<g class="rv-moon" opacity="0"><circle cx="{SUNX-120}" cy="300" r="150" fill="url(#rvMoonG)"/>'
+      f'<circle cx="{SUNX-120}" cy="300" r="40" fill="#FBF8EA"/>'
+      f'<circle cx="{SUNX-104}" cy="288" r="8" fill="#E6E2D2" opacity=".55"/>'
+      f'<circle cx="{SUNX-136}" cy="312" r="11" fill="#E6E2D2" opacity=".45"/>'
+      f'<circle cx="{SUNX-112}" cy="320" r="6" fill="#E6E2D2" opacity=".4"/></g>')
 
     for i, (cx, cy, sc, op) in enumerate(
             [(170, 288, 1.5, .36), (690, 272, 1.2, .28), (420, 338, 1.8, .26),
@@ -521,10 +531,10 @@ PAGES = [
     '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
     '<p class="addr">Civil Bazar, Shamnagar Road<br>Dharamshala, District Kangra<br>'
     'Himachal Pradesh &mdash; 176215</p>'
- + ORN +
+    '<p class="label phlab">Phone Number <span class="deva">फ़ोन नंबर</span></p>'
+    '<p class="phone">+91 94180 65277<br>+91 97368 53285</p>' + ORN +
     '<p class="deva blessing">आपकी उपस्थिति ही<br>हमारा आशीर्वाद है</p>'
-    '<p class="trans">Your presence is our blessing.</p>'
-    '<p class="deva sub">शुभाकांक्षी — दोनों परिवार</p>',
+    '<p class="trans">Your presence is our blessing.</p>',
 ]
 
 SCENE_B = 5.2
@@ -538,7 +548,7 @@ print('pages %d | first %.1f | last %.1f | duration %.1f' % (len(PAGES), TIMES[1
 TPL = r'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Invitation film</title><style>
 @@FONTS@@
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:1080px;height:1920px;overflow:hidden;background:#F7DED6}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#F7DED6}
 body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
   background:
     radial-gradient(ellipse at 12% 6%,rgba(224,154,60,.28) 0%,transparent 42%),
@@ -547,8 +557,8 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
     linear-gradient(168deg,#FDF4EE 0%,#F5DAD1 100%);}
 .deva{font-family:'Tiro Devanagari Hindi',serif}
 
-#nagL,#nagR{position:absolute;bottom:0;width:168px;z-index:8}
-#nagL{left:8px} #nagR{right:8px}
+#nagL,#nagR{position:absolute;bottom:0;width:176px;z-index:8}
+#nagL{left:2px} #nagR{right:2px}
 .nag{width:100%;height:auto;display:block}
 #shower{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:40}
 .fl{position:absolute;top:0;left:0;will-change:transform,opacity}
@@ -568,18 +578,21 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 #stage{position:absolute;inset:0;perspective:3200px;z-index:25}
 
 /* the picture fills the top of the frame, edge to edge */
-#art{position:absolute;top:0;left:0;width:1080px;height:700px;overflow:hidden;z-index:2}
+#art{position:absolute;top:0;left:0;width:780px;height:1080px;overflow:hidden;z-index:2}
 #art .river{position:absolute;inset:0;width:100%;height:100%;display:block}
 .rk-fg{position:absolute;display:block;z-index:6;transform-origin:50% 82%;
   will-change:transform,left,top,width}
+#nightVeil{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;
+  mix-blend-mode:multiply;
+  background:linear-gradient(180deg,#5B5296 0%,#6E5C9E 34%,#8D74A8 56%,#6E5F96 78%,#4E4878 100%)}
 #artVg{position:absolute;inset:0;z-index:7;pointer-events:none;
   background:radial-gradient(ellipse at 50% 42%,transparent 62%,rgba(60,10,28,.26) 100%)}
-#artHem{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:10;
-  background:linear-gradient(90deg,transparent,#A8822C 18%,#E6C56A 50%,#A8822C 82%,transparent)}
+#artHem{position:absolute;top:0;bottom:0;right:0;width:5px;z-index:10;
+  background:linear-gradient(180deg,transparent,#A8822C 18%,#E6C56A 50%,#A8822C 82%,transparent)}
 
 /* the page that is read sits under it, and turns on its left edge */
-#pagewrap{position:absolute;top:700px;left:0;width:1080px;height:1220px;
-  transform-style:preserve-3d;z-index:3;background:#F7DED6}
+#pagewrap{position:absolute;top:0;left:780px;width:1140px;height:1080px;
+  overflow:hidden;perspective:2600px;z-index:3;background:#F7DED6}
 .pg{position:absolute;inset:0;overflow:hidden;
   background:linear-gradient(162deg,#FFFCFA 0%,#FDF3EF 100%)}
 #leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;z-index:6}
@@ -629,17 +642,22 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .famrule{width:58%;height:1px;margin:26px auto;
   background:linear-gradient(90deg,transparent,rgba(168,130,44,.7),transparent)}
 .bigdate{display:flex;flex-direction:column;align-items:center;margin-top:4px}
-.bigdate b{font-size:184px;line-height:.92;font-weight:500;color:@@ROSE@@}
-.bigdate span{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+.bigdate b{font-size:158px;line-height:.92;font-weight:500;color:@@ROSE@@}
+.bigdate span{font-size:36px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
   color:@@ROSE2@@;margin-top:14px}
-.bigdate i{font-size:40px;font-style:normal;color:@@INK@@;margin-top:10px}
-.evname{font-size:88px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
-.prog{list-style:none;margin-top:30px;display:grid;gap:26px;width:100%}
+.bigdate i{font-size:36px;font-style:normal;color:@@INK@@;margin-top:10px}
+.evname{font-size:78px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
+.prog{list-style:none;margin-top:22px;display:grid;gap:18px;width:100%}
 .prog li{display:flex;align-items:flex-start;justify-content:center;gap:26px;text-align:left}
 .prog li>b{flex:none;font-size:44px;font-weight:600;color:@@ROSE@@;min-width:4.7em;
   text-align:right;line-height:1.26}
 .prog li>span{font-size:46px;color:@@INK@@;line-height:1.24;min-width:11.4em}
 .prog li>span i{display:block;font-size:.88em;font-style:normal;color:@@ROSE2@@;margin-top:5px}
+.phlab{margin-top:2px}
+.phlab .deva{letter-spacing:0;text-transform:none;font-weight:400;font-size:1.15em;
+  color:@@INK@@;margin-left:16px}
+.phone{font-size:52px;font-weight:600;line-height:1.46;color:@@ROSE@@;letter-spacing:.02em;
+  margin-top:10px}
 .bless{font-size:38px;font-style:italic;color:@@INK@@;margin-top:22px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.1em}
 .kin{font-size:44px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
@@ -654,9 +672,9 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .evb h3 .deva{font-weight:400;font-size:.7em;color:@@ROSE2@@;margin-left:10px}
 .evx{font-size:50px;font-style:italic;color:@@INK@@;margin-top:9px}
 .evt{font-size:46px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:18px}
-.venue{font-size:82px;font-weight:600;color:@@ROSE@@}
-.addr{font-size:44px;line-height:1.55;color:@@INK@@}
-.blessing{font-size:68px;line-height:1.7;color:@@ROSE@@}
+.venue{font-size:74px;font-weight:600;color:@@ROSE@@}
+.addr{font-size:41px;line-height:1.55;color:@@INK@@}
+.blessing{font-size:58px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 
 <div id="intro">
@@ -669,7 +687,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
     @@RIVER@@
     <img class="rk-fg" src="@@DANCERS@@" alt="Radha and Krishna on the bank of the Yamuna">
     <div id="nagL">@@NAGL@@</div><div id="nagR">@@NAGR@@</div>
-    <div id="artVg"></div><div id="artHem"></div>
+    <div id="nightVeil"></div><div id="artVg"></div><div id="artHem"></div>
   </div>
   <div id="pagewrap">
     <div class="pg" id="pR"><div class="inner" id="iR"></div><div id="uShade"></div></div>
@@ -688,7 +706,7 @@ const PAGEHTML = @@PAGES@@, TIMES = @@TIMES@@, DURATION = @@DUR@@;
 const HOLD = @@HOLD@@, TURN = @@TURN@@, OPEN_DUR = @@OPEN@@, COVER_HOLD = @@COVER_HOLD@@;
 const SCENE_B = @@SCENE_B@@, BOOK_IN = SCENE_B - 0.2, BEAT = 60/104, START = TIMES[1];
 /* the cut-out is 660x800 and its lowest pixel sits at 0.819 of that height */
-const CPW = 660, CPH = 800, FEET = 0.819, GROUND = 652;
+const CPW = 660, CPH = 800, FEET = 0.819, GROUND = 988;
 
 const RV=[...document.querySelectorAll('.river')].map(sv=>{
   const grab=c=>[...sv.querySelectorAll(c)].map(el=>{
@@ -697,6 +715,7 @@ const RV=[...document.querySelectorAll('.river')].map(sv=>{
             b:el.getAttribute('transform')||'',sb:(sw&&sw.getAttribute('transform'))||''};
   });
   return {sun:sv.querySelector('.rv-sun'),warm:sv.querySelector('.rv-warm'),
+    moon:sv.querySelector('.rv-moon'),
     stars:[...sv.querySelectorAll('.rv-star')].map((el,i)=>({el,i,o:+el.getAttribute('opacity')})),
     refl:[...sv.querySelectorAll('.rv-rf')].map(el=>({el,i:+el.dataset.i,r:+el.getAttribute('rx')})),
     clouds:grab('.rv-cloud'),birds:grab('.rv-bird'),shim:grab('.rv-shim'),
@@ -752,6 +771,7 @@ function seek(t){
   const nagIn=easeOut(clamp((t-0.3)/1.1,0,1))*clamp((DURATION-t)/1.2,0,1);
   /* a drummer's hand rises slowly and snaps down onto the beat */
   const swing=p=>p<0.74?Math.sin(p/0.74*Math.PI/2):Math.cos((p-0.74)/0.26*Math.PI/2);
+  const nightVeil=document.getElementById('nightVeil');
   const PIV={armL:[86,136],foreL:[52,170],armR:[154,136],foreR:[190,172]};
   for(let d=0;d<2;d++){
     const el=nags[d], mir=d?'scaleX(-1) ':'';
@@ -779,14 +799,25 @@ function seek(t){
   /* ── the story told on the left-hand page ──────────────────────────
      The sun sinks over the Yamuna, the water catches it, reeds and grass
      move on the breeze, and the fireflies come out as it darkens. */
-  const ST=Math.max(0,t-START), dusk=clamp(ST/22,0,1);
-  const A2=START+10.5, A3=START+20.5;
+  const ST=Math.max(0,t-START);
+  /* The day turns while the card is read: noon when the first page opens,
+     gold through the Sangeet, night by the time the venue is given — the
+     same arc the programme runs, 12:15 in the afternoon to dinner at 8. */
+  const DAY=easeIO(clamp(ST/(DURATION-START-1.2),0,1));
+  const dusk=DAY, A2=START+10.5, A3=START+20.5;
+  const gold=Math.sin(Math.PI*clamp(DAY/0.86,0,1));       /* peaks at golden hour */
+  const night=easeIO(clamp((DAY-0.42)/0.5,0,1));
+  nightVeil.style.opacity=(0.80*night).toFixed(3);
   const act3=clamp((t-A3)/5,0,1);
   for(const R of RV){
-    R.sun.setAttribute('transform','translate(0 '+(16*dusk).toFixed(1)+')');
-    R.warm.setAttribute('opacity',(0.5*act3).toFixed(3));
+    /* the sun sinks and goes out; the moon comes up behind it */
+    R.sun.setAttribute('transform','translate('+(70*DAY).toFixed(1)+' '+(210*DAY).toFixed(1)+')');
+    R.sun.setAttribute('opacity',(clamp(1-(DAY-0.62)/0.26,0,1)).toFixed(3));
+    R.moon.setAttribute('opacity',(0.95*clamp((DAY-0.52)/0.3,0,1)).toFixed(3));
+    R.moon.setAttribute('transform','translate(0 '+(120-150*clamp((DAY-0.45)/0.5,0,1)).toFixed(1)+')');
+    R.warm.setAttribute('opacity',(0.5*gold*(1-night*0.8)+0.12*act3).toFixed(3));
     for(const s of R.stars)
-      s.el.setAttribute('opacity',(s.o*(0.28+0.72*dusk)*(0.76+0.24*Math.sin(t*2.1+s.i))).toFixed(3));
+      s.el.setAttribute('opacity',(s.o*1.5*night*(0.72+0.28*Math.sin(t*2.1+s.i))).toFixed(3));
     for(const c of R.clouds)
       c.el.setAttribute('transform','translate('+(c.sp*ST*2.6).toFixed(1)+' 0)');
     for(const b of R.birds)
@@ -802,7 +833,7 @@ function seek(t){
     for(const r of R.reeds) r.sw.setAttribute('transform','rotate('+(3.4*Math.sin(ST*0.9+r.i*0.7)).toFixed(2)+')');
     for(const v of R.vines) v.sw.setAttribute('transform','rotate('+(4.2*Math.sin(ST*0.8+v.i*1.1)).toFixed(2)+')');
     for(const g of R.grass) g.sw.setAttribute('transform','rotate('+(5*Math.sin(ST*1.15+g.i*0.6)).toFixed(2)+')');
-    const flyIn=clamp((ST-9)/5,0,1);
+    const flyIn=clamp((DAY-0.34)/0.3,0,1);
     for(const f of R.flies){
       f.el.setAttribute('transform','translate('+(22*Math.sin(ST*0.42+f.i*1.7)).toFixed(1)+' '
         +(16*Math.sin(ST*0.33+f.i*2.3)).toFixed(1)+')');
@@ -840,7 +871,7 @@ function seek(t){
       d.flame.style.transformOrigin='0px 0px';
       d.flame.style.transform='scale('+(0.94+0.1*fk).toFixed(3)+','+fk.toFixed(3)
         +') rotate('+(3.5*Math.sin(ST*3.7+d.i)).toFixed(2)+'deg)';
-      d.flame.style.opacity=(0.82+0.18*fk).toFixed(3);
+      d.flame.style.opacity=((0.4+0.6*night)*(0.82+0.18*fk)).toFixed(3);
     }
   }
 
@@ -849,15 +880,15 @@ function seek(t){
   let cw,dx,dy=0,cop=1,danceAmt;
   if(t<A2){
     const p=easeIO(clamp((t-START)/(A2-START),0,1));
-    cw=252+92*p; dx=380-380*p; danceAmt=0;
+    cw=252+86*p; dx=300-300*p; danceAmt=0;
     dy=-7*Math.abs(Math.sin(Math.PI*(t-START)/0.62))*(1-0.85*p);   /* the step of a walk */
     cop=clamp((t-START)/1.4,0,1);
   } else if(t<A3){
     const p=easeIO(clamp((t-A2)/(A3-A2),0,1));
-    cw=344+40*p; dx=0; danceAmt=0;
+    cw=338+36*p; dx=0; danceAmt=0;
     dy=-3.4*Math.sin(2*Math.PI*(t-A2)/3.1);                        /* at rest, breathing */
   } else {
-    cw=384+56*easeIO(clamp((t-A3)/(DURATION-A3),0,1)); dx=0;
+    cw=374+52*easeIO(clamp((t-A3)/(DURATION-A3),0,1)); dx=0;
     danceAmt=easeIO(clamp((t-A3)/2.6,0,1));
   }
   const ph=t/BEAT;
@@ -868,7 +899,7 @@ function seek(t){
   const chF=cw*CPH/CPW;                       /* the cut-out keeps its proportions */
   for(const d of dancers){
     d.style.width=cw.toFixed(1)+'px';
-    d.style.left=(540-cw/2+dx).toFixed(1)+'px';
+    d.style.left=(390-cw/2+dx).toFixed(1)+'px';
     d.style.top=(GROUND-FEET*chF+dy).toFixed(1)+'px';
     d.style.transform='translateY('+bounce.toFixed(2)+'px) rotate('+sway.toFixed(2)
       +'deg) skewX('+skew.toFixed(2)+'deg) scale('+pulse.toFixed(4)+')';

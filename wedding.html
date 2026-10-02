@@ -14,6 +14,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
+<script>
+  /* ?only=<event key> prints a card for that occasion alone; with no
+     parameter the card carries every occasion, as it always has. */
+  (function () {
+    var only = new URLSearchParams(location.search).get('only');
+    if (only) {
+      document.documentElement.setAttribute('data-only', only);
+      document.title = 'Smatav & Priyanka \u2014 Wedding Invitation';
+    }
+  })();
+</script>
+
 <!--
   ══════════════════════════════════════════════════════════════════
    WEDDING_DETAILS
@@ -64,6 +76,14 @@
   .prog li{font-size:clamp(.82rem,2vw,.95rem);line-height:1.34;color:var(--ink)}
   .prog b{font-weight:600;color:var(--maroon);letter-spacing:.03em;margin-right:.5em}
   .prog .hi{font-family:var(--deva);color:var(--gold-deep);font-size:.92em;margin-left:.35em}
+  .phone-label{margin-top:clamp(16px,3vw,24px)}
+  .phone-label .hi{font-family:var(--deva);letter-spacing:0;text-transform:none;
+    font-weight:400;color:var(--ink);margin-left:.5em}
+  .phone{margin-top:.45rem;font-size:clamp(1.05rem,3vw,1.3rem);font-weight:600;
+    color:var(--maroon);letter-spacing:.02em;line-height:1.5}
+  .phone a{color:inherit;text-decoration:none}
+  .phone .dot{color:var(--gold);margin:0 .7em}
+  @media (max-width:430px){ .phone a{display:block} .phone .dot{display:none} }
   .sheet{display:contents}
   html{scroll-behavior:smooth;background:#F7DED6}
 
@@ -578,15 +598,28 @@
 
     /* sheet two: the occasions, the venue and the blessing */
     .occasions{padding-top:0}
-    .leaf{width:162px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
+    .leaf{width:138px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
     .leaf-cap{margin-bottom:10px}
-    .occasions+.label{margin-top:18px}
+    .occasions+.label{margin-top:12px}
+    .phone-label{margin-top:12px}
+    .phone{font-size:1.12rem;margin-top:.3rem}
     .event{break-inside:avoid}
-    .blessing{margin-top:10px}
-    .event .body{padding:11px 15px}
-    .event .when{padding:10px 8px}
-    .compliments{margin-top:10px}
+    .blessing{margin-top:6px}
+    .event .body{padding:8px 15px}
+    .event .when{padding:8px 8px}
+    .compliments{margin-top:6px}
     .addr{max-width:none}
+
+    /* with one occasion on the sheet there is room to spare, so the
+       painting and the spacing both grow back */
+    html[data-only] .leaf{width:196px}
+    html[data-only] .leaf-cap{margin-bottom:16px}
+    html[data-only] .occasions+.label{margin-top:26px}
+    html[data-only] .event .body{padding:16px 18px}
+    html[data-only] .event .when{padding:16px 8px}
+    html[data-only] .phone-label{margin-top:22px}
+    html[data-only] .blessing{margin-top:20px}
+    html[data-only] .compliments{margin-top:16px}
 
     @page{size:A4;margin:10mm}
   }
@@ -736,6 +769,11 @@
     <span class="hi">सिविल बाज़ार, शामनगर रोड<br>धर्मशाला, ज़िला कांगड़ा<br>हिमाचल प्रदेश — १७६२१५</span>
   </p>
 
+  <p class="label phone-label">Phone Number <span class="hi">फ़ोन नंबर</span></p>
+  <p class="phone">
+    <a href="tel:+919418065277">+91 94180 65277</a><span class="dot">&middot;</span><a href="tel:+919736853285">+91 97368 53285</a>
+  </p>
+
   <div class="countdown" aria-label="Countdown to the first celebration">
     <div class="unit"><b data-d>--</b><span>Days</span></div>
     <div class="unit"><b data-h>--</b><span>Hours</span></div>
@@ -814,11 +852,24 @@
   }
 
   /* ── the occasions, derived ── */
+  var ONLY = document.documentElement.getAttribute('data-only');
+  var shown = WEDDING.events.filter(function (ev) { return !ONLY || ev.key === ONLY; });
+  if (!shown.length) { shown = WEDDING.events; ONLY = null; }
+
+  if (ONLY) {
+    var vl = document.querySelector('.venue-label');
+    if (vl) {
+      vl.textContent = 'The occasion at';
+      var vlh = vl.nextElementSibling;
+      if (vlh && vlh.classList.contains('label-hi')) { vlh.textContent = 'कार्यक्रम स्थल'; }
+    }
+  }
+
   var wrap = document.querySelector('[data-events]');
-  if (wrap && WEDDING.events.length) {
+  if (wrap && shown.length) {
     var frag = document.createDocumentFragment();
 
-    WEDDING.events.forEach(function(ev){
+    shown.forEach(function(ev){
       var cd = calendarDate(ev.date);
 
       var when = el('div', 'when');
@@ -863,9 +914,10 @@
 
   /* ── countdown to the first occasion ── */
   var target = null;
-  WEDDING.events.forEach(function(ev){
+  shown.forEach(function(ev){
     if (ev.key === WEDDING.countdownTo) { target = ev; }
   });
+  if (!target) { target = shown[0]; }
 
   var box = document.querySelector('.countdown');
   if (box && target) {
