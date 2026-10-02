@@ -38,6 +38,9 @@ const HONESTY_RULES = `Hard rules:
 - Keep it to what fits on 1-2 A4 pages.`;
 
 const EVAL_SCHEMA = obj({
+  jobTitle: { type: "string", description: "The job's title as stated on the page" },
+  company: { type: "string", description: "Hiring company name as stated on the page" },
+  location: { type: "string", description: "Job location, or empty" },
   matchScore: { type: "integer", description: "0-100 fit of candidate to this job" },
   shouldApply: { type: "boolean" },
   matchReasons: { ...strArr, description: "2-4 short reasons it fits" },
@@ -72,6 +75,7 @@ The candidate is a FULL-STACK engineer: back end (Adobe Commerce/Magento 2, PHP,
 - Nice-to-have or secondary skills she lacks (e.g. Hyva, AWS, Docker, Vue, Node) lower the score a little but never make shouldApply false.
 - Seniority: she has 9+ years. Senior, Lead, Staff and mid-level (4+ yrs) roles are all fine; Architect/Manager roles are fine if hands-on.
 - shouldApply=false ONLY when the core stack is unrelated (e.g. Java/Spring-only, .NET, Python/data science, native iOS/Android, SAP, Salesforce, QA-only, DevOps-only) or the role is not a developer role.
+The job text may be a raw copy of the whole web page (navigation, other job titles, ads). Find the actual job being viewed and judge only that; fill jobTitle/company/location from it.
 Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjacent but workable; below 55 = unrelated.
 
 ${HONESTY_RULES}
@@ -84,8 +88,8 @@ ${JSON.stringify(resume, null, 2)}
 Notice period: ${applicationAnswers.noticePeriod ?? applicationAnswers.noticePeriodDays ?? "not stated"}
 
 JOB:
-Title: ${job.title}
-Company: ${job.company}
+Title: ${job.title || "(not detected — read it from the text)"}
+Company: ${job.company || "(not detected — read it from the text)"}
 Location: ${job.location ?? ""}
 Hiring contact: ${contact}
 Description:

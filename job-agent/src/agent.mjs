@@ -84,8 +84,16 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("err", `  could not read ${ref.url}: ${e.message.split("\n")[0]}`);
           continue;
         }
+        if ((job.description ?? "").length < 200) {
+          // The page didn't render (logged out, captcha, slow network). Save what we saw and move on.
+          const shot = path.join(DATA_DIR, "debug", `${key}-${job.jobId}.png`);
+          fs.mkdirSync(path.dirname(shot), { recursive: true });
+          await page.screenshot({ path: shot }).catch(() => {});
+          log("err", `  couldn't read the job page (${ref.url}) — screenshot saved to data/debug/`);
+          continue;
+        }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
-        log("info", `• ${job.title} — ${job.company}`);
+        log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
 
         if (job.alreadyApplied) {
           tracker.upsert(key, job.jobId, { ...base, status: "applied", historyNote: "Already applied before the agent saw it" });
@@ -113,6 +121,13 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("err", `  Claude evaluation failed: ${e.message}`);
           continue;
         }
+        // Fill in anything the page selectors missed from what Claude read on the page.
+        const wasMissing = !job.title || !job.company;
+        job.title ||= ev.jobTitle;
+        job.company ||= ev.company;
+        job.location ||= ev.location;
+        Object.assign(base, { title: job.title, company: job.company, location: job.location });
+        if (wasMissing) log("dim", `  = ${job.title} — ${job.company}`);
         const scored = {
           ...base, matchScore: ev.matchScore, matchReasons: ev.matchReasons, missingSkills: ev.missingSkills,
           hiringContact: job.hiringContact ?? null, hiringMessage: ev.hiringMessage, messageStatus: "draft",
@@ -123,7 +138,7 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("dim", `  score ${ev.matchScore}% but mentions "${hit}" — applying anyway`);
         } else if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {
           tracker.upsert(key, job.jobId, { ...scored, status: "skipped", skipReason: "score", historyNote: `Match ${ev.matchScore}% — not her stack` });
-          log("dim", `  match ${ev.matchScore}% — skipping (${ev.missingSkills.slice(0, 3).join(", ") || "low fit"})`);
+          log("dim", `  match ${ev.matchScore}% — skipping: ${ev.missingSkills.slice(0, 3).join(", ") || ev.matchReasons[0] || "not her stack"}`);
           stats.skipped++;
           continue;
         }

@@ -1,4 +1,4 @@
-import { firstVisible, textOf } from "./browser.mjs";
+import { firstVisible, readPage, textOf } from "./browser.mjs";
 import { fillForm } from "./forms.mjs";
 import { confirm, humanPause, log, sleep, waitForUser } from "./util.mjs";
 
@@ -30,24 +30,34 @@ export async function search(page, s, cfg) {
 
 export async function getJob(page, ref) {
   await page.goto(ref.url, { waitUntil: "domcontentloaded" });
-  await firstVisible(page, ["h1"], 10000);
-  await humanPause();
+  await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+  await firstVisible(page, ["h1", "main"], 10000);
+  await humanPause(1500, 2500);
   // Expand "See more" on the description.
-  const more = await firstVisible(page, ["button.jobs-description__footer-button", "button[aria-label*='see more' i]"]);
-  await more?.click().catch(() => {});
+  await page.getByRole("button", { name: /see more|show more/i }).first().click({ timeout: 1500 }).catch(() => {});
+  await sleep(500);
 
-  const top = (await textOf(page, [".job-details-jobs-unified-top-card__container--two-pane", ".jobs-unified-top-card", "main"])) || "";
-  const applyBtn = await firstVisible(page, ["button.jobs-apply-button", "button[aria-label*='Apply to' i]", "a[aria-label*='Apply' i]"], 4000);
-  const applyLabel = applyBtn ? ((await applyBtn.getAttribute("aria-label")) || (await applyBtn.innerText())) : "";
+  const { docTitle, h1, pageText } = await readPage(page);
+  // The tab title is "<job title> | <company> | LinkedIn" (sometimes with a "(3) " prefix).
+  const parts = docTitle.replace(/^\(\d+\)\s*/, "").split(/\s+\|\s+/);
+  const fromTitle = parts.length >= 3 && /linkedin/i.test(parts.at(-1)) ? { title: parts[0], company: parts[1] } : {};
+
+  const description = await textOf(page, ["#job-details", ".jobs-description__content", ".jobs-box__html-content", "[class*=jobs-description]"]);
+  const company = (await textOf(page, [".job-details-jobs-unified-top-card__company-name a", ".job-details-jobs-unified-top-card__company-name", ".jobs-unified-top-card__company-name"])).split("\n")[0];
+
+  const easy = await page.getByRole("button", { name: /easy apply/i }).first().isVisible({ timeout: 3000 }).catch(() => false);
+  const other = !easy && (await page.getByRole("button", { name: /^apply/i }).or(page.getByRole("link", { name: /^apply/i })).first().isVisible().catch(() => false));
   return {
     ...ref,
-    title: await textOf(page, ["h1"]),
-    company: await textOf(page, [".job-details-jobs-unified-top-card__company-name a", ".job-details-jobs-unified-top-card__company-name", ".jobs-unified-top-card__company-name"]),
-    location: (await textOf(page, [".job-details-jobs-unified-top-card__primary-description-container", ".job-details-jobs-unified-top-card__tertiary-description-container", ".jobs-unified-top-card__bullet"])).split("·")[0].trim(),
-    description: await textOf(page, ["#job-details", ".jobs-description__content", ".jobs-box__html-content", "article"]),
+    title: h1 || fromTitle.title || "",
+    company: company || fromTitle.company || "",
+    location: (await textOf(page, [".job-details-jobs-unified-top-card__primary-description-container", ".job-details-jobs-unified-top-card__tertiary-description-container"])).split("·")[0].trim(),
+    // Fall back to the whole page text when the description block isn't found.
+    description: description.length > 300 ? description : pageText,
+    pageTextLength: pageText.length,
     hiringContact: await hiringContact(page),
-    alreadyApplied: /\bApplied\b.*\bago\b|Application submitted/i.test(top),
-    applyType: !applyBtn ? "none" : /easy apply/i.test(applyLabel) ? "easy" : "external",
+    alreadyApplied: /\bApplied\s+\d+\s*(minute|hour|day|week|month)s?\s+ago\b|Application submitted/i.test(pageText.slice(0, 3000)),
+    applyType: easy ? "easy" : other ? "external" : "none",
   };
 }
 
@@ -55,7 +65,9 @@ export async function getJob(page, ref) {
 async function hiringContact(page) {
   return page.evaluate(() => {
     const heading = [...document.querySelectorAll("h2, h3, span")].find((el) => /meet the hiring team|people you can reach out to/i.test(el.textContent || ""));
-    const box = heading?.closest("section, .artdeco-card, div[class*=people-who-can-help], div[class*=hirer]") ?? null;
+    // Walk up from the heading to the nearest block that contains a profile link.
+    let box = heading ?? null;
+    for (let i = 0; box && i < 6 && !box.querySelector?.("a[href*='/in/']"); i++) box = box.parentElement;
     const link = box?.querySelector("a[href*='/in/']");
     if (!link) return null;
     box.setAttribute("data-ja", "hiring-team");
@@ -118,8 +130,8 @@ export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
 const modalSel = ".jobs-easy-apply-modal, div[role=dialog][aria-labelledby*='easy-apply' i], div[role=dialog]";
 
 export async function apply(page, job, { resumePath, profile, mode }) {
-  const btn = await firstVisible(page, ["button.jobs-apply-button", "button[aria-label*='Easy Apply' i]"], 5000);
-  if (!btn) return { status: "needs_attention", note: "Easy Apply button not found" };
+  const btn = page.getByRole("button", { name: /easy apply/i }).first();
+  if (!(await btn.isVisible({ timeout: 5000 }).catch(() => false))) return { status: "needs_attention", note: "Easy Apply button not found" };
   await btn.click();
   const modal = await firstVisible(page, [modalSel], 8000);
   if (!modal) return { status: "needs_attention", note: "Easy Apply dialog did not open" };

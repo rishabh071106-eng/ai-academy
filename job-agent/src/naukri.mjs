@@ -1,4 +1,4 @@
-import { firstVisible, textOf } from "./browser.mjs";
+import { firstVisible, readPage, textOf } from "./browser.mjs";
 import { answerQuestions } from "./llm.mjs";
 import { confirm, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
 
@@ -25,17 +25,21 @@ export async function search(page, s, cfg) {
 
 export async function getJob(page, ref) {
   await page.goto(ref.url, { waitUntil: "domcontentloaded" });
-  await firstVisible(page, ["h1"], 15000);
-  await humanPause();
+  await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
+  await firstVisible(page, ["h1", "main"], 15000);
+  await humanPause(1200, 2200);
+  const { h1, pageText } = await readPage(page);
   const applyBtn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"]);
   const applyText = applyBtn ? (await applyBtn.innerText()).trim() : "";
   const external = await firstVisible(page, ["#company-site-button", "button:has-text('Apply on company site')"]);
+  const description = await textOf(page, ["[class*=job-desc]", "[class*=dang-inner-html]", "section[class*=JD]"]);
   return {
     ...ref,
-    title: await textOf(page, ["h1[class*=jd-header-title]", "h1"]),
+    title: h1,
     company: (await textOf(page, ["[class*=jd-header-comp-name] a", "[class*=jd-header-comp-name]"])).split("\n")[0],
     location: await textOf(page, ["[class*=jhc__location]", "[class*=location] a", "[class*=loc]"]),
-    description: await textOf(page, ["[class*=job-desc]", "[class*=dang-inner-html]", "section[class*=JD]", "main"]),
+    description: description.length > 300 ? description : pageText,
+    pageTextLength: pageText.length,
     alreadyApplied: /^applied$/i.test(applyText),
     applyType: external ? "external" : applyBtn ? "easy" : "none",
   };

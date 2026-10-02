@@ -36,3 +36,15 @@ export async function textOf(scope, selectors) {
   const el = await firstVisible(scope, selectors);
   return el ? (await el.innerText().catch(() => "")).trim() : "";
 }
+
+/**
+ * Layout-independent read of a job page: the tab title plus the visible text of the main
+ * area. Claude extracts title/company/description from this when CSS selectors miss.
+ */
+export async function readPage(page) {
+  return page.evaluate(() => {
+    const main = document.querySelector("main") || document.body;
+    const h1 = document.querySelector("h1")?.innerText?.trim() || "";
+    return { docTitle: document.title, h1, pageText: (main.innerText || "").replace(/\n{3,}/g, "\n\n").slice(0, 25000) };
+  });
+}
