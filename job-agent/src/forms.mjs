@@ -74,7 +74,7 @@ export async function collectFields(root) {
 }
 
 /** Answers that come straight from the profile, no LLM needed. */
-function quickAnswer(field, profile) {
+export function quickAnswer(field, profile) {
   const l = field.label.toLowerCase();
   const [first, ...rest] = profile.name.split(" ");
   if (/e-?mail/.test(l)) return profile.email;
@@ -139,8 +139,23 @@ async function fillOne(root, field, answer) {
   return true;
 }
 
-function bestOption(options = [], answer) {
+export function bestOption(options = [], answer) {
   const a = String(answer).trim().toLowerCase();
+  // A number against range options ("0-3 years", "4-7", "8+ years", "more than 10").
+  const num = /^\d+(\.\d+)?$/.test(a) ? Number(a) : null;
+  if (num !== null && !options.some((o) => o.trim().toLowerCase() === a)) {
+    const hit = options.findIndex((o) => {
+      const t = o.toLowerCase();
+      const r = t.match(/(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)/);
+      if (r) return num >= +r[1] && num <= +r[2];
+      const plus = t.match(/(\d+(?:\.\d+)?)\s*\+|(?:more than|above|over|greater than)\s*(\d+(?:\.\d+)?)/);
+      if (plus) return num >= +(plus[1] ?? plus[2]);
+      const less = t.match(/(?:less than|below|under|upto|up to)\s*(\d+(?:\.\d+)?)/);
+      if (less) return num < +less[1];
+      return false;
+    });
+    if (hit >= 0) return hit;
+  }
   let i = options.findIndex((o) => o.toLowerCase() === a);
   if (i < 0) i = options.findIndex((o) => o.toLowerCase().startsWith(a) || a.startsWith(o.toLowerCase()));
   if (i < 0) i = options.findIndex((o) => o.toLowerCase().includes(a));

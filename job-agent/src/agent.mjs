@@ -7,7 +7,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { connect } from "./browser.mjs";
-import { applyExternal } from "./external.mjs";
+import { applyExternal, applyLinkInText } from "./external.mjs";
 import { syncProfile } from "./profile-sync.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
@@ -205,8 +205,19 @@ for (const [key, mod] of Object.entries(platforms)) {
 
         if (job.applyType !== "easy") {
           tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
-          if (mode !== "dry-run" && job.applyType === "external" && config.externalApply?.enabled !== false && mod.openCompanySite) {
-            await applyTo(mod, key, page, job, resumePath, { external: true, coverLetter: ev.hiringMessage?.full?.replace(/^Hi[^,\n]*,/, "Dear Hiring Team,") });
+          const formLink = applyLinkInText(job.description);
+          const coverLetter = ev.hiringMessage?.full?.replace(/^Hi[^,\n]*,/, "Dear Hiring Team,");
+          if (mode !== "dry-run" && formLink && config.externalApply?.enabled !== false) {
+            // The post says "apply via this Google Form".
+            log("dim", `  application form in the post: ${formLink}`);
+            const open = async (p) => {
+              const tab = await p.context().newPage();
+              await tab.goto(formLink, { waitUntil: "domcontentloaded" });
+              return tab;
+            };
+            await applyTo(mod, key, page, job, resumePath, { external: true, open, coverLetter });
+          } else if (mode !== "dry-run" && job.applyType === "external" && config.externalApply?.enabled !== false && mod.openCompanySite) {
+            await applyTo(mod, key, page, job, resumePath, { external: true, coverLetter });
           } else if (mode !== "dry-run") {
             await maybeMessage(mod, key, page, job);
           }
@@ -238,12 +249,12 @@ for (const [key, mod] of Object.entries(platforms)) {
   }
 }
 
-async function applyTo(mod, key, page, job, resumePath, { external = false, coverLetter } = {}) {
+async function applyTo(mod, key, page, job, resumePath, { external = false, coverLetter, open } = {}) {
   let result;
   try {
     if (external) {
       log("info", "  applying on the company's site…");
-      result = await applyExternal(page, job, { open: mod.openCompanySite, resumePath, profile, mode, coverLetter });
+      result = await applyExternal(page, job, { open: open ?? mod.openCompanySite, resumePath, profile, mode, coverLetter });
       // Back to the job page for the hiring-team message.
       if (!page.url().includes(new URL(job.url).hostname)) await page.goto(job.url, { waitUntil: "domcontentloaded" }).catch(() => {});
     } else {

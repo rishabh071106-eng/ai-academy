@@ -6,12 +6,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
+import { googleForm } from "./googleforms.mjs";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep } from "./util.mjs";
 
 const SUCCESS = /thank you for (applying|your application|your interest)|application (has been |was )?(received|submitted|sent|complete)|we('ve| have) received your application|successfully (applied|submitted)|you('ve| have) applied/i;
 
 export function detectAts(url) {
   const u = url.toLowerCase();
+  if (/docs\.google\.com\/forms|forms\.gle/.test(u)) return "googleforms";
   if (/myworkdayjobs\.com|\.workday\.com|wd\d+\.myworkday/.test(u)) return "workday";
   if (/greenhouse\.io/.test(u)) return "greenhouse";
   if (/lever\.co/.test(u)) return "lever";
@@ -288,10 +290,19 @@ export async function applyExternal(page, job, { open, resumePath, profile, mode
   const ctx = { job, resumePath, profile, mode, coverLetter, ats };
   let result;
   try {
-    result = ats === "workday" ? await workday(site, ctx) : await generic(site, ctx);
+    result =
+      ats === "workday" ? await workday(site, ctx)
+      : ats === "googleforms" ? await googleForm(site, ctx, (reason) => handOver(site, job, mode, reason))
+      : await generic(site, ctx);
   } catch (e) {
     result = await handOver(site, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false);
   }
   if (site !== page) await site.close().catch(() => {});
   return result ?? { status: "needs_attention", note: "Company site: unfinished" };
+}
+
+/** Application links written in the job description (Google Forms, careers pages…). */
+export function applyLinkInText(text) {
+  const m = String(text || "").match(/https?:\/\/(?:forms\.gle\/[\w-]+|docs\.google\.com\/forms\/[^\s)"'<>]+)/i);
+  return m?.[0] ?? null;
 }
