@@ -128,5 +128,9 @@
   "excludeCompanies": [],
   "externalApply": {
     "enabled": true
-  }
+  },
+  "maxJobsToReview": 0,
+  "maxResultPagesPerSearch": 5,
+  "keepGoing": true,
+  "recheckMinutes": 30
 }

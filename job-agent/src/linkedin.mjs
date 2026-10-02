@@ -11,6 +11,7 @@ export async function search(page, s, cfg) {
   if (cfg.easyApplyOnly) params.set("f_AL", "true");
   if (cfg.postedWithinDays) params.set("f_TPR", `r${cfg.postedWithinDays * 86400}`);
   if (s.remote) params.set("f_WT", "2");
+  if (cfg.pageIndex) params.set("start", String(cfg.pageIndex * 25));
   await page.goto(`https://www.linkedin.com/jobs/search/?${params}`, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await sleep(3000);
@@ -26,6 +27,13 @@ export async function search(page, s, cfg) {
     if (s.location) await loc.fill(s.location).catch(() => {});
     await box.press("Enter").catch(() => {});
     await sleep(4000);
+    // The typed search starts at page 1; go to the requested results page.
+    if (cfg.pageIndex) {
+      const pg = page.getByRole("button", { name: new RegExp(`^Page ${cfg.pageIndex + 1}$`, "i") }).filter({ visible: true }).first();
+      const ok = await pg.click({ timeout: 4000 }).then(() => true).catch(() => false);
+      if (!ok) return []; // no such page
+      await sleep(3000);
+    }
   }
   log("dim", `  LinkedIn shows: ${(await page.title()).replace(/\s*\|\s*LinkedIn$/, "")}`);
 

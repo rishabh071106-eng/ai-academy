@@ -23,12 +23,21 @@ const baseResume = await syncProfile(config);
 const profile = loadProfile();
 const mode = args.mode ?? config.mode ?? "review";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
+// 0 = no limit: review every job the searches return (across result pages).
+const reviewLimit = Number(args.review ?? config.maxJobsToReview ?? 0);
+const keepGoing = args["keep-going"] !== undefined ? args["keep-going"] !== "false" : !!config.keepGoing;
+const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
+const recheckMinutes = Number(config.recheckMinutes ?? 30);
 const platforms = { linkedin, naukri };
 const DONE = new Set(["applied", "interview", "offer", "rejected", "withdrawn", "skipped", "external", "needs_attention"]);
 
 const todo = Object.values(profile.applicationAnswers ?? {}).filter((v) => typeof v === "string" && v.startsWith("TODO"));
 if (todo.length) log("warn", `profile.json has ${todo.length} TODO answers (notice period, CTC…). Questions needing them will pause for you.`);
-log("info", `Mode: ${mode} · max applications this run: ${maxApply}`);
+log("info", `Mode: ${mode} · apply to up to ${maxApply} · review ${reviewLimit || "all"} jobs${keepGoing ? " · keep going until done" : ""}`);
+
+// One bad page or network hiccup must never end the run.
+process.on("unhandledRejection", (e) => log("err", `  (recovered) ${String(e?.message ?? e).split("\n")[0]}`));
+process.on("uncaughtException", (e) => log("err", `  (recovered) ${String(e?.message ?? e).split("\n")[0]}`));
 
 let context;
 try {
@@ -62,19 +71,35 @@ const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 for (const [key, mod] of Object.entries(platforms)) {
   const pcfg = config.platforms[key];
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
-  const page = await context.newPage();
+  let page = await context.newPage();
   openPages.add(page);
+  // Reopen the tab / reconnect to Chrome if something closed it.
+  const ensurePage = async () => {
+    if (!context.browser()?.isConnected?.() && context.browser()) ({ context } = await connect());
+    if (page.isClosed()) {
+      page = await context.newPage();
+      openPages.add(page);
+      log("dim", "  (reopened the agent's tab)");
+    }
+  };
+  const done = () => applied >= maxApply || (reviewLimit > 0 && stats.scanned >= reviewLimit);
   try {
+   for (let round = 1; ; round++) {
+    const reviewedBefore = stats.scanned;
     for (const s of pcfg.searches) {
-      if (applied >= maxApply) break;
-      log("info", `\n[${key}] Searching "${s.keywords}" in ${s.location}…`);
+     for (let pageIndex = 0; pageIndex < maxPages; pageIndex++) {
+      if (done()) break;
+      await ensurePage().catch(() => {});
+      log("info", `\n[${key}] Searching "${s.keywords}" in ${s.location}${pageIndex ? ` (results page ${pageIndex + 1})` : ""}…`);
       let refs = [];
       try {
-        refs = await mod.search(page, s, { ...pcfg, max: config.maxJobsToScanPerSearch });
+        refs = await mod.search(page, s, { ...pcfg, max: config.maxJobsToScanPerSearch, pageIndex });
       } catch (e) {
         log("err", `  search failed: ${e.message.split("\n")[0]}`);
-        continue;
+        break;
       }
+      if (!refs.length) break;
+      const unseen = refs.filter((r) => !tracker.find(key, r.jobId)).length;
       // Cheap relevance check on the result cards, before opening anything.
       const offTopic = refs.filter((r) => r.cardText && !isRelevant(r.cardText));
       refs = refs.filter((r) => !offTopic.includes(r));
@@ -82,7 +107,9 @@ for (const [key, mod] of Object.entries(platforms)) {
       if (offTopic.length) log("dim", `  ignoring off-topic: ${offTopic.slice(0, 6).map((r) => r.cardText.split(/ · |\n/)[0].slice(0, 45)).join(" | ")}${offTopic.length > 6 ? " …" : ""}`);
 
       for (const ref of refs) {
-        if (applied >= maxApply) break;
+        if (done()) break;
+       try {
+        await ensurePage();
         const existing = tracker.find(key, ref.jobId);
         // Low-score skips get a second look (matching rules may have changed); exclusions don't.
         const retry = existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason);
@@ -191,8 +218,21 @@ for (const [key, mod] of Object.entries(platforms)) {
         }
         tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted" });
         await applyTo(mod, key, page, job, resumePath);
+       } catch (e) {
+        // Anything unexpected on one job: note it and move on to the next.
+        log("err", `  error on ${ref.url}: ${String(e?.message ?? e).split("\n")[0]} — moving on`);
+       }
       }
+      // Deeper result pages only help while they still contain jobs we haven't seen.
+      if (pageIndex > 0 && !unseen) break;
+     }
     }
+    if (done() || !keepGoing) break;
+    if (stats.scanned === reviewedBefore) {
+      log("info", `\n[${key}] Every current job has been reviewed (${applied}/${maxApply} applied). Checking for new postings in ${recheckMinutes} min — press Stop to end.`);
+      await sleep(recheckMinutes * 60000);
+    }
+   }
   } finally {
     // Keep the tab: closing the last tab of a window closes the window in her Chrome.
   }

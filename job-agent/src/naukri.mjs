@@ -8,7 +8,7 @@ export const name = "naukri";
 
 export async function search(page, s, cfg) {
   const remote = /remote|wfh/i.test(s.location ?? "");
-  const slug = slugify(s.keywords) + "-jobs" + (s.location && !remote ? `-in-${slugify(s.location)}` : "");
+  const slug = slugify(s.keywords) + "-jobs" + (s.location && !remote ? `-in-${slugify(s.location)}` : "") + (cfg.pageIndex ? `-${cfg.pageIndex + 1}` : "");
   const params = new URLSearchParams({ k: s.keywords });
   if (s.location && !remote) params.set("l", s.location);
   if (remote) params.set("wfhType", "2");

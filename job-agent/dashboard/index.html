@@ -177,6 +177,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 .agents .agent { margin-bottom: 0; }
 .agent-title .pf { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
 .agents .seg button { padding: 6px 10px; font-size: 12.5px; }
+.agent .keep { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
 @media (max-width: 1080px) { .agents { grid-template-columns: 1fr; } }
 
 .agent-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
@@ -657,14 +658,14 @@ const MODE_HINT = {
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
 const AG = {
-  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, since: 0, running: false, pending: null, logOpen: false },
-  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, since: 0, running: false, pending: null, logOpen: false },
+  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
+  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
 };
 try {
   const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
   for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
 } catch {}
-const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max }])))); } catch {} };
+const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max, review: a.review, keepGoing: a.keepGoing }])))); } catch {} };
 
 $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
   <div class="card agent" data-p="${k}">
@@ -679,7 +680,9 @@ $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
       <div class="seg" data-el="seg" role="group" aria-label="${a.label} mode">
         <button data-v="dry-run">Practice</button><button data-v="review">Ask before submit</button><button data-v="auto">Fully automatic</button>
       </div>
-      <label class="sub" title="Maximum applications this run">Max <input class="num-input" data-el="max" type="number" min="1" max="50" value="${a.max}"></label>
+      <label class="sub" title="Stop after this many applications">Apply to <input class="num-input" data-el="max" type="number" min="1" max="500" value="${a.max}"></label>
+      <label class="sub" title="Stop after reviewing this many jobs (0 = all of them)">Review <small>(0 = all)</small> <input class="num-input" data-el="review" type="number" min="0" max="5000" value="${a.review}" placeholder="all"></label>
+      <label class="sub keep" title="Don't stop until the target is reached: go through more result pages, and check again for new postings when everything has been reviewed"><input type="checkbox" data-el="keep" ${a.keepGoing ? "checked" : ""}> Keep going until done</label>
     </div>
     <div class="mode-hint" data-el="hint"></div>
     <div data-el="ask"></div>
@@ -696,6 +699,8 @@ for (const k of Object.keys(AG)) {
   paintMode(k);
   el(k, "seg").onclick = (e) => { const b = e.target.closest("button"); if (!b || AG[k].running) return; AG[k].mode = b.dataset.v; paintMode(k); savePrefs(); };
   el(k, "max").onchange = (e) => { AG[k].max = Number(e.target.value) || 15; savePrefs(); };
+  el(k, "review").onchange = (e) => { AG[k].review = Math.max(0, Number(e.target.value) || 0); savePrefs(); };
+  el(k, "keep").onchange = (e) => { AG[k].keepGoing = e.target.checked; savePrefs(); };
   el(k, "logToggle").onclick = () => toggleLog(k);
   el(k, "btn").onclick = () => startStop(k);
 }
@@ -710,7 +715,7 @@ async function startStop(k) {
   btn.disabled = true;
   const starting = !AG[k].running;
   try {
-    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max }) });
+    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing }) });
     const data = await r.json();
     if (!r.ok) alert(data.error || "Something went wrong");
     else if (starting) { AG[k].since = 0; el(k, "log").innerHTML = ""; toggleLog(k, true); }
@@ -760,19 +765,20 @@ async function pollAgent() {
   pollTimer = setTimeout(pollAgent, anyRunning ? 1500 : 6000);
 }
 
+const appliedSince = (k, t) => state.rows.filter((r) => r.platform === k && r.appliedAt && new Date(r.appliedAt).getTime() >= (t || 0)).length;
 function renderAgent(k, s) {
   const a = AG[k], btn = el(k, "btn");
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
   const modeName = MODE_NAME[s.options?.mode] ?? "";
   if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
-  else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · keep the agent's Chrome open`; }
+  else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · applied ${appliedSince(k, s.startedAt)}/${s.options?.max ?? "?"}${s.restarts ? ` · restarted ${s.restarts}×` : ""} · keep the agent's Chrome open`; }
   else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
   else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start"; }
   btn.className = "btn " + (s.running ? "stop" : "go");
   btn.textContent = s.running ? "■ Stop" : "▶ Start";
   el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
-  el(k, "max").disabled = s.running;
+  el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = s.running;
   if (s.running && s.options?.mode && s.options.mode !== a.mode) { a.mode = s.options.mode; paintMode(k); }
 
   const key = s.pending ? s.pending.id : null;
