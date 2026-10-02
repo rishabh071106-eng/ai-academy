@@ -10,10 +10,33 @@ listen to, quick quizzes, 10 years of previous papers (official sources) and a p
 | `exams.html` | Exam categories: Defence & SSB (NDA, CDS, AFCAT, SSB), Civil Services (UPSC CSE), Bank exams, IT placements (+ your own company list) |
 | `exam.html?id=<exam>` | Lectures by subject, exam pattern, previous papers 2016–2025, free resources |
 | `lecture.html?...` | Swipe card player with quizzes and audiobook mode (browser text-to-speech) |
+| `languages.html` | Languages hub: Local (Bengali, Kannada, Malayalam, Tamil, Telugu) and International (Spanish, French, German, Japanese, Mandarin), plus a phrase translator across all 10 |
+| `language.html?id=<lang>` | One language: about, pronunciation tips, its 6 lessons |
+| `lesson.html?lang=..&l=..` | Animated lesson: Meera (SVG presenter) says each phrase, you repeat, she explains it; then a 4-question check |
+| `challenge.html` | 60-day challenge board (one lesson a day, all 60 lessons), streak, catch-up days, printable certificate |
 | `progress.html` | Performance board: chapters done, audio minutes, streak, quiz accuracy, badges, activity log, export/import |
 | `ai.html` + `chapters/` | The old AI chapters, kept as an archive (daily generation is paused) |
 
 All content is JSON in `data/` — see `data/SCHEMA.md` to add an exam or chapter, then run `npm run validate`.
+Language content lives in `data/languages/` (see `data/SCHEMA.md`).
+
+### Recording Meera's voice with ElevenLabs
+
+Lessons play studio recordings from `assets/audio/lang/` when they exist, and fall back to the device's
+voice otherwise. `assets/audio/lang/manifest.json` stores a hash of each clip's text, so an edited phrase
+never plays stale audio.
+
+```bash
+npm run voices -- --dry-run                      # what would be recorded (1,260 clips)
+ELEVENLABS_API_KEY=sk_... ELEVENLABS_VOICE_ID=<voice id> npm run voices   # record missing/changed clips
+ELEVENLABS_API_KEY=sk_... npm run voices -- --lang tamil                  # one language at a time
+npm run voices -- --export   # audio-script.csv, if you'd rather record by hand in the ElevenLabs app...
+npm run voices -- --scan     # ...then save each mp3 at its "file" path and rebuild the manifest
+```
+
+The default model is `eleven_v3`, which covers all five Indian languages; use one female voice for both
+English and native clips so Meera sounds like the same person throughout. Commit `assets/audio/lang/`.
+
 Progress is stored in the student's browser (`localStorage`); there are no accounts yet.
 
 Previous papers and NCERT PDFs are **linked** to the official sites (upsc.gov.in, ncert.nic.in, etc.), not

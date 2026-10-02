@@ -108,6 +108,7 @@ const NAV_LINKS = [
   ['index.html', 'Home'],
   ['ncert.html', 'NCERT'],
   ['exams.html', 'Exam Prep'],
+  ['languages.html', 'Languages'],
   ['progress.html', 'My Progress'],
 ];
 

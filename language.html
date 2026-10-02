@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Language &mdash; AI Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@600&family=Noto+Sans+Kannada:wght@600&family=Noto+Sans+Malayalam:wght@600&family=Noto+Sans+Tamil:wght@600&family=Noto+Sans+Telugu:wght@600&family=Noto+Sans+JP:wght@600&family=Noto+Sans+SC:wght@600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/learn.css">
+</head>
+<body>
+<main class="page">
+  <div class="crumbs"><a href="languages.html">Languages</a> › <span id="crumb"></span></div>
+  <section class="lang-hero">
+    <div class="page-head" style="margin:0" id="head"></div>
+    <div><div class="presenter" id="host"></div></div>
+  </section>
+  <h2 class="section-title">🎓 Lessons</h2>
+  <p class="section-sub">Each lesson takes about 5 minutes: Meera introduces six phrases, you repeat them, then a four-question check.</p>
+  <div class="subject" id="lessons" style="overflow:hidden"></div>
+  <h2 class="section-title">🗣 Pronunciation tips</h2>
+  <ul class="clean tile" id="tips"></ul>
+</main>
+
+<script type="module">
+import { renderNav, renderFooter, esc, param } from './assets/js/app.js';
+import { loadLangCatalog, loadLanguage, langStore, challengePlan, lessonHref } from './assets/js/lang.js';
+import { createPresenter } from './assets/js/presenter.js';
+renderNav('languages.html');
+renderFooter();
+
+const host = createPresenter(document.getElementById('host'));
+host.setGesture('wave'); setTimeout(() => host.setGesture('explain'), 2400); setTimeout(() => host.setGesture('idle'), 5200);
+
+const id = param('id');
+const cat = await loadLangCatalog();
+const l = await loadLanguage(id).catch(() => null);
+if (!l) { document.getElementById('head').innerHTML = '<h1>Language not found</h1><p><a href="languages.html">All languages</a></p>'; throw new Error('missing'); }
+const s = langStore.read(), plan = challengePlan(cat);
+const category = cat.categories.find(c => c.id === l.category);
+document.title = `Learn ${l.name} — AI Academy`;
+document.getElementById('crumb').textContent = l.name;
+const done = l.lessons.filter(x => s.done[`${id}/${x.id}`]).length;
+const next = cat.lessons.find(x => !s.done[`${id}/${x.id}`]) || cat.lessons[0];
+
+document.getElementById('head').innerHTML = `
+  <div class="pill">${category.icon} ${esc(category.name)}</div>
+  <h1 style="margin-top:.6rem">${esc(l.name)} <span lang="${l.bcp47}" style="-webkit-text-fill-color:var(--accent-2)">${esc(l.native)}</span></h1>
+  <p>${esc(l.about)}</p>
+  <div class="kv" style="margin:1.2rem 0">
+    <div class="stat"><b style="font-size:1.2rem">${esc(l.speakers)}</b><span>speakers</span></div>
+    <div class="stat"><b style="font-size:1.2rem">${esc(l.script)}</b><span>writing system</span></div>
+    <div class="stat"><b style="font-size:1.2rem">${done}/${l.lessons.length}</b><span>lessons done</span></div>
+  </div>
+  <p class="meta" style="margin-bottom:1rem">📍 ${esc(l.region)}</p>
+  <a class="btn btn-primary" href="${lessonHref(id, next.id)}">${done ? (done === l.lessons.length ? 'Review lesson 1' : 'Continue') : 'Start lesson 1'} →</a>`;
+
+document.getElementById('lessons').innerHTML = cat.lessons.map((m, i) => {
+  const k = `${id}/${m.id}`, d = s.done[k], day = plan.find(p => p.key === k).day;
+  const first = l.lessons.find(x => x.id === m.id)?.phrases[0];
+  return `<a class="chapter-row ${d ? 'done' : ''}" href="${lessonHref(id, m.id)}" ${i === 0 ? 'style="border-top:none"' : ''}>
+    <span class="tick">${d ? '✓' : i + 1}</span>
+    <span class="t"><b>${esc(m.title)}</b><div class="meta">${esc(m.goal)}${first ? ` · <span lang="${l.bcp47}">${esc(first.native)}</span>` : ''}</div></span>
+    <span class="meta" style="text-align:right">Day ${day}${d?.total ? `<br>${d.score}/${d.total}` : ''}</span></a>`;
+}).join('');
+document.getElementById('tips').innerHTML = (l.pronunciation || []).map(t => `<li>${esc(t)}</li>`).join('');
+</script>
+</body>
+</html>

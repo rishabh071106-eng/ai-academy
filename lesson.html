@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Language lesson &mdash; AI Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Kannada:wght@500;700&family=Noto+Sans+Malayalam:wght@500;700&family=Noto+Sans+Tamil:wght@500;700&family=Noto+Sans+Telugu:wght@500;700&family=Noto+Sans+JP:wght@500;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/learn.css">
+</head>
+<body class="lecture-page">
+<main class="studio">
+  <div class="crumbs" id="crumbs"></div>
+  <div class="player-top">
+    <div class="bar" style="flex:1"><span id="prog" style="width:0"></span></div>
+    <span class="meta" id="count"></span>
+  </div>
+  <h1 id="title" style="font-size:clamp(1.3rem,3.5vw,1.8rem);font-weight:800;margin:.4rem 0 1rem"></h1>
+
+  <section class="stage">
+    <div class="presenter" id="host"></div>
+    <div>
+      <div class="board" id="board"></div>
+      <div class="caption" id="caption" aria-live="polite"><span class="who">Meera</span>Press play to start the lesson.</div>
+    </div>
+  </section>
+
+  <div class="transport">
+    <button class="icon-btn" id="prevP" title="Previous phrase" aria-label="Previous phrase">⏮</button>
+    <button class="icon-btn play-big" id="play" aria-label="Play">▶</button>
+    <button class="icon-btn" id="nextP" title="Next phrase" aria-label="Next phrase">⏭</button>
+    <button class="icon-btn" id="again" title="Hear the phrase again" aria-label="Hear the phrase again">🔁</button>
+    <label class="meta">Speed <select id="rate" class="audio-sel"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label>
+  </div>
+  <p class="src-note" id="src"></p>
+
+  <h2 class="section-title">Phrases in this lesson</h2>
+  <div class="phrase-list" id="phrases"></div>
+
+  <section class="quiz-wrap" id="quiz" hidden></section>
+</main>
+
+<script type="module">
+import { renderNav, renderFooter, store, addTime, logActivity, esc, param, fmtMinutes } from './assets/js/app.js';
+import { loadLangCatalog, loadLanguage, loadAudioManifest, lessonSegments, lessonQuiz, clipFor, markLessonDone, lessonHref, challengePlan, langStore } from './assets/js/lang.js';
+import { createPresenter } from './assets/js/presenter.js';
+renderNav('languages.html');
+renderFooter();
+
+const langId = param('lang'), lessonId = param('l');
+const [cat, manifest] = await Promise.all([loadLangCatalog(), loadAudioManifest()]);
+const language = await loadLanguage(langId).catch(() => null);
+const li = cat.lessons.findIndex(l => l.id === lessonId);
+const board = document.getElementById('board');
+if (!language || li < 0) { board.innerHTML = '<h2>Lesson not found</h2><a href="languages.html">All languages</a>'; throw new Error('missing'); }
+
+const meta = cat.lessons[li], lesson = language.lessons.find(l => l.id === lessonId);
+const segs = lessonSegments(cat, language, lessonId);
+const key = `${langId}/${lessonId}`, storeKey = `lang/${key}`;
+const plan = challengePlan(cat), day = plan.find(p => p.key === key)?.day;
+const nextLesson = plan[plan.findIndex(p => p.key === key) + 1];
+const host = cat.host.name;
+
+document.title = `${language.name}: ${meta.title} — AI Academy`;
+document.getElementById('crumbs').innerHTML = `<a href="languages.html">Languages</a> › <a href="language.html?id=${langId}">${esc(language.name)}</a> › Lesson ${li + 1}${day ? ` · Challenge day ${day}` : ''}`;
+document.getElementById('title').textContent = `${language.name} · ${meta.title}`;
+document.documentElement.style.setProperty('--native-font', `'Noto Sans', 'Noto Sans ${{ bengali: 'Bengali', kannada: 'Kannada', malayalam: 'Malayalam', tamil: 'Tamil', telugu: 'Telugu', japanese: 'JP', mandarin: 'SC' }[langId] || ''}'`);
+store.update(s => { s.last = { href: lessonHref(langId, lessonId), title: `${language.name}: ${meta.title}`, exam: 'Languages', at: Date.now() }; });
+
+const presenter = createPresenter(document.getElementById('host'));
+const phrases = meta.phrases.map(p => ({ en: p.en, ...lesson.phrases.find(x => x.key === p.key) }));
+const recorded = segs.filter(s => s.voice && clipFor(manifest, s)).length, speakable = segs.filter(s => s.voice).length;
+
+// ---------- Board + phrase list
+const nativeSpan = t => `<span lang="${language.bcp47}" style="font-family:var(--native-font),Inter,sans-serif">${esc(t)}</span>`;
+function showBoard(seg) {
+  board.classList.toggle('live', !!seg && seg.phrase !== undefined);
+  if (!seg || seg.phrase === undefined) {
+    board.innerHTML = `<div class="k">Lesson ${li + 1} of ${cat.lessons.length}</div>
+      <div class="native" style="font-size:clamp(1.6rem,4vw,2.4rem)">${nativeSpan(language.native)}</div>
+      <div class="en"><b>${esc(meta.title)}</b>: ${esc(meta.goal)}</div>
+      ${seg?.kind === 'tip' ? `<div class="note">💡 ${esc(lesson.tip)}</div>` : `<div class="note">${phrases.length} phrases · listen, repeat, then a quick check</div>`}`;
+    return;
+  }
+  const p = phrases[seg.phrase];
+  board.innerHTML = `<div class="k">Phrase ${seg.phrase + 1} of ${phrases.length}</div>
+    <div class="native">${nativeSpan(p.native)}</div>
+    <div class="roman">${esc(p.roman)}</div>
+    <div class="en">“${esc(p.en)}”</div>
+    ${seg.kind === 'yourturn' ? '<div class="yourturn"><i></i> Your turn — say it out loud</div>' : ''}
+    ${seg.kind === 'note' ? `<div class="note">${esc(p.note)}</div>` : ''}`;
+  highlightPhrase(seg.phrase);
+}
+const list = document.getElementById('phrases');
+list.innerHTML = phrases.map((p, i) => `<button class="phrase-item" data-i="${i}">
+  <span class="icon-btn" aria-hidden="true">▶</span>
+  <span class="t"><div class="n">${nativeSpan(p.native)}</div><div class="s">${esc(p.roman)} · ${esc(p.en)}</div></span></button>`).join('');
+function highlightPhrase(i) { [...list.children].forEach((b, j) => b.classList.toggle('on', j === i)); }
+list.addEventListener('click', e => {
+  const b = e.target.closest('.phrase-item');
+  if (b) playFrom(segs.findIndex(s => s.phrase === +b.dataset.i));
+});
+
+// ---------- Audio engine: ElevenLabs recordings when present, device voice otherwise
+const audio = new Audio(); audio.preload = 'auto';
+let actx, analyser, buf;
+function ensureAudioGraph() {
+  if (actx) { actx.resume(); return; }
+  try {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = actx.createMediaElementSource(audio);
+    analyser = actx.createAnalyser(); analyser.fftSize = 1024;
+    src.connect(analyser); analyser.connect(actx.destination);
+    buf = new Uint8Array(analyser.fftSize);
+  } catch { actx = null; }
+}
+let mode = 'idle'; // 'clip' | 'tts' | 'pause' | 'idle'
+(function meter() {
+  let v = 0;
+  if (mode === 'clip' && analyser && !audio.paused) {
+    analyser.getByteTimeDomainData(buf);
+    let sum = 0; for (const x of buf) { const d = (x - 128) / 128; sum += d * d; }
+    v = Math.min(1, Math.sqrt(sum / buf.length) * 5.5);
+  } else if (mode === 'clip' && !audio.paused) {
+    v = 0.35 + 0.35 * Math.sin(performance.now() / 70) * Math.random();
+  } else if (mode === 'tts' && speechSynthesis.speaking) {
+    // No audio data from speech synthesis: approximate syllables.
+    const t = performance.now() / 1000;
+    v = Math.max(0, 0.45 * Math.abs(Math.sin(t * 11)) + 0.3 * Math.abs(Math.sin(t * 7.3)) - 0.08);
+  }
+  presenter.setLevel(v);
+  requestAnimationFrame(meter);
+})();
+
+let voices = [];
+const loadVoices = () => { voices = 'speechSynthesis' in window ? speechSynthesis.getVoices() : []; };
+loadVoices();
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
+const FEMALE = /female|woman|samantha|victoria|karen|moira|tessa|veena|heera|kalpana|swara|aditi|raveena|google uk english female|zira|susan|serena|fiona|neerja/i;
+function voiceFor(tag) {
+  const base = tag.split('-')[0];
+  const match = voices.filter(v => v.lang.replace('_', '-').toLowerCase().startsWith(base));
+  return match.find(v => v.lang.replace('_', '-') === tag && FEMALE.test(v.name)) || match.find(v => v.lang.replace('_', '-') === tag)
+    || match.find(v => FEMALE.test(v.name)) || match[0] || null;
+}
+const enVoice = () => voiceFor('en-IN') && FEMALE.test(voiceFor('en-IN').name) ? voiceFor('en-IN') : (voiceFor('en-GB') || voiceFor('en-US') || voiceFor('en-IN'));
+
+const rateSel = document.getElementById('rate');
+try { rateSel.value = localStorage.getItem('academy.lang.rate') || '1'; } catch {}
+rateSel.onchange = () => { try { localStorage.setItem('academy.lang.rate', rateSel.value); } catch {} };
+
+function playClip(url, token) {
+  return new Promise(resolve => {
+    mode = 'clip';
+    audio.src = url; audio.playbackRate = +rateSel.value;
+    audio.onended = audio.onerror = () => resolve();
+    audio.play().catch(() => resolve());
+    token.stop = () => { audio.pause(); resolve(); };
+  });
+}
+function speakTTS(text, tag, token) {
+  return new Promise(resolve => {
+    if (!('speechSynthesis' in window)) return setTimeout(resolve, 1200);
+    mode = 'tts';
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = tag === 'en' ? enVoice() : voiceFor(tag);
+    if (v) u.voice = v;
+    u.lang = v?.lang || (tag === 'en' ? 'en-IN' : tag);
+    u.rate = +rateSel.value * (tag === 'en' ? 1 : 0.85);
+    u.pitch = 1.05;
+    u.onend = u.onerror = () => resolve();
+    // Chrome sometimes never fires onend for cancelled utterances.
+    token.stop = () => { speechSynthesis.cancel(); resolve(); };
+    speechSynthesis.speak(u);
+  });
+}
+const wait = (ms, token) => new Promise(r => { const t = setTimeout(r, ms); token.stop = () => { clearTimeout(t); r(); }; });
+
+async function playSegment(seg, token) {
+  presenter.setGesture(seg.gesture || (seg.kind === 'yourturn' ? 'listen' : 'idle'));
+  showBoard(seg);
+  const caption = seg.kind === 'yourturn' ? `<span class="who">${host}</span>${esc(seg.text)}`
+    : seg.kind === 'say' ? `<span class="who">${host}</span><span lang="${language.bcp47}">${esc(seg.text)}</span> <span class="meta">(${esc(seg.roman)})</span>`
+    : `<span class="who">${host}</span>${esc(seg.text)}`;
+  document.getElementById('caption').innerHTML = caption;
+  if (seg.kind === 'yourturn') { mode = 'pause'; presenter.setTalking(false); return wait(seg.pauseMs / +rateSel.value, token); }
+  presenter.setTalking(true);
+  const url = clipFor(manifest, seg);
+  if (url) await playClip(url, token);
+  else if (seg.voice === 'en' || voiceFor(seg.voice)) await speakTTS(seg.text, seg.voice, token);
+  // No device voice for this language: read the romanised form with the English voice.
+  else await speakTTS(seg.roman || seg.text, 'en', token);
+  presenter.setTalking(false);
+  mode = 'idle';
+  if (!token.cancelled) await wait(seg.kind === 'say' ? 500 : 350, token);
+}
+
+// ---------- Sequencer
+let pos = 0, playing = false, token = null, listenSec = 0;
+const playBtn = document.getElementById('play');
+function setPlaying(v) {
+  playing = v;
+  playBtn.textContent = v ? '⏸' : '▶';
+  playBtn.setAttribute('aria-label', v ? 'Pause' : 'Play');
+  if (!v) { presenter.setTalking(false); presenter.setGesture('idle'); }
+}
+function progress() {
+  document.getElementById('prog').style.width = `${Math.round(100 * pos / segs.length)}%`;
+  const p = segs[Math.min(pos, segs.length - 1)];
+  document.getElementById('count').textContent = p.phrase !== undefined ? `Phrase ${p.phrase + 1}/${phrases.length}` : '';
+}
+async function run() {
+  setPlaying(true);
+  const my = token = { cancelled: false, stop: () => {} };
+  while (pos < segs.length && !my.cancelled) {
+    progress();
+    await playSegment(segs[pos], my);
+    if (my.cancelled) return;
+    pos++;
+  }
+  if (my.cancelled) return;
+  progress();
+  setPlaying(false);
+  showQuiz();
+}
+function stop() { if (token) { token.cancelled = true; token.stop(); } mode = 'idle'; setPlaying(false); }
+function playFrom(i) { stop(); ensureAudioGraph(); pos = Math.max(0, i); run(); }
+playBtn.onclick = () => {
+  if (playing) return stop();
+  ensureAudioGraph();
+  if (pos >= segs.length) pos = 0;
+  run();
+};
+const curPhrase = () => segs[Math.min(pos, segs.length - 1)].phrase;
+document.getElementById('nextP').onclick = () => {
+  const c = curPhrase() ?? -1;
+  const i = segs.findIndex(s => s.phrase === c + 1);
+  playFrom(i >= 0 ? i : segs.findIndex(s => s.kind === 'tip'));
+};
+document.getElementById('prevP').onclick = () => {
+  const c = curPhrase();
+  playFrom(c === undefined ? (pos > 0 && segs[pos].kind !== 'intro' ? segs.findIndex(s => s.phrase === phrases.length - 1) : 0)
+    : c === 0 ? 0 : segs.findIndex(s => s.phrase === c - 1));
+};
+document.getElementById('again').onclick = async () => {
+  const c = curPhrase() ?? 0;
+  stop(); ensureAudioGraph();
+  const seg = segs.find(s => s.phrase === c && s.kind === 'say');
+  const my = token = { cancelled: false, stop: () => {} };
+  pos = segs.indexOf(seg);
+  await playSegment(seg, my);
+  if (!my.cancelled) { presenter.setGesture('idle'); mode = 'idle'; }
+};
+addEventListener('keydown', e => {
+  if (e.target.closest('input,select,textarea')) return;
+  if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+  if (e.code === 'ArrowRight') document.getElementById('nextP').click();
+  if (e.code === 'ArrowLeft') document.getElementById('prevP').click();
+});
+
+document.getElementById('src').textContent = recorded === speakable
+  ? `🎙 Studio voice recordings (ElevenLabs) · ${host}`
+  : recorded ? `🎙 ${recorded}/${speakable} clips recorded; the rest use your device's voice`
+  : `Using your device's voice. Studio recordings play automatically once they're generated.`;
+
+// Listening time feeds the main progress board.
+setInterval(() => {
+  if (document.hidden || !playing) return;
+  listenSec++;
+  if (listenSec % 15 === 0) addTime('listen', storeKey, 15);
+}, 1000);
+addEventListener('pagehide', () => { addTime('listen', storeKey, listenSec % 15); listenSec -= listenSec % 15; stop(); });
+
+showBoard(null);
+progress();
+presenter.setGesture('wave');
+setTimeout(() => !playing && presenter.setGesture('idle'), 2600);
+
+// ---------- Quick check + completion
+const quizEl = document.getElementById('quiz');
+function showQuiz() {
+  presenter.setGesture('explain');
+  const qs = lessonQuiz(cat, language, lessonId);
+  const answers = {};
+  quizEl.hidden = false;
+  quizEl.innerHTML = `<h2 class="section-title">✅ Quick check</h2><p class="section-sub">${qs.length} questions. Tap the right answer.</p>` +
+    qs.map((q, i) => `<article class="card quiz" data-i="${i}" style="min-height:0;margin-bottom:1rem">
+      <div class="type">Question ${i + 1}</div><h2 style="font-size:1.15rem">${esc(q.q)}</h2>
+      <div>${q.options.map((o, j) => `<button class="opt" data-j="${j}">${String.fromCharCode(65 + j)}. ${esc(o)}</button>`).join('')}</div>
+      <div class="explain" hidden>${esc(q.phrase.native)} (${esc(q.phrase.roman)}) means: “${esc(q.phrase.en)}”</div></article>`).join('') +
+    '<div id="done"></div>';
+  quizEl.scrollIntoView({ behavior: 'smooth' });
+  quizEl.onclick = e => {
+    const btn = e.target.closest('.opt'); if (!btn) return;
+    const card = btn.closest('.card'), i = +card.dataset.i;
+    if (i in answers) return;
+    answers[i] = +btn.dataset.j === qs[i].answer;
+    card.querySelectorAll('.opt').forEach((b, j) => { b.disabled = true; if (j === qs[i].answer) b.classList.add('right'); });
+    if (!answers[i]) btn.classList.add('wrong');
+    card.querySelector('.explain').hidden = false;
+    if (Object.keys(answers).length === qs.length) finish(Object.values(answers).filter(Boolean).length, qs.length);
+  };
+}
+function finish(score, total) {
+  markLessonDone(key, score, total);
+  store.update(s => {
+    const prev = s.completed[storeKey];
+    s.completed[storeKey] = { at: Date.now(), score: prev && prev.score > score ? prev.score : score, total };
+  });
+  logActivity({ type: 'complete', key: storeKey, exam: `Languages · ${language.name}`, title: meta.title, listened: listenSec, score, total, href: lessonHref(langId, lessonId) });
+  const started = !!langStore.read().start;
+  presenter.setGesture('wave');
+  setTimeout(() => presenter.setGesture('idle'), 2500);
+  document.getElementById('done').innerHTML = `<div class="tile" style="text-align:center;align-items:center">
+    <div class="icon">🏅</div><h3>Lesson complete! ${score}/${total}</h3>
+    <p>${score === total ? 'Perfect score.' : 'Replay the phrases you missed, then try again any time.'}${day ? ` This was day ${day} of the ${cat.challenge.days}-day challenge.` : ''}${listenSec > 30 ? ` You listened for ${fmtMinutes(listenSec)}.` : ''}</p>
+    <div class="cta-row" style="justify-content:center">
+      ${nextLesson ? `<a class="btn btn-primary" href="${lessonHref(nextLesson.lang, nextLesson.lesson)}">Next lesson →</a>` : ''}
+      <a class="btn btn-ghost" href="challenge.html">${started ? 'Challenge board' : 'Start the 60-day challenge'}</a>
+      <a class="btn btn-ghost" href="language.html?id=${langId}">All ${esc(language.name)} lessons</a>
+    </div></div>`;
+}
+</script>
+</body>
+</html>

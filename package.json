@@ -6,6 +6,7 @@
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "validate": "node scripts/validate-content.mjs",
+    "voices": "node scripts/elevenlabs.mjs",
     "dev": "python3 -m http.server 8080"
   },
   "dependencies": {

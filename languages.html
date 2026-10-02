@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Languages &mdash; AI Academy</title>
+<meta name="description" content="Learn Bengali, Kannada, Malayalam, Tamil, Telugu, Spanish, French, German, Japanese and Mandarin with Meera, your animated language coach. 60-day challenge, voiced lessons and a phrase translator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@600&family=Noto+Sans+Kannada:wght@600&family=Noto+Sans+Malayalam:wght@600&family=Noto+Sans+Tamil:wght@600&family=Noto+Sans+Telugu:wght@600&family=Noto+Sans+JP:wght@600&family=Noto+Sans+SC:wght@600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/learn.css">
+</head>
+<body>
+<main class="page">
+  <section class="lang-hero">
+    <div class="page-head" style="margin:0">
+      <div class="hero-badge"><span class="pulse"></span> 10 languages · 60 lessons · 60 days</div>
+      <h1>Speak a new language with Meera</h1>
+      <p>Meera, your language coach, says every phrase the way native speakers do, then explains what it means and when to use it. Listen, repeat out loud and take a quick check after each lesson.</p>
+      <div class="cta-row" style="justify-content:flex-start;margin-top:1.2rem">
+        <a class="btn btn-primary" href="challenge.html" id="ctaChallenge">Start the 60-day challenge →</a>
+        <a class="btn btn-ghost" href="#translator">Phrase translator</a>
+      </div>
+    </div>
+    <div>
+      <div class="presenter" id="host"></div>
+      <div class="speech" id="hello">Hi, I'm Meera! Pick a language and I'll teach you the phrases you'll actually use.</div>
+    </div>
+  </section>
+
+  <div id="challenge"></div>
+  <div id="cats"><p class="meta">Loading…</p></div>
+
+  <h2 class="section-title" id="translator">🔤 Phrase translator</h2>
+  <p class="section-sub">Type an English word or pick a phrase. You'll see it in all 10 languages, and you can play each one.</p>
+  <div class="form-row">
+    <input id="q" type="search" placeholder="Try “thank you”, “water”, “left”, “how much”…" autocomplete="off" aria-label="Search phrases">
+    <select id="pick" class="chip" aria-label="Pick a phrase"></select>
+  </div>
+  <div class="tile" id="results"></div>
+</main>
+
+<script type="module">
+import { renderNav, renderFooter, esc } from './assets/js/app.js';
+import { loadLangCatalog, loadAllLanguages, loadAudioManifest, langStore, challengeStatus, clipFor, lessonSegments, lessonHref } from './assets/js/lang.js';
+import { createPresenter } from './assets/js/presenter.js';
+renderNav('languages.html');
+renderFooter();
+
+const host = createPresenter(document.getElementById('host'));
+host.setGesture('wave');
+setTimeout(() => host.setGesture('idle'), 3000);
+
+const cat = await loadLangCatalog();
+const [langs, manifest] = await Promise.all([loadAllLanguages(cat), loadAudioManifest()]);
+const s = langStore.read();
+const st = challengeStatus(cat, s);
+
+// ---------- Challenge banner
+const pct = Math.round(100 * st.doneCount / st.total);
+document.getElementById('ctaChallenge').textContent = st.started ? 'Continue the challenge →' : 'Start the 60-day challenge →';
+const nx = st.next;
+document.getElementById('challenge').innerHTML = `<div class="challenge-card">
+  <div class="ring" style="--p:${pct}"><b>${st.doneCount}/${st.total}</b></div>
+  <div class="t"><div class="ck">${esc(cat.challenge.title)}</div>
+    <h3>${st.started ? (st.finished ? 'Challenge complete. Well done!' : `Day ${st.unlocked} of ${st.total} · ${st.streak} day streak 🔥`) : 'Start today, finish every section in 60 days'}</h3>
+    <p class="meta" style="font-size:.88rem">${st.started && nx && !st.finished ? `Up next: ${esc(langs[nx.lang]?.name || nx.lang)} · ${esc(cat.lessons.find(l => l.id === nx.lesson).title)}` : esc(cat.challenge.blurb)}</p></div>
+  <a class="btn btn-primary" href="${st.started && nx && !st.finished ? lessonHref(nx.lang, nx.lesson) : 'challenge.html'}">${st.started ? (st.finished ? 'Get your certificate' : "Today's lesson →") : 'Start now →'}</a>
+</div>`;
+
+// ---------- Categories
+document.getElementById('cats').innerHTML = cat.categories.map(c => `
+  <h2 class="section-title">${c.icon} ${esc(c.name)}</h2>
+  <p class="section-sub">${esc(c.blurb)}</p>
+  <div class="grid lang-grid">${c.languages.map(id => {
+    const l = langs[id];
+    if (!l) return '';
+    const done = l.lessons.filter(x => s.done[`${id}/${x.id}`]).length;
+    return `<a class="tile lang-tile" href="language.html?id=${id}">
+      <div class="row"><div class="native" lang="${l.bcp47}">${esc(l.native)}</div>${done === l.lessons.length ? '<span class="pill ok">Done</span>' : done ? `<span class="pill">${done}/${l.lessons.length}</span>` : ''}</div>
+      <h3>${esc(l.name)}</h3>
+      <p>${esc(l.region)}</p>
+      <div class="meta">${esc(l.speakers)} speakers · ${l.lessons.length} lessons</div>
+      <div class="bar"><span style="width:${100 * done / l.lessons.length}%"></span></div>
+    </a>`; }).join('')}</div>`).join('');
+
+// ---------- Phrase translator: every phrase key is shared by all languages.
+const ids = cat.categories.flatMap(c => c.languages).filter(id => langs[id]);
+const entries = cat.lessons.flatMap(l => l.phrases.map(p => ({ ...p, lesson: l })));
+const pick = document.getElementById('pick'), q = document.getElementById('q'), out = document.getElementById('results');
+pick.innerHTML = '<option value="">All phrases…</option>' + cat.lessons.map(l => `<optgroup label="${esc(l.title)}">${l.phrases.map(p => `<option value="${p.key}">${esc(p.en)}</option>`).join('')}</optgroup>`).join('');
+
+function show(entry) {
+  if (!entry) { out.innerHTML = '<p class="meta">No phrase matches that yet. Try a simpler word like “hello”, “water” or “station”.</p>'; return; }
+  out.innerHTML = `<div class="kicker">${esc(entry.lesson.title)}</div><h3 style="margin-bottom:.4rem">“${esc(entry.en)}”</h3>` + ids.map((id, n) => {
+    const l = langs[id], ph = l.lessons.find(x => x.id === entry.lesson.id)?.phrases.find(x => x.key === entry.key);
+    if (!ph) return '';
+    return `<div class="phrase-hit"><div><div class="l">${esc(l.name)}</div><div class="n" lang="${l.bcp47}">${esc(ph.native)}</div><div class="r">${esc(ph.roman)}</div></div>
+      <div style="display:flex;gap:.4rem"><button class="icon-btn" data-play="${id}" aria-label="Play ${esc(l.name)}">▶</button>
+      <a class="icon-btn" href="${lessonHref(id, entry.lesson.id)}" title="Open the lesson" aria-label="Open the ${esc(l.name)} lesson">🎓</a></div></div>`;
+  }).join('');
+  out.dataset.key = entry.key; out.dataset.lesson = entry.lesson.id;
+}
+function search() {
+  const t = q.value.trim().toLowerCase();
+  if (!t) return show(entries.find(e => e.key === (pick.value || 'thank-you')));
+  const words = t.split(/\s+/);
+  const scored = entries.map(e => ({ e, s: words.filter(w => e.en.toLowerCase().includes(w) || e.key.includes(w)).length })).filter(x => x.s).sort((a, b) => b.s - a.s);
+  // Also match native or romanised text typed in any language.
+  const rev = !scored.length && entries.find(e => ids.some(id => {
+    const ph = langs[id].lessons.find(x => x.id === e.lesson.id)?.phrases.find(x => x.key === e.key);
+    return ph && (ph.native.toLowerCase().includes(t) || ph.roman.toLowerCase().includes(t));
+  }));
+  show(scored[0]?.e || rev);
+}
+q.oninput = search;
+pick.onchange = () => { q.value = ''; search(); };
+search();
+
+// Play: the ElevenLabs clip when recorded, the device voice otherwise.
+const audio = new Audio();
+out.addEventListener('click', e => {
+  const b = e.target.closest('[data-play]'); if (!b) return;
+  const l = langs[b.dataset.play];
+  const seg = lessonSegments(cat, l, out.dataset.lesson).find(x => x.kind === 'say' && x.audio === x.id && cat.lessons.find(y => y.id === out.dataset.lesson).phrases[x.phrase].key === out.dataset.key);
+  const url = clipFor(manifest, seg);
+  speechSynthesis?.cancel(); audio.pause();
+  host.setTalking(true); host.setGesture('point');
+  const done = () => { host.setTalking(false); host.setGesture('idle'); host.setLevel(0); clearInterval(lip); };
+  const lip = setInterval(() => host.setLevel(Math.random() * 0.8), 90);
+  if (url) { audio.src = url; audio.onended = audio.onerror = done; audio.play().catch(done); return; }
+  const u = new SpeechSynthesisUtterance(seg.text);
+  const v = speechSynthesis.getVoices().find(v => v.lang.replace('_', '-').startsWith(l.bcp47.split('-')[0]));
+  if (v) { u.voice = v; u.lang = v.lang; } else { u.text = seg.roman; u.lang = 'en-IN'; }
+  u.rate = 0.85; u.onend = u.onerror = done;
+  speechSynthesis.speak(u);
+});
+</script>
+</body>
+</html>

@@ -48,3 +48,27 @@ Add a new exam by dropping a file in `data/exams/<id>.json` and listing it in `d
 
 Card rules: 6–10 cards per chapter, one idea per card, body under ~70 words so it fits a phone screen,
 and every chapter ends with 2–3 `quiz` cards. `answer` is the 0-based index into `options`.
+
+## data/languages/
+
+`catalog.json` holds the host, the two categories (which language ids are in each), and the 6 lessons.
+Each lesson lists its phrases as `{ "key", "en" }`; the key is shared across languages (it powers the
+phrase translator and the auto-generated quiz).
+
+`<id>.json` (one per language):
+
+```jsonc
+{
+  "id": "tamil", "name": "Tamil", "native": "தமிழ்", "category": "local", "bcp47": "ta-IN",
+  "script": "Tamil script", "region": "...", "speakers": "≈ 80 million", "about": "2 sentences",
+  "pronunciation": ["tip", "..."],
+  "lessons": [
+    { "id": "greetings", "intro": "What Meera says to open the lesson", "tip": "Culture/grammar tip",
+      "phrases": [ { "key": "hello", "native": "வணக்கம்", "roman": "vanakkam", "note": "What Meera says after the phrase" } ] }
+  ]
+}
+```
+
+Every language must have every catalog lesson and phrase key (`npm run validate` checks this).
+Notes and intros are spoken aloud, so write them as plain spoken sentences. After editing text, re-run
+`npm run voices` to re-record the changed clips.

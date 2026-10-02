@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>60-Day Language Challenge &mdash; AI Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/learn.css">
+</head>
+<body>
+<main class="page">
+  <div class="crumbs no-print"><a href="languages.html">Languages</a> › 60-day challenge</div>
+  <section class="lang-hero no-print">
+    <div class="page-head" style="margin:0">
+      <h1>60-Day Language Challenge</h1>
+      <p>One lesson a day for 60 days: 30 days of Indian languages (Bengali, Kannada, Malayalam, Tamil, Telugu), then 30 days of international languages (Spanish, French, German, Japanese, Mandarin). Miss a day? Catch up whenever you like. Finish all 60 to earn your certificate.</p>
+      <div id="actions" style="margin-top:1.2rem"></div>
+    </div>
+    <div><div class="presenter" id="host"></div><div class="speech" id="say"></div></div>
+  </section>
+
+  <div class="stat-row no-print" id="stats" style="margin-bottom:1.5rem"></div>
+  <div class="no-print" id="board"></div>
+  <div id="cert"></div>
+</main>
+
+<script type="module">
+import { renderNav, renderFooter, esc } from './assets/js/app.js';
+import { loadLangCatalog, loadAllLanguages, langStore, challengeStatus, localDay, lessonHref } from './assets/js/lang.js';
+import { createPresenter } from './assets/js/presenter.js';
+renderNav('languages.html');
+renderFooter();
+
+const host = createPresenter(document.getElementById('host'));
+const cat = await loadLangCatalog();
+const langs = await loadAllLanguages(cat);
+const lessonTitle = id => cat.lessons.find(l => l.id === id).title;
+
+function render() {
+  const s = langStore.read(), st = challengeStatus(cat, s);
+  const nx = st.next;
+  host.setGesture(st.finished ? 'wave' : st.started ? 'explain' : 'wave');
+  setTimeout(() => host.setGesture('idle'), 2800);
+  document.getElementById('say').textContent = !st.started
+    ? `I'll be with you every day. Ready? Press start and we'll begin with ${langs[cat.categories[0].languages[0]].name}.`
+    : st.finished ? `You did it, all ${st.total} lessons! I'm so proud of you.`
+    : st.days.some(d => d.state === 'missed') ? `You have ${st.days.filter(d => d.state === 'missed').length} day(s) to catch up. Let's do one now!`
+    : st.days.find(d => d.state === 'today') ? `Today is day ${st.unlocked}. Just five minutes and you're done!`
+    : `Today's lesson is done. See you tomorrow!`;
+
+  document.getElementById('actions').innerHTML = !st.started
+    ? `<button class="btn btn-primary" id="start">Start my challenge today →</button>`
+    : `${nx && !st.finished ? `<a class="btn btn-primary" href="${lessonHref(nx.lang, nx.lesson)}">${nx.state === 'missed' ? 'Catch up' : nx.state === 'today' ? "Today's lesson" : 'Next lesson'}: ${esc(langs[nx.lang].name)} · ${esc(lessonTitle(nx.lesson))} →</a>` : ''}
+       <button class="linkbtn" id="restart" style="margin-left:1rem">Restart challenge</button>`;
+
+  document.getElementById('stats').innerHTML = [
+    [`${st.doneCount}/${st.total}`, 'lessons complete'],
+    [st.started ? `Day ${st.unlocked}` : '—', st.started ? `started ${new Date(st.start + 'T12:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}` : 'not started'],
+    [`${st.streak} 🔥`, 'day streak'],
+    [st.days.filter(d => d.state === 'missed').length, 'days to catch up'],
+    [`${cat.categories.filter(c => c.languages.every(l => cat.lessons.every(x => s.done[`${l}/${x.id}`]))).length}/2`, 'tracks finished'],
+  ].map(([b, l]) => `<div class="stat"><b>${b}</b><span>${l}</span></div>`).join('');
+
+  document.getElementById('board').innerHTML = cat.categories.map(c => `
+    <h2 class="section-title">${c.icon} ${esc(c.name)}</h2>
+    <div class="days">${st.days.filter(d => c.languages.includes(d.lang)).map(d => {
+      const label = `<b>Day ${d.day}${d.state === 'done' ? ' ✓' : ''}</b><span>${esc(langs[d.lang].name)}</span><span>${esc(lessonTitle(d.lesson))}</span>`;
+      // Locked days can still be opened as free practice, but they only count once you finish them.
+      return `<a class="day ${d.state}" href="${lessonHref(d.lang, d.lesson)}" title="${esc(langs[d.lang].name)} · ${esc(lessonTitle(d.lesson))}">${label}</a>`;
+    }).join('')}</div>`).join('') +
+    `<p class="meta" style="margin-top:1rem">✓ done · <span style="color:var(--accent-2)">today</span> · <span style="color:var(--warn)">catch up</span> · faded = coming up. Progress is saved in this browser.</p>`;
+
+  document.getElementById('cert').innerHTML = st.finished ? `
+    <div class="form-row no-print" style="max-width:520px;margin:2rem auto 0"><input id="name" placeholder="Your name for the certificate" value="${esc(s.name)}"><button class="btn btn-primary" id="print">Print / save PDF</button></div>
+    <div class="cert">
+      <div style="letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;color:#8a6d1d">AI Academy · Languages</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="who" id="certName">${esc(s.name || 'Your Name')}</div>
+      <p>completed the <b>60-Day Language Challenge</b>: ${st.total} lessons across Bengali, Kannada, Malayalam, Tamil, Telugu, Spanish, French, German, Japanese and Mandarin Chinese.</p>
+      <p style="margin-top:1.5rem;font-size:.9rem">Completed ${new Date(Math.max(...Object.values(s.done).map(d => d.at))).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })} · Coach: ${esc(cat.host.name)}</p>
+    </div>` : '';
+
+  document.getElementById('start')?.addEventListener('click', () => { langStore.update(x => { x.start = localDay(); }); render(); });
+  document.getElementById('restart')?.addEventListener('click', () => {
+    if (!confirm('Restart the challenge from day 1 today? Lessons you already finished stay ticked.')) return;
+    langStore.update(x => { x.start = localDay(); }); render();
+  });
+  const name = document.getElementById('name');
+  if (name) {
+    name.oninput = () => { document.getElementById('certName').textContent = name.value || 'Your Name'; langStore.update(x => { x.name = name.value; }); };
+    document.getElementById('print').onclick = () => print();
+  }
+}
+render();
+</script>
+</body>
+</html>

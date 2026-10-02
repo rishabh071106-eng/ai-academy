@@ -54,6 +54,27 @@ for (const c of ncert.classes) for (const b of c.books) {
   if (b.code && !(b.chapters > 0)) err('ncert.json', `class ${c.class} "${b.title}": chapters missing`);
 }
 
-console.log(`${files.length} exams · ${chapters} chapters · ${cards} cards · ${books} NCERT books`);
+// Languages: every language file must carry every catalog lesson and phrase key.
+const langCat = await read('data/languages/catalog.json');
+let langPhrases = 0;
+for (const id of langCat.categories.flatMap(c => c.languages)) {
+  const f = `languages/${id}.json`;
+  let l;
+  try { l = await read(`data/${f}`); } catch (e) { err(f, `missing or invalid: ${e.message}`); continue; }
+  if (l.id !== id) err(f, `id "${l.id}" does not match file name`);
+  for (const k of ['name', 'native', 'bcp47', 'category', 'about']) if (!l[k]) err(f, `missing ${k}`);
+  for (const m of langCat.lessons) {
+    const lesson = l.lessons?.find(x => x.id === m.id);
+    if (!lesson) { err(f, `missing lesson ${m.id}`); continue; }
+    if (!lesson.intro || !lesson.tip) err(f, `${m.id}: needs intro and tip`);
+    for (const p of m.phrases) {
+      const ph = lesson.phrases?.find(x => x.key === p.key);
+      langPhrases++;
+      if (!ph?.native || !ph.roman || !ph.note) err(f, `${m.id}/${p.key}: needs native, roman and note`);
+    }
+  }
+}
+
+console.log(`${files.length} exams · ${chapters} chapters · ${cards} cards · ${books} NCERT books · ${langPhrases} language phrases`);
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log('All content valid.');
