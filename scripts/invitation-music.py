@@ -12,7 +12,7 @@ from scipy.io import wavfile
 from scipy.signal import fftconvolve
 
 SR = 44100
-DUR = 40.0
+DUR = 40.9
 BPM = 104.0
 BEAT = 60.0 / BPM
 rng = np.random.default_rng(20261129)
