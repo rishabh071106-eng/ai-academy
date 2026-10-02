@@ -483,10 +483,14 @@ PAGES = [
     + ORN +
     '<div class="fams">'
     '<div class="fam"><h3>Bride&rsquo;s Family</h3><p class="deva fsub">वधू पक्ष</p>'
-    '<p class="kin">Smt. Vijay Laxmi Sharma</p><p class="kin">Sh. Rajender Dev Sharma</p><p class="kin">Miss Arushi Sharma</p></div>'
+    '<p class="kin"><i>Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</p>'
+    '<p class="kin"><i>Sister of</i>Miss Arushi Sharma</p></div>'
     '<div class="fdiv"></div>'
     '<div class="fam"><h3>Groom&rsquo;s Family</h3><p class="deva fsub">वर पक्ष</p>'
-    '<p class="kin">Shanti Swaroop Sharma</p><p class="kin">Raksha Sharma</p><p class="kin">Suman Sharma</p><p class="kin">Malini Sharma</p>'
+    '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
+    '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
+    '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
+    '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
     '<p class="bless">with the blessings of Nana ji<br><b>O. P. Kaushal</b></p></div></div>',
 
     '<p class="invite">request the pleasure of your company<br>at the wedding of</p>'
@@ -498,16 +502,21 @@ PAGES = [
     '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
     '<div class="ev"><div class="evd"><b>29</b><span>November 2026</span><i class="deva">रविवार</i></div>'
     '<div class="evb"><h3>Ladies Sangeet <span class="deva">महिला संगीत</span></h3>'
-    '<p class="evx">An evening of dholak, song and dancing.</p>'
-    '<p class="evt">Sunday &middot; 4:00 PM onwards</p></div></div>'
+    '<ul class="prog">'
+    '<li><b>12:15 PM</b> Welcome of Mama ji <span class="deva">मामा जी का स्वागत</span></li>'
+    '<li><b>4:00 PM</b> Ladies Sangeet <span class="deva">महिला संगीत</span></li>'
+    '<li><b>8:00 PM</b> Dinner <span class="deva">रात्रि भोज</span></li>'
+    '</ul></div></div>'
     '<div class="ev"><div class="evd"><b>04</b><span>December 2026</span><i class="deva">शुक्रवार</i></div>'
     '<div class="evb"><h3>The Dham <span class="deva">धाम</span></h3>'
     '<p class="evx">The traditional Pahari feast, served to all.</p>'
     '<p class="evt">Friday &middot; 12:00 noon &ndash; 4:00 PM</p></div></div>',
 
     '<p class="label">Both occasions at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
-    '<p class="venue">Lions Club Bhawan</p><p class="deva sub">लायंस क्लब भवन</p>'
-    '<p class="addr">Excise Office Road, Chilgari<br>Dharamshala, Himachal Pradesh 176215</p>' + ORN +
+    '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
+    '<p class="addr">Civil Bazar, Sharmnagar Road<br>Dharamshala, District Kangra<br>'
+    'Himachal Pradesh &mdash; 176215</p>'
+ + ORN +
     '<p class="deva blessing">आपकी उपस्थिति ही<br>हमारा आशीर्वाद है</p>'
     '<p class="trans">Your presence is our blessing.</p>'
     '<p class="deva sub">शुभाकांक्षी — दोनों परिवार</p>',
@@ -606,11 +615,16 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .shubh{font-size:92px;letter-spacing:.1em;color:@@ROSE@@}
 .label{font-size:32px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
 .sub{font-size:45px;color:@@INK@@}
-.fams{display:flex;gap:29px;align-items:flex-start;width:100%;margin-top:11px}
+.fams{display:flex;gap:18px;align-items:flex-start;width:100%;margin-top:11px}
 .fam{flex:1}
 .fam h3{font-size:28px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
 .fsub{font-size:36px;color:@@INK@@;margin-top:4px}
-.kin{font-size:38px;line-height:1.7;color:@@ROSE@@;white-space:nowrap}
+.kin{font-size:30px;line-height:1.5;color:@@ROSE@@;margin-top:12px}
+.kin i{font-style:italic;font-size:.72em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
+.prog{list-style:none;margin-top:12px;display:grid;gap:9px;text-align:left}
+.prog li{font-size:28px;line-height:1.35;color:@@INK@@}
+.prog b{font-weight:600;color:@@ROSE@@;letter-spacing:.03em;margin-right:.5em}
+.prog .deva{color:@@ROSE2@@;font-size:.94em;margin-left:.35em}
 .bless{font-size:32px;font-style:italic;color:@@INK@@;margin-top:21px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.12em}
 .fdiv{width:1px;align-self:stretch;background:linear-gradient(180deg,transparent,rgba(168,130,44,.65),transparent)}
@@ -631,9 +645,9 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .evb h3 .deva{font-weight:400;font-size:.7em;color:@@ROSE2@@;margin-left:10px}
 .evx{font-size:36px;font-style:italic;color:@@INK@@;margin-top:7px}
 .evt{font-size:29px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:16px}
-.venue{font-size:87px;font-weight:600;color:@@ROSE@@}
-.addr{font-size:41px;line-height:1.55;color:@@INK@@}
-.blessing{font-size:71px;line-height:1.7;color:@@ROSE@@}
+.venue{font-size:76px;font-weight:600;color:@@ROSE@@}
+.addr{font-size:36px;line-height:1.55;color:@@INK@@}
+.blessing{font-size:62px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 
 <div id="intro">

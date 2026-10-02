@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smatav &amp; Priyanka &mdash; Wedding Invitation</title>
-<meta name="description" content="Smatav weds Priyanka. Ladies Sangeet on Sunday 29 November 2026 and the Dham on Friday 4 December 2026, at Lions Club Bhawan, Excise Office Road, Chilgari, Dharamshala.">
+<meta name="description" content="Smatav weds Priyanka. Ladies Sangeet on Sunday 29 November 2026 and the Dham on Friday 4 December 2026, at Lions Club Dharamshala, Civil Bazar, Sharmnagar Road, District Kangra.">
 <meta property="og:title" content="Smatav weds Priyanka">
-<meta property="og:description" content="Ladies Sangeet &middot; 29 November 2026. The Dham &middot; 4 December 2026. Lions Club Bhawan, Dharamshala.">
+<meta property="og:description" content="Ladies Sangeet &middot; 29 November 2026. The Dham &middot; 4 December 2026. Lions Club Dharamshala.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#FBEFE7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +58,12 @@
 
   *{box-sizing:border-box;margin:0;padding:0}
   .deco{display:none}
+  .kin .rel{font-style:italic;font-size:.76em;letter-spacing:.06em;
+    color:var(--gold-deep);opacity:.9;margin-right:.4em}
+  .prog{list-style:none;margin-top:.4rem;display:grid;gap:.24rem}
+  .prog li{font-size:clamp(.82rem,2vw,.95rem);line-height:1.34;color:var(--ink)}
+  .prog b{font-weight:600;color:var(--maroon);letter-spacing:.03em;margin-right:.5em}
+  .prog .hi{font-family:var(--deva);color:var(--gold-deep);font-size:.92em;margin-left:.35em}
   .sheet{display:contents}
   html{scroll-behavior:smooth;background:#F7DED6}
 
@@ -572,12 +578,15 @@
 
     /* sheet two: the occasions, the venue and the blessing */
     .occasions{padding-top:0}
-    .leaf{width:176px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
+    .leaf{width:162px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
     .leaf-cap{margin-bottom:10px}
     .occasions+.label{margin-top:18px}
     .event{break-inside:avoid}
-    .blessing{margin-top:12px}
+    .blessing{margin-top:10px}
+    .event .body{padding:11px 15px}
+    .event .when{padding:10px 8px}
     .compliments{margin-top:10px}
+    .addr{max-width:none}
 
     @page{size:A4;margin:10mm}
   }
@@ -627,9 +636,8 @@
       <h2 class="side-label">Bride&rsquo;s Family</h2>
       <p class="side-label-hi">वधू पक्ष</p>
       <ul class="kin">
-        <li>Smt. Vijay Laxmi Sharma</li>
-        <li>Sh. Rajender Dev Sharma</li>
-        <li>Miss Arushi Sharma</li>
+        <li><i class="rel">Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</li>
+        <li><i class="rel">Sister of</i>Miss Arushi Sharma</li>
       </ul>
     </section>
 
@@ -639,10 +647,10 @@
       <h2 class="side-label">Groom&rsquo;s Family</h2>
       <p class="side-label-hi">वर पक्ष</p>
       <ul class="kin">
-        <li>Shanti Swaroop Sharma</li>
-        <li>Raksha Sharma</li>
-        <li>Suman Sharma</li>
-        <li>Malini Sharma</li>
+        <li><i class="rel">Taya ji</i>Sh. Shanti Swaroop Sharma</li>
+        <li><i class="rel">Tayi ji</i>Smt. Raksha Sharma</li>
+        <li><i class="rel">Father</i>Sh. Suman Sharma</li>
+        <li><i class="rel">Mother</i>Smt. Malini Sharma</li>
       </ul>
       <p class="kin-bless">with the blessings of Nana ji<br><strong>O. P. Kaushal</strong></p>
     </section>
@@ -696,8 +704,11 @@
         </div>
         <div class="body">
           <h3>Ladies Sangeet <span class="hi">महिला संगीत</span></h3>
-          <p class="desc">An evening of dholak, song and dancing.<span class="hi">ढोलक, गीत और नृत्य की सांझ</span></p>
-          <p class="time">Sunday &middot; 4:00 PM onwards<span class="hi">रविवार, २९ नवम्बर २०२६ · सायं ४:०० बजे से</span></p>
+          <ul class="prog">
+            <li><b>12:15 PM</b> Welcome of Mama ji <span class="hi">मामा जी का स्वागत</span></li>
+            <li><b>4:00 PM</b> Ladies Sangeet <span class="hi">महिला संगीत</span></li>
+            <li><b>8:00 PM</b> Dinner <span class="hi">रात्रि भोज</span></li>
+          </ul>
         </div>
       </article>
       <article class="event">
@@ -717,11 +728,12 @@
 
   <p class="label venue-label">Both occasions at</p>
   <p class="label-hi">दोनों कार्यक्रम स्थल</p>
-  <p class="venue">Lions Club Bhawan<span class="hi">लायंस क्लब भवन</span></p>
+  <p class="venue">Lions Club Dharamshala<span class="hi">लायंस क्लब धर्मशाला</span></p>
   <p class="addr">
-    Excise Office Road, Chilgari<br>
-    Dharamshala, Himachal Pradesh 176215
-    <span class="hi">एक्साइज़ ऑफ़िस रोड, चिलगड़ी<br>धर्मशाला, हिमाचल प्रदेश — १७६२१५</span>
+    Civil Bazar, Sharmnagar Road<br>
+    Dharamshala, District Kangra<br>
+    Himachal Pradesh &mdash; 176215
+    <span class="hi">सिविल बाज़ार, शर्मनगर रोड<br>धर्मशाला, ज़िला कांगड़ा<br>हिमाचल प्रदेश — १७६२१५</span>
   </p>
 
   <div class="countdown" aria-label="Countdown to the first celebration">
@@ -759,11 +771,16 @@
       {
         key: 'sangeet',
         name: 'Ladies Sangeet', nameHi: 'महिला संगीत',
-        desc: 'An evening of dholak, song and dancing.', descHi: 'ढोलक, गीत और नृत्य की सांझ',
         date: '2026-11-29', time: '16:00',
         clock: '4:00 PM onwards',
         whenHi: 'रविवार, २९ नवम्बर २०२६ · सायं ४:०० बजे से',
-        wkHi: 'रविवार'
+        wkHi: 'रविवार',
+        /* the day runs to a programme, so it is listed instead of one time */
+        programme: [
+          { at: '12:15 PM', what: 'Welcome of Mama ji', whatHi: 'मामा जी का स्वागत' },
+          { at: '4:00 PM',  what: 'Ladies Sangeet',     whatHi: 'महिला संगीत' },
+          { at: '8:00 PM',  what: 'Dinner',             whatHi: 'रात्रि भोज' }
+        ]
       },
       {
         key: 'dham',
@@ -812,16 +829,27 @@
       var h3 = el('h3', null, ev.name + ' ');
       h3.appendChild(el('span', 'hi', ev.nameHi));
 
-      var desc = el('p', 'desc', ev.desc);
-      desc.appendChild(el('span', 'hi', ev.descHi));
-
-      var time = el('p', 'time', fmt(cd, { weekday: 'long' }) + ' · ' + ev.clock);
-      time.appendChild(el('span', 'hi', ev.whenHi));
-
       var body = el('div', 'body');
       body.appendChild(h3);
-      body.appendChild(desc);
-      body.appendChild(time);
+
+      if (ev.programme && ev.programme.length) {
+        var prog = el('ul', 'prog');
+        ev.programme.forEach(function(item){
+          var li = el('li');
+          li.appendChild(el('b', null, item.at));
+          li.appendChild(document.createTextNode(' ' + item.what + ' '));
+          li.appendChild(el('span', 'hi', item.whatHi));
+          prog.appendChild(li);
+        });
+        body.appendChild(prog);
+      } else {
+        var desc = el('p', 'desc', ev.desc);
+        desc.appendChild(el('span', 'hi', ev.descHi));
+        var time = el('p', 'time', fmt(cd, { weekday: 'long' }) + ' · ' + ev.clock);
+        time.appendChild(el('span', 'hi', ev.whenHi));
+        body.appendChild(desc);
+        body.appendChild(time);
+      }
 
       var card = el('article', 'event');
       card.appendChild(when);
