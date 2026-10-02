@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smatav &amp; Priyanka &mdash; Wedding Invitation</title>
-<meta name="description" content="Smatav weds Priyanka. Ladies Sangeet on Sunday 29 November 2026 and the Dham on Friday 4 December 2026, at Lions Club Bhawan, Dharamshala.">
+<meta name="description" content="Smatav weds Priyanka. Ladies Sangeet on Sunday 29 November 2026 and the Dham on Friday 4 December 2026, at Lions Club Bhawan, Excise Office Road, Chilgari, Dharamshala.">
 <meta property="og:title" content="Smatav weds Priyanka">
 <meta property="og:description" content="Ladies Sangeet &middot; 29 November 2026. The Dham &middot; 4 December 2026. Lions Club Bhawan, Dharamshala.">
 <meta property="og:type" content="website">
@@ -173,6 +173,62 @@
   .weds::before,.weds::after{content:"";height:1px;width:46px;background:linear-gradient(90deg,transparent,var(--gold))}
   .weds::after{background:linear-gradient(90deg,var(--gold),transparent)}
   .weds .hi{font-style:normal;font-size:.72em;letter-spacing:.03em}
+
+  /* ── the two families ── */
+  .families{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:clamp(18px,4vw,44px);
+    flex-wrap:wrap;
+    margin-top:clamp(16px,3vw,24px);
+  }
+  .side{flex:1 1 230px;max-width:300px}
+  .side-label{
+    font-size:clamp(.66rem,1.8vw,.76rem);
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--gold-deep);
+  }
+  .side-label-hi{
+    font-family:var(--deva);
+    font-size:clamp(.82rem,2.1vw,.92rem);
+    color:var(--ink);
+    opacity:.8;
+    margin-top:.2rem;
+  }
+  .kin{list-style:none;margin:clamp(9px,1.8vw,13px) 0 0}
+  .kin li{
+    font-size:clamp(1rem,2.5vw,1.14rem);
+    font-weight:400;
+    line-height:1.65;
+    color:var(--maroon);
+  }
+  .kin-bless{
+    font-size:clamp(.86rem,2.1vw,.95rem);
+    font-style:italic;
+    line-height:1.6;
+    color:var(--ink);
+    opacity:.85;
+    margin-top:.55rem;
+  }
+  .kin-bless strong{font-style:normal;font-weight:600;color:var(--maroon)}
+  .side-div{
+    align-self:stretch;width:1px;
+    background:linear-gradient(180deg,transparent,rgba(168,130,44,.55),transparent);
+  }
+  @media (max-width:560px){.side-div{display:none}}
+
+  .invite-line{
+    font-size:clamp(1rem,2.6vw,1.16rem);
+    font-style:italic;
+    font-weight:300;
+    line-height:1.7;
+    color:var(--ink);
+    max-width:34ch;
+    margin:clamp(20px,3.6vw,30px) auto 0;
+  }
 
   .host{
     font-size:clamp(1rem,2.6vw,1.18rem);
@@ -408,15 +464,24 @@
     }
     .reveal{opacity:1;transform:none}
 
-    /* sheet one has to hold the whole invitation face, so it runs tighter */
-    .ganesha{width:150px;margin-bottom:6px}
-    .shloka{margin-top:10px}
-    .shubh{margin-top:16px}
-    .rule{margin:18px auto}
-    .names .n{font-size:64px}
-    .names{margin-top:12px}
-    .host{margin-top:16px;max-width:46ch}
-    .host-hi{max-width:44ch}
+    /* sheet one carries the invocation, both families and the couple,
+       so every band on it runs tighter than on screen */
+    .card{padding:20px 44px 22px}
+    .ganesha{width:110px;margin-bottom:3px}
+    .shloka{margin-top:8px}
+    .shloka-en{margin-top:6px}
+    .shubh{margin-top:12px}
+    .rule{margin:9px auto}
+    .families{margin-top:12px;gap:34px}
+    .side-label-hi{margin-top:1px}
+    .kin{margin-top:7px}
+    .kin li{line-height:1.45;font-size:15px}
+    .kin-bless{margin-top:6px}
+    .invite-line{margin-top:16px}
+    .names .n{font-size:52px}
+    .names{margin-top:8px}
+    .names .weds{margin:6px 0}
+    .host-hi{max-width:46ch;margin-top:8px}
 
     /* sheet two: the occasions, the venue and the blessing */
     .occasions{break-before:page;padding-top:4mm}
@@ -715,6 +780,34 @@
   <p class="label">With the blessings of our elders</p>
   <p class="label-hi">बड़ों के आशीर्वाद से</p>
 
+  <div class="families">
+    <section class="side">
+      <h2 class="side-label">Bride&rsquo;s Family</h2>
+      <p class="side-label-hi">वधू पक्ष</p>
+      <ul class="kin">
+        <li>Smt. Vijay Laxmi Sharma</li>
+        <li>Sh. Rajender Dev Sharma</li>
+        <li>Miss Arushi Sharma</li>
+      </ul>
+    </section>
+
+    <span class="side-div" aria-hidden="true"></span>
+
+    <section class="side">
+      <h2 class="side-label">Groom&rsquo;s Family</h2>
+      <p class="side-label-hi">वर पक्ष</p>
+      <ul class="kin">
+        <li>Shanti Swaroop Sharma</li>
+        <li>Raksha Sharma</li>
+        <li>Suman Sharma</li>
+        <li>Malini Sharma</li>
+      </ul>
+      <p class="kin-bless">with the blessings of Nana ji<br><strong>O. P. Kaushal</strong></p>
+    </section>
+  </div>
+
+  <p class="invite-line">request the pleasure of your company at the wedding of</p>
+
   <h1 class="names">
     <span class="n">Smatav</span>
     <span class="n-hi">चि. स्मतव</span>
@@ -723,7 +816,6 @@
     <span class="n-hi">सुश्री प्रियंका</span>
   </h1>
 
-  <p class="host">Our families would be honoured by your presence as the two of them begin their life together.</p>
   <p class="host-hi">इस मंगल अवसर पर आप सपरिवार पधारकर वर-वधू को आशीर्वाद प्रदान करें।</p>
 
   <div class="rule reveal" aria-hidden="true">
@@ -765,10 +857,9 @@
   <p class="label-hi">दोनों कार्यक्रम स्थल</p>
   <p class="venue">Lions Club Bhawan<span class="hi">लायंस क्लब भवन</span></p>
   <p class="addr">
-    Chilgari, Shamnagar Road<br>
-    Dharamshala, District Kangra<br>
-    Himachal Pradesh 176215
-    <span class="hi">चिलगड़ी, शामनगर रोड, धर्मशाला<br>ज़िला काँगड़ा, हिमाचल प्रदेश — १७६२१५</span>
+    Excise Office Road, Chilgari<br>
+    Dharamshala, Himachal Pradesh 176215
+    <span class="hi">एक्साइज़ ऑफ़िस रोड, चिलगड़ी<br>धर्मशाला, हिमाचल प्रदेश — १७६२१५</span>
   </p>
 
   <div class="countdown" aria-label="Countdown to the first celebration">

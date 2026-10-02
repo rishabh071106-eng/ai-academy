@@ -12,7 +12,7 @@ from scipy.io import wavfile
 from scipy.signal import fftconvolve
 
 SR = 44100
-DUR = 42.2
+DUR = 49.0
 BPM = 104.0
 BEAT = 60.0 / BPM
 rng = np.random.default_rng(20261129)
@@ -154,6 +154,9 @@ PHRASE = [
     ('S', 4, None),
 ]
 
+# A(16) B(16) C(16) A(16) D(16) — the reprise keeps the piece ending on its resolve
+PHRASE = PHRASE[:38] + PHRASE[:14] + PHRASE[38:]
+
 MEL_START = 4 * BEAT            # the groove and tune come in together after a pickup
 
 lead = np.zeros(n_total)
@@ -215,7 +218,8 @@ while t < DUR:
     k += 1
 
 bells = np.zeros(n_total)
-for t0, a in [(0.05, 1.0), (MEL_START + 16 * BEAT, .30), (MEL_START + 32 * BEAT, .30), (MEL_END - 0.3, .55)]:
+for t0, a in [(0.05, 1.0), (MEL_START + 16 * BEAT, .30), (MEL_START + 32 * BEAT, .30),
+              (MEL_START + 64 * BEAT, .30), (MEL_END - 0.3, .55)]:
     place(bells, bell() * a, t0)
 
 # ── mix ──────────────────────────────────────────────────────────────────
