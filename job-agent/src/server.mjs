@@ -91,7 +91,14 @@ const server = http.createServer(async (req, res) => {
 // If an older dashboard is still running (e.g. in another Terminal window), replace it
 // so `git pull && npm run dashboard` always serves the new version.
 let replaced = false;
+let retries = 0;
 server.on("error", (e) => {
+  // The old dashboard may need a few seconds to shut down (it stops its agents first).
+  if (e.code === "EADDRINUSE" && replaced && retries < 10) {
+    retries++;
+    setTimeout(() => server.listen(PORT, "127.0.0.1"), 1000);
+    return;
+  }
   if (e.code !== "EADDRINUSE" || replaced) {
     log("err", e.code === "EADDRINUSE" ? `Port ${PORT} is still in use. Close the other dashboard window (or run: lsof -ti tcp:${PORT} | xargs kill) and try again.` : e.message);
     process.exit(1);
