@@ -48,11 +48,13 @@ const EVAL_SCHEMA = obj({
   missingSkills: { ...strArr, description: "Required skills the candidate lacks" },
   tailored: obj({
     headline: str,
+    tagline: str,
     summary: str,
-    skills: { ...strArr, description: "12-20 skills, most relevant to this job first, only ones the candidate has" },
+    skillGroups: { type: "array", description: "Her skill groups with the same items, reordered so the most relevant come first", items: obj({ name: str, items: strArr }) },
+    skills: { ...strArr, description: "Flat list, most relevant first" },
     experience: {
       type: "array",
-      items: obj({ company: str, role: str, location: str, start: str, end: str, bullets: strArr }),
+      items: obj({ company: str, role: str, location: str, client: str, start: str, end: str, bullets: strArr }),
     },
   }),
   hiringMessage: obj({
@@ -80,7 +82,11 @@ The job text may be a raw copy of the whole web page (navigation, other job titl
 Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjacent but workable; below 55 = unrelated.
 
 ${HONESTY_RULES}
-Return every experience entry from the candidate's profile (same companies, roles and dates), with bullets rewritten/reordered for this job; older roles can have fewer bullets.
+Tailored resume: it must stay VERY close to her own resume, so a recruiter who has seen both sees the same document, sharpened for this job:
+- Keep her headline unless the role is clearly front-end or full-stack JS, in which case lead with that (e.g. "Senior Full Stack Engineer · Next.js / React + Adobe Commerce"). Keep her tagline, reordering items if useful.
+- Summary: keep her summary; you may adjust the first sentence and reorder clauses to match the job. Same length (±15%).
+- Experience: every role, same company/role/client/dates. Keep her bullet wording; reorder bullets so the most relevant come first and change at most a few words per bullet to mirror the job's terms where truthful. Keep bold lead-ins like "Peelworks (…):". Don't drop roles or bullets from the two most recent roles.
+- Skill groups: same groups and items as hers, reordered by relevance.
 
 Hiring message — write it the way she would actually type it to a stranger on LinkedIn. It must read as genuine and human, not AI-written:
 - Open with "Hi <first name>," (or "Hi," if no contact name). Then get straight to the point; no pleasantries like "I hope this message finds you well".
@@ -148,16 +154,21 @@ ${JSON.stringify(fields, null, 2)}`,
 }
 
 const PROFILE_SCHEMA = obj({
-  name: str, headline: str, email: str, phone: str, city: str, address: str, linkedinUrl: str,
+  name: str, headline: str,
+  tagline: { type: "string", description: "The line of key tech under the headline, e.g. 'Next.js · React · …'" },
+  email: str, phone: { type: "string", description: "Digits only, without country code" }, city: str, address: str, linkedinUrl: str,
   totalExperienceYears: { type: "integer" },
   summary: str,
-  skills: strArr,
+  highlights: { type: "array", description: "'At a glance' stat tiles, if any", items: obj({ value: str, label: str }) },
+  skillGroups: { type: "array", description: "Technical skills exactly as grouped on the resume", items: obj({ name: str, items: strArr }) },
+  skills: { ...strArr, description: "All skills, flat" },
   experience: {
     type: "array",
-    items: obj({ company: str, role: str, location: str, start: str, end: str, bullets: strArr }),
+    items: obj({ company: str, role: str, location: str, client: { type: "string", description: "e.g. 'Blackhawk Network' or empty" }, start: str, end: str, bullets: strArr }),
   },
-  education: { type: "array", items: obj({ degree: str, institution: str, start: str, end: str }) },
-  certifications: { type: "array", items: obj({ name: str, date: str }) },
+  projects: { type: "array", description: "Project index table rows, if any", items: obj({ client: str, platform: str, employer: str, work: str }) },
+  education: { type: "array", items: obj({ degree: str, institution: str, status: { type: "string", description: "e.g. 'pursuing' or empty" }, start: str, end: str }) },
+  certifications: { type: "array", items: obj({ name: str, issuer: str, date: str }) },
 });
 
 /** Turn a resume PDF into a profile.json skeleton. */
@@ -165,7 +176,7 @@ export async function extractProfile(pdfBase64) {
   return jsonCall({
     effort: "low",
     schema: PROFILE_SCHEMA,
-    system: "Extract the resume into the JSON schema exactly as written. Do not embellish. Use YYYY-MM for dates and 'present' for current roles. Use empty strings for missing fields.",
+    system: "Extract the resume into the JSON schema exactly as written: same wording, same bullet text, same skill groups and order. Keep a bullet's bold lead-in like 'Peelworks (Magento 2 Commerce, mobile + web): …' as part of the bullet text. Do not embellish or summarise. Use YYYY-MM for dates and 'present' for current roles. Use empty strings/arrays for missing parts.",
     content: [
       { type: "document", source: { type: "base64", media_type: "application/pdf", data: pdfBase64 } },
       { type: "text", text: "Extract this resume." },

@@ -8,6 +8,7 @@ import os from "node:os";
 import path from "node:path";
 import { connect } from "./browser.mjs";
 import { applyExternal } from "./external.mjs";
+import { syncProfile } from "./profile-sync.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
@@ -17,6 +18,8 @@ import { DATA_DIR, loadConfig, loadProfile, log, randomBetween, sleep } from "./
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const config = loadConfig();
+// Step 0: make sure we work from her latest resume (re-reads it if Downloads has a newer one).
+const baseResume = await syncProfile(config);
 const profile = loadProfile();
 const mode = args.mode ?? config.mode ?? "review";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
@@ -130,6 +133,7 @@ for (const [key, mod] of Object.entries(platforms)) {
           continue;
         }
 
+        log("dim", "  checking the job against her resume…");
         let ev;
         try {
           ev = await evaluateAndTailor(profile, job);
@@ -170,7 +174,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         stats.matched++;
         const resumePath = await buildResumePdf(profile, ev.tailored, job);
         const resumeFile = path.relative(DATA_DIR, resumePath).split(path.sep).join("/");
-        log("ok", `  match ${ev.matchScore}% — tailored resume: data/${resumeFile}`);
+        log("ok", `  match ${ev.matchScore}% — resume created for this job: data/${resumeFile}`);
 
         if (job.applyType !== "easy") {
           tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
@@ -238,7 +242,7 @@ async function maybeMessage(mod, key, page, job) {
 if (naukri.apply.uploaded && config.platforms.naukri?.restoreBaseResumeAfterRun !== false) {
   try {
     const custom = (config.platforms.naukri.baseResumePath || "").replace(/^~(?=\/)/, os.homedir());
-    const base = custom && fs.existsSync(custom) ? custom : await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" });
+    const base = custom && fs.existsSync(custom) ? custom : baseResume?.path ?? (await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" }));
     log("info", "\nRestoring your normal resume on Naukri…");
     const tab = [...openPages].at(-1) ?? (await context.newPage());
     const ok = await naukri.uploadResume(tab, base);

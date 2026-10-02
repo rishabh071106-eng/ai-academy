@@ -19,6 +19,15 @@ search ─► read job ─► Claude: match score + tailored resume ─► apply
 | **Asks when unsure** | If a question needs data it doesn't have (notice period, CTC…) it **pauses and asks you** instead of guessing. |
 | **Tracks** | Dashboard at http://localhost:4321 shows KPIs, applications per day, the pipeline, status edits, notes, links to each tailored resume, and CSV export. |
 
+## Her resume is the source of truth
+
+At the start of every run the agent looks for the newest `~/Downloads/Aishwarya-Sharma-Resume*.pdf` (set `baseResume` in `config.json` to change this). If it's new or changed, Claude re-reads it into `profile.json`: summary, roles and bullets, grouped skills, "at a glance" numbers, project index and credentials. Her screening answers (notice period, CTC…) and contact details are kept. Run `npm run import-resume` to do it by hand.
+
+For every job the steps are: **read the job → create a resume for it → upload that resume → apply**.
+- The per-job resume uses the same design as hers (serif name, teal accents, two-column first page, project index, credentials) and stays close to her wording: bullets and skills are reordered and lightly adjusted for the job, never invented.
+- LinkedIn Easy Apply and company sites: the new PDF is uploaded in the application and selected.
+- Naukri: the new PDF replaces the resume on her Naukri profile just before applying; her own resume from Downloads is put back after the run.
+
 ## One-time setup
 
 You need Node.js 20+ and Google Chrome.

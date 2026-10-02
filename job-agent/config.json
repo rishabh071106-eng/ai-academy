@@ -1,6 +1,7 @@
 {
   "model": "claude-opus-5-5",
   "mode": "review",
+  "baseResume": "~/Downloads/Aishwarya-Sharma-Resume*.pdf",
   "minMatchScore": 55,
   "alwaysApplyKeywords": [
     "magento",

@@ -582,6 +582,7 @@ fetch("/api/profile").then((r) => r.json()).then((p) => {
   $("#heading").textContent = `${first}'s Job Hunt`;
   $("#initials").textContent = p.name.split(" ").map((w) => w[0]).slice(0, 2).join("");
   if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn & Naukri`;
+  if (p.sourceResume?.name) $("#subheading").textContent += ` · resume: ${p.sourceResume.name} (${new Date(p.sourceResume.mtimeMs).toLocaleDateString(undefined, { day: "numeric", month: "short" })})`;
   document.title = `${first}'s Job Hunt`;
 }).catch(() => {});
 

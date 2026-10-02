@@ -43,7 +43,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (p === "/api/profile") {
     const prof = readJson(path.join(ROOT, "profile.json"), {});
-    return send(res, 200, { name: prof.name ?? "", headline: prof.headline ?? "" });
+    return send(res, 200, { name: prof.name ?? "", headline: prof.headline ?? "", sourceResume: prof.sourceResume ?? null });
   }
   if (p === "/api/applications" && req.method === "GET") return send(res, 200, { statuses: tracker.STATUSES, rows: tracker.loadAll() });
   if (p === "/api/applications" && req.method === "POST") {

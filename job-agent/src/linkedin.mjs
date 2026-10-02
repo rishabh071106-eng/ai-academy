@@ -206,8 +206,15 @@ export async function apply(page, job, { resumePath, profile, mode }) {
     if ((await file.count().catch(() => 0)) && resumePath) {
       const accept = (await file.first().getAttribute("accept").catch(() => "")) ?? "";
       if (!accept || /pdf/i.test(accept)) {
-        await file.first().setInputFiles(resumePath).then(() => log("dim", "   ↳ uploaded tailored resume")).catch((e) => log("warn", `   resume upload failed: ${e.message.split("\n")[0]}`));
-        await sleep(2500);
+        await file.first().setInputFiles(resumePath).then(() => log("dim", `   ↳ uploaded ${path.basename(resumePath)} (made for this job)`)).catch((e) => log("warn", `   resume upload failed: ${e.message.split("\n")[0]}`));
+        await sleep(3000);
+        // LinkedIn lists earlier resumes too; make sure the one just uploaded is the selected one.
+        const card = root.getByText(path.basename(resumePath), { exact: false }).filter({ visible: true }).first();
+        const radio = card.locator("xpath=ancestor::*[.//input[@type='radio']][1]//input[@type='radio']").first();
+        if ((await radio.count().catch(() => 0)) && !(await radio.isChecked().catch(() => true))) {
+          await card.click().catch(() => {});
+          log("dim", "   ↳ selected the new resume");
+        }
       }
     }
 
