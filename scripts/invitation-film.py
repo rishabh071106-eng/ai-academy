@@ -59,7 +59,7 @@ def _ridge(y0, amp, step, fill, op):
 
 def river_scene():
     _s[0] = 987654321
-    o = [f'<svg class="river" viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid slice" fill="none">']
+    o = [f'<svg class="river" viewBox="0 250 {W} 760" preserveAspectRatio="xMidYMid slice" fill="none">']
     a = o.append
 
     a('<defs>'
@@ -91,16 +91,16 @@ def river_scene():
     # ── sky ──────────────────────────────────────────────────────────
     a(f'<rect width="{W}" height="{HORIZ+4}" fill="url(#rvSky)"/>')
     for _ in range(64):
-        a(f'<circle class="rv-star" cx="{_r()*W:.0f}" cy="{_r()*250:.0f}" r="{0.9+_r()*1.7:.1f}" '
+        a(f'<circle class="rv-star" cx="{_r()*W:.0f}" cy="{262+_r()*150:.0f}" r="{0.9+_r()*1.7:.1f}" '
           f'fill="#FFF6E2" opacity="{0.25+_r()*0.5:.2f}"/>')
-    a(f'<g class="rv-sun"><circle cx="{SUNX}" cy="250" r="190" fill="url(#rvGlow)"/>'
-      f'<circle cx="{SUNX}" cy="250" r="46" fill="#FFF2CE" opacity=".96"/>'
-      f'<circle cx="{SUNX}" cy="250" r="46" fill="none" stroke="#FFD89A" stroke-width="6" opacity=".5"/>'
-      f'<circle cx="{SUNX}" cy="250" r="68" fill="none" stroke="#FFE2AC" stroke-width="2" opacity=".28"/></g>')
+    a(f'<g class="rv-sun"><circle cx="{SUNX}" cy="322" r="156" fill="url(#rvGlow)"/>'
+      f'<circle cx="{SUNX}" cy="322" r="40" fill="#FFF2CE" opacity=".96"/>'
+      f'<circle cx="{SUNX}" cy="322" r="40" fill="none" stroke="#FFD89A" stroke-width="6" opacity=".5"/>'
+      f'<circle cx="{SUNX}" cy="322" r="58" fill="none" stroke="#FFE2AC" stroke-width="2" opacity=".28"/></g>')
 
     for i, (cx, cy, sc, op) in enumerate(
-            [(170, 120, 1.6, .38), (690, 90, 1.25, .30), (420, 206, 2.0, .28),
-             (930, 262, 1.35, .24), (90, 300, 1.2, .2), (560, 330, 1.5, .18)]):
+            [(170, 288, 1.5, .36), (690, 272, 1.2, .28), (420, 338, 1.8, .26),
+             (930, 368, 1.3, .22), (90, 392, 1.15, .2), (560, 404, 1.4, .17)]):
         a(f'<g class="rv-cloud" data-sp="{0.35+i*0.2:.2f}" opacity="{op}">'
           f'<g transform="translate({cx} {cy}) scale({sc})">'
           '<ellipse cx="0" cy="0" rx="76" ry="15" fill="#FFF2E0"/>'
@@ -108,17 +108,17 @@ def river_scene():
           '<ellipse cx="30" cy="-9" rx="44" ry="15" fill="#FFF6E8"/>'
           '<ellipse cx="4" cy="6" rx="60" ry="10" fill="#F6D8CE" opacity=".7"/></g></g>')
 
-    for i, (bx, by, bs) in enumerate([(250, 180, 1.1), (320, 156, .85), (205, 146, .7),
-                                      (840, 196, .95), (900, 216, .72), (780, 230, .6)]):
+    for i, (bx, by, bs) in enumerate([(250, 318, 1.0), (320, 300, .8), (205, 294, .66),
+                                      (840, 330, .9), (900, 346, .7), (780, 358, .58)]):
         a(f'<g class="rv-bird" data-sp="{0.5+i*0.26:.2f}">'
           f'<path transform="translate({bx} {by}) scale({bs})" d="M-12 0 C-6 -8 -2 -8 0 -2 '
           'C2 -8 6 -8 12 0" stroke="#7A5570" stroke-width="2.4" fill="none" '
           'stroke-linecap="round" opacity=".55"/></g>')
 
     # ── hills, then the far bank with its little temple spires ───────
-    a(_ridge(336, 22, 230, '#B195C2', .6))
-    a(_ridge(374, 16, 180, '#9C7FB2', .72))
-    a(_ridge(404, 10, 150, '#6E5A80', .8))
+    a(_ridge(366, 20, 230, '#B195C2', .6))
+    a(_ridge(392, 15, 180, '#9C7FB2', .72))
+    a(_ridge(410, 10, 150, '#6E5A80', .8))
     for tx, th in [(132, 30), (318, 23), (520, 34), (742, 25), (928, 30), (1046, 22)]:
         a(f'<path d="M{tx-10} 410 L{tx} {410-th} L{tx+10} 410 Z" fill="#5E4A70" opacity=".85"/>'
           f'<circle cx="{tx}" cy="{410-th-3}" r="3" fill="#E8C56A" opacity=".8"/>')
@@ -181,7 +181,7 @@ def river_scene():
       f'C820 {BANK-22} 960 {BANK+4} {W} {BANK-10}" stroke="#B4C184" stroke-width="3.4" opacity=".5"/>')
 
     # ── the kadamba tree leaning in from the left ────────────────────
-    a('<g class="rv-tree">'
+    a('<g class="rv-tree" transform="translate(0 96)">'
       f'<path d="M-18 {H+10} C10 880 34 740 42 600 C48 500 42 410 22 338 L68 326 '
       f'C86 404 94 500 88 604 C80 746 56 884 38 {H+10} Z" fill="#6B4A2E"/>'
       '<path d="M-6 760 C16 738 40 728 64 732" stroke="#5C3F26" stroke-width="9" '
@@ -207,9 +207,9 @@ def river_scene():
 
     # ── Krishna's cows, come down to the water ───────────────────────
     for i, (cx, foot, cs, body, patch) in enumerate([
-            (250, 906, 0.72, '#F4ECE1', '#C09060'),    # nearest, by the tree
-            (822, 838, 0.56, '#EADCC4', '#8E5A2E'),    # further along the bank
-            (986, 932, 0.44, '#FBF6EE', '#B8926A')]):  # a calf at her heel
+            (236, 918, 0.56, '#F4ECE1', '#C09060'),    # nearest, by the tree
+            (812, 842, 0.42, '#EADCC4', '#8E5A2E'),    # further along the bank
+            (978, 944, 0.33, '#FBF6EE', '#B8926A')]):  # a calf at her heel
         # the drawing stands on y=154 in its own space, so lift it onto the grass
         ty = foot - 154 * cs
         a(f'<g class="rv-cow" data-i="{i}" data-x="{cx}" data-y="{ty:.1f}" '
@@ -468,10 +468,13 @@ def nagada(side='L'):
       '</g>'
       '</svg>')
 # ── the cover, and the pages that are read on the right ──
-COVER = ('<div class="cov">' + SPRAY.replace('class="spray"', 'class="spray cov-tl"')
+COVER = ('<div class="cov">'
+         + SPRAY.replace('class="spray"', 'class="spray cov-tl"')
+         + SPRAY.replace('class="spray"', 'class="spray cov-br"')
          + '<p class="deva cov-shubh">॥ शुभ विवाह ॥</p>' + ORN
-         + '<p class="cov-names">Smatav <i>&amp;</i> Priyanka</p>'
-         + '<p class="cov-date">29 November &middot; 4 December 2026</p></div>')
+         + '<p class="cov-names">Smatav<i>&amp;</i>Priyanka</p>' + ORN
+         + '<p class="cov-date">29 November &middot; 4 December<br><b>2026</b></p>'
+         + '<p class="deva cov-foot">शुभ विवाह &mdash; स्मतव एवं प्रियंका</p></div>')
 
 PAGES = [
     '<p class="deva inv">॥ श्री गणेशाय नमः ॥</p>'
@@ -514,7 +517,7 @@ PAGES = [
 
     '<p class="label">Both occasions at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
     '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
-    '<p class="addr">Civil Bazar, Sharmnagar Road<br>Dharamshala, District Kangra<br>'
+    '<p class="addr">Civil Bazar, Shamnagar Road<br>Dharamshala, District Kangra<br>'
     'Himachal Pradesh &mdash; 176215</p>'
  + ORN +
     '<p class="deva blessing">आपकी उपस्थिति ही<br>हमारा आशीर्वाद है</p>'
@@ -542,7 +545,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
     linear-gradient(168deg,#FDF4EE 0%,#F5DAD1 100%);}
 .deva{font-family:'Tiro Devanagari Hindi',serif}
 
-#nagL,#nagR{position:absolute;bottom:0;width:214px;z-index:8}
+#nagL,#nagR{position:absolute;bottom:0;width:168px;z-index:8}
 #nagL{left:8px} #nagR{right:8px}
 .nag{width:100%;height:auto;display:block}
 #shower{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:40}
@@ -563,17 +566,17 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 #stage{position:absolute;inset:0;perspective:3200px;z-index:25}
 
 /* the picture fills the top of the frame, edge to edge */
-#art{position:absolute;top:0;left:0;width:1080px;height:1010px;overflow:hidden;z-index:2}
+#art{position:absolute;top:0;left:0;width:1080px;height:700px;overflow:hidden;z-index:2}
 #art .river{position:absolute;inset:0;width:100%;height:100%;display:block}
 .rk-fg{position:absolute;display:block;z-index:6;transform-origin:50% 82%;
   will-change:transform,left,top,width}
 #artVg{position:absolute;inset:0;z-index:7;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 40%,transparent 58%,rgba(60,10,28,.3) 100%)}
+  background:radial-gradient(ellipse at 50% 42%,transparent 62%,rgba(60,10,28,.26) 100%)}
 #artHem{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:10;
   background:linear-gradient(90deg,transparent,#A8822C 18%,#E6C56A 50%,#A8822C 82%,transparent)}
 
 /* the page that is read sits under it, and turns on its left edge */
-#pagewrap{position:absolute;top:1010px;left:0;width:1080px;height:910px;
+#pagewrap{position:absolute;top:700px;left:0;width:1080px;height:1220px;
   transform-style:preserve-3d;z-index:3;background:#F7DED6}
 .pg{position:absolute;inset:0;overflow:hidden;
   background:linear-gradient(162deg,#FFFCFA 0%,#FDF3EF 100%)}
@@ -595,59 +598,61 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
   background:linear-gradient(162deg,#FFFCFA 0%,#FBE7DE 100%);
   box-shadow:0 40px 90px -40px rgba(142,16,52,.5)}
 
-.inner{position:absolute;inset:34px 44px;border:1.5px solid rgba(168,130,44,.6);border-radius:8px;
+.inner{position:absolute;inset:40px 50px;border:1.5px solid rgba(168,130,44,.6);border-radius:8px;
   display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;text-align:center;padding:34px 38px}
 .inner::before{content:"";position:absolute;inset:8px;border:1px solid rgba(168,130,44,.3);border-radius:5px}
 
-.orn{width:250px;height:52px;margin:0}
+.orn{width:300px;height:62px;margin:0}
 .inner>*{margin-top:0}
-.spray{width:150px;height:150px}
-.cov{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
-.cov-tl{position:absolute;top:44px;left:44px}
-.cov-shubh{font-size:90px;letter-spacing:.1em;color:@@ROSE@@}
-.cov-names{font-family:'Great Vibes',cursive;font-size:137px;line-height:1.15;color:@@ROSE@@;margin-top:11px}
-.cov-names i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.48em;color:@@ROSE2@@}
-.cov-date{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:26px}
+.spray{width:180px;height:180px}
+.cov{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px}
+.cov-tl{position:absolute;top:50px;left:50px}
+.cov-br{position:absolute;bottom:50px;right:50px;transform:rotate(180deg)}
+.cov-foot{font-size:34px;color:@@ROSE2@@;margin-top:26px;opacity:.9}
+.cov-shubh{font-size:99px;letter-spacing:.1em;color:@@ROSE@@}
+.cov-names{font-family:'Great Vibes',cursive;font-size:152px;line-height:1.0;color:@@ROSE@@;margin-top:14px}
+.cov-names i{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.33em;color:@@ROSE2@@;margin:10px 0;letter-spacing:.1em}
+.cov-date{font-size:36px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:30px;line-height:1.9}
 
-.inv{font-size:79px;letter-spacing:.05em;color:@@ROSE2@@}
-.shloka{font-size:55px;line-height:1.95;color:@@ROSE@@}
-.trans{font-size:40px;font-style:italic;line-height:1.55;color:@@INK@@}
-.shubh{font-size:92px;letter-spacing:.1em;color:@@ROSE@@}
-.label{font-size:32px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.sub{font-size:45px;color:@@INK@@}
-.fams{display:flex;gap:18px;align-items:flex-start;width:100%;margin-top:11px}
+.inv{font-size:86px;letter-spacing:.05em;color:@@ROSE2@@}
+.shloka{font-size:60px;line-height:1.95;color:@@ROSE@@}
+.trans{font-size:44px;font-style:italic;line-height:1.55;color:@@INK@@}
+.shubh{font-size:101px;letter-spacing:.1em;color:@@ROSE@@}
+.label{font-size:30px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.sub{font-size:50px;color:@@INK@@}
+.fams{display:flex;gap:20px;align-items:flex-start;width:100%;margin-top:12px}
 .fam{flex:1}
-.fam h3{font-size:28px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
-.fsub{font-size:36px;color:@@INK@@;margin-top:4px}
-.kin{font-size:30px;line-height:1.5;color:@@ROSE@@;margin-top:12px}
+.fam h3{font-size:31px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
+.fsub{font-size:40px;color:@@INK@@;margin-top:4px}
+.kin{font-size:31px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
 .kin i{font-style:italic;font-size:.72em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
-.prog{list-style:none;margin-top:12px;display:grid;gap:9px;text-align:left}
-.prog li{font-size:28px;line-height:1.35;color:@@INK@@}
-.prog b{font-weight:600;color:@@ROSE@@;letter-spacing:.03em;margin-right:.5em}
+.prog{list-style:none;margin-top:16px;display:grid;gap:13px;text-align:left}
+.prog li{font-size:27px;line-height:1.3;color:@@INK@@}
+.prog b{font-weight:600;color:@@ROSE@@;letter-spacing:.03em;margin-right:.55em;display:inline-block;min-width:4.3em}
 .prog .deva{color:@@ROSE2@@;font-size:.94em;margin-left:.35em}
-.bless{font-size:32px;font-style:italic;color:@@INK@@;margin-top:21px;line-height:1.5}
+.bless{font-size:35px;font-style:italic;color:@@INK@@;margin-top:23px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.12em}
 .fdiv{width:1px;align-self:stretch;background:linear-gradient(180deg,transparent,rgba(168,130,44,.65),transparent)}
-.invite{font-size:44px;font-style:italic;line-height:1.65;color:@@INK@@}
-.name{font-family:'Great Vibes',cursive;font-size:162px;line-height:1.02;color:@@ROSE@@}
-.weds{font-size:53px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
+.invite{font-size:49px;font-style:italic;line-height:1.65;color:@@INK@@}
+.name{font-family:'Great Vibes',cursive;font-size:178px;line-height:1.02;color:@@ROSE@@}
+.weds{font-size:58px;font-style:italic;letter-spacing:.14em;color:@@ROSE2@@}
 .weds .deva{font-style:normal;font-size:.76em}
-.hi-note{font-size:37px;line-height:1.8;color:@@INK@@}
+.hi-note{font-size:40px;line-height:1.8;color:@@INK@@}
 .ev{display:flex;align-items:stretch;width:100%;border:1.5px solid rgba(168,130,44,.55);
   background:rgba(255,250,248,.88);text-align:left}
-.evd{width:246px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 11px;
+.evd{width:252px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:29px 13px;
   background:rgba(224,154,60,.16);border-right:1.5px solid rgba(168,130,44,.5)}
-.evd b{font-size:95px;line-height:1;font-weight:500;color:@@ROSE@@}
-.evd span{font-size:20px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@;margin-top:12px}
-.evd i{font-size:26px;font-style:normal;color:@@INK@@;margin-top:5px}
-.evb{padding:24px 29px}
-.evb h3{font-size:48px;font-weight:600;color:@@ROSE@@}
+.evd b{font-size:96px;line-height:1;font-weight:500;color:@@ROSE@@}
+.evd span{font-size:22px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@;margin-top:14px}
+.evd i{font-size:29px;font-style:normal;color:@@INK@@;margin-top:5px}
+.evb{padding:30px 28px}
+.evb h3{white-space:nowrap;font-size:53px;font-weight:600;color:@@ROSE@@}
 .evb h3 .deva{font-weight:400;font-size:.7em;color:@@ROSE2@@;margin-left:10px}
-.evx{font-size:36px;font-style:italic;color:@@INK@@;margin-top:7px}
-.evt{font-size:29px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:16px}
-.venue{font-size:76px;font-weight:600;color:@@ROSE@@}
-.addr{font-size:36px;line-height:1.55;color:@@INK@@}
-.blessing{font-size:62px;line-height:1.7;color:@@ROSE@@}
+.evx{font-size:34px;font-style:italic;color:@@INK@@;margin-top:9px}
+.evt{font-size:28px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:18px}
+.venue{font-size:78px;font-weight:600;color:@@ROSE@@}
+.addr{font-size:40px;line-height:1.55;color:@@INK@@}
+.blessing{font-size:68px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 
 <div id="intro">
@@ -679,7 +684,7 @@ const PAGEHTML = @@PAGES@@, TIMES = @@TIMES@@, DURATION = @@DUR@@;
 const HOLD = @@HOLD@@, TURN = @@TURN@@, OPEN_DUR = @@OPEN@@, COVER_HOLD = @@COVER_HOLD@@;
 const SCENE_B = @@SCENE_B@@, BOOK_IN = SCENE_B - 0.2, BEAT = 60/104, START = TIMES[1];
 /* the cut-out is 660x800 and its lowest pixel sits at 0.819 of that height */
-const CPW = 660, CPH = 800, FEET = 0.819, GROUND = 962;
+const CPW = 660, CPH = 800, FEET = 0.819, GROUND = 652;
 
 const RV=[...document.querySelectorAll('.river')].map(sv=>{
   const grab=c=>[...sv.querySelectorAll(c)].map(el=>{
@@ -840,19 +845,19 @@ function seek(t){
   let cw,dx,dy=0,cop=1,danceAmt;
   if(t<A2){
     const p=easeIO(clamp((t-START)/(A2-START),0,1));
-    cw=330+128*p; dx=440-440*p; danceAmt=0;
+    cw=252+92*p; dx=380-380*p; danceAmt=0;
     dy=-7*Math.abs(Math.sin(Math.PI*(t-START)/0.62))*(1-0.85*p);   /* the step of a walk */
     cop=clamp((t-START)/1.4,0,1);
   } else if(t<A3){
     const p=easeIO(clamp((t-A2)/(A3-A2),0,1));
-    cw=458+54*p; dx=0; danceAmt=0;
+    cw=344+40*p; dx=0; danceAmt=0;
     dy=-3.4*Math.sin(2*Math.PI*(t-A2)/3.1);                        /* at rest, breathing */
   } else {
-    cw=512+74*easeIO(clamp((t-A3)/(DURATION-A3),0,1)); dx=0;
+    cw=384+56*easeIO(clamp((t-A3)/(DURATION-A3),0,1)); dx=0;
     danceAmt=easeIO(clamp((t-A3)/2.6,0,1));
   }
   const ph=t/BEAT;
-  const bounce=-13*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
+  const bounce=-10*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
   const sway=2.4*Math.sin(2*Math.PI*ph/4)*(0.3+0.7*danceAmt);
   const skew=1.2*Math.sin(2*Math.PI*ph/4+0.6)*danceAmt;
   const pulse=1+0.018*Math.abs(Math.sin(Math.PI*ph))*danceAmt;
