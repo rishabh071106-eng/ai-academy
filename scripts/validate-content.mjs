@@ -50,7 +50,7 @@ const ncert = await read('data/ncert.json');
 let books = 0;
 for (const c of ncert.classes) for (const b of c.books) {
   books++;
-  if (b.code && !/^[a-l][ehu][a-z]{2}\d$/.test(b.code)) err('ncert.json', `class ${c.class} "${b.title}": odd code ${b.code}`);
+  if (b.code && !/^[a-l][ehus][a-z]{2}\d$/.test(b.code)) err('ncert.json', `class ${c.class} "${b.title}": odd code ${b.code}`);
   if (b.code && !(b.chapters > 0)) err('ncert.json', `class ${c.class} "${b.title}": chapters missing`);
 }
 

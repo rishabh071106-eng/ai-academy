@@ -148,3 +148,12 @@ ul.clean li:last-child{border-bottom:none}
   .page{padding:1.5rem 1rem 3rem}
 }
 .nav-inner{flex-wrap:wrap;gap:.6rem}
+/* The lecture player fills the screen below a non-sticky nav. */
+.lecture-page nav{position:static}
+.lecture-page .player{min-height:calc(100dvh - 70px)}
+.controls .btn{white-space:nowrap}
+@media(max-width:600px){
+  .lecture-page .player{min-height:calc(100dvh - 100px);padding-top:.5rem}
+  .lecture-page .card{min-height:0}
+  .controls .btn{padding:.65rem 1rem;font-size:.9rem}
+}

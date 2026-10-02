@@ -110,13 +110,15 @@ const rows = loaded.filter(Boolean).map(({ e, x }) => {
   const listenedHere = ch.reduce((a, c) => a + (s.listen[c.key] || 0), 0);
   return { e, n, total: ch.length, listenedHere };
 }).sort((a, b) => b.n / (b.total || 1) - a.n / (a.total || 1));
-document.getElementById('exams').innerHTML = rows.length ? `<div class="grid">${rows.map(r => `
+const started = rows.filter(r => r.n || r.listenedHere), rest = rows.filter(r => !r.n && !r.listenedHere);
+document.getElementById('exams').innerHTML = (started.length ? `<div class="grid">${started.map(r => `
   <a class="tile" href="exam.html?id=${r.e.id}">
     <div class="kicker">${r.e.cat.icon} ${esc(r.e.cat.name)}</div>
     <h3>${esc(r.e.name)}</h3>
     <div class="bar"><span style="width:${r.total ? (r.n / r.total) * 100 : 0}%"></span></div>
     <div class="meta">${r.n}/${r.total} chapters${r.listenedHere ? ` · 🎧 ${fmtMinutes(r.listenedHere)}` : ''}</div>
-  </a>`).join('')}</div>` : '<p class="meta">No exams loaded.</p>';
+  </a>`).join('')}</div>` : '<p class="meta">You haven\'t started an exam yet.</p>')
+  + (rest.length ? `<p class="meta" style="margin-top:1rem">Not started: ${rest.map(r => `<a href="exam.html?id=${r.e.id}">${esc(r.e.name)}</a>`).join(' · ')}</p>` : '');
 
 // Backup
 document.getElementById('export').onclick = () => {

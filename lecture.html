@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/learn.css">
 </head>
-<body>
+<body class="lecture-page">
 <div class="player">
   <div class="player-top">
     <a class="x" id="close" href="exams.html" aria-label="Close lecture">✕</a>
@@ -27,7 +27,7 @@
   </div>
   <div class="audio" id="audioOpts">
     Speed <select id="rate"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option></select>
-    Voice <select id="voice"></select>
+    <span>Voice</span> <select id="voice"></select>
   </div>
 </div>
 
@@ -110,7 +110,7 @@ function setIndex(i) {
   dots.forEach((d, j) => d.classList.toggle('on', j === i));
   document.getElementById('prog').style.width = `${(i / (all.length - 1)) * 100}%`;
   document.getElementById('count').textContent = `${Math.min(i + 1, cards.length)}/${cards.length}`;
-  document.getElementById('next').textContent = i === all.length - 1 ? (nextCh ? 'Next chapter →' : 'Done ✓') : 'Next →';
+  document.getElementById('next').textContent = i === all.length - 1 && !nextCh ? 'Done ✓' : 'Next →';
   if (i === all.length - 1) complete();
   // Swiping by hand while listening jumps the narration to the new card.
   if (listening && i !== spokenIdx && i < cards.length) speakCard(i);
@@ -168,6 +168,7 @@ else {
   const loadVoices = () => {
     voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en') || v.lang.startsWith('hi'));
     const pref = voices.findIndex(v => v.lang === 'en-IN');
+    voiceSel.hidden = voiceSel.previousElementSibling.hidden = !voices.length;
     voiceSel.innerHTML = voices.map((v, i) => `<option value="${i}"${i === pref ? ' selected' : ''}>${esc(v.name)} (${v.lang})</option>`).join('');
   };
   loadVoices();
