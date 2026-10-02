@@ -2,7 +2,7 @@ import pathlib, json, math
 
 fonts = pathlib.Path('fonts.css').read_text(encoding='utf-8')
 B = lambda n: pathlib.Path('/tmp/b64_%s.txt' % n).read_text().strip()
-IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green', 'radha-krishna-wide')}
+IMG = {n: 'data:image/jpeg;base64,' + B(n) for n in ('ganesh-ji', 'radha-krishna', 'ganesh-green')}
 
 def flower(cx, cy, r, petal, core, n=8, op=1.0):
     out = []
@@ -118,9 +118,9 @@ SPREADS = [
                '<p class="deva sub">शुभाकांक्षी — दोनों परिवार</p>')},
 ]
 
-SCENE_A, SCENE_B = 5.2, 10.2
-INTRO_OUT, BOOK_IN = 10.2, 10.0
-COVER_T, OPEN_DUR = 10.2, 1.6
+SCENE_A, SCENE_B = 0.0, 5.2
+INTRO_OUT, BOOK_IN = 5.2, 5.0
+COVER_T, OPEN_DUR = 5.2, 1.6
 HOLD, TURN = 5.0, 1.3
 START = COVER_T + 1.0 + OPEN_DUR          # first inner spread
 TIMES = [COVER_T] + [START + i*(HOLD+TURN) for i in range(len(SPREADS)-1)]
@@ -140,13 +140,6 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
     linear-gradient(168deg,#FDF4EE 0%,#F6DCD3 100%);}
 .deva{font-family:'Tiro Devanagari Hindi',serif}
 
-#opening{position:absolute;inset:0;z-index:15;overflow:hidden}
-#opening img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#opening .scrim{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,4,16,.14) 0%,transparent 26%,transparent 48%,rgba(50,8,26,.58) 100%)}
-.otitle{position:absolute;left:0;right:0;bottom:78px;text-align:center;color:#FFF6EE}
-.otitle .ot1{font-family:'Tiro Devanagari Hindi',serif;font-size:48px;letter-spacing:.1em;text-shadow:0 3px 20px rgba(40,6,20,.75)}
-.onames{font-family:'Great Vibes',cursive;font-size:96px;line-height:1.1;margin-top:10px;text-shadow:0 4px 24px rgba(40,6,20,.8)}
-.onames i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.48em;opacity:.92}
 #nagL,#nagR{position:absolute;bottom:8px;width:236px;z-index:30}
 #nagL{left:6px} #nagR{right:6px}
 .nag{width:100%;height:auto;display:block}
@@ -229,15 +222,6 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:#8A1F43;
 .blessing{font-size:44px;line-height:1.75;color:#8A1F43}
 </style></head><body>
 
-<div id="opening">
-  <img src="@@WIDE@@" alt="Radha and Krishna dancing together among the clouds">
-  <div class="scrim"></div>
-  <div class="otitle">
-    <p class="ot1">॥ शुभ विवाह ॥</p>
-    <p class="onames">Smatav <i>&amp;</i> Priyanka</p>
-  </div>
-</div>
-
 <div id="nagL">@@NAGL@@</div>
 <div id="nagR">@@NAGR@@</div>
 
@@ -285,7 +269,6 @@ const iL=document.getElementById('iL'),iR=document.getElementById('iR'),
       leaf=document.getElementById('leaf'),shade=document.getElementById('shade'),
       book=document.getElementById('book'),stage=document.getElementById('stage'),
       intro=document.getElementById('intro'),
-      opening=document.getElementById('opening'),openImg=document.querySelector('#opening img'),
       nags=[document.getElementById('nagL'),document.getElementById('nagR')];
 let last={};
 function setHTML(node,key,html){ if(last[key]!==html){node.innerHTML=html;last[key]=html;} }
@@ -299,14 +282,8 @@ function seek(t){
     f.el.style.opacity=(f.op*clamp(t/0.8,0,1)*clamp((DURATION-t)/1.6,0,1)).toFixed(3);
   }
 
-  /* Radha and Krishna open the film */
-  const oin=easeOut(clamp(t/1.0,0,1)), oout=1-easeIO(clamp((t-(SCENE_A-0.8))/0.8,0,1));
-  opening.style.opacity=(oin*oout).toFixed(3);
-  opening.style.visibility=(oin*oout)<0.004?'hidden':'visible';
-  openImg.style.transform='scale('+(1.085-0.085*clamp(t/SCENE_A,0,1)).toFixed(4)+')';
-
   /* the nagada players keep the beat the whole way through */
-  const nagIn=easeOut(clamp((t-(SCENE_A-1.2))/1.0,0,1))*clamp((DURATION-t)/1.2,0,1);
+  const nagIn=easeOut(clamp((t-0.3)/1.1,0,1))*clamp((DURATION-t)/1.2,0,1);
   for(let d=0;d<2;d++){
     const el=nags[d];
     el.style.opacity=nagIn.toFixed(3);
@@ -320,7 +297,7 @@ function seek(t){
   }
 
   /* Ganesh ji, then the book */
-  const iin=easeOut(clamp((t-SCENE_A+0.5)/1.0,0,1)), iout=1-easeIO(clamp((t-(SCENE_B-0.9))/0.9,0,1));
+  const iin=easeOut(clamp(t/1.0,0,1)), iout=1-easeIO(clamp((t-(SCENE_B-0.9))/0.9,0,1));
   intro.style.opacity=(iin*iout).toFixed(3);
   intro.style.transform='scale('+(0.94+0.06*iin).toFixed(4)+')';
   intro.style.visibility=(iin*iout)<0.004?'hidden':'visible';
@@ -364,7 +341,6 @@ html = (TPL.replace('@@FONTS@@', fonts)
            .replace('@@OPEN@@', str(OPEN_DUR))
            .replace('@@INTRO_OUT@@', str(INTRO_OUT)).replace('@@BOOK_IN@@', str(BOOK_IN))
            .replace('@@SCENE_A@@', str(SCENE_A)).replace('@@SCENE_B@@', str(SCENE_B))
-           .replace('@@WIDE@@', IMG['radha-krishna-wide'])
            .replace('@@NAGL@@', nagada()).replace('@@NAGR@@', nagada(mirror=True)))
 pathlib.Path('video.html').write_text(html, encoding='utf-8')
 print('video.html %.0f KB  duration %.1fs' % (len(html)/1024, DURATION))
