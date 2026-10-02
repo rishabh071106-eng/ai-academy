@@ -114,6 +114,7 @@ async function hiringContact(page) {
  * it often isn't possible; then the message just stays as a draft on the dashboard.
  */
 export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
+  if (!(await page.locator("[data-ja=hiring-team]").count())) await hiringContact(page); // page was reloaded
   const box = page.locator("[data-ja=hiring-team]").first();
   const btn = (await box.count()) ? await firstVisible(box, ["button:has-text('Message')", "a:has-text('Message')"]) : null;
   if (!btn) return { status: "draft", note: "No Message button on the hiring-team card" };
@@ -311,4 +312,19 @@ export async function sendForJob(page, row) {
   const contact = await hiringContact(page);
   if (!contact) return { status: "draft", note: "This job has no hiring-team card to message" };
   return messageHiringTeam(page, { ...row, hiringContact: contact }, row.hiringMessage, { mode: "send" });
+}
+
+/** Clicks "Apply" (company website) and returns the tab with the company's application page. */
+export async function openCompanySite(page) {
+  const ctl = page.getByRole("button", { name: /^apply|apply on company/i }).or(page.getByRole("link", { name: /^apply|apply on company/i })).filter({ visible: true }).first();
+  await ctl.waitFor({ state: "visible", timeout: 8000 });
+  const popup = page.context().waitForEvent("page", { timeout: 15000 }).catch(() => null);
+  await ctl.click();
+  await sleep(1500);
+  // LinkedIn sometimes asks to confirm leaving / sharing the profile first.
+  const cont = page.getByRole("dialog").getByRole("button", { name: /continue|apply|^ok$/i }).filter({ visible: true }).first();
+  if (await cont.isVisible().catch(() => false)) await cont.click().catch(() => {});
+  const tab = await popup;
+  if (tab) return tab;
+  return /linkedin\.com/.test(page.url()) ? null : page;
 }

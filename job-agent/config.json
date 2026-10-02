@@ -45,7 +45,7 @@
   "platforms": {
     "linkedin": {
       "enabled": true,
-      "easyApplyOnly": true,
+      "easyApplyOnly": false,
       "postedWithinDays": 14,
       "searches": [
         {
@@ -124,5 +124,8 @@
     "data scientist",
     "react native"
   ],
-  "excludeCompanies": []
+  "excludeCompanies": [],
+  "externalApply": {
+    "enabled": true
+  }
 }

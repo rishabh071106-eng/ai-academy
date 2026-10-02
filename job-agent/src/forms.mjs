@@ -34,6 +34,7 @@ export async function collectFields(root) {
     for (const el of deepAll(rootEl, "input, select, textarea")) {
       const type = (el.tagName === "INPUT" ? el.type || "text" : el.tagName).toLowerCase();
       if (["hidden", "submit", "button", "file", "search", "image", "reset"].includes(type)) continue;
+      if (el.getAttribute("role") === "combobox" || el.closest("[role=combobox], [data-automation-id=multiselectInputContainer]")) continue; // custom dropdowns: fillCustomSelects
       if (el.disabled || el.readOnly) continue;
       if (type === "radio") {
         const name = el.name || el.id;
@@ -77,18 +78,26 @@ function quickAnswer(field, profile) {
   const l = field.label.toLowerCase();
   const [first, ...rest] = profile.name.split(" ");
   if (/e-?mail/.test(l)) return profile.email;
-  if (/country code/.test(l) && !/(number|mobile).*country code/.test(l)) return field.options?.length ? field.options.find((o) => /india|\+91/i.test(o)) ?? null : profile.phoneCountryCode || "+91";
+  if (/country (phone |dial(ing)? )?code|phone (country )?code|dial(ing)? code/.test(l) && !/(number|mobile).*country code/.test(l)) return field.options?.length ? field.options.find((o) => /india|\+91/i.test(o)) ?? null : profile.phoneCountryCode || "+91";
   const cc = profile.phoneCountryCode || "+91";
   const digits = String(profile.phone).replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
   if (/(mobile|phone).*(with|incl\w*).*(country|code)|international|e\.?164/.test(l)) return `${cc} ${digits}`;
   if (/whatsapp|mobile|phone|contact number/.test(l)) return digits;
   if (/^(country|country of residence)$/.test(l)) return field.options?.find((o) => /india/i.test(o)) ?? "India";
-  if (/first name/.test(l)) return first;
-  if (/last name|surname/.test(l)) return rest.join(" ");
+  if (/first name|given name/.test(l)) return first;
+  if (/last name|surname|family name/.test(l)) return rest.join(" ");
   if (/^(full )?name$/.test(l)) return profile.name;
   if (/linkedin/.test(l) && profile.linkedinUrl) return profile.linkedinUrl;
   if (/^(location|city|current city|location \(city\))$/.test(l)) return profile.city;
   if (/total (years of )?(work )?experience|overall experience/.test(l) && field.type !== "select") return String(profile.totalExperienceYears);
+  const a = profile.applicationAnswers ?? {};
+  if (/preferred (first )?name/.test(l)) return first;
+  if (/^(signature|full legal name|legal name|your name)/.test(l)) return profile.name;
+  if (/current (company|employer)/.test(l) && a.currentCompany) return a.currentCompany;
+  if (/current (job )?title|current (role|designation)/.test(l) && a.currentTitle) return a.currentTitle;
+  if (/how did you (hear|find|learn)|source of (application|referral)/.test(l)) return field.options?.find((o) => /linkedin/i.test(o)) ?? field.options?.find((o) => /job board|website|online/i.test(o)) ?? (field.options?.length ? null : "LinkedIn");
+  // Consent / acknowledgement checkboxes on application forms.
+  if (field.type === "checkbox" && /agree|terms|consent|acknowledg|certify|privacy|confirm that|i understand/.test(l)) return "Yes";
   return null;
 }
 
@@ -181,4 +190,101 @@ export async function fillForm(root, profile, job) {
     await humanPause(200, 600);
   }
   return unanswered;
+}
+
+/**
+ * Custom dropdowns that aren't <select>: Workday's "Select One" buttons, React-Select /
+ * Greenhouse comboboxes, Workday multiselect prompts ("How did you hear about us?").
+ * Opens each empty one to read its options, asks Claude, then picks the answer.
+ * Returns labels of required dropdowns it couldn't fill.
+ */
+export async function fillCustomSelects(root, profile, job) {
+  const page = root.page();
+  const triggers = root.locator("button[aria-haspopup=listbox], [role=combobox]:not(select)").filter({ visible: true });
+  const n = Math.min(await triggers.count().catch(() => 0), 40);
+  const items = [];
+  for (let i = 0; i < n; i++) {
+    const t = triggers.nth(i);
+    const info = await t.evaluate((el) => {
+      const clean = (s) => (s || "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
+      const byId = (id) => el.getRootNode()?.getElementById?.(id) || document.getElementById(id);
+      const lab = el.getAttribute("aria-labelledby")?.split(" ").map((id) => byId(id)?.innerText || "").join(" ")
+        || el.getAttribute("aria-label")
+        || (el.id && document.querySelector(`label[for="${CSS.escape(el.id)}"]`)?.innerText)
+        || el.closest("[data-automation-id^=formField], .field, .form-group, fieldset, div")?.querySelector("label, legend")?.innerText || "";
+      const value = el.tagName === "INPUT" ? el.value : el.innerText;
+      const wrap = el.closest("[data-automation-id^=formField], .field, .form-group, fieldset, div");
+      return {
+        label: clean(lab),
+        value: clean(value),
+        required: el.getAttribute("aria-required") === "true" || /\*/.test(wrap?.innerText?.slice(0, 200) || ""),
+        isInput: el.tagName === "INPUT",
+        multi: !!el.closest("[data-automation-id=multiselectInputContainer]"),
+      };
+    }).catch(() => null);
+    if (!info || !info.label) continue;
+    if (info.value && !/^(select( one)?|select\.\.\.|choose|please select|--)$/i.test(info.value) && !info.isInput) continue;
+    if (info.isInput && info.value) continue;
+    // Open dropdowns to read their options. Search boxes only show options after typing.
+    let options = [];
+    if (!info.isInput) {
+      await t.click({ timeout: 2000 }).catch(() => {});
+      await page.waitForTimeout(500);
+      options = (await page.getByRole("option").filter({ visible: true }).allInnerTexts().catch(() => [])).map((o) => o.trim()).filter(Boolean).slice(0, 80);
+      await page.keyboard.press("Escape").catch(() => {});
+      if (await page.getByRole("listbox").filter({ visible: true }).count().catch(() => 0)) await t.click({ timeout: 1000 }).catch(() => {});
+    }
+    items.push({ i, ...info, options });
+  }
+  if (!items.length) return [];
+
+  const fields = items.map((it) => ({ key: `cs${it.i}`, label: it.label, type: "select", options: it.options, required: it.required }));
+  let answers = {};
+  const quick = {};
+  for (const f of fields) {
+    const q = quickAnswer(f, profile);
+    if (q) quick[f.key] = q;
+  }
+  const rest = fields.filter((f) => !quick[f.key]);
+  if (rest.length) {
+    try {
+      answers = await answerQuestions(profile, job, rest);
+    } catch (e) {
+      log("warn", `   Claude couldn't answer the dropdowns (${e.message.split("\n")[0]})`);
+    }
+  }
+  const missing = [];
+  for (const it of items) {
+    const key = `cs${it.i}`;
+    const ans = quick[key] ?? answers[key];
+    if (!ans || ans === "__ASK__") {
+      if (it.required) missing.push({ label: it.label });
+      continue;
+    }
+    const t = triggers.nth(it.i);
+    if (process.env.JA_DEBUG) log("dim", `   [debug] ${it.label}: answer=${ans} options=${it.options.length}`);
+    await t.click({ timeout: 2000 }).catch(() => {});
+    if (it.isInput) {
+      await t.fill("").catch(() => {});
+      await t.pressSequentially(ans, { delay: 20 }).catch(() => {});
+      if (it.multi) await page.keyboard.press("Enter").catch(() => {});
+      await page.waitForTimeout(700);
+    }
+    // Options may only load after typing; re-read them now.
+    const live = (await page.getByRole("option").filter({ visible: true }).allInnerTexts().catch(() => [])).map((o) => o.trim()).filter(Boolean);
+    const opts = live.length ? live : it.options;
+    const idx = bestOption(opts, ans);
+    // Never pick an arbitrary option for a dropdown; for a search box the first match is what we typed.
+    const opt = idx >= 0 ? page.getByRole("option", { name: opts[idx], exact: true }).filter({ visible: true }).first() : it.isInput ? page.getByRole("option").filter({ visible: true }).first() : null;
+    const ok = opt ? await opt.click({ timeout: 2500 }).then(() => true).catch(() => false) : false;
+    if (!ok && it.isInput) await page.keyboard.press("Enter").catch(() => {});
+    if (!ok && !it.isInput) {
+      await page.keyboard.press("Escape").catch(() => {});
+      if (it.required) missing.push({ label: it.label });
+      continue;
+    }
+    log("dim", `   ↳ ${it.label.slice(0, 70)} → ${idx >= 0 ? opts[idx] : ans}`);
+    await page.waitForTimeout(400);
+  }
+  return missing;
 }

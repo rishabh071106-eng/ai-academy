@@ -15,6 +15,7 @@ search ─► read job ─► Claude: match score + tailored resume ─► apply
 | **Tailors the resume** | Reorders and rewrites the summary, skills and bullets for each job. It never invents experience. The PDF is saved as `data/resumes/<job>/Aishwarya_Sharma_Resume.pdf`. |
 | **Applies** | LinkedIn: goes through Easy Apply, uploads the tailored PDF and answers the screening questions. Naukri: clicks Apply and answers the recruiter chatbot. |
 | **Messages the hiring team** | Writes a short, human-sounding note to the recruiter or hiring manager for every matched job. It names the role, one specific thing from the job post that matches her work, and a real project. With LinkedIn Premium it sends it as an InMail from the "Meet the hiring team" card (after asking you). On the dashboard you can **edit any message and press "Send on LinkedIn"**, or copy it. |
+| **Applies on company sites** | When a job says "Apply on company website", the agent opens the site and fills the application: **Workday** (signs in, or creates an account with her email and `ATS_PASSWORD`, then goes through every step), **Greenhouse, Lever, Ashby, SmartRecruiters** and ordinary one-page forms. It uploads the tailored resume and a cover letter, and answers dropdowns and questions with Claude. CAPTCHAs, email verification and sign-ins it can't do are handed to you on the dashboard. |
 | **Asks when unsure** | If a question needs data it doesn't have (notice period, CTC…) it **pauses and asks you** instead of guessing. |
 | **Tracks** | Dashboard at http://localhost:4321 shows KPIs, applications per day, the pipeline, status edits, notes, links to each tailored resume, and CSV export. |
 
@@ -25,7 +26,7 @@ You need Node.js 20+ and Google Chrome.
 ```bash
 cd job-agent
 npm install
-cp .env.example .env          # paste your ANTHROPIC_API_KEY
+cp .env.example .env          # paste your ANTHROPIC_API_KEY (and an ATS_PASSWORD for career sites)
 ```
 
 1. **Profile.** `profile.json` holds the candidate's data. It is git-ignored, so it never leaves this machine. Either put the supplied `profile.json` in this folder, or generate one from a PDF with `npm run import-resume -- ~/Downloads/resume.pdf`.

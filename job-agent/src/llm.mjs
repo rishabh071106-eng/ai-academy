@@ -131,7 +131,10 @@ export async function answerQuestions(profile, job, fields) {
 - For select/radio fields, answer with one of the given options, copied exactly.
 - For "years of experience with X" give a whole number: use skillYears, or for related skills the closest sensible value; use 0 only when the candidate truly lacks it.
 - For numeric fields answer digits only. CTC values are in lakhs per annum (LPA) unless the question asks for another unit; convert if needed.
-- If a needed value is missing or starts with "TODO", or the question asks for something you cannot know (e.g. a personal opinion essay, reference names, ID numbers), answer exactly __ASK__.
+- Motivation / free-text questions ("Why do you want to join us?", "Tell us about a project", "Anything else?"): write 2-4 genuine, specific sentences in her voice using her real experience and this job. No clichés, no exclamation marks.
+- Voluntary self-identification (race/ethnicity, veteran status, disability, sexual orientation): use the data if present (gender and disability are given); otherwise pick the "decline / prefer not to say / I don't wish to answer" option. Veteran status: she is not a veteran.
+- Work authorization outside India / visa sponsorship: she is authorized only in India; for other countries answer that she would need sponsorship.
+- If a needed fact is missing or starts with "TODO", or the question asks for something you cannot know (reference names, ID/passport numbers, exact salary history line items), answer exactly __ASK__.
 - Never claim skills, degrees or legal statuses the data does not support.`,
     content: `CANDIDATE DATA:
 ${JSON.stringify(profile, null, 2)}

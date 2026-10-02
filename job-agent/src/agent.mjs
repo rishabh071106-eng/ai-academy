@@ -7,6 +7,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { connect } from "./browser.mjs";
+import { applyExternal } from "./external.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
@@ -172,9 +173,12 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("ok", `  match ${ev.matchScore}% — tailored resume: data/${resumeFile}`);
 
         if (job.applyType !== "easy") {
-          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on company site — apply manually with the tailored resume" });
-          // Can't apply here, but reaching the hiring team still helps.
-          if (mode !== "dry-run") await maybeMessage(mod, key, page, job);
+          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
+          if (mode !== "dry-run" && job.applyType === "external" && config.externalApply?.enabled !== false && mod.openCompanySite) {
+            await applyTo(mod, key, page, job, resumePath, { external: true, coverLetter: ev.hiringMessage?.full?.replace(/^Hi[^,\n]*,/, "Dear Hiring Team,") });
+          } else if (mode !== "dry-run") {
+            await maybeMessage(mod, key, page, job);
+          }
           continue;
         }
         if (mode === "dry-run") {
@@ -190,10 +194,17 @@ for (const [key, mod] of Object.entries(platforms)) {
   }
 }
 
-async function applyTo(mod, key, page, job, resumePath) {
+async function applyTo(mod, key, page, job, resumePath, { external = false, coverLetter } = {}) {
   let result;
   try {
-    result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} });
+    if (external) {
+      log("info", "  applying on the company's site…");
+      result = await applyExternal(page, job, { open: mod.openCompanySite, resumePath, profile, mode, coverLetter });
+      // Back to the job page for the hiring-team message.
+      if (!page.url().includes(new URL(job.url).hostname)) await page.goto(job.url, { waitUntil: "domcontentloaded" }).catch(() => {});
+    } else {
+      result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} });
+    }
   } catch (e) {
     result = { status: "needs_attention", note: `Error: ${e.message}` };
   }
