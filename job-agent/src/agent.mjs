@@ -94,6 +94,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
         log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
+        log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
 
         if (job.alreadyApplied) {
           tracker.upsert(key, job.jobId, { ...base, status: "applied", historyNote: "Already applied before the agent saw it" });
@@ -117,6 +118,15 @@ for (const [key, mod] of Object.entries(platforms)) {
         let ev;
         try {
           ev = await evaluateAndTailor(profile, job);
+          if (!ev.descriptionComplete) {
+            // Claude thinks the description was cut off: open the job again and re-read it once.
+            log("dim", "  description looks cut off — opening the full job again");
+            const again = { platform: key, ...(await mod.getJob(page, ref)) };
+            if ((again.description ?? "").length > (job.description ?? "").length + 50) {
+              Object.assign(job, { ...again, title: job.title || again.title, company: job.company || again.company });
+              ev = await evaluateAndTailor(profile, job);
+            }
+          }
         } catch (e) {
           log("err", `  Claude evaluation failed: ${e.message}`);
           continue;

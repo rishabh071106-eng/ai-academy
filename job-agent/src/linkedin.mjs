@@ -1,4 +1,4 @@
-import { firstVisible, readPage, textOf } from "./browser.mjs";
+import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { fillForm } from "./forms.mjs";
 import { confirm, humanPause, log, sleep, waitForUser } from "./util.mjs";
 
@@ -33,9 +33,7 @@ export async function getJob(page, ref) {
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await firstVisible(page, ["h1", "main"], 10000);
   await humanPause(1500, 2500);
-  // Expand "See more" on the description.
-  await page.getByRole("button", { name: /see more|show more/i }).first().click({ timeout: 1500 }).catch(() => {});
-  await sleep(500);
+  const expanded = await expandJob(page);
 
   const { docTitle, h1, pageText } = await readPage(page);
   // The tab title is "<job title> | <company> | LinkedIn" (sometimes with a "(3) " prefix).
@@ -55,6 +53,7 @@ export async function getJob(page, ref) {
     // Fall back to the whole page text when the description block isn't found.
     description: description.length > 300 ? description : pageText,
     pageTextLength: pageText.length,
+    expanded,
     hiringContact: await hiringContact(page),
     alreadyApplied: /\bApplied\s+\d+\s*(minute|hour|day|week|month)s?\s+ago\b|Application submitted/i.test(pageText.slice(0, 3000)),
     applyType: easy ? "easy" : other ? "external" : "none",

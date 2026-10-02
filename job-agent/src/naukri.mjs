@@ -1,4 +1,4 @@
-import { firstVisible, readPage, textOf } from "./browser.mjs";
+import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { answerQuestions } from "./llm.mjs";
 import { confirm, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
 
@@ -28,6 +28,7 @@ export async function getJob(page, ref) {
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await firstVisible(page, ["h1", "main"], 15000);
   await humanPause(1200, 2200);
+  const expanded = await expandJob(page, "body");
   const { h1, pageText } = await readPage(page);
   const applyBtn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"]);
   const applyText = applyBtn ? (await applyBtn.innerText()).trim() : "";
@@ -40,6 +41,7 @@ export async function getJob(page, ref) {
     location: await textOf(page, ["[class*=jhc__location]", "[class*=location] a", "[class*=loc]"]),
     description: description.length > 300 ? description : pageText,
     pageTextLength: pageText.length,
+    expanded,
     alreadyApplied: /^applied$/i.test(applyText),
     applyType: external ? "external" : applyBtn ? "easy" : "none",
   };

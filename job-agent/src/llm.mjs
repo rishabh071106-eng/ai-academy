@@ -41,6 +41,7 @@ const EVAL_SCHEMA = obj({
   jobTitle: { type: "string", description: "The job's title as stated on the page" },
   company: { type: "string", description: "Hiring company name as stated on the page" },
   location: { type: "string", description: "Job location, or empty" },
+  descriptionComplete: { type: "boolean", description: "false if the job description looks cut off (ends mid-sentence, '…more', only a teaser)" },
   matchScore: { type: "integer", description: "0-100 fit of candidate to this job" },
   shouldApply: { type: "boolean" },
   matchReasons: { ...strArr, description: "2-4 short reasons it fits" },
