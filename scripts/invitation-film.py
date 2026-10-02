@@ -516,18 +516,22 @@ PAGES = [
     '<h2 class="evname">Ladies Sangeet</h2><p class="deva sub">महिला संगीत</p>'
     '<ul class="prog">'
     '<li><b>12:15 PM</b><span>Welcome of Mama ji<i class="deva">मामा जी का स्वागत</i></span></li>'
+    '<li><b>12:00 &ndash; 3:00 PM</b><span>Lunch &middot; Paramparik style'
+    '<i class="deva">दोपहर का भोजन &middot; पारम्परिक शैली</i></span></li>'
     '<li><b>4:00 PM</b><span>Ladies Sangeet<i class="deva">महिला संगीत</i></span></li>'
     '<li><b>8:00 PM</b><span>Dinner<i class="deva">रात्रि भोज</i></span></li>'
-    '</ul>',
+    '</ul>'
+    '<p class="evat">at <b>Lions Club Dharamshala</b></p>',
 
     '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
     '<div class="bigdate"><b>04</b><span>December 2026</span><i class="deva">शुक्रवार &middot; Friday</i></div>'
     '<h2 class="evname">The Dham</h2><p class="deva sub">धाम</p>'
     '<p class="evx">The traditional Pahari feast,<br>served to all.</p>'
     '<p class="deva sub">पारम्परिक पहाड़ी भोज</p>'
-    '<p class="evt">12:00 noon &ndash; 4:00 PM</p>',
+    '<p class="evt">12:00 noon &ndash; 4:00 PM</p>'
+    '<p class="evat">at <b>Lions Club Dharamshala</b></p>',
 
-    '<p class="label">Both occasions at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
+    '<p class="label">Both events at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
     '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
     '<p class="addr">Civil Bazar, Shamnagar Road<br>Dharamshala, District Kangra<br>'
     'Himachal Pradesh &mdash; 176215</p>'
@@ -642,22 +646,24 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .famrule{width:58%;height:1px;margin:26px auto;
   background:linear-gradient(90deg,transparent,rgba(168,130,44,.7),transparent)}
 .bigdate{display:flex;flex-direction:column;align-items:center;margin-top:4px}
-.bigdate b{font-size:158px;line-height:.92;font-weight:500;color:@@ROSE@@}
-.bigdate span{font-size:36px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
-  color:@@ROSE2@@;margin-top:14px}
-.bigdate i{font-size:36px;font-style:normal;color:@@INK@@;margin-top:10px}
-.evname{font-size:78px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
-.prog{list-style:none;margin-top:22px;display:grid;gap:18px;width:100%}
+.bigdate b{font-size:116px;line-height:.92;font-weight:500;color:@@ROSE@@}
+.bigdate span{font-size:32px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+  color:@@ROSE2@@;margin-top:9px}
+.bigdate i{font-size:32px;font-style:normal;color:@@INK@@;margin-top:6px}
+.evname{font-size:64px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
+.prog{list-style:none;margin-top:16px;display:grid;gap:10px;width:100%}
 .prog li{display:flex;align-items:flex-start;justify-content:center;gap:26px;text-align:left}
-.prog li>b{flex:none;font-size:44px;font-weight:600;color:@@ROSE@@;min-width:4.7em;
+.prog li>b{flex:none;font-size:38px;font-weight:600;color:@@ROSE@@;min-width:6.4em;
   text-align:right;line-height:1.26}
-.prog li>span{font-size:46px;color:@@INK@@;line-height:1.24;min-width:11.4em}
-.prog li>span i{display:block;font-size:.88em;font-style:normal;color:@@ROSE2@@;margin-top:5px}
+.prog li>span{font-size:40px;color:@@INK@@;line-height:1.24;min-width:11.4em}
+.prog li>span i{display:block;font-size:.88em;font-style:normal;color:@@ROSE2@@;margin-top:2px}
 .phlab{margin-top:2px}
 .phlab .deva{letter-spacing:0;text-transform:none;font-weight:400;font-size:1.15em;
   color:@@INK@@;margin-left:16px}
 .phone{font-size:52px;font-weight:600;line-height:1.46;color:@@ROSE@@;letter-spacing:.02em;
   margin-top:10px}
+.evat{font-size:33px;font-style:italic;color:@@INK@@;margin-top:12px}
+.evat b{font-style:normal;color:@@ROSE2@@;font-weight:600;font-size:1.06em}
 .bless{font-size:38px;font-style:italic;color:@@INK@@;margin-top:22px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.1em}
 .kin{font-size:44px;line-height:1.5;color:@@ROSE@@;margin-top:14px}

@@ -598,16 +598,16 @@
 
     /* sheet two: the occasions, the venue and the blessing */
     .occasions{padding-top:0}
-    .leaf{width:138px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
+    .leaf{width:124px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.45)}
     .leaf-cap{margin-bottom:10px}
     .occasions+.label{margin-top:12px}
     .phone-label{margin-top:12px}
     .phone{font-size:1.12rem;margin-top:.3rem}
     .event{break-inside:avoid}
-    .blessing{margin-top:6px}
-    .event .body{padding:8px 15px}
+    .blessing{margin-top:4px}
+    .event .body{padding:6px 14px}
     .event .when{padding:8px 8px}
-    .compliments{margin-top:6px}
+    .compliments{margin-top:4px}
     .addr{max-width:none}
 
     /* with one occasion on the sheet there is room to spare, so the
@@ -739,6 +739,7 @@
           <h3>Ladies Sangeet <span class="hi">महिला संगीत</span></h3>
           <ul class="prog">
             <li><b>12:15 PM</b> Welcome of Mama ji <span class="hi">मामा जी का स्वागत</span></li>
+            <li><b>12:00 &ndash; 3:00 PM</b> Lunch &middot; Paramparik style <span class="hi">दोपहर का भोजन &middot; पारम्परिक शैली</span></li>
             <li><b>4:00 PM</b> Ladies Sangeet <span class="hi">महिला संगीत</span></li>
             <li><b>8:00 PM</b> Dinner <span class="hi">रात्रि भोज</span></li>
           </ul>
@@ -759,7 +760,7 @@
     </div>
   </section>
 
-  <p class="label venue-label">Both occasions at</p>
+  <p class="label venue-label">Both events at</p>
   <p class="label-hi">दोनों कार्यक्रम स्थल</p>
   <p class="venue">Lions Club Dharamshala<span class="hi">लायंस क्लब धर्मशाला</span></p>
   <p class="addr">
@@ -816,6 +817,8 @@
         /* the day runs to a programme, so it is listed instead of one time */
         programme: [
           { at: '12:15 PM', what: 'Welcome of Mama ji', whatHi: 'मामा जी का स्वागत' },
+          { at: '12:00 – 3:00 PM', what: 'Lunch · Paramparik style',
+                                                whatHi: 'दोपहर का भोजन · पारम्परिक शैली' },
           { at: '4:00 PM',  what: 'Ladies Sangeet',     whatHi: 'महिला संगीत' },
           { at: '8:00 PM',  what: 'Dinner',             whatHi: 'रात्रि भोज' }
         ]
