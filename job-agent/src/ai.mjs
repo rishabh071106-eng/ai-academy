@@ -52,10 +52,16 @@ async function claude({ system, content, schema, effort, maxTokens, role }) {
 // Two kinds of Google keys work:
 //  - Google AI Studio keys ("AIza…")          → generativelanguage.googleapis.com
 //  - Vertex AI express-mode keys ("AQ.…")     → aiplatform.googleapis.com
-const isVertexKey = (key) => /^AQ\./.test(key) || config.geminiEndpoint === "vertex";
-const geminiBase = (key) =>
-  process.env.GEMINI_BASE_URL ||
-  (isVertexKey(key) ? "https://aiplatform.googleapis.com/v1/publishers/google" : "https://generativelanguage.googleapis.com/v1beta");
+// A key may be restricted to one of the two services; if one says "blocked"/"not enabled",
+// the other is tried and remembered for the rest of the run.
+const ENDPOINTS = {
+  studio: "https://generativelanguage.googleapis.com/v1beta",
+  vertex: "https://aiplatform.googleapis.com/v1/publishers/google",
+};
+let endpointOverride = null;
+const isVertexKey = (key) => (endpointOverride ? endpointOverride === "vertex" : /^AQ\./.test(key) || config.geminiEndpoint === "vertex");
+const geminiBase = (key) => process.env.GEMINI_BASE_URL || ENDPOINTS[isVertexKey(key) ? "vertex" : "studio"];
+let switchedEndpoint = false;
 
 // If the configured model name isn't available for this key, try these in order.
 const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
@@ -131,8 +137,15 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       log("err", `\n■ STOPPED: The Gemini API key in job-agent/.env is not valid (${isVertexKey(key) ? "Vertex AI key" : "AI Studio key"}). Check it was copied completely, or create a new one, then press Start again.`);
       process.exit(3);
     }
+    // Key not allowed on this Google service: try the other one once.
+    if ((res.status === 403 || res.status === 401) && !switchedEndpoint && !process.env.GEMINI_BASE_URL) {
+      switchedEndpoint = true;
+      endpointOverride = isVertexKey(key) ? "studio" : "vertex";
+      log("dim", `   Google says this key can't use ${endpointOverride === "studio" ? "Vertex AI" : "the Gemini API"}; trying ${endpointOverride === "studio" ? "the Gemini API (AI Studio)" : "Vertex AI"} instead`);
+      continue;
+    }
     if (res.status === 403) {
-      log("err", `\n■ STOPPED: Google refused the request (${msg}). ${isVertexKey(key) ? "For a Vertex AI key, the Vertex AI API must be enabled in its Google Cloud project." : "Check the key's project has the Gemini API enabled."}`);
+      log("err", `\n■ STOPPED: Google refused the request on both of its Gemini services (${msg}). The simplest fix: create a key at aistudio.google.com/apikey and put it in .env as GEMINI_API_KEY.`);
       process.exit(3);
     }
     if (res.status === 404 && candidates.length) {
