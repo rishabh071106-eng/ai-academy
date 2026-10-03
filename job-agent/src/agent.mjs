@@ -43,6 +43,12 @@ log("info", `Mode: ${mode} · apply to up to ${maxApply} · review ${reviewLimit
 process.on("unhandledRejection", (e) => log("err", `  (recovered) ${String(e?.message ?? e).split("\n")[0]}`));
 process.on("uncaughtException", (e) => log("err", `  (recovered) ${String(e?.message ?? e).split("\n")[0]}`));
 
+// Jobs whose page showed LinkedIn's "unusual activity" warning were saved under that text as
+// the title and skipped; put them back on the to-do list so they're tried again later.
+for (const r of tracker.loadAll()) {
+  if (/unusual activity on your account/i.test(r.title || "")) tracker.update(r.id, { title: "(LinkedIn job, not read yet)", company: "", status: "needs_attention", skipReason: null, historyNote: "LinkedIn showed a security check instead of the job; will retry" });
+}
+
 let context;
 try {
   ({ context } = await connect());
@@ -100,7 +106,7 @@ for (const [key, mod] of Object.entries(platforms)) {
     const reviewedBefore = stats.scanned;
     // Round 1 begins with the unfinished jobs from earlier runs.
     const retryList = round === 1 && retryUnfinished
-      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: `${r.title} · ${r.company}`, title: r.title }))
+      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: r.title?.startsWith("(") ? "" : `${r.title} · ${r.company}`, title: r.title }))
       : [];
     if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
     for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...pcfg.searches]) {

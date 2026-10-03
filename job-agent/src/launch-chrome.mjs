@@ -3,13 +3,13 @@
 // dedicated profile in job-agent/.chrome-profile. Log in to LinkedIn, Naukri and Alignerr in
 // that window once; the logins persist for every later run. (The agents also start this
 // Chrome by themselves when it isn't running.)
-import { CDP_URL, launchChrome } from "./chrome.mjs";
+import { launchChrome } from "./chrome.mjs";
 import { log } from "./util.mjs";
 
 try {
-  const ok = await launchChrome();
-  if (ok) {
-    log("ok", `Chrome is running with DevTools at ${CDP_URL} (profile: .chrome-profile).`);
+  const url = await launchChrome();
+  if (url) {
+    log("ok", `Chrome is running with DevTools at ${url} (profile: .chrome-profile).`);
     log("info", "Log in to LinkedIn, Naukri and Alignerr in that window (first time only), then start the agents from the dashboard.");
   } else log("err", "Chrome started but didn't open its DevTools port. Quit Chrome completely (Cmd+Q) and run npm run chrome again.");
 } catch (e) {

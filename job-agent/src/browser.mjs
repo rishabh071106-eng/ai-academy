@@ -1,32 +1,24 @@
 import { chromium } from "playwright-core";
-import { CDP_URL, chromeIsUp, launchChrome } from "./chrome.mjs";
-import { log, sleep } from "./util.mjs";
+import { ensureChrome } from "./chrome.mjs";
+import { log } from "./util.mjs";
 
-/** Attach to the already-running, already-logged-in Chrome. */
+/** Attach to the agent's Chrome, starting or restarting it when needed. */
 export async function connect() {
-  const url = CDP_URL;
-  // The agent's Chrome was closed? Start it ourselves instead of failing.
-  if (!(await chromeIsUp())) {
-    log("warn", "The agent's Chrome isn't running — starting it…");
-    const ok = await launchChrome().catch((e) => {
-      log("err", e.message);
-      return false;
-    });
-    if (!ok) {
-      log("err", "\n■ STOPPED: Couldn't start the agent's Chrome. Quit Chrome completely (Cmd+Q), run `npm run chrome`, then press Start again.");
-      process.exit(3);
-    }
-    log("ok", "Chrome started. (If LinkedIn/Naukri/Alignerr ask you to log in, log in once in that window.)");
-    await sleep(4000);
-  }
   try {
-    const browser = await chromium.connectOverCDP(url);
-    const context = browser.contexts()[0];
-    if (!context) throw new Error("No browser context");
+    const { url, browser, context } = await ensureChrome(async (url) => {
+      const browser = await chromium.connectOverCDP(url);
+      const context = browser.contexts()[0];
+      if (!context) {
+        await browser.close().catch(() => {});
+        throw new Error("No browser context");
+      }
+      return { browser, context };
+    });
     log("ok", `Connected to Chrome at ${url}`);
     return { browser, context };
   } catch (e) {
-    throw new Error(`Could not reach Chrome at ${url}. Start it with \`npm run chrome\` (and keep it open). (${e.message.split("\n")[0]})`);
+    log("err", `\n■ STOPPED: Couldn't connect to the agent's Chrome (${e.message.slice(0, 300)}). Quit Chrome completely (Cmd+Q on every Chrome window), then press Start again — the agent opens its own Chrome.`);
+    process.exit(3);
   }
 }
 

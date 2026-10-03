@@ -79,8 +79,8 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
       setTimeout(() => { if (!run.stopRequested && !run.child) start(run.options && { platform, ...run.options }, run.restarts); }, 10000);
       return;
     }
-    push(run, signal ? "■ Agent stopped" : code === 3 ? "■ Agent stopped: Claude API problem (see the line above)" : `■ Agent finished (exit code ${code})`, code === 3 ? "err" : "sys");
-    run.fatal = code === 3 ? (run.log.filter((l) => /STOPPED:/.test(l.text)).at(-1)?.text.replace(/^.*STOPPED:\s*/, "") ?? "Claude API problem") : null;
+    push(run, signal ? "■ Agent stopped" : code === 3 ? "■ Agent stopped (see the line above)" : `■ Agent finished (exit code ${code})`, code === 3 ? "err" : "sys");
+    run.fatal = code === 3 ? (run.log.filter((l) => /STOPPED:/.test(l.text)).at(-1)?.text.replace(/^.*STOPPED:\s*/, "") ?? "see the live log") : null;
     Object.assign(run, { running: false, endedAt: Date.now(), exitCode: code });
   });
   return status();

@@ -7,6 +7,19 @@ import { ask, confirm, DATA_DIR, humanPause, log, sleep, waitForUser } from "./u
 
 export const name = "linkedin";
 
+// LinkedIn's "We noticed some unusual activity" / security check pages mean the account is
+// being rate-limited for automation. Carrying on makes a restriction more likely, so the
+// LinkedIn agent stops and tells you.
+const FLAGGED = /unusual activity|security verification|quick security check|let's confirm it's you|account (has been |is )?restricted|temporarily restricted/i;
+async function stopIfFlagged(page) {
+  const url = page.url();
+  const head = await page.evaluate(() => `${document.title}\n${(document.body?.innerText || "").slice(0, 1500)}`).catch(() => "");
+  if (!/\/checkpoint\/(challenge|rp)/.test(url) && !FLAGGED.test(head)) return;
+  await page.bringToFront().catch(() => {});
+  log("err", "\n■ STOPPED: LinkedIn says it noticed unusual activity on her account. Do the check LinkedIn shows in the agent's Chrome window, then give LinkedIn a rest (at least a few hours, ideally until tomorrow) before starting the LinkedIn agent again, with a lower \"Apply to\" (10-15). Naukri and Alignerr can keep running.");
+  process.exit(3);
+}
+
 export async function search(page, s, cfg) {
   const params = new URLSearchParams({ keywords: s.keywords, location: s.location ?? "", sortBy: "DD" });
   if (cfg.easyApplyOnly) params.set("f_AL", "true");
@@ -16,6 +29,7 @@ export async function search(page, s, cfg) {
   await page.goto(`https://www.linkedin.com/jobs/search/?${params}`, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await sleep(3000);
+  await stopIfFlagged(page);
   if (/\/login|\/authwall|\/checkpoint/.test(page.url())) throw new Error("LinkedIn is not logged in in this Chrome window");
 
   // LinkedIn sometimes ignores URL keywords and shows "recommended" jobs; then type the search in.
@@ -69,6 +83,7 @@ export async function getJob(page, ref) {
   await page.goto(ref.url, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await firstVisible(page, ["h1", "main"], 10000);
+  await stopIfFlagged(page);
   await humanPause(1500, 2500);
   const expanded = await expandJob(page);
 
