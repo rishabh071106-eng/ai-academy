@@ -38,6 +38,7 @@ const server = http.createServer(async (req, res) => {
     if (p === "/api/agent/start" && req.method === "POST") return send(res, 200, runner.start(await readBody(req)));
     if (p === "/api/agent/stop" && req.method === "POST") return send(res, 200, runner.stop(await readBody(req)));
     if (p === "/api/agent/answer" && req.method === "POST") return send(res, 200, runner.answer(await readBody(req)));
+    if (p === "/api/agent/skip" && req.method === "POST") return send(res, 200, runner.skip(await readBody(req)));
   } catch (e) {
     return send(res, 409, { error: e.message });
   }

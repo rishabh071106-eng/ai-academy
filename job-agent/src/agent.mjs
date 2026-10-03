@@ -15,7 +15,7 @@ import * as naukri from "./naukri.mjs";
 import * as alignerr from "./alignerr.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
-import { DATA_DIR, loadConfig, loadProfile, log, randomBetween, sleep } from "./util.mjs";
+import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, randomBetween, say, sleep } from "./util.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const config = loadConfig();
@@ -33,6 +33,22 @@ const UNFINISHED = new Set(["needs_attention", "external", "shortlisted"]);
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
 const platforms = { linkedin, naukri, alignerr };
+const LABEL = { linkedin: "LinkedIn", naukri: "Naukri", alignerr: "Alignerr" };
+const voiceCfg = config.voice ?? {};
+// Short spoken names: "React Developer at Bounteous".
+const spokenJob = (job) => `${(job.title || "this job").replace(/\(.*?\)|\[.*?\]|[|@].*$/g, "").trim().slice(0, 70)}${job.company ? ` at ${job.company.slice(0, 40)}` : ""}`;
+let currentRow = null; // { key, jobId, title, company } of the job being worked on
+
+// "Skip this job" from the dashboard (button or voice).
+process.on("message", (m) => {
+  if (m?.type !== "skip") return;
+  if (!jobControl.active || !currentRow) {
+    say("There's no job in progress to pass on right now.");
+    return;
+  }
+  jobControl.skip = true;
+  log("warn", `  ⏭ Skip requested for ${currentRow.title || "this job"} — stopping it…`);
+});
 const DONE = new Set(["applied", "interview", "offer", "rejected", "withdrawn", "skipped", "external", "needs_attention"]);
 
 const todo = Object.values(profile.applicationAnswers ?? {}).filter((v) => typeof v === "string" && v.startsWith("TODO"));
@@ -142,6 +158,8 @@ for (const [key, mod] of Object.entries(platforms)) {
         const retry = s.retry || (existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason));
         if (existing && !retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
+        Object.assign(jobControl, { active: true, skip: false });
+        currentRow = { key, jobId: ref.jobId, title: ref.title || existing?.title || "", company: existing?.company || "" };
 
         let job;
         try {
@@ -169,6 +187,8 @@ for (const [key, mod] of Object.entries(platforms)) {
           continue;
         }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
+        currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
+        process.send?.({ type: "job", title: job.title, company: job.company, url: job.url });
         log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
         log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
 
@@ -235,6 +255,10 @@ for (const [key, mod] of Object.entries(platforms)) {
         const resumePath = await buildResumePdf(profile, ev.tailored, job);
         const resumeFile = path.relative(DATA_DIR, resumePath).split(path.sep).join("/");
         log("ok", `  match ${ev.matchScore}% — resume created for this job: data/${resumeFile}`);
+        currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
+        process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, matchScore: ev.matchScore });
+        if (voiceCfg.announceJobs !== false && mode !== "dry-run") say(`${LABEL[key]}: applying to ${spokenJob(job)}, ${ev.matchScore} percent match.`);
+        checkSkip();
 
         if (job.applyType !== "easy") {
           tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
@@ -263,8 +287,23 @@ for (const [key, mod] of Object.entries(platforms)) {
         tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted" });
         await applyTo(mod, key, page, job, resumePath);
        } catch (e) {
-        // Anything unexpected on one job: note it and move on to the next.
-        log("err", `  error on ${ref.url}: ${String(e?.message ?? e).split("\n")[0]} — moving on`);
+        if (isSkip(e) || jobControl.skip) {
+          // Skipped by you from the dashboard / by voice. Never overwrite a finished application.
+          const row = currentRow && tracker.find(key, currentRow.jobId);
+          if (!row || !["applied", "interview", "offer"].includes(row.status))
+            tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}), status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
+          stats.skipped++;
+          log("warn", "  ⏭ skipped by you — on to the next job");
+          say("Okay, skipped. Moving to the next job.");
+          await page.keyboard.press("Escape").catch(() => {});
+        } else {
+          // Anything unexpected on one job: note it and move on to the next.
+          log("err", `  error on ${ref.url}: ${String(e?.message ?? e).split("\n")[0]} — moving on`);
+        }
+       } finally {
+        Object.assign(jobControl, { active: false, skip: false });
+        currentRow = null;
+        process.send?.({ type: "job", title: null });
        }
       }
       // Deeper result pages only help while they still contain jobs we haven't seen.
@@ -294,19 +333,28 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
       result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} });
     }
   } catch (e) {
+    if (isSkip(e)) throw e;
     result = { status: "needs_attention", note: `Error: ${e.message}` };
   }
+  // A skip asked while the form was being filled wins over whatever the form step reported
+  // (unless it got submitted in the meantime).
+  if (jobControl.skip && result.status !== "applied") checkSkip();
   tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note });
   if (result.status === "applied") {
     await maybeMessage(mod, key, page, job);
     applied++;
     stats.applied++;
     log("ok", `  ✔ applied (${applied}/${maxApply})`);
+    if (voiceCfg.announceJobs !== false) say(`Applied to ${spokenJob(job)}.`);
+    jobControl.active = false; // nothing left to skip during the pause between applications
     const [lo, hi] = config.delaySecondsBetweenApplications;
     await sleep(randomBetween(lo, hi) * 1000);
   } else {
     if (result.status === "needs_attention") stats.attention++;
     log("warn", `  ${result.status}: ${result.note}`);
+    // Tell her out loud what went wrong, so she can step in or let it go.
+    if (result.status === "needs_attention" && voiceCfg.announceProblems !== false)
+      say(`Problem on ${LABEL[key]} with ${spokenJob(job)}: ${String(result.note || "").replace(/https?:\S+/g, "").slice(0, 160)}`, "problem");
   }
 }
 

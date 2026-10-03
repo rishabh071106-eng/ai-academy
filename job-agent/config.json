@@ -165,7 +165,9 @@
   "voice": {
     "enabled": true,
     "callName": "Rishabh",
-    "voiceName": ""
+    "voiceName": "",
+    "announceJobs": true,
+    "announceProblems": true
   },
   "keywordOverrideMinScore": 45
 }

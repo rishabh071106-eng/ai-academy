@@ -37,7 +37,29 @@ export function loadProfile() {
   return readJson(file);
 }
 
-export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// ---- "Skip this job" from the dashboard (button or voice). The agent marks the job it is
+// working on as active; a skip request then ends that job at the next pause (every wait in the
+// agent goes through sleep()), and any question waiting for an answer is closed at once.
+export const jobControl = { active: false, skip: false };
+export class SkipJob extends Error {
+  constructor() {
+    super("Skipped by you");
+    this.name = "SkipJob";
+  }
+}
+export const isSkip = (e) => e?.name === "SkipJob";
+export function checkSkip() {
+  if (jobControl.active && jobControl.skip) throw new SkipJob();
+}
+export const sleep = async (ms) => {
+  await new Promise((r) => setTimeout(r, ms));
+  checkSkip();
+};
+
+/** Say something out loud through the dashboard (the Mac's voice). No-op in a terminal run. */
+export function say(text, kind = "info") {
+  if (process.send && text) process.send({ type: "say", text: String(text).slice(0, 300), kind });
+}
 export const randomBetween = (min, max) => Math.round(min + Math.random() * (max - min));
 export const humanPause = (min = 800, max = 2200) => sleep(randomBetween(min, max));
 
@@ -70,6 +92,13 @@ export async function ask(question, choices, { timeoutMs = 0, timeoutAnswer = "s
           clearTimeout(timer);
           process.off("message", onMsg);
           resolve(String(m.answer ?? "").trim());
+        }
+        // "Skip this job" while a question is open: answer it with No / Skip right away.
+        if (m?.type === "skip") {
+          clearTimeout(timer);
+          process.off("message", onMsg);
+          process.send({ type: "ask-timeout", id, skipped: true });
+          resolve(choices?.some((c) => c.value === "n") ? "n" : "s");
         }
       };
       process.on("message", onMsg);
