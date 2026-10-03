@@ -501,7 +501,7 @@ PAGES = [
     '<div class="fam1"><h3>Groom&rsquo;s Family</h3>'
     '<p class="solicit">solicit your gracious presence and blessings on the auspicious<br>'
     'occasion of the marriage ceremony of their loving nephew</p>'
-    '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
+    '<p class="kin"><i>Taya ji</i>Sh. Shanti Sarup Sharma</p>'
     '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
     '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
     '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
