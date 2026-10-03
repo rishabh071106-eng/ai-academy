@@ -179,7 +179,7 @@ for (const [key, mod] of Object.entries(platforms)) {
             }
           }
         } catch (e) {
-          log("err", `  Claude evaluation failed: ${e.message}`);
+          log("err", `  AI evaluation failed: ${e.message}`);
           continue;
         }
         // Fill in anything the page selectors missed from what Claude read on the page.

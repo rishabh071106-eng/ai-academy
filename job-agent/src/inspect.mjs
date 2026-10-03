@@ -34,5 +34,5 @@ fs.writeFileSync(txt, mask([
   ...s.elements.map((e) => `${e.id} ${e.tag}${e.role ? `[${e.role}]` : ""}${e.type ? `(${e.type})` : ""}${e.disabled ? " disabled" : ""} "${e.text || e.label}"${e.label && e.text ? ` label="${e.label}"` : ""}${e.href ? ` href=${e.href}` : ""}`),
   "", "TEXT:", s.text,
 ].join("\n")));
-log("ok", `Saved:\n  ${png}\n  ${txt}\nSend these two files to Claude.`);
+log("ok", `Saved:\n  ${png}\n  ${txt}\nSend these two files to Claude (the assistant that built this) to get the site fixed.`);
 process.exit(0);

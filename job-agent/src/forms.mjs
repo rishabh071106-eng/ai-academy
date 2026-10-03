@@ -190,7 +190,7 @@ export async function fillForm(root, profile, job) {
   try {
     answers = await answerQuestions(profile, job, needLlm.map(({ key, label, type, options, required }) => ({ key, label, type, options, required })));
   } catch (e) {
-    log("warn", `   Claude couldn't answer the questions (${e.message.split("\n")[0]})`);
+    log("warn", `   The AI couldn't answer the questions (${e.message.split("\n")[0]})`);
   }
   const unanswered = [];
   for (const f of needLlm) {
@@ -265,7 +265,7 @@ export async function fillCustomSelects(root, profile, job) {
     try {
       answers = await answerQuestions(profile, job, rest);
     } catch (e) {
-      log("warn", `   Claude couldn't answer the dropdowns (${e.message.split("\n")[0]})`);
+      log("warn", `   The AI couldn't answer the dropdowns (${e.message.split("\n")[0]})`);
     }
   }
   const missing = [];

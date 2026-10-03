@@ -28,6 +28,14 @@ For every job the steps are: **read the job → create a resume for it → uploa
 - LinkedIn Easy Apply and company sites: the new PDF is uploaded in the application and selected.
 - Naukri: the new PDF replaces the resume on her Naukri profile just before applying; her own resume from Downloads is put back after the run.
 
+## Which AI it uses (Gemini or Claude)
+
+Set `"provider"` in `config.json`:
+- `"gemini"` (default): Google Gemini. Put `GEMINI_API_KEY=…` in `.env` (create a key at aistudio.google.com/apikey). The model is `"geminiModel"` (default `gemini-flash-latest`; `gemini-pro-latest` is stronger and slower). `"geminiNavigatorModel"` can set a different model for the click-by-click steps.
+- `"anthropic"`: Claude. Put `ANTHROPIC_API_KEY=…` in `.env`; the model is `"model"`.
+
+Every AI step uses this setting: matching, tailored resumes, hiring messages, form answers, the Alignerr navigator and resume import. If the key is wrong, the quota or credit runs out, or the model name doesn't exist, the agent stops with a plain message on its dashboard card. Short "busy" (429) replies are retried automatically.
+
 ## One-time setup
 
 You need Node.js 20+ and Google Chrome.
@@ -35,7 +43,7 @@ You need Node.js 20+ and Google Chrome.
 ```bash
 cd job-agent
 npm install
-cp .env.example .env          # paste your ANTHROPIC_API_KEY (and an ATS_PASSWORD for career sites)
+cp .env.example .env          # paste your GEMINI_API_KEY (and an ATS_PASSWORD for career sites)
 ```
 
 1. **Profile.** `profile.json` holds the candidate's data. It is git-ignored, so it never leaves this machine. Either put the supplied `profile.json` in this folder, or generate one from a PDF with `npm run import-resume -- ~/Downloads/resume.pdf`.

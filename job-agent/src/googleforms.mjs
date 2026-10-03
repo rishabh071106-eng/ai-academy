@@ -150,7 +150,7 @@ export async function googleForm(page, ctx, handOver) {
           type: q.type === "checkbox" ? "checkbox (several allowed: answer the matching options separated by commas)" : q.type,
         })));
       } catch (e) {
-        log("warn", `   Claude couldn't answer (${e.message.split("\n")[0]})`);
+        log("warn", `   The AI couldn't answer (${e.message.split("\n")[0]})`);
       }
     }
     const missing = [];

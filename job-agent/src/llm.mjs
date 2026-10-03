@@ -1,8 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { loadConfig, stopIfFatalApiError } from "./util.mjs";
+import { generateJSON } from "./ai.mjs";
 
-const client = new Anthropic();
-const MODEL = loadConfig().model || "claude-opus-5-5";
 
 const obj = (properties) => ({
   type: "object",
@@ -15,24 +12,7 @@ const strArr = { type: "array", items: str };
 
 /** One Claude call that must return JSON matching `schema`. */
 async function jsonCall({ system, content, schema, effort = "medium", maxTokens = 16000 }) {
-  const response = await client.beta.messages.create({
-    model: MODEL,
-    max_tokens: maxTokens,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    system,
-    output_config: { effort, format: { type: "json_schema", schema } },
-    messages: [{ role: "user", content }],
-  }).catch((e) => {
-    stopIfFatalApiError(e);
-    throw e;
-  });
-  if (response.stop_reason === "refusal") {
-    throw new Error(`Claude declined: ${response.stop_details?.explanation ?? "no explanation"}`);
-  }
-  if (response.stop_reason === "max_tokens") throw new Error("Claude response was cut off (max_tokens)");
-  const text = response.content.filter((b) => b.type === "text").map((b) => b.text).join("");
-  return JSON.parse(text);
+  return generateJSON({ system, content, schema, effort, maxTokens });
 }
 
 const HONESTY_RULES = `Hard rules:

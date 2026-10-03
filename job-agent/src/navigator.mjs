@@ -3,13 +3,10 @@
 // screen (headings, text, numbered buttons/links/fields), asks Claude for ONE next action,
 // and performs it. Forms are filled with the same filler as everywhere else; the tailored
 // resume is uploaded through file inputs or the browser's file chooser.
-import Anthropic from "@anthropic-ai/sdk";
+import { generateJSON } from "./ai.mjs";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
-import { ask, confirm, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
+import { ask, confirm, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
-const client = new Anthropic();
-// The click-by-click decisions can run on a cheaper model (config.navigatorModel).
-const MODEL = loadConfig().navigatorModel || loadConfig().model || "claude-opus-5-5";
 
 /** Numbers every visible interactive element (data-ja-ui) and returns a text snapshot. */
 export async function snapshot(page) {
@@ -72,12 +69,11 @@ const STEP_SCHEMA = obj({
 
 async function decide({ goal, rules, snap, history, profile, job }) {
   const { applicationAnswers, ...resume } = profile;
-  const res = await client.beta.messages.create({
-    model: MODEL,
-    max_tokens: 6000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    output_config: { effort: "low", format: { type: "json_schema", schema: STEP_SCHEMA } },
+  return generateJSON({
+    role: "navigator",
+    effort: "low",
+    maxTokens: 6000,
+    schema: STEP_SCHEMA,
     system: `You operate a web browser for Aishwarya Sharma to find and apply for work. Choose exactly ONE next action.
 Actions: click(target) · type(target, value) · select(target, value) · fill_form (fills every empty field on the page from her data — use it as soon as an application form is visible) · upload_resume(target = the file input or the upload button/area) · scroll · back · goto(value=url) · report_jobs(jobs) · done(status, message) · need_user(message).
 Rules:
@@ -88,10 +84,7 @@ Rules:
 - Close cookie banners and pop-ups that block the page.
 - If the same action didn't change anything twice, try something else; if stuck, need_user.
 ${rules || ""}`,
-    messages: [
-      {
-        role: "user",
-        content: `GOAL: ${goal}
+    content: `GOAL: ${goal}
 ${job ? `ROLE: ${job.title}${job.company ? ` at ${job.company}` : ""}` : ""}
 
 HER DATA (short):
@@ -106,11 +99,7 @@ Text: ${snap.text.slice(0, 5000)}
 
 ELEMENTS:
 ${snap.elements.map((e) => `${e.id} ${e.tag}${e.role ? `[${e.role}]` : ""}${e.type ? `(${e.type})` : ""}${e.disabled ? " disabled" : ""}${e.checked ? " checked" : ""} "${e.text || e.label}"${e.label && e.text ? ` label="${e.label}"` : ""}${e.value ? ` value="${e.value}"` : ""}${e.href ? ` href=${e.href.slice(0, 100)}` : ""}`).join("\n")}`,
-      },
-    ],
   });
-  if (res.stop_reason === "refusal") throw new Error("Claude declined this step");
-  return JSON.parse(res.content.filter((b) => b.type === "text").map((b) => b.text).join(""));
 }
 
 const el = (page, id) => page.locator(`[data-ja-ui="${id}"]`).first();

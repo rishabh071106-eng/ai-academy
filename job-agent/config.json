@@ -1,4 +1,7 @@
 {
+  "provider": "gemini",
+  "geminiModel": "gemini-flash-latest",
+  "geminiNavigatorModel": "",
   "model": "claude-opus-5-5",
   "navigatorModel": "",
   "mode": "review",
