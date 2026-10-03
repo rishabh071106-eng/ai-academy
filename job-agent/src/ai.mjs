@@ -49,7 +49,17 @@ async function claude({ system, content, schema, effort, maxTokens, role }) {
 }
 
 // ---------------------------------------------------------------- Gemini
-const GEMINI_BASE = process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta";
+// Two kinds of Google keys work:
+//  - Google AI Studio keys ("AIza…")          → generativelanguage.googleapis.com
+//  - Vertex AI express-mode keys ("AQ.…")     → aiplatform.googleapis.com
+const isVertexKey = (key) => /^AQ\./.test(key) || config.geminiEndpoint === "vertex";
+const geminiBase = (key) =>
+  process.env.GEMINI_BASE_URL ||
+  (isVertexKey(key) ? "https://aiplatform.googleapis.com/v1/publishers/google" : "https://generativelanguage.googleapis.com/v1beta");
+
+// If the configured model name isn't available for this key, try these in order.
+const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
+let workingModel = null;
 
 const toParts = (content) =>
   (typeof content === "string" ? [{ type: "text", text: content }] : content).map((b) =>
@@ -75,7 +85,9 @@ async function gemini({ system, content, schema, maxTokens, role }) {
     log("err", "\n■ STOPPED: GEMINI_API_KEY is missing from job-agent/.env. Add it, then press Start again.");
     process.exit(3);
   }
-  const model = modelFor(role);
+  const wanted = modelFor(role);
+  const candidates = [...new Set([workingModel && role === "main" ? workingModel : wanted, wanted, ...FALLBACK_MODELS].filter(Boolean))];
+  let model = candidates.shift();
   for (let attempt = 1; ; attempt++) {
     const body = {
       systemInstruction: { parts: [{ text: system }] },
@@ -88,7 +100,7 @@ async function gemini({ system, content, schema, maxTokens, role }) {
     };
     let res, data;
     try {
-      res = await fetch(`${GEMINI_BASE}/models/${encodeURIComponent(model)}:generateContent`, {
+      res = await fetch(`${geminiBase(key)}/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify(body),
@@ -102,6 +114,7 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       throw new Error(`Gemini unreachable: ${e.message}`);
     }
     if (res.ok) {
+      if (role === "main") workingModel = model;
       const cand = data.candidates?.[0];
       const text = (cand?.content?.parts || []).filter((p) => p.text && !p.thought).map((p) => p.text).join("");
       if (!text) throw new Error(`Gemini returned no answer (${cand?.finishReason || data.promptFeedback?.blockReason || "empty"})`);
@@ -115,12 +128,17 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       continue;
     }
     if (/api key not valid|API_KEY_INVALID|api key expired/i.test(msg)) {
-      log("err", "\n■ STOPPED: The Gemini API key in job-agent/.env is not valid. Create one at aistudio.google.com/apikey, then press Start again.");
+      log("err", `\n■ STOPPED: The Gemini API key in job-agent/.env is not valid (${isVertexKey(key) ? "Vertex AI key" : "AI Studio key"}). Check it was copied completely, or create a new one, then press Start again.`);
       process.exit(3);
     }
     if (res.status === 403) {
-      log("err", `\n■ STOPPED: Gemini refused the request (${msg}). Check the API key's project has the Gemini API enabled.`);
+      log("err", `\n■ STOPPED: Google refused the request (${msg}). ${isVertexKey(key) ? "For a Vertex AI key, the Vertex AI API must be enabled in its Google Cloud project." : "Check the key's project has the Gemini API enabled."}`);
       process.exit(3);
+    }
+    if (res.status === 404 && candidates.length) {
+      log("dim", `   Gemini model "${model}" isn't available for this key; trying "${candidates[0]}"`);
+      model = candidates.shift();
+      continue;
     }
     if (res.status === 404) {
       log("err", `\n■ STOPPED: Gemini model "${model}" not found. Set "geminiModel" in config.json to a current model (e.g. gemini-flash-latest).`);
