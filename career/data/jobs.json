@@ -1547,10 +1547,12 @@
     "immediate_joiner": false,
     "fit_score": 7,
     "fit_reason": "Director on Mastercard's Operational Insights global product team (data-product commercialization) — payments-data fit at Director band; Gurgaon-based.",
-    "notes": "'Posted 2 days ago' on Muse as of 8 Aug; original req on careers.mastercard.com (R-number unconfirmed, fetch blocked).",
+    "notes": "'Posted 2 days ago' on Muse as of 8 Aug; original req on careers.mastercard.com (R-number unconfirmed, fetch blocked). Re-bump 3 Oct: resurfaced on zapply aggregator 'posted 2 days ago' (~1 Oct) — req still circulating, likely still hiring.",
     "verified": false,
     "category": "workday-banks",
-    "id": 102
+    "id": 102,
+    "status": "likely_live",
+    "last_checked": "2026-10-03"
   },
   {
     "company": "Google",
