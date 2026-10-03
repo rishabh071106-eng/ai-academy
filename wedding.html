@@ -74,7 +74,16 @@
   /* ── the hosts' words, and each name with its people and place ── */
   .shloka-sa{font-size:clamp(.95rem,2.4vw,1.1rem);font-style:italic;line-height:1.7;
     color:var(--maroon);max-width:48ch;margin:.5rem auto 0}
-  .host{font-size:clamp(.95rem,2.5vw,1.14rem);line-height:1.5;color:var(--ink);margin-top:.7rem}
+  .journey{display:flex;align-items:flex-start;justify-content:center;
+    gap:clamp(14px,3vw,30px);margin-top:.5rem}
+  .journey .leg{flex:1;max-width:34ch}
+  .journey .leg-tag{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:700;color:var(--gold-deep);opacity:.85}
+  .journey .venue{font-size:clamp(1.1rem,3vw,1.42rem);margin-top:.15rem}
+  .journey .addr{margin-top:.2rem}
+  .journey .leg-arrow{align-self:center;font-size:1.4rem;color:var(--gold);flex:none}
+  .solicit{font-size:clamp(.78rem,1.95vw,.88rem);font-style:italic;line-height:1.5;
+    color:var(--ink);opacity:.9;margin:.35rem auto .1rem;max-width:30ch}
   .host strong{color:var(--maroon);font-weight:600;font-size:1.14em}
   .kin-line{display:block;font-family:var(--serif);font-size:clamp(.84rem,2.1vw,.96rem);
     line-height:1.45;color:var(--ink);margin-top:.3rem}
@@ -593,7 +602,7 @@
 
     /* sheet one carries the invocation, both families and the couple,
        so every band on it runs tighter than on screen */
-    .murti{width:110px;margin-bottom:6px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.5)}
+    .murti{width:138px;margin-bottom:6px;padding:4px;box-shadow:0 0 0 1px rgba(143,110,24,.5)}
     .murti::before{display:none}
     .shloka{margin-top:8px}
     .shloka-en{margin-top:5px;max-width:74ch}
@@ -606,7 +615,7 @@
     .kin li{line-height:1.36;font-size:14px}
     .kin-bless{margin-top:5px}
     .invite-line{margin-top:7px}
-    .names .n{font-size:46px}
+    .names .n{font-size:54px}
     .names{margin-top:5px}
     .names .weds{margin:4px 0}
     .host-hi{max-width:62ch;margin-top:8px}
@@ -627,14 +636,14 @@
 
     /* one format for every card, whatever it carries */
     .occ-sheet{display:flex;flex-direction:column;justify-content:center}
-    .occ-sheet .leaf{width:130px}
+    .occ-sheet .leaf{width:100px}
     .occ-sheet .leaf-cap{margin-bottom:12px}
     .occ-sheet .events-label{margin-top:16px}
     .occ-sheet .events{gap:10px}
-    .occ-sheet .event .body{padding:9px 15px}
-    .occ-sheet .event .when{padding:9px 8px}
-    .occ-sheet .venue-label{margin-top:20px}
-    .occ-sheet .phone-label{margin-top:16px}
+    .occ-sheet .event .body{padding:8px 15px}
+    .occ-sheet .event .when{padding:8px 8px}
+    .occ-sheet .venue-label{margin-top:16px}
+    .occ-sheet .phone-label{margin-top:14px}
     .occ-sheet .blessing-en{margin-top:12px}
     .occ-sheet .compliments{margin-top:8px}
 
@@ -697,6 +706,8 @@
 
     <section class="side">
       <h2 class="side-label">Groom&rsquo;s Family</h2>
+      <p class="solicit">solicit your gracious presence and blessings on the auspicious
+        occasion of the marriage ceremony of their loving nephew</p>
       <ul class="kin">
         <li><i class="rel">Taya ji</i>Sh. Shanti Swaroop Sharma</li>
         <li><i class="rel">Tayi ji</i>Smt. Raksha Sharma</li>
@@ -706,10 +717,6 @@
       <p class="kin-bless">with the blessings of Nana ji <strong>O. P. Kaushal</strong></p>
     </section>
   </div>
-
-  <p class="host"><strong>Smt. Raksha Sharma</strong><br>w/o Sh. Shanti Swaroop Sharma</p>
-  <p class="invite-line">solicit your gracious presence and blessings on the auspicious occasion of
-    the marriage ceremony of their loving nephew</p>
 
   <h1 class="names">
     <span class="n">Smatav</span>
@@ -818,10 +825,15 @@
       },
       rohru: {
         heading: 'The Wedding Programme',
-        venueLabel: 'All functions at',
-        venue: 'Village Kashkandi (Spail Valley)',
-        address: ['P.O. Kutara, Teh. Rohru',
-                  'Distt. Shimla (H.P.) 171207'],
+        venueLabel: 'The baraat travels from Dharamshala to Rohru',
+        journey: {
+          from: { place: 'Dharamshala',
+                  address: ['Jawahar Nagar, Near H.P.C.A. Stadium',
+                            'Distt. Kangra (H.P.)'] },
+          to:   { place: 'Rohru',
+                  address: ['Village Kashkandi (Spail Valley), P.O. Kutara',
+                            'Teh. Rohru, Distt. Shimla (H.P.) 171207'] }
+        },
         events: [
           { key: 'mehendi', name: 'Mehendi', date: '2026-11-30', time: '14:00', clock: '2:00 PM' },
           { key: 'rohru', name: 'Departure to Rohru', date: '2026-12-01', time: '06:00', clock: '6:00 AM' },
@@ -924,13 +936,32 @@
     vbox.textContent = '';
     vbox.appendChild(el('p', 'label venue-label',
       part.venueLabel || (list.length > 1 ? g.venueLabel : 'The occasion at')));
-    vbox.appendChild(el('p', 'venue', g.venue));
-    var addr = el('p', 'addr');
-    g.address.forEach(function (line, i) {
-      if (i) { addr.appendChild(document.createElement('br')); }
-      addr.appendChild(document.createTextNode(line));
-    });
-    vbox.appendChild(addr);
+
+    var lines = function (box, arr) {
+      var p = el('p', 'addr');
+      arr.forEach(function (line, i) {
+        if (i) { p.appendChild(document.createElement('br')); }
+        p.appendChild(document.createTextNode(line));
+      });
+      box.appendChild(p);
+    };
+
+    if (g.journey) {
+      var leg = el('div', 'journey');
+      ['from', 'to'].forEach(function (side, i) {
+        var end = g.journey[side];
+        var col = el('div', 'leg');
+        col.appendChild(el('p', 'leg-tag', side === 'from' ? 'From' : 'To'));
+        col.appendChild(el('p', 'venue', end.place));
+        lines(col, end.address);
+        if (i) { leg.appendChild(el('span', 'leg-arrow', '\u2192')); }
+        leg.appendChild(col);
+      });
+      vbox.appendChild(leg);
+    } else {
+      vbox.appendChild(el('p', 'venue', g.venue));
+      lines(vbox, g.address);
+    }
 
     sheet.setAttribute('data-filled', '1');
   });

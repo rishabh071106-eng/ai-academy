@@ -499,16 +499,13 @@ PAGES = [
     '<p class="kin"><i>Sister of</i>Miss Arushi Sharma</p></div>'
     '<div class="famrule"></div>'
     '<div class="fam1"><h3>Groom&rsquo;s Family</h3>'
+    '<p class="solicit">solicit your gracious presence and blessings on the auspicious<br>'
+    'occasion of the marriage ceremony of their loving nephew</p>'
     '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
     '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
     '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
     '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
     '<p class="bless">with the blessings of Nana ji &mdash; <b>O. P. Kaushal</b></p></div>',
-
-    '<p class="host"><b>Smt. Raksha Sharma</b><br>w/o Sh. Shanti Swaroop Sharma</p>'
-    '<p class="invite">solicit your gracious presence and blessings<br>'
-    'on the auspicious occasion of the marriage ceremony<br>'
-    'of their loving nephew</p>' + ORN,
 
     '<p class="name">Smatav</p>'
     '<p class="kinline">S/o Smt. Malini Sharma w/o Sh. Suman Sharma</p>'
@@ -678,6 +675,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .host b{color:@@ROSE@@;font-weight:600;font-size:1.18em}
 .kinline{font-size:34px;line-height:1.45;color:@@INK@@;margin-top:16px}
 .addrline{font-size:30px;line-height:1.45;color:@@INK@@;opacity:.8;margin-top:9px}
+.solicit{font-size:30px;font-style:italic;line-height:1.5;color:@@INK@@;opacity:.9;margin-top:12px}
 .kin{font-size:44px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
 .kin i{font-style:italic;font-size:.74em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
 .bless{font-size:35px;font-style:italic;color:@@INK@@;margin-top:23px;line-height:1.5}
