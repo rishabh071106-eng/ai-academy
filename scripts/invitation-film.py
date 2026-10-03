@@ -494,9 +494,21 @@ PAGES = [
     + ORN + '<p class="shubh">Shubh Vivah</p>',
 
     '<p class="label">With the blessings of our elders</p>' + ORN +
+    '<div class="fam1"><h3>Bride&rsquo;s Family</h3>'
+    '<p class="kin"><i>Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</p>'
+    '<p class="kin"><i>Sister of</i>Miss Arushi Sharma</p></div>'
+    '<div class="famrule"></div>'
+    '<div class="fam1"><h3>Groom&rsquo;s Family</h3>'
+    '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
+    '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
+    '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
+    '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
+    '<p class="bless">with the blessings of Nana ji &mdash; <b>O. P. Kaushal</b></p></div>',
+
     '<p class="host"><b>Smt. Raksha Sharma</b><br>w/o Sh. Shanti Swaroop Sharma</p>'
     '<p class="invite">solicit your gracious presence and blessings<br>'
-    'on the auspicious occasion of the marriage ceremony<br>of their loving nephew</p>',
+    'on the auspicious occasion of the marriage ceremony<br>'
+    'of their loving nephew</p>' + ORN,
 
     '<p class="name">Smatav</p>'
     '<p class="kinline">S/o Smt. Malini Sharma w/o Sh. Suman Sharma</p>'
