@@ -166,5 +166,6 @@
     "enabled": true,
     "callName": "Rishabh",
     "voiceName": ""
-  }
+  },
+  "keywordOverrideMinScore": 45
 }

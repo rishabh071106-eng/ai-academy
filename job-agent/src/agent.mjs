@@ -70,6 +70,10 @@ const relevantRe = new RegExp(`(^|[^a-z])(${(config.relevantKeywords ?? []).map(
 const isRelevantGlobal = (text) => !(config.relevantKeywords ?? []).length || relevantRe.test(text);
 const reFor = (words) => new RegExp(`(^|[^a-z])(${words.map((k) => k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})([^a-z]|$)`, "i");
 let isRelevant = isRelevantGlobal;
+// Keyword must be in the job's own title/description, not in sidebar text of the page.
+// (When the description is the whole page text, only the title counts.)
+const hitInTitleOrPost = (job, word) =>
+  reFor([word]).test(job.title || "") || (String(job.description || "").length < (job.pageTextLength || Infinity) * 0.9 && reFor([word]).test(job.description));
 const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job.description}`))?.word;
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
@@ -154,6 +158,10 @@ for (const [key, mod] of Object.entries(platforms)) {
           stats.skipped++;
           continue;
         }
+        if (/build your professional brand|join linkedin|sign in to (view|see)|feed post|linkedin feed/i.test(`${job.title} ${job.company}`)) {
+          log("dim", `  not a job page (${job.title || job.url}) — skipping`);
+          continue;
+        }
         const base = { url: job.url, title: job.title, company: job.company, location: job.location };
         log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
         log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
@@ -206,7 +214,9 @@ for (const [key, mod] of Object.entries(platforms)) {
           hiringContact: job.hiringContact ?? null, hiringMessage: ev.hiringMessage, messageStatus: "draft",
         };
         const hit = keywordHit(job);
-        if ((!ev.shouldApply || ev.matchScore < config.minMatchScore) && hit) {
+        // The keyword override only rescues borderline scores; it must not push through
+        // off-target jobs (other countries, Java-only, non-job pages) that score low.
+        if ((!ev.shouldApply || ev.matchScore < config.minMatchScore) && hit && ev.matchScore >= Number(config.keywordOverrideMinScore ?? 45) && hitInTitleOrPost(job, hit)) {
           scored.matchReasons = [`Mentions ${hit}, which is in her core stack`, ...scored.matchReasons];
           log("dim", `  score ${ev.matchScore}% but mentions "${hit}" — applying anyway`);
         } else if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {

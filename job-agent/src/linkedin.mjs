@@ -178,9 +178,21 @@ export async function messageHiringTeam(page, job, msg, { mode, autoSend }) {
  * shadow root) or on its own /apply page. Returns a locator for whichever appeared.
  */
 async function applyRoot(page) {
-  const deadline = Date.now() + 15000;
+  const deadline = Date.now() + 25000;
   while (Date.now() < deadline) {
-    const dialog = page.getByRole("dialog").filter({ has: page.locator("input, select, textarea, button") }).filter({ hasText: /apply|contact info|resume|mobile|phone|email|question|review|submit/i }).last();
+    // Pop-ups LinkedIn shows before the form ("Job search safety reminder", "Continue applying",
+    // "Share your profile?", "Save this application?" from an earlier attempt): click through.
+    const interstitial = page.getByRole("dialog").filter({ hasNot: page.locator("input:not([type=hidden]):not([type=checkbox]), select, textarea") }).last();
+    if (await interstitial.isVisible().catch(() => false)) {
+      const go = interstitial.getByRole("button", { name: /continue applying|^continue$|continue to apply|^apply$|^next$|got it|^ok$|i understand|resume application|^start$/i }).filter({ visible: true }).first();
+      if (await go.isVisible().catch(() => false)) {
+        log("dim", `   ↳ clicked "${((await go.innerText().catch(() => "")) || "Continue").trim()}" on a LinkedIn pop-up`);
+        await go.click().catch(() => {});
+        await sleep(1500);
+        continue;
+      }
+    }
+    const dialog = page.getByRole("dialog").filter({ has: page.locator("input, select, textarea, button") }).filter({ hasText: /apply|contact info|resume|mobile|phone|email|question|review|submit|experience|additional|work authorization|education|screening/i }).last();
     if (await dialog.isVisible().catch(() => false)) return dialog;
     if (/\/apply\b|openSDUIApplyFlow/i.test(page.url())) {
       const main = page.locator("main").first();

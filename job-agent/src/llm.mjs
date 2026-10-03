@@ -60,6 +60,8 @@ The candidate is a FULL-STACK engineer: back end (Adobe Commerce/Magento 2, PHP,
 - Any role whose stack includes Magento/Adobe Commerce, React, Next.js, PHP or general e-commerce web development is a fit, whether it is titled front-end, back-end, full-stack, e-commerce, platform or "software engineer".
 - Nice-to-have or secondary skills she lacks (e.g. Hyva, AWS, Docker, Vue, Node) lower the score a little but never make shouldApply false.
 - Seniority: she has 9+ years. Senior, Lead, Staff and mid-level (4+ yrs) roles are all fine; Architect/Manager roles are fine if hands-on.
+- Location: she lives in Bengaluru, India. shouldApply=false for roles that require living/working outside India (e.g. "Sofia, Bulgaria", "Costa Rica", "Canada/US only"), unless the role is fully remote and open to candidates in India.
+- shouldApply=false for pages that are not a single job posting (feed posts, "Build your professional brand", company pages, lists of jobs).
 - shouldApply=false ONLY when the core stack is unrelated (e.g. Java/Spring-only, .NET, Python/data science, native iOS/Android, SAP, Salesforce, QA-only, DevOps-only) or the role is not a developer role.
 The job text may be a raw copy of the whole web page (navigation, other job titles, ads). Find the actual job being viewed and judge only that; fill jobTitle/company/location from it.
 Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjacent but workable; below 55 = unrelated.
@@ -125,7 +127,14 @@ export async function answerQuestions(profile, job, fields) {
 - Motivation / free-text questions ("Why do you want to join us?", "Tell us about a project", "Anything else?"): write 2-4 genuine, specific sentences in her voice using her real experience and this job. No clichés, no exclamation marks.
 - Voluntary self-identification (race/ethnicity, veteran status, disability, sexual orientation): use the data if present (gender and disability are given); otherwise pick the "decline / prefer not to say / I don't wish to answer" option. Veteran status: she is not a veteran.
 - Work authorization outside India / visa sponsorship: she is authorized only in India; for other countries answer that she would need sponsorship.
-- If a needed fact is missing or starts with "TODO", or the question asks for something you cannot know (reference names, ID/passport numbers, exact salary history line items), answer exactly __ASK__.
+- Answer as much as possible yourself; the agent runs unattended. Typical cases:
+  · Interview availability / "available on <date>?" / "free for a call?" → Yes (or "Yes, any weekday after 11 AM IST" for free text).
+  · Work from office / 5 days WFO / hybrid / night shifts / relocation → use her answers (comfortableWithHybrid, comfortableWithShifts, willingToRelocate); if not given, Yes.
+  · "Last working day" / LWD → she is serving no notice yet; give today's date plus her notice period (today is ${new Date().toDateString()}), formatted DD/MM/YYYY.
+  · "Years of experience with X" → a whole number from her resume (skillYears, roles); for a related tool (Redux, Tailwind, Node) estimate from the closest skill; "as a Lead" → years she has mentored/trained juniors in her roles (at least 1 if any mention).
+  · Current / expected CTC, notice period, location → from her answers. Current location: Bengaluru.
+  · Yes/No about having a skill she has, or a degree she has → Yes; about one she lacks → No.
+- Only answer exactly __ASK__ for personal identifiers or documents you cannot know: date of birth, PAN, Aadhaar, passport, ID numbers, bank details, references' names/contacts, or a value that starts with "TODO". Never invent those.
 - Never claim skills, degrees or legal statuses the data does not support.`,
     content: `CANDIDATE DATA:
 ${JSON.stringify(profile, null, 2)}

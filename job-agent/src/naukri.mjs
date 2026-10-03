@@ -2,7 +2,8 @@ import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { answerQuestions } from "./llm.mjs";
 import fs from "node:fs";
 import path from "node:path";
-import { ask, confirm, DATA_DIR, humanPause, log, sleep, slugify, waitForUser } from "./util.mjs";
+import { askPerson, tryNavigator } from "./escalate.mjs";
+import { confirm, DATA_DIR, humanPause, log, sleep, slugify } from "./util.mjs";
 
 export const name = "naukri";
 
@@ -49,7 +50,17 @@ export async function getJob(page, ref) {
   };
 }
 
-const SUCCESS = ["text=/successfully applied/i", "text=/applied to/i", "[class*=apply-message]:has-text('Applied')"];
+const SUCCESS = [
+  "text=/successfully applied|applied successfully|application (has been )?(sent|submitted)|you have applied|you('ve| have) successfully applied|applied to /i",
+  "[class*=apply-message]:has-text('Applied')",
+  "[class*=applied]:has-text('Applied')",
+];
+/** Naukri also confirms by turning the Apply button into a disabled "Applied" button. */
+async function confirmedApplied(page, wait = 3000) {
+  if (await firstVisible(page, SUCCESS, wait)) return true;
+  const btn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Applied')"]);
+  return !!btn && /^\s*applied\s*$/i.test((await btn.innerText().catch(() => "")) || "");
+}
 const CHAT = "[class*=chatbot_Drawer], [class*=chatbot_MessageContainer], .chatbot_DrawerContentWrapper";
 
 /**
@@ -79,6 +90,7 @@ export async function uploadResume(page, pdfPath, returnTo) {
 }
 
 export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) {
+  job.resumePath = resumePath;
   const btn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"], 5000);
   if (!btn) return { status: "needs_attention", note: "Apply button not found" };
   if (mode !== "auto") {
@@ -100,7 +112,7 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
   await sleep(2500);
 
   for (let turn = 0; turn < 20; turn++) {
-    if (await firstVisible(page, SUCCESS, 1500)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
+    if (await confirmedApplied(page, 1500)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
     const chat = await firstVisible(page, [CHAT], 3000);
     if (!chat) break;
 
@@ -116,8 +128,8 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
     const { q: answer } = await answerQuestions(profile, job, [{ key: "q", label: question, type: options.length ? "radio" : "text", options, required: true }]);
     if (!answer || answer === "__ASK__") {
       log("warn", `   Couldn't answer: "${question}"`);
-      if (mode === "auto") return { status: "needs_attention", note: `Questionnaire: ${question}` };
-      if (!(await waitForUser(`Naukri question for ${job.company}: "${question}". Answer it in Chrome, then continue.`))) return { status: "skipped", note: "Skipped by you at questionnaire" };
+      const r = await escalateChat(page, job, mode, `Naukri asks "${question}"`);
+      if (r) return r;
       continue;
     }
     log("dim", `   ↳ ${question.slice(0, 70)} → ${answer}`);
@@ -126,14 +138,18 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
       let i = options.findIndex((o) => o.toLowerCase() === a);
       if (i < 0) i = options.findIndex((o) => o.toLowerCase().includes(a) || a.includes(o.toLowerCase()));
       if (i < 0) {
-        if (mode === "auto") return { status: "needs_attention", note: `Questionnaire: ${question}` };
-        if (!(await waitForUser(`Pick the answer for "${question}" in Chrome, then continue.`))) return { status: "skipped", note: "Skipped by you at questionnaire" };
+        const r = await escalateChat(page, job, mode, `Naukri asks "${question}" and none of its options matched`);
+        if (r) return r;
         continue;
       }
       await chips.nth(i).click().catch(() => {});
     } else {
       const input = await firstVisible(chat, ["div.textArea[contenteditable]", "[contenteditable=true]", "input[type=text]", "textarea"]);
-      if (!input) return { status: "needs_attention", note: `No input for: ${question}` };
+      if (!input) {
+        const r = await escalateChat(page, job, mode, `Naukri asks "${question}" with an answer box I can't use`);
+        if (r) return r;
+        continue;
+      }
       await input.click();
       await input.pressSequentially(answer, { delay: 30 });
     }
@@ -142,17 +158,22 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
     await send?.click();
     await sleep(2000);
   }
-  if (await firstVisible(page, SUCCESS, 4000)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
+  if (await confirmedApplied(page, 4000)) return { status: "applied", note: `Naukri apply (${resumeNote})` };
+  // Reload the job: Naukri shows "Applied" on it if the application went through.
+  await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
+  await sleep(2500);
+  if (await confirmedApplied(page, 2000)) return { status: "applied", note: `Naukri apply (${resumeNote}, confirmed after reload)` };
+  const nav = await tryNavigator(page, job, { reason: "Naukri didn't confirm the application", resumePath: job.resumePath, mode });
+  if (nav) return nav;
   // Naukri sent us somewhere unexpected (extra form, company page, login). Don't silently move on.
   const shot = path.join(DATA_DIR, "debug", `naukri-${job.jobId}-apply.png`);
   fs.mkdirSync(path.dirname(shot), { recursive: true });
   await page.screenshot({ path: shot }).catch(() => {});
   log("warn", `   no confirmation after Apply (screenshot: data/debug/${path.basename(shot)})`);
-  if (mode === "auto") return { status: "needs_attention", note: "No confirmation after Apply — check Naukri > Applies" };
-  const r = await ask(`${job.company} – ${job.title}: Naukri didn't confirm the application. Finish it in Chrome if something is asked, then tell me.`, [
+  const r = await askPerson(page, `${job.company} – ${job.title}: Naukri didn't confirm the application. Finish it in Chrome if something is asked, then tell me.`, [
     { label: "It's applied", value: "done" },
     { label: "Skip this job", value: "s" },
-  ]);
+  ], mode);
   return r === "done" ? { status: "applied", note: `Naukri apply, finished by you (${resumeNote})` } : { status: "needs_attention", note: "No confirmation after Apply" };
 }
 
@@ -166,4 +187,18 @@ export async function openCompanySite(page) {
   if (tab) return tab;
   await sleep(2000);
   return /naukri\.com/.test(page.url()) ? null : page;
+}
+
+/** A chatbot question the agent couldn't handle: AI navigator first, then a person, then skip. */
+async function escalateChat(page, job, mode, reason) {
+  const nav = await tryNavigator(page, job, { reason, resumePath: job.resumePath, mode });
+  if (nav) return nav;
+  const r = await askPerson(page, `${job.company} – ${job.title}: ${reason}. Answer it in Chrome and I'll carry on, or skip.`, [
+    { label: "Done, continue", value: "" },
+    { label: "It's applied", value: "done" },
+    { label: "Skip this job", value: "s" },
+  ], mode);
+  if (r === "") return null;
+  if (r === "done") return { status: "applied", note: "Naukri apply, finished by you" };
+  return { status: "needs_attention", note: `Questionnaire: ${reason}` };
 }

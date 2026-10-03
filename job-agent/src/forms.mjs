@@ -55,9 +55,14 @@ export async function collectFields(root) {
         continue;
       }
       if (!visible(el)) continue;
+      // Anti-bot "honeypot" fields: never fill them (doing so marks the application as spam).
+      const lab = labelOf(el).toLowerCase();
+      const r = el.getBoundingClientRect();
+      if (/ignore this field|leave (this )?(field )?(blank|empty)|if you are (a )?human|do not fill|don'?t fill/.test(lab) || r.right < 0 || r.bottom < 0 || r.left < -500 || el.closest("[aria-hidden=true]") || (el.tabIndex === -1 && /hp|honey|trap|website|url/i.test(el.name || ""))) continue;
       const key = `ja${n++}`;
       el.setAttribute("data-ja-key", key);
       const f = { key, type, label: labelOf(el), required: el.required || el.getAttribute("aria-required") === "true" };
+      if (!f.label) f.required = false; // nothing to go on; don't block the application on it
       if (type === "select") {
         f.options = [...el.options].map((o) => clean(o.text)).filter((t) => t && !/^select/i.test(t));
         const sel = el.options[el.selectedIndex];
