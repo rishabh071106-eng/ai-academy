@@ -481,64 +481,59 @@ def nagada(side='L'):
 COVER = ('<div class="cov">'
          + SPRAY.replace('class="spray"', 'class="spray cov-tl"')
          + SPRAY.replace('class="spray"', 'class="spray cov-br"')
-         + '<p class="deva cov-shubh">॥ शुभ विवाह ॥</p>' + ORN
+         + '<p class="cov-shubh">Shubh Vivah</p>' + ORN
          + '<p class="cov-names">Smatav<i>&amp;</i>Priyanka</p>' + ORN
-         + '<p class="cov-date">29 November &middot; 4 December<br><b>2026</b></p>'
-         + '<p class="deva cov-foot">शुभ विवाह &mdash; स्मतव एवं प्रियंका</p></div>')
+         + '<p class="cov-date">29 November &middot; 4 December<br><b>2026</b></p></div>')
 
 PAGES = [
-    '<p class="deva inv">॥ श्री गणेशाय नमः ॥</p>'
-    '<p class="deva shloka">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>'
-    '<p class="trans">O Lord of the curved trunk, radiant as a million suns —<br>keep all our undertakings free of obstacles, always.</p>'
-    + ORN + '<p class="deva shubh">॥ शुभ विवाह ॥</p>',
+    '<p class="inv">Shri Ganeshaya Namah</p>'
+    '<p class="shloka">Vakratunda Mahakaya Suryakoti Samaprabha<br>'
+    'Nirvighnam Kuru Me Deva Sarvakaryeshu Sarvada</p>'
+    '<p class="trans">O Lord of the curved trunk, radiant as a million suns &mdash;<br>'
+    'keep all our undertakings free of obstacles, always.</p>'
+    + ORN + '<p class="shubh">Shubh Vivah</p>',
 
-    '<p class="label">With the blessings of our elders</p><p class="deva sub">बड़ों के आशीर्वाद से</p>'
-    + ORN +
-    '<div class="fam1"><h3>Bride&rsquo;s Family <span class="deva">वधू पक्ष</span></h3>'
-    '<p class="kin"><i>Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</p>'
-    '<p class="kin"><i>Sister of</i>Miss Arushi Sharma</p></div>'
-    '<div class="famrule"></div>'
-    '<div class="fam1"><h3>Groom&rsquo;s Family <span class="deva">वर पक्ष</span></h3>'
-    '<p class="kin"><i>Taya ji</i>Sh. Shanti Swaroop Sharma</p>'
-    '<p class="kin"><i>Tayi ji</i>Smt. Raksha Sharma</p>'
-    '<p class="kin"><i>Father</i>Sh. Suman Sharma</p>'
-    '<p class="kin"><i>Mother</i>Smt. Malini Sharma</p>'
-    '<p class="bless">with the blessings of Nana ji &mdash; <b>O. P. Kaushal</b></p></div>',
+    '<p class="label">With the blessings of our elders</p>' + ORN +
+    '<p class="host"><b>Smt. Raksha Sharma</b><br>w/o Sh. Shanti Swaroop Sharma</p>'
+    '<p class="invite">solicit your gracious presence and blessings<br>'
+    'on the auspicious occasion of the marriage ceremony<br>of their loving nephew</p>',
 
-    '<p class="invite">request the pleasure of your company<br>at the wedding of</p>'
-    '<p class="name">Smatav</p><p class="deva sub">चि. स्मतव</p>'
-    '<p class="weds">weds <span class="deva">एवं</span></p>'
-    '<p class="name">Priyanka</p><p class="deva sub">सुश्री प्रियंका</p>'
-    '<p class="deva hi-note">इस मंगल अवसर पर आप सपरिवार पधारकर<br>वर-वधू को आशीर्वाद प्रदान करें।</p>',
+    '<p class="name">Smatav</p>'
+    '<p class="kinline">S/o Smt. Malini Sharma w/o Sh. Suman Sharma</p>'
+    '<p class="addrline">Jawahar Nagar, Near H.P.C.A. Stadium<br>Dharamshala, Distt. Kangra (H.P.)</p>'
+    '<p class="weds">weds</p>'
+    '<p class="name">Priyanka</p>'
+    '<p class="kinline">D/o Smt. Vijay Laxmi Sharma w/o Sh. Rajender Dev Sharma<br>'
+    'Sister of Miss Arushi Sharma</p>'
+    '<p class="addrline">Village Kashkandi (Spail Valley), P.O. Kutara<br>'
+    'Teh. Rohru, Distt. Shimla (H.P.) 171207</p>',
 
-    '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
-    '<div class="bigdate"><b>29</b><span>November 2026</span><i class="deva">रविवार &middot; Sunday</i></div>'
-    '<h2 class="evname">Ladies Sangeet</h2><p class="deva sub">महिला संगीत</p>'
+    '<p class="label">The Celebrations</p>' + ORN +
+    '<div class="bigdate"><b>29</b><span>November 2026</span><i>Sunday</i></div>'
+    '<h2 class="evname">Ladies Sangeet</h2>'
     '<ul class="prog">'
-    '<li><b>12:15 PM</b><span>Welcome of Mama ji<i class="deva">मामा जी का स्वागत</i></span></li>'
-    '<li><b>12:00 &ndash; 3:00 PM</b><span>Lunch &middot; Paramparik style'
-    '<i class="deva">दोपहर का भोजन &middot; पारम्परिक शैली</i></span></li>'
-    '<li><b>4:00 PM</b><span>Ladies Sangeet<i class="deva">महिला संगीत</i></span></li>'
-    '<li><b>8:00 PM</b><span>Dinner<i class="deva">रात्रि भोज</i></span></li>'
+    '<li><b>12:15 PM</b><span>Mama&rsquo;s Swagat</span></li>'
+    '<li><b>12:30 PM</b><span>Lunch</span></li>'
+    '<li><b>3:30 PM</b><span>Ladies Sangeet</span></li>'
+    '<li><b>8:00 PM</b><span>Dinner</span></li>'
     '</ul>'
     '<p class="evat">at <b>Lions Club Dharamshala</b></p>',
 
-    '<p class="label">The Celebrations</p><p class="deva sub">समारोह</p>' + ORN +
-    '<div class="bigdate"><b>04</b><span>December 2026</span><i class="deva">शुक्रवार &middot; Friday</i></div>'
-    '<h2 class="evname">The Dham</h2><p class="deva sub">धाम</p>'
+    '<p class="label">The Celebrations</p>' + ORN +
+    '<div class="bigdate"><b>04</b><span>December 2026</span><i>Friday</i></div>'
+    '<h2 class="evname">The Dham <span class="sub">Priti Bhoj</span></h2>'
     '<p class="evx">The traditional Pahari feast,<br>served to all.</p>'
-    '<p class="deva sub">पारम्परिक पहाड़ी भोज</p>'
-    '<p class="evt">12:00 noon &ndash; 4:00 PM</p>'
+    '<p class="evt">12:00 PM to 5:00 PM</p>'
     '<p class="evat">at <b>Lions Club Dharamshala</b></p>',
 
-    '<p class="label">Both events at</p><p class="deva sub">दोनों कार्यक्रम स्थल</p>'
-    '<p class="venue">Lions Club Dharamshala</p><p class="deva sub">लायंस क्लब धर्मशाला</p>'
-    '<p class="addr">Civil Bazar, Shamnagar Road<br>Dharamshala, District Kangra<br>'
-    'Himachal Pradesh &mdash; 176215</p>'
-    '<p class="label phlab">Phone Number <span class="deva">फ़ोन नंबर</span></p>'
+    '<p class="label">Both events at</p>'
+    '<p class="venue">Lions Club Dharamshala</p>'
+    '<p class="addr">Civil Bazar, Shamnagar Road<br>'
+    'Dharamshala, Distt. Kangra (H.P.) 176215</p>'
+    '<p class="label phlab">Phone Number</p>'
     '<p class="phone">+91 94180 65277<br>+91 97368 53285</p>' + ORN +
-    '<p class="deva blessing">आपकी उपस्थिति ही<br>हमारा आशीर्वाद है</p>'
-    '<p class="trans">Your presence is our blessing.</p>',
+    '<p class="blessing">Your presence is our blessing.</p>'
+    '<p class="trans">With love, from both families</p>',
 ]
 
 SCENE_B = 5.2
@@ -634,7 +629,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .cov-date{font-size:40px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:@@ROSE2@@;margin-top:30px;line-height:1.9}
 
 .inv{font-size:86px;letter-spacing:.05em;color:@@ROSE2@@}
-.shloka{font-size:56px;line-height:1.95;color:@@ROSE@@}
+.shloka{font-size:47px;line-height:1.95;color:@@ROSE@@}
 .trans{font-size:44px;font-style:italic;line-height:1.55;color:@@INK@@}
 .shubh{font-size:96px;letter-spacing:.1em;color:@@ROSE@@}
 .label{font-size:38px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE2@@}
@@ -650,6 +645,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .bigdate span{font-size:32px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
   color:@@ROSE2@@;margin-top:9px}
 .bigdate i{font-size:32px;font-style:normal;color:@@INK@@;margin-top:6px}
+.evname .sub{font-weight:400;font-style:italic;color:@@ROSE2@@;font-size:.72em;margin-left:14px}
 .evname{font-size:64px;font-weight:600;color:@@ROSE@@;line-height:1.08;margin-top:22px}
 .prog{list-style:none;margin-top:16px;display:grid;gap:10px;width:100%}
 .prog li{display:flex;align-items:flex-start;justify-content:center;gap:26px;text-align:left}
@@ -666,6 +662,10 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .evat b{font-style:normal;color:@@ROSE2@@;font-weight:600;font-size:1.06em}
 .bless{font-size:38px;font-style:italic;color:@@INK@@;margin-top:22px;line-height:1.5}
 .bless b{font-style:normal;color:@@ROSE@@;font-size:1.1em}
+.host{font-size:46px;line-height:1.5;color:@@INK@@;margin-top:12px}
+.host b{color:@@ROSE@@;font-weight:600;font-size:1.18em}
+.kinline{font-size:34px;line-height:1.45;color:@@INK@@;margin-top:16px}
+.addrline{font-size:30px;line-height:1.45;color:@@INK@@;opacity:.8;margin-top:9px}
 .kin{font-size:44px;line-height:1.5;color:@@ROSE@@;margin-top:14px}
 .kin i{font-style:italic;font-size:.74em;letter-spacing:.06em;color:@@ROSE2@@;opacity:.92;margin-right:.45em}
 .bless{font-size:35px;font-style:italic;color:@@INK@@;margin-top:23px;line-height:1.5}
@@ -680,12 +680,12 @@ body{font-family:'Cormorant Garamond',Georgia,serif;color:@@ROSE@@;
 .evt{font-size:46px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:@@ROSE@@;margin-top:18px}
 .venue{font-size:74px;font-weight:600;color:@@ROSE@@}
 .addr{font-size:41px;line-height:1.55;color:@@INK@@}
-.blessing{font-size:58px;line-height:1.7;color:@@ROSE@@}
+.blessing{font-family:'Cormorant Garamond',serif;font-size:58px;line-height:1.7;color:@@ROSE@@}
 </style></head><body>
 
 <div id="intro">
   <div class="pframe"><img src="@@GREEN@@" alt="Lord Ganesha in green and gold at the family puja"></div>
-  <p class="deva inv2">॥ श्री गणेशाय नमः ॥</p>
+  <p class="inv2">Shri Ganeshaya Namah</p>
 </div>
 
 <div id="stage">

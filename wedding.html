@@ -70,6 +70,21 @@
 
   *{box-sizing:border-box;margin:0;padding:0}
   .deco{display:none}
+
+  /* ── the hosts' words, and each name with its people and place ── */
+  .shloka-sa{font-size:clamp(.95rem,2.4vw,1.1rem);font-style:italic;line-height:1.7;
+    color:var(--maroon);max-width:48ch;margin:.5rem auto 0}
+  .host{font-size:clamp(1rem,2.7vw,1.22rem);line-height:1.5;color:var(--ink);margin-top:.5rem}
+  .host strong{color:var(--maroon);font-weight:600;font-size:1.14em}
+  .kin-line{display:block;font-family:var(--serif);font-size:clamp(.84rem,2.1vw,.96rem);
+    line-height:1.45;color:var(--ink);margin-top:.3rem}
+  .addr-line{display:block;font-family:var(--serif);font-size:clamp(.78rem,1.95vw,.88rem);
+    line-height:1.45;color:var(--ink);opacity:.78;margin-top:.15rem}
+  .event h3 .sub{font-weight:400;font-style:italic;color:var(--gold-deep);
+    margin-left:.5em;font-size:.84em}
+  .event .when .wk{font-family:var(--serif);font-size:.7rem;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:600;color:var(--ink);opacity:.8;margin-top:.25rem}
+  .leaf-cap{font-size:clamp(.95rem,2.4vw,1.1rem);letter-spacing:.08em;color:var(--gold-deep)}
   .kin .rel{font-style:italic;font-size:.76em;letter-spacing:.06em;
     color:var(--gold-deep);opacity:.9;margin-right:.4em}
   .prog{list-style:none;margin-top:.4rem;display:grid;gap:.24rem}
@@ -591,7 +606,7 @@
     .kin li{line-height:1.45;font-size:15px}
     .kin-bless{margin-top:6px}
     .invite-line{margin-top:12px}
-    .names .n{font-size:50px}
+    .names .n{font-size:56px}
     .names{margin-top:8px}
     .names .weds{margin:6px 0}
     .host-hi{max-width:62ch;margin-top:8px}
@@ -610,16 +625,34 @@
     .compliments{margin-top:4px}
     .addr{max-width:none}
 
-    /* with one occasion on the sheet there is room to spare, so the
-       painting and the spacing both grow back */
-    html[data-only] .leaf{width:196px}
-    html[data-only] .leaf-cap{margin-bottom:16px}
-    html[data-only] .occasions+.label{margin-top:26px}
-    html[data-only] .event .body{padding:16px 18px}
-    html[data-only] .event .when{padding:16px 8px}
-    html[data-only] .phone-label{margin-top:22px}
-    html[data-only] .blessing{margin-top:20px}
-    html[data-only] .compliments{margin-top:16px}
+    /* each card carries a different weight of detail, so the painting
+       and the spacing are set per card */
+    html:not([data-only]) .leaf{width:252px}
+    html:not([data-only]) .leaf-cap{margin-bottom:16px}
+    html:not([data-only]) .events-label{margin-top:20px}
+    html:not([data-only]) .event .body{padding:13px 17px}
+    html:not([data-only]) .event .when{padding:13px 8px}
+    html:not([data-only]) .venue-label{margin-top:26px}
+    html:not([data-only]) .phone-label{margin-top:22px}
+    html[data-only="dham"] .leaf{width:372px}
+    html[data-only="dham"] .leaf-cap{margin-bottom:22px}
+    html[data-only="dham"] .events-label{margin-top:28px}
+    html[data-only="dham"] .event .body{padding:18px 20px}
+    html[data-only="dham"] .event .when{padding:18px 8px}
+    html[data-only="dham"] .venue-label{margin-top:30px}
+    html[data-only="dham"] .phone-label{margin-top:26px}
+
+    /* the baraat card carries four days, so it runs tight */
+    html[data-only="baraat"] .leaf{width:150px}
+    html[data-only="baraat"] .leaf-cap{font-size:.95rem;margin-bottom:14px}
+    html[data-only="baraat"] .events-label{margin-top:10px}
+    html[data-only="baraat"] .events{gap:14px}
+    html[data-only="baraat"] .event .body{padding:11px 16px}
+    html[data-only="baraat"] .event .when{padding:11px 8px}
+    html[data-only="baraat"] .event .when .d{font-size:1.9rem}
+    html[data-only="baraat"] .event h3{font-size:1.12rem}
+    html[data-only="baraat"] .venue-label{margin-top:24px}
+    html[data-only="baraat"] .phone-label{margin-top:20px}
 
     @page{size:A4;margin:10mm}
   }
@@ -649,11 +682,11 @@
          alt="Lord Ganesha, crowned and dressed in rose silk with a mirror-work drape, garlanded among roses and tulips at the family puja">
   </figure>
 
-  <p class="invocation">॥ श्री गणेशाय नमः ॥</p>
-  <p class="shloka">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
+  <p class="invocation">Shri Ganeshaya Namah</p>
+  <p class="shloka-sa">Vakratunda Mahakaya Suryakoti Samaprabha<br>Nirvighnam Kuru Me Deva Sarvakaryeshu Sarvada</p>
   <p class="shloka-en">O Lord of the curved trunk, radiant as a million suns &mdash; keep all our undertakings free of obstacles, always.</p>
 
-  <p class="shubh">॥ शुभ विवाह ॥</p>
+  <p class="shubh">Shubh Vivah</p>
 
   <div class="rule" aria-hidden="true">
     <span class="ln"></span>
@@ -661,51 +694,19 @@
     <span class="ln"></span>
   </div>
 
-  <p class="label">With the blessings of our elders</p>
-  <p class="label-hi">बड़ों के आशीर्वाद से</p>
-
-  <div class="families">
-    <section class="side">
-      <h2 class="side-label">Bride&rsquo;s Family</h2>
-      <p class="side-label-hi">वधू पक्ष</p>
-      <ul class="kin">
-        <li><i class="rel">Daughter of</i>Sh. Rajender Dev Sharma<br>&amp; Smt. Vijay Laxmi Sharma</li>
-        <li><i class="rel">Sister of</i>Miss Arushi Sharma</li>
-      </ul>
-    </section>
-
-    <span class="side-div" aria-hidden="true"></span>
-
-    <section class="side">
-      <h2 class="side-label">Groom&rsquo;s Family</h2>
-      <p class="side-label-hi">वर पक्ष</p>
-      <ul class="kin">
-        <li><i class="rel">Taya ji</i>Sh. Shanti Swaroop Sharma</li>
-        <li><i class="rel">Tayi ji</i>Smt. Raksha Sharma</li>
-        <li><i class="rel">Father</i>Sh. Suman Sharma</li>
-        <li><i class="rel">Mother</i>Smt. Malini Sharma</li>
-      </ul>
-      <p class="kin-bless">with the blessings of Nana ji<br><strong>O. P. Kaushal</strong></p>
-    </section>
-  </div>
-
-  <p class="invite-line">request the pleasure of your company at the wedding of</p>
+  <p class="host"><strong>Smt. Raksha Sharma</strong><br>w/o Sh. Shanti Swaroop Sharma</p>
+  <p class="invite-line">solicit your gracious presence and blessings on the auspicious occasion of
+    the marriage ceremony of their loving nephew</p>
 
   <h1 class="names">
     <span class="n">Smatav</span>
-    <span class="n-hi">चि. स्मतव</span>
-    <span class="weds">weds <span class="hi">एवं</span></span>
+    <span class="kin-line">S/o Smt. Malini Sharma w/o Sh. Suman Sharma</span>
+    <span class="addr-line">Jawahar Nagar, Near H.P.C.A. Stadium<br>Dharamshala, Distt. Kangra (H.P.)</span>
+    <span class="weds">weds</span>
     <span class="n">Priyanka</span>
-    <span class="n-hi">सुश्री प्रियंका</span>
+    <span class="kin-line">D/o Smt. Vijay Laxmi Sharma w/o Sh. Rajender Dev Sharma<br>Sister of Miss Arushi Sharma</span>
+    <span class="addr-line">Village Kashkandi (Spail Valley), P.O. Kutara<br>Teh. Rohru, Distt. Shimla (H.P.) 171207</span>
   </h1>
-
-  <p class="host-hi">इस मंगल अवसर पर आप सपरिवार पधारकर वर-वधू को आशीर्वाद प्रदान करें।</p>
-
-  <div class="rule reveal" aria-hidden="true">
-    <span class="ln"></span>
-    <span class="orn"><svg viewBox="0 0 120 18" fill="none" aria-hidden="true"><path d="M60 3 C54 7 54 11 60 15 C66 11 66 7 60 3Z" stroke="#B9912F" stroke-width="1.2" fill="#FCEFE2"/><circle cx="60" cy="9" r="2" fill="#D4607F"/><path d="M50 9 C44 3 36 5 36 9 C36 13 44 15 50 9Z" stroke="#B9912F" stroke-width="1.1" fill="none"/><path d="M70 9 C76 3 84 5 84 9 C84 13 76 15 70 9Z" stroke="#B9912F" stroke-width="1.1" fill="none"/><path d="M34 9 L8 9 M86 9 L112 9" stroke="#D8B771" stroke-width="1"/><circle cx="6" cy="9" r="1.8" fill="#B9912F"/><circle cx="114" cy="9" r="1.8" fill="#B9912F"/></svg></span>
-    <span class="ln"></span>
-  </div>
 
 </section>
 <section class="sheet">
@@ -726,51 +727,15 @@
            width="1100" height="1328" loading="lazy" decoding="async"
            alt="Radha and Krishna dancing on the bank of the Yamuna at dusk, beneath a kadamba tree, with lotuses on the water">
     </figure>
-    <p class="deva leaf-cap">॥ राधे कृष्ण ॥</p>
+    <p class="leaf-cap">Radhe Krishna</p>
 
-    <div class="events" data-events>
-      <article class="event">
-        <div class="when">
-          <span class="d">29</span>
-          <span class="mo">November 2026</span>
-          <span class="wk hi">रविवार</span>
-        </div>
-        <div class="body">
-          <h3>Ladies Sangeet <span class="hi">महिला संगीत</span></h3>
-          <ul class="prog">
-            <li><b>12:15 PM</b> Welcome of Mama ji <span class="hi">मामा जी का स्वागत</span></li>
-            <li><b>12:00 &ndash; 3:00 PM</b> Lunch &middot; Paramparik style <span class="hi">दोपहर का भोजन &middot; पारम्परिक शैली</span></li>
-            <li><b>4:00 PM</b> Ladies Sangeet <span class="hi">महिला संगीत</span></li>
-            <li><b>8:00 PM</b> Dinner <span class="hi">रात्रि भोज</span></li>
-          </ul>
-        </div>
-      </article>
-      <article class="event">
-        <div class="when">
-          <span class="d">04</span>
-          <span class="mo">December 2026</span>
-          <span class="wk hi">शुक्रवार</span>
-        </div>
-        <div class="body">
-          <h3>The Dham <span class="hi">धाम</span></h3>
-          <p class="desc">The traditional Pahari feast, served to all.<span class="hi">पारम्परिक पहाड़ी भोज</span></p>
-          <p class="time">Friday &middot; 12:00 noon &ndash; 4:00 PM<span class="hi">शुक्रवार, ०४ दिसम्बर २०२६ · दोपहर १२:०० से सायं ४:०० बजे तक</span></p>
-        </div>
-      </article>
-    </div>
+    <p class="label events-label" data-events-label>The Celebrations</p>
+    <div class="events" data-events></div>
   </section>
 
-  <p class="label venue-label">Both events at</p>
-  <p class="label-hi">दोनों कार्यक्रम स्थल</p>
-  <p class="venue">Lions Club Dharamshala<span class="hi">लायंस क्लब धर्मशाला</span></p>
-  <p class="addr">
-    Civil Bazar, Shamnagar Road<br>
-    Dharamshala, District Kangra<br>
-    Himachal Pradesh &mdash; 176215
-    <span class="hi">सिविल बाज़ार, शामनगर रोड<br>धर्मशाला, ज़िला कांगड़ा<br>हिमाचल प्रदेश — १७६२१५</span>
-  </p>
+  <div data-venue></div>
 
-  <p class="label phone-label">Phone Number <span class="hi">फ़ोन नंबर</span></p>
+  <p class="label phone-label">Phone Number</p>
   <p class="phone">
     <a href="tel:+919418065277">+91 94180 65277</a><span class="dot">&middot;</span><a href="tel:+919736853285">+91 97368 53285</a>
   </p>
@@ -782,10 +747,8 @@
     <div class="unit"><b data-s>--</b><span>Seconds</span></div>
   </div>
 
-  <p class="blessing reveal">आपकी उपस्थिति ही हमारा आशीर्वाद है</p>
   <p class="blessing-en reveal">Your presence is our blessing.</p>
-
-  <p class="compliments reveal">With love, from both families<b>शुभाकांक्षी — दोनों परिवार</b></p>
+  <p class="compliments reveal">With love, from both families</p>
 
 </section>
 </main>
@@ -806,32 +769,52 @@
   var WEDDING = {
     tz: '+05:30',            /* India Standard Time */
     countdownTo: 'sangeet',  /* which occasion the countdown runs to */
+
+    /* ?only=<key> picks one of these; with no parameter the card is 'main' */
+    sets: {
+      main:   { heading: 'The Celebrations',
+                venueLabel: 'Both events at',
+                venue: 'Lions Club Dharamshala',
+                address: ['Civil Bazar, Shamnagar Road',
+                          'Dharamshala, Distt. Kangra (H.P.) 176215'] },
+      dham:   { heading: 'The Celebration',
+                venueLabel: 'The occasion at',
+                venue: 'Lions Club Dharamshala',
+                address: ['Civil Bazar, Shamnagar Road',
+                          'Dharamshala, Distt. Kangra (H.P.) 176215'] },
+      baraat: { heading: 'The Wedding Programme',
+                venueLabel: 'All functions at',
+                venue: 'Village Kashkandi (Spail Valley)',
+                address: ['P.O. Kutara, Teh. Rohru',
+                          'Distt. Shimla (H.P.) 171207'] }
+    },
+
     events: [
-      {
-        key: 'sangeet',
-        name: 'Ladies Sangeet', nameHi: 'महिला संगीत',
-        date: '2026-11-29', time: '16:00',
-        clock: '4:00 PM onwards',
-        whenHi: 'रविवार, २९ नवम्बर २०२६ · सायं ४:०० बजे से',
-        wkHi: 'रविवार',
-        /* the day runs to a programme, so it is listed instead of one time */
-        programme: [
-          { at: '12:15 PM', what: 'Welcome of Mama ji', whatHi: 'मामा जी का स्वागत' },
-          { at: '12:00 – 3:00 PM', what: 'Lunch · Paramparik style',
-                                                whatHi: 'दोपहर का भोजन · पारम्परिक शैली' },
-          { at: '4:00 PM',  what: 'Ladies Sangeet',     whatHi: 'महिला संगीत' },
-          { at: '8:00 PM',  what: 'Dinner',             whatHi: 'रात्रि भोज' }
-        ]
-      },
-      {
-        key: 'dham',
-        name: 'The Dham', nameHi: 'धाम',
-        desc: 'The traditional Pahari feast, served to all.', descHi: 'पारम्परिक पहाड़ी भोज',
-        date: '2026-12-04', time: '12:00',
-        clock: '12:00 noon – 4:00 PM',
-        whenHi: 'शुक्रवार, ०४ दिसम्बर २०२६ · दोपहर १२:०० से सायं ४:०० बजे तक',
-        wkHi: 'शुक्रवार'
-      }
+      { key: 'sangeet', sets: ['main'],
+        name: 'Ladies Sangeet', date: '2026-11-29', time: '12:15',
+        programme: [ { at: '12:15 PM', what: "Mama's Swagat" },
+                     { at: '12:30 PM', what: 'Lunch' },
+                     { at: '3:30 PM',  what: 'Ladies Sangeet' },
+                     { at: '8:00 PM',  what: 'Dinner' } ] },
+
+      { key: 'dham', sets: ['main', 'dham'],
+        name: 'The Dham', sub: 'Priti Bhoj',
+        desc: 'The traditional Pahari feast, served to all.',
+        date: '2026-12-04', time: '12:00', clock: '12:00 PM to 5:00 PM' },
+
+      { key: 'mehendi', sets: ['baraat'],
+        name: 'Mehendi', date: '2026-11-30', time: '14:00', clock: '2:00 PM' },
+
+      { key: 'rohru', sets: ['baraat'],
+        name: 'Departure to Rohru', date: '2026-12-01', time: '06:00', clock: '6:00 AM' },
+
+      { key: 'haldi', sets: ['baraat'],
+        name: 'Samuhat / Haldi', date: '2026-12-02', time: '08:00',
+        programme: [ { at: '8:00 AM', what: 'Samuhat / Haldi' },
+                     { at: '5:00 PM', what: 'Departure of Baraat' } ] },
+
+      { key: 'pravesh', sets: ['baraat'],
+        name: 'Badhu Pravesh', date: '2026-12-03', time: '12:15', clock: '12:15 PM' }
     ]
   };
 
@@ -854,55 +837,46 @@
     return n;
   }
 
-  /* ── the occasions, derived ── */
-  var ONLY = document.documentElement.getAttribute('data-only');
-  var shown = WEDDING.events.filter(function (ev) { return !ONLY || ev.key === ONLY; });
-  if (!shown.length) { shown = WEDDING.events; ONLY = null; }
+  /* ── the occasions and the venue, derived ── */
+  var ONLY = document.documentElement.getAttribute('data-only') || 'main';
+  var SET  = WEDDING.sets[ONLY] || WEDDING.sets.main;
+  var shown = WEDDING.events.filter(function (ev) { return ev.sets.indexOf(ONLY) !== -1; });
+  if (!shown.length) { shown = WEDDING.events.filter(function (ev) { return ev.sets.indexOf('main') !== -1; }); }
 
-  if (ONLY) {
-    var vl = document.querySelector('.venue-label');
-    if (vl) {
-      vl.textContent = 'The occasion at';
-      var vlh = vl.nextElementSibling;
-      if (vlh && vlh.classList.contains('label-hi')) { vlh.textContent = 'कार्यक्रम स्थल'; }
-    }
-  }
+  var headingEl = document.querySelector('[data-events-label]');
+  if (headingEl) { headingEl.textContent = SET.heading; }
 
   var wrap = document.querySelector('[data-events]');
   if (wrap && shown.length) {
     var frag = document.createDocumentFragment();
 
-    shown.forEach(function(ev){
+    shown.forEach(function (ev) {
       var cd = calendarDate(ev.date);
 
       var when = el('div', 'when');
       when.appendChild(el('span', 'd', ('0' + cd.getDate()).slice(-2)));
       when.appendChild(el('span', 'mo', fmt(cd, { month: 'long', year: 'numeric' })));
-      when.appendChild(el('span', 'wk hi', ev.wkHi));
+      when.appendChild(el('span', 'wk', fmt(cd, { weekday: 'long' })));
 
-      var h3 = el('h3', null, ev.name + ' ');
-      h3.appendChild(el('span', 'hi', ev.nameHi));
+      var h3 = el('h3', null, ev.name);
+      if (ev.sub) { h3.appendChild(el('span', 'sub', ev.sub)); }
 
       var body = el('div', 'body');
       body.appendChild(h3);
 
+      if (ev.desc) { body.appendChild(el('p', 'desc', ev.desc)); }
+
       if (ev.programme && ev.programme.length) {
         var prog = el('ul', 'prog');
-        ev.programme.forEach(function(item){
+        ev.programme.forEach(function (item) {
           var li = el('li');
           li.appendChild(el('b', null, item.at));
-          li.appendChild(document.createTextNode(' ' + item.what + ' '));
-          li.appendChild(el('span', 'hi', item.whatHi));
+          li.appendChild(document.createTextNode(' ' + item.what));
           prog.appendChild(li);
         });
         body.appendChild(prog);
-      } else {
-        var desc = el('p', 'desc', ev.desc);
-        desc.appendChild(el('span', 'hi', ev.descHi));
-        var time = el('p', 'time', fmt(cd, { weekday: 'long' }) + ' · ' + ev.clock);
-        time.appendChild(el('span', 'hi', ev.whenHi));
-        body.appendChild(desc);
-        body.appendChild(time);
+      } else if (ev.clock) {
+        body.appendChild(el('p', 'time', ev.clock));
       }
 
       var card = el('article', 'event');
@@ -915,52 +889,16 @@
     wrap.appendChild(frag);
   }
 
-  /* ── countdown to the first occasion ── */
-  var target = null;
-  shown.forEach(function(ev){
-    if (ev.key === WEDDING.countdownTo) { target = ev; }
-  });
-  if (!target) { target = shown[0]; }
-
-  var box = document.querySelector('.countdown');
-  if (box && target) {
-    var at = instant(target).getTime();
-    var elD = box.querySelector('[data-d]'), elH = box.querySelector('[data-h]'),
-        elM = box.querySelector('[data-m]'), elS = box.querySelector('[data-s]');
-    var pad = function(n){ return String(n).padStart(2, '0'); };
-    var timer = null;
-
-    var replace = function(text){
-      var p = el('p', 'countdown-note', text);
-      box.parentNode.replaceChild(p, box);
-      if (timer) { clearInterval(timer); }
-    };
-
-    var last = WEDDING.events[WEDDING.events.length - 1];
-    var lastEnd = instant(last).getTime() + 12 * 3600 * 1000;
-
-    var tick = function(){
-      if (isNaN(at)) { replace(''); return; }
-      var now = Date.now();
-      var diff = at - now;
-
-      if (diff > 0) {
-        var s = Math.floor(diff / 1000);
-        elD.textContent = Math.floor(s / 86400);
-        elH.textContent = pad(Math.floor(s / 3600) % 24);
-        elM.textContent = pad(Math.floor(s / 60) % 60);
-        elS.textContent = pad(s % 60);
-        return;
-      }
-      /* the celebrations have begun, and run until the last occasion */
-      if (now < lastEnd) {
-        replace('The celebrations have begun — thank you for being with us.');
-        return;
-      }
-      replace('Celebrated in ' + fmt(calendarDate(target.date), { month: 'long', year: 'numeric' }) + '. Thank you for your blessings.');
-    };
-    tick();
-    timer = setInterval(tick, 1000);
+  var vbox = document.querySelector('[data-venue]');
+  if (vbox) {
+    vbox.appendChild(el('p', 'label venue-label', SET.venueLabel));
+    vbox.appendChild(el('p', 'venue', SET.venue));
+    var addr = el('p', 'addr');
+    SET.address.forEach(function (line, i) {
+      if (i) { addr.appendChild(document.createElement('br')); }
+      addr.appendChild(document.createTextNode(line));
+    });
+    vbox.appendChild(addr);
   }
 
   /* ── reveal on scroll, with a failsafe so nothing stays hidden ── */
