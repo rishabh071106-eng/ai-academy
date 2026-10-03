@@ -1,5 +1,6 @@
 import { expandJob, firstVisible, readPage, textOf } from "./browser.mjs";
 import { fillForm } from "./forms.mjs";
+import { askPerson, tryNavigator } from "./escalate.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep, waitForUser } from "./util.mjs";
@@ -193,6 +194,7 @@ async function applyRoot(page) {
 const button = (root, re) => root.getByRole("button", { name: re }).filter({ visible: true }).first();
 
 export async function apply(page, job, { resumePath, profile, mode }) {
+  job.resumePath = resumePath;
   const ctl = easyApplyControl(page);
   await ctl.waitFor({ state: "visible", timeout: 8000 }).catch(() => {});
   if (!(await ctl.isVisible().catch(() => false))) return stuck(page, null, job, mode, "I can't see the Easy Apply button");
@@ -229,9 +231,8 @@ export async function apply(page, job, { resumePath, profile, mode }) {
     let unanswered = await fillForm(root, profile, job);
     if (unanswered.length) {
       log("warn", `   couldn't answer: ${unanswered.map((f) => `"${f.label}"`).join(", ")}`);
-      if (mode === "auto") return discard(page, "Unanswered: " + unanswered.map((f) => f.label).join("; "));
-      const go = await waitForUser(`${job.company}: please fill ${unanswered.map((f) => `"${f.label}"`).join(", ")} in the Chrome form, then press Done.`);
-      if (!go) return discard(page, "Skipped by you at questions", "skipped");
+      const r = await stuck(page, root, job, mode, `I couldn't answer ${unanswered.map((f) => `"${f.label}"`).join(", ")}`, true);
+      if (r) return r;
     }
 
     const submit = button(root, /submit application|^submit$/i);
@@ -301,13 +302,16 @@ async function stuck(page, root, job, mode, reason, canContinue = false) {
   await page.screenshot({ path: shot }).catch(() => {});
   if (root) fs.writeFileSync(shot.replace(/\.png$/, ".html"), await root.innerHTML().catch(() => ""));
   log("warn", `   stuck: ${reason} (screenshot: data/debug/${path.basename(shot)})`);
-  if (mode === "auto") return discard(page, `Stuck: ${reason}`);
+  // 1. AI navigator first.
+  const nav = await tryNavigator(page, job, { reason, resumePath: job.resumePath, mode });
+  if (nav) return nav;
+  // 2. Then a person (time-limited in fully automatic mode).
   const choices = [
     ...(canContinue ? [{ label: "I fixed it, continue", value: "" }] : []),
     { label: "I submitted it myself", value: "done" },
     { label: "Skip this job", value: "s" },
   ];
-  const r = await ask(`${job.company} – ${job.title}: I'm stuck because ${reason}. ${canContinue ? "Fix it in the Chrome form and I'll carry on, " : ""}finish it yourself, or skip it.`, choices);
+  const r = await askPerson(page, `${job.company} – ${job.title}: I'm stuck because ${reason}. ${canContinue ? "Fix it in the Chrome form and I'll carry on, " : ""}finish it yourself, or skip it.`, choices, mode);
   if (r === "done") return { status: "applied", note: "Submitted by you after the agent got stuck" };
   if (r === "" && canContinue) return null;
   return discard(page, `Stuck: ${reason}`);

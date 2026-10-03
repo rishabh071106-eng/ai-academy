@@ -5,7 +5,7 @@
 // resume is uploaded through file inputs or the browser's file chooser.
 import { generateJSON } from "./ai.mjs";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
-import { ask, confirm, log, sleep, stopIfFatalApiError } from "./util.mjs";
+import { ask, askForHelp, confirm, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
 
 /** Numbers every visible interactive element (data-ja-ui) and returns a text snapshot. */
@@ -49,9 +49,15 @@ export async function snapshot(page) {
         disabled: el.disabled || el.getAttribute("aria-disabled") === "true" || undefined,
       });
     }
-    const headings = [...document.querySelectorAll("h1, h2, h3, [role=heading]")].filter(visible).map((h) => clean(h.innerText)).filter(Boolean).slice(0, 30);
+    const headings = deepAll(document, "h1, h2, h3, [role=heading]").filter(visible).map((h) => clean(h.innerText)).filter(Boolean).slice(0, 30);
     const main = document.querySelector("main, [role=main]") || document.body;
-    return { url: location.href, title: document.title, headings, text: clean(main.innerText).slice(0, 7000), elements: els };
+    // Dialogs and widgets rendered in shadow DOM (e.g. LinkedIn's Easy Apply) don't show up in
+    // innerText of the page; add their text so confirmations like "Application sent" are seen.
+    const shadowText = [];
+    for (const host of deepAll(document, "*")) if (host.shadowRoot) shadowText.push(clean([...host.shadowRoot.children].map((c) => c.innerText || "").join(" ")));
+    const dialogs = deepAll(document, "[role=dialog], [role=alertdialog]").filter(visible).map((d) => clean(d.innerText));
+    const text = [dialogs.join(" | "), shadowText.filter(Boolean).join(" | "), clean(main.innerText)].filter(Boolean).join("\n");
+    return { url: location.href, title: document.title, headings, text: text.slice(0, 7000), elements: els };
   });
 }
 
@@ -201,13 +207,15 @@ export async function navigate(page, opts) {
         case "done":
           return { status: d.status === "already_applied" ? "applied" : d.status === "not_eligible" ? "skipped" : d.status === "applied" ? "applied" : "needs_attention", note: d.message || d.status, jobs: reported };
         case "need_user": {
-          if (mode === "auto") return { status: "needs_attention", note: d.message };
           await page.bringToFront().catch(() => {});
-          const r = await ask(`${job ? `${job.title}: ` : ""}${d.message}`, [
+          const choices = [
             { label: "Done, continue", value: "" },
             { label: "It's applied", value: "done" },
             { label: "Skip", value: "s" },
-          ]);
+          ];
+          const q = `${job ? `${job.title}: ` : ""}${d.message}`;
+          const r = mode === "auto" ? await askForHelp(q, choices) : await ask(q, choices);
+          if (r === null) return { status: "needs_attention", note: d.message };
           if (r === "done") return { status: "applied", note: "Finished by you" };
           if (r === "s") return { status: "needs_attention", note: d.message };
           history.push("the user handled the request; continue");

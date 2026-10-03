@@ -159,5 +159,12 @@
   "maxJobsToReview": 0,
   "maxResultPagesPerSearch": 5,
   "keepGoing": true,
-  "recheckMinutes": 30
+  "recheckMinutes": 30,
+  "retryUnfinished": true,
+  "helpTimeoutMinutes": 3,
+  "voice": {
+    "enabled": true,
+    "callName": "Rishabh",
+    "voiceName": ""
+  }
 }

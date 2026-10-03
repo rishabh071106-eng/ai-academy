@@ -131,7 +131,7 @@ export async function answerQuestions(profile, job, fields) {
 ${JSON.stringify(profile, null, 2)}
 
 JOB: ${job.title} at ${job.company}
-
+${job.description ? `JOB POST (excerpt):\n${String(job.description).slice(0, 3000)}\n` : ""}
 QUESTIONS (JSON):
 ${JSON.stringify(fields, null, 2)}`,
   });

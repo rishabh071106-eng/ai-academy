@@ -78,6 +78,13 @@ Each agent card has **Apply to** (stop after this many applications), **Review**
 - **Google Forms:** when a job's "apply" link, or a link written in the job post, is a Google Form (`forms.gle`, `docs.google.com/forms`), the agent fills it: name, email, phone, ranges like "8+ years", checkboxes, dropdowns, free-text answers written by Claude, and the resume where the form has a file question. It goes through every section and submits. Forms that require a Google sign-in need you to sign in to Google once in the agent's Chrome.
 - **Alignerr** (app.alignerr.com) has its own agent card. Alignerr is an app rather than a classic job board, so this agent "looks" at each screen: it numbers the buttons, links and fields, Claude picks the next step (open the Opportunities tab, open a role, Apply, fill the form, upload the resume, Submit), and the agent does it. Every step is shown in the live log. Log in to Alignerr once in the agent's Chrome. The agent lists the open roles, keeps the ones that fit her (software, coding, PHP, JavaScript, full stack…), creates the tailored resume, and applies. Skill assessments and AI interviews are for her to take herself: the agent tells you, and in fully automatic mode marks them "needs attention" and moves on.
 
+## Autonomous mode, retries and voice
+
+- **Retry unfinished first** (on by default): every run starts by going back to jobs found earlier that aren't applied yet (needs attention, apply on site, shortlisted) and tries them again.
+- **When an application gets stuck**, the agent goes deeper in this order: (1) the AI navigator reads the page and finishes it (answers the question, clicks through, submits); (2) only if that fails, it asks a person; (3) in **Fully automatic** mode it waits at most `helpTimeoutMinutes` (3), then skips that job and carries on.
+- **Voice:** when it needs a person, the Mac says *"Hey Rishabh, I need your help…"* (`voice.callName` in `config.json`, macOS `say`), and repeats every 2 minutes while waiting. Press **🎤 Voice** on the dashboard (Chrome, allow the microphone once) to answer out loud: "yes", "no", "skip", "done / continue", "I submitted it".
+- Things it never does for her: CAPTCHAs, email/phone verification codes, sign-ins it has no password for, skill assessments and interviews. Those always go to a person (or are skipped in fully automatic mode).
+
 ## Statuses on the dashboard
 
 - **Applied**: submitted by the agent, or already applied before.

@@ -27,6 +27,9 @@ const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
 // 0 = no limit: review every job the searches return (across result pages).
 const reviewLimit = Number(args.review ?? config.maxJobsToReview ?? 0);
 const keepGoing = args["keep-going"] !== undefined ? args["keep-going"] !== "false" : !!config.keepGoing;
+// Start each run by going back to jobs that were found earlier but not applied yet.
+const retryUnfinished = args.retry !== undefined ? args.retry !== "false" : config.retryUnfinished !== false;
+const UNFINISHED = new Set(["needs_attention", "external", "shortlisted"]);
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
 const platforms = { linkedin, naukri, alignerr };
@@ -91,13 +94,22 @@ for (const [key, mod] of Object.entries(platforms)) {
   try {
    for (let round = 1; ; round++) {
     const reviewedBefore = stats.scanned;
-    for (const s of pcfg.searches) {
+    // Round 1 begins with the unfinished jobs from earlier runs.
+    const retryList = round === 1 && retryUnfinished
+      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: `${r.title} · ${r.company}`, title: r.title }))
+      : [];
+    if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
+    for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...pcfg.searches]) {
      for (let pageIndex = 0; pageIndex < maxPages; pageIndex++) {
       if (done()) break;
       await ensurePage().catch(() => {});
-      log("info", `\n[${key}] Searching "${s.keywords}" in ${s.location}${pageIndex ? ` (results page ${pageIndex + 1})` : ""}…`);
+      if (s.retry && pageIndex > 0) break;
+      if (!s.retry) log("info", `\n[${key}] Searching "${s.keywords}" in ${s.location}${pageIndex ? ` (results page ${pageIndex + 1})` : ""}…`);
       let refs = [];
-      try {
+      if (s.retry) {
+        if (pageIndex > 0) break;
+        refs = retryList;
+      } else try {
         refs = await mod.search(page, s, { ...pcfg, max: config.maxJobsToScanPerSearch, pageIndex });
       } catch (e) {
         log("err", `  search failed: ${e.message.split("\n")[0]}`);
@@ -117,7 +129,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         await ensurePage();
         const existing = tracker.find(key, ref.jobId);
         // Low-score skips get a second look (matching rules may have changed); exclusions don't.
-        const retry = existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason);
+        const retry = s.retry || (existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason));
         if (existing && !retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
 

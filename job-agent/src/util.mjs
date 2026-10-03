@@ -59,18 +59,28 @@ let askSeq = 0;
  * channel to the server, so the question shows up there as buttons; otherwise it's asked
  * in the terminal. `choices` = [{ label, value }].
  */
-export async function ask(question, choices) {
+export async function ask(question, choices, { timeoutMs = 0, timeoutAnswer = "s" } = {}) {
   if (process.send) {
     const id = ++askSeq;
-    process.send({ type: "ask", id, question, choices });
+    process.send({ type: "ask", id, question, choices, timeoutMs });
     return new Promise((resolve) => {
+      let timer;
       const onMsg = (m) => {
         if (m?.type === "answer" && m.id === id) {
+          clearTimeout(timer);
           process.off("message", onMsg);
           resolve(String(m.answer ?? "").trim());
         }
       };
       process.on("message", onMsg);
+      // Unattended runs: if nobody answers in time, take the default (normally "skip") and go on.
+      if (timeoutMs > 0)
+        timer = setTimeout(() => {
+          process.off("message", onMsg);
+          process.send({ type: "ask-timeout", id });
+          log("warn", `   no answer within ${timeoutMs >= 60000 ? `${Math.round(timeoutMs / 60000)} min` : `${Math.round(timeoutMs / 1000)} s`} — moving on`);
+          resolve(timeoutAnswer);
+        }, timeoutMs);
     });
   }
   const readline = await import("node:readline/promises");
@@ -110,4 +120,16 @@ export function stopIfFatalApiError(e) {
   if (!why) return;
   log("err", `\n■ STOPPED: ${why}`);
   process.exit(3);
+}
+
+/**
+ * Unattended mode ("auto"): ask for help on the dashboard (and by voice) but don't wait
+ * forever. Returns null when there is no dashboard to ask, so the caller just skips.
+ */
+export async function askForHelp(question, choices) {
+  const cfg = loadConfig();
+  if (!process.send) return null;
+  const minutes = Number(cfg.helpTimeoutMinutes ?? 3);
+  if (minutes <= 0) return null;
+  return ask(question, choices, { timeoutMs: minutes * 60000, timeoutAnswer: "s" });
 }

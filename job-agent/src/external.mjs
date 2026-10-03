@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
 import { googleForm } from "./googleforms.mjs";
+import { askPerson, tryNavigator } from "./escalate.mjs";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep } from "./util.mjs";
 
 const SUCCESS = /thank you for (applying|your application|your interest)|application (has been |was )?(received|submitted|sent|complete)|we('ve| have) received your application|successfully (applied|submitted)|you('ve| have) applied/i;
@@ -49,13 +50,15 @@ async function handOver(page, job, mode, reason, canContinue = true) {
   fs.mkdirSync(path.dirname(shot), { recursive: true });
   await page.screenshot({ path: shot, fullPage: true }).catch(() => {});
   log("warn", `   company site: ${reason} (screenshot: data/debug/${path.basename(shot)})`);
-  if (mode === "auto") return { status: "needs_attention", note: `Company site: ${reason}` };
-  await page.bringToFront().catch(() => {});
-  const r = await ask(`${job.company} (company site): ${reason}. ${canContinue ? "Do it in Chrome and I'll carry on, " : ""}finish it yourself, or skip.`, [
+  // 1. Let the AI navigator try to finish it.
+  const nav = await tryNavigator(page, job, { reason, resumePath: job.resumePath, mode });
+  if (nav) return nav;
+  // 2. Ask a person (time-limited in fully automatic mode).
+  const r = await askPerson(page, `${job.company} (company site): ${reason}. ${canContinue ? "Do it in Chrome and I'll carry on, " : ""}finish it yourself, or skip.`, [
     ...(canContinue ? [{ label: "Done, continue", value: "" }] : []),
     { label: "I submitted it myself", value: "done" },
     { label: "Skip this job", value: "s" },
-  ]);
+  ], mode);
   if (r === "done") return { status: "applied", note: "Submitted by you on the company site" };
   if (r === "" && canContinue) return null;
   return { status: "needs_attention", note: `Company site: ${reason}` };
@@ -287,6 +290,7 @@ export async function applyExternal(page, job, { open, resumePath, profile, mode
   await sleep(2000);
   const ats = detectAts(site.url());
   log("dim", `   company site: ${ats} · ${new URL(site.url()).hostname}`);
+  job.resumePath = resumePath;
   const ctx = { job, resumePath, profile, mode, coverLetter, ats };
   let result;
   try {
@@ -312,6 +316,7 @@ export function applyLinkInText(text) {
  * e.g. Alignerr): click Apply if needed, fill every step, submit.
  */
 export async function applyHere(page, job, { resumePath, profile, mode, coverLetter, label = "site" }) {
+  job.resumePath = resumePath;
   const ctx = { job, resumePath, profile, mode, coverLetter, ats: label };
   try {
     return (await generic(page, ctx)) ?? { status: "needs_attention", note: `${label}: unfinished` };

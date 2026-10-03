@@ -240,6 +240,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
       <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
       <button class="btn primary" id="addBtn">+ Add job</button>
+      <button class="btn" id="voiceBtn" title="Answer the agents' questions by voice (uses the microphone)">🎤 Voice: off</button>
       <button class="btn icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
     </div>
   </header>
@@ -655,19 +656,19 @@ document.addEventListener("input", (e) => {
 const MODE_HINT = {
   "dry-run": "Practice: finds jobs, scores them, writes tailored resumes and messages. Applies to nothing.",
   review: "Ask before submit: fills each application, then waits for you to press Yes here.",
-  auto: "Fully automatic: submits on its own. Still pauses if a question can't be answered truthfully.",
+  auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. Only if that fails it calls you (out loud) for up to 3 min, then skips and carries on.",
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
 const AG = {
-  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
-  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
-  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "review", max: 15, review: 0, keepGoing: true, since: 0, running: false, pending: null, logOpen: false },
+  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
+  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
+  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
 };
 try {
   const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
   for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
 } catch {}
-const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max, review: a.review, keepGoing: a.keepGoing }])))); } catch {} };
+const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max, review: a.review, keepGoing: a.keepGoing, retry: a.retry }])))); } catch {} };
 
 $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
   <div class="card agent" data-p="${k}">
@@ -685,6 +686,7 @@ $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
       <label class="sub" title="Stop after this many applications">Apply to <input class="num-input" data-el="max" type="number" min="1" max="500" value="${a.max}"></label>
       <label class="sub" title="Stop after reviewing this many jobs (0 = all of them)">Review <small>(0 = all)</small> <input class="num-input" data-el="review" type="number" min="0" max="5000" value="${a.review}" placeholder="all"></label>
       <label class="sub keep" title="Don't stop until the target is reached: go through more result pages, and check again for new postings when everything has been reviewed"><input type="checkbox" data-el="keep" ${a.keepGoing ? "checked" : ""}> Keep going until done</label>
+      <label class="sub keep" title="First go back to jobs found earlier that aren't applied yet (needs attention, apply on site, shortlisted)"><input type="checkbox" data-el="retry" ${a.retry !== false ? "checked" : ""}> Retry unfinished first</label>
     </div>
     <div class="mode-hint" data-el="hint"></div>
     <div data-el="ask"></div>
@@ -703,6 +705,7 @@ for (const k of Object.keys(AG)) {
   el(k, "max").onchange = (e) => { AG[k].max = Number(e.target.value) || 15; savePrefs(); };
   el(k, "review").onchange = (e) => { AG[k].review = Math.max(0, Number(e.target.value) || 0); savePrefs(); };
   el(k, "keep").onchange = (e) => { AG[k].keepGoing = e.target.checked; savePrefs(); };
+  el(k, "retry").onchange = (e) => { AG[k].retry = e.target.checked; savePrefs(); };
   el(k, "logToggle").onclick = () => toggleLog(k);
   el(k, "btn").onclick = () => startStop(k);
 }
@@ -717,7 +720,7 @@ async function startStop(k) {
   btn.disabled = true;
   const starting = !AG[k].running;
   try {
-    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing }) });
+    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing, retry: AG[k].retry !== false }) });
     const data = await r.json();
     if (!r.ok) alert(data.error || "Something went wrong");
     else if (starting) { AG[k].since = 0; el(k, "log").innerHTML = ""; toggleLog(k, true); }
@@ -770,6 +773,8 @@ async function pollAgent() {
 const appliedSince = (k, t) => state.rows.filter((r) => r.platform === k && r.appliedAt && new Date(r.appliedAt).getTime() >= (t || 0)).length;
 function renderAgent(k, s) {
   const a = AG[k], btn = el(k, "btn");
+  a.lastStatus = s;
+  if (s.pending) setTimeout(listenIfNeeded, 0);
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
   const modeName = MODE_NAME[s.options?.mode] ?? "";
@@ -781,7 +786,7 @@ function renderAgent(k, s) {
   btn.className = "btn " + (s.running ? "stop" : "go");
   btn.textContent = s.running ? "■ Stop" : "▶ Start";
   el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
-  el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = s.running;
+  el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = el(k, "retry").disabled = s.running;
   if (s.running && s.options?.mode && s.options.mode !== a.mode) { a.mode = s.options.mode; paintMode(k); }
 
   const key = s.pending ? s.pending.id : null;
@@ -789,7 +794,8 @@ function renderAgent(k, s) {
   a.pending = key;
   if (!s.pending) { el(k, "ask").innerHTML = ""; return; }
   const choices = s.pending.choices?.length ? s.pending.choices : [{ label: "Continue", value: "" }];
-  el(k, "ask").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>${a.label} agent needs you</small>${esc(s.pending.question)}</div>
+  const until = s.pending.timeoutMs ? ` · skips in ${Math.round(s.pending.timeoutMs / 60000)} min if nobody answers` : "";
+  el(k, "ask").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>${a.label} agent needs you${until}${voice.on ? " · 🎤 say yes / no / skip / done" : ""}</small>${esc(s.pending.question)}</div>
     <div class="ask-btns">${choices.map((c, i) => `<button class="btn ${i === 0 ? "primary" : ""}" data-ans="${esc(c.value)}">${esc(c.label)}</button>`).join("")}</div></div>`;
   el(k, "ask").querySelectorAll("[data-ans]").forEach((b) => (b.onclick = async () => {
     el(k, "ask").querySelectorAll("button").forEach((x) => (x.disabled = true));
@@ -798,6 +804,60 @@ function renderAgent(k, s) {
   }));
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification(`${a.label} agent needs you`, { body: s.pending.question }); } catch {}
 }
+// ---- Voice answers: when an agent asks something, listen for "yes / no / skip / done".
+const voice = { on: false, rec: null, busy: false };
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+try { voice.on = localStorage.getItem("ja-voice") === "on" && !!SR; } catch {}
+function paintVoice(state) { $("#voiceBtn").textContent = !SR ? "🎤 Voice: not supported" : voice.on ? `🎤 Voice: on${state ? " · " + state : ""}` : "🎤 Voice: off"; }
+$("#voiceBtn").onclick = async () => {
+  if (!SR) return alert("This browser can't listen. Use Chrome for voice answers.");
+  if (!voice.on) {
+    try { (await navigator.mediaDevices.getUserMedia({ audio: true })).getTracks().forEach((t) => t.stop()); } catch { return alert("Microphone permission was blocked."); }
+  }
+  voice.on = !voice.on;
+  try { localStorage.setItem("ja-voice", voice.on ? "on" : "off"); } catch {}
+  paintVoice();
+  listenIfNeeded();
+};
+function spokenToAnswer(text, choices) {
+  const t = ` ${text.toLowerCase()} `;
+  const has = (v) => choices.some((c) => c.value === v);
+  if (/\b(submitted|i applied|already applied|it'?s applied|i did it)\b/.test(t) && has("done")) return "done";
+  if (/\b(skip|next job|leave it|ignore)\b/.test(t) && has("s")) return "s";
+  if (/\b(no|nope|don'?t|do not|cancel|stop)\b/.test(t) && has("n")) return "n";
+  if (/\b(yes|yeah|yep|yup|sure|submit|apply|go ahead|okay|ok)\b/.test(t) && has("y")) return "y";
+  if (/\b(done|continue|fixed|carry on|go on|finished|ready|ok|okay|yes)\b/.test(t) && has("")) return "";
+  const byLabel = choices.find((c) => t.includes(` ${c.label.toLowerCase()} `));
+  return byLabel ? byLabel.value : null;
+}
+function pendingQuestion() {
+  return Object.entries(AG).map(([k, a]) => ({ k, s: a.lastStatus })).filter((x) => x.s?.pending).sort((a, b) => a.s.pending.at - b.s.pending.at)[0];
+}
+function listenIfNeeded() {
+  if (!voice.on || voice.busy || !SR) return;
+  const p = pendingQuestion();
+  if (!p) return paintVoice();
+  voice.busy = true;
+  const rec = new SR();
+  rec.lang = "en-IN";
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  paintVoice("listening…");
+  rec.onresult = async (e) => {
+    const said = [...e.results[0]].map((r) => r.transcript);
+    const choices = p.s.pending.choices?.length ? p.s.pending.choices : [{ label: "Continue", value: "" }];
+    const ans = said.map((x) => spokenToAnswer(x, choices)).find((x) => x !== null);
+    if (ans === undefined || ans === null) { paintVoice(`heard "${said[0]}" — say yes, no, skip or done`); return; }
+    paintVoice(`heard "${said[0]}"`);
+    await fetch("/api/agent/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: p.k, id: p.s.pending.id, answer: ans }) });
+    pollAgent();
+  };
+  rec.onerror = () => {};
+  rec.onend = () => { voice.busy = false; setTimeout(listenIfNeeded, 600); };
+  try { rec.start(); } catch { voice.busy = false; }
+}
+paintVoice();
+
 try {
   if ("Notification" in window && Notification.permission === "default")
     document.querySelectorAll(".agent [data-el=btn]").forEach((b) => b.addEventListener("click", () => Notification.requestPermission(), { once: true }));
