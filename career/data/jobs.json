@@ -15,7 +15,7 @@
     "category": "exec-search",
     "id": 1,
     "status": "live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Confidential leading payments company (via iimjobs)",
@@ -51,7 +51,7 @@
     "category": "workday-banks",
     "id": 3,
     "status": "live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "SAP Labs India",
@@ -69,7 +69,7 @@
     "category": "bigtech",
     "id": 4,
     "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Confidential (UPI/payments platform, via iimjobs)",
@@ -81,12 +81,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "Fintech Head of Product in Bengaluru; posting explicitly asks 'immediate to 30 days notice period'.",
-    "notes": "Immediate-joiner evidence quoted in listing Live-check 24 Aug: iimjobs listing still indexed with full JD. 31 Aug check: still listed on iimjobs (~1 month old). 8 Sep check: still on iimjobs, 'posted 1 month ago' (re-bumped). 14 Sep check: still indexed with full JD, no recent re-bump. 21 Sep check: still indexed, ~1 month old bump.",
+    "notes": "Live-check 5 Oct: iimjobs 1560466 gone from index — likely expired/archived.",
     "verified": true,
     "category": "exec-search",
     "id": 5,
-    "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "status": "likely_closed",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Freshworks",
@@ -120,7 +120,7 @@
     "category": "bigtech",
     "id": 7,
     "status": "live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Visa",
@@ -138,7 +138,7 @@
     "category": "workday-banks",
     "id": 8,
     "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Salesforce",
@@ -150,12 +150,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Owns the AI Platform powering Einstein/Agentforce — near-exact overlap with multi-agent LLM/RAG platform work at enterprise scale.",
-    "notes": "CAUTION 28 Sep: JR208713 no longer appears in careers.salesforce.com search (current reqs are JR300k+); verify before applying.",
+    "notes": "Live-check 5 Oct: JR208713 absent from careers.salesforce.com for the second consecutive week while comparable JRs surface — treat as closed.",
     "verified": true,
     "category": "saas-ai",
     "id": 9,
-    "status": "unknown",
-    "last_checked": "2026-09-28"
+    "status": "likely_closed",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Bottomline Technologies",
@@ -203,12 +203,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP owning digital lending lifecycle — lead gen, onboarding, KYC, underwriting, disbursal, collections — direct match.",
-    "notes": "Also older id 1695365 (May 2026) Re-bumped on iimjobs (1695365) 'posted 2 days ago' as of 23 Aug — mandate still open. Live-check 24 Aug: iimjobs 1695365 still in current index (86-99 LPA). 31 Aug check: 'posted 2 days ago' — fresh re-bump, very active. 8 Sep check: 'posted 2 days ago' — re-bumped yet again, very active. 14 Sep check: re-bumped 'posted 2 days ago' again. 21 Sep check: still indexed; near-identical repost 1709063 also live — active hiring.",
+    "notes": "Live-check 5 Oct: 1709063 not in index, but same-title VP Digital Product — Consumer Lending (Mumbai, 10-16 yrs) indexed under 1695365 — likely repost/renumber; try iimjobs.com/j/...-1695365.",
     "verified": true,
     "category": "exec-search",
     "id": 12,
-    "status": "live",
-    "last_checked": "2026-09-28"
+    "status": "unknown",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Elevation Capital (portfolio fintech)",
@@ -1280,7 +1280,7 @@
     "category": "fintech-india",
     "id": 86,
     "status": "live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "CredAble",
@@ -1416,7 +1416,7 @@
     "category": "workday-banks",
     "id": 94,
     "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1585,8 +1585,8 @@
     "verified": true,
     "category": "fintech-india",
     "id": 104,
-    "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "status": "live",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Paytm",
@@ -1615,12 +1615,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP-level lending (LOS/LMS) product leadership at a banking-infrastructure fintech, 16–21 yrs band — seniority and domain both line up with the ₹95L ask.",
-    "notes": "Active Instahyre listing 9 Aug; posting date not exposed. Distinct from tracked mid-level M2P Banking Domain role (id 68). Live-check 24 Aug: Instahyre 326747 still in index, no expired signal. 31 Aug check: Instahyre 326747 still active-style. 8 Sep check: Instahyre 326747 still indexed, no expired signal. 14 Sep check: Instahyre still indexed, no expired signal. 21 Sep check: Instahyre still indexed.",
+    "notes": "Live-check 5 Oct: Instahyre page says no longer accepting applications.",
     "verified": true,
     "category": "fintech-india",
     "id": 106,
-    "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "status": "likely_closed",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Flexmoney Technologies",
@@ -1804,7 +1804,7 @@
     "category": "workday-banks",
     "id": 117,
     "status": "live",
-    "last_checked": "2026-09-28"
+    "last_checked": "2026-10-05"
   },
   {
     "company": "BNY",
@@ -1937,10 +1937,10 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Senior Director product leadership at a major payments-infrastructure fintech ($80B+ TPV) — payments platform ownership at the right band; likely the re-opened, upgraded version of the earlier Director mandate.",
-    "notes": "Built In job ID 9368097 is far above the newest otherwise-observed IDs — posted within days (as of 30 Aug). Earlier Director-level req (id 11) went closed ~24 Aug; this appears to be the same mandate re-opened at Sr Director level — apply to this one. 8 Sep check: Built In 9368097 still live at source URL. 14 Sep check: Built In listing still indexed. 21 Sep check: Built In listing still indexed.",
+    "notes": "Live-check 5 Oct: Built In shows role removed 2 Jun; nothing on Cashfree careers — treat as closed.",
     "verified": true,
-    "status": "likely_live",
-    "last_checked": "2026-09-28",
+    "status": "likely_closed",
+    "last_checked": "2026-10-05",
     "category": "fintech-india",
     "id": 125
   },
@@ -2081,10 +2081,10 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Lead GPM driving Google Pay's payments expansion with a PM team — consumer payments leadership at big-tech comp, one of the strongest payments matches on the board.",
-    "notes": "Live-check 28 Sep: req still indexed but snippet references GPay Brazil/Open Finance scope — confirm India scope before a long application.",
+    "notes": "Live-check 5 Oct: req absent from Google careers; only Brazil copy of Lead GPM Payments found — no India seat evidenced.",
     "verified": true,
-    "status": "likely_live",
-    "last_checked": "2026-09-28",
+    "status": "likely_closed",
+    "last_checked": "2026-10-05",
     "category": "bigtech",
     "id": 133
   },
@@ -2135,10 +2135,10 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP owning data-platform product for Aladdin (BlackRock's core investment platform) — financial-data platform leadership with a listed comp band of ₹75L–1.2Cr that overlaps the ₹95L–1Cr target; Mumbai-based.",
-    "notes": "'Posted 3 days ago' on Built In Mumbai as of 15 Sep; first BlackRock role tracked. Confirm req live before a long application. 21 Sep check: still live (req R252097) — CORRECTION: original posting dates to Sep 2025, an older evergreen req, not a fresh Sep 2026 post.",
+    "notes": "Live-check 5 Oct: still on careers.blackrock.com (req 86173845536) but req dates to Sep 2025 — aging; confirm with recruiter.",
     "verified": true,
     "status": "likely_live",
-    "last_checked": "2026-09-28",
+    "last_checked": "2026-10-05",
     "category": "workday-banks",
     "id": 136
   },
@@ -2153,10 +2153,10 @@
     "immediate_joiner": false,
     "fit_score": 7,
     "fit_reason": "Director-level PM at Google for AlloyDB (cloud database) — a level above the tracked GPM band with comp comfortably in range; domain is data infrastructure, adjacent via the API/platform record rather than core fintech.",
-    "notes": "Live on Google Careers 16 Sep, not previously tracked; Google listings undated so freshness unconfirmed. Thirteenth Google req tracked, first at Director level.",
+    "notes": "Live-check 5 Oct: Director PM AlloyDB gone from Google careers index; only PM II / Senior PM AlloyDB remain.",
     "verified": false,
-    "status": "likely_live",
-    "last_checked": "2026-09-28",
+    "status": "likely_closed",
+    "last_checked": "2026-10-05",
     "category": "bigtech",
     "id": 137
   },
@@ -2174,7 +2174,7 @@
     "notes": "Reposted '6 hours ago' on Built In as of 22 Sep (req JR317504); very fresh.",
     "verified": false,
     "status": "live",
-    "last_checked": "2026-09-28",
+    "last_checked": "2026-10-05",
     "category": "saas-ai",
     "id": 138
   },
@@ -2189,12 +2189,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Pure lending mandate — mortgage originations/servicing and non-agency lending strategy, 10+ yrs bar. Direct overlap with your lending-platform ownership; US-lender GCC comp bands can reach the ask at VP level. Mumbai-based.",
-    "notes": "CAUTION 28 Sep: not fresh — originally posted Jul-Aug 2026, re-indexed by Built In; Mumbai location unconfirmed (JD reads as US housing-finance role). Verify location and req age before applying.",
+    "notes": "Live-check 5 Oct: all copies show US-only seats ($175-240K, GSE housing finance); India seat not substantiated — closed for our purposes.",
     "verified": false,
     "category": "workday-banks",
     "id": 139,
-    "status": "likely_live",
-    "last_checked": "2026-09-28"
+    "status": "likely_closed",
+    "last_checked": "2026-10-05"
   },
   {
     "company": "Intuit",
@@ -2211,7 +2211,79 @@
     "verified": false,
     "category": "bigtech",
     "id": 140,
+    "status": "live",
+    "last_checked": "2026-10-05"
+  },
+  {
+    "company": "HSBC",
+    "title": "Vice President — Product Management, Digital Loans",
+    "location": "Mumbai",
+    "seniority": "VP",
+    "apply_url": "https://hsbc.eightfold.ai/careers?query=Vice%20President%20Product%20Management%20Digital%20Loans&location=Mumbai",
+    "platform": "careers-site",
+    "posted_date": "2026-10-03",
+    "immediate_joiner": false,
+    "fit_score": 9,
+    "fit_reason": "VP Digital Loans product at a global bank — near-exact lateral match to the JPM digital lending platform record; Mumbai seat.",
+    "notes": "LinkedIn 'actively hiring 2 days ago' as of 4 Oct; URL is the HSBC eightfold search deep-link (direct req not surfaced) — locate the req there before applying.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 141,
     "status": "likely_live",
-    "last_checked": "2026-09-30"
+    "last_checked": "2026-10-05"
+  },
+  {
+    "company": "Goldman Sachs",
+    "title": "Vice President — Product Management (Engineering, Bengaluru)",
+    "location": "Bengaluru",
+    "seniority": "VP",
+    "apply_url": "https://www.dreamworkhq.com/job/b5ab646c-3a2b-4ecb-9574-7b354be159c9",
+    "platform": "other",
+    "posted_date": "2026-10-04",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "VP PM in Goldman's Bengaluru engineering org; listed comp ₹65L–1.1Cr brackets the ask; platform product at a global bank.",
+    "notes": "Aggregator 'posted yesterday' 4 Oct (another copy said 5 days); find the req on higher.gs.com before applying — aggregator link only.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 142,
+    "status": "likely_live",
+    "last_checked": "2026-10-05"
+  },
+  {
+    "company": "Morgan Stanley",
+    "title": "AI@MS Product Owner — Platforms, Vice President (Wealth Management)",
+    "location": "Mumbai",
+    "seniority": "VP",
+    "apply_url": "https://www.efinancialcareers.com/jobs-India-Mumbai-AIMS_Product_Owner_Platforms_Vice_President_Wealth_Management.id24193033",
+    "platform": "other",
+    "posted_date": "2026-10-03",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "VP product owner for the AI@MS GenAI/agentic platform in Wealth Management — direct hit on multi-agent AI platform record at a global bank.",
+    "notes": "eFinancialCareers 'posted 2 days ago' on 5 Oct; a related 'VP — Product Management, Wealth Management' Mumbai posting also surfaced on LinkedIn 3-4 Oct (no direct req URL found); a May 2026 copy existed, so possibly a re-bump — confirm on morganstanley.eightfold.ai.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 143,
+    "status": "likely_live",
+    "last_checked": "2026-10-05"
+  },
+  {
+    "company": "Fidelity Investments",
+    "title": "Vice President — Fidelity Digital Assets India (site product leadership)",
+    "location": "Bengaluru",
+    "seniority": "VP",
+    "apply_url": "https://jobs.fidelity.com/in/jobs/2134550/vice-president-fidelity-digital-assets-india/",
+    "platform": "careers-site",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "VP site technology+product leadership for digital assets, 15+ yrs bar — seniority and platform-leadership match; domain adjacent (digital assets vs lending/payments).",
+    "notes": "Direct jobs.fidelity.com req live in index 5 Oct but posting date unverified (page fetch blocked) — could be an older req; confirm freshness on the page.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 144,
+    "status": "likely_live",
+    "last_checked": "2026-10-05"
   }
 ]
