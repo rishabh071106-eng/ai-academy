@@ -8,6 +8,7 @@ import path from "node:path";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
 import { googleForm } from "./googleforms.mjs";
 import { askPerson, tryNavigator } from "./escalate.mjs";
+import { navigate } from "./navigator.mjs";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep } from "./util.mjs";
 
 const SUCCESS = /thank you for (applying|your application|your interest)|application (has been |was )?(received|submitted|sent|complete)|we('ve| have) received your application|successfully (applied|submitted)|you('ve| have) applied/i;
@@ -38,7 +39,8 @@ async function dismissBanners(page) {
 
 async function captchaPresent(page) {
   return page
-    .locator("iframe[src*='recaptcha'], iframe[src*='hcaptcha'], iframe[title*='captcha' i], iframe[src*='challenges.cloudflare'], #px-captcha")
+    // Invisible reCAPTCHA / its hidden challenge frame don't need a person; only a visible checkbox or puzzle does.
+    .locator("iframe[src*='recaptcha']:not([src*='size=invisible']):not([src*='bframe']), iframe[src*='hcaptcha']:not([src*='invisible']), iframe[title*='captcha' i]:not([title*='recaptcha challenge' i]), iframe[src*='challenges.cloudflare'], #px-captcha")
     .filter({ visible: true })
     .count()
     .then((n) => n > 0)
@@ -297,12 +299,34 @@ export async function applyExternal(page, job, { open, resumePath, profile, mode
     result =
       ats === "workday" ? await workday(site, ctx)
       : ats === "googleforms" ? await googleForm(site, ctx, (reason) => handOver(site, job, mode, reason))
-      : await generic(site, ctx);
+      : await navigatorApply(site, ctx);
   } catch (e) {
     result = await handOver(site, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false);
   }
   if (site !== page) await site.close().catch(() => {});
   return result ?? { status: "needs_attention", note: "Company site: unfinished" };
+}
+
+/**
+ * Every other career site (Greenhouse, Lever, Ashby, iCIMS, Taleo, SuccessFactors, Zoho,
+ * Keka, Darwinbox, company homepages…): the AI navigator does the whole application the way a
+ * person would — finds the job and its Apply button, signs in or creates an account,
+ * uploads the resume, answers every question, scrolls through each step and submits.
+ */
+async function navigatorApply(site, ctx) {
+  await dismissBanners(site);
+  if (await captchaPresent(site)) {
+    const r = await handOver(site, ctx.job, ctx.mode, "there's a CAPTCHA to solve");
+    if (r) return r;
+  }
+  const r = await navigate(site, {
+    goal: `Apply for the job "${ctx.job.title}" at ${ctx.job.company} on this company career site (${ctx.ats}). If this page isn't the application yet, find the job and click Apply. Create an account or sign in if the site requires it. Upload her resume where a resume/CV is asked for, fill every field and question, scroll through each step, and submit. ${ctx.coverLetter ? "If a cover letter is asked for as text, use this one:\n" + ctx.coverLetter.slice(0, 1500) : ""}`,
+    profile: ctx.profile,
+    job: ctx.job,
+    resumePath: ctx.resumePath,
+    mode: ctx.mode === "review" ? "review" : "auto",
+  }).catch((e) => ({ status: "needs_attention", note: e.message.split("\n")[0] }));
+  return { ...r, note: r.status === "applied" ? `Company site (${ctx.ats}): ${r.note}` : `Company site: ${r.note}` };
 }
 
 /** Application links written in the job description (Google Forms, careers pages…). */

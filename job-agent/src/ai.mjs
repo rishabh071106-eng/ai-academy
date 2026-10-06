@@ -69,7 +69,7 @@ let workingModel = null;
 
 const toParts = (content) =>
   (typeof content === "string" ? [{ type: "text", text: content }] : content).map((b) =>
-    b.type === "document" ? { inline_data: { mime_type: b.source.media_type, data: b.source.data } } : { text: b.text },
+    b.type === "document" || b.type === "image" ? { inline_data: { mime_type: b.source.media_type, data: b.source.data } } : { text: b.text },
   );
 
 // Older Gemini models only take the OpenAPI-style `responseSchema` (no additionalProperties).

@@ -1,7 +1,7 @@
 // Starts/stops one agent per platform (LinkedIn and Naukri run independently) and relays their questions.
-import { fork, spawn } from "node:child_process";
+import { fork } from "node:child_process";
 import path from "node:path";
-import { loadConfig, ROOT } from "./util.mjs";
+import { ROOT } from "./util.mjs";
 
 export const PLATFORMS = ["linkedin", "naukri", "alignerr"];
 const MAX_LOG = 600;
@@ -24,7 +24,7 @@ function pipe(run, stream, kind) {
   });
 }
 const view = (run, since = 0) => {
-  const { child, log, stopRequested, callTimer, ...rest } = run;
+  const { child, log, stopRequested, ...rest } = run;
   return { ...rest, log: log.filter((l) => l.n > since) };
 };
 const get = (platform) => {
@@ -35,7 +35,7 @@ const get = (platform) => {
 
 /** since = { linkedin: n, naukri: n } — only log lines newer than those are returned. */
 export function status(since = {}) {
-  return { runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])), speaking: { text: lastSpoken.text, until: lastSpoken.until, now: Date.now() } };
+  return { runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
 }
 
 export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true } = {}, restart = 0) {
@@ -59,21 +59,17 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
     if (m?.type === "ask") {
       run.pending = { id: m.id, question: m.question, choices: m.choices ?? [], at: Date.now(), timeoutMs: m.timeoutMs || 0 };
       push(run, `? ${m.question}`, "ask");
-      callForHelp(run);
     }
-    if (m?.type === "say") speak(m.text, m.kind === "problem" ? 1 : 0);
     if (m?.type === "job") run.current = m.title ? { title: m.title, company: m.company || "", url: m.url || "", matchScore: m.matchScore ?? null, at: Date.now() } : null;
     if (m?.type === "ask-timeout" && run.pending?.id === m.id) {
       push(run, m.skipped ? "→ skipped by you" : "→ no answer in time; skipped", "sys");
       run.pending = null;
-      stopCalling(run);
-    }
+      }
   });
   child.on("exit", (code, signal) => {
     // Exit code 3 = Claude API unusable (no credit / bad key): restarting won't help.
     const crashed = !run.stopRequested && code !== 3 && (code !== 0 || signal);
     Object.assign(run, { child: null, pending: null, current: null });
-    stopCalling(run);
     // Keep-going runs come back by themselves after a crash (already-handled jobs are skipped).
     if (crashed && keepGoing && (run.restarts ?? 0) < 5) {
       run.restarts = (run.restarts ?? 0) + 1;
@@ -83,7 +79,6 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
     }
     push(run, signal ? "■ Agent stopped" : code === 3 ? "■ Agent stopped (see the line above)" : `■ Agent finished (exit code ${code})`, code === 3 ? "err" : "sys");
     run.fatal = code === 3 ? (run.log.filter((l) => /STOPPED:/.test(l.text)).at(-1)?.text.replace(/^.*STOPPED:\s*/, "") ?? "see the live log") : null;
-    if (run.fatal) speak(`Hey ${loadConfig().voice?.callName || "Rishabh"}, the ${LABEL[platform]} agent stopped. ${run.fatal.split(/(?<=\.)\s/)[0]}`, 2);
     Object.assign(run, { running: false, endedAt: Date.now(), exitCode: code });
   });
   return status();
@@ -112,62 +107,6 @@ export function skip({ platform } = {}) {
   return status();
 }
 
-// ---- Voice: say it out loud on the Mac ("say"), repeated every 2 minutes while waiting.
-// One sentence at a time (a queue), so several agents don't talk over each other. Words the
-// dashboard listens for ("skip", "next job"…) are never spoken, so the microphone can't
-// mistake the Mac's own voice for a command.
-const LABEL = { linkedin: "LinkedIn", naukri: "Naukri", alignerr: "Alignerr" };
-const speech = { queue: [], busy: false };
-export const lastSpoken = { text: "", at: 0, until: 0 };
-function speak(text, priority = 0) {
-  const cfg = loadConfig().voice ?? {};
-  if (cfg.enabled === false || !text) return;
-  const clean = String(text)
-    .replace(/https?:\S+/g, "")
-    .replace(/\b(skip\w*|deny\w*|next job|move on|apply to next)\b/gi, "pass")
-    .replace(/\s+/g, " ")
-    .trim();
-  // Keep the queue short: routine lines are dropped when it's busy, problems/help never.
-  if (priority === 0 && speech.queue.length >= 2) return;
-  speech.queue.push(clean);
-  speakNext();
-}
-function speakNext() {
-  if (speech.busy || !speech.queue.length) return;
-  const text = speech.queue.shift();
-  Object.assign(lastSpoken, { text, at: Date.now(), until: Date.now() + 20000 });
-  if (process.platform !== "darwin") return void setTimeout(() => ((lastSpoken.until = Date.now()), speakNext()), 50);
-  const cfg = loadConfig().voice ?? {};
-  speech.busy = true;
-  try {
-    const p = spawn("say", cfg.voiceName ? ["-v", cfg.voiceName, text] : [text], { stdio: "ignore" });
-    const done = () => {
-      speech.busy = false;
-      lastSpoken.until = Date.now() + 800;
-      speakNext();
-    };
-    p.on("exit", done);
-    p.on("error", done);
-  } catch {
-    speech.busy = false;
-  }
-}
-function callForHelp(run) {
-  stopCalling(run);
-  const name = loadConfig().voice?.callName || "Rishabh";
-  const q = run.pending.question.replace(/\(.*?\)|https?:\S+/g, "").slice(0, 160);
-  const line = `Hey ${name}, I need your help. ${LABEL[run.platform]} agent: ${q}`;
-  speak(line, 2);
-  let n = 0;
-  run.callTimer = setInterval(() => {
-    if (!run.pending || ++n > 3) return stopCalling(run);
-    speak(`Hey ${name}, the ${LABEL[run.platform]} agent is still waiting for you.`, 2);
-  }, 120000);
-}
-function stopCalling(run) {
-  clearInterval(run.callTimer);
-  run.callTimer = null;
-}
 
 export function answer({ platform, id, answer: value = "" } = {}) {
   const run = get(platform);
@@ -176,7 +115,6 @@ export function answer({ platform, id, answer: value = "" } = {}) {
   push(run, `→ ${label || "Continue"}`, "sys");
   run.child.send({ type: "answer", id: Number(id), answer: String(value) });
   run.pending = null;
-  stopCalling(run);
   return status();
 }
 

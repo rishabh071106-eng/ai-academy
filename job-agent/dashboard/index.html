@@ -244,7 +244,6 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
       <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
       <button class="btn primary" id="addBtn">+ Add job</button>
-      <button class="btn" id="voiceBtn" title="Answer the agents' questions by voice (uses the microphone)">🎤 Voice: off</button>
       <button class="btn icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
     </div>
   </header>
@@ -660,7 +659,7 @@ document.addEventListener("input", (e) => {
 const MODE_HINT = {
   "dry-run": "Practice: finds jobs, scores them, writes tailored resumes and messages. Applies to nothing.",
   review: "Ask before submit: fills each application, then waits for you to press Yes here.",
-  auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. Only if that fails it calls you (out loud) for up to 3 min, then skips and carries on.",
+  auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. Only if that fails it asks you here for up to 3 min, then skips and carries on.",
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
 const AG = {
@@ -693,7 +692,7 @@ $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
       <label class="sub keep" title="First go back to jobs found earlier that aren't applied yet (needs attention, apply on site, shortlisted)"><input type="checkbox" data-el="retry" ${a.retry !== false ? "checked" : ""}> Retry unfinished first</label>
     </div>
     <div class="mode-hint" data-el="hint"></div>
-    <div class="now" data-el="now" hidden><div class="now-job"><small>Working on</small><span data-el="nowText"></span></div><button class="btn" data-el="skip" title="Drop this job and move to the next one (or say &quot;skip&quot; / &quot;next job&quot; with 🎤 Voice on)">⏭ Skip this job</button></div>
+    <div class="now" data-el="now" hidden><div class="now-job"><small>Working on</small><span data-el="nowText"></span></div><button class="btn" data-el="skip" title="Drop this job and move to the next one">⏭ Skip this job</button></div>
     <div data-el="ask"></div>
     <button class="log-toggle" data-el="logToggle">▸ Show live log</button>
     <div class="logbox" data-el="log" hidden></div>
@@ -760,8 +759,7 @@ async function pollAgent() {
   let anyRunning = false;
   try {
     const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
-    const { runs, speaking } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
-    if (speaking) voice.macSpeakingUntil = Date.now() + Math.max(0, speaking.until - speaking.now);
+    const { runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
     let newLines = false;
     for (const [k, s] of Object.entries(runs)) {
       if (!AG[k]) continue;
@@ -814,7 +812,7 @@ function renderAgent(k, s) {
   if (!s.pending) { el(k, "ask").innerHTML = ""; return; }
   const choices = s.pending.choices?.length ? s.pending.choices : [{ label: "Continue", value: "" }];
   const until = s.pending.timeoutMs ? ` · skips in ${Math.round(s.pending.timeoutMs / 60000)} min if nobody answers` : "";
-  el(k, "ask").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>${a.label} agent needs you${until}${voice.on ? " · 🎤 say yes / no / done, or “skip” for the next job" : ""}</small>${esc(s.pending.question)}</div>
+  el(k, "ask").innerHTML = `<div class="ask" role="alert"><div class="ask-q"><small>${a.label} agent needs you${until}</small>${esc(s.pending.question)}</div>
     <div class="ask-btns">${choices.map((c, i) => `<button class="btn ${i === 0 ? "primary" : ""}" data-ans="${esc(c.value)}">${esc(c.label)}</button>`).join("")}</div></div>`;
   el(k, "ask").querySelectorAll("[data-ans]").forEach((b) => (b.onclick = async () => {
     el(k, "ask").querySelectorAll("button").forEach((x) => (x.disabled = true));
@@ -823,92 +821,6 @@ function renderAgent(k, s) {
   }));
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification(`${a.label} agent needs you`, { body: s.pending.question }); } catch {}
 }
-// ---- Voice: while 🎤 Voice is on the dashboard keeps listening.
-//  · "skip" / "deny" / "next job" / "apply to next" / "not this one" → the agent drops the job
-//    it's on (add "LinkedIn" / "Naukri" / "Alignerr" to pick an agent when several run)
-//  · when an agent asks something: "yes" / "no" / "done" / "I submitted it"
-// What the Mac says itself is ignored (listening pauses while it speaks).
-const voice = { on: false, rec: null, macSpeakingUntil: 0 };
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-try { voice.on = localStorage.getItem("ja-voice") === "on" && !!SR; } catch {}
-function paintVoice(state) { $("#voiceBtn").textContent = !SR ? "🎤 Voice: not supported" : voice.on ? `🎤 Voice: on${state ? " · " + state : " · listening"}` : "🎤 Voice: off"; }
-$("#voiceBtn").onclick = async () => {
-  if (!SR) return alert("This browser can't listen. Use Chrome for voice commands.");
-  if (!voice.on) {
-    try { (await navigator.mediaDevices.getUserMedia({ audio: true })).getTracks().forEach((t) => t.stop()); } catch { return alert("Microphone permission was blocked."); }
-  }
-  voice.on = !voice.on;
-  try { localStorage.setItem("ja-voice", voice.on ? "on" : "off"); } catch {}
-  paintVoice();
-  if (voice.on) listen(); else try { voice.rec?.abort(); } catch {}
-};
-const SKIP_CMD = /\b(skip|deny|denied|reject|next job|apply to next|go to next|next one|move on|not this (one|job)|leave (it|this|this job)|don'?t apply)\b/;
-function spokenToAnswer(text, choices) {
-  const t = ` ${text.toLowerCase()} `;
-  const has = (v) => choices.some((c) => c.value === v);
-  if (/\b(submitted|i applied|already applied|it'?s applied|i did it)\b/.test(t) && has("done")) return "done";
-  if (/\b(no|nope|don'?t|do not|cancel|stop)\b/.test(t) && has("n")) return "n";
-  if (/\b(yes|yeah|yep|yup|sure|submit|apply|go ahead|okay|ok)\b/.test(t) && has("y")) return "y";
-  if (/\b(done|continue|fixed|carry on|go on|finished|ready|ok|okay|yes)\b/.test(t) && has("")) return "";
-  const byLabel = choices.find((c) => t.includes(` ${c.label.toLowerCase()} `));
-  return byLabel ? byLabel.value : null;
-}
-function pendingQuestion() {
-  return Object.entries(AG).map(([k, a]) => ({ k, s: a.lastStatus })).filter((x) => x.s?.pending).sort((a, b) => a.s.pending.at - b.s.pending.at)[0];
-}
-/** Which agent a spoken command is for: the one named, else the one asking, else the busiest one. */
-function agentFor(text) {
-  const t = text.toLowerCase();
-  const named = Object.keys(AG).find((k) => t.includes(AG[k].label.toLowerCase()) || (k === "naukri" && /naukri|nokri|nakri|knock ?ri/.test(t)));
-  if (named) return named;
-  const p = pendingQuestion();
-  if (p) return p.k;
-  return Object.entries(AG).filter(([, a]) => a.lastStatus?.running && a.lastStatus?.current).sort((a, b) => b[1].lastStatus.current.at - a[1].lastStatus.current.at)[0]?.[0] ?? null;
-}
-async function handleSpeech(said) {
-  const text = said[0] || "";
-  if (said.some((x) => SKIP_CMD.test(x.toLowerCase()))) {
-    const k = agentFor(said.join(" "));
-    if (!k) return paintVoice(`heard "${text}" — no job in progress`);
-    paintVoice(`heard "${text}" → skipping on ${AG[k].label}`);
-    return skipJob(k);
-  }
-  const p = pendingQuestion();
-  if (!p) return paintVoice(`heard "${text}"`);
-  const choices = p.s.pending.choices?.length ? p.s.pending.choices : [{ label: "Continue", value: "" }];
-  const ans = said.map((x) => spokenToAnswer(x, choices)).find((x) => x !== null);
-  if (ans === undefined || ans === null) return paintVoice(`heard "${text}" — say yes, no, done or skip`);
-  paintVoice(`heard "${text}"`);
-  await fetch("/api/agent/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: p.k, id: p.s.pending.id, answer: ans }) });
-  pollAgent();
-}
-function listen() {
-  if (!voice.on || !SR || voice.rec) return;
-  const rec = new SR();
-  voice.rec = rec;
-  rec.lang = "en-IN";
-  rec.continuous = true;
-  rec.interimResults = false;
-  rec.maxAlternatives = 3;
-  paintVoice();
-  rec.onresult = (e) => {
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (!e.results[i].isFinal) continue;
-      if (Date.now() < voice.macSpeakingUntil) continue; // that was the Mac talking
-      handleSpeech([...e.results[i]].map((r) => r.transcript.trim()).filter(Boolean));
-    }
-  };
-  rec.onerror = (e) => {
-    if (e.error === "not-allowed" || e.error === "service-not-allowed") {
-      voice.on = false;
-      paintVoice();
-    }
-  };
-  rec.onend = () => { voice.rec = null; if (voice.on) setTimeout(listen, 400); };
-  try { rec.start(); } catch { voice.rec = null; }
-}
-paintVoice();
-if (voice.on) listen();
 
 try {
   if ("Notification" in window && Notification.permission === "default")

@@ -7,12 +7,15 @@
   "mode": "review",
   "baseResume": "~/Downloads/Aishwarya-Sharma-Resume*.pdf",
   "minMatchScore": 55,
+  "requiredKeywords": [
+    "magento",
+    "adobe commerce",
+    "php"
+  ],
   "alwaysApplyKeywords": [
     "magento",
     "adobe commerce",
-    "react",
-    "next.js",
-    "nextjs"
+    "php"
   ],
   "relevantKeywords": [
     "magento",
@@ -67,15 +70,16 @@
           "remote": true
         },
         {
-          "keywords": "React Developer",
+          "keywords": "PHP Developer",
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "Next.js Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "Senior PHP Developer",
+          "location": "India",
+          "remote": true
         },
         {
-          "keywords": "Full Stack Developer PHP React",
+          "keywords": "Full Stack Developer PHP",
           "location": "Bengaluru, Karnataka, India"
         }
       ]
@@ -98,15 +102,19 @@
           "location": "remote"
         },
         {
-          "keywords": "react developer",
+          "keywords": "php developer",
           "location": "bangalore"
         },
         {
-          "keywords": "nextjs developer",
+          "keywords": "senior php developer",
           "location": "bangalore"
         },
         {
-          "keywords": "full stack developer php react",
+          "keywords": "php laravel",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "full stack developer php",
           "location": "bangalore"
         }
       ],
@@ -162,12 +170,8 @@
   "recheckMinutes": 30,
   "retryUnfinished": true,
   "helpTimeoutMinutes": 3,
-  "voice": {
-    "enabled": true,
-    "callName": "Rishabh",
-    "voiceName": "",
-    "announceJobs": true,
-    "announceProblems": true
-  },
-  "keywordOverrideMinScore": 45
+  "keywordOverrideMinScore": 45,
+  "maxAttemptsPerJob": 3,
+  "navigatorMaxSteps": 45,
+  "navigatorScreenshots": true
 }

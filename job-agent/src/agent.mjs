@@ -15,7 +15,7 @@ import * as naukri from "./naukri.mjs";
 import * as alignerr from "./alignerr.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
-import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, randomBetween, say, sleep } from "./util.mjs";
+import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, randomBetween, sleep } from "./util.mjs";
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const config = loadConfig();
@@ -33,17 +33,13 @@ const UNFINISHED = new Set(["needs_attention", "external", "shortlisted"]);
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
 const platforms = { linkedin, naukri, alignerr };
-const LABEL = { linkedin: "LinkedIn", naukri: "Naukri", alignerr: "Alignerr" };
-const voiceCfg = config.voice ?? {};
-// Short spoken names: "React Developer at Bounteous".
-const spokenJob = (job) => `${(job.title || "this job").replace(/\(.*?\)|\[.*?\]|[|@].*$/g, "").trim().slice(0, 70)}${job.company ? ` at ${job.company.slice(0, 40)}` : ""}`;
 let currentRow = null; // { key, jobId, title, company } of the job being worked on
 
-// "Skip this job" from the dashboard (button or voice).
+// "Skip this job" from the dashboard.
 process.on("message", (m) => {
   if (m?.type !== "skip") return;
   if (!jobControl.active || !currentRow) {
-    say("There's no job in progress to pass on right now.");
+    log("dim", "  (skip asked, but no job is in progress right now)");
     return;
   }
   jobControl.skip = true;
@@ -97,6 +93,11 @@ let isRelevant = isRelevantGlobal;
 const hitInTitleOrPost = (job, word) =>
   reFor([word]).test(job.title || "") || (String(job.description || "").length < (job.pageTextLength || Infinity) * 0.9 && reFor([word]).test(job.description));
 const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job.description}`))?.word;
+// Hard rule (config "requiredKeywords", e.g. Magento / Adobe Commerce / PHP): a job is only
+// considered when its own title or description contains one of these words.
+const requiredFor = (pcfg) => pcfg.requiredKeywords ?? config.requiredKeywords ?? [];
+const requiredHit = (job, words) => !words.length || words.some((w) => hitInTitleOrPost(job, w));
+const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 
@@ -121,8 +122,10 @@ for (const [key, mod] of Object.entries(platforms)) {
    for (let round = 1; ; round++) {
     const reviewedBefore = stats.scanned;
     // Round 1 begins with the unfinished jobs from earlier runs.
-    const retryList = round === 1 && retryUnfinished
-      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: r.title?.startsWith("(") ? "" : `${r.title} · ${r.company}`, title: r.title }))
+    // Every round starts by finishing the jobs that are still open (best matches first),
+    // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.
+    const retryList = retryUnfinished
+      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: r.title?.startsWith("(") ? "" : `${r.title} · ${r.company}`, title: r.title }))
       : [];
     if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
     for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...pcfg.searches]) {
@@ -174,6 +177,13 @@ for (const [key, mod] of Object.entries(platforms)) {
           fs.mkdirSync(path.dirname(shot), { recursive: true });
           await page.screenshot({ path: shot }).catch(() => {});
           log("err", `  couldn't read the job page (${ref.url}) — screenshot saved to data/debug/`);
+          continue;
+        }
+        const required = requiredFor(pcfg);
+        if (!requiredHit(job, required)) {
+          log("dim", `• ${job.title || job.url} — no ${required.join(" / ")} in the job post, skipping`);
+          tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: `No ${required.join(" / ")} in the job post` });
+          stats.skipped++;
           continue;
         }
         if (!isRelevant(`${job.title}\n${job.description}`)) {
@@ -257,7 +267,6 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("ok", `  match ${ev.matchScore}% — resume created for this job: data/${resumeFile}`);
         currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
         process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, matchScore: ev.matchScore });
-        if (voiceCfg.announceJobs !== false && mode !== "dry-run") say(`${LABEL[key]}: applying to ${spokenJob(job)}, ${ev.matchScore} percent match.`);
         checkSkip();
 
         if (job.applyType !== "easy") {
@@ -288,13 +297,12 @@ for (const [key, mod] of Object.entries(platforms)) {
         await applyTo(mod, key, page, job, resumePath);
        } catch (e) {
         if (isSkip(e) || jobControl.skip) {
-          // Skipped by you from the dashboard / by voice. Never overwrite a finished application.
+          // Skipped by you from the dashboard. Never overwrite a finished application.
           const row = currentRow && tracker.find(key, currentRow.jobId);
           if (!row || !["applied", "interview", "offer"].includes(row.status))
             tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}), status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
           stats.skipped++;
           log("warn", "  ⏭ skipped by you — on to the next job");
-          say("Okay, skipped. Moving to the next job.");
           await page.keyboard.press("Escape").catch(() => {});
         } else {
           // Anything unexpected on one job: note it and move on to the next.
@@ -339,22 +347,19 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
   // A skip asked while the form was being filled wins over whatever the form step reported
   // (unless it got submitted in the meantime).
   if (jobControl.skip && result.status !== "applied") checkSkip();
-  tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note });
+  const attempts = (tracker.find(key, job.jobId)?.attempts ?? 0) + (result.status === "applied" ? 0 : 1);
+  tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
   if (result.status === "applied") {
     await maybeMessage(mod, key, page, job);
     applied++;
     stats.applied++;
     log("ok", `  ✔ applied (${applied}/${maxApply})`);
-    if (voiceCfg.announceJobs !== false) say(`Applied to ${spokenJob(job)}.`);
     jobControl.active = false; // nothing left to skip during the pause between applications
     const [lo, hi] = config.delaySecondsBetweenApplications;
     await sleep(randomBetween(lo, hi) * 1000);
   } else {
     if (result.status === "needs_attention") stats.attention++;
     log("warn", `  ${result.status}: ${result.note}`);
-    // Tell her out loud what went wrong, so she can step in or let it go.
-    if (result.status === "needs_attention" && voiceCfg.announceProblems !== false)
-      say(`Problem on ${LABEL[key]} with ${spokenJob(job)}: ${String(result.note || "").replace(/https?:\S+/g, "").slice(0, 160)}`, "problem");
   }
 }
 

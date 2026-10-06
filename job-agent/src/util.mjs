@@ -37,7 +37,7 @@ export function loadProfile() {
   return readJson(file);
 }
 
-// ---- "Skip this job" from the dashboard (button or voice). The agent marks the job it is
+// ---- "Skip this job" from the dashboard. The agent marks the job it is
 // working on as active; a skip request then ends that job at the next pause (every wait in the
 // agent goes through sleep()), and any question waiting for an answer is closed at once.
 export const jobControl = { active: false, skip: false };
@@ -56,10 +56,6 @@ export const sleep = async (ms) => {
   checkSkip();
 };
 
-/** Say something out loud through the dashboard (the Mac's voice). No-op in a terminal run. */
-export function say(text, kind = "info") {
-  if (process.send && text) process.send({ type: "say", text: String(text).slice(0, 300), kind });
-}
 export const randomBetween = (min, max) => Math.round(min + Math.random() * (max - min));
 export const humanPause = (min = 800, max = 2200) => sleep(randomBetween(min, max));
 
@@ -152,7 +148,7 @@ export function stopIfFatalApiError(e) {
 }
 
 /**
- * Unattended mode ("auto"): ask for help on the dashboard (and by voice) but don't wait
+ * Unattended mode ("auto"): ask for help on the dashboard but don't wait
  * forever. Returns null when there is no dashboard to ask, so the caller just skips.
  */
 export async function askForHelp(question, choices) {
