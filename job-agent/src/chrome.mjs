@@ -63,7 +63,7 @@ async function quitAgentChrome() {
   await sleep(1000);
 }
 
-const DEFAULT_URLS = ["https://www.linkedin.com/jobs/", "https://www.naukri.com/mnjuser/homepage", "https://app.alignerr.com/home"];
+const DEFAULT_URLS = ["https://www.linkedin.com/jobs/", "https://www.naukri.com/mnjuser/homepage", "https://app.alignerr.com/home", "https://mail.google.com/"];
 
 async function startOn(port, urls = DEFAULT_URLS) {
   const exe = findChrome();

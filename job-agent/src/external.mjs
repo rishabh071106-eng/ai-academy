@@ -1,13 +1,15 @@
 // Applies on the company's own careers site when a LinkedIn / Naukri job says
 // "Apply on company website". Workday gets a dedicated flow (sign in / create account,
 // multi-step wizard); Greenhouse, Lever, Ashby, SmartRecruiters and ordinary one-page
-// forms go through the generic filler. CAPTCHAs and email verification are always handed
-// to the user — the agent never tries to get around them.
+// forms go through the AI navigator. Verification emails are read from her Gmail in the
+// agent's Chrome. CAPTCHAs are always handed to a person — the agent never tries to get
+// around them.
 import fs from "node:fs";
 import path from "node:path";
 import { fillCustomSelects, fillForm } from "./forms.mjs";
 import { googleForm } from "./googleforms.mjs";
 import { askPerson, tryNavigator } from "./escalate.mjs";
+import { openVerificationLink, readVerificationEmail } from "./mail.mjs";
 import { navigate } from "./navigator.mjs";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep } from "./util.mjs";
 
@@ -219,8 +221,23 @@ async function workdayAuth(page, ctx) {
   await sleep(5000);
   const body = await page.locator("body").innerText().catch(() => "");
   if (/verify|verification|check your email|activate/i.test(body)) {
-    const r = await handOver(page, ctx.job, ctx.mode, `Workday sent a verification email to ${email}. Click the link in that email, then sign in here`);
-    if (r) return r;
+    // Read the verification email from her Gmail (agent's Chrome), open its link, sign in.
+    const host = new URL(page.url()).hostname.split(".")[0];
+    const mail = await readVerificationEmail(page.context(), `${ctx.job.company || ""} ${host}`.trim());
+    if (mail?.link) {
+      await openVerificationLink(page.context(), mail.link);
+      log("dim", "   verified the Workday account from the email");
+      await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
+      await sleep(3000);
+      if (!(await visible(wd(page, "email")))) await page.getByRole("button", { name: /^sign in$/i }).filter({ visible: true }).first().click().catch(() => {});
+      await wd(page, "email").fill(email).catch(() => {});
+      await wd(page, "password").fill(password).catch(() => {});
+      await ((await visible(wd(page, "signInSubmitButton"))) ? wd(page, "signInSubmitButton") : btn(page, /^sign in$/i)).click().catch(() => {});
+      await sleep(4000);
+    } else {
+      const r = await handOver(page, ctx.job, ctx.mode, `Workday sent a verification email to ${email}; use check_email to get the link, then sign in`);
+      if (r) return r;
+    }
   }
   if (await onAuth()) return handOver(page, ctx.job, ctx.mode, "I couldn't sign in or create the Workday account");
   return null;

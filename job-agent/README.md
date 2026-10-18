@@ -48,7 +48,7 @@ cp .env.example .env          # paste your GEMINI_API_KEY (and an ATS_PASSWORD f
 
 1. **Profile.** `profile.json` holds the candidate's data. It is git-ignored, so it never leaves this machine. Either put the supplied `profile.json` in this folder, or generate one from a PDF with `npm run import-resume -- ~/Downloads/resume.pdf`.
 2. **Fill the `TODO`s** in `profile.json → applicationAnswers` (notice period, current and expected CTC, relocation, shifts). The agent uses these to answer screening questions.
-3. **Start the agent's Chrome:** `npm run chrome`. Chrome doesn't let tools control your everyday profile, so this opens a separate Chrome window with its own profile. **Log in to LinkedIn and Naukri in that window once.** The logins are remembered.
+3. **Start the agent's Chrome:** `npm run chrome`. Chrome doesn't let tools control your everyday profile, so this opens a separate Chrome window with its own profile. **Log in to LinkedIn, Naukri, Alignerr and Gmail in that window once.** The logins are remembered. (Gmail is used only to read verification codes/links that career sites email her.)
 
 ## Daily use
 
@@ -89,7 +89,8 @@ Each agent card has **Apply to** (stop after this many applications), **Review**
   - **scrolls** to find more fields and the Next/Submit button, reads error messages and fixes them;
   - submits, and only reports "applied" when the site shows a confirmation.
   If an action didn't change anything it tries a different way. Up to `navigatorMaxSteps` (45) steps per application. Every step is shown in the live log.
-- **When a person is really needed** (CAPTCHA, an email/SMS verification code, a skill test or video interview, data she never gave), the question appears on the dashboard. In *Fully automatic* mode it waits up to `helpTimeoutMinutes` (3), then moves on and tries again in a later round.
+- **Verification emails are handled by the agent.** When a career site says it emailed a code or a link to verify the account (Workday, Photon, iCIMS…), the agent opens her **Gmail in the agent's Chrome**, reads only the newest matching email, types the code or opens the link, and carries on. Log in to Gmail once in that Chrome window (`npm run chrome` opens it). Turn this off with `"readVerificationEmails": false` in `config.json`.
+- **When a person is really needed** (CAPTCHA, an SMS code, a skill test or video interview, data she never gave), the job is set aside. In *Fully automatic* mode (`helpTimeoutMinutes` 0) the agent never waits: it moves on at once and tries that job again in a later round, up to `maxAttemptsPerJob` times; the reason is shown on the dashboard. In *Ask before submit* mode the question appears on the dashboard and the agent waits for your answer.
 - **⏭ Skip this job** on an agent card drops the job it's working on and goes to the next one.
 - Things it never does: solve CAPTCHAs, pay, change account security settings, delete anything, take tests or interviews.
 

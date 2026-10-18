@@ -3,13 +3,13 @@
 //   2. a person is asked on the dashboard (and out loud on the Mac): in "auto" mode with a
 //      time limit, after which the job is skipped and the run continues;
 //   3. otherwise the job is marked "needs attention" and the run moves on.
-// Things only a person may do (CAPTCHA, email/phone verification codes, assessments,
-// interviews) skip step 1. Signing in / creating an account is done by the navigator with
+// Things only a person may do (CAPTCHA, SMS codes, assessments, interviews) skip step 1.
+// Email verification codes/links are read from her Gmail by the navigator (check_email). Signing in / creating an account is done by the navigator with
 // ATS_PASSWORD from .env.
 import { navigate } from "./navigator.mjs";
 import { ask, askForHelp, loadProfile, log } from "./util.mjs";
 
-const HUMAN_ONLY = /captcha|robot|verification (code|email)|two-factor|\botp\b|assessment|interview|\btest\b|quiz/i;
+const HUMAN_ONLY = /captcha|robot|two-factor|\bsms\b|assessment|interview|\btest\b|quiz/i;
 const tried = new WeakSet();
 
 /** Step 1. Returns a result when the navigator finished (or decided to skip), else null. */

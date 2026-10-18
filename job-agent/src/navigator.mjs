@@ -6,6 +6,7 @@
 //  - does it, checks what changed, and remembers the outcome for the next step.
 // Used for company career sites, stuck application dialogs, Google Forms and Alignerr.
 import { generateJSON } from "./ai.mjs";
+import { openVerificationLink, readVerificationEmail } from "./mail.mjs";
 import { bestOption, fillCustomSelects, fillForm } from "./forms.mjs";
 import { ask, askForHelp, confirm, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
@@ -129,7 +130,7 @@ const str = { type: "string" };
 const STEP_SCHEMA = obj({
   observation: { type: "string", description: "What the page shows right now, in one sentence (which step of the application, any errors)" },
   reasoning: { type: "string", description: "Why this action is the best next step" },
-  action: { type: "string", enum: ["click", "type", "choose", "check", "upload_resume", "fill_form", "press", "scroll", "wait", "back", "goto", "report_jobs", "done", "need_user"] },
+  action: { type: "string", enum: ["click", "type", "choose", "check", "upload_resume", "fill_form", "check_email", "press", "scroll", "wait", "back", "goto", "report_jobs", "done", "need_user"] },
   target: { type: "string", description: "Element id like e12 or f1e4, or empty" },
   value: { type: "string", description: "type: the text · choose: the option to pick · press: a key like Enter/Tab/ArrowDown/Escape · scroll: down/up · goto: URL · otherwise empty" },
   jobs: { type: "array", description: "Only for report_jobs: every role on the page", items: obj({ title: str, target: str, href: str, summary: str, already_applied: { type: "boolean" } }) },
@@ -212,6 +213,7 @@ Actions:
 - check(target) — tick a checkbox / radio / switch (consent boxes, "Yes"/"No" radios).
 - upload_resume(target) — attach her resume: target the file input, the "Upload"/"Attach"/"Choose file" button or the drop zone. Use it whenever a resume/CV is asked for and files=none.
 - fill_form — fills every empty standard field on the page from her data at once (name, email, phone, links, experience…). Good first move on a new form page; then fix whatever is still empty or flagged.
+- check_email(value = the company or site name) — when the site says it emailed her a verification code or a link to verify/activate the account: reads her Gmail and gives you the code (then type it) or opens the link for you (then reload / sign in and continue).
 - press(value) — a key: Enter, Tab, Escape, ArrowDown…
 - scroll(value "down"/"up", or target to bring an element into view) — forms are long; scroll to find required fields and the Next/Submit button below.
 - wait — the page is loading or processing an upload.
@@ -225,7 +227,7 @@ How to work:
 - If the page is only a company homepage or job list, find the matching job (search for the role title) and its Apply button.
 - When the same action did not change anything, don't repeat it: scroll, look for an error message, pick another element, or try another way.
 - Use done(status "applied") ONLY when the page clearly confirms the application was submitted (or says she already applied → "already_applied"). Use done(status "not_eligible") when there's no way to apply (job closed, no application form, location not allowed).
-- need_user ONLY for things a person must do: CAPTCHA / "I'm not a robot", an email or SMS verification code, a password reset, a skill test, a video/AI interview, payment, or data she has never given (e.g. PAN, date of birth if not in her data).
+- need_user ONLY for things a person must do: CAPTCHA / "I'm not a robot", an SMS/phone code, an email code that check_email couldn't find, a password reset, a skill test, a video/AI interview, payment, or data she has never given (e.g. PAN, date of birth if not in her data).
 - Never invent facts; never pay; never change account security settings; never delete anything; never log out.
 - Close cookie banners and pop-ups that block the page.
 ${rules || ""}`,
@@ -424,6 +426,16 @@ export async function navigate(page, opts) {
             missing.push(...(await fillForm(root, profile, job || {}).catch(() => [])), ...(await fillCustomSelects(root, profile, job || {}).catch(() => [])));
           }
           outcome = missing.length ? `left empty: ${missing.map((m) => m.label).join("; ").slice(0, 300)}` : "filled";
+          break;
+        }
+        case "check_email": {
+          const mail = await readVerificationEmail(page.context(), d.value || job?.company || "");
+          if (!mail) outcome = "no verification email found in Gmail (is Gmail logged in in this Chrome?)";
+          else if (mail.code) outcome = `the emailed verification code is ${mail.code} — type it into the code field`;
+          else {
+            await openVerificationLink(page.context(), mail.link);
+            outcome = "opened the verification link from the email; the account should now be verified — reload / sign in and continue";
+          }
           break;
         }
         case "press":

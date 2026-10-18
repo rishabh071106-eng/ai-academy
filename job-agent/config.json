@@ -208,5 +208,6 @@
   "keywordOverrideMinScore": 45,
   "maxAttemptsPerJob": 3,
   "navigatorMaxSteps": 45,
-  "navigatorScreenshots": true
+  "navigatorScreenshots": true,
+  "readVerificationEmails": true
 }
