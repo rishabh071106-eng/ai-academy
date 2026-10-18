@@ -169,7 +169,7 @@
   "keepGoing": true,
   "recheckMinutes": 30,
   "retryUnfinished": true,
-  "helpTimeoutMinutes": 3,
+  "helpTimeoutMinutes": 0,
   "keywordOverrideMinScore": 45,
   "maxAttemptsPerJob": 3,
   "navigatorMaxSteps": 45,

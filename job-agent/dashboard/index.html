@@ -659,7 +659,7 @@ document.addEventListener("input", (e) => {
 const MODE_HINT = {
   "dry-run": "Practice: finds jobs, scores them, writes tailored resumes and messages. Applies to nothing.",
   review: "Ask before submit: fills each application, then waits for you to press Yes here.",
-  auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. Only if that fails it asks you here for up to 3 min, then skips and carries on.",
+  auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. It never waits for you: a job that needs a person (CAPTCHA, SMS code) is set aside and retried later.",
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
 const AG = {
