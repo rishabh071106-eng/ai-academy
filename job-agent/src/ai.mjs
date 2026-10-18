@@ -144,6 +144,10 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       log("dim", `   Google says this key can't use ${endpointOverride === "studio" ? "Vertex AI" : "the Gemini API"}; trying ${endpointOverride === "studio" ? "the Gemini API (AI Studio)" : "Vertex AI"} instead`);
       continue;
     }
+    if (res.status === 402 || /credits are depleted|billing|payment required/i.test(msg)) {
+      log("err", `\n■ STOPPED: The Google account behind GEMINI_API_KEY has no credit left (${msg.split(".")[0]}). Add credits at https://ai.studio/projects, or put a new key from https://aistudio.google.com/apikey into job-agent/.env, then press Start again.`);
+      process.exit(3);
+    }
     if (res.status === 403) {
       log("err", `\n■ STOPPED: Google refused the request on both of its Gemini services (${msg}). The simplest fix: create a key at aistudio.google.com/apikey and put it in .env as GEMINI_API_KEY.`);
       process.exit(3);

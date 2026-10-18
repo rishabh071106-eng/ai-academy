@@ -141,7 +141,8 @@ export async function waitForUser(question, { allowSkip = true } = {}) {
 export function stopIfFatalApiError(e) {
   const msg = String(e?.message ?? e);
   let why = null;
-  if (/credit balance is too low|billing|purchase credits/i.test(msg)) why = "Your Anthropic API credit has run out. Add credit at console.anthropic.com → Settings → Billing, then press Start again.";
+  if (/credits are depleted|Gemini error 402/i.test(msg)) why = "The Google account behind GEMINI_API_KEY has no credit left. Add credits at https://ai.studio/projects, or put a new key from https://aistudio.google.com/apikey into job-agent/.env, then press Start again.";
+  else if (/credit balance is too low|billing|purchase credits/i.test(msg)) why = "Your Anthropic API credit has run out. Add credit at console.anthropic.com → Settings → Billing, then press Start again.";
   else if (/invalid x-api-key|authentication_error|401/i.test(msg)) why = "The Claude API key in job-agent/.env is not valid. Put a working key there, then press Start again.";
   else if (/permission_error|403/i.test(msg) && /api/i.test(msg)) why = "The Claude API key doesn't have access to this model. Check the key's workspace in the Anthropic Console.";
   if (!why) return;

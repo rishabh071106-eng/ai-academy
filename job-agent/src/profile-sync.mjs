@@ -6,7 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { extractProfile } from "./llm.mjs";
-import { log, readJson, ROOT, sleep } from "./util.mjs";
+import { log, readJson, ROOT, sleep, stopIfFatalApiError } from "./util.mjs";
 
 const PROFILE = path.join(ROOT, "profile.json");
 
@@ -86,6 +86,9 @@ export async function syncProfile(config) {
     return base;
   }
   // Another agent may be importing right now; wait for it and re-check.
-  await importResume(base.path, { reason: cur.sourceResume ? "new version found" : "first time" }).catch((e) => log("err", `Couldn't read the resume: ${e.message}`));
+  await importResume(base.path, { reason: cur.sourceResume ? "new version found" : "first time" }).catch((e) => {
+    stopIfFatalApiError(e);
+    log("err", `Couldn't read the resume: ${e.message}`);
+  });
   return base;
 }
