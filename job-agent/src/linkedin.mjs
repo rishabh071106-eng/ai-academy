@@ -3,6 +3,7 @@ import { fillForm } from "./forms.mjs";
 import { askPerson, tryNavigator } from "./escalate.mjs";
 import fs from "node:fs";
 import path from "node:path";
+import { signInWithGoogle } from "./login.mjs";
 import { ask, confirm, DATA_DIR, humanPause, log, sleep, waitForUser } from "./util.mjs";
 
 export const name = "linkedin";
@@ -20,17 +21,27 @@ async function stopIfFlagged(page) {
   process.exit(3);
 }
 
+const LOGGED_OUT = /\/login|\/authwall|\/checkpoint\/lg|\/uas\/login|\/signup/;
+/** Logged out? Sign in with her Google account, then come back to `url`. */
+async function ensureLoggedIn(page, url) {
+  if (!LOGGED_OUT.test(page.url())) return;
+  const ok = await signInWithGoogle(page, "LinkedIn", { isLoggedIn: async (p) => !LOGGED_OUT.test(p.url()), returnTo: url });
+  if (!ok) throw new Error("LinkedIn is not logged in in this Chrome window");
+  await stopIfFlagged(page);
+}
+
 export async function search(page, s, cfg) {
   const params = new URLSearchParams({ keywords: s.keywords, location: s.location ?? "", sortBy: "DD" });
   if (cfg.easyApplyOnly) params.set("f_AL", "true");
   if (cfg.postedWithinDays) params.set("f_TPR", `r${cfg.postedWithinDays * 86400}`);
   if (s.remote) params.set("f_WT", "2");
   if (cfg.pageIndex) params.set("start", String(cfg.pageIndex * 25));
-  await page.goto(`https://www.linkedin.com/jobs/search/?${params}`, { waitUntil: "domcontentloaded" });
+  const url = `https://www.linkedin.com/jobs/search/?${params}`;
+  await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await sleep(3000);
   await stopIfFlagged(page);
-  if (/\/login|\/authwall|\/checkpoint/.test(page.url())) throw new Error("LinkedIn is not logged in in this Chrome window");
+  await ensureLoggedIn(page, url);
 
   // LinkedIn sometimes ignores URL keywords and shows "recommended" jobs; then type the search in.
   const box = page.getByRole("combobox", { name: /title|skill|search/i }).or(page.getByRole("textbox", { name: /title|skill|search jobs/i })).filter({ visible: true }).first();
@@ -84,6 +95,7 @@ export async function getJob(page, ref) {
   await page.waitForLoadState("load", { timeout: 15000 }).catch(() => {});
   await firstVisible(page, ["h1", "main"], 10000);
   await stopIfFlagged(page);
+  await ensureLoggedIn(page, ref.url);
   await humanPause(1500, 2500);
   const expanded = await expandJob(page);
 

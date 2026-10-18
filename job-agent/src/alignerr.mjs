@@ -4,6 +4,7 @@
 // AI interviews are hers to take: the navigator hands those over instead of doing them.
 import { expandJob, readPage } from "./browser.mjs";
 import { navigate } from "./navigator.mjs";
+import { signInWithGoogle } from "./login.mjs";
 import { log, loadProfile, sleep, slugify } from "./util.mjs";
 
 export const name = "alignerr";
@@ -20,7 +21,11 @@ export async function search(page, s, cfg) {
   await page.goto(cfg.url || HOME, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
   await sleep(2500);
-  if (!(await loggedIn(page))) throw new Error("Alignerr is not logged in in this Chrome window — log in once at app.alignerr.com");
+  if (!(await loggedIn(page))) {
+    const ok = await signInWithGoogle(page, "Alignerr", { isLoggedIn: loggedIn, returnTo: cfg.url || HOME });
+    if (!ok) throw new Error("Alignerr is not logged in in this Chrome window — log in once at app.alignerr.com");
+    await sleep(2000);
+  }
 
   const r = await navigate(page, {
     goal:

@@ -11,6 +11,7 @@ import { bestOption, fillCustomSelects, fillForm } from "./forms.mjs";
 import { ask, askForHelp, confirm, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
 const PASSWORD_TOKEN = "{{PASSWORD}}";
+export const GOOGLE_RULES = (email) => `- This browser is signed in to Google as ${email}. When a site offers "Sign in with Google" / "Continue with Google", prefer it over creating a password account. In Google's account pop-up click the entry for ${email}; then click Continue / Allow / Confirm to share her name and email. If Google asks for a password or a phone code, use need_user.`;
 const password = () => process.env.ATS_PASSWORD || process.env.WORKDAY_PASSWORD || "";
 
 // Runs inside each frame: numbers the interactive elements and returns them with page text.
@@ -229,6 +230,7 @@ How to work:
 - need_user ONLY for things a person must do: CAPTCHA / "I'm not a robot", an SMS/phone code, an email code that check_email couldn't find, a password reset, a skill test, a video/AI interview, payment, or data she has never given (e.g. PAN, date of birth if not in her data).
 - Never invent facts; never pay; never change account security settings; never delete anything; never log out.
 - Close cookie banners and pop-ups that block the page.
+${GOOGLE_RULES(profile.email)}
 ${rules || ""}`,
     content,
   });

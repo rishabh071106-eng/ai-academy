@@ -3,9 +3,17 @@ import { answerQuestions } from "./llm.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { askPerson, tryNavigator } from "./escalate.mjs";
+import { signInWithGoogle } from "./login.mjs";
 import { confirm, DATA_DIR, humanPause, log, sleep, slugify } from "./util.mjs";
 
 export const name = "naukri";
+
+/** Logged in = no "Login" / "Register" links in the header, or a login page URL. */
+async function loggedIn(page) {
+  if (/nlogin|\/login/i.test(page.url())) return false;
+  const n = await page.locator("header, nav, [class*=header]").getByRole("link", { name: /^(login|register)$/i }).filter({ visible: true }).count().catch(() => 0);
+  return n === 0;
+}
 
 export async function search(page, s, cfg) {
   const remote = /remote|wfh/i.test(s.location ?? "");
@@ -15,8 +23,13 @@ export async function search(page, s, cfg) {
   if (remote) params.set("wfhType", "2");
   if (cfg.experienceYears != null) params.set("experience", String(cfg.experienceYears));
   if (cfg.postedWithinDays) params.set("jobAge", String(cfg.postedWithinDays));
-  await page.goto(`https://www.naukri.com/${slug}?${params}`, { waitUntil: "domcontentloaded" });
+  const url = `https://www.naukri.com/${slug}?${params}`;
+  await page.goto(url, { waitUntil: "domcontentloaded" });
   await firstVisible(page, [".srp-jobtuple-wrapper", "article.jobTuple", "[class*=no-result]"], 15000);
+  if (!(await loggedIn(page))) {
+    const ok = await signInWithGoogle(page, "Naukri", { isLoggedIn: loggedIn, returnTo: url });
+    if (!ok) throw new Error("Naukri is not logged in in this Chrome window");
+  }
 
   const jobs = await page.$$eval(".srp-jobtuple-wrapper, article.jobTuple", (els) =>
     els.map((e) => {
