@@ -1,6 +1,6 @@
 import { chromium } from "playwright-core";
 import { ensureChrome } from "./chrome.mjs";
-import { log } from "./util.mjs";
+import { log, sleep } from "./util.mjs";
 
 /** Attach to the agent's Chrome, starting or restarting it when needed. */
 export async function connect() {
@@ -20,6 +20,39 @@ export async function connect() {
     log("err", `\n■ STOPPED: Couldn't connect to the agent's Chrome (${e.message.slice(0, 300)}). Quit Chrome completely (Cmd+Q on every Chrome window), then press Start again — the agent opens its own Chrome.`);
     process.exit(3);
   }
+}
+
+const SLOT = { linkedin: 0, naukri: 1, alignerr: 2 };
+
+/**
+ * Opens a tab in a Chrome window of its own for one agent (each agent keeps the visible tab
+ * of its window, so three agents can take screenshots at the same time without stealing each
+ * other's tab). Windows are tiled side by side: LinkedIn | Naukri | Alignerr.
+ */
+export async function openAgentWindow(context, platform) {
+  const slot = SLOT[platform] ?? 0;
+  const marker = `data:text/html,<title>${platform} agent</title><p style="font:16px system-ui;margin:24px">The ${platform} agent works in this window. Leave it open.</p><!--${process.pid}-->`;
+  const anyPage = context.pages()[0] ?? (await context.newPage());
+  let page;
+  try {
+    const cdp = await context.newCDPSession(anyPage);
+    const { targetId } = await cdp.send("Target.createTarget", { url: marker, newWindow: true });
+    for (let i = 0; i < 50 && !page; i++) {
+      page = context.pages().find((p) => p.url().startsWith(marker.slice(0, 60)) && p !== anyPage);
+      if (!page) await sleep(200);
+    }
+    // Tile: a third of the screen per agent.
+    try {
+      const { windowId } = await cdp.send("Browser.getWindowForTarget", { targetId });
+      const { w, h } = await (page ?? anyPage).evaluate(() => ({ w: screen.availWidth, h: screen.availHeight }));
+      const width = Math.max(700, Math.floor(w / 3));
+      await cdp.send("Browser.setWindowBounds", { windowId, bounds: { left: Math.min(slot * width, Math.max(0, w - width)), top: 0, width, height: h, windowState: "normal" } });
+    } catch {}
+    await cdp.detach().catch(() => {});
+  } catch (e) {
+    log("dim", `  (couldn't open a separate window: ${e.message.split("\n")[0]}; using a tab)`);
+  }
+  return page ?? (await context.newPage());
 }
 
 /** First visible element out of several candidate selectors, or null. */

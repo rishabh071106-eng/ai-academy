@@ -57,7 +57,7 @@ npm run chrome        # if that Chrome window isn't already open
 npm run dashboard     # then open http://localhost:4321
 ```
 
-Start and stop the agents **from the dashboard**. LinkedIn and Naukri each have their own agent card, so they run independently and can run at the same time. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
+Start and stop the agents **from the dashboard**. LinkedIn, Naukri and Alignerr each have their own agent card and run as separate processes at the same time, each in **its own Chrome window** (tiled LinkedIn | Naukri | Alignerr; leave them open, they can sit behind other windows). **▶ Start all** / **■ Stop all** in the header start or stop all three with the settings on their cards. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
 
 You can also run it from a terminal; questions are then asked in the terminal. Modes:
 
@@ -80,7 +80,7 @@ Each agent card has **Apply to** (stop after this many applications), **Review**
 
 ## How the agents work through applications
 
-- **Open jobs first, then new ones.** Every round starts with the jobs that aren't finished yet (needs attention, apply on site, shortlisted), best matches first, and only then searches for new postings. Each job gets up to `maxAttemptsPerJob` (3) tries; after that it stays on the dashboard for you.
+- **New jobs every round, old ones in batches.** Each round runs every search (Magento, Adobe Commerce, PHP, React…) and applies to the new postings, then retries a batch of `retryBatchSize` (5) old unfinished jobs (needs attention, apply on site, shortlisted), in Magento → PHP → React order, best match first. The old jobs rotate through over the rounds. No single job may take more than `maxMinutesPerJob` (6); after that it's put back for a later try. Each job gets up to `maxAttemptsPerJob` (3) tries; a job that still can't be applied is marked **Couldn't apply** with the reason (its own filter on the dashboard) and left for you.
 - **The AI navigator does the hard parts like a person would.** On company career sites (Greenhouse, Lever, Ashby, iCIMS, Taleo, SuccessFactors, Zoho, Keka, Darwinbox, company homepages…) and whenever an Easy Apply / Naukri form gets stuck, it takes over. Every step it looks at a **screenshot** of the page plus a numbered list of all buttons, links and fields, **including forms embedded from another site (iframes)**. Then it does one thing:
   - finds the job and the Apply button, following new tabs;
   - **signs in or creates an account** with her email and `ATS_PASSWORD` from `.env` (the password is never sent to the AI);

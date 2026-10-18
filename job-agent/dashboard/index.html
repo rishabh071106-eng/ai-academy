@@ -242,6 +242,8 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     </div>
     <div class="actions">
       <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
+      <button class="btn go" id="startAllBtn" title="Start the LinkedIn, Naukri and Alignerr agents with the settings on their cards">▶ Start all</button>
+      <button class="btn stop" id="stopAllBtn" title="Stop every running agent">■ Stop all</button>
       <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
       <button class="btn primary" id="addBtn">+ Add job</button>
       <button class="btn icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
@@ -746,6 +748,13 @@ async function startStop(k) {
     pollAgent();
   }
 }
+
+$("#startAllBtn").onclick = async () => {
+  for (const k of Object.keys(AG)) if (!AG[k].running) await startStop(k);
+};
+$("#stopAllBtn").onclick = async () => {
+  for (const k of Object.keys(AG)) if (AG[k].running) await startStop(k);
+};
 
 function lineClass(t, kind) {
   if (kind === "sys") return "sys";

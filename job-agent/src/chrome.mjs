@@ -71,7 +71,23 @@ async function startOn(port, urls = DEFAULT_URLS) {
   // The agent's Chrome is open but without a usable DevTools port: a second launch would just
   // hand over to it, so close it first (only that Chrome, recognised by its own profile folder).
   if (agentChromes().length) await quitAgentChrome();
-  const child = spawn(exe, [`--remote-debugging-port=${port}`, `--user-data-dir=${PROFILE_DIR}`, "--no-first-run", "--no-default-browser-check", ...(process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(" ") : []), ...urls], { detached: true, stdio: "ignore" });
+  const child = spawn(
+    exe,
+    [
+      `--remote-debugging-port=${port}`,
+      `--user-data-dir=${PROFILE_DIR}`,
+      "--no-first-run",
+      "--no-default-browser-check",
+      // Three agents each work in their own window; windows behind other windows must keep rendering.
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+      "--disable-background-timer-throttling",
+      "--disable-features=CalculateNativeWinOcclusion",
+      ...(process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(" ") : []),
+      ...urls,
+    ],
+    { detached: true, stdio: "ignore" },
+  );
   child.unref();
   for (let i = 0; i < 40; i++) {
     await sleep(500);

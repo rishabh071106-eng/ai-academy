@@ -321,8 +321,8 @@ const pageSig = (page) =>
   page.evaluate(() => `${location.href}|${[...document.querySelectorAll("h1,h2,h3,legend,[role=alert]")].slice(0, 8).map((h) => h.innerText.trim()).join("|")}|${Math.round((document.body?.innerText.length || 0) / 50)}`).catch(() => "");
 
 async function screenshot(page) {
-  // Several agents share one Chrome window; a background tab can't be captured.
-  await page.bringToFront().catch(() => {});
+  // Each agent has its own window, so its tab is visible; if a capture still fails, the step
+  // goes ahead with the page text only.
   return page.screenshot({ type: "jpeg", quality: 55, timeout: 8000 }).then((b) => b.toString("base64")).catch(() => null);
 }
 

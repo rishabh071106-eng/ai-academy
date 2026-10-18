@@ -210,5 +210,8 @@
   "maxAttemptsPerJob": 3,
   "navigatorMaxSteps": 45,
   "navigatorScreenshots": true,
-  "readVerificationEmails": true
+  "readVerificationEmails": true,
+  "retryBatchSize": 5,
+  "maxMinutesPerJob": 6,
+  "rescueMaxSteps": 20
 }

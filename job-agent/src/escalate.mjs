@@ -7,7 +7,7 @@
 // Email verification codes/links are read from her Gmail by the navigator (check_email);
 // signing in / creating an account is done by the navigator with ATS_PASSWORD from .env.
 import { navigate } from "./navigator.mjs";
-import { ask, askForHelp, isSkip, loadProfile, log } from "./util.mjs";
+import { ask, askForHelp, isSkip, loadConfig, loadProfile, log } from "./util.mjs";
 
 // Only real person-only situations; a screening question that merely mentions "interview"
 // or "test" in its label is still for the navigator.
@@ -29,6 +29,7 @@ export async function tryNavigator(page, job, { reason, resumePath, mode }) {
     job,
     resumePath,
     mode: mode === "review" ? "review" : "auto",
+    maxSteps: Number(loadConfig().rescueMaxSteps ?? 20),
   }).catch((e) => {
     if (isSkip(e)) throw e;
     return { status: "needs_attention", note: e.message };

@@ -40,16 +40,20 @@ export function loadProfile() {
 // ---- "Skip this job" from the dashboard. The agent marks the job it is
 // working on as active; a skip request then ends that job at the next pause (every wait in the
 // agent goes through sleep()), and any question waiting for an answer is closed at once.
-export const jobControl = { active: false, skip: false };
+export const jobControl = { active: false, skip: false, deadline: 0 };
 export class SkipJob extends Error {
-  constructor() {
-    super("Skipped by you");
+  constructor(timeout = false) {
+    super(timeout ? "Took too long" : "Skipped by you");
     this.name = "SkipJob";
+    this.timeout = timeout;
   }
 }
 export const isSkip = (e) => e?.name === "SkipJob";
 export function checkSkip() {
-  if (jobControl.active && jobControl.skip) throw new SkipJob();
+  if (!jobControl.active) return;
+  if (jobControl.skip) throw new SkipJob();
+  // A job that has run past its time limit is given up on, so one stubborn page can't eat the run.
+  if (jobControl.deadline && Date.now() > jobControl.deadline) throw new SkipJob(true);
 }
 export const sleep = async (ms) => {
   await new Promise((r) => setTimeout(r, ms));

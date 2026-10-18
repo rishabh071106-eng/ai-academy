@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { connect } from "./browser.mjs";
+import { connect, openAgentWindow } from "./browser.mjs";
 import { applyExternal, applyLinkInText } from "./external.mjs";
 import { syncProfile } from "./profile-sync.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
@@ -47,7 +47,7 @@ process.on("message", (m) => {
   jobControl.skip = true;
   log("warn", `  ⏭ Skip requested for ${currentRow.title || "this job"} — stopping it…`);
 });
-const DONE = new Set(["applied", "interview", "offer", "rejected", "withdrawn", "skipped", "external", "needs_attention"]);
+const DONE = new Set(["applied", "interview", "offer", "rejected", "withdrawn", "skipped", "external", "needs_attention", "unable"]);
 
 const todo = Object.values(profile.applicationAnswers ?? {}).filter((v) => typeof v === "string" && v.startsWith("TODO"));
 if (todo.length) log("warn", `profile.json has ${todo.length} TODO answers (notice period, CTC…). Questions needing them will pause for you.`);
@@ -66,6 +66,10 @@ for (const r of tracker.loadAll()) {
 }
 
 const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
+// Per round: a few old jobs are retried, then every search runs — so new jobs get applied to
+// every round instead of after all the old ones. The old ones rotate through over the rounds.
+const RETRY_BATCH = Number(config.retryBatchSize ?? 5);
+const MAX_MINUTES_PER_JOB = Number(config.maxMinutesPerJob ?? 6);
 /** A job that used up its attempts without being applied is closed as "Couldn't apply" (status unable). */
 function giveUpIfExhausted(key, jobId) {
   const row = tracker.find(key, jobId);
@@ -88,7 +92,7 @@ try {
 const openPages = new Set();
 const shutdown = async () => {
   log("warn", "Stopping agent…");
-  Object.assign(jobControl, { active: false, skip: false });
+  Object.assign(jobControl, { active: false, skip: false, deadline: 0 });
   // Put her own resume back on Naukri before going (the dashboard allows up to a minute).
   await Promise.race([restoreNaukriResume(), new Promise((r) => setTimeout(r, 45000))]).catch(() => {});
   // Leave the agent's tab open in Chrome; never close the user's browser.
@@ -127,18 +131,20 @@ for (const [key, mod] of Object.entries(platforms)) {
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
   // A platform can widen what counts as relevant (e.g. Alignerr's "AI trainer – coding" roles).
   isRelevant = pcfg.relevantKeywords?.length ? ((re) => (t) => re.test(t) || isRelevantGlobal(t))(reFor(pcfg.relevantKeywords)) : isRelevantGlobal;
-  let page = await context.newPage();
+  let page = await openAgentWindow(context, key);
   openPages.add(page);
-  // Reopen the tab / reconnect to Chrome if something closed it.
+  // Reopen the window / reconnect to Chrome if something closed it.
   const ensurePage = async () => {
     if (!context.browser()?.isConnected?.() && context.browser()) ({ context } = await connect());
     if (page.isClosed()) {
-      page = await context.newPage();
+      page = await openAgentWindow(context, key);
       openPages.add(page);
-      log("dim", "  (reopened the agent's tab)");
+      log("dim", "  (reopened the agent's window)");
     }
   };
   const done = () => applied >= maxApply || (reviewLimit > 0 && stats.scanned >= reviewLimit);
+  const retriedThisRun = new Set();
+  let moreRetries = false;
   try {
    for (let round = 1; ; round++) {
     roundProgress = 0;
@@ -153,11 +159,21 @@ for (const [key, mod] of Object.entries(platforms)) {
       const i = priorityWords.findIndex((w) => reFor([w]).test(text));
       return i < 0 ? priorityWords.length : i;
     };
-    const retryList = retryUnfinished
+    const allRetries = retryUnfinished
       ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => priority(a) - priority(b) || (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, listUrl: r.listUrl, cardText: "", title: r.title }))
       : [];
-    if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
-    for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...(pcfg.searches ?? [])]) {
+    // Next batch of old jobs not yet retried in this run; once every one has had a turn, start over.
+    let fresh = allRetries.filter((r) => !retriedThisRun.has(r.jobId));
+    if (!fresh.length && allRetries.length) {
+      retriedThisRun.clear();
+      fresh = allRetries;
+    }
+    const retryList = fresh.slice(0, RETRY_BATCH);
+    retryList.forEach((r) => retriedThisRun.add(r.jobId));
+    moreRetries = fresh.length > retryList.length;
+    // New postings first (so applications happen every round), then a batch of old jobs.
+    for (const s of [...(pcfg.searches ?? []), ...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : [])]) {
+     if (s.retry) log("info", `\n[${key}] Retrying ${retryList.length} of ${allRetries.length} old job(s) not applied yet…`);
      for (let pageIndex = 0; pageIndex < maxPages; pageIndex++) {
       if (done()) break;
       await ensurePage().catch(() => {});
@@ -193,7 +209,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         if (existing && !s.retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
         attemptCounted = false;
-        Object.assign(jobControl, { active: true, skip: false });
+        Object.assign(jobControl, { active: true, skip: false, deadline: MAX_MINUTES_PER_JOB > 0 ? Date.now() + MAX_MINUTES_PER_JOB * 60000 : 0 });
         currentRow = { key, jobId: ref.jobId, title: ref.title || existing?.title || "", company: existing?.company || "" };
 
         let job;
@@ -344,16 +360,28 @@ for (const [key, mod] of Object.entries(platforms)) {
         await applyTo(mod, key, page, job, resumePath);
        } catch (e) {
         if (isSkip(e) || jobControl.skip) {
-          // Skipped by you from the dashboard. Never overwrite a finished application.
+          // Skipped by you from the dashboard, or over the time limit. Never overwrite a finished application.
           const row = currentRow && tracker.find(key, currentRow.jobId);
+          const timedOut = e?.timeout && !jobControl.skip;
+          const ids = { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}) };
           if (!row || !["applied", "interview", "offer"].includes(row.status))
             try {
-              tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}), status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
+              if (timedOut) {
+                const note = `Took too long (over ${MAX_MINUTES_PER_JOB} min) — will try again later`;
+                tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "needs_attention", historyNote: note, lastNote: note, attempts: (row?.attempts ?? 0) + 1 });
+                attemptCounted = true;
+                giveUpIfExhausted(key, currentRow?.jobId ?? ref.jobId);
+              } else tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
             } catch (e2) {
               log("warn", `  couldn't record the skip: ${e2.message}`);
             }
-          stats.skipped++;
-          log("warn", "  ⏭ skipped by you — on to the next job");
+          if (timedOut) {
+            stats.attention++;
+            log("warn", `  ⏱ over ${MAX_MINUTES_PER_JOB} min on this job — moving on (it gets another try later)`);
+          } else {
+            stats.skipped++;
+            log("warn", "  ⏭ skipped by you — on to the next job");
+          }
           await page.keyboard.press("Escape").catch(() => {});
         } else {
           // Anything unexpected on one job: note it and move on to the next.
@@ -370,7 +398,7 @@ for (const [key, mod] of Object.entries(platforms)) {
             }
           } catch {}
         }
-        Object.assign(jobControl, { active: false, skip: false });
+        Object.assign(jobControl, { active: false, skip: false, deadline: 0 });
         currentRow = null;
         process.send?.({ type: "job", title: null });
        }
@@ -380,7 +408,7 @@ for (const [key, mod] of Object.entries(platforms)) {
      }
     }
     if (done() || !keepGoing) break;
-    if (roundProgress === 0) {
+    if (roundProgress === 0 && !moreRetries) {
       // Nothing new and nothing applied this round: wait before looking again (retries included).
       log("info", `\n[${key}] Every current job has been reviewed (${applied}/${maxApply} applied). Checking for new postings in ${recheckMinutes} min — press Stop to end.`);
       await sleep(recheckMinutes * 60000);
@@ -421,6 +449,7 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
   tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
   if (result.status !== "applied") giveUpIfExhausted(key, job.jobId);
   if (result.status === "applied") {
+    jobControl.deadline = 0;
     await maybeMessage(mod, key, page, job);
     applied++;
     stats.applied++;
