@@ -11,7 +11,7 @@ search ─► read job ─► Claude: match score + tailored resume ─► apply
 | | |
 |---|---|
 | **Finds jobs** | Runs the searches in `config.json` on LinkedIn (Easy Apply, last 7 days) and Naukri (by experience, last 7 days). |
-| **Targets Magento / PHP only** | A job is only considered when its own title or description says **Magento, Adobe Commerce or PHP** (`requiredKeywords` in `config.json`). Everything else is skipped before any AI call. Matching jobs are then checked by the AI (location, real job post) and applied to. Searches are Magento, Adobe Commerce and PHP roles. |
+| **Targets Magento / PHP only** | A job is only considered when its own title or description says **Magento, Adobe Commerce, PHP, React or Next.js** (`requiredKeywords` in `config.json`). Everything else is skipped before any AI call. Matching jobs are then checked by the AI (location, real job post) and applied to. Searches are Magento, Adobe Commerce, PHP, React and Next.js roles. |
 | **Tailors the resume** | Reorders and rewrites the summary, skills and bullets for each job. It never invents experience. The PDF is saved as `data/resumes/<job>/Aishwarya_Sharma_Resume.pdf`. |
 | **Applies** | LinkedIn: goes through Easy Apply, uploads the tailored PDF and answers the screening questions. Naukri: clicks Apply and answers the recruiter chatbot. |
 | **Messages the hiring team** | Writes a short, human-sounding note to the recruiter or hiring manager for every matched job. It names the role, one specific thing from the job post that matches her work, and a real project. With LinkedIn Premium it sends it as an InMail from the "Meet the hiring team" card (after asking you). On the dashboard you can **edit any message and press "Send on LinkedIn"**, or copy it. |
