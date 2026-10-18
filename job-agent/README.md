@@ -31,8 +31,8 @@ For every job the steps are: **read the job → create a resume for it → uploa
 ## Which AI it uses (Gemini or Claude)
 
 Set `"provider"` in `config.json`:
-- `"gemini"` (default): Google Gemini. Put `GEMINI_API_KEY=…` in `.env`. Both Google key types work: AI Studio keys (`AIza…`, from aistudio.google.com/apikey) and Vertex AI express-mode keys (`AQ.…`, from Google Cloud); the agent picks the right Google endpoint from the key. If a model name isn't available for the key, it tries gemini-2.5-flash / gemini-2.5-pro / gemini-2.0-flash. The model is `"geminiModel"` (default `gemini-flash-latest`; `gemini-pro-latest` is stronger and slower). `"geminiNavigatorModel"` can set a different model for the click-by-click steps.
-- `"anthropic"`: Claude. Put `ANTHROPIC_API_KEY=…` in `.env`; the model is `"model"`.
+- `"anthropic"` (default): Claude. Put `ANTHROPIC_API_KEY=…` in `.env` (console.anthropic.com → API Keys; the account needs credit under Settings → Billing). The model is `"model"` (default `claude-opus-5-5`); `"navigatorModel"` can set a different model for the click-by-click steps, e.g. `claude-sonnet-5-5` to lower the cost of long company-site applications.
+- `"gemini"`: Google Gemini. Put `GEMINI_API_KEY=…` in `.env`. Both Google key types work: AI Studio keys (`AIza…`, from aistudio.google.com/apikey) and Vertex AI express-mode keys (`AQ.…`, from Google Cloud); the agent picks the right Google endpoint from the key. If a model name isn't available for the key, it tries gemini-2.5-flash / gemini-2.5-pro / gemini-2.0-flash. The model is `"geminiModel"` (default `gemini-flash-latest`; `gemini-pro-latest` is stronger and slower). `"geminiNavigatorModel"` can set a different model for the click-by-click steps.
 
 Every AI step uses this setting: matching, tailored resumes, hiring messages, form answers, the Alignerr navigator and resume import. If the key is wrong, the quota or credit runs out, or the model name doesn't exist, the agent stops with a plain message on its dashboard card. Short "busy" (429) replies are retried automatically.
 

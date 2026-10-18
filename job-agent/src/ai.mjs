@@ -26,6 +26,10 @@ export async function generateJSON({ system, content, schema, effort = "medium",
 let anthropic;
 async function claude({ system, content, schema, effort, maxTokens, role }) {
   if (!anthropic) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      log("err", "\n■ STOPPED: ANTHROPIC_API_KEY is missing from job-agent/.env. Create a key at console.anthropic.com → API Keys, add it there, then press Start again.");
+      process.exit(3);
+    }
     const { default: Anthropic } = await import("@anthropic-ai/sdk");
     anthropic = new Anthropic();
   }
