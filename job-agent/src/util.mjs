@@ -34,7 +34,20 @@ export function loadProfile() {
   if (!fs.existsSync(file)) {
     throw new Error("profile.json not found. Run `npm run import-resume -- <resume.pdf>` or copy profile.example.json to profile.json.");
   }
-  return readJson(file);
+  const profile = readJson(file);
+  // Years per skill and screening answers set in config.json win over profile.json (which is
+  // re-generated from the resume), so they never get lost.
+  const cfg = loadConfig();
+  if (cfg.skillYears) {
+    const merged = { ...(profile.skillYears ?? {}) };
+    for (const [k, v] of Object.entries(cfg.skillYears)) {
+      const existing = Object.keys(merged).find((x) => x.toLowerCase() === k.toLowerCase());
+      merged[existing ?? k] = v;
+    }
+    profile.skillYears = merged;
+  }
+  if (cfg.applicationAnswers) profile.applicationAnswers = { ...(profile.applicationAnswers ?? {}), ...cfg.applicationAnswers };
+  return profile;
 }
 
 // ---- "Skip this job" from the dashboard. The agent marks the job it is
