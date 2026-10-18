@@ -108,6 +108,7 @@ export async function getJob(page, ref) {
     expanded,
     hiringContact: await hiringContact(page),
     alreadyApplied: /\bApplied\s+\d+\s*(minute|hour|day|week|month)s?\s+ago\b|Application submitted/i.test(pageText.slice(0, 3000)),
+    closed: /no longer accepting applications|this job is no longer available|job is closed|this job has been closed|job (posting )?has expired/i.test(pageText.slice(0, 4000)),
     applyType: easy ? "easy" : other ? "external" : "none",
   };
 }

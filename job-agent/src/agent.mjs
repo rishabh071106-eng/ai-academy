@@ -65,6 +65,19 @@ for (const r of tracker.loadAll()) {
   else if (r.status === "skipped" && (r.history ?? []).some((h) => /^No magento \/ adobe commerce \/ php in the job post$/i.test(h.note || ""))) tracker.remove(r.id);
 }
 
+const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
+/** A job that used up its attempts without being applied is closed as "Couldn't apply" (status unable). */
+function giveUpIfExhausted(key, jobId) {
+  const row = tracker.find(key, jobId);
+  if (!row || !UNFINISHED.has(row.status) || (row.attempts ?? 0) < MAX_ATTEMPTS) return false;
+  const why = row.lastNote || row.history?.at(-1)?.note || "";
+  tracker.upsert(key, jobId, { status: "unable", historyNote: `Couldn't apply after ${row.attempts} tries${why ? ` — ${why}` : ""}`, lastNote: why });
+  log("warn", `  ✖ couldn't apply after ${row.attempts} tries — marked "Couldn't apply" on the dashboard`);
+  return true;
+}
+// Old jobs that already used up their attempts are closed now, so the to-do list only holds jobs still worth trying.
+for (const r of tracker.loadAll()) if (UNFINISHED.has(r.status) && (r.attempts ?? 0) >= MAX_ATTEMPTS) giveUpIfExhausted(r.platform, r.jobId);
+
 let context;
 try {
   ({ context } = await connect());
@@ -105,7 +118,6 @@ const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job
 const requiredFor = (pcfg) => pcfg.requiredKeywords ?? config.requiredKeywords ?? [];
 // (A cheap pre-filter; the AI check that follows still applies the location and fit rules.)
 const requiredHit = (job, words) => !words.length || reFor(words).test(`${job.title}\n${job.description}`);
-const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 
@@ -133,8 +145,16 @@ for (const [key, mod] of Object.entries(platforms)) {
     // Round 1 begins with the unfinished jobs from earlier runs.
     // Every round starts by finishing the jobs that are still open (best matches first),
     // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.
+    // Order: the keywords in requiredKeywords (Magento / Adobe Commerce first, then PHP, then
+    // React…) looked up in the title and match reasons, then the better match first.
+    const priorityWords = requiredFor(pcfg);
+    const priority = (r) => {
+      const text = `${r.title || ""}\n${(r.matchReasons || []).join(" ")}`;
+      const i = priorityWords.findIndex((w) => reFor([w]).test(text));
+      return i < 0 ? priorityWords.length : i;
+    };
     const retryList = retryUnfinished
-      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, listUrl: r.listUrl, cardText: "", title: r.title }))
+      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => priority(a) - priority(b) || (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, listUrl: r.listUrl, cardText: "", title: r.title }))
       : [];
     if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
     for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...(pcfg.searches ?? [])]) {
@@ -214,6 +234,12 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
         log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
 
+        if (job.closed) {
+          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "closed", historyNote: "The job is closed / no longer accepting applications" });
+          log("dim", "  closed — no longer accepting applications");
+          stats.skipped++;
+          continue;
+        }
         if (job.alreadyApplied) {
           tracker.upsert(key, job.jobId, { ...base, status: "applied", historyNote: "Already applied before the agent saw it" });
           log("dim", "  already applied");
@@ -338,7 +364,10 @@ for (const [key, mod] of Object.entries(platforms)) {
         if (s.retry && !attemptCounted) {
           try {
             const row = tracker.find(key, ref.jobId);
-            if (row && UNFINISHED.has(row.status)) tracker.upsert(key, ref.jobId, { attempts: (row.attempts ?? 0) + 1 });
+            if (row && UNFINISHED.has(row.status)) {
+              tracker.upsert(key, ref.jobId, { attempts: (row.attempts ?? 0) + 1 });
+              giveUpIfExhausted(key, ref.jobId);
+            }
           } catch {}
         }
         Object.assign(jobControl, { active: false, skip: false });
@@ -390,6 +419,7 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
   const attempts = (tracker.find(key, job.jobId)?.attempts ?? 0) + (result.status === "applied" ? 0 : 1);
   attemptCounted = true;
   tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
+  if (result.status !== "applied") giveUpIfExhausted(key, job.jobId);
   if (result.status === "applied") {
     await maybeMessage(mod, key, page, job);
     applied++;

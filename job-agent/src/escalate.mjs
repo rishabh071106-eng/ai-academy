@@ -22,6 +22,8 @@ export async function tryNavigator(page, job, { reason, resumePath, mode }) {
   tried.set(id, Date.now());
   log("info", `   stuck (${reason}) — letting the AI navigator try to finish it`);
   const r = await navigate(page, {
+    rules: `- Stay on this job's page and its application dialog. Never use the site's search box, never open other jobs or pages.
+- If the page says the job is closed / no longer accepting applications / expired, or there is no Apply button at all, use done with status "not_eligible".`,
     goal: `Finish and submit the job application for "${job.title}" at ${job.company} that is open on this page. The automatic filler got stuck here: ${reason}. Look at the screenshot, fix what's missing (fill empty or invalid fields, upload the resume, answer questions, tick required consent boxes), scroll to find more fields and the Next/Submit button, go through every remaining step and submit. Use done "applied" only when the site confirms the application.`,
     profile: loadProfile(),
     job,

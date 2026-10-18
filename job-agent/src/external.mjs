@@ -342,6 +342,7 @@ async function navigatorApply(site, ctx) {
     if (r) return r;
   }
   const r = await navigate(site, {
+    rules: "- If the page is only a company homepage or a job list, find the matching job (search the site for the role title) and its Apply button.",
     goal: `Apply for the job "${ctx.job.title}" at ${ctx.job.company} on this company career site (${ctx.ats}). If this page isn't the application yet, find the job and click Apply. Create an account or sign in if the site requires it. Upload her resume where a resume/CV is asked for, fill every field and question, scroll through each step, and submit. ${ctx.coverLetter ? "If a cover letter is asked for as text, use this one:\n" + ctx.coverLetter.slice(0, 1500) : ""}`,
     profile: ctx.profile,
     job: ctx.job,

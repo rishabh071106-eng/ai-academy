@@ -46,6 +46,7 @@ export async function getJob(page, ref) {
     pageTextLength: pageText.length,
     expanded,
     alreadyApplied: /^applied$/i.test(applyText),
+    closed: /this job has expired|job expired|no longer accepting|this job is no longer available|job has been closed/i.test(pageText.slice(0, 4000)),
     applyType: external ? "external" : applyBtn ? "easy" : "none",
   };
 }
