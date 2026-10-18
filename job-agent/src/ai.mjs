@@ -3,7 +3,9 @@
 //   "anthropic" → Claude API (ANTHROPIC_API_KEY in .env)
 // Every caller asks for JSON that matches a schema, so both providers are used in
 // structured-output mode and the result is parsed and returned as an object.
-import { loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
+import fs from "node:fs";
+import path from "node:path";
+import { DATA_DIR, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
 const config = loadConfig();
 export const PROVIDER = (config.provider || (process.env.GEMINI_API_KEY ? "gemini" : "anthropic")).toLowerCase();
@@ -62,10 +64,27 @@ const ENDPOINTS = {
   studio: "https://generativelanguage.googleapis.com/v1beta",
   vertex: "https://aiplatform.googleapis.com/v1/publishers/google",
 };
-let endpointOverride = null;
-const isVertexKey = (key) => (endpointOverride ? endpointOverride === "vertex" : /^AQ\./.test(key) || config.geminiEndpoint === "vertex");
-const geminiBase = (key) => process.env.GEMINI_BASE_URL || ENDPOINTS[isVertexKey(key) ? "vertex" : "studio"];
+// Which Google service to call: config "geminiEndpoint" if set, else the one that worked last
+// time (remembered in data/gemini-endpoint.txt), else the Gemini API (AI Studio) — that is
+// where prepaid credits live, and it accepts both key types.
+const ENDPOINT_MEMO = path.join(DATA_DIR, "gemini-endpoint.txt");
+let endpoint = ["studio", "vertex"].includes(config.geminiEndpoint) ? config.geminiEndpoint : null;
+if (!endpoint) {
+  try {
+    const saved = fs.readFileSync(ENDPOINT_MEMO, "utf8").trim();
+    if (["studio", "vertex"].includes(saved)) endpoint = saved;
+  } catch {}
+}
+endpoint ||= "studio";
+const isVertexKey = () => endpoint === "vertex";
+const geminiBase = () => process.env.GEMINI_BASE_URL || ENDPOINTS[endpoint];
 let switchedEndpoint = false;
+function rememberEndpoint() {
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(ENDPOINT_MEMO, endpoint);
+  } catch {}
+}
 
 // If the configured model name isn't available for this key, try these in order.
 const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
@@ -110,7 +129,7 @@ async function gemini({ system, content, schema, maxTokens, role }) {
     };
     let res, data;
     try {
-      res = await fetch(`${geminiBase(key)}/models/${encodeURIComponent(model)}:generateContent`, {
+      res = await fetch(`${geminiBase()}/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify(body),
@@ -125,6 +144,10 @@ async function gemini({ system, content, schema, maxTokens, role }) {
     }
     if (res.ok) {
       if (role === "main") workingModel = model;
+      if (switchedEndpoint) {
+        rememberEndpoint();
+        switchedEndpoint = false;
+      }
       const cand = data.candidates?.[0];
       const text = (cand?.content?.parts || []).filter((p) => p.text && !p.thought).map((p) => p.text).join("");
       if (!text) throw new Error(`Gemini returned no answer (${cand?.finishReason || data.promptFeedback?.blockReason || "empty"})`);
@@ -138,14 +161,14 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       continue;
     }
     if (/api key not valid|API_KEY_INVALID|api key expired/i.test(msg)) {
-      log("err", `\n■ STOPPED: The Gemini API key in job-agent/.env is not valid (${isVertexKey(key) ? "Vertex AI key" : "AI Studio key"}). Check it was copied completely, or create a new one, then press Start again.`);
+      log("err", `\n■ STOPPED: The Gemini API key in job-agent/.env is not valid (tried ${isVertexKey() ? "Vertex AI" : "the Gemini API"}). Check it was copied completely, or create a new one, then press Start again.`);
       process.exit(3);
     }
     // Key not allowed on this Google service: try the other one once.
-    if ((res.status === 403 || res.status === 401) && !switchedEndpoint && !process.env.GEMINI_BASE_URL) {
+    if ((res.status === 403 || res.status === 401) && !switchedEndpoint && !process.env.GEMINI_BASE_URL && !config.geminiEndpoint) {
       switchedEndpoint = true;
-      endpointOverride = isVertexKey(key) ? "studio" : "vertex";
-      log("dim", `   Google says this key can't use ${endpointOverride === "studio" ? "Vertex AI" : "the Gemini API"}; trying ${endpointOverride === "studio" ? "the Gemini API (AI Studio)" : "Vertex AI"} instead`);
+      endpoint = endpoint === "vertex" ? "studio" : "vertex";
+      log("dim", `   (using ${endpoint === "studio" ? "the Gemini API (AI Studio)" : "Vertex AI"} for this key)`);
       continue;
     }
     if (res.status === 402 || /credits are depleted|billing|payment required/i.test(msg)) {
