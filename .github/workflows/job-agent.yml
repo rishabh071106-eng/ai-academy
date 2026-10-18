@@ -1,0 +1,53 @@
+# Scheduled autonomous job-agent run.
+# Requirements:
+#   - Repo secret ANTHROPIC_API_KEY
+#   - This file must be on the default branch for the schedule to fire.
+# State (the no-duplicate-applications DB) persists between runs via cache;
+# tailored packages + screenshots are uploaded as run artifacts.
+
+name: job-agent
+
+on:
+  schedule:
+    - cron: "30 3,9,15 * * *" # 09:00 / 15:00 / 21:00 IST
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: job-agent
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore agent state
+        uses: actions/cache@v4
+        with:
+          path: job-agent/state
+          key: job-agent-state-${{ github.run_id }}
+          restore-keys: job-agent-state-
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m src.main
+
+      - name: Upload application packages
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: applications-${{ github.run_id }}
+          path: job-agent/applications
+          if-no-files-found: ignore
+          retention-days: 30

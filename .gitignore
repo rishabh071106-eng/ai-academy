@@ -2,3 +2,9 @@ node_modules/
 .env
 .DS_Store
 *.log
+
+# job-agent runtime data (personal)
+job-agent/state/
+job-agent/applications/
+job-agent/.venv/
+__pycache__/
