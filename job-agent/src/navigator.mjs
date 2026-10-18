@@ -222,6 +222,7 @@ Actions:
 
 How to work:
 - Think like a person filling the application: read the screenshot and the error messages, fill every required field (marked *, required or invalid), then press Next/Continue/Submit. After submitting, look for the confirmation.
+- "Years of experience with X": use skillYears from HER DATA (synonyms count); a related tool inherits the closest skill's years; anything AI / LLM / GenAI related is at least 2 years; never understate her (9+ years in total).
 - Answer screening questions truthfully from HER DATA; write short, natural answers for open questions ("why this role", "cover letter") using the job post and her experience (Magento/Adobe Commerce, PHP, React/Next.js, 9+ years). Salary in INR as in her answers. Notice period from her answers.
 - To apply, many career sites need an account: sign in or create one with her email and the password token; tick the terms box needed to register.
 - If an "Apply" button opens a new tab or a different site (Workday, Greenhouse, Lever, iCIMS, Taleo, SuccessFactors, Zoho, Freshteam, Keka, Darwinbox…), keep going there.
