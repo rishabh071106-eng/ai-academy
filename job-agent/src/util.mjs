@@ -78,6 +78,8 @@ let askSeq = 0;
  * in the terminal. `choices` = [{ label, value }].
  */
 export async function ask(question, choices, { timeoutMs = 0, timeoutAnswer = "s" } = {}) {
+  // The job was already skipped from the dashboard: answer No / Skip without waiting.
+  if (jobControl.active && jobControl.skip) return choices?.some((c) => c.value === "n") ? "n" : "s";
   if (process.send) {
     const id = ++askSeq;
     process.send({ type: "ask", id, question, choices, timeoutMs });

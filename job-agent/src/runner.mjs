@@ -94,7 +94,8 @@ export function stop({ platform } = {}) {
   }
   push(run, "■ Stop requested…", "sys");
   c.kill("SIGTERM");
-  setTimeout(() => c.exitCode === null && c.signalCode === null && c.kill("SIGKILL"), 8000);
+  // The agent first puts her own resume back on Naukri; give it up to a minute.
+  setTimeout(() => c.exitCode === null && c.signalCode === null && c.kill("SIGKILL"), 60000);
   return status();
 }
 

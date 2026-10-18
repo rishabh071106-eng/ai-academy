@@ -34,6 +34,8 @@ const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
 const platforms = { linkedin, naukri, alignerr };
 let currentRow = null; // { key, jobId, title, company } of the job being worked on
+let attemptCounted = false; // applyTo bumped the job's attempt counter in this pass
+let roundProgress = 0; // new jobs seen + applications made in the current round
 
 // "Skip this job" from the dashboard.
 process.on("message", (m) => {
@@ -57,8 +59,10 @@ process.on("uncaughtException", (e) => log("err", `  (recovered) ${String(e?.mes
 
 // Jobs whose page showed LinkedIn's "unusual activity" warning were saved under that text as
 // the title and skipped; put them back on the to-do list so they're tried again later.
+// Jobs skipped while the rule was "Magento / PHP only" are forgotten so React roles get a fresh look.
 for (const r of tracker.loadAll()) {
   if (/unusual activity on your account/i.test(r.title || "")) tracker.update(r.id, { title: "(LinkedIn job, not read yet)", company: "", status: "needs_attention", skipReason: null, historyNote: "LinkedIn showed a security check instead of the job; will retry" });
+  else if (r.status === "skipped" && (r.history ?? []).some((h) => /^No magento \/ adobe commerce \/ php in the job post$/i.test(h.note || ""))) tracker.remove(r.id);
 }
 
 let context;
@@ -71,6 +75,9 @@ try {
 const openPages = new Set();
 const shutdown = async () => {
   log("warn", "Stopping agent…");
+  Object.assign(jobControl, { active: false, skip: false });
+  // Put her own resume back on Naukri before going (the dashboard allows up to a minute).
+  await Promise.race([restoreNaukriResume(), new Promise((r) => setTimeout(r, 45000))]).catch(() => {});
   // Leave the agent's tab open in Chrome; never close the user's browser.
   await closePdfBrowser().catch(() => {});
   process.exit(0);
@@ -96,11 +103,13 @@ const keywordHit = (job) => mustApply.find((k) => k.re.test(`${job.title}\n${job
 // Hard rule (config "requiredKeywords", e.g. Magento / Adobe Commerce / PHP): a job is only
 // considered when its own title or description contains one of these words.
 const requiredFor = (pcfg) => pcfg.requiredKeywords ?? config.requiredKeywords ?? [];
-const requiredHit = (job, words) => !words.length || words.some((w) => hitInTitleOrPost(job, w));
+// (A cheap pre-filter; the AI check that follows still applies the location and fit rules.)
+const requiredHit = (job, words) => !words.length || reFor(words).test(`${job.title}\n${job.description}`);
 const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
 let applied = 0;
 const stats = { scanned: 0, matched: 0, applied: 0, attention: 0, skipped: 0 };
 
+try {
 for (const [key, mod] of Object.entries(platforms)) {
   const pcfg = config.platforms[key];
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
@@ -120,15 +129,15 @@ for (const [key, mod] of Object.entries(platforms)) {
   const done = () => applied >= maxApply || (reviewLimit > 0 && stats.scanned >= reviewLimit);
   try {
    for (let round = 1; ; round++) {
-    const reviewedBefore = stats.scanned;
+    roundProgress = 0;
     // Round 1 begins with the unfinished jobs from earlier runs.
     // Every round starts by finishing the jobs that are still open (best matches first),
     // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.
     const retryList = retryUnfinished
-      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, cardText: r.title?.startsWith("(") ? "" : `${r.title} · ${r.company}`, title: r.title }))
+      ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, listUrl: r.listUrl, cardText: "", title: r.title }))
       : [];
     if (retryList.length) log("info", `\n[${key}] Going back to ${retryList.length} job(s) not applied yet…`);
-    for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...pcfg.searches]) {
+    for (const s of [...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : []), ...(pcfg.searches ?? [])]) {
      for (let pageIndex = 0; pageIndex < maxPages; pageIndex++) {
       if (done()) break;
       await ensurePage().catch(() => {});
@@ -146,8 +155,10 @@ for (const [key, mod] of Object.entries(platforms)) {
       }
       if (!refs.length) break;
       const unseen = refs.filter((r) => !tracker.find(key, r.jobId)).length;
-      // Cheap relevance check on the result cards, before opening anything.
-      const offTopic = refs.filter((r) => r.cardText && !isRelevant(r.cardText));
+      roundProgress += unseen;
+      // Cheap relevance check on the result cards, before opening anything (not for retries:
+      // those were already read, and the keyword may only be in the description).
+      const offTopic = s.retry ? [] : refs.filter((r) => r.cardText && !isRelevant(r.cardText));
       refs = refs.filter((r) => !offTopic.includes(r));
       log("dim", `  ${refs.length + offTopic.length} jobs found, ${refs.length} look relevant`);
       if (offTopic.length) log("dim", `  ignoring off-topic: ${offTopic.slice(0, 6).map((r) => r.cardText.split(/ · |\n/)[0].slice(0, 45)).join(" | ")}${offTopic.length > 6 ? " …" : ""}`);
@@ -157,10 +168,11 @@ for (const [key, mod] of Object.entries(platforms)) {
        try {
         await ensurePage();
         const existing = tracker.find(key, ref.jobId);
-        // Low-score skips get a second look (matching rules may have changed); exclusions don't.
-        const retry = s.retry || (existing?.status === "skipped" && !["excluded", "offtopic"].includes(existing.skipReason));
-        if (existing && !retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
+        // A job already handled (applied, skipped, waiting for a person…) is only revisited
+        // through the retry list at the start of a round.
+        if (existing && !s.retry && (DONE.has(existing.status) || mode === "dry-run")) continue;
         stats.scanned++;
+        attemptCounted = false;
         Object.assign(jobControl, { active: true, skip: false });
         currentRow = { key, jobId: ref.jobId, title: ref.title || existing?.title || "", company: existing?.company || "" };
 
@@ -196,7 +208,7 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("dim", `  not a job page (${job.title || job.url}) — skipping`);
           continue;
         }
-        const base = { url: job.url, title: job.title, company: job.company, location: job.location };
+        const base = { url: job.url, title: job.title, company: job.company, location: job.location, ...(ref.listUrl ? { listUrl: ref.listUrl } : {}) };
         currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
         process.send?.({ type: "job", title: job.title, company: job.company, url: job.url });
         log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
@@ -207,9 +219,11 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("dim", "  already applied");
           continue;
         }
-        const lower = `${job.title}`.toLowerCase();
-        if (config.excludeTitleKeywords.some((k) => lower.includes(k)) || config.excludeCompanies.some((c) => job.company.toLowerCase().includes(c.toLowerCase()))) {
-          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "excluded", historyNote: "Excluded by config" });
+        // Whole words only: "intern" must not exclude "International".
+        const excludedTitle = (config.excludeTitleKeywords ?? []).find((k) => reFor([k]).test(job.title || ""));
+        const excludedCompany = (config.excludeCompanies ?? []).find((c) => (job.company || "").toLowerCase().includes(c.toLowerCase()));
+        if (excludedTitle || excludedCompany) {
+          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "excluded", historyNote: `Excluded by config (${excludedTitle || excludedCompany})` });
           stats.skipped++;
           continue;
         }
@@ -269,6 +283,13 @@ for (const [key, mod] of Object.entries(platforms)) {
         process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, matchScore: ev.matchScore });
         checkSkip();
 
+        if (job.applyType === "none") {
+          // No Apply control on the page: closed, already applied, or it didn't render. Tried again later (bounded by attempts).
+          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "needs_attention", historyNote: "No Apply button on the job page (closed, already applied, or it didn't load)", lastNote: "No Apply button on the job page" });
+          log("warn", "  no Apply button on the page — will look again later");
+          stats.attention++;
+          continue;
+        }
         if (job.applyType !== "easy") {
           tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
           const formLink = applyLinkInText(job.description);
@@ -300,7 +321,11 @@ for (const [key, mod] of Object.entries(platforms)) {
           // Skipped by you from the dashboard. Never overwrite a finished application.
           const row = currentRow && tracker.find(key, currentRow.jobId);
           if (!row || !["applied", "interview", "offer"].includes(row.status))
-            tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}), status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
+            try {
+              tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { url: ref.url, ...(currentRow?.title ? { title: currentRow.title } : {}), ...(currentRow?.company ? { company: currentRow.company } : {}), status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
+            } catch (e2) {
+              log("warn", `  couldn't record the skip: ${e2.message}`);
+            }
           stats.skipped++;
           log("warn", "  ⏭ skipped by you — on to the next job");
           await page.keyboard.press("Escape").catch(() => {});
@@ -309,6 +334,13 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("err", `  error on ${ref.url}: ${String(e?.message ?? e).split("\n")[0]} — moving on`);
         }
        } finally {
+        // A retried job that got nowhere this pass still used up one of its attempts.
+        if (s.retry && !attemptCounted) {
+          try {
+            const row = tracker.find(key, ref.jobId);
+            if (row && UNFINISHED.has(row.status)) tracker.upsert(key, ref.jobId, { attempts: (row.attempts ?? 0) + 1 });
+          } catch {}
+        }
         Object.assign(jobControl, { active: false, skip: false });
         currentRow = null;
         process.send?.({ type: "job", title: null });
@@ -319,7 +351,8 @@ for (const [key, mod] of Object.entries(platforms)) {
      }
     }
     if (done() || !keepGoing) break;
-    if (stats.scanned === reviewedBefore) {
+    if (roundProgress === 0) {
+      // Nothing new and nothing applied this round: wait before looking again (retries included).
       log("info", `\n[${key}] Every current job has been reviewed (${applied}/${maxApply} applied). Checking for new postings in ${recheckMinutes} min — press Stop to end.`);
       await sleep(recheckMinutes * 60000);
     }
@@ -327,6 +360,13 @@ for (const [key, mod] of Object.entries(platforms)) {
   } finally {
     // Keep the tab: closing the last tab of a window closes the window in her Chrome.
   }
+}
+} catch (e) {
+  // An error outside a single job (search set-up, tracker lock…): stop so the dashboard restarts the agent.
+  log("err", `■ Unexpected error: ${String(e?.message ?? e).split("\n")[0]} — restarting`);
+  await restoreNaukriResume();
+  await closePdfBrowser().catch(() => {});
+  process.exit(1);
 }
 
 async function applyTo(mod, key, page, job, resumePath, { external = false, coverLetter, open } = {}) {
@@ -348,11 +388,13 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
   // (unless it got submitted in the meantime).
   if (jobControl.skip && result.status !== "applied") checkSkip();
   const attempts = (tracker.find(key, job.jobId)?.attempts ?? 0) + (result.status === "applied" ? 0 : 1);
+  attemptCounted = true;
   tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
   if (result.status === "applied") {
     await maybeMessage(mod, key, page, job);
     applied++;
     stats.applied++;
+    roundProgress++;
     log("ok", `  ✔ applied (${applied}/${maxApply})`);
     jobControl.active = false; // nothing left to skip during the pause between applications
     const [lo, hi] = config.delaySecondsBetweenApplications;
@@ -368,26 +410,32 @@ async function maybeMessage(mod, key, page, job) {
   if (!config.hiringMessage?.enabled || !mod.messageHiringTeam || !row?.hiringMessage || !job.hiringContact) return;
   try {
     const r = await mod.messageHiringTeam(page, job, row.hiringMessage, { mode, autoSend: config.hiringMessage.autoSend });
-    tracker.upsert(key, job.jobId, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { historyNote: r.note, status: "applied" } : {}) });
+    // A sent message is noted on the job; it never counts as an application.
+    tracker.upsert(key, job.jobId, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { historyNote: r.note } : {}) });
     log(r.status === "sent" ? "ok" : "dim", `  ✉ ${r.note}`);
   } catch (e) {
     tracker.upsert(key, job.jobId, { messageStatus: "draft", messageNote: `Couldn't send: ${e.message}` });
   }
 }
 
-// Put her normal resume back on Naukri after a run that uploaded tailored ones.
-if (naukri.apply.uploaded && config.platforms.naukri?.restoreBaseResumeAfterRun !== false) {
+// Put her normal resume back on Naukri after a run that uploaded tailored ones
+// (also on Stop from the dashboard, see shutdown()).
+let restored = false;
+async function restoreNaukriResume() {
+  if (restored || !naukri.apply.uploaded || config.platforms.naukri?.restoreBaseResumeAfterRun === false) return;
+  restored = true;
   try {
     const custom = (config.platforms.naukri.baseResumePath || "").replace(/^~(?=\/)/, os.homedir());
     const base = custom && fs.existsSync(custom) ? custom : baseResume?.path ?? (await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" }));
     log("info", "\nRestoring your normal resume on Naukri…");
-    const tab = [...openPages].at(-1) ?? (await context.newPage());
+    const tab = [...openPages].filter((p) => !p.isClosed()).at(-1) ?? (await context.newPage());
     const ok = await naukri.uploadResume(tab, base);
     log(ok ? "ok" : "warn", ok ? `  ${path.basename(base)} is back on your Naukri profile` : "  couldn't confirm; check your Naukri profile resume");
   } catch (e) {
     log("warn", `  couldn't restore the base resume: ${e.message}`);
   }
 }
+await restoreNaukriResume();
 
 await closePdfBrowser();
 log("ok", `\nDone. Scanned ${stats.scanned} · matched ${stats.matched} · applied ${stats.applied} · needs attention ${stats.attention} · skipped ${stats.skipped}`);

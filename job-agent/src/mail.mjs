@@ -4,7 +4,7 @@
 // so the application can carry on without a person. Only the newest matching emails are read,
 // and only to extract that code or link.
 import { generateJSON } from "./ai.mjs";
-import { loadConfig, log, sleep } from "./util.mjs";
+import { isSkip, loadConfig, log, sleep } from "./util.mjs";
 
 const SCHEMA = {
   type: "object",
@@ -76,6 +76,7 @@ export async function readVerificationEmail(context, hint = "") {
     }
     return null;
   } catch (e) {
+    if (isSkip(e)) throw e;
     log("warn", `   couldn't read Gmail: ${e.message.split("\n")[0]}`);
     return null;
   } finally {

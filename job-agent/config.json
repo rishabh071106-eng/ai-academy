@@ -178,7 +178,8 @@
         "php",
         "javascript",
         "typescript"
-      ]
+      ],
+      "requiredKeywords": []
     }
   },
   "excludeTitleKeywords": [

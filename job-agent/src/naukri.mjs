@@ -181,7 +181,7 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
 export async function openCompanySite(page) {
   const ctl = await firstVisible(page, ["#company-site-button", "button:has-text('Apply on company site')", "a:has-text('Apply on company site')"], 8000);
   if (!ctl) return null;
-  const popup = page.context().waitForEvent("page", { timeout: 15000 }).catch(() => null);
+  const popup = page.waitForEvent("popup", { timeout: 15000 }).catch(() => null);
   await ctl.click();
   const tab = await popup;
   if (tab) return tab;

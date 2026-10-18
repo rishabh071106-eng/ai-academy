@@ -225,6 +225,7 @@ export async function fillCustomSelects(root, profile, job) {
   const items = [];
   for (let i = 0; i < n; i++) {
     const t = triggers.nth(i);
+    await t.evaluate((el, i) => el.setAttribute("data-ja-cs", String(i)), i).catch(() => {});
     const info = await t.evaluate((el) => {
       const clean = (s) => (s || "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
       const byId = (id) => el.getRootNode()?.getElementById?.(id) || document.getElementById(id);
@@ -281,7 +282,7 @@ export async function fillCustomSelects(root, profile, job) {
       if (it.required) missing.push({ label: it.label });
       continue;
     }
-    const t = triggers.nth(it.i);
+    const t = root.locator(`[data-ja-cs="${it.i}"]`).first();
     if (process.env.JA_DEBUG) log("dim", `   [debug] ${it.label}: answer=${ans} options=${it.options.length}`);
     await t.click({ timeout: 2000 }).catch(() => {});
     if (it.isInput) {

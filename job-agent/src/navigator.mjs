@@ -322,6 +322,8 @@ const pageSig = (page) =>
   page.evaluate(() => `${location.href}|${[...document.querySelectorAll("h1,h2,h3,legend,[role=alert]")].slice(0, 8).map((h) => h.innerText.trim()).join("|")}|${Math.round((document.body?.innerText.length || 0) / 50)}`).catch(() => "");
 
 async function screenshot(page) {
+  // Several agents share one Chrome window; a background tab can't be captured.
+  await page.bringToFront().catch(() => {});
   return page.screenshot({ type: "jpeg", quality: 55, timeout: 8000 }).then((b) => b.toString("base64")).catch(() => null);
 }
 
@@ -333,9 +335,13 @@ export async function navigate(page, opts) {
   const { goal, profile, job, resumePath, mode = "review", stopOnReport = false } = opts;
   const maxSteps = opts.maxSteps ?? Number(loadConfig().navigatorMaxSteps ?? 45);
   const history = opts.history ?? [];
+  // The step budget is shared with pop-up tabs this call follows.
+  const budget = opts.budget ?? { left: maxSteps };
   const lastActions = [];
   let reported = [];
-  for (let step = 0; step < maxSteps; step++) {
+  for (let step = 0; budget.left > 0; step++, budget.left--) {
+    // A pop-up that closed itself (OAuth sign-in, a link opened in a new tab…): back to the opener.
+    if (page.isClosed()) return { status: "needs_attention", note: "that tab was closed", jobs: reported, tabClosed: true };
     await page.waitForLoadState("domcontentloaded").catch(() => {});
     await sleep(1000);
     const snap = await snapshot(page).catch(() => null);
@@ -365,6 +371,7 @@ export async function navigate(page, opts) {
     const before = await pageSig(page);
     let outcome = "";
     try {
+      if (d.target && !t) throw new Error(`there is no element "${d.target}" on this page; use an id from the ELEMENTS list`);
       const loc = d.target ? findEl(page, snap, d.target) : null;
       if (["click", "type", "choose", "check", "upload_resume"].includes(d.action) && d.action !== "upload_resume" && !loc) throw new Error("no target given");
       if (loc) await loc.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
@@ -374,7 +381,7 @@ export async function navigate(page, opts) {
           if (mode !== "auto" && /submit|send application|finish|complete application/i.test(label)) {
             if (!(await confirm(`Submit the application${job ? ` for ${job.title}` : ""}?`))) return { status: "skipped", note: "You chose not to submit" };
           }
-          const popup = page.context().waitForEvent("page", { timeout: 3000 }).catch(() => null);
+          const popup = page.waitForEvent("popup", { timeout: 3000 }).catch(() => null);
           await loc.click({ timeout: 6000 }).catch(async (e) => {
             // Covered by an overlay or styled away: click it from inside the page.
             if (!/intercept|not visible|outside of the viewport|timeout/i.test(e.message)) throw e;
@@ -385,7 +392,13 @@ export async function navigate(page, opts) {
             log("dim", "   (opened in a new tab; continuing there)");
             await tab.waitForLoadState("domcontentloaded").catch(() => {});
             history.push(`${desc} → opened a new tab`);
-            return navigate(tab, { ...opts, history, maxSteps: maxSteps - step - 1 });
+            const sub = await navigate(tab, { ...opts, history, budget });
+            if (sub.status === "applied" || sub.status === "skipped" || sub.jobs?.length) return sub;
+            // The new tab didn't finish the job (sign-in pop-up, terms page…): close it and carry on here.
+            if (!tab.isClosed()) await tab.close().catch(() => {});
+            await page.bringToFront().catch(() => {});
+            history.push(`the new tab ended (${sub.note}); back on the original tab`);
+            continue;
           }
           break;
         }

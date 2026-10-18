@@ -4,18 +4,22 @@
 //      time limit, after which the job is skipped and the run continues;
 //   3. otherwise the job is marked "needs attention" and the run moves on.
 // Things only a person may do (CAPTCHA, SMS codes, assessments, interviews) skip step 1.
-// Email verification codes/links are read from her Gmail by the navigator (check_email). Signing in / creating an account is done by the navigator with
-// ATS_PASSWORD from .env.
+// Email verification codes/links are read from her Gmail by the navigator (check_email);
+// signing in / creating an account is done by the navigator with ATS_PASSWORD from .env.
 import { navigate } from "./navigator.mjs";
-import { ask, askForHelp, loadProfile, log } from "./util.mjs";
+import { ask, askForHelp, isSkip, loadProfile, log } from "./util.mjs";
 
-const HUMAN_ONLY = /captcha|robot|two-factor|\bsms\b|assessment|interview|\btest\b|quiz/i;
-const tried = new WeakSet();
+// Only real person-only situations; a screening question that merely mentions "interview"
+// or "test" in its label is still for the navigator.
+const HUMAN_ONLY = /captcha|robot|two-factor|\bsms\b|\botp\b|skill assessment|coding (test|challenge)|(video|ai) interview/i;
+// One navigator rescue per job per pass (keyed by job, since one tab is reused for every job).
+const tried = new Map();
 
 /** Step 1. Returns a result when the navigator finished (or decided to skip), else null. */
 export async function tryNavigator(page, job, { reason, resumePath, mode }) {
-  if (HUMAN_ONLY.test(reason) || tried.has(page)) return null;
-  tried.add(page);
+  const id = `${job.platform}:${job.jobId}`;
+  if (HUMAN_ONLY.test(reason) || Date.now() - (tried.get(id) ?? 0) < 10 * 60000) return null;
+  tried.set(id, Date.now());
   log("info", `   stuck (${reason}) — letting the AI navigator try to finish it`);
   const r = await navigate(page, {
     goal: `Finish and submit the job application for "${job.title}" at ${job.company} that is open on this page. The automatic filler got stuck here: ${reason}. Look at the screenshot, fix what's missing (fill empty or invalid fields, upload the resume, answer questions, tick required consent boxes), scroll to find more fields and the Next/Submit button, go through every remaining step and submit. Use done "applied" only when the site confirms the application.`,
@@ -23,7 +27,10 @@ export async function tryNavigator(page, job, { reason, resumePath, mode }) {
     job,
     resumePath,
     mode: mode === "review" ? "review" : "auto",
-  }).catch((e) => ({ status: "needs_attention", note: e.message }));
+  }).catch((e) => {
+    if (isSkip(e)) throw e;
+    return { status: "needs_attention", note: e.message };
+  });
   if (r.status === "applied" || r.status === "skipped") return r;
   log("dim", `   navigator couldn't finish: ${r.note}`);
   return null;

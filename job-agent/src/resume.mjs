@@ -134,6 +134,7 @@ ${later.length || profile.projects?.length ? `<div class="page2">
 
 let pdfBrowser;
 async function getPdfBrowser() {
+  if (pdfBrowser && !pdfBrowser.isConnected()) pdfBrowser = undefined; // it crashed or was killed: start a new one
   if (pdfBrowser) return pdfBrowser;
   // PDF printing needs headless Chromium; reuse the locally installed Chrome when possible.
   const attempts = [{ channel: "chrome" }, { channel: "msedge" }, {}];
@@ -173,6 +174,14 @@ export async function buildResumePdf(profile, tailored, job) {
   const pdfPath = path.join(dir, `${fileBase}.pdf`);
   const browser = await getPdfBrowser();
   const page = await browser.newPage();
+  try {
+    return await renderWithPage(page, profile, tailored, htmlPath, pdfPath);
+  } finally {
+    await page.close().catch(() => {});
+  }
+}
+
+async function renderWithPage(page, profile, tailored, htmlPath, pdfPath) {
   // If even slightly smaller text doesn't fit 2 pages, trim the least important content step by step.
   const t = tailored ?? {};
   const exp = t.experience?.length ? t.experience : profile.experience || [];
@@ -193,7 +202,6 @@ export async function buildResumePdf(profile, tailored, job) {
   }
   fs.writeFileSync(htmlPath, html);
   fs.writeFileSync(pdfPath, buf);
-  await page.close();
   return pdfPath;
 }
 

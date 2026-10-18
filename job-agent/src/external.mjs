@@ -11,9 +11,9 @@ import { googleForm } from "./googleforms.mjs";
 import { askPerson, tryNavigator } from "./escalate.mjs";
 import { openVerificationLink, readVerificationEmail } from "./mail.mjs";
 import { navigate } from "./navigator.mjs";
-import { ask, confirm, DATA_DIR, humanPause, log, sleep } from "./util.mjs";
+import { ask, confirm, DATA_DIR, humanPause, isSkip, log, sleep } from "./util.mjs";
 
-const SUCCESS = /thank you for (applying|your application|your interest)|application (has been |was )?(received|submitted|sent|complete)|we('ve| have) received your application|successfully (applied|submitted)|you('ve| have) applied/i;
+const SUCCESS = /thank you for (applying|your application)|application (has been |was )?(received|submitted|sent|complete)|we('ve| have) received your application|successfully (applied|submitted)|you('ve| have) applied/i;
 
 export function detectAts(url) {
   const u = url.toLowerCase();
@@ -118,7 +118,8 @@ async function runWizard(page, root, ctx, { next, submit, errors, maxSteps = 14 
   for (let step = 0; step < maxSteps; step++) {
     await humanPause(1200, 2000);
     await dismissBanners(page);
-    if (SUCCESS.test(await page.locator("body").innerText().catch(() => ""))) return { status: "applied", note: `Company site (${ctx.ats})` };
+    // Only after something was submitted: job pages themselves can say "thank you for applying".
+    if (step > 0 && SUCCESS.test(await page.locator("body").innerText().catch(() => ""))) return { status: "applied", note: `Company site (${ctx.ats})` };
     if (await captchaPresent(page)) {
       const r = await handOver(page, ctx.job, ctx.mode, "there's a CAPTCHA to solve");
       if (r) return r;
@@ -318,6 +319,10 @@ export async function applyExternal(page, job, { open, resumePath, profile, mode
       : ats === "googleforms" ? await googleForm(site, ctx, (reason) => handOver(site, job, mode, reason))
       : await navigatorApply(site, ctx);
   } catch (e) {
+    if (isSkip(e)) {
+      if (site !== page) await site.close().catch(() => {});
+      throw e;
+    }
     result = await handOver(site, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false);
   }
   if (site !== page) await site.close().catch(() => {});
@@ -342,7 +347,10 @@ async function navigatorApply(site, ctx) {
     job: ctx.job,
     resumePath: ctx.resumePath,
     mode: ctx.mode === "review" ? "review" : "auto",
-  }).catch((e) => ({ status: "needs_attention", note: e.message.split("\n")[0] }));
+  }).catch((e) => {
+    if (isSkip(e)) throw e;
+    return { status: "needs_attention", note: e.message.split("\n")[0] };
+  });
   return { ...r, note: r.status === "applied" ? `Company site (${ctx.ats}): ${r.note}` : `Company site: ${r.note}` };
 }
 
@@ -362,6 +370,7 @@ export async function applyHere(page, job, { resumePath, profile, mode, coverLet
   try {
     return (await generic(page, ctx)) ?? { status: "needs_attention", note: `${label}: unfinished` };
   } catch (e) {
+    if (isSkip(e)) throw e;
     return (await handOver(page, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false)) ?? { status: "needs_attention", note: e.message };
   }
 }

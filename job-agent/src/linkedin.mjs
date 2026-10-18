@@ -364,7 +364,7 @@ export async function sendForJob(page, row) {
 export async function openCompanySite(page) {
   const ctl = page.getByRole("button", { name: /^apply|apply on company/i }).or(page.getByRole("link", { name: /^apply|apply on company/i })).filter({ visible: true }).first();
   await ctl.waitFor({ state: "visible", timeout: 8000 });
-  const popup = page.context().waitForEvent("page", { timeout: 15000 }).catch(() => null);
+  const popup = page.waitForEvent("popup", { timeout: 15000 }).catch(() => null);
   await ctl.click();
   await sleep(1500);
   // LinkedIn sometimes asks to confirm leaving / sharing the profile first.
