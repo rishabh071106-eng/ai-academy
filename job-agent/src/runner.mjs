@@ -1,5 +1,6 @@
 // Starts/stops one agent per platform (LinkedIn and Naukri run independently) and relays their questions.
 import { fork } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "./util.mjs";
 
@@ -8,11 +9,46 @@ const MAX_LOG = 600;
 const runs = Object.fromEntries(PLATFORMS.map((p) => [p, { platform: p, running: false, startedAt: null, endedAt: null, exitCode: null, options: null, pending: null, log: [], seq: 0, child: null }]));
 
 const strip = (s) => s.replace(/\x1b\[[0-9;]*m/g, "").replace(/^\d{1,2}:\d{2}:\d{2}(\s?[AP]M)?\s/i, "");
+const LOG_DIR = path.join(ROOT, "data", "logs");
+const dayStamp = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 function push(run, line, kind = "out") {
   if (!line.trim()) return;
   run.seq++;
-  run.log.push({ n: run.seq, at: Date.now(), kind, text: strip(line) });
+  const text = strip(line);
+  run.log.push({ n: run.seq, at: Date.now(), kind, text });
   if (run.log.length > MAX_LOG) run.log.splice(0, run.log.length - MAX_LOG);
+  // Also on disk, so a whole day's run can be downloaded from the dashboard (⇩ Logs).
+  try {
+    fs.mkdirSync(LOG_DIR, { recursive: true });
+    fs.appendFileSync(path.join(LOG_DIR, `${run.platform}-${dayStamp()}.log`), `${new Date().toLocaleTimeString()}  ${text}\n`);
+  } catch {}
+}
+
+/** Today's (or `date`'s) logs of every agent plus a summary of where jobs got stuck, as text. */
+export function logsText(date = dayStamp()) {
+  const parts = [];
+  try {
+    const rows = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "applications.json"), "utf8"));
+    const byStatus = {};
+    for (const r of rows) byStatus[r.status] = (byStatus[r.status] ?? 0) + 1;
+    parts.push(`JOB AGENT LOGS — ${date}\n\nJobs by status: ${Object.entries(byStatus).map(([k, v]) => `${k} ${v}`).join(" · ")}`);
+    const stuck = rows.filter((r) => ["needs_attention", "unable", "external"].includes(r.status));
+    const reasons = {};
+    for (const r of stuck) {
+      const why = (r.lastNote || r.history?.at(-1)?.note || "(no note)").replace(/https?:\S+/g, "").slice(0, 90);
+      reasons[why] = (reasons[why] ?? 0) + 1;
+    }
+    parts.push(`\nWhy jobs are not applied yet (${stuck.length}):\n${Object.entries(reasons).sort((a, b) => b[1] - a[1]).map(([k, v]) => `  ${String(v).padStart(3)} × ${k}`).join("\n")}`);
+    const today = rows.filter((r) => (r.updatedAt || "").startsWith(date));
+    parts.push(`\nJobs touched on ${date} (${today.length}):\n${today.map((r) => `  [${r.platform}] ${r.status.padEnd(16)} ${(r.title || "").slice(0, 50).padEnd(50)} ${(r.company || "").slice(0, 28).padEnd(28)} ${(r.lastNote || "").replace(/https?:\S+/g, "").slice(0, 100)}`).join("\n")}`);
+  } catch (e) {
+    parts.push(`(no tracker summary: ${e.message})`);
+  }
+  for (const p of PLATFORMS) {
+    const file = path.join(LOG_DIR, `${p}-${date}.log`);
+    parts.push(`\n\n===== ${p.toUpperCase()} AGENT =====\n${fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "(no log for this day)"}`);
+  }
+  return parts.join("\n");
 }
 function pipe(run, stream, kind) {
   let buf = "";

@@ -42,6 +42,12 @@ const server = http.createServer(async (req, res) => {
   } catch (e) {
     return send(res, 409, { error: e.message });
   }
+  if (p === "/api/logs" && req.method === "GET") {
+    const date = url.searchParams.get("date") || undefined;
+    const body = runner.logsText(date);
+    res.writeHead(200, { "content-type": "text/plain; charset=utf-8", "content-disposition": `attachment; filename="job-agent-logs-${date || new Date().toISOString().slice(0, 10)}.txt"` });
+    return res.end(body);
+  }
   if (p === "/api/profile") {
     const prof = readJson(path.join(ROOT, "profile.json"), {});
     return send(res, 200, { name: prof.name ?? "", headline: prof.headline ?? "", sourceResume: prof.sourceResume ?? null });
