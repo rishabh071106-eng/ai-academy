@@ -11,47 +11,106 @@
     "magento",
     "adobe commerce",
     "php",
-    "react",
-    "reactjs",
-    "react.js",
-    "next.js",
-    "nextjs"
-  ],
-  "alwaysApplyKeywords": [
-    "magento",
-    "adobe commerce",
-    "php",
-    "react",
-    "reactjs",
-    "react.js",
-    "next.js",
-    "nextjs"
-  ],
-  "relevantKeywords": [
-    "magento",
-    "adobe commerce",
+    "laravel",
     "react",
     "reactjs",
     "react.js",
     "next.js",
     "nextjs",
-    "php",
+    "html",
+    "css",
+    "javascript",
+    "typescript",
+    "jquery",
+    "graphql",
+    "mysql",
+    "node.js",
+    "nodejs",
+    "wordpress",
+    "shopify",
+    "woocommerce",
+    "e-commerce",
+    "ecommerce",
     "full stack",
     "fullstack",
     "full-stack",
     "front end",
     "frontend",
     "front-end",
-    "e-commerce",
-    "ecommerce",
-    "graphql",
+    "web developer",
+    "ui developer",
+    "mern"
+  ],
+  "alwaysApplyKeywords": [
+    "magento",
+    "adobe commerce",
+    "php",
+    "laravel",
+    "react",
+    "reactjs",
+    "react.js",
+    "next.js",
+    "nextjs",
+    "html",
+    "css",
     "javascript",
     "typescript",
+    "jquery",
+    "graphql",
+    "mysql",
+    "node.js",
+    "nodejs",
+    "wordpress",
+    "shopify",
+    "woocommerce",
+    "e-commerce",
+    "ecommerce",
+    "full stack",
+    "fullstack",
+    "full-stack",
+    "front end",
+    "frontend",
+    "front-end",
     "web developer",
-    "ui developer"
+    "ui developer",
+    "mern"
   ],
-  "maxApplicationsPerRun": 15,
-  "maxJobsToScanPerSearch": 40,
+  "relevantKeywords": [
+    "magento",
+    "adobe commerce",
+    "php",
+    "laravel",
+    "react",
+    "reactjs",
+    "react.js",
+    "next.js",
+    "nextjs",
+    "html",
+    "css",
+    "javascript",
+    "typescript",
+    "jquery",
+    "graphql",
+    "mysql",
+    "node.js",
+    "nodejs",
+    "wordpress",
+    "shopify",
+    "woocommerce",
+    "e-commerce",
+    "ecommerce",
+    "full stack",
+    "fullstack",
+    "full-stack",
+    "front end",
+    "frontend",
+    "front-end",
+    "web developer",
+    "ui developer",
+    "mern"
+  ],
+  "maxApplicationsPerRun": 1000,
+  "maxJobsToScanPerSearch": 60,
   "delaySecondsBetweenApplications": [
     25,
     70
@@ -89,6 +148,10 @@
           "remote": true
         },
         {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
           "keywords": "Full Stack Developer PHP",
           "location": "Bengaluru, Karnataka, India"
         },
@@ -104,7 +167,40 @@
         {
           "keywords": "React Next.js Developer",
           "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "India",
+          "remote": true
         }
+      ],
+      "delaySeconds": [
+        20,
+        40
       ]
     },
     "naukri": {
@@ -151,11 +247,51 @@
         {
           "keywords": "nextjs developer",
           "location": "bangalore"
+        },
+        {
+          "keywords": "frontend developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "full stack developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "web developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "ui developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "javascript developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "node js developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "wordpress developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "shopify developer",
+          "location": "bangalore"
+        },
+        {
+          "keywords": "ecommerce developer",
+          "location": "bangalore"
         }
       ],
       "uploadTailoredResume": true,
       "restoreBaseResumeAfterRun": true,
-      "baseResumePath": ""
+      "baseResumePath": "",
+      "delaySeconds": [
+        5,
+        12
+      ]
     },
     "alignerr": {
       "enabled": true,
@@ -179,7 +315,11 @@
         "javascript",
         "typescript"
       ],
-      "requiredKeywords": []
+      "requiredKeywords": [],
+      "delaySeconds": [
+        5,
+        10
+      ]
     }
   },
   "excludeTitleKeywords": [
@@ -203,7 +343,7 @@
   "maxJobsToReview": 0,
   "maxResultPagesPerSearch": 5,
   "keepGoing": true,
-  "recheckMinutes": 30,
+  "recheckMinutes": 10,
   "retryUnfinished": true,
   "helpTimeoutMinutes": 0,
   "keywordOverrideMinScore": 45,
@@ -267,5 +407,6 @@
     "Agentic AI": 2,
     "Vector databases": 2,
     "Python": 2
-  }
+  },
+  "applyToAllMatching": true
 }

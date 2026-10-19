@@ -66,6 +66,15 @@ for (const r of tracker.loadAll()) {
 }
 
 const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
+// applyToAllMatching: every job that mentions one of her keywords is applied to — no AI
+// match score, no fit judgement. The AI still writes the tailored resume; if that fails the
+// standard resume is used so the application still goes out.
+const APPLY_ALL = config.applyToAllMatching === true;
+let standardResume = null;
+async function standardResumePdf() {
+  if (!standardResume) standardResume = baseResume?.path ?? (await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" }));
+  return standardResume;
+}
 // Per round: a few old jobs are retried, then every search runs — so new jobs get applied to
 // every round instead of after all the old ones. The old ones rotate through over the rounds.
 const RETRY_BATCH = Number(config.retryBatchSize ?? 5);
@@ -277,11 +286,11 @@ for (const [key, mod] of Object.entries(platforms)) {
           continue;
         }
 
-        log("dim", "  checking the job against her resume…");
+        log("dim", APPLY_ALL ? "  writing the resume for this job…" : "  checking the job against her resume…");
         let ev;
         try {
           ev = await evaluateAndTailor(profile, job);
-          if (!ev.descriptionComplete) {
+          if (!ev.descriptionComplete && !APPLY_ALL) {
             // Claude thinks the description was cut off: open the job again and re-read it once.
             log("dim", "  description looks cut off — opening the full job again");
             const again = { platform: key, ...(await mod.getJob(page, ref)) };
@@ -291,8 +300,13 @@ for (const [key, mod] of Object.entries(platforms)) {
             }
           }
         } catch (e) {
-          log("err", `  AI evaluation failed: ${e.message}`);
-          continue;
+          if (!APPLY_ALL) {
+            log("err", `  AI evaluation failed: ${e.message}`);
+            continue;
+          }
+          // Apply anyway, with her standard resume.
+          log("warn", `  AI couldn't write the resume (${String(e.message).split("\n")[0].slice(0, 80)}) — applying with her standard resume`);
+          ev = { jobTitle: "", company: "", location: "", descriptionComplete: true, matchScore: null, shouldApply: true, matchReasons: [], missingSkills: [], tailored: null, hiringMessage: null };
         }
         // Fill in anything the page selectors missed from what Claude read on the page.
         const wasMissing = !job.title || !job.company;
@@ -306,9 +320,13 @@ for (const [key, mod] of Object.entries(platforms)) {
           hiringContact: job.hiringContact ?? null, hiringMessage: ev.hiringMessage, messageStatus: "draft",
         };
         const hit = keywordHit(job);
-        // The keyword override only rescues borderline scores; it must not push through
-        // off-target jobs (other countries, Java-only, non-job pages) that score low.
-        if ((!ev.shouldApply || ev.matchScore < config.minMatchScore) && hit && ev.matchScore >= Number(config.keywordOverrideMinScore ?? 45) && hitInTitleOrPost(job, hit)) {
+        if (APPLY_ALL) {
+          // Every job with one of her keywords is applied to; the score is shown for information only.
+          scored.matchReasons = [`Mentions ${hit || required[0] || "her skills"}`, ...(scored.matchReasons || [])];
+          if (ev.matchScore != null && !ev.shouldApply) log("dim", `  (AI rates the fit ${ev.matchScore}%, applying anyway: it mentions ${hit || "her skills"})`);
+        } else if ((!ev.shouldApply || ev.matchScore < config.minMatchScore) && hit && ev.matchScore >= Number(config.keywordOverrideMinScore ?? 45) && hitInTitleOrPost(job, hit)) {
+          // The keyword override only rescues borderline scores; it must not push through
+          // off-target jobs (other countries, Java-only, non-job pages) that score low.
           scored.matchReasons = [`Mentions ${hit}, which is in her core stack`, ...scored.matchReasons];
           log("dim", `  score ${ev.matchScore}% but mentions "${hit}" — applying anyway`);
         } else if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {
@@ -318,9 +336,15 @@ for (const [key, mod] of Object.entries(platforms)) {
           continue;
         }
         stats.matched++;
-        const resumePath = await buildResumePdf(profile, ev.tailored, job);
+        let resumePath;
+        try {
+          resumePath = ev.tailored ? await buildResumePdf(profile, ev.tailored, job) : await standardResumePdf();
+        } catch (e) {
+          log("warn", `  couldn't build the tailored PDF (${String(e.message).split("\n")[0].slice(0, 80)}) — using her standard resume`);
+          resumePath = await standardResumePdf();
+        }
         const resumeFile = path.relative(DATA_DIR, resumePath).split(path.sep).join("/");
-        log("ok", `  match ${ev.matchScore}% — resume created for this job: data/${resumeFile}`);
+        log("ok", `  ${ev.matchScore != null ? `match ${ev.matchScore}% — ` : ""}resume ready: data/${resumeFile}`);
         currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
         process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, matchScore: ev.matchScore });
         checkSkip();
@@ -456,7 +480,7 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
     roundProgress++;
     log("ok", `  ✔ applied (${applied}/${maxApply})`);
     jobControl.active = false; // nothing left to skip during the pause between applications
-    const [lo, hi] = config.delaySecondsBetweenApplications;
+    const [lo, hi] = config.platforms[key]?.delaySeconds ?? config.delaySecondsBetweenApplications ?? [25, 70];
     await sleep(randomBetween(lo, hi) * 1000);
   } else {
     if (result.status === "needs_attention") stats.attention++;

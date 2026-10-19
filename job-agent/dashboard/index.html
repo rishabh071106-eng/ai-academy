@@ -669,9 +669,9 @@ const MODE_HINT = {
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
 const AG = {
-  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
-  naukri: { label: "Naukri", color: "var(--series-2)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
-  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "review", max: 15, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
+  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
+  naukri: { label: "Naukri", color: "var(--series-2)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
+  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
 };
 try {
   const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
@@ -692,7 +692,7 @@ $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
       <div class="seg" data-el="seg" role="group" aria-label="${a.label} mode">
         <button data-v="dry-run">Practice</button><button data-v="review">Ask before submit</button><button data-v="auto">Fully automatic</button>
       </div>
-      <label class="sub" title="Stop after this many applications">Apply to <input class="num-input" data-el="max" type="number" min="1" max="500" value="${a.max}"></label>
+      <label class="sub" title="Stop after this many applications">Apply to <input class="num-input" data-el="max" type="number" min="1" max="2000" value="${a.max}"></label>
       <label class="sub" title="Stop after reviewing this many jobs (0 = all of them)">Review <small>(0 = all)</small> <input class="num-input" data-el="review" type="number" min="0" max="5000" value="${a.review}" placeholder="all"></label>
       <label class="sub keep" title="Don't stop until the target is reached: go through more result pages, and check again for new postings when everything has been reviewed"><input type="checkbox" data-el="keep" ${a.keepGoing ? "checked" : ""}> Keep going until done</label>
       <label class="sub keep" title="First go back to jobs found earlier that aren't applied yet (needs attention, apply on site, shortlisted)"><input type="checkbox" data-el="retry" ${a.retry !== false ? "checked" : ""}> Retry unfinished first</label>

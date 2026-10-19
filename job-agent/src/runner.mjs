@@ -78,7 +78,7 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
   const run = get(platform);
   if (run.child) throw new Error(`The ${platform} agent is already running`);
   if (!["review", "auto", "dry-run"].includes(mode)) throw new Error("Unknown mode");
-  max = Math.max(1, Math.min(500, Number(max) || 15));
+  max = Math.max(1, Math.min(2000, Number(max) || 1000));
   review = Math.max(0, Math.min(5000, Number(review) || 0));
   keepGoing = keepGoing !== false && keepGoing !== "false";
   retry = retry !== false && retry !== "false" && !restart; // a crash-restart doesn't redo the retry pass
