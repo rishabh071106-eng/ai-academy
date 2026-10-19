@@ -138,6 +138,11 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
     const chips = chat.locator(".ssrc__radio-btn-container label, .chatbot_Chip, [class*=chipsContainer] [class*=chip], .mcc__checkbox label");
     const options = (await chips.allInnerTexts().catch(() => [])).map((t) => t.trim()).filter(Boolean);
     if (!question) break;
+    // The bot's closing line ("Thank you for your responses…") isn't a question: the chat is over.
+    if (!options.length && !/\?/.test(question) && /thank you|thanks for|we('ve| have) received|application (sent|submitted|received)|successfully|all the best|good luck|get back to you/i.test(question)) {
+      log("dim", `   chat finished: ${question.slice(0, 70)}`);
+      break;
+    }
 
     const { q: answer } = await answerQuestions(profile, job, [{ key: "q", label: question, type: options.length ? "radio" : "text", options, required: true }]);
     if (!answer || answer === "__ASK__") {
@@ -158,7 +163,7 @@ export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) 
       }
       await chips.nth(i).click().catch(() => {});
     } else {
-      const input = await firstVisible(chat, ["div.textArea[contenteditable]", "[contenteditable=true]", "input[type=text]", "textarea"]);
+      const input = await firstVisible(chat, ["div.textArea[contenteditable]", "[contenteditable=true]", "input[type=text]", "textarea", "input:not([type=hidden])"], 4000);
       if (!input) {
         const r = await escalateChat(page, job, mode, `Naukri asks "${question}" with an answer box I can't use`);
         if (r) return r;

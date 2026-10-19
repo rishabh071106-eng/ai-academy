@@ -313,7 +313,7 @@ const STATUS = {
   interview:       { label: "Interview",       fg: "var(--violet)", bg: "var(--violet-bg)" },
   offer:           { label: "Offer",           fg: "var(--good)",   bg: "var(--good-bg)" },
   rejected:        { label: "Rejected",        fg: "var(--crit)",   bg: "var(--crit-bg)" },
-  needs_attention: { label: "Needs attention", fg: "var(--warn)",   bg: "var(--warn-bg)" },
+  needs_attention: { label: "Retrying",        fg: "var(--warn)",   bg: "var(--warn-bg)" },
   external:        { label: "Apply on site",   fg: "var(--aqua)",   bg: "var(--aqua-bg)" },
   shortlisted:     { label: "Shortlisted",     fg: "var(--text-2)", bg: "var(--neutral-bg)" },
   unable:          { label: "Couldn't apply",  fg: "var(--crit)",   bg: "var(--crit-bg)" },
@@ -383,7 +383,7 @@ function renderKpis() {
     { label: "Interviews", value: interviews, hint: rows.some((r) => r.status === "offer") ? `${rows.filter((r) => r.status === "offer").length} offer 🎉` : "incl. offers" },
     { label: "Response rate", value: applied.length ? Math.round((responded / applied.length) * 100) + "%" : "—", hint: `${responded} heard back` },
     { label: "Avg. match", value: avg != null ? avg + "%" : "—", hint: "of applied jobs" },
-    { label: "To do", value: attention, hint: `${rows.filter((r) => r.status === "unable").length} couldn't apply`, cls: "attention" },
+    { label: "In progress", value: attention, hint: `agent retries these · ${rows.filter((r) => r.status === "unable").length} couldn't apply`, cls: "attention" },
   ];
   $("#kpis").innerHTML = k.map((x) => `<div class="card kpi ${x.cls ?? ""}" ${x.cls ? 'role="button" tabindex="0" title="Show these jobs"' : ""}>
     <div class="label">${x.label}</div><div class="value">${x.value}</div><div class="hint">${x.hint}</div></div>`).join("");
@@ -475,7 +475,7 @@ function renderFunnel() {
 
 const FILTERS = [
   { key: "active", label: "Active", test: (r) => r.status !== "skipped" && r.status !== "withdrawn" && r.status !== "unable" },
-  { key: "todo", label: "To do", test: (r) => r.status === "needs_attention" || r.status === "external" || r.status === "shortlisted" },
+  { key: "todo", label: "In progress", test: (r) => r.status === "needs_attention" || r.status === "external" || r.status === "shortlisted" },
   { key: "applied", label: "Applied", test: (r) => r.status === "applied" },
   { key: "interview", label: "Interviews", test: (r) => r.status === "interview" || r.status === "offer" },
   { key: "rejected", label: "Rejected", test: (r) => r.status === "rejected" },

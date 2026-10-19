@@ -213,7 +213,7 @@
   "readVerificationEmails": true,
   "retryBatchSize": 5,
   "maxMinutesPerJob": 6,
-  "rescueMaxSteps": 20,
+  "rescueMaxSteps": 35,
   "skillYears": {
     "Magento": 9,
     "Magento 2": 9,
