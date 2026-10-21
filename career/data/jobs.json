@@ -10,12 +10,12 @@
     "immediate_joiner": true,
     "fit_score": 10,
     "fit_reason": "End-to-end consumer lending product ownership (journeys, underwriting, pricing, risk, portfolio growth) at 13–19 yrs — mirrors the JPM digital-lending VP role.",
-    "notes": "₹79–96 LPA; posted ~5 days ago — very fresh Live-check 24 Aug: still indexed on iimjobs, full JD served, no closure signal. 31 Aug check: still indexed on iimjobs with full JD. 8 Sep check: still indexed with full JD. 14 Sep check: re-bumped 'posted 2 days ago' — actively hiring. 21 Sep check: re-bumped 'posted 2 days ago' — still actively hiring.",
+    "notes": "Live-check 20 Oct: iimjobs 1690796 gone from index while adjacent lending IDs still index — likely expired after months of re-bumps.",
     "verified": true,
     "category": "exec-search",
     "id": 1,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_closed",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Confidential leading payments company (via iimjobs)",
@@ -46,12 +46,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "Director-level lending-platform product leadership at a digital banking unit — closest match to the digital loan booking platform record.",
-    "notes": "Live-check 28 Sep: fresh req R-00277563 (Broker Platform Lending Director, Bangalore/Gurugram) posted within days — still hiring.",
+    "notes": "Live-check 20 Oct: R-00277563 / Broker Platform Director no longer indexed anywhere — likely filled or pulled.",
     "verified": true,
     "category": "workday-banks",
     "id": 3,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_closed",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "SAP Labs India",
@@ -69,7 +69,7 @@
     "category": "bigtech",
     "id": 4,
     "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Confidential (UPI/payments platform, via iimjobs)",
@@ -119,8 +119,8 @@
     "verified": true,
     "category": "bigtech",
     "id": 7,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Visa",
@@ -133,12 +133,12 @@
     "immediate_joiner": true,
     "fit_score": 8,
     "fit_reason": "End-to-end P&L-style accountability for two open-banking product domains — Head-of-Product scope.",
-    "notes": "Very recent REF number — act fast Live-check 24 Aug: REF085043W live on Visa Workday incl. /apply page. 31 Aug check: job + /apply pages live on Visa Workday (posted 22 Jul). 8 Sep check: REF085043W still indexed incl. /apply page. 14 Sep check: Workday page + /apply still indexed. 21 Sep check: REF085043W + /apply still indexed.",
+    "notes": "Live-check 20 Oct: REF085043W returns zero hits; no Data & Risk Senior Director among Visa open-banking listings — likely closed.",
     "verified": true,
     "category": "workday-banks",
     "id": 8,
-    "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "status": "likely_closed",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Salesforce",
@@ -203,12 +203,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP owning digital lending lifecycle — lead gen, onboarding, KYC, underwriting, disbursal, collections — direct match.",
-    "notes": "Live-check 5 Oct: 1709063 not in index, but same-title VP Digital Product — Consumer Lending (Mumbai, 10-16 yrs) indexed under 1695365 — likely repost/renumber; try iimjobs.com/j/...-1695365.",
+    "notes": "Live-check 20 Oct: neither 1709063 nor 1695365 indexed any more — likely closed.",
     "verified": true,
     "category": "exec-search",
     "id": 12,
-    "status": "unknown",
-    "last_checked": "2026-10-05"
+    "status": "likely_closed",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Elevation Capital (portfolio fintech)",
@@ -1279,8 +1279,8 @@
     "verified": true,
     "category": "fintech-india",
     "id": 86,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "CredAble",
@@ -1416,7 +1416,7 @@
     "category": "workday-banks",
     "id": 94,
     "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "last_checked": "2026-10-20"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1575,18 +1575,18 @@
     "title": "Director, Product Management — Lending",
     "location": "Noida / Bengaluru",
     "seniority": "Director",
-    "apply_url": "https://jobs.lever.co/paytm/ed35f6c6-f0bc-44e5-834f-7d40ca8a1e25",
+    "apply_url": "https://jobs.lever.co/paytm/e3f616a7-6e5d-4989-a9b5-3da729d9ba03",
     "platform": "lever",
     "posted_date": "",
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Credit-platform / LMS product ownership (8–13 yrs) at India's largest lending distributor — direct overlap with the digital loan-booking platform record.",
-    "notes": "Newly indexed on Paytm's Lever board 9 Aug; posting date not exposed, freshness unconfirmed. Distinct req from tracked VP Lending (EMI). Live-check 24 Aug: exact Lever URL indexed with full JD. 31 Aug check: Lever req still indexed with full JD. 8 Sep check: Lever req still indexed with full JD. 14 Sep check: Lever URL still serves JD (Lever 404s closed posts). 21 Sep check: Lever page still served (Lever removes closed posts).",
+    "notes": "Live-check 20 Oct: original Lever req gone but role REPOSTED at a new Lever id (~20 days old) — still hiring; URL updated.",
     "verified": true,
     "category": "fintech-india",
     "id": 104,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Paytm",
@@ -1799,12 +1799,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director owning the MLX/GenAI platform product team at a top US bank's India GCC — a level up from the tracked Capital One Directors and squarely on the multi-agent AI + banking record.",
-    "notes": "'Posted Yesterday' via Muse mirror (d1c465) on 20 Aug; distinct req 91940333232, not one of the Built In re-bumped Director reqs (ids 90/91). Live-check 24 Aug: live on capitalonecareers.com; also on eFinancialCareers. 31 Aug check: full JD live on capitalonecareers.com. 8 Sep check: live on capitalonecareers.com; Workday req R248632 also indexed. 14 Sep check: still live on capitalonecareers.com. 21 Sep check: still indexed on capitalonecareers.com though absent from site's current Bengaluru listing search.",
+    "notes": "Live-check 20 Oct: MLX Sr Director title re-bumped on The Muse/Built In \"yesterday\"; original careers ID not re-confirmed — verify on capitalonecareers.com.",
     "verified": true,
     "category": "workday-banks",
     "id": 117,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "BNY",
@@ -2137,8 +2137,8 @@
     "fit_reason": "VP owning data-platform product for Aladdin (BlackRock's core investment platform) — financial-data platform leadership with a listed comp band of ₹75L–1.2Cr that overlaps the ₹95L–1Cr target; Mumbai-based.",
     "notes": "Live-check 5 Oct: still on careers.blackrock.com (req 86173845536) but req dates to Sep 2025 — aging; confirm with recruiter.",
     "verified": true,
-    "status": "likely_live",
-    "last_checked": "2026-10-05",
+    "status": "live",
+    "last_checked": "2026-10-20",
     "category": "workday-banks",
     "id": 136
   },
@@ -2171,10 +2171,10 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Senior Director owning Salesforce's intelligent component platform layer — AI-infused platform product leadership at big-tech comp, fourth distinct Salesforce req tracked.",
-    "notes": "Reposted '6 hours ago' on Built In as of 22 Sep (req JR317504); very fresh.",
+    "notes": "Live-check 20 Oct: JR317504 returns zero hits on careers.salesforce.com; only stale mirrors remain — likely closed.",
     "verified": false,
-    "status": "live",
-    "last_checked": "2026-10-05",
+    "status": "likely_closed",
+    "last_checked": "2026-10-20",
     "category": "saas-ai",
     "id": 138
   },
@@ -2207,12 +2207,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "GPM building AI-native products at a fintech — LLM/agentic platform record plus fintech domain hit; GPM at Intuit sits in the target comp band.",
-    "notes": "Glassdoor shows the AI-native GPM posting ~24h old on 29 Sep; Intuit careers confirms a GPM Project Capability req in Bengaluru — confirm the req number on the page before applying.",
+    "notes": "Live-check 20 Oct: req 92049730672 gone from jobs.intuit.com index (unlike the Conversational Intelligence req on the same ATS) — likely closed.",
     "verified": false,
     "category": "bigtech",
     "id": 140,
-    "status": "live",
-    "last_checked": "2026-10-05"
+    "status": "likely_closed",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "HSBC",
@@ -2225,30 +2225,30 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "VP Digital Loans product at a global bank — near-exact lateral match to the JPM digital lending platform record; Mumbai seat.",
-    "notes": "LinkedIn 'actively hiring 2 days ago' as of 4 Oct; URL is the HSBC eightfold search deep-link (direct req not surfaced) — locate the req there before applying.",
+    "notes": "Live-check 20 Oct: Digital Loans VP title not found on HSBC eightfold; other live HSBC Mumbai VP product/loans roles exist (VP Digital Products, VP Loans Portfolio Mgmt) — search the board.",
     "verified": false,
     "category": "workday-banks",
     "id": 141,
-    "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "status": "unknown",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Goldman Sachs",
     "title": "Vice President — Product Management (Engineering, Bengaluru)",
     "location": "Bengaluru",
     "seniority": "VP",
-    "apply_url": "https://www.dreamworkhq.com/job/b5ab646c-3a2b-4ecb-9574-7b354be159c9",
+    "apply_url": "https://higher.gs.com/roles/179747",
     "platform": "other",
     "posted_date": "2026-10-04",
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP PM in Goldman's Bengaluru engineering org; listed comp ₹65L–1.1Cr brackets the ask; platform product at a global bank.",
-    "notes": "Aggregator 'posted yesterday' 4 Oct (another copy said 5 days); find the req on higher.gs.com before applying — aggregator link only.",
-    "verified": false,
+    "notes": "Live-check 20 Oct: exact req confirmed live on higher.gs.com/roles/179747 — direct URL swapped in.",
+    "verified": true,
     "category": "workday-banks",
     "id": 142,
-    "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "status": "live",
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Morgan Stanley",
@@ -2261,12 +2261,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP product owner for the AI@MS GenAI/agentic platform in Wealth Management — direct hit on multi-agent AI platform record at a global bank.",
-    "notes": "eFinancialCareers 'posted 2 days ago' on 5 Oct; a related 'VP — Product Management, Wealth Management' Mumbai posting also surfaced on LinkedIn 3-4 Oct (no direct req URL found); a May 2026 copy existed, so possibly a re-bump — confirm on morganstanley.eightfold.ai.",
+    "notes": "eFinancialCareers 'posted 2 days ago' on 5 Oct; a related 'VP — Product Management, Wealth Management' Mumbai posting also surfaced on LinkedIn 3-4 Oct (no direct req URL found); a May 2026 copy existed, so possibly a re-bump — confirm on morganstanley.eightfold.ai. Live-check 20 Oct: AI@MS Product Owner Platforms VP WM still indexed — likely live.",
     "verified": false,
     "category": "workday-banks",
     "id": 143,
     "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "last_checked": "2026-10-20"
   },
   {
     "company": "Fidelity Investments",
@@ -2279,11 +2279,101 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP site technology+product leadership for digital assets, 15+ yrs bar — seniority and platform-leadership match; domain adjacent (digital assets vs lending/payments).",
-    "notes": "Direct jobs.fidelity.com req live in index 5 Oct but posting date unverified (page fetch blocked) — could be an older req; confirm freshness on the page.",
+    "notes": "Direct jobs.fidelity.com req live in index 5 Oct but posting date unverified (page fetch blocked) — could be an older req; confirm freshness on the page. 20 Oct: not re-checked (check interrupted) — verify on jobs.fidelity.com.",
     "verified": false,
     "category": "workday-banks",
     "id": 144,
     "status": "likely_live",
     "last_checked": "2026-10-05"
+  },
+  {
+    "company": "Citi",
+    "title": "Product Manager — Senior Vice President (Digital PM Group Manager)",
+    "location": "Chennai (hybrid)",
+    "seniority": "SVP",
+    "apply_url": "https://jobs.citi.com/job/chennai/product-manager-senior-vice-president/287/101956588384",
+    "platform": "careers-site",
+    "posted_date": "2026-10-14",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "SVP digital product group manager at a global bank — level jump (VP→SVP) with digital banking platform scope; Chennai seat.",
+    "notes": "Posted 14 Oct (req 261000690), confirmed on jobs.citi.com. Distinct from the stale Citi SVP AI PM entry.",
+    "verified": true,
+    "category": "workday-banks",
+    "id": 145,
+    "status": "live",
+    "last_checked": "2026-10-20"
+  },
+  {
+    "company": "Visa",
+    "title": "Director — Product Development/Management (Predictive Fraud Intelligence, Visa Protect AI/ML)",
+    "location": "Bengaluru",
+    "seniority": "Director",
+    "apply_url": "https://www.foundit.in/job/director-product-development-management-visa-bengaluru-bangalore-59538167",
+    "platform": "other",
+    "posted_date": "2026-10-17",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director owning AI/ML fraud products in the Visa Protect suite — AI platform + payments-risk blend squarely in the wheelhouse.",
+    "notes": "foundit 'posted 3 days ago' ~17 Oct; not located on Visa's own ATS yet — find the req on corporate.visa.com before a long application.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 146,
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
+  },
+  {
+    "company": "Zeta (Studio PayZapp)",
+    "title": "Director of Product Management — Consumer",
+    "location": "Bengaluru (on-site)",
+    "seniority": "Director",
+    "apply_url": "https://jobs.lever.co/zeta/1c920922-3ba0-42d4-85c4-34df6f058b82",
+    "platform": "lever",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director PM for consumer banking, payments and digital-first credit cards on Zeta's Tachyon platform — banking-platform + cards/credit product depth.",
+    "notes": "Live on Zeta's Lever board 20 Oct (no posted date shown — freshness unconfirmed). Distinct from the stale Instahyre Zeta entry.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 147,
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
+  },
+  {
+    "company": "MobiKwik",
+    "title": "Director, Product Management — Lending",
+    "location": "Gurgaon (5 days WFO)",
+    "seniority": "Director",
+    "apply_url": "https://www.theproductfolks.com/job/director-of-product-management-at-mobikwik",
+    "platform": "other",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director owning lending/credit/wallet products at a listed Indian fintech — lending is the core strength; 10+ yrs bar.",
+    "notes": "Live 20 Oct via aggregator; no posted date visible — freshness unconfirmed; apply via MobiKwik careers.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 148,
+    "status": "likely_live",
+    "last_checked": "2026-10-20"
+  },
+  {
+    "company": "Interface AI",
+    "title": "Director, Product Management (AI for banking)",
+    "location": "Remote (India)",
+    "seniority": "Director",
+    "apply_url": "https://builtinbengaluru.in/job/director-product-management/3853408",
+    "platform": "other",
+    "posted_date": "",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Director PM at an AI-for-banking vendor (12+ yrs) — agentic AI + banking domain is the exact intersection; remote-India.",
+    "notes": "CAUTION: Built In 'posted yesterday' 20 Oct but the ID is well below the fresh band — likely a refreshed older posting; verify on interface.ai careers.",
+    "verified": false,
+    "category": "saas-ai",
+    "id": 149,
+    "status": "unknown",
+    "last_checked": "2026-10-20"
   }
 ]
