@@ -230,6 +230,7 @@ How to work:
 - When the same action did not change anything, don't repeat it: scroll, look for an error message, pick another element, or try another way.
 - Use done(status "applied") ONLY when the page clearly confirms the application was submitted (or says she already applied → "already_applied"). Use done(status "not_eligible") when there's no way to apply (job closed, no application form, location not allowed).
 - need_user ONLY for things a person must do: CAPTCHA / "I'm not a robot", an SMS/phone code, an email code that check_email couldn't find, a password reset, a skill test, a video/AI interview, payment, or data she has never given (e.g. PAN, date of birth if not in her data).
+- HER DATA is her resume: employers, job titles, dates, education, skills and contact details must match it exactly on every site — never invent, merge or move anything.
 - Never invent facts; never pay; never change account security settings; never delete anything; never log out.
 - Close cookie banners and pop-ups that block the page.
 ${GOOGLE_RULES(profile.email)}

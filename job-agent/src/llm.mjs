@@ -134,6 +134,7 @@ export async function answerQuestions(profile, job, fields) {
   · "Years of experience with X" → the number from skillYears (synonyms count: React.js = React, NextJS = Next.js, REST/web services = API); a related tool inherits the closest skill's years (Redux/Hooks/Tailwind → React, Node → JavaScript, Laravel → PHP, Shopify/e-commerce → Magento, SOAP/integration → API); anything AI / LLM / GenAI / ML related → at least 2; never understate her, total is 9+; "as a Lead" → years she has led or mentored in her roles (at least 2).
   · Current / expected CTC, notice period, location → from her answers. Current location: Bengaluru.
   · Yes/No about having a skill she has, or a degree she has → Yes; about one she lacks → No.
+- Every answer must be consistent with her resume (the profile): same employers, titles, dates, education and contact details; never invent or shift anything.
 - Only answer exactly __ASK__ for personal identifiers or documents you cannot know: date of birth, PAN, Aadhaar, passport, ID numbers, bank details, references' names/contacts, or a value that starts with "TODO". Never invent those.
 - Never claim skills, degrees or legal statuses the data does not support.`,
     content: `CANDIDATE DATA:

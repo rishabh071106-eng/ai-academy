@@ -20,8 +20,17 @@ import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const config = loadConfig();
 // Step 0: make sure we work from her latest resume (re-reads it if Downloads has a newer one).
-const baseResume = await syncProfile(config);
-const profile = loadProfile();
+let baseResume = await syncProfile(config);
+let profile = loadProfile();
+/** A newer Aishwarya-Sharma-Resume*.pdf in Downloads mid-run is picked up at the next round. */
+async function refreshResume() {
+  const latest = await syncProfile(config).catch(() => null);
+  if (!latest || (latest.path === baseResume?.path && latest.mtimeMs === baseResume?.mtimeMs)) return;
+  baseResume = latest;
+  profile = loadProfile();
+  standardResume = null;
+  log("ok", `Resume updated: now using ${path.basename(latest.path)} for every application`);
+}
 const mode = args.mode ?? config.mode ?? "review";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
 // 0 = no limit: review every job the searches return (across result pages).
@@ -165,6 +174,7 @@ for (const [key, mod] of Object.entries(platforms)) {
   try {
    for (let round = 1; ; round++) {
     roundProgress = 0;
+    if (round > 1) await refreshResume();
     // Round 1 begins with the unfinished jobs from earlier runs.
     // Every round starts by finishing the jobs that are still open (best matches first),
     // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.

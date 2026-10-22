@@ -2,7 +2,8 @@
 // so "Continue with Google" needs no password: pick her account in Google's pop-up, allow, done.
 // Used when LinkedIn / Naukri / Alignerr show a login page, and by the navigator on company sites.
 import { GOOGLE_RULES, navigate } from "./navigator.mjs";
-import { loadProfile, log, sleep } from "./util.mjs";
+import { findBaseResume } from "./profile-sync.mjs";
+import { loadConfig, loadProfile, log, sleep } from "./util.mjs";
 
 const PASSWORD_TOKEN = "{{PASSWORD}}";
 
@@ -26,7 +27,7 @@ export async function ensureAccount(page, site, { isLoggedIn, home } = {}) {
     goal: `Get ${site} logged in as ${profile.email}. Steps: open Register / Sign up / Create account; fill her details (name ${profile.name}, email ${profile.email}, phone ${profile.phone}, city ${profile.city}, experience ${profile.totalExperienceYears} years, current role ${profile.headline}); for every password field type exactly ${PASSWORD_TOKEN}; accept the terms; submit. If the site emails a verification code or link, use check_email("${site}") and finish the verification. If it says the email is already registered / account exists, go to Login → "Forgot password", enter ${profile.email}, use check_email("${site}") to get the reset link or code, set the new password to ${PASSWORD_TOKEN}, then log in with ${profile.email} and ${PASSWORD_TOKEN}. Upload her resume (upload_resume) if the sign-up asks for one; skip optional profile steps. When ${site} shows her as logged in, use done with status "applied" (meaning: logged in). Only use need_user for a CAPTCHA or an SMS code.`,
     rules: GOOGLE_RULES(profile.email),
     profile,
-    resumePath: profile.resumePath,
+    resumePath: findBaseResume(loadConfig().baseResume)?.path ?? null,
     mode: "auto",
     maxSteps: 40,
   }).catch((e) => ({ status: "needs_attention", note: e.message }));
