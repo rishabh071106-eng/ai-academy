@@ -13,6 +13,7 @@ import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
 import { makePortal } from "./portal.mjs";
+import { profileUpdateDue, updateSiteProfile } from "./profile-update.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
 import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, randomBetween, sleep } from "./util.mjs";
@@ -32,6 +33,8 @@ async function refreshResume() {
   log("ok", `Resume updated: now using ${path.basename(latest.path)} for every application`);
 }
 const mode = args.mode ?? config.mode ?? "review";
+// task "jobs" (default) searches and applies; task "profile" only updates her profile on each site.
+const task = args.task ?? "jobs";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
 // 0 = no limit: review every job the searches return (across result pages).
 const reviewLimit = Number(args.review ?? config.maxJobsToReview ?? 0);
@@ -169,6 +172,22 @@ for (const [key, mod] of Object.entries(platforms)) {
       log("dim", "  (reopened the agent's window)");
     }
   };
+  // Her profile on this site is brought in line with the resume: on demand (task "profile",
+  // pausing for you when a site needs a code) or by itself once every profileSync.everyDays.
+  if (task === "profile" || (mode !== "dry-run" && profileUpdateDue(key))) {
+    const profileUrls = { linkedin: "https://www.linkedin.com/in/me/", naukri: "https://www.naukri.com/mnjuser/profile", indeed: "https://profile.indeed.com/" };
+    const loggedInCheck = mod.isLoggedIn ?? (async (p) => !/\/login|\/authwall|\/checkpoint\/lg|nlogin/.test(p.url()));
+    await ensurePage().catch(() => {});
+    Object.assign(jobControl, { active: true, skip: false, deadline: Date.now() + 25 * 60000 });
+    try {
+      await updateSiteProfile(page, { key, site: pcfg.label || key, home: pcfg.home || homeOf[key], profileUrl: pcfg.profileUrl || profileUrls[key], profile, resumePath: await standardResumePdf().catch(() => null), isLoggedIn: loggedInCheck, mode: task === "profile" ? "review" : "auto" });
+    } catch (e) {
+      log("warn", `[${key}] profile update stopped: ${String(e?.message ?? e).split("\n")[0]}`);
+    } finally {
+      Object.assign(jobControl, { active: false, skip: false, deadline: 0 });
+    }
+    if (task === "profile") continue;
+  }
   const done = () => applied >= maxApply || (reviewLimit > 0 && stats.scanned >= reviewLimit);
   const retriedThisRun = new Set();
   let moreRetries = false;

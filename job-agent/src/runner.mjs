@@ -79,7 +79,7 @@ export function status(since = {}) {
   return { platforms: platformList(), runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
 }
 
-export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true } = {}, restart = 0) {
+export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true, task = "jobs" } = {}, restart = 0) {
   const run = get(platform);
   if (run.child) throw new Error(`The ${platform} agent is already running`);
   if (!["review", "auto", "dry-run"].includes(mode)) throw new Error("Unknown mode");
@@ -87,11 +87,12 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
   review = Math.max(0, Math.min(5000, Number(review) || 0));
   keepGoing = keepGoing !== false && keepGoing !== "false";
   retry = retry !== false && retry !== "false" && !restart; // a crash-restart doesn't redo the retry pass
-  const args = [`--platform=${platform}`, `--mode=${mode}`, `--max=${max}`, `--review=${review}`, `--keep-going=${keepGoing}`, `--retry=${retry}`];
+  if (task === "profile") keepGoing = false; // one pass, then the agent exits
+  const args = [`--platform=${platform}`, `--mode=${mode}`, `--max=${max}`, `--review=${review}`, `--keep-going=${keepGoing}`, `--retry=${retry}`, `--task=${task}`];
 
   if (!restart) Object.assign(run, { startedAt: Date.now(), log: [], restarts: 0 });
-  Object.assign(run, { running: true, endedAt: null, exitCode: null, options: { mode, max, review, keepGoing, retry }, pending: null, stopRequested: false });
-  push(run, restart ? `↻ Restarting ${platform} agent after a crash (${restart}/5)` : `▶ Starting ${platform} agent (${mode}, apply to ${max}, review ${review || "all"}${keepGoing ? ", keep going" : ""})`, "sys");
+  Object.assign(run, { running: true, endedAt: null, exitCode: null, options: { mode, max, review, keepGoing, retry, task }, pending: null, stopRequested: false });
+  push(run, restart ? `↻ Restarting ${platform} agent after a crash (${restart}/5)` : task === "profile" ? `↻ Updating her ${platform} profile from the resume…` : `▶ Starting ${platform} agent (${mode}, apply to ${max}, review ${review || "all"}${keepGoing ? ", keep going" : ""})`, "sys");
   const child = fork(path.join(ROOT, "src", "agent.mjs"), args, { cwd: ROOT, stdio: ["ignore", "pipe", "pipe", "ipc"], env: { ...process.env, FORCE_COLOR: "0" } });
   run.child = child;
   pipe(run, child.stdout, "out");

@@ -1211,5 +1211,10 @@
     "Python": 2
   },
   "applyToAllMatching": true,
-  "skipDuplicatesAcrossSites": true
+  "skipDuplicatesAcrossSites": true,
+  "profileSync": {
+    "enabled": true,
+    "everyDays": 7,
+    "maxSteps": 70
+  }
 }

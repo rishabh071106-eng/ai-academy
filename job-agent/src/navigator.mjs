@@ -500,7 +500,8 @@ export async function navigate(page, opts) {
             { label: "Skip", value: "s" },
           ];
           const q = `${job ? `${job.title} at ${job.company}: ` : ""}${d.message}`;
-          const r = mode === "auto" ? await askForHelp(q, choices) : await ask(q, choices);
+          // helpTimeoutMs: wait that long for the person (dashboard question), then move on.
+          const r = opts.helpTimeoutMs ? await ask(q, choices, { timeoutMs: opts.helpTimeoutMs, timeoutAnswer: "s" }) : mode === "auto" ? await askForHelp(q, choices) : await ask(q, choices);
           if (r === null || r === "s") return { status: "needs_attention", note: d.message };
           if (r === "done") return { status: "applied", note: "Finished by you" };
           history.push(`need_user: ${d.message} → the person did it; continue`);

@@ -100,5 +100,5 @@ export function makePortal(key, cfg) {
     return applyHere(page, job, { resumePath, profile, mode, coverLetter, label: site, navigatorFirst: true, rules: `${GOOGLE_RULES(profile.email)}\n- If ${site} redirects to the company's own site to apply, carry on there (new tabs included) and complete that application.\n- If ${site} asks to complete her profile before applying, fill it from her data (upload_resume, fill_form) and continue to the application.` });
   }
 
-  return { name: key, site, search, getJob, apply };
+  return { name: key, site, search, getJob, apply, isLoggedIn };
 }

@@ -244,6 +244,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
       <button class="btn go" id="startAllBtn" title="Start every site's agent with the settings on its card">▶ Start all</button>
       <button class="btn stop" id="stopAllBtn" title="Stop every running agent">■ Stop all</button>
+      <button class="btn" id="profilesBtn" title="Update her profile on every site from the resume (one site after another)">↻ Update all profiles</button>
       <button class="btn" id="logsBtn" title="Download today's agent logs and a summary of where jobs got stuck (send this file to get problems fixed)">⇩ Logs</button>
       <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
       <button class="btn primary" id="addBtn">+ Add job</button>
@@ -696,7 +697,7 @@ function buildAgents(list) {
         <span class="agent-dot" data-el="dot"></span>
         <div><div class="agent-title"><i class="pf" style="background:${a.color}"></i>${esc(a.label)} agent · <span data-el="title">idle</span></div><div class="sub" data-el="sub">Choose a mode and press Start</div></div>
       </div>
-      <button class="btn go" data-el="btn">▶ Start</button>
+      <div style="display:flex;gap:8px;align-items:center"><button class="btn" data-el="profileBtn" title="Bring her profile on this site in line with the resume (headline, experience, skills, education, resume file). Pauses for you only if the site asks for a code.">↻ Update profile</button><button class="btn go" data-el="btn">▶ Start</button></div>
     </div>
     <div class="agent-controls" style="margin-top:12px">
       <div class="seg" data-el="seg" role="group" aria-label="${esc(a.label)} mode">
@@ -722,6 +723,7 @@ function buildAgents(list) {
     el(k, "retry").onchange = (e) => { AG[k].retry = e.target.checked; savePrefs(); };
     el(k, "logToggle").onclick = () => toggleLog(k);
     el(k, "btn").onclick = () => startStop(k);
+    el(k, "profileBtn").onclick = () => updateProfile(k);
     el(k, "skip").onclick = () => skipJob(k);
   }
   try {
@@ -747,6 +749,20 @@ function toggleLog(k, open = !AG[k].logOpen) {
   el(k, "logToggle").textContent = (open ? "▾ Hide" : "▸ Show") + " live log";
   if (open) el(k, "log").scrollTop = 1e9;
 }
+async function updateProfile(k) {
+  if (AG[k].running) return alert(`${AG[k].label} is running. Stop it first, then update the profile.`);
+  const btn = el(k, "profileBtn");
+  btn.disabled = true;
+  try {
+    const r = await fetch("/api/agent/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: "review", task: "profile", max: 1, review: 0, keepGoing: false, retry: false }) });
+    const data = await r.json();
+    if (!r.ok) alert(data.error || "Something went wrong");
+    else { AG[k].since = 0; el(k, "log").innerHTML = ""; toggleLog(k, true); }
+  } finally {
+    btn.disabled = false;
+    pollAgent();
+  }
+}
 async function startStop(k) {
   const btn = el(k, "btn");
   btn.disabled = true;
@@ -764,6 +780,9 @@ async function startStop(k) {
 
 $("#startAllBtn").onclick = async () => {
   for (const k of Object.keys(AG)) if (!AG[k].running) await startStop(k);
+};
+$("#profilesBtn").onclick = async () => {
+  for (const k of Object.keys(AG)) if (!AG[k].running) await updateProfile(k);
 };
 $("#stopAllBtn").onclick = async () => {
   for (const k of Object.keys(AG)) if (AG[k].running) await startStop(k);
@@ -827,6 +846,8 @@ function renderAgent(k, s) {
   else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start"; }
   btn.className = "btn " + (s.running ? "stop" : "go");
   btn.textContent = s.running ? "■ Stop" : "▶ Start";
+  el(k, "profileBtn").disabled = s.running;
+  if (s.running && s.options?.task === "profile") el(k, "title").textContent = s.pending ? "profile · needs you" : "updating profile";
   el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
   el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = el(k, "retry").disabled = s.running;
   if (s.running && s.options?.mode && s.options.mode !== a.mode) { a.mode = s.options.mode; paintMode(k); }
