@@ -22,6 +22,7 @@ const readMemo = () => {
 export function profileUpdateDue(site, baseResume) {
   const cfg = loadConfig().profileSync ?? {};
   if (cfg.enabled === false) return false;
+  if ((cfg.skip ?? []).includes(site)) return false; // e.g. LinkedIn and Naukri: apply only, never touch the profile
   const days = Number(cfg.everyDays ?? 7);
   const last = readMemo()[site];
   if (!last?.at) return true;

@@ -29,7 +29,7 @@ export const currentProvider = () => provider;
 
 /** The model for a role: "main" (matching, tailoring, answers) or "navigator" (click-by-click). */
 export function modelFor(role = "main") {
-  if (provider === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-flash-lite-latest";
+  if (provider === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-3.5-flash-lite";
   return (role === "navigator" && config.navigatorModel) || config.model || "claude-haiku-5-5";
 }
 
@@ -134,7 +134,7 @@ function rememberEndpoint() {
 }
 
 // If the configured model name isn't available for this key, try these in order.
-const FALLBACK_MODELS = ["gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"];
+const FALLBACK_MODELS = ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-3.8-flash", "gemini-flash-latest"];
 let workingModel = null;
 
 const toParts = (content) =>

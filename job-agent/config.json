@@ -1,6 +1,6 @@
 {
-  "provider": "anthropic",
-  "geminiModel": "gemini-flash-lite-latest",
+  "provider": "gemini",
+  "geminiModel": "gemini-3.5-flash-lite",
   "geminiNavigatorModel": "",
   "model": "claude-haiku-5-5",
   "navigatorModel": "",
@@ -1214,7 +1214,12 @@
   "skipDuplicatesAcrossSites": true,
   "profileSync": {
     "enabled": true,
-    "everyDays": 7,
+    "skip": [
+      "linkedin",
+      "naukri"
+    ],
+    "everyDays": 365,
+    "helpMinutes": 30,
     "maxSteps": 70
   }
 }
