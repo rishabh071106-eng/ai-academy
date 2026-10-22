@@ -19,7 +19,7 @@ try {
   const { context } = await connect();
   page = await context.newPage();
   const r = await sendForJob(page, row);
-  tracker.update(id, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { messageSentAt: new Date().toISOString() } : {}) });
+  await tracker.update(id, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { messageSentAt: new Date().toISOString() } : {}) });
   await page.close().catch(() => {});
   done(r);
 } catch (e) {

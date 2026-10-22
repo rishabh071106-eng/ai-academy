@@ -56,7 +56,7 @@ const server = http.createServer(async (req, res) => {
   if (p === "/api/applications" && req.method === "POST") {
     const b = await readBody(req);
     if (!b.title || !b.company) return send(res, 400, { error: "title and company are required" });
-    const row = tracker.upsert(b.platform || "other", b.jobId || `manual-${Date.now()}`, {
+    const row = await tracker.upsert(b.platform || "other", b.jobId || `manual-${Date.now()}`, {
       title: b.title, company: b.company, url: b.url || "", location: b.location || "", status: b.status || "applied", notes: b.notes || "",
       historyNote: "Added manually",
     });
@@ -73,7 +73,7 @@ const server = http.createServer(async (req, res) => {
       patch.hiringMessage = { ...cur, ...b.hiringMessage };
     }
     if (b.status) patch.historyNote = "Updated on dashboard";
-    const row = tracker.update(m[1], patch);
+    const row = await tracker.update(m[1], patch);
     return row ? send(res, 200, row) : send(res, 404, { error: "not found" });
   }
   const sm = p.match(/^\/api\/applications\/(.+)\/send-message$/);
@@ -91,7 +91,7 @@ const server = http.createServer(async (req, res) => {
     });
     return;
   }
-  if (m && req.method === "DELETE") return send(res, tracker.remove(m[1]) ? 200 : 404, {});
+  if (m && req.method === "DELETE") return send(res, await tracker.remove(m[1]) ? 200 : 404, {});
   send(res, 404, { error: "not found" });
 });
 

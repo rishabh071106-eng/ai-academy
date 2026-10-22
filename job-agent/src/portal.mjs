@@ -10,6 +10,23 @@ import { ensureAccount, looksLoggedOut } from "./login.mjs";
 import { GOOGLE_RULES, navigate } from "./navigator.mjs";
 import { loadProfile, log, sleep } from "./util.mjs";
 
+const BLOCKED = /just a moment|checking your browser|verify you are (a )?human|access denied|unusual traffic|attention required|cloudflare|are you a robot|ddos-guard|captcha/i;
+
+/** Loads `url` without hanging on slow pages; returns "blocked" when the site shows a bot check. */
+async function open(page, url) {
+  await page.goto(url, { waitUntil: "commit", timeout: 25000 });
+  await page.waitForLoadState("domcontentloaded", { timeout: 20000 }).catch(() => {});
+  await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
+  const head = await page.evaluate(() => `${document.title}\n${(document.body?.innerText || "").slice(0, 1200)}`).catch(() => "");
+  if (BLOCKED.test(head) && head.length < 1500) {
+    // Give an automatic check a moment to pass by itself.
+    await sleep(8000);
+    const again = await page.evaluate(() => `${document.title}\n${(document.body?.innerText || "").slice(0, 1200)}`).catch(() => "");
+    if (BLOCKED.test(again) && again.length < 1500) return "blocked";
+  }
+  return "ok";
+}
+
 const hash = (s) => {
   let h = 0;
   for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) | 0;
@@ -28,15 +45,20 @@ export function makePortal(key, cfg) {
     return ok;
   }
 
+  let blockedRound = 0;
   async function search(page, s, c) {
     if (c.pageIndex > 0 && !cfg.pagination) return []; // one results page unless the site paginates by URL
+    if (blockedRound >= 2) throw new Error(`${site} is showing a bot check on every page — skipping it for now`);
     const loc = s.location ?? cfg.location ?? "";
     let url = cfg.searchUrl
       ? cfg.searchUrl.replace("{keywords}", encodeURIComponent(s.keywords)).replace("{location}", encodeURIComponent(loc)).replace("{keywords-slug}", s.keywords.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{location-slug}", loc.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{page}", String((c.pageIndex ?? 0) + 1))
       : home;
-    await page.goto(url, { waitUntil: "domcontentloaded" });
-    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
-    await sleep(2000);
+    const state = await open(page, url);
+    if (state === "blocked") {
+      blockedRound++;
+      throw new Error(`${site} is showing a bot check ("just a moment / verify you are human") instead of the page`);
+    }
+    blockedRound = 0;
     await ready(page);
     if (page.url() !== url && !page.url().startsWith(url.split("?")[0])) await page.goto(url, { waitUntil: "domcontentloaded" }).catch(() => {});
     const profile = loadProfile();
@@ -54,9 +76,8 @@ export function makePortal(key, cfg) {
   }
 
   async function getJob(page, ref) {
-    await page.goto(ref.url, { waitUntil: "domcontentloaded" });
-    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
-    await sleep(1200);
+    if ((await open(page, ref.url)) === "blocked") throw new Error(`${site} is showing a bot check instead of the job page`);
+    await sleep(800);
     const expanded = await expandJob(page, "body");
     const { docTitle, h1, pageText } = await readPage(page);
     const title = h1 || ref.title || docTitle.split(/[|\-–]/)[0].trim();

@@ -78,8 +78,8 @@ process.on("uncaughtException", (e) => log("err", `  (recovered) ${String(e?.mes
 // the title and skipped; put them back on the to-do list so they're tried again later.
 // Jobs skipped while the rule was "Magento / PHP only" are forgotten so React roles get a fresh look.
 for (const r of tracker.loadAll()) {
-  if (/unusual activity on your account/i.test(r.title || "")) tracker.update(r.id, { title: "(LinkedIn job, not read yet)", company: "", status: "needs_attention", skipReason: null, historyNote: "LinkedIn showed a security check instead of the job; will retry" });
-  else if (r.status === "skipped" && (r.history ?? []).some((h) => /^No magento \/ adobe commerce \/ php in the job post$/i.test(h.note || ""))) tracker.remove(r.id);
+  if (/unusual activity on your account/i.test(r.title || "")) await tracker.update(r.id, { title: "(LinkedIn job, not read yet)", company: "", status: "needs_attention", skipReason: null, historyNote: "LinkedIn showed a security check instead of the job; will retry" });
+  else if (r.status === "skipped" && (r.history ?? []).some((h) => /^No magento \/ adobe commerce \/ php in the job post$/i.test(h.note || ""))) await tracker.remove(r.id);
 }
 
 const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
@@ -97,16 +97,16 @@ async function standardResumePdf() {
 const RETRY_BATCH = Number(config.retryBatchSize ?? 5);
 const MAX_MINUTES_PER_JOB = Number(config.maxMinutesPerJob ?? 6);
 /** A job that used up its attempts without being applied is closed as "Couldn't apply" (status unable). */
-function giveUpIfExhausted(key, jobId) {
+async function giveUpIfExhausted(key, jobId) {
   const row = tracker.find(key, jobId);
   if (!row || !UNFINISHED.has(row.status) || (row.attempts ?? 0) < MAX_ATTEMPTS) return false;
   const why = row.lastNote || row.history?.at(-1)?.note || "";
-  tracker.upsert(key, jobId, { status: "unable", historyNote: `Couldn't apply after ${row.attempts} tries${why ? ` — ${why}` : ""}`, lastNote: why });
+  await tracker.upsert(key, jobId, { status: "unable", historyNote: `Couldn't apply after ${row.attempts} tries${why ? ` — ${why}` : ""}`, lastNote: why });
   log("warn", `  ✖ couldn't apply after ${row.attempts} tries — marked "Couldn't apply" on the dashboard`);
   return true;
 }
 // Old jobs that already used up their attempts are closed now, so the to-do list only holds jobs still worth trying.
-for (const r of tracker.loadAll()) if (UNFINISHED.has(r.status) && (r.attempts ?? 0) >= MAX_ATTEMPTS) giveUpIfExhausted(r.platform, r.jobId);
+for (const r of tracker.loadAll()) if (UNFINISHED.has(r.status) && (r.attempts ?? 0) >= MAX_ATTEMPTS) await giveUpIfExhausted(r.platform, r.jobId);
 
 let context;
 try {
@@ -157,13 +157,14 @@ for (const [key, mod] of Object.entries(platforms)) {
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
   // A platform can widen what counts as relevant (e.g. Alignerr's "AI trainer – coding" roles).
   isRelevant = pcfg.relevantKeywords?.length ? ((re) => (t) => re.test(t) || isRelevantGlobal(t))(reFor(pcfg.relevantKeywords)) : isRelevantGlobal;
-  let page = await openAgentWindow(context, key);
+  const homeOf = { linkedin: "https://www.linkedin.com/jobs/", naukri: "https://www.naukri.com/mnjuser/homepage" };
+  let page = await openAgentWindow(context, key, pcfg.home || homeOf[key] || "");
   openPages.add(page);
   // Reopen the window / reconnect to Chrome if something closed it.
   const ensurePage = async () => {
     if (!context.browser()?.isConnected?.() && context.browser()) ({ context } = await connect());
     if (page.isClosed()) {
-      page = await openAgentWindow(context, key);
+      page = await openAgentWindow(context, key, pcfg.home || homeOf[key] || "");
       openPages.add(page);
       log("dim", "  (reopened the agent's window)");
     }
@@ -257,13 +258,13 @@ for (const [key, mod] of Object.entries(platforms)) {
         const required = requiredFor(pcfg);
         if (!requiredHit(job, required)) {
           log("dim", `• ${job.title || job.url} — no ${required.join(" / ")} in the job post, skipping`);
-          tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: `No ${required.join(" / ")} in the job post` });
+          await tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: `No ${required.join(" / ")} in the job post` });
           stats.skipped++;
           continue;
         }
         if (!isRelevant(`${job.title}\n${job.description}`)) {
           log("dim", `• ${job.title || job.url} — not a Magento/PHP/React/front-end/full-stack role, skipping`);
-          tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: "Off-topic (none of her core skills mentioned)" });
+          await tracker.upsert(key, job.jobId, { url: job.url, title: job.title, company: job.company, location: job.location, status: "skipped", skipReason: "offtopic", historyNote: "Off-topic (none of her core skills mentioned)" });
           stats.skipped++;
           continue;
         }
@@ -278,13 +279,13 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
 
         if (job.closed) {
-          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "closed", historyNote: "The job is closed / no longer accepting applications" });
+          await tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "closed", historyNote: "The job is closed / no longer accepting applications" });
           log("dim", "  closed — no longer accepting applications");
           stats.skipped++;
           continue;
         }
         if (job.alreadyApplied) {
-          tracker.upsert(key, job.jobId, { ...base, status: "applied", historyNote: "Already applied before the agent saw it" });
+          await tracker.upsert(key, job.jobId, { ...base, status: "applied", historyNote: "Already applied before the agent saw it" });
           log("dim", "  already applied");
           continue;
         }
@@ -292,7 +293,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         const excludedTitle = (config.excludeTitleKeywords ?? []).find((k) => reFor([k]).test(job.title || ""));
         const excludedCompany = (config.excludeCompanies ?? []).find((c) => (job.company || "").toLowerCase().includes(c.toLowerCase()));
         if (excludedTitle || excludedCompany) {
-          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "excluded", historyNote: `Excluded by config (${excludedTitle || excludedCompany})` });
+          await tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "excluded", historyNote: `Excluded by config (${excludedTitle || excludedCompany})` });
           stats.skipped++;
           continue;
         }
@@ -335,7 +336,7 @@ for (const [key, mod] of Object.entries(platforms)) {
         if (wasMissing) log("dim", `  = ${job.title} — ${job.company}`);
         const dup = appliedElsewhere(key, job);
         if (dup) {
-          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "duplicate", historyNote: `Already applied to this job on ${dup.platform}` });
+          await tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "duplicate", historyNote: `Already applied to this job on ${dup.platform}` });
           log("dim", `  same job already applied on ${dup.platform} — skipping the duplicate`);
           stats.skipped++;
           continue;
@@ -355,7 +356,7 @@ for (const [key, mod] of Object.entries(platforms)) {
           scored.matchReasons = [`Mentions ${hit}, which is in her core stack`, ...scored.matchReasons];
           log("dim", `  score ${ev.matchScore}% but mentions "${hit}" — applying anyway`);
         } else if (!ev.shouldApply || ev.matchScore < config.minMatchScore) {
-          tracker.upsert(key, job.jobId, { ...scored, status: "skipped", skipReason: "score", historyNote: `Match ${ev.matchScore}% — not her stack` });
+          await tracker.upsert(key, job.jobId, { ...scored, status: "skipped", skipReason: "score", historyNote: `Match ${ev.matchScore}% — not her stack` });
           log("dim", `  match ${ev.matchScore}% — skipping: ${ev.missingSkills.slice(0, 3).join(", ") || ev.matchReasons[0] || "not her stack"}`);
           stats.skipped++;
           continue;
@@ -376,13 +377,13 @@ for (const [key, mod] of Object.entries(platforms)) {
 
         if (job.applyType === "none") {
           // No Apply control on the page: closed, already applied, or it didn't render. Tried again later (bounded by attempts).
-          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "needs_attention", historyNote: "No Apply button on the job page (closed, already applied, or it didn't load)", lastNote: "No Apply button on the job page" });
+          await tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "needs_attention", historyNote: "No Apply button on the job page (closed, already applied, or it didn't load)", lastNote: "No Apply button on the job page" });
           log("warn", "  no Apply button on the page — will look again later");
           stats.attention++;
           continue;
         }
         if (job.applyType !== "easy") {
-          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
+          await tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "external", historyNote: "Applies on the company's site" });
           const formLink = applyLinkInText(job.description);
           const coverLetter = ev.hiringMessage?.full?.replace(/^Hi[^,\n]*,/, "Dear Hiring Team,");
           if (mode !== "dry-run" && formLink && config.externalApply?.enabled !== false) {
@@ -402,10 +403,10 @@ for (const [key, mod] of Object.entries(platforms)) {
           continue;
         }
         if (mode === "dry-run") {
-          tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted", historyNote: "Dry run" });
+          await tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted", historyNote: "Dry run" });
           continue;
         }
-        tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted" });
+        await tracker.upsert(key, job.jobId, { ...scored, resumeFile, status: "shortlisted" });
         await applyTo(mod, key, page, job, resumePath);
        } catch (e) {
         if (isSkip(e) || jobControl.skip) {
@@ -417,10 +418,10 @@ for (const [key, mod] of Object.entries(platforms)) {
             try {
               if (timedOut) {
                 const note = `Took too long (over ${MAX_MINUTES_PER_JOB} min) — will try again later`;
-                tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "needs_attention", historyNote: note, lastNote: note, attempts: (row?.attempts ?? 0) + 1 });
+                await tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "needs_attention", historyNote: note, lastNote: note, attempts: (row?.attempts ?? 0) + 1 });
                 attemptCounted = true;
-                giveUpIfExhausted(key, currentRow?.jobId ?? ref.jobId);
-              } else tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
+                await giveUpIfExhausted(key, currentRow?.jobId ?? ref.jobId);
+              } else await tracker.upsert(key, currentRow?.jobId ?? ref.jobId, { ...ids, status: "skipped", skipReason: "user", historyNote: "Skipped by you", lastNote: "Skipped by you" });
             } catch (e2) {
               log("warn", `  couldn't record the skip: ${e2.message}`);
             }
@@ -442,8 +443,8 @@ for (const [key, mod] of Object.entries(platforms)) {
           try {
             const row = tracker.find(key, ref.jobId);
             if (row && UNFINISHED.has(row.status)) {
-              tracker.upsert(key, ref.jobId, { attempts: (row.attempts ?? 0) + 1 });
-              giveUpIfExhausted(key, ref.jobId);
+              await tracker.upsert(key, ref.jobId, { attempts: (row.attempts ?? 0) + 1 });
+              await giveUpIfExhausted(key, ref.jobId);
             }
           } catch {}
         }
@@ -495,8 +496,8 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
   if (jobControl.skip && result.status !== "applied") checkSkip();
   const attempts = (tracker.find(key, job.jobId)?.attempts ?? 0) + (result.status === "applied" ? 0 : 1);
   attemptCounted = true;
-  tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
-  if (result.status !== "applied") giveUpIfExhausted(key, job.jobId);
+  await tracker.upsert(key, job.jobId, { status: result.status, historyNote: result.note, lastNote: result.note, attempts });
+  if (result.status !== "applied") await giveUpIfExhausted(key, job.jobId);
   if (result.status === "applied") {
     jobControl.deadline = 0;
     await maybeMessage(mod, key, page, job);
@@ -519,10 +520,10 @@ async function maybeMessage(mod, key, page, job) {
   try {
     const r = await mod.messageHiringTeam(page, job, row.hiringMessage, { mode, autoSend: config.hiringMessage.autoSend });
     // A sent message is noted on the job; it never counts as an application.
-    tracker.upsert(key, job.jobId, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { historyNote: r.note } : {}) });
+    await tracker.upsert(key, job.jobId, { messageStatus: r.status, messageNote: r.note, ...(r.status === "sent" ? { historyNote: r.note } : {}) });
     log(r.status === "sent" ? "ok" : "dim", `  ✉ ${r.note}`);
   } catch (e) {
-    tracker.upsert(key, job.jobId, { messageStatus: "draft", messageNote: `Couldn't send: ${e.message}` });
+    await tracker.upsert(key, job.jobId, { messageStatus: "draft", messageNote: `Couldn't send: ${e.message}` });
   }
 }
 

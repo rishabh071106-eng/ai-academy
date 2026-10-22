@@ -30,16 +30,24 @@ const SLOT = Object.fromEntries(SLOTS.map((k, i) => [k, i]));
  * of its window, so three agents can take screenshots at the same time without stealing each
  * other's tab). Windows are tiled side by side: LinkedIn | Naukri | Alignerr.
  */
-export async function openAgentWindow(context, platform) {
+export async function openAgentWindow(context, platform, startUrl = "") {
   const slot = SLOT[platform] ?? 0;
-  const marker = `data:text/html,<title>${platform} agent</title><p style="font:16px system-ui;margin:24px">The ${platform} agent works in this window. Leave it open.</p><!--${process.pid}-->`;
+  const tag = `${platform}-agent-${process.pid}`;
+  const marker = `data:text/html,<title>${tag}</title><p style="font:16px system-ui;margin:24px">The ${platform} agent works in this window. Leave it open.</p>`;
   const anyPage = context.pages()[0] ?? (await context.newPage());
   let page;
   try {
     const cdp = await context.newCDPSession(anyPage);
     const { targetId } = await cdp.send("Target.createTarget", { url: marker, newWindow: true });
     for (let i = 0; i < 50 && !page; i++) {
-      page = context.pages().find((p) => p.url().startsWith(marker.slice(0, 60)) && p !== anyPage);
+      for (const p of context.pages()) {
+        if (p === anyPage) continue;
+        const u = p.url();
+        if (u.includes(tag) || u.includes(encodeURIComponent(tag)) || (await p.title().catch(() => "")) === tag) {
+          page = p;
+          break;
+        }
+      }
       if (!page) await sleep(200);
     }
     // Tile the agents' windows in a grid across the screen.
@@ -57,7 +65,12 @@ export async function openAgentWindow(context, platform) {
   } catch (e) {
     log("dim", `  (couldn't open a separate window: ${e.message.split("\n")[0]}; using a tab)`);
   }
-  return page ?? (await context.newPage());
+  page ??= await context.newPage();
+  // Show the site straight away (the placeholder stays only until the first page loads).
+  if (startUrl) {
+    await page.goto(startUrl, { waitUntil: "commit", timeout: 20000 }).catch(() => {});
+  }
+  return page;
 }
 
 /** First visible element out of several candidate selectors, or null. */
