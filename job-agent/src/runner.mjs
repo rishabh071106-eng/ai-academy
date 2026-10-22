@@ -2,6 +2,7 @@
 import { fork } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { profileUpdates } from "./profile-update.mjs";
 import { loadConfig, ROOT } from "./util.mjs";
 
 const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#8e5cd9", "#d6336c", "#0ca5b8", "#c27c0e", "#5c7cfa", "#2f9e44", "#e03131", "#f08c00", "#7048e8", "#1098ad", "#868e96", "#e64980", "#37b24d"];
@@ -76,7 +77,7 @@ const get = (platform) => {
 
 /** since = { linkedin: n, naukri: n } — only log lines newer than those are returned. */
 export function status(since = {}) {
-  return { platforms: platformList(), runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
+  return { platforms: platformList(), profiles: profileUpdates(), runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
 }
 
 export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true, task = "jobs" } = {}, restart = 0) {

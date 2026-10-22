@@ -174,19 +174,22 @@ for (const [key, mod] of Object.entries(platforms)) {
   };
   // Her profile on this site is brought in line with the resume: on demand (task "profile",
   // pausing for you when a site needs a code) or by itself once every profileSync.everyDays.
-  if (task === "profile" || (mode !== "dry-run" && profileUpdateDue(key))) {
+  const syncProfileOnSite = async () => {
     const profileUrls = { linkedin: "https://www.linkedin.com/in/me/", naukri: "https://www.naukri.com/mnjuser/profile", indeed: "https://profile.indeed.com/" };
     const loggedInCheck = mod.isLoggedIn ?? (async (p) => !/\/login|\/authwall|\/checkpoint\/lg|nlogin/.test(p.url()));
     await ensurePage().catch(() => {});
     Object.assign(jobControl, { active: true, skip: false, deadline: Date.now() + 25 * 60000 });
     try {
-      await updateSiteProfile(page, { key, site: pcfg.label || key, home: pcfg.home || homeOf[key], profileUrl: pcfg.profileUrl || profileUrls[key], profile, resumePath: await standardResumePdf().catch(() => null), isLoggedIn: loggedInCheck, mode: task === "profile" ? "review" : "auto" });
+      await updateSiteProfile(page, { key, site: pcfg.label || key, home: pcfg.home || homeOf[key], profileUrl: pcfg.profileUrl || profileUrls[key], profile, resumePath: await standardResumePdf().catch(() => null), baseResume, isLoggedIn: loggedInCheck, mode: task === "profile" ? "review" : "auto" });
     } catch (e) {
       log("warn", `[${key}] profile update stopped: ${String(e?.message ?? e).split("\n")[0]}`);
     } finally {
       Object.assign(jobControl, { active: false, skip: false, deadline: 0 });
     }
-    if (task === "profile") continue;
+  };
+  if (task === "profile") {
+    await syncProfileOnSite();
+    continue;
   }
   const done = () => applied >= maxApply || (reviewLimit > 0 && stats.scanned >= reviewLimit);
   const retriedThisRun = new Set();
@@ -195,6 +198,8 @@ for (const [key, mod] of Object.entries(platforms)) {
    for (let round = 1; ; round++) {
     roundProgress = 0;
     if (round > 1) await refreshResume();
+    // A new resume in Downloads (or a week gone by) → the site's profile and stored resume are refreshed first.
+    if (mode !== "dry-run" && profileUpdateDue(key, baseResume)) await syncProfileOnSite();
     // Round 1 begins with the unfinished jobs from earlier runs.
     // Every round starts by finishing the jobs that are still open (best matches first),
     // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.

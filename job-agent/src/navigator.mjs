@@ -213,6 +213,7 @@ Actions:
 - type(target, value) — text fields. For autocomplete fields (city, school, company…) type, then click the matching suggestion in the next step.
 - choose(target, value) — pick an option in a <select> or custom dropdown/combobox; value is the option text you want.
 - check(target) — tick a checkbox / radio / switch (consent boxes, "Yes"/"No" radios).
+- When an application offers a resume already stored on the site next to an upload option, upload her file with upload_resume (it is the newest, written for this job) and make sure it is the one selected; never submit with an older stored copy.
 - upload_resume(target) — attach her resume: target the file input, the "Upload"/"Attach"/"Choose file" button or the drop zone. Use it whenever a resume/CV is asked for and files=none.
 - fill_form — fills every empty standard field on the page from her data at once (name, email, phone, links, experience…). Good first move on a new form page; then fix whatever is still empty or flagged.
 - check_email(value = the company or site name) — when the site says it emailed her a verification code or a link to verify/activate the account: reads her Gmail and gives you the code (then type it) or opens the link for you (then reload / sign in and continue).

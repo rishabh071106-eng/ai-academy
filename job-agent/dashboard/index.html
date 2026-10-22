@@ -802,8 +802,9 @@ async function pollAgent() {
   let anyRunning = false;
   try {
     const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
-    const { platforms, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    const { platforms, profiles, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
     if (!agentsBuilt && platforms?.length) buildAgents(platforms);
+    window.__profiles = profiles || {};
     let newLines = false;
     for (const [k, s] of Object.entries(runs)) {
       if (!AG[k]) continue;
@@ -829,6 +830,7 @@ async function pollAgent() {
   pollTimer = setTimeout(pollAgent, anyRunning ? 1500 : 6000);
 }
 
+const profileLine = (k) => { const p = window.__profiles?.[k]; return p?.at ? ` · profile synced ${ago(p.at)}${p.resume ? ` with ${p.resume}` : ""}` : " · profile not synced yet"; };
 const appliedSince = (k, t) => state.rows.filter((r) => r.platform === k && r.appliedAt && new Date(r.appliedAt).getTime() >= (t || 0)).length;
 function renderAgent(k, s) {
   const a = AG[k], btn = el(k, "btn");
@@ -842,8 +844,8 @@ function renderAgent(k, s) {
   if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
   else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · applied ${appliedSince(k, s.startedAt)}/${s.options?.max ?? "?"}${s.restarts ? ` · restarted ${s.restarts}×` : ""} · keep the agent's Chrome open`; }
   else if (s.endedAt && s.fatal) { el(k, "title").textContent = "stopped"; el(k, "sub").innerHTML = `<span style="color:var(--crit)">⚠ ${esc(s.fatal)}</span>`; }
-  else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)`; }
-  else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start"; }
+  else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)` + profileLine(k); }
+  else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start" + profileLine(k); }
   btn.className = "btn " + (s.running ? "stop" : "go");
   btn.textContent = s.running ? "■ Stop" : "▶ Start";
   el(k, "profileBtn").disabled = s.running;
