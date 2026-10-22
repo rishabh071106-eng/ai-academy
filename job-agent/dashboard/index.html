@@ -174,7 +174,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 
 
 .agent { padding: 16px 18px; margin-bottom: 16px; }
-.agents { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.agents { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .agents .agent { margin-bottom: 0; }
 .agent-title .pf { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
 .agents .seg button { padding: 6px 10px; font-size: 12.5px; }
@@ -261,7 +261,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     <div class="card panel">
       <div class="panel-head">
         <h2>Applications per day <span class="sub">· last 21 days</span></h2>
-        <div class="legend"><span><i style="background:var(--series-1)"></i>LinkedIn</span><span><i style="background:var(--series-2)"></i>Naukri</span><span><i style="background:var(--series-3)"></i>Alignerr</span></div>
+        <div class="legend" id="legend"></div>
       </div>
       <div class="chart" id="daily"><div class="tooltip" id="tip"></div></div>
     </div>
@@ -320,7 +320,8 @@ const STATUS = {
   skipped:         { label: "Skipped",         fg: "var(--muted)",  bg: "var(--neutral-bg)" },
   withdrawn:       { label: "Withdrawn",       fg: "var(--muted)",  bg: "var(--neutral-bg)" },
 };
-const PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, alignerr: { label: "Alignerr", color: "var(--series-3)" }, other: { label: "Other", color: "var(--muted)" } };
+let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, alignerr: { label: "Alignerr", color: "var(--series-3)" }, other: { label: "Other", color: "var(--muted)" } };
+const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.slice(1) : "Other", color: PLATFORM.other.color };
 const APPLIED_LIKE = new Set(["applied", "interview", "offer", "rejected", "withdrawn"]);
 
 const state = { rows: [], statuses: Object.keys(STATUS), filter: "active", q: "", platform: "", sort: "recent", open: new Set() };
@@ -396,16 +397,18 @@ function renderDaily() {
   const buckets = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(Date.now() - i * 864e5);
-    buckets.push({ key: day(d), date: d, linkedin: 0, naukri: 0, alignerr: 0 });
+    buckets.push({ key: day(d), date: d, counts: {} });
   }
   const idx = Object.fromEntries(buckets.map((b, i) => [b.key, i]));
   for (const r of state.rows) {
     if (!r.appliedAt || !APPLIED_LIKE.has(r.status)) continue;
     const i = idx[day(r.appliedAt)];
-    if (i != null) buckets[i][r.platform === "naukri" || r.platform === "alignerr" ? r.platform : "linkedin"]++;
+    if (i != null) buckets[i].counts[r.platform || "other"] = (buckets[i].counts[r.platform || "other"] ?? 0) + 1;
   }
   const W = 720, H = 220, L = 28, R = 8, T = 10, B = 26;
-  const max = Math.max(4, ...buckets.map((b) => b.linkedin + b.naukri + b.alignerr));
+  const total = (b) => Object.values(b.counts).reduce((a, v) => a + v, 0);
+  const order = [...Object.keys(PLATFORM).filter((k) => k !== "other"), ...new Set(buckets.flatMap((b) => Object.keys(b.counts)).filter((k) => !PLATFORM[k]))];
+  const max = Math.max(4, ...buckets.map(total));
   const step = Math.ceil(max / 4);
   const top = step * 4;
   const bw = (W - L - R) / days;
@@ -419,15 +422,15 @@ function renderDaily() {
   svg += `</g>`;
   buckets.forEach((b, i) => {
     const x = L + bw * i + (bw - barW) / 2;
-    const segs = [["linkedin", "var(--series-1)"], ["naukri", "var(--series-2)"], ["alignerr", "var(--series-3)"]].filter(([k]) => b[k] > 0);
+    const segs = order.filter((k) => b.counts[k] > 0).map((k) => [k, platformOf(k).color]);
     let base = 0;
     segs.forEach(([k, color], si) => {
-      const y0 = y(base), y1 = y(base + b[k]);
+      const y0 = y(base), y1 = y(base + b.counts[k]);
       const isTop = si === segs.length - 1;
       const h = Math.max(0, y0 - y1 - (si > 0 ? 2 : 0)); // 2px surface gap between stacked segments
       const r = isTop ? Math.min(4, h / 2, barW / 2) : 0;
       svg += `<path d="${roundedTop(x, y1, barW, h, r)}" fill="${color}"/>`;
-      base += b[k];
+      base += b.counts[k];
     });
     svg += `<rect class="hit" data-i="${i}" x="${L + bw * i}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent"/>`;
   });
@@ -440,10 +443,9 @@ function renderDaily() {
     el.onmouseenter = () => {
       const b = buckets[+el.dataset.i];
       const rect = host.getBoundingClientRect(), r = el.getBoundingClientRect();
-      tip.innerHTML = `<b>${b.date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</b><br>LinkedIn ${b.linkedin} · Naukri ${b.naukri} · Alignerr ${b.alignerr}`;
+      tip.innerHTML = `<b>${b.date.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}</b><br>${order.filter((k) => b.counts[k] > 0).map((k) => `${platformOf(k).label} ${b.counts[k]}`).join(" · ") || "no applications"}`;
       tip.style.left = r.left - rect.left + r.width / 2 + "px";
-      const total = b.linkedin + b.naukri + b.alignerr;
-      tip.style.top = (y(total) / H) * rect.height + "px";
+      tip.style.top = (y(total(b)) / H) * rect.height + "px";
       tip.style.opacity = 1;
       el.setAttribute("fill", "rgba(127,127,127,.08)");
     };
@@ -518,7 +520,7 @@ function renderTable() {
   if (!rows.length) { $("#rows").innerHTML = `<tr><td colspan="6" class="empty"><b>Nothing here</b>Try another filter.</td></tr>`; return; }
   $("#rows").innerHTML = rows.map((r) => {
     const st = STATUS[r.status] ?? STATUS.shortlisted;
-    const p = PLATFORM[r.platform] ?? PLATFORM.other;
+    const p = platformOf(r.platform);
     const open = state.open.has(r.id);
     const opts = state.statuses.map((s) => `<option value="${s}" ${s === r.status ? "selected" : ""}>${(STATUS[s] ?? { label: s }).label}</option>`).join("");
     return `<tr class="job" data-id="${esc(r.id)}" aria-expanded="${open}">
@@ -668,28 +670,34 @@ const MODE_HINT = {
   auto: "Fully automatic: fills and submits on its own; when stuck, the AI navigator works it out. It never waits for you: a job that needs a person (CAPTCHA, SMS code) is set aside and retried later.",
 };
 const MODE_NAME = { "dry-run": "Practice", review: "Ask before submit", auto: "Fully automatic" };
-const AG = {
-  linkedin: { label: "LinkedIn", color: "var(--series-1)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
-  naukri: { label: "Naukri", color: "var(--series-2)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
-  alignerr: { label: "Alignerr", color: "var(--series-3)", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false },
-};
-try {
-  const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
-  for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
-} catch {}
+let AG = {};
+let agentsBuilt = false;
+const el = (k, name) => document.querySelector(`.agent[data-p="${k}"] [data-el="${name}"]`);
 const savePrefs = () => { try { localStorage.setItem("ja-agents", JSON.stringify(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, { mode: a.mode, max: a.max, review: a.review, keepGoing: a.keepGoing, retry: a.retry }])))); } catch {} };
-
-$("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
+function paintMode(k) {
+  el(k, "seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === AG[k].mode));
+  el(k, "hint").textContent = MODE_HINT[AG[k].mode];
+}
+/** One card per site listed by the server (config.json → platforms). */
+function buildAgents(list) {
+  PLATFORM = { ...Object.fromEntries(list.map((p) => [p.key, { label: p.label, color: p.color }])), other: { label: "Other", color: "var(--muted)" } };
+  $("#legend").innerHTML = list.map((p) => `<span><i style="background:${p.color}"></i>${esc(p.label)}</span>`).join("");
+  AG = Object.fromEntries(list.map((p) => [p.key, { label: p.label, color: p.color, mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false }]));
+  try {
+    const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
+    for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
+  } catch {}
+  $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
   <div class="card agent" data-p="${k}">
     <div class="agent-top">
       <div class="agent-state">
         <span class="agent-dot" data-el="dot"></span>
-        <div><div class="agent-title"><i class="pf" style="background:${a.color}"></i>${a.label} agent · <span data-el="title">idle</span></div><div class="sub" data-el="sub">Choose a mode and press Start</div></div>
+        <div><div class="agent-title"><i class="pf" style="background:${a.color}"></i>${esc(a.label)} agent · <span data-el="title">idle</span></div><div class="sub" data-el="sub">Choose a mode and press Start</div></div>
       </div>
       <button class="btn go" data-el="btn">▶ Start</button>
     </div>
     <div class="agent-controls" style="margin-top:12px">
-      <div class="seg" data-el="seg" role="group" aria-label="${a.label} mode">
+      <div class="seg" data-el="seg" role="group" aria-label="${esc(a.label)} mode">
         <button data-v="dry-run">Practice</button><button data-v="review">Ask before submit</button><button data-v="auto">Fully automatic</button>
       </div>
       <label class="sub" title="Stop after this many applications">Apply to <input class="num-input" data-el="max" type="number" min="1" max="2000" value="${a.max}"></label>
@@ -703,22 +711,23 @@ $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
     <button class="log-toggle" data-el="logToggle">▸ Show live log</button>
     <div class="logbox" data-el="log" hidden></div>
   </div>`).join("");
-
-const el = (k, name) => document.querySelector(`.agent[data-p="${k}"] [data-el="${name}"]`);
-function paintMode(k) {
-  el(k, "seg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === AG[k].mode));
-  el(k, "hint").textContent = MODE_HINT[AG[k].mode];
-}
-for (const k of Object.keys(AG)) {
-  paintMode(k);
-  el(k, "seg").onclick = (e) => { const b = e.target.closest("button"); if (!b || AG[k].running) return; AG[k].mode = b.dataset.v; paintMode(k); savePrefs(); };
-  el(k, "max").onchange = (e) => { AG[k].max = Number(e.target.value) || 15; savePrefs(); };
-  el(k, "review").onchange = (e) => { AG[k].review = Math.max(0, Number(e.target.value) || 0); savePrefs(); };
-  el(k, "keep").onchange = (e) => { AG[k].keepGoing = e.target.checked; savePrefs(); };
-  el(k, "retry").onchange = (e) => { AG[k].retry = e.target.checked; savePrefs(); };
-  el(k, "logToggle").onclick = () => toggleLog(k);
-  el(k, "btn").onclick = () => startStop(k);
-  el(k, "skip").onclick = () => skipJob(k);
+  for (const k of Object.keys(AG)) {
+    paintMode(k);
+    el(k, "seg").onclick = (e) => { const b = e.target.closest("button"); if (!b || AG[k].running) return; AG[k].mode = b.dataset.v; paintMode(k); savePrefs(); };
+    el(k, "max").onchange = (e) => { AG[k].max = Number(e.target.value) || 1000; savePrefs(); };
+    el(k, "review").onchange = (e) => { AG[k].review = Math.max(0, Number(e.target.value) || 0); savePrefs(); };
+    el(k, "keep").onchange = (e) => { AG[k].keepGoing = e.target.checked; savePrefs(); };
+    el(k, "retry").onchange = (e) => { AG[k].retry = e.target.checked; savePrefs(); };
+    el(k, "logToggle").onclick = () => toggleLog(k);
+    el(k, "btn").onclick = () => startStop(k);
+    el(k, "skip").onclick = () => skipJob(k);
+  }
+  try {
+    if ("Notification" in window && Notification.permission === "default")
+      document.querySelectorAll(".agent [data-el=btn]").forEach((b) => b.addEventListener("click", () => Notification.requestPermission(), { once: true }));
+  } catch {}
+  agentsBuilt = true;
+  render();
 }
 async function skipJob(k) {
   el(k, "skip").disabled = true;
@@ -772,7 +781,8 @@ async function pollAgent() {
   let anyRunning = false;
   try {
     const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
-    const { runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    const { platforms, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    if (!agentsBuilt && platforms?.length) buildAgents(platforms);
     let newLines = false;
     for (const [k, s] of Object.entries(runs)) {
       if (!AG[k]) continue;
@@ -835,10 +845,6 @@ function renderAgent(k, s) {
   try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification(`${a.label} agent needs you`, { body: s.pending.question }); } catch {}
 }
 
-try {
-  if ("Notification" in window && Notification.permission === "default")
-    document.querySelectorAll(".agent [data-el=btn]").forEach((b) => b.addEventListener("click", () => Notification.requestPermission(), { once: true }));
-} catch {}
 pollAgent();
 
 load();

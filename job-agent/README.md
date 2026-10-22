@@ -73,6 +73,15 @@ Change searches, the match threshold, `alwaysApplyKeywords`, the per-run cap and
 ### Long runs: "Apply to", "Review" and "Keep going until done"
 Each agent card has **Apply to** (stop after this many applications), **Review** (stop after looking at this many jobs; 0 = all) and **Keep going until done**. With Keep going on, the agent works through up to 5 result pages per search. When every current job has been reviewed and the target isn't reached, it checks again for new postings every 30 minutes (`recheckMinutes` in `config.json`) instead of stopping. An error on one job never ends the run, a closed tab is reopened, and if the agent process crashes the dashboard restarts it (up to 5 times). Jobs already handled are skipped, so it carries on where it left off. **■ Stop** always ends it.
 
+## Fifteen job sites
+
+Besides LinkedIn, Naukri and Alignerr, the agent runs on the Naukri-like portals where a profile plus one Apply click does the job: **Indeed, Foundit, Shine, TimesJobs, Hirist, Instahyre and Cutshort** (on by default), each as its own agent card and its own Chrome window. **Glassdoor, Wellfound, Apna, Adzuna and Jooble** are configured too but off by default (`enabled: false`), because they mostly redirect to company sites or need heavy profiles; switch them on in `config.json` if you want them. These "portals" have no site-specific code: the AI navigator drives them. On each one it
+- **gets her an account**: signs in with Google when the site offers it; otherwise registers with her email and `ATS_PASSWORD`, reads the verification code or link from her Gmail, and if the email is already registered uses *Forgot password*, takes the reset link from Gmail, sets the password to `ATS_PASSWORD` and logs in;
+- runs every search in `platforms.<site>.searches`, lists the jobs on the results page, reads each one, and applies the way a person would (profile completion, resume upload, questions, submit), following redirects to company sites.
+Add a site by adding a `platforms` entry with `type: "portal"`, `home`, an optional `searchUrl` with `{keywords}` / `{location}` placeholders, and `searches`. `requiresLogin: true` makes the agent insist on an account before searching. The same job (title + company) applied to on one site is not applied to again on another within 30 days (`skipDuplicatesAcrossSites`).
+
+Running ten agents at once opens ten Chrome windows and processes; that needs a Mac with 16 GB or more. Start fewer cards if it gets slow.
+
 ## Google Forms and Alignerr
 
 - **Google Forms:** when a job's "apply" link, or a link written in the job post, is a Google Form (`forms.gle`, `docs.google.com/forms`), the agent fills it: name, email, phone, ranges like "8+ years", checkboxes, dropdowns, free-text answers written by Claude, and the resume where the form has a file question. It goes through every section and submits. Forms that require a Google sign-in need you to sign in to Google once in the agent's Chrome.

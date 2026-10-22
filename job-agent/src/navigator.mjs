@@ -75,6 +75,7 @@ function tagFrame(prefix) {
       required: el.required || el.getAttribute("aria-required") === "true" || undefined,
       invalid: el.getAttribute("aria-invalid") === "true" || undefined,
       href: tag === "a" ? (el.getAttribute("href") || "").slice(0, 100) : undefined,
+      hrefFull: tag === "a" ? el.href || "" : undefined,
       disabled: el.disabled || el.getAttribute("aria-disabled") === "true" || undefined,
       offscreen: !isFile && (r.bottom < 0 || r.top > vh) ? (r.top > vh ? "below" : "above") : undefined,
     });
@@ -472,7 +473,15 @@ export async function navigate(page, opts) {
           await page.goto(d.value, { waitUntil: "domcontentloaded" });
           break;
         case "report_jobs":
-          reported = d.jobs || [];
+          // Prefer the real link of the element the model pointed at over a link it typed.
+          reported = (d.jobs || []).map((j) => {
+            const src = snap.elements.find((x) => x.id === j.target);
+            let href = src?.hrefFull || j.href || "";
+            try {
+              href = href ? new URL(href, snap.url).href : "";
+            } catch {}
+            return { ...j, href };
+          });
           if (stopOnReport) return { status: "none", note: "", jobs: reported };
           break;
         case "done":

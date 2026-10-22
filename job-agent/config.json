@@ -320,6 +320,836 @@
         5,
         10
       ]
+    },
+    "indeed": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Indeed",
+      "home": "https://in.indeed.com/",
+      "searchUrl": "https://in.indeed.com/jobs?q={keywords}&l={location}&fromage=14",
+      "requiresLogin": false,
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "foundit": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Foundit",
+      "home": "https://www.foundit.in/",
+      "searchUrl": "https://www.foundit.in/srp/results?query={keywords}&locations={location}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "shine": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Shine",
+      "home": "https://www.shine.com/",
+      "searchUrl": "https://www.shine.com/job-search/{keywords-slug}-jobs-in-{location-slug}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "timesjobs": {
+      "enabled": true,
+      "type": "portal",
+      "label": "TimesJobs",
+      "home": "https://www.timesjobs.com/",
+      "searchUrl": "https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords={keywords}&txtLocation={location}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "glassdoor": {
+      "enabled": false,
+      "type": "portal",
+      "label": "Glassdoor",
+      "home": "https://www.glassdoor.co.in/",
+      "searchUrl": "https://www.glassdoor.co.in/Job/jobs.htm?sc.keyword={keywords}&locT=C&locKeyword={location}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "hirist": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Hirist",
+      "home": "https://www.hirist.tech/",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "instahyre": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Instahyre",
+      "home": "https://www.instahyre.com/",
+      "searchUrl": "https://www.instahyre.com/search-jobs/?q={keywords}",
+      "requiresLogin": true,
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "cutshort": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Cutshort",
+      "home": "https://cutshort.io/",
+      "searchUrl": "https://cutshort.io/jobs?q={keywords}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "wellfound": {
+      "enabled": false,
+      "type": "portal",
+      "label": "Wellfound",
+      "home": "https://wellfound.com/jobs",
+      "searchUrl": "https://wellfound.com/jobs?q={keywords}&l={location}",
+      "requiresLogin": true,
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "apna": {
+      "enabled": false,
+      "type": "portal",
+      "label": "Apna",
+      "home": "https://apna.co/jobs",
+      "searchUrl": "https://apna.co/jobs?search={keywords}&location={location}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "adzuna": {
+      "enabled": false,
+      "type": "portal",
+      "label": "Adzuna",
+      "home": "https://www.adzuna.in/",
+      "searchUrl": "https://www.adzuna.in/search?q={keywords}&w={location}&d=14",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "jooble": {
+      "enabled": false,
+      "type": "portal",
+      "label": "Jooble",
+      "home": "https://in.jooble.org/",
+      "searchUrl": "https://in.jooble.org/SearchResult?ukw={keywords}&rgns={location}",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        }
+      ]
     }
   },
   "excludeTitleKeywords": [
@@ -408,5 +1238,6 @@
     "Vector databases": 2,
     "Python": 2
   },
-  "applyToAllMatching": true
+  "applyToAllMatching": true,
+  "skipDuplicatesAcrossSites": true
 }

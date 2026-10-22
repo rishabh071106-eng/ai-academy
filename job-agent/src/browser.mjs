@@ -1,6 +1,6 @@
 import { chromium } from "playwright-core";
 import { ensureChrome } from "./chrome.mjs";
-import { log, sleep } from "./util.mjs";
+import { loadConfig, log, sleep } from "./util.mjs";
 
 /** Attach to the agent's Chrome, starting or restarting it when needed. */
 export async function connect() {
@@ -22,7 +22,8 @@ export async function connect() {
   }
 }
 
-const SLOT = { linkedin: 0, naukri: 1, alignerr: 2 };
+const SLOTS = Object.keys(loadConfig().platforms ?? {}).filter((k) => loadConfig().platforms[k]?.enabled !== false);
+const SLOT = Object.fromEntries(SLOTS.map((k, i) => [k, i]));
 
 /**
  * Opens a tab in a Chrome window of its own for one agent (each agent keeps the visible tab
@@ -41,12 +42,16 @@ export async function openAgentWindow(context, platform) {
       page = context.pages().find((p) => p.url().startsWith(marker.slice(0, 60)) && p !== anyPage);
       if (!page) await sleep(200);
     }
-    // Tile: a third of the screen per agent.
+    // Tile the agents' windows in a grid across the screen.
     try {
       const { windowId } = await cdp.send("Browser.getWindowForTarget", { targetId });
       const { w, h } = await (page ?? anyPage).evaluate(() => ({ w: screen.availWidth, h: screen.availHeight }));
-      const width = Math.max(700, Math.floor(w / 3));
-      await cdp.send("Browser.setWindowBounds", { windowId, bounds: { left: Math.min(slot * width, Math.max(0, w - width)), top: 0, width, height: h, windowState: "normal" } });
+      const n = Math.max(1, SLOTS.length);
+      const cols = Math.min(n, Math.max(1, Math.floor(w / 640)));
+      const rows = Math.ceil(n / cols);
+      const width = Math.floor(w / cols);
+      const height = Math.max(500, Math.floor(h / rows));
+      await cdp.send("Browser.setWindowBounds", { windowId, bounds: { left: (slot % cols) * width, top: Math.floor(slot / cols) * height, width, height, windowState: "normal" } });
     } catch {}
     await cdp.detach().catch(() => {});
   } catch (e) {

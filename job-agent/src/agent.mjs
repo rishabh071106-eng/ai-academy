@@ -13,6 +13,7 @@ import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
 import * as alignerr from "./alignerr.mjs";
+import { makePortal } from "./portal.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
 import { checkSkip, DATA_DIR, isSkip, jobControl, loadConfig, loadProfile, log, randomBetween, sleep } from "./util.mjs";
@@ -32,7 +33,15 @@ const retryUnfinished = args.retry !== undefined ? args.retry !== "false" : conf
 const UNFINISHED = new Set(["needs_attention", "external", "shortlisted"]);
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
-const platforms = { linkedin, naukri, alignerr };
+const builtin = { linkedin, naukri, alignerr };
+const platforms = Object.fromEntries(Object.keys(config.platforms ?? {}).map((k) => [k, builtin[k] ?? makePortal(k, config.platforms[k])]));
+// The same job (title + company) applied to on another site in the last 30 days is not applied to again.
+const norm = (s) => String(s || "").toLowerCase().replace(/\(.*?\)|[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+function appliedElsewhere(key, job) {
+  if (config.skipDuplicatesAcrossSites === false || !job.title || !job.company) return null;
+  const since = Date.now() - 30 * 86400000;
+  return tracker.loadAll().find((r) => r.platform !== key && ["applied", "interview", "offer"].includes(r.status) && new Date(r.appliedAt || r.updatedAt || 0).getTime() > since && norm(r.title) === norm(job.title) && norm(r.company) === norm(job.company)) ?? null;
+}
 let currentRow = null; // { key, jobId, title, company } of the job being worked on
 let attemptCounted = false; // applyTo bumped the job's attempt counter in this pass
 let roundProgress = 0; // new jobs seen + applications made in the current round
@@ -315,6 +324,13 @@ for (const [key, mod] of Object.entries(platforms)) {
         job.location ||= ev.location;
         Object.assign(base, { title: job.title, company: job.company, location: job.location });
         if (wasMissing) log("dim", `  = ${job.title} — ${job.company}`);
+        const dup = appliedElsewhere(key, job);
+        if (dup) {
+          tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "duplicate", historyNote: `Already applied to this job on ${dup.platform}` });
+          log("dim", `  same job already applied on ${dup.platform} — skipping the duplicate`);
+          stats.skipped++;
+          continue;
+        }
         const scored = {
           ...base, matchScore: ev.matchScore, matchReasons: ev.matchReasons, missingSkills: ev.missingSkills,
           hiringContact: job.hiringContact ?? null, hiringMessage: ev.hiringMessage, messageStatus: "draft",

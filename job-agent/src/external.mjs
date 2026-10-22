@@ -342,7 +342,7 @@ async function navigatorApply(site, ctx) {
     if (r) return r;
   }
   const r = await navigate(site, {
-    rules: "- If the page is only a company homepage or a job list, find the matching job (search the site for the role title) and its Apply button.",
+    rules: `- If the page is only a company homepage or a job list, find the matching job (search the site for the role title) and its Apply button.${ctx.rules ? `\n${ctx.rules}` : ""}`,
     goal: `Apply for the job "${ctx.job.title}" at ${ctx.job.company} on this company career site (${ctx.ats}). If this page isn't the application yet, find the job and click Apply. Create an account or sign in if the site requires it. Upload her resume where a resume/CV is asked for, fill every field and question, scroll through each step, and submit. ${ctx.coverLetter ? "If a cover letter is asked for as text, use this one:\n" + ctx.coverLetter.slice(0, 1500) : ""}`,
     profile: ctx.profile,
     job: ctx.job,
@@ -365,11 +365,11 @@ export function applyLinkInText(text) {
  * Apply on the page that is already open (job boards whose own site is the application,
  * e.g. Alignerr): click Apply if needed, fill every step, submit.
  */
-export async function applyHere(page, job, { resumePath, profile, mode, coverLetter, label = "site" }) {
+export async function applyHere(page, job, { resumePath, profile, mode, coverLetter, label = "site", navigatorFirst = false, rules = "" }) {
   job.resumePath = resumePath;
-  const ctx = { job, resumePath, profile, mode, coverLetter, ats: label };
+  const ctx = { job, resumePath, profile, mode, coverLetter, ats: label, rules };
   try {
-    return (await generic(page, ctx)) ?? { status: "needs_attention", note: `${label}: unfinished` };
+    return (await (navigatorFirst ? navigatorApply(page, ctx) : generic(page, ctx))) ?? { status: "needs_attention", note: `${label}: unfinished` };
   } catch (e) {
     if (isSkip(e)) throw e;
     return (await handOver(page, job, mode, `something went wrong (${e.message.split("\n")[0]})`, false)) ?? { status: "needs_attention", note: e.message };
