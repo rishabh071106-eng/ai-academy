@@ -237,12 +237,12 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <div class="logo" id="initials">JA</div>
       <div>
         <h1 id="heading">Job Hunt Tracker</h1>
-        <div class="sub" id="subheading">Applications from the job agent · LinkedIn, Naukri &amp; Alignerr</div>
+        <div class="sub" id="subheading">Applications from the job agent · LinkedIn, Naukri &amp; more</div>
       </div>
     </div>
     <div class="actions">
       <span class="live" title="Refreshes every 15 seconds"><i></i><span id="updated">Live</span></span>
-      <button class="btn go" id="startAllBtn" title="Start the LinkedIn, Naukri and Alignerr agents with the settings on their cards">▶ Start all</button>
+      <button class="btn go" id="startAllBtn" title="Start every site's agent with the settings on its card">▶ Start all</button>
       <button class="btn stop" id="stopAllBtn" title="Stop every running agent">■ Stop all</button>
       <button class="btn" id="logsBtn" title="Download today's agent logs and a summary of where jobs got stuck (send this file to get problems fixed)">⇩ Logs</button>
       <button class="btn" id="exportBtn" title="Download CSV">⇩ CSV</button>
@@ -277,7 +277,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <label class="search"><span aria-hidden="true">⌕</span><input id="q" placeholder="Search company, title, location…" autocomplete="off"></label>
       <div class="chips" id="statusChips"></div>
       <select class="sel" id="platformSel" aria-label="Platform">
-        <option value="">All platforms</option><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="alignerr">Alignerr</option><option value="other">Other</option>
+        <option value="">All platforms</option>
       </select>
       <select class="sel" id="sortSel" aria-label="Sort">
         <option value="recent">Most recent</option><option value="score">Best match</option><option value="company">Company A–Z</option>
@@ -682,6 +682,8 @@ function paintMode(k) {
 function buildAgents(list) {
   PLATFORM = { ...Object.fromEntries(list.map((p) => [p.key, { label: p.label, color: p.color }])), other: { label: "Other", color: "var(--muted)" } };
   $("#legend").innerHTML = list.map((p) => `<span><i style="background:${p.color}"></i>${esc(p.label)}</span>`).join("");
+  const sel = $("#platformSel");
+  if (sel) sel.innerHTML = `<option value="">All platforms</option>${list.map((p) => `<option value="${p.key}">${esc(p.label)}</option>`).join("")}<option value="other">Other</option>`;
   AG = Object.fromEntries(list.map((p) => [p.key, { label: p.label, color: p.color, mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false }]));
   try {
     const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");

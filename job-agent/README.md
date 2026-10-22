@@ -34,7 +34,7 @@ Set `"provider"` in `config.json`:
 - `"anthropic"` (default): Claude. Put `ANTHROPIC_API_KEY=…` in `.env` (console.anthropic.com → API Keys; the account needs credit under Settings → Billing). The model is `"model"` (default `claude-opus-5-5`); `"navigatorModel"` can set a different model for the click-by-click steps, e.g. `claude-sonnet-5-5` to lower the cost of long company-site applications.
 - `"gemini"`: Google Gemini. Put `GEMINI_API_KEY=…` in `.env`. Both Google key types work: AI Studio keys (`AIza…`, from aistudio.google.com/apikey) and Vertex AI express-mode keys (`AQ.…`, from Google Cloud); the agent picks the right Google endpoint from the key. If a model name isn't available for the key, it tries gemini-2.5-flash / gemini-2.5-pro / gemini-2.0-flash. The model is `"geminiModel"` (default `gemini-flash-latest`; `gemini-pro-latest` is stronger and slower). `"geminiNavigatorModel"` can set a different model for the click-by-click steps.
 
-Every AI step uses this setting: matching, tailored resumes, hiring messages, form answers, the Alignerr navigator and resume import. If the key is wrong, the quota or credit runs out, or the model name doesn't exist, the agent stops with a plain message on its dashboard card. Short "busy" (429) replies are retried automatically.
+Every AI step uses this setting: matching, tailored resumes, hiring messages, form answers, the navigator and resume import. If the key is wrong, the quota or credit runs out, or the model name doesn't exist, the agent stops with a plain message on its dashboard card. Short "busy" (429) replies are retried automatically.
 
 ## One-time setup
 
@@ -48,7 +48,7 @@ cp .env.example .env          # paste your GEMINI_API_KEY (and an ATS_PASSWORD f
 
 1. **Profile.** `profile.json` holds the candidate's data. It is git-ignored, so it never leaves this machine. Either put the supplied `profile.json` in this folder, or generate one from a PDF with `npm run import-resume -- ~/Downloads/resume.pdf`.
 2. **Fill the `TODO`s** in `profile.json → applicationAnswers` (notice period, current and expected CTC, relocation, shifts). The agent uses these to answer screening questions.
-3. **Start the agent's Chrome:** `npm run chrome`. Chrome doesn't let tools control your everyday profile, so this opens a separate Chrome window with its own profile. **Log in to LinkedIn, Naukri, Alignerr and Gmail in that window once.** The logins are remembered. (Gmail is used only to read verification codes/links that career sites email her.)
+3. **Start the agent's Chrome:** `npm run chrome`. Chrome doesn't let tools control your everyday profile, so this opens a separate Chrome window with its own profile. **Log in to LinkedIn, Naukri and Gmail in that window once.** The logins are remembered. (Gmail is used only to read verification codes/links that career sites email her.)
 
 ## Daily use
 
@@ -57,7 +57,7 @@ npm run chrome        # if that Chrome window isn't already open
 npm run dashboard     # then open http://localhost:4321
 ```
 
-Start and stop the agents **from the dashboard**. LinkedIn, Naukri and Alignerr each have their own agent card and run as separate processes at the same time, each in **its own Chrome window** (tiled LinkedIn | Naukri | Alignerr; leave them open, they can sit behind other windows). **▶ Start all** / **■ Stop all** in the header start or stop all three with the settings on their cards. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
+Start and stop the agents **from the dashboard**. Every site in `config.json` has its own agent card and runs as a separate process, each in **its own Chrome window** (tiled across the screen; leave them open, they can sit behind other windows). **▶ Start all** / **■ Stop all** in the header start or stop all of them with the settings on their cards. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
 
 You can also run it from a terminal; questions are then asked in the terminal. Modes:
 
@@ -75,21 +75,20 @@ Each agent card has **Apply to** (stop after this many applications), **Review**
 
 ## Fifteen job sites
 
-Besides LinkedIn, Naukri and Alignerr, the agent runs on the Naukri-like portals where a profile plus one Apply click does the job: **Indeed, Foundit, Shine, TimesJobs, Hirist, Instahyre and Cutshort** (on by default), each as its own agent card and its own Chrome window. **Glassdoor, Wellfound, Apna, Adzuna and Jooble** are configured too but off by default (`enabled: false`), because they mostly redirect to company sites or need heavy profiles; switch them on in `config.json` if you want them. These "portals" have no site-specific code: the AI navigator drives them. On each one it
+Besides LinkedIn and Naukri, the agent runs on the Naukri-like portals where a profile plus one Apply click does the job: **Indeed, Foundit, Shine, TimesJobs, Hirist, Instahyre and Cutshort** (on by default), each as its own agent card and its own Chrome window. **Glassdoor, Wellfound, Apna, Adzuna and Jooble** are configured too but off by default (`enabled: false`), because they mostly redirect to company sites or need heavy profiles; switch them on in `config.json` if you want them. These "portals" have no site-specific code: the AI navigator drives them. On each one it
 - **gets her an account**: signs in with Google when the site offers it; otherwise registers with her email and `ATS_PASSWORD`, reads the verification code or link from her Gmail, and if the email is already registered uses *Forgot password*, takes the reset link from Gmail, sets the password to `ATS_PASSWORD` and logs in;
 - runs every search in `platforms.<site>.searches`, lists the jobs on the results page, reads each one, and applies the way a person would (profile completion, resume upload, questions, submit), following redirects to company sites.
 Add a site by adding a `platforms` entry with `type: "portal"`, `home`, an optional `searchUrl` with `{keywords}` / `{location}` placeholders, and `searches`. `requiresLogin: true` makes the agent insist on an account before searching. The same job (title + company) applied to on one site is not applied to again on another within 30 days (`skipDuplicatesAcrossSites`).
 
 Running ten agents at once opens ten Chrome windows and processes; that needs a Mac with 16 GB or more. Start fewer cards if it gets slow.
 
-## Google Forms and Alignerr
+## Google Forms
 
 - **Google Forms:** when a job's "apply" link, or a link written in the job post, is a Google Form (`forms.gle`, `docs.google.com/forms`), the agent fills it: name, email, phone, ranges like "8+ years", checkboxes, dropdowns, free-text answers written by Claude, and the resume where the form has a file question. It goes through every section and submits. Forms that require a Google sign-in need you to sign in to Google once in the agent's Chrome.
-- **Alignerr** (app.alignerr.com) has its own agent card. Alignerr is an app rather than a classic job board, so this agent "looks" at each screen: it numbers the buttons, links and fields, Claude picks the next step (open the Opportunities tab, open a role, Apply, fill the form, upload the resume, Submit), and the agent does it. Every step is shown in the live log. Log in to Alignerr once in the agent's Chrome. The agent lists the open roles, keeps the ones that fit her (software, coding, PHP, JavaScript, full stack…), creates the tailored resume, and applies. Skill assessments and AI interviews are for her to take herself: the agent tells you, and in fully automatic mode marks them "needs attention" and moves on.
 
 ## How the agents work through applications
 
-- **Pace per site** (`delaySeconds` per platform): LinkedIn 20–40 s between applications (it restricts accounts that apply too fast), Naukri 5–12 s, Alignerr 5–10 s. New postings are checked every `recheckMinutes` (10).
+- **Pace per site** (`delaySeconds` per platform): LinkedIn 20–40 s between applications (it restricts accounts that apply too fast), the other sites 5–12 s. New postings are checked every `recheckMinutes` (10).
 - **New jobs every round, old ones in batches.** Each round runs every search (Magento, Adobe Commerce, PHP, React…) and applies to the new postings, then retries a batch of `retryBatchSize` (5) old unfinished jobs (needs attention, apply on site, shortlisted), in Magento → PHP → React order, best match first. The old jobs rotate through over the rounds. No single job may take more than `maxMinutesPerJob` (6); after that it's put back for a later try. Each job gets up to `maxAttemptsPerJob` (3) tries; a job that still can't be applied is marked **Couldn't apply** with the reason (its own filter on the dashboard) and left for you.
 - **The AI navigator does the hard parts like a person would.** On company career sites (Greenhouse, Lever, Ashby, iCIMS, Taleo, SuccessFactors, Zoho, Keka, Darwinbox, company homepages…) and whenever an Easy Apply / Naukri form gets stuck, it takes over. Every step it looks at a **screenshot** of the page plus a numbered list of all buttons, links and fields, **including forms embedded from another site (iframes)**. Then it does one thing:
   - finds the job and the Apply button, following new tabs;
@@ -99,7 +98,7 @@ Running ten agents at once opens ten Chrome windows and processes; that needs a 
   - **scrolls** to find more fields and the Next/Submit button, reads error messages and fixes them;
   - submits, and only reports "applied" when the site shows a confirmation.
   If an action didn't change anything it tries a different way. Up to `navigatorMaxSteps` (45) steps per application. Every step is shown in the live log.
-- **Logged out? It signs in with Google.** When LinkedIn, Naukri or Alignerr show a login page, the agent uses "Sign in with Google" with her account (Gmail is logged in in the agent's Chrome, so no password is needed), picks her account in Google's pop-up and carries on. On company sites it prefers "Continue with Google" over creating a password account. Only if a site has no Google button does it ask you.
+- **Logged out? It signs in with Google.** When a site shows a login page, the agent uses "Sign in with Google" with her account (Gmail is logged in in the agent's Chrome, so no password is needed), picks her account in Google's pop-up and carries on. On company sites it prefers "Continue with Google" over creating a password account. Only if a site has no Google button does it ask you.
 - **Verification emails are handled by the agent.** When a career site says it emailed a code or a link to verify the account (Workday, Photon, iCIMS…), the agent opens her **Gmail in the agent's Chrome**, reads only the newest matching email, types the code or opens the link, and carries on. Log in to Gmail once in that Chrome window (`npm run chrome` opens it). Turn this off with `"readVerificationEmails": false` in `config.json`.
 - **When a person is really needed** (CAPTCHA, an SMS code, a skill test or video interview, data she never gave), the job is set aside. In *Fully automatic* mode (`helpTimeoutMinutes` 0) the agent never waits: it moves on at once and tries that job again in a later round, up to `maxAttemptsPerJob` times; the reason is shown on the dashboard. In *Ask before submit* mode the question appears on the dashboard and the agent waits for your answer.
 - **⏭ Skip this job** on an agent card drops the job it's working on and goes to the next one.

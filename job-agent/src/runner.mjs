@@ -7,7 +7,7 @@ import { loadConfig, ROOT } from "./util.mjs";
 const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#8e5cd9", "#d6336c", "#0ca5b8", "#c27c0e", "#5c7cfa", "#2f9e44", "#e03131", "#f08c00", "#7048e8", "#1098ad", "#868e96", "#e64980", "#37b24d"];
 const cfgPlatforms = loadConfig().platforms ?? {};
 export const PLATFORMS = Object.keys(cfgPlatforms).filter((k) => cfgPlatforms[k]?.enabled !== false);
-export const LABELS = Object.fromEntries(PLATFORMS.map((k) => [k, cfgPlatforms[k].label || { linkedin: "LinkedIn", naukri: "Naukri", alignerr: "Alignerr" }[k] || k[0].toUpperCase() + k.slice(1)]));
+export const LABELS = Object.fromEntries(PLATFORMS.map((k) => [k, cfgPlatforms[k].label || { linkedin: "LinkedIn", naukri: "Naukri" }[k] || k[0].toUpperCase() + k.slice(1)]));
 /** [{ key, label, color }] for the dashboard. */
 export const platformList = () => PLATFORMS.map((k, i) => ({ key: k, label: LABELS[k], color: PALETTE[i % PALETTE.length] }));
 const MAX_LOG = 600;

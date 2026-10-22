@@ -12,7 +12,6 @@ import { syncProfile } from "./profile-sync.mjs";
 import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
-import * as alignerr from "./alignerr.mjs";
 import { makePortal } from "./portal.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
@@ -33,7 +32,7 @@ const retryUnfinished = args.retry !== undefined ? args.retry !== "false" : conf
 const UNFINISHED = new Set(["needs_attention", "external", "shortlisted"]);
 const maxPages = Number(config.maxResultPagesPerSearch ?? 5);
 const recheckMinutes = Number(config.recheckMinutes ?? 30);
-const builtin = { linkedin, naukri, alignerr };
+const builtin = { linkedin, naukri };
 const platforms = Object.fromEntries(Object.keys(config.platforms ?? {}).map((k) => [k, builtin[k] ?? makePortal(k, config.platforms[k])]));
 // The same job (title + company) applied to on another site in the last 30 days is not applied to again.
 const norm = (s) => String(s || "").toLowerCase().replace(/\(.*?\)|[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();

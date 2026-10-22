@@ -6,7 +6,7 @@
 //  - does it, checks what changed, and remembers the outcome for the next step.
 // Used for company career sites, stuck application dialogs, Google Forms and Alignerr.
 import { generateJSON } from "./ai.mjs";
-import { openVerificationLink, readVerificationEmail } from "./mail.mjs";
+import { readVerificationEmail } from "./mail.mjs";
 import { bestOption, fillCustomSelects, fillForm } from "./forms.mjs";
 import { ask, askForHelp, confirm, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
@@ -449,8 +449,9 @@ export async function navigate(page, opts) {
           if (!mail) outcome = "no verification email found in Gmail (is Gmail logged in in this Chrome?)";
           else if (mail.code) outcome = `the emailed verification code is ${mail.code} — type it into the code field`;
           else {
-            await openVerificationLink(page.context(), mail.link);
-            outcome = "opened the verification link from the email; the account should now be verified — reload / sign in and continue";
+            await page.goto(mail.link, { waitUntil: "domcontentloaded" }).catch(() => {});
+            await sleep(2500);
+            outcome = "opened the link from the email in this tab — continue here (set the new password / sign in / carry on with the application)";
           }
           break;
         }

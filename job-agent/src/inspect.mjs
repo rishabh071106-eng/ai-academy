@@ -14,7 +14,7 @@ const pages = context.pages().filter((p) => !p.url().startsWith("chrome") && !p.
 let page = pages.at(-1);
 if (url || !page) {
   page = await context.newPage();
-  await page.goto(url || "https://app.alignerr.com/home", { waitUntil: "domcontentloaded" });
+  await page.goto(url || "https://www.naukri.com/mnjuser/homepage", { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
 }
 await page.bringToFront().catch(() => {});
