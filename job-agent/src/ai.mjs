@@ -29,8 +29,8 @@ export const currentProvider = () => provider;
 
 /** The model for a role: "main" (matching, tailoring, answers) or "navigator" (click-by-click). */
 export function modelFor(role = "main") {
-  if (provider === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-flash-latest";
-  return (role === "navigator" && config.navigatorModel) || config.model || "claude-opus-5-5";
+  if (provider === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-flash-lite-latest";
+  return (role === "navigator" && config.navigatorModel) || config.model || "claude-haiku-5-5";
 }
 
 /**
@@ -60,11 +60,12 @@ async function claude(args) {
   for (let attempt = 1; ; attempt++) {
     let response;
     try {
+      const model = modelFor(role);
       response = await anthropic.beta.messages.create({
-        model: modelFor(role),
+        model,
         max_tokens: maxTokens,
-        betas: ["server-side-fallback-2026-07-01"],
-        fallbacks: "default",
+        // Server-side refusal fallbacks exist for Opus/Sonnet/Fable; Haiku has none.
+        ...(/haiku/i.test(model) ? {} : { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" }),
         system,
         output_config: { effort, format: { type: "json_schema", schema } },
         messages: [{ role: "user", content }],
@@ -133,7 +134,7 @@ function rememberEndpoint() {
 }
 
 // If the configured model name isn't available for this key, try these in order.
-const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
+const FALLBACK_MODELS = ["gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"];
 let workingModel = null;
 
 const toParts = (content) =>

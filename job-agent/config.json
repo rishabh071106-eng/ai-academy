@@ -1,8 +1,8 @@
 {
   "provider": "anthropic",
-  "geminiModel": "gemini-flash-latest",
+  "geminiModel": "gemini-flash-lite-latest",
   "geminiNavigatorModel": "",
-  "model": "claude-opus-5-5",
+  "model": "claude-haiku-5-5",
   "navigatorModel": "",
   "mode": "review",
   "baseResume": "~/Downloads/Aishwarya-Sharma-Resume*.pdf",
