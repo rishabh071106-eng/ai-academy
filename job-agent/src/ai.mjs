@@ -8,50 +8,96 @@ import path from "node:path";
 import { DATA_DIR, loadConfig, log, sleep, stopIfFatalApiError } from "./util.mjs";
 
 const config = loadConfig();
-export const PROVIDER = (config.provider || (process.env.GEMINI_API_KEY ? "gemini" : "anthropic")).toLowerCase();
+const haveClaude = () => !!process.env.ANTHROPIC_API_KEY;
+const haveGemini = () => !!process.env.GEMINI_API_KEY;
+export const PROVIDER = (config.provider || (haveClaude() ? "anthropic" : "gemini")).toLowerCase();
+// The provider in use; it can switch once during a run when the first one stops working
+// (no credit, bad key) and the other key is in .env — the run carries on instead of stopping.
+let provider = PROVIDER === "anthropic" && !haveClaude() && haveGemini() ? "gemini" : PROVIDER === "gemini" && !haveGemini() && haveClaude() ? "anthropic" : PROVIDER;
+if (provider !== PROVIDER) log("warn", `No ${PROVIDER === "anthropic" ? "ANTHROPIC_API_KEY" : "GEMINI_API_KEY"} in .env — using ${provider === "gemini" ? "Gemini" : "Claude"} instead.`);
+let switched = false;
+function switchProvider(reason) {
+  if (switched) return false;
+  const other = provider === "gemini" ? "anthropic" : "gemini";
+  if ((other === "gemini" && !haveGemini()) || (other === "anthropic" && !haveClaude())) return false;
+  switched = true;
+  provider = other;
+  log("warn", `\n⚠ ${other === "gemini" ? "Claude" : "Gemini"} can't be used right now (${String(reason).split("\n")[0].slice(0, 120)}) — switching to ${other === "gemini" ? "Gemini" : "Claude"} for the rest of this run.`);
+  return true;
+}
+export const currentProvider = () => provider;
 
 /** The model for a role: "main" (matching, tailoring, answers) or "navigator" (click-by-click). */
 export function modelFor(role = "main") {
-  if (PROVIDER === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-flash-latest";
+  if (provider === "gemini") return (role === "navigator" && config.geminiNavigatorModel) || config.geminiModel || "gemini-flash-latest";
   return (role === "navigator" && config.navigatorModel) || config.model || "claude-opus-5-5";
 }
 
 /**
- * content: a string, or an array of { type: "text", text } and
- * { type: "document", source: { type: "base64", media_type, data } } blocks.
+ * content: a string, or an array of { type: "text", text }, { type: "image", source: {…} } and
+ * { type: "document", source: { type: "base64", media_type, data } } blocks (Claude block shapes).
  */
 export async function generateJSON({ system, content, schema, effort = "medium", maxTokens = 16000, role = "main" }) {
-  return PROVIDER === "gemini" ? gemini({ system, content, schema, maxTokens, role }) : claude({ system, content, schema, effort, maxTokens, role });
+  const args = { system, content, schema, effort, maxTokens, role };
+  return provider === "gemini" ? gemini(args) : claude(args);
 }
 
 // ---------------------------------------------------------------- Claude
+// claude-opus-5-5 with structured output (output_config.format json_schema), adaptive thinking
+// (the model's default), explicit effort, and server-side refusal fallbacks.
 let anthropic;
-async function claude({ system, content, schema, effort, maxTokens, role }) {
+async function claude(args) {
+  const { system, content, schema, effort, maxTokens, role } = args;
   if (!anthropic) {
-    if (!process.env.ANTHROPIC_API_KEY) {
+    if (!haveClaude()) {
+      if (switchProvider("ANTHROPIC_API_KEY is missing from .env")) return gemini(args);
       log("err", "\n■ STOPPED: ANTHROPIC_API_KEY is missing from job-agent/.env. Create a key at console.anthropic.com → API Keys, add it there, then press Start again.");
       process.exit(3);
     }
     const { default: Anthropic } = await import("@anthropic-ai/sdk");
     anthropic = new Anthropic();
   }
-  const response = await anthropic.beta.messages
-    .create({
-      model: modelFor(role),
-      max_tokens: maxTokens,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      system,
-      output_config: { effort, format: { type: "json_schema", schema } },
-      messages: [{ role: "user", content }],
-    })
-    .catch((e) => {
-      stopIfFatalApiError(e);
+  for (let attempt = 1; ; attempt++) {
+    let response;
+    try {
+      response = await anthropic.beta.messages.create({
+        model: modelFor(role),
+        max_tokens: maxTokens,
+        betas: ["server-side-fallback-2026-07-01"],
+        fallbacks: "default",
+        system,
+        output_config: { effort, format: { type: "json_schema", schema } },
+        messages: [{ role: "user", content }],
+      });
+    } catch (e) {
+      const status = e?.status ?? 0;
+      const msg = String(e?.message ?? e);
+      const fatal = status === 401 || status === 403 || /credit balance is too low|billing|purchase credits|invalid x-api-key|authentication_error|permission_error/i.test(msg);
+      if (fatal) {
+        if (switchProvider(msg)) return gemini(args);
+        stopIfFatalApiError(e);
+        throw e;
+      }
+      // Rate limit / overloaded / temporary: wait and retry a few times (the SDK already retried twice).
+      if ([408, 409, 429, 500, 502, 503, 504, 529].includes(status) && attempt < 5) {
+        const wait = Math.min(120, 10 * attempt);
+        log("dim", `   Claude busy (${status}); retrying in ${wait} s…`);
+        await sleep(wait * 1000);
+        continue;
+      }
       throw e;
-    });
-  if (response.stop_reason === "refusal") throw new Error(`Claude declined: ${response.stop_details?.explanation ?? "no explanation"}`);
-  if (response.stop_reason === "max_tokens") throw new Error("Claude response was cut off (max_tokens)");
-  return JSON.parse(response.content.filter((b) => b.type === "text").map((b) => b.text).join(""));
+    }
+    if (response.stop_reason === "refusal") throw new Error(`Claude declined: ${response.stop_details?.explanation ?? "no explanation"}`);
+    if (response.stop_reason === "max_tokens") throw new Error("Claude response was cut off (max_tokens)");
+    return JSON.parse(response.content.filter((b) => b.type === "text").map((b) => b.text).join(""));
+  }
+}
+
+/** A Gemini problem that would end the run: switch to Claude if its key is there, else stop. */
+async function geminiGiveUp(message, args) {
+  if (switchProvider(message)) return claude(args);
+  log("err", `\n■ STOPPED: ${message}`);
+  process.exit(3);
 }
 
 // ---------------------------------------------------------------- Gemini
@@ -108,12 +154,10 @@ function toOpenApiSchema(s) {
 }
 
 let schemaField = "responseJsonSchema";
-async function gemini({ system, content, schema, maxTokens, role }) {
+async function gemini(args) {
+  const { system, content, schema, maxTokens, role } = args;
   const key = process.env.GEMINI_API_KEY;
-  if (!key) {
-    log("err", "\n■ STOPPED: GEMINI_API_KEY is missing from job-agent/.env. Add it, then press Start again.");
-    process.exit(3);
-  }
+  if (!key) return geminiGiveUp("GEMINI_API_KEY is missing from job-agent/.env. Add it, then press Start again.", args);
   const wanted = modelFor(role);
   const candidates = [...new Set([workingModel && role === "main" ? workingModel : wanted, wanted, ...FALLBACK_MODELS].filter(Boolean))];
   let model = candidates.shift();
@@ -160,10 +204,7 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       schemaField = "responseSchema";
       continue;
     }
-    if (/api key not valid|API_KEY_INVALID|api key expired/i.test(msg)) {
-      log("err", `\n■ STOPPED: The Gemini API key in job-agent/.env is not valid (tried ${isVertexKey() ? "Vertex AI" : "the Gemini API"}). Check it was copied completely, or create a new one, then press Start again.`);
-      process.exit(3);
-    }
+    if (/api key not valid|API_KEY_INVALID|api key expired/i.test(msg)) return geminiGiveUp(`The Gemini API key in job-agent/.env is not valid (tried ${isVertexKey() ? "Vertex AI" : "the Gemini API"}). Check it was copied completely, or create a new one, then press Start again.`, args);
     // Key not allowed on this Google service: try the other one once.
     if ((res.status === 403 || res.status === 401) && !switchedEndpoint && !process.env.GEMINI_BASE_URL && !config.geminiEndpoint) {
       switchedEndpoint = true;
@@ -171,23 +212,14 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       log("dim", `   (using ${endpoint === "studio" ? "the Gemini API (AI Studio)" : "Vertex AI"} for this key)`);
       continue;
     }
-    if (res.status === 402 || /credits are depleted|billing|payment required/i.test(msg)) {
-      log("err", `\n■ STOPPED: The Google account behind GEMINI_API_KEY has no credit left (${msg.split(".")[0]}). Add credits at https://ai.studio/projects, or put a new key from https://aistudio.google.com/apikey into job-agent/.env, then press Start again.`);
-      process.exit(3);
-    }
-    if (res.status === 403) {
-      log("err", `\n■ STOPPED: Google refused the request on both of its Gemini services (${msg}). The simplest fix: create a key at aistudio.google.com/apikey and put it in .env as GEMINI_API_KEY.`);
-      process.exit(3);
-    }
+    if (res.status === 402 || /credits are depleted|billing|payment required/i.test(msg)) return geminiGiveUp(`The Google account behind GEMINI_API_KEY has no credit left (${msg.split(".")[0]}). Add credits at https://ai.studio/projects, or put a new key from https://aistudio.google.com/apikey into job-agent/.env, then press Start again.`, args);
+    if (res.status === 403) return geminiGiveUp(`Google refused the request on both of its Gemini services (${msg}). The simplest fix: create a key at aistudio.google.com/apikey and put it in .env as GEMINI_API_KEY.`, args);
     if (res.status === 404 && candidates.length) {
       log("dim", `   Gemini model "${model}" isn't available for this key; trying "${candidates[0]}"`);
       model = candidates.shift();
       continue;
     }
-    if (res.status === 404) {
-      log("err", `\n■ STOPPED: Gemini model "${model}" not found. Set "geminiModel" in config.json to a current model (e.g. gemini-flash-latest).`);
-      process.exit(3);
-    }
+    if (res.status === 404) return geminiGiveUp(`Gemini model "${model}" not found. Set "geminiModel" in config.json to a current model (e.g. gemini-flash-latest).`, args);
     // Rate limits and temporary errors: wait and retry (Gemini says how long).
     if ([429, 500, 502, 503, 504].includes(res.status) && attempt < 6) {
       const hint = JSON.stringify(data.error?.details || []).match(/"retryDelay":"(\d+(?:\.\d+)?)s"/)?.[1];
@@ -196,10 +228,7 @@ async function gemini({ system, content, schema, maxTokens, role }) {
       await sleep(wait * 1000);
       continue;
     }
-    if (res.status === 429) {
-      log("err", "\n■ STOPPED: Your Gemini quota is used up for now (rate or daily limit). Wait, or raise the limit / enable billing in Google AI Studio, then press Start again.");
-      process.exit(3);
-    }
+    if (res.status === 429) return geminiGiveUp("Your Gemini quota is used up for now (rate or daily limit). Wait, or raise the limit / enable billing in Google AI Studio, then press Start again.", args);
     throw new Error(`Gemini error ${res.status}: ${msg}`);
   }
 }
