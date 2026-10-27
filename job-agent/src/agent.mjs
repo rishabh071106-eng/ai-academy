@@ -385,6 +385,17 @@ for (const [key, mod] of Object.entries(platforms)) {
           stats.skipped++;
           continue;
         }
+        // The tailored resume may reorder skills but never lose any: put back whatever the AI dropped.
+        if (ev.tailored?.skillGroups?.length && profile.skillGroups?.length) {
+          const have = new Set(ev.tailored.skillGroups.flatMap((g) => g.items.map((i) => i.toLowerCase())));
+          for (const g of profile.skillGroups) {
+            const missing = g.items.filter((i) => !have.has(i.toLowerCase()));
+            if (!missing.length) continue;
+            const target = ev.tailored.skillGroups.find((x) => x.name.toLowerCase() === g.name.toLowerCase());
+            if (target) target.items.push(...missing);
+            else ev.tailored.skillGroups.push({ name: g.name, items: [...g.items] });
+          }
+        }
         stats.matched++;
         let resumePath;
         try {

@@ -18,6 +18,7 @@ async function jsonCall({ system, content, schema, effort = "medium", maxTokens 
 const HONESTY_RULES = `Hard rules:
 - Never invent employers, dates, projects, degrees, certifications, numbers or skills the candidate does not have.
 - You may reorder, rephrase, emphasise and trim existing facts, and mirror the job description's wording where it truthfully describes the candidate's work.
+- Technical skills: keep every group and every item from the resume — Adobe Commerce/Magento, PHP/MySQL/GraphQL back end AND React/Next.js/TypeScript/HTML/CSS front end — only reorder; the resume must always show her as full stack.
 - Keep it to what fits on 1-2 A4 pages.`;
 
 const EVAL_SCHEMA = obj({
@@ -33,7 +34,7 @@ const EVAL_SCHEMA = obj({
     headline: str,
     tagline: str,
     summary: str,
-    skillGroups: { type: "array", description: "Her skill groups with the same items, reordered so the most relevant come first", items: obj({ name: str, items: strArr }) },
+    skillGroups: { type: "array", description: "ALL her skill groups with ALL their items (front end and back end alike), only reordered so the most relevant come first — never drop a group or an item", items: obj({ name: str, items: strArr }) },
     skills: { ...strArr, description: "Flat list, most relevant first" },
     experience: {
       type: "array",

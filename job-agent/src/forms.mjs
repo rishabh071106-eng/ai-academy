@@ -1,6 +1,6 @@
 // Generic form reading/filling for application modals (LinkedIn Easy Apply, Naukri questionnaires).
 import { answerQuestions } from "./llm.mjs";
-import { humanPause, log } from "./util.mjs";
+import { humanPause, loadConfig, log } from "./util.mjs";
 
 /**
  * Reads every visible, fillable field inside `root` and tags it with data-ja-key.
@@ -83,6 +83,7 @@ export function quickAnswer(field, profile) {
   const l = field.label.toLowerCase();
   const [first, ...rest] = profile.name.split(" ");
   if (/e-?mail/.test(l)) return profile.email;
+  if (/^(key ?skills?|skills?|technologies|technical skills|tags|areas? of expertise)\b/.test(l) && !field.options?.length && field.type !== "checkbox" && field.type !== "radio") return (loadConfig().skillTags ?? profile.skills ?? []).join(", ");
   if (/country (phone |dial(ing)? )?code|phone (country )?code|dial(ing)? code/.test(l) && !/(number|mobile).*country code/.test(l)) return field.options?.length ? field.options.find((o) => /india|\+91/i.test(o)) ?? null : profile.phoneCountryCode || "+91";
   const cc = profile.phoneCountryCode || "+91";
   const digits = String(profile.phone).replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");

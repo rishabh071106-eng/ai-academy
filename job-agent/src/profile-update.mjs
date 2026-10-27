@@ -64,23 +64,47 @@ ${cert || "(none)"}
 NOTICE PERIOD: ${a.noticePeriod || a.noticePeriodDays || ""} · CURRENT CTC: ${a.currentCtcLpa ? `${a.currentCtcLpa} LPA` : ""} · EXPECTED CTC: ${a.expectedCtcLpa ? `${a.expectedCtcLpa} LPA` : ""} · OPEN TO RELOCATE: ${a.willingToRelocate || ""}`;
 }
 
+const SECTIONS = ["resume file", "headline", "summary", "work experience", "skills", "education", "certifications", "contact details", "job preferences"];
+
+/** The part of the resume one section needs, so each edit gets exactly the right data. */
+function sectionData(section, profile, resumeName) {
+  const a = profile.applicationAnswers ?? {};
+  const tags = loadConfig().skillTags ?? profile.skills ?? [];
+  switch (section) {
+    case "resume file": return `Upload the NEW resume PDF${resumeName ? ` "${resumeName}"` : ""} with upload_resume, replacing the old one; if the site lists several resumes, make the new one the default and delete older copies.`;
+    case "headline": return `Headline / profile title / current designation: "${profile.headline}". Tagline if there is one: "${profile.tagline || ""}". Total experience: ${profile.totalExperienceYears} years.`;
+    case "summary": return `Summary / About / Profile summary (replace the old text with exactly this):\n${profile.summary}`;
+    case "work experience": return `Every employer must exist with these exact details (add missing ones, fix dates/titles, keep bullets as given):\n${(profile.experience ?? []).map((e) => `• ${e.role} — ${e.company}${e.client ? ` (client: ${e.client})` : ""}, ${e.location || ""}, ${e.start} to ${e.end}\n${(e.bullets ?? []).slice(0, 4).map((b) => `   - ${b}`).join("\n")}`).join("\n")}`;
+    case "skills": return `Add ALL of these skills / key skills / tags (one at a time where the field takes tags, choose the site's suggestion when it matches; keep the ones already there):\n${tags.join(", ")}\nYears per skill if asked: ${Object.entries(profile.skillYears ?? {}).map(([k, v]) => `${k} ${v}`).join(", ")}`;
+    case "education": return `Education:\n${(profile.education ?? []).map((e) => `• ${e.degree}${e.field ? ` in ${e.field}` : ""} — ${e.institution}${e.year || e.end ? ` (${e.year || e.end})` : ""}`).join("\n") || "(none on the resume: skip)"}`;
+    case "certifications": return `Certifications:\n${(profile.certifications ?? []).map((c) => `• ${typeof c === "string" ? c : `${c.name}${c.issuer ? ` — ${c.issuer}` : ""}${c.year ? ` (${c.year})` : ""}`}`).join("\n") || "(none on the resume: skip)"}`;
+    case "contact details": return `Name ${profile.name} · phone ${profile.phoneCountryCode || "+91"} ${profile.phone} · email ${profile.email} · location ${profile.city}${profile.address ? ` (${profile.address})` : ""} · LinkedIn ${profile.linkedinUrl || ""}. Gender: ${a.gender || ""}.`;
+    case "job preferences": return `Notice period: ${a.noticePeriod || a.noticePeriodDays || ""} · current CTC: ${a.currentCtcLpa ? `${a.currentCtcLpa} LPA (₹${a.currentCtcInr || ""})` : ""} · expected CTC: ${a.expectedCtcLpa ? `${a.expectedCtcLpa} LPA (₹${a.expectedCtcInr || ""})` : ""} · open to relocate: ${a.willingToRelocate || ""} · preferred location: ${profile.city} · job type: full-time · mark her as actively looking / open to work if the site has it.`;
+    default: return "";
+  }
+}
+
+const parseAssessment = (text) => {
+  try {
+    const m = String(text || "").match(/\[[\s\S]*\]/);
+    const arr = m ? JSON.parse(m[0]) : null;
+    return Array.isArray(arr) ? arr : null;
+  } catch {
+    return null;
+  }
+};
+
 /**
- * Brings her profile on `site` up to date. Returns { status: "updated" | "needs_attention", note }.
- * `home` = the site's home page; `profileUrl` (optional) = a direct link to her profile/resume page.
+ * Brings her profile on `site` up to date in three passes, so even a small model stays on track:
+ *   1. assess — open the profile, compare every section with the resume, report each as ok / outdated / missing;
+ *   2. update — one focused edit per section that isn't ok, with exactly that section's data;
+ *   3. verify — the resume file on the site is the new one.
+ * Returns { status: "updated" | "needs_attention", note }.
  */
 export async function updateSiteProfile(page, { key, site, home, profileUrl, profile, resumePath, baseResume, isLoggedIn, mode = "review" }) {
   const resumeName = resumePath ? path.basename(resumePath) : "";
-  log("info", `\n[${key}] Updating her ${site} profile from the resume…`);
-  await page.goto(profileUrl || home, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => {});
-  if (!(await ensureAccount(page, site, { isLoggedIn, home }))) return { status: "needs_attention", note: `${site}: couldn't log in to update the profile` };
-  if (profileUrl) await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => {});
-  const r = await navigate(page, {
-    goal: `Bring her ${site} profile fully up to date so it matches her resume below, section by section. Open My profile / Profile / Resume / Edit profile. For each section (headline or title, summary/about, work experience, skills, education, certifications, contact details, location, notice period, current and expected salary, resume file): open its Edit, replace outdated text with the resume's wording, add anything missing (each employer with role, dates, location and 2–4 bullet points; every skill listed), keep what already matches, and Save. Upload the resume PDF where the site keeps a resume (upload_resume), replacing the old one. Mark her as actively looking / open to work if the site has such a setting. Dismiss tips and pop-ups.
-THE RESUME FILE MATTERS MOST: the site must end up with her NEW resume${resumeName ? ` ("${resumeName}", uploaded today)` : ""} as the one and only / default resume. Delete or replace older copies the site still lists (old file names or older upload dates) so applications can't pick an old one. FINAL CHECK before finishing: open the resume section again and confirm the file shown is the new one (today's upload); if it isn't, upload it again.
-When every section is saved and the final check passed, use done with status "applied" (meaning: profile updated) and list in message what you changed and the resume file the site now shows.
-
-HER RESUME:
-${resumeText(profile)}`,
+  const cfg = loadConfig().profileSync ?? {};
+  const common = {
     rules: `${GOOGLE_RULES(profile.email)}
 - Edit only her own profile. Never delete an employer, degree or skill that is also on the resume; never add anything that isn't on it.
 - Dates: use the resume's months and years exactly; "present" means she still works there.
@@ -90,15 +114,67 @@ ${resumeText(profile)}`,
     profile,
     resumePath,
     mode,
-    // In a jobs run the person gets 10 minutes to do a code / CAPTCHA on screen; on demand it waits.
-    helpTimeoutMs: mode === "auto" ? Number(loadConfig().profileSync?.helpMinutes ?? 10) * 60000 : 0,
-    maxSteps: Number(loadConfig().profileSync?.maxSteps ?? 70),
+    helpTimeoutMs: mode === "auto" ? Number(cfg.helpMinutes ?? 10) * 60000 : 0,
+  };
+  const goProfile = async () => {
+    if (profileUrl) await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => {});
+  };
+  log("info", `\n[${key}] Updating her ${site} profile from the resume…`);
+  await page.goto(profileUrl || home, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => {});
+  if (!(await ensureAccount(page, site, { isLoggedIn, home }))) return { status: "needs_attention", note: `${site}: couldn't log in to update the profile` };
+  await goProfile();
+
+  // 1. Assess.
+  log("dim", `   step 1/3: looking at what the ${site} profile has today`);
+  const assess = await navigate(page, {
+    ...common,
+    goal: `Look at her ${site} profile (open My profile / Profile / Resume if needed, scroll through all of it, open sections if they are collapsed) and compare it with her resume below. Do not edit anything yet. When you have seen every section, use done (status "none") with message = a JSON array, one entry per section, exactly: [{"section":"resume file"|"headline"|"summary"|"work experience"|"skills"|"education"|"certifications"|"contact details"|"job preferences","status":"ok"|"outdated"|"missing"|"no-edit","note":"what differs"}]. "ok" only when the section already matches the resume (for the resume file: only if it is "${resumeName}" uploaded today).
+
+HER RESUME:
+${resumeText(profile)}`,
+    maxSteps: Number(cfg.assessSteps ?? 18),
   }).catch((e) => ({ status: "needs_attention", note: e.message }));
-  if (r.status === "applied") {
-    markUpdated(key, r.note, resumePath, baseResume);
-    log("ok", `[${key}] Profile updated: ${String(r.note || "").slice(0, 200)}`);
-    return { status: "updated", note: r.note };
+  const report = parseAssessment(assess.note) ?? SECTIONS.map((section) => ({ section, status: "unknown", note: "" }));
+  const todo = SECTIONS.filter((sec) => (report.find((r) => r.section === sec)?.status ?? "unknown") !== "ok" && report.find((r) => r.section === sec)?.status !== "no-edit");
+  log("dim", `   profile check: ${report.map((r) => `${r.section}=${r.status}`).join(" · ")}`);
+
+  // 2. Update what isn't right, one section at a time.
+  const done = [], failed = [];
+  for (const section of todo) {
+    log("dim", `   step 2/3: updating ${section}`);
+    await goProfile();
+    const r = await navigate(page, {
+      ...common,
+      goal: `On her ${site} profile, update ONLY the "${section}" section so it matches the resume, then Save. Open its Edit (pencil / Edit / Add), make the change, save, and confirm the saved section shows the new content. Then use done (status "applied") with message = what you changed. If this site has no such section or it can't be edited, use done (status "not_eligible").
+
+${sectionData(section, profile, resumeName)}`,
+      maxSteps: Number(cfg.sectionSteps ?? 25),
+    }).catch((e) => ({ status: "needs_attention", note: e.message }));
+    if (r.status === "applied") done.push(`${section}: ${String(r.note || "").slice(0, 120)}`);
+    else if (r.status === "skipped") done.push(`${section}: not on this site`);
+    else failed.push(`${section}: ${String(r.note || "").slice(0, 120)}`);
   }
-  log("warn", `[${key}] Profile update not finished: ${r.note}`);
-  return { status: "needs_attention", note: r.note };
+
+  // 3. Verify the resume file.
+  let resumeOk = true;
+  if (resumePath) {
+    log("dim", `   step 3/3: checking the resume file on ${site}`);
+    await goProfile();
+    const v = await navigate(page, {
+      ...common,
+      goal: `Open the resume / CV section of her ${site} profile and check which file it shows. If it is "${resumeName}" (uploaded today), use done (status "applied") with message = the file name and date shown. If it is an older file or missing, upload "${resumeName}" with upload_resume, make it the default, remove older copies if the site lists them, then re-check and use done (status "applied"). If the site has no resume section, use done (status "not_eligible").`,
+      maxSteps: 15,
+    }).catch((e) => ({ status: "needs_attention", note: e.message }));
+    resumeOk = v.status === "applied" || v.status === "skipped";
+    (resumeOk ? done : failed).push(`resume file: ${String(v.note || "").slice(0, 120)}`);
+  }
+
+  const note = `${done.join(" · ")}${failed.length ? ` · NOT DONE → ${failed.join(" · ")}` : ""}`;
+  if (!failed.length || (resumeOk && failed.length <= 2)) {
+    markUpdated(key, note, resumePath, baseResume);
+    log("ok", `[${key}] Profile updated: ${note.slice(0, 300)}`);
+    return { status: "updated", note };
+  }
+  log("warn", `[${key}] Profile update not finished: ${note.slice(0, 300)}`);
+  return { status: "needs_attention", note };
 }

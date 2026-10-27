@@ -129,7 +129,9 @@ export async function snapshot(page) {
 
 const obj = (properties) => ({ type: "object", properties, required: Object.keys(properties), additionalProperties: false });
 const str = { type: "string" };
+const PAGE_STATES = ["home_or_search", "login_or_signup", "verification", "job_list", "job_detail", "application_form", "review_or_submit", "confirmation", "profile", "profile_section_edit", "blocked", "error", "other"];
 const STEP_SCHEMA = obj({
+  page_state: { type: "string", enum: PAGE_STATES, description: "Where you are in the journey right now" },
   observation: { type: "string", description: "What the page shows right now, in one sentence (which step of the application, any errors)" },
   reasoning: { type: "string", description: "Why this action is the best next step" },
   action: { type: "string", enum: ["click", "type", "choose", "check", "upload_resume", "fill_form", "check_email", "press", "scroll", "wait", "back", "goto", "report_jobs", "done", "need_user"] },
@@ -222,6 +224,10 @@ Actions:
 - wait — the page is loading or processing an upload.
 - back · goto(value=url) · report_jobs(jobs) · done(status, message) · need_user(message).
 
+THE JOURNEY (always say which state you are in — page_state — and take the step that moves forward from it):
+- home_or_search → use the search box or open the job list. · login_or_signup → sign in with Google, or log in / register with her email and the password token. · verification → check_email for the code or link; an SMS code → need_user. · job_list → open the job (or report_jobs when asked to list). · job_detail → click Apply / Easy Apply. · application_form → fill_form, then fix empty or invalid fields, upload_resume, answer questions, Next. · review_or_submit → check nothing is missing, Submit. · confirmation → done "applied". · profile / profile_section_edit → edit the section from HER DATA and Save. · blocked (CAPTCHA, bot check, locked) → need_user. · error → read the message, fix the cause, retry once, otherwise another route.
+- Before acting, compare the page with the previous step: if you are in the same state after your last action, the action did not work — do something different.
+
 How to work:
 - Think like a person filling the application: read the screenshot and the error messages, fill every required field (marked *, required or invalid), then press Next/Continue/Submit. After submitting, look for the confirmation.
 - "Years of experience with X": use skillYears from HER DATA (synonyms count); a related tool inherits the closest skill's years; anything AI / LLM / GenAI related is at least 2 years; never understate her (9+ years in total).
@@ -232,6 +238,7 @@ How to work:
 - Use done(status "applied") ONLY when the page clearly confirms the application was submitted (or says she already applied → "already_applied"). Use done(status "not_eligible") when there's no way to apply (job closed, no application form, location not allowed).
 - need_user ONLY for things a person must do: CAPTCHA / "I'm not a robot", an SMS/phone code, an email code that check_email couldn't find, a password reset, a skill test, a video/AI interview, payment, or data she has never given (e.g. PAN, date of birth if not in her data).
 - HER DATA is her resume: employers, job titles, dates, education, skills and contact details must match it exactly on every site — never invent, merge or move anything.
+- Skills / key skills / tags / technologies fields (on a profile or in an application): add ALL of these, one tag at a time where the field takes tags, picking the site's suggestion when it matches: ${(loadConfig().skillTags ?? []).join(", ")}.
 - Never invent facts; never pay; never change account security settings; never delete anything; never log out.
 - Close cookie banners and pop-ups that block the page.
 ${GOOGLE_RULES(profile.email)}
@@ -367,7 +374,7 @@ export async function navigate(page, opts) {
     const tName = t ? ` "${(t.text || t.label || t.question || t.tag).slice(0, 50)}"` : "";
     const shown = d.action === "type" && /password/i.test(`${t?.type} ${t?.label}`) ? "••••" : (d.value || "").slice(0, 50);
     const desc = `${d.action}${tName}${shown ? ` = ${shown}` : ""}`;
-    log("dim", `   → ${desc}  (${(d.reasoning || "").slice(0, 100)})`);
+    log("dim", `   [${d.page_state || "?"}] → ${desc}  (${(d.reasoning || "").slice(0, 100)})`);
 
     // Same action three times in a row without progress: say so, so the model changes approach.
     lastActions.push(desc);
@@ -514,7 +521,7 @@ export async function navigate(page, opts) {
     }
     await sleep(700);
     const changed = (await pageSig(page)) !== before ? "page changed" : "no visible change";
-    history.push(`${desc}${outcome ? ` → ${outcome}` : ""}${["type", "fill_form", "choose", "check"].includes(d.action) && !outcome.startsWith("FAILED") ? "" : ` → ${changed}`}${repeated ? " → WARNING: same action 3 times; it is not working, do something different" : ""}`);
+    history.push(`(${d.page_state || "?"}) ${desc}${outcome ? ` → ${outcome}` : ""}${["type", "fill_form", "choose", "check"].includes(d.action) && !outcome.startsWith("FAILED") ? "" : ` → ${changed}`}${repeated ? " → WARNING: same action 3 times; it is not working, do something different" : ""}`);
   }
   return { status: "needs_attention", note: "Ran out of steps", jobs: reported };
 }
