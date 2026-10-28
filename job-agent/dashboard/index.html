@@ -132,6 +132,9 @@ tr.job { cursor: pointer; }
 .job-title { font-weight: 600; }
 .job-co { color: var(--text-2); font-size: 13px; }
 .why { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.tier { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; color: var(--text-2); background: var(--surface-2); vertical-align: 1px; white-space: nowrap; }
+.focus { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -6px 0 16px; }
+.focus-label { color: var(--text-2); font-size: 12.5px; margin-right: 4px; }
 .platform { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); }
 .platform i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 .score { display: flex; align-items: center; gap: 8px; min-width: 96px; }
@@ -257,6 +260,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
   <div class="banner" id="banner"></div>
 
   <section class="kpis" id="kpis"></section>
+  <div class="focus" id="focus" title="Which of her stacks the applied jobs are about — the agent takes jobs in this order"></div>
 
   <section class="grid2">
     <div class="card panel">
@@ -280,8 +284,11 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
       <select class="sel" id="platformSel" aria-label="Platform">
         <option value="">All platforms</option>
       </select>
+      <select class="sel" id="tierSel" aria-label="Stack" title="Magento, PHP, React, Node, front end or full stack jobs">
+        <option value="">All stacks</option>
+      </select>
       <select class="sel" id="sortSel" aria-label="Sort">
-        <option value="recent">Most recent</option><option value="score">Best match</option><option value="company">Company A–Z</option>
+        <option value="recent">Most recent</option><option value="priority">Magento → PHP → React</option><option value="score">Best match</option><option value="company">Company A–Z</option>
       </select>
     </div>
     <div class="table-wrap">
@@ -323,9 +330,35 @@ const STATUS = {
 };
 let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, alignerr: { label: "Alignerr", color: "var(--series-3)" }, other: { label: "Other", color: "var(--muted)" } };
 const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.slice(1) : "Other", color: PLATFORM.other.color };
+// Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React → Node →
+// front end → full stack). The agent stores it on each job; older rows are classified here from the title.
+let TIER_DEFS = [
+  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php", "laravel", "wordpress", "woocommerce"] },
+  { name: "React", keywords: ["react", "reactjs", "react.js", "next.js", "nextjs", "typescript"] }, { name: "Node", keywords: ["node.js", "nodejs", "node js", "node", "mern"] },
+  { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css"] },
+  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "shopify", "e-commerce", "ecommerce"] },
+];
+let TIER_RES = [];
+const tierNames = () => [...TIER_DEFS.map((t) => t.name), "Other"];
+function setTiers(list) {
+  if (Array.isArray(list) && list.length) TIER_DEFS = list;
+  TIER_RES = TIER_DEFS.map((t) => new RegExp(`(^|[^a-z])(${t.keywords.map((k) => k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})([^a-z0-9]|$)`, "i"));
+  const sel = $("#tierSel");
+  if (sel) sel.innerHTML = `<option value="">All stacks</option>` + tierNames().map((n) => `<option value="${esc(n)}" ${state.tier === n ? "selected" : ""}>${esc(n)}</option>`).join("");
+}
+function tierOfRow(r) {
+  if (r.tier) return r.tier;
+  if (!TIER_RES.length) setTiers();
+  for (const text of [r.title || "", (r.matchReasons || []).join(" ")]) {
+    const i = text ? TIER_RES.findIndex((re) => re.test(text)) : -1;
+    if (i >= 0) return TIER_DEFS[i].name;
+  }
+  return "Other";
+}
+const tierIndex = (r) => { const i = tierNames().indexOf(tierOfRow(r)); return i < 0 ? 99 : i; };
 const APPLIED_LIKE = new Set(["applied", "interview", "offer", "rejected", "withdrawn"]);
 
-const state = { rows: [], statuses: Object.keys(STATUS), filter: "active", q: "", platform: "", sort: "recent", open: new Set() };
+const state = { rows: [], statuses: Object.keys(STATUS), filter: "active", q: "", platform: "", tier: "", sort: "recent", open: new Set() };
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const day = (d) => { const x = new Date(d); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`; };
@@ -391,6 +424,11 @@ function renderKpis() {
     <div class="label">${x.label}</div><div class="value">${x.value}</div><div class="hint">${x.hint}</div></div>`).join("");
   const att = $("#kpis .attention");
   att.onclick = att.onkeydown = (e) => { if (e.type === "keydown" && e.key !== "Enter") return; state.filter = "todo"; render(); document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth" }); };
+  const byTier = {};
+  for (const r of applied) { const t = tierOfRow(r); byTier[t] = (byTier[t] || 0) + 1; }
+  const focus = $("#focus");
+  focus.innerHTML = applied.length ? `<span class="focus-label">Applied by stack</span>` + tierNames().map((n) => `<button class="chip" aria-pressed="${state.tier === n}" data-t="${esc(n)}">${esc(n)}<span class="n">${byTier[n] || 0}</span></button>`).join("") : "";
+  focus.querySelectorAll(".chip").forEach((b) => (b.onclick = () => { state.tier = state.tier === b.dataset.t ? "" : b.dataset.t; $("#tierSel").value = state.tier; renderTable(); renderKpis(); }));
 }
 
 function renderDaily() {
@@ -496,9 +534,11 @@ function visibleRows() {
   const q = state.q.toLowerCase();
   const rows = state.rows.filter((r) => f.test(r)
     && (!state.platform || r.platform === state.platform)
+    && (!state.tier || tierOfRow(r) === state.tier)
     && (!q || `${r.company} ${r.title} ${r.location} ${r.notes}`.toLowerCase().includes(q)));
   const when = (r) => new Date(r.appliedAt || r.updatedAt || r.foundAt).getTime();
-  rows.sort(state.sort === "score" ? (a, b) => (b.matchScore ?? -1) - (a.matchScore ?? -1)
+  rows.sort(state.sort === "priority" ? (a, b) => tierIndex(a) - tierIndex(b) || when(b) - when(a)
+    : state.sort === "score" ? (a, b) => (b.matchScore ?? -1) - (a.matchScore ?? -1)
     : state.sort === "company" ? (a, b) => String(a.company).localeCompare(b.company)
     : (a, b) => when(b) - when(a));
   return rows;
@@ -525,7 +565,7 @@ function renderTable() {
     const open = state.open.has(r.id);
     const opts = state.statuses.map((s) => `<option value="${s}" ${s === r.status ? "selected" : ""}>${(STATUS[s] ?? { label: s }).label}</option>`).join("");
     return `<tr class="job" data-id="${esc(r.id)}" aria-expanded="${open}">
-      <td><div class="job-title">${esc(r.title) || "<span class=sub>(untitled)</span>"}</div><div class="job-co">${esc(r.company)}${r.location ? " · " + esc(r.location) : ""}</div>${r.status === "skipped" || r.status === "needs_attention" ? `<div class="why">${esc(lastNote(r))}</div>` : ""}</td>
+      <td><div class="job-title">${esc(r.title) || "<span class=sub>(untitled)</span>"}${tierOfRow(r) !== "Other" ? `<span class="tier">${esc(tierOfRow(r))}</span>` : ""}</div><div class="job-co">${esc(r.company)}${r.location ? " · " + esc(r.location) : ""}</div>${r.status === "skipped" || r.status === "needs_attention" ? `<div class="why">${esc(lastNote(r))}</div>` : ""}</td>
       <td class="hide-sm"><span class="platform"><i style="background:${p.color}"></i>${p.label}</span></td>
       <td class="hide-sm">${r.matchScore != null ? `<div class="score" title="Match ${r.matchScore}%"><div class="track"><div class="fill" style="width:${r.matchScore}%;background:${scoreColor(r.matchScore)}"></div></div><span>${r.matchScore}</span></div>` : '<span class="date">—</span>'}</td>
       <td><select class="pill status-select" data-id="${esc(r.id)}" style="color:${st.fg};background:${st.bg}" aria-label="Status">${opts}</select></td>
@@ -569,6 +609,7 @@ async function patch(id, body, rerender = true) {
 
 $("#q").oninput = (e) => { state.q = e.target.value; renderTable(); };
 $("#platformSel").onchange = (e) => { state.platform = e.target.value; renderTable(); };
+$("#tierSel").onchange = (e) => { state.tier = e.target.value; renderTable(); renderKpis(); };
 $("#sortSel").onchange = (e) => { state.sort = e.target.value; renderTable(); };
 
 $("#addForm").status.innerHTML = ["applied", "interview", "offer", "rejected", "shortlisted"].map((s) => `<option value="${s}">${STATUS[s].label}</option>`).join("");
@@ -583,8 +624,8 @@ $("#addDialog").onclose = async () => {
 
 $("#logsBtn").onclick = () => { window.location.href = "/api/logs"; };
 $("#exportBtn").onclick = () => {
-  const cols = ["company", "title", "platform", "status", "matchScore", "appliedAt", "location", "url", "notes"];
-  const csv = [cols.join(","), ...visibleRows().map((r) => cols.map((c) => `"${String(r[c] ?? "").replace(/"/g, '""')}"`).join(","))].join("\n");
+  const cols = ["company", "title", "stack", "platform", "status", "matchScore", "appliedAt", "location", "url", "notes"];
+  const csv = [cols.join(","), ...visibleRows().map((r) => cols.map((c) => `"${String(c === "stack" ? tierOfRow(r) : r[c] ?? "").replace(/"/g, '""')}"`).join(","))].join("\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
   a.download = `applications-${day(new Date())}.csv`;
@@ -797,13 +838,15 @@ function lineClass(t, kind) {
 }
 
 let pollTimer;
+let tiersLoaded = false;
 async function pollAgent() {
   clearTimeout(pollTimer);
   let anyRunning = false;
   try {
     const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
-    const { platforms, profiles, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    const { platforms, tiers, profiles, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
     if (!agentsBuilt && platforms?.length) buildAgents(platforms);
+    if (!tiersLoaded && tiers?.length) { tiersLoaded = true; setTiers(tiers); renderTable(); }
     window.__profiles = profiles || {};
     let newLines = false;
     for (const [k, s] of Object.entries(runs)) {
@@ -837,7 +880,7 @@ function renderAgent(k, s) {
   a.lastStatus = s;
   const cur = s.running && s.current;
   el(k, "now").hidden = !cur;
-  if (cur) el(k, "nowText").textContent = `${cur.title}${cur.company ? ` · ${cur.company}` : ""}${cur.matchScore != null ? ` · ${cur.matchScore}% match` : ""}`;
+  if (cur) el(k, "nowText").textContent = `${cur.tier ? `[${cur.tier}] ` : ""}${cur.title}${cur.company ? ` · ${cur.company}` : ""}${cur.matchScore != null ? ` · ${cur.matchScore}% match` : ""}`;
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
   const modeName = MODE_NAME[s.options?.mode] ?? "";

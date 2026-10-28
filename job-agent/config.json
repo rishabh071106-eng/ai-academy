@@ -41,6 +41,89 @@
     "ui developer",
     "mern"
   ],
+  "priorityTiers": [
+    {
+      "name": "Magento",
+      "keywords": [
+        "magento",
+        "adobe commerce",
+        "magento 2",
+        "magento2",
+        "hyva",
+        "hyvä",
+        "pwa studio"
+      ]
+    },
+    {
+      "name": "PHP",
+      "keywords": [
+        "php",
+        "laravel",
+        "symfony",
+        "codeigniter",
+        "yii",
+        "cakephp",
+        "wordpress",
+        "woocommerce",
+        "drupal"
+      ]
+    },
+    {
+      "name": "React",
+      "keywords": [
+        "react",
+        "reactjs",
+        "react.js",
+        "react js",
+        "next.js",
+        "nextjs",
+        "next js",
+        "redux",
+        "typescript"
+      ]
+    },
+    {
+      "name": "Node",
+      "keywords": [
+        "node.js",
+        "nodejs",
+        "node js",
+        "node",
+        "express",
+        "express.js",
+        "nestjs",
+        "nest.js",
+        "mern"
+      ]
+    },
+    {
+      "name": "Front end",
+      "keywords": [
+        "front end",
+        "frontend",
+        "front-end",
+        "ui developer",
+        "web developer",
+        "javascript",
+        "html",
+        "css",
+        "jquery"
+      ]
+    },
+    {
+      "name": "Full stack",
+      "keywords": [
+        "full stack",
+        "fullstack",
+        "full-stack",
+        "shopify",
+        "e-commerce",
+        "ecommerce",
+        "graphql",
+        "mysql"
+      ]
+    }
+  ],
   "alwaysApplyKeywords": [
     "magento",
     "adobe commerce",
@@ -156,6 +239,10 @@
           "location": "Bengaluru, Karnataka, India"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru, Karnataka, India"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru, Karnataka, India"
         },
@@ -169,11 +256,11 @@
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru, Karnataka, India"
         },
         {
@@ -185,11 +272,7 @@
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "Node.js Developer",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru, Karnataka, India"
         },
         {
@@ -237,6 +320,10 @@
           "location": "bangalore"
         },
         {
+          "keywords": "wordpress developer",
+          "location": "bangalore"
+        },
+        {
           "keywords": "react developer",
           "location": "bangalore"
         },
@@ -249,11 +336,11 @@
           "location": "bangalore"
         },
         {
-          "keywords": "frontend developer",
+          "keywords": "node js developer",
           "location": "bangalore"
         },
         {
-          "keywords": "full stack developer",
+          "keywords": "frontend developer",
           "location": "bangalore"
         },
         {
@@ -269,11 +356,7 @@
           "location": "bangalore"
         },
         {
-          "keywords": "node js developer",
-          "location": "bangalore"
-        },
-        {
-          "keywords": "wordpress developer",
+          "keywords": "full stack developer",
           "location": "bangalore"
         },
         {
@@ -322,6 +405,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -330,11 +417,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -346,19 +433,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -391,6 +474,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -399,11 +486,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -415,19 +502,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -460,6 +543,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -468,11 +555,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -484,19 +571,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -529,6 +612,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -537,11 +624,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -553,19 +640,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -598,6 +681,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -606,11 +693,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -622,19 +709,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -666,6 +749,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -674,11 +761,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -690,19 +777,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -736,6 +819,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -744,11 +831,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -760,19 +847,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -805,6 +888,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -813,11 +900,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -829,19 +916,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -875,6 +958,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -883,11 +970,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -899,19 +986,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -944,6 +1027,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -952,11 +1039,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -968,19 +1055,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1013,6 +1096,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1021,11 +1108,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -1037,19 +1124,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1082,6 +1165,10 @@
           "location": "Bengaluru"
         },
         {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1090,11 +1177,11 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer",
           "location": "Bengaluru"
         },
         {
@@ -1106,19 +1193,15 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Node.js Developer",
+          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
+          "keywords": "Full Stack Developer",
           "location": "Bengaluru"
         },
         {
           "keywords": "Shopify Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
           "location": "Bengaluru"
         }
       ]

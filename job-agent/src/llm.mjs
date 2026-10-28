@@ -49,7 +49,7 @@ const EVAL_SCHEMA = obj({
 });
 
 /** Score a job against the profile and, if it fits, produce resume content and a hiring-team message for it. */
-export async function evaluateAndTailor(profile, job) {
+export async function evaluateAndTailor(profile, job, { tier = "", focus = "" } = {}) {
   const { applicationAnswers = {}, ...resume } = profile;
   const contact = job.hiringContact?.name ? `${job.hiringContact.name}${job.hiringContact.title ? ` (${job.hiringContact.title})` : ""}` : "unknown";
   const result = await jsonCall({
@@ -70,6 +70,7 @@ Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjac
 ${HONESTY_RULES}
 Tailored resume: it must stay VERY close to her own resume, so a recruiter who has seen both sees the same document, sharpened for this job:
 - Keep her headline unless the role is clearly front-end or full-stack JS, in which case lead with that (e.g. "Senior Full Stack Engineer · Next.js / React + Adobe Commerce"). Keep her tagline, reordering items if useful.
+- A JOB FOCUS line (below the job) says which part of her stack this job is about: lead the headline, the summary's first sentence, the bullet order and the skill-group order with that focus. Every other skill group and item still stays on the resume — she is applied as a full-stack engineer everywhere.
 - Summary: keep her summary; you may adjust the first sentence and reorder clauses to match the job. Same length (±15%).
 - Experience: every role, same company/role/client/dates. Keep her bullet wording; reorder bullets so the most relevant come first and change at most a few words per bullet to mirror the job's terms where truthful. Keep bold lead-ins like "Peelworks (…):". Don't drop roles or bullets from the two most recent roles.
 - Skill groups: same groups and items as hers, reordered by relevance.
@@ -89,7 +90,7 @@ Hiring message — write it the way she would actually type it to a stranger on 
 ${JSON.stringify(resume, null, 2)}
 
 Notice period: ${applicationAnswers.noticePeriod ?? applicationAnswers.noticePeriodDays ?? "not stated"}
-
+${focus ? `\nJOB FOCUS (${tier} role): ${focus}\n` : ""}
 JOB:
 Title: ${job.title || "(not detected — read it from the text)"}
 Company: ${job.company || "(not detected — read it from the text)"}

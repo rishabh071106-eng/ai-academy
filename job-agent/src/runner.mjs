@@ -2,6 +2,7 @@
 import { fork } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { TIERS } from "./priority.mjs";
 import { profileUpdates } from "./profile-update.mjs";
 import { loadConfig, ROOT } from "./util.mjs";
 
@@ -77,7 +78,7 @@ const get = (platform) => {
 
 /** since = { linkedin: n, naukri: n } — only log lines newer than those are returned. */
 export function status(since = {}) {
-  return { platforms: platformList(), profiles: profileUpdates(), runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
+  return { platforms: platformList(), tiers: TIERS.map((t) => ({ name: t.name, keywords: t.keywords })), profiles: profileUpdates(), runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
 }
 
 export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true, task = "jobs" } = {}, restart = 0) {
@@ -103,7 +104,7 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
       run.pending = { id: m.id, question: m.question, choices: m.choices ?? [], at: Date.now(), timeoutMs: m.timeoutMs || 0 };
       push(run, `? ${m.question}`, "ask");
     }
-    if (m?.type === "job") run.current = m.title ? { title: m.title, company: m.company || "", url: m.url || "", matchScore: m.matchScore ?? null, at: Date.now() } : null;
+    if (m?.type === "job") run.current = m.title ? { title: m.title, company: m.company || "", url: m.url || "", tier: m.tier || "", matchScore: m.matchScore ?? null, at: Date.now() } : null;
     if (m?.type === "ask-timeout" && run.pending?.id === m.id) {
       push(run, m.skipped ? "→ skipped by you" : "→ no answer in time; skipped", "sys");
       run.pending = null;

@@ -13,6 +13,7 @@ import { evaluateAndTailor } from "./llm.mjs";
 import * as linkedin from "./linkedin.mjs";
 import * as naukri from "./naukri.mjs";
 import { makePortal } from "./portal.mjs";
+import { focusFor, sortByTier, TIER_NAMES, tierOf } from "./priority.mjs";
 import { profileUpdateDue, updateSiteProfile } from "./profile-update.mjs";
 import { buildResumePdf, closePdfBrowser } from "./resume.mjs";
 import * as tracker from "./tracker.mjs";
@@ -203,13 +204,11 @@ for (const [key, mod] of Object.entries(platforms)) {
     // Round 1 begins with the unfinished jobs from earlier runs.
     // Every round starts by finishing the jobs that are still open (best matches first),
     // before looking for new ones. A job gets at most MAX_ATTEMPTS tries.
-    // Order: the keywords in requiredKeywords (Magento / Adobe Commerce first, then PHP, then
-    // React…) looked up in the title and match reasons, then the better match first.
-    const priorityWords = requiredFor(pcfg);
+    // Order: the job's tier (Magento → PHP → React → Node → Front end → Full stack, see
+    // priority.mjs) from its stored tier or its title and match reasons, then the better match first.
     const priority = (r) => {
-      const text = `${r.title || ""}\n${(r.matchReasons || []).join(" ")}`;
-      const i = priorityWords.findIndex((w) => reFor([w]).test(text));
-      return i < 0 ? priorityWords.length : i;
+      const stored = r.tier ? TIER_NAMES.indexOf(r.tier) : -1;
+      return stored >= 0 ? stored : tierOf(r.title, (r.matchReasons || []).join(" ")).index;
     };
     const allRetries = retryUnfinished
       ? tracker.loadAll().filter((r) => r.platform === key && UNFINISHED.has(r.status) && r.url && !/^manual-/.test(r.jobId) && (r.attempts ?? 0) < MAX_ATTEMPTS).sort((a, b) => priority(a) - priority(b) || (b.matchScore ?? 0) - (a.matchScore ?? 0)).map((r) => ({ jobId: r.jobId, url: r.url, listUrl: r.listUrl, cardText: "", title: r.title }))
@@ -223,8 +222,11 @@ for (const [key, mod] of Object.entries(platforms)) {
     const retryList = fresh.slice(0, RETRY_BATCH);
     retryList.forEach((r) => retriedThisRun.add(r.jobId));
     moreRetries = fresh.length > retryList.length;
+    // Searches run in tier order too: every Magento search before any PHP one, and so on.
+    const searches = sortByTier(pcfg.searches ?? [], (s) => [s.keywords || "", s.title || ""]);
+    if (round === 1 && searches.length) log("dim", `[${key}] Search order: ${searches.map((s) => s.keywords).join(" → ")}`);
     // New postings first (so applications happen every round), then a batch of old jobs.
-    for (const s of [...(pcfg.searches ?? []), ...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : [])]) {
+    for (const s of [...searches, ...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : [])]) {
      if (s.retry) log("info", `\n[${key}] Retrying ${retryList.length} of ${allRetries.length} old job(s) not applied yet…`);
      for (let pageIndex = 0; pageIndex < maxPages; pageIndex++) {
       if (done()) break;
@@ -249,6 +251,13 @@ for (const [key, mod] of Object.entries(platforms)) {
       const offTopic = s.retry ? [] : refs.filter((r) => r.cardText && !isRelevant(r.cardText));
       refs = refs.filter((r) => !offTopic.includes(r));
       log("dim", `  ${refs.length + offTopic.length} jobs found, ${refs.length} look relevant`);
+      if (!s.retry && refs.length) {
+        // Within the page: Magento jobs first, then PHP, React, Node, front end, full stack, the rest.
+        refs = sortByTier(refs, (r) => [r.title || "", r.cardText || ""]);
+        const counts = {};
+        for (const r of refs) { const t = tierOf(r.title || "", r.cardText || "").name; counts[t] = (counts[t] || 0) + 1; }
+        log("dim", `  in this order: ${TIER_NAMES.filter((t) => counts[t]).map((t) => `${t} ${counts[t]}`).join(" · ")}`);
+      }
       if (offTopic.length) log("dim", `  ignoring off-topic: ${offTopic.slice(0, 6).map((r) => r.cardText.split(/ · |\n/)[0].slice(0, 45)).join(" | ")}${offTopic.length > 6 ? " …" : ""}`);
 
       for (const ref of refs) {
@@ -296,10 +305,13 @@ for (const [key, mod] of Object.entries(platforms)) {
           log("dim", `  not a job page (${job.title || job.url}) — skipping`);
           continue;
         }
-        const base = { url: job.url, title: job.title, company: job.company, location: job.location, ...(ref.listUrl ? { listUrl: ref.listUrl } : {}) };
+        // Which of her stacks the job is about (title first, then the description): it decides
+        // the order jobs are taken in and how the tailored resume leads.
+        const tier = tierOf(job.title, job.description);
+        const base = { url: job.url, title: job.title, company: job.company, location: job.location, tier: tier.name, ...(ref.listUrl ? { listUrl: ref.listUrl } : {}) };
         currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
-        process.send?.({ type: "job", title: job.title, company: job.company, url: job.url });
-        log("info", `• ${job.title || "(reading job…)"} — ${job.company || ""}`);
+        process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, tier: tier.name });
+        log("info", `• [${tier.name}] ${job.title || "(reading job…)"} — ${job.company || ""}`);
         log("dim", `  read ${job.description.length.toLocaleString()} characters${job.expanded ? ` (opened ${job.expanded} "see more")` : ""}`);
 
         if (job.closed) {
@@ -332,14 +344,14 @@ for (const [key, mod] of Object.entries(platforms)) {
         log("dim", APPLY_ALL ? "  writing the resume for this job…" : "  checking the job against her resume…");
         let ev;
         try {
-          ev = await evaluateAndTailor(profile, job);
+          ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name) });
           if (!ev.descriptionComplete && !APPLY_ALL) {
             // Claude thinks the description was cut off: open the job again and re-read it once.
             log("dim", "  description looks cut off — opening the full job again");
             const again = { platform: key, ...(await mod.getJob(page, ref)) };
             if ((again.description ?? "").length > (job.description ?? "").length + 50) {
               Object.assign(job, { ...again, title: job.title || again.title, company: job.company || again.company });
-              ev = await evaluateAndTailor(profile, job);
+              ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name) });
             }
           }
         } catch (e) {
