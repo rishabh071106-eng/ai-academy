@@ -30,6 +30,7 @@ const EVAL_SCHEMA = obj({
   shouldApply: { type: "boolean" },
   matchReasons: { ...strArr, description: "2-4 short reasons it fits" },
   missingSkills: { ...strArr, description: "Required skills the candidate lacks" },
+  eligibleFromIndia: { type: "boolean", description: "false only when the post rules out a candidate applying from India: needs existing local work rights with no sponsorship, citizens/residents only, or on-site in the US/Canada without sponsorship or relocation" },
   tailored: obj({
     headline: str,
     tagline: str,
@@ -73,7 +74,7 @@ The candidate is a FULL-STACK engineer: back end (Adobe Commerce/Magento 2, PHP,
 - Any role whose stack includes Magento/Adobe Commerce, React, Next.js, PHP or general e-commerce web development is a fit, whether it is titled front-end, back-end, full-stack, e-commerce, platform or "software engineer".
 - Nice-to-have or secondary skills she lacks (e.g. Hyva, AWS, Docker, Vue, Node) lower the score a little but never make shouldApply false.
 - Seniority: she has 9+ years. Senior, Lead, Staff and mid-level (4+ yrs) roles are all fine; Architect/Manager roles are fine if hands-on.
-- Location: she lives in Bengaluru, India. shouldApply=false for roles that require living/working outside India (e.g. "Sofia, Bulgaria", "Costa Rica", "Canada/US only"), unless the role is fully remote and open to candidates in India.
+- Location: she lives in Bengaluru, India, and is open to relocating anywhere in the Gulf, APAC and Europe, and to remote work from India. eligibleFromIndia=true (and location is no reason for shouldApply=false) for roles in India, remote roles open to India, Gulf/APAC/European roles that do not rule her out, and any role that offers visa sponsorship or relocation. eligibleFromIndia=false and shouldApply=false only when the post explicitly rules her out: an existing local work permit / right to work required with no sponsorship, citizens or residents only, remote restricted to another country, or US/Canada on-site with no sponsorship or relocation mentioned.
 - shouldApply=false for pages that are not a single job posting (feed posts, "Build your professional brand", company pages, lists of jobs).
 - shouldApply=false ONLY when the core stack is unrelated (e.g. Java/Spring-only, .NET, Python/data science, native iOS/Android, SAP, Salesforce, QA-only, DevOps-only) or the role is not a developer role.
 The job text may be a raw copy of the whole web page (navigation, other job titles, ads). Find the actual job being viewed and judge only that; fill jobTitle/company/location from it.
@@ -129,7 +130,7 @@ export async function answerQuestions(profile, job, fields) {
     schema: ANSWER_SCHEMA,
     system: `You fill job application screening questions on behalf of a candidate, using only the candidate data provided.
 - For select/radio fields, answer with one of the given options, copied exactly.
-- For "years of experience with X" give a whole number from skillYears (match the skill or its synonym: React/React.js/ReactJS, Next.js/NextJS, REST/API/web services…). A related tool inherits the years of the closest skill she has: Redux, Hooks, Tailwind, MUI, Vite → React; Node/Express → JavaScript; Laravel, Symfony, CodeIgniter → PHP; Shopify, WooCommerce, Salesforce Commerce, e-commerce → Magento; SOAP, API integration, microservices → API; SQL, PostgreSQL → MySQL. Anything AI / LLM / GenAI / machine-learning related (AI tools, Copilot, ChatGPT, OpenAI API, prompt engineering, RAG, LangChain, AI agents…) is at least 2 years. Never understate her: total experience is 9+ years. Use 0 only for something she has clearly never used (e.g. Java, .NET, Android).
+- For "years of experience with X" give a whole number from skillYears (match the skill or its synonym: React/React.js/ReactJS, Next.js/NextJS, REST/API/web services…). A related tool inherits the years of the closest skill she has: Redux, Hooks, Tailwind, MUI, Vite → React; Node/Express → Next.js; Laravel, Symfony, CodeIgniter → PHP; Shopify, WooCommerce, Salesforce Commerce, e-commerce → Magento; SOAP, API integration, microservices → API; SQL, PostgreSQL → MySQL. Anything AI / LLM / GenAI / machine-learning related (AI tools, Copilot, ChatGPT, OpenAI API, prompt engineering, RAG, LangChain, AI agents…) is at least 2 years. Never understate her: total experience is 9+ years. Use 0 only for something she has clearly never used (e.g. Java, .NET, Android).
 - For numeric fields answer digits only. CTC values are in lakhs per annum (LPA) unless the question asks for another unit; convert if needed.
 - Motivation / free-text questions ("Why do you want to join us?", "Tell us about a project", "Anything else?"): write 2-4 genuine, specific sentences in her voice using her real experience and this job. No clichés, no exclamation marks.
 - Voluntary self-identification (race/ethnicity, veteran status, disability, sexual orientation): use the data if present (gender and disability are given); otherwise pick the "decline / prefer not to say / I don't wish to answer" option. Veteran status: she is not a veteran.
@@ -138,7 +139,7 @@ export async function answerQuestions(profile, job, fields) {
   · Interview availability / "available on <date>?" / "free for a call?" → Yes (or "Yes, any weekday after 11 AM IST" for free text).
   · Work from office / 5 days WFO / hybrid / night shifts / relocation → use her answers (comfortableWithHybrid, comfortableWithShifts, willingToRelocate); if not given, Yes.
   · "Last working day" / LWD → she is serving no notice yet; give today's date plus her notice period (today is ${new Date().toDateString()}), formatted DD/MM/YYYY.
-  · "Years of experience with X" → the number from skillYears (synonyms count: React.js = React, NextJS = Next.js, REST/web services = API); a related tool inherits the closest skill's years (Redux/Hooks/Tailwind → React, Node → JavaScript, Laravel → PHP, Shopify/e-commerce → Magento, SOAP/integration → API); anything AI / LLM / GenAI / ML related → at least 2; never understate her, total is 9+; "as a Lead" → years she has led or mentored in her roles (at least 2).
+  · "Years of experience with X" → the number from skillYears (synonyms count: React.js = React, NextJS = Next.js, REST/web services = API); a related tool inherits the closest skill's years (Redux/Hooks/Tailwind → React, Node → Next.js, Laravel → PHP, Shopify/e-commerce → Magento, SOAP/integration → API); anything AI / LLM / GenAI / ML related → at least 2; never understate her, total is 9+; "as a Lead" → years she has led or mentored in her roles (at least 2).
   · Current / expected CTC, notice period, location → from her answers. Current location: Bengaluru.
   · Yes/No about having a skill she has, or a degree she has → Yes; about one she lacks → No.
 - Every answer must be consistent with her resume (the profile): same employers, titles, dates, education and contact details; never invent or shift anything.

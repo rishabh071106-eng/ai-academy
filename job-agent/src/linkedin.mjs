@@ -35,6 +35,7 @@ export async function search(page, s, cfg) {
   if (cfg.easyApplyOnly) params.set("f_AL", "true");
   if (cfg.postedWithinDays) params.set("f_TPR", `r${cfg.postedWithinDays * 86400}`);
   if (s.remote) params.set("f_WT", "2");
+  if (s.geoId) params.set("geoId", String(s.geoId)); // 92000000 = Worldwide (remote jobs anywhere)
   if (cfg.pageIndex) params.set("start", String(cfg.pageIndex * 25));
   const url = `https://www.linkedin.com/jobs/search/?${params}`;
   await page.goto(url, { waitUntil: "domcontentloaded" });

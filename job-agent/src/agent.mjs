@@ -37,6 +37,8 @@ const mode = args.mode ?? config.mode ?? "review";
 // task "jobs" (default) searches and applies; task "profile" only updates her profile on each site.
 const task = args.task ?? "jobs";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
+// Phrases that rule out a candidate applying from India for a role abroad.
+const NOT_ELIGIBLE = /\b(no (visa )?sponsorship|without (visa )?sponsorship|not (able|willing) to sponsor|unable to (sponsor|offer sponsorship)|cannot (sponsor|provide (visa )?sponsorship)|must (already )?(have|hold|possess) (the |a |an )?(right|eligibility|authori[sz]ation|permit|valid visa|existing visa) to (live and )?work|(eu|eea|uk|us|u\.s\.|australian|singaporean|canadian|german|dutch|irish) (citizens?|nationals?|permanent residents?|residents?|passport holders?|work permit holders?)( only| required)|(local|in-country|onshore) candidates only|(permanent residents?|pr holders?|citizens?) only|citizenship (is )?required|security clearance|green card|w-?2 only|c2c)\b/i;
 // tailorResume: false (the default in config.json) sends her own resume file to every job, unchanged.
 const TAILOR = config.tailorResume !== false;
 // 0 = no limit: review every job the searches return (across result pages).
@@ -238,8 +240,9 @@ for (const [key, mod] of Object.entries(platforms)) {
     retryList.forEach((r) => retriedThisRun.add(r.jobId));
     moreRetries = fresh.length > retryList.length;
     // Searches run in tier order too: every Magento search before any PHP one, and so on.
-    const searches = sortByTier(pcfg.searches ?? [], (s) => [s.keywords || "", s.title || ""]);
-    if (round === 1 && searches.length) log("dim", `[${key}] Search order: ${searches.map((s) => s.keywords).join(" → ")}`);
+    // Searches marked everyRounds: n (the abroad ones) run on every n-th round, so the site is not hammered.
+    const searches = sortByTier((pcfg.searches ?? []).filter((s) => !s.everyRounds || (round - 1) % Number(s.everyRounds) === 0), (s) => [s.keywords || "", s.title || ""]);
+    if (round === 1 && searches.length) log("dim", `[${key}] Search order: ${searches.map((s) => s.keywords + (s.location && !/bengaluru|bangalore/i.test(s.location) ? ` (${s.location})` : "")).join(" → ")}`);
     // New postings first (so applications happen every round), then a batch of old jobs.
     for (const s of [...searches, ...(retryList.length ? [{ retry: true, keywords: "unfinished jobs", location: "from earlier runs" }] : [])]) {
      if (s.retry) log("info", `\n[${key}] Retrying ${retryList.length} of ${allRetries.length} old job(s) not applied yet…`);
@@ -385,6 +388,16 @@ for (const [key, mod] of Object.entries(platforms)) {
         job.location ||= ev.location;
         Object.assign(base, { title: job.title, company: job.company, location: job.location });
         if (wasMissing) log("dim", `  = ${job.title} — ${job.company}`);
+        // Abroad: she applies anywhere in the Gulf, APAC and Europe and to remote roles, except where the post
+        // rules out candidates who need sponsorship or relocation (the AI reads it; a plain-text check backs it up).
+        const abroad = !/india|bengaluru|bangalore|hyderabad|pune|chennai|mumbai|delhi|noida|gurgaon|gurugram|kolkata|ahmedabad|kochi|jaipur|indore/i.test(`${job.location || ""} ${ev.location || ""}`);
+        const ruledOut = abroad && (ev.eligibleFromIndia === false || NOT_ELIGIBLE.test(job.description || ""));
+        if (ruledOut) {
+          await tracker.upsert(key, job.jobId, { ...base, matchScore: ev.matchScore, status: "skipped", skipReason: "abroad", historyNote: "Abroad role that requires local work rights / offers no sponsorship" });
+          log("dim", `  ${ev.location || job.location || "abroad"} — needs local work rights or no sponsorship, skipping`);
+          stats.skipped++;
+          continue;
+        }
         const dup = appliedElsewhere(key, job);
         if (dup) {
           await tracker.upsert(key, job.jobId, { ...base, status: "skipped", skipReason: "duplicate", historyNote: `Already applied to this job on ${dup.platform}` });

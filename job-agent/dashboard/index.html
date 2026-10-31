@@ -336,13 +336,13 @@ const STATUS = {
 };
 let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, other: { label: "Other", color: "var(--muted)" } };
 const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.slice(1) : "Other", color: PLATFORM.other.color };
-// Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React → Node →
+// Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React →
 // front end → full stack). The agent stores it on each job; older rows are classified here from the title.
 let TIER_DEFS = [
-  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php", "laravel", "wordpress", "woocommerce"] },
-  { name: "React", keywords: ["react", "reactjs", "react.js", "next.js", "nextjs", "typescript"] }, { name: "Node", keywords: ["node.js", "nodejs", "node js", "node", "mern"] },
+  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php", "wordpress", "woocommerce"] },
+  { name: "React", keywords: ["react", "reactjs", "react.js", "next.js", "nextjs", "typescript"] },
   { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css"] },
-  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "shopify", "e-commerce", "ecommerce"] },
+  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce"] },
 ];
 let TIER_RES = [];
 const tierNames = () => [...TIER_DEFS.map((t) => t.name), "Other"];

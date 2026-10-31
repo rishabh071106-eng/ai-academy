@@ -1,4 +1,4 @@
-// Which jobs come first: Magento, then PHP, then React, then Node, then front end, then
+// Which jobs come first: Magento, then PHP, then React, then front end, then
 // full stack / e-commerce. A job's tier is the first tier (in this order) whose keyword
 // appears in its title; if no tier matches the title, the job's description/card text is
 // used the same way. Everything else is "Other" and comes last.
@@ -7,11 +7,10 @@ import { loadConfig } from "./util.mjs";
 
 export const DEFAULT_TIERS = [
   { name: "Magento", keywords: ["magento", "adobe commerce", "magento 2", "magento2", "hyva", "hyvä", "pwa studio"] },
-  { name: "PHP", keywords: ["php", "laravel", "symfony", "codeigniter", "yii", "cakephp", "wordpress", "woocommerce", "drupal"] },
+  { name: "PHP", keywords: ["php", "symfony", "codeigniter", "yii", "cakephp", "wordpress", "woocommerce", "drupal"] },
   { name: "React", keywords: ["react", "reactjs", "react.js", "react js", "next.js", "nextjs", "next js", "redux", "typescript"] },
-  { name: "Node", keywords: ["node.js", "nodejs", "node js", "node", "express", "express.js", "nestjs", "nest.js", "mern"] },
   { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css", "jquery"] },
-  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "shopify", "e-commerce", "ecommerce", "graphql", "mysql"] },
+  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce", "graphql", "mysql"] },
 ];
 export const OTHER = "Other";
 
@@ -54,7 +53,6 @@ export const FOCUS = {
   Magento: "Lead with Adobe Commerce / Magento 2: the Adobe Certified Expert credential, Magento 2 modules and customisations, PWA/Hyva/headless storefronts, performance, integrations. The React/Next.js and PHP groups follow right after.",
   PHP: "Lead with PHP: present her Magento work as PHP 7/8 + MySQL back-end engineering (REST/GraphQL APIs, OOP, design patterns, performance); Magento/Adobe Commerce next, then front end.",
   React: "Lead with React / Next.js / TypeScript front-end work (headless storefronts, component libraries, state management, performance); then Adobe Commerce/PHP back end.",
-  Node: "Lead with JavaScript / TypeScript, Node.js and React (APIs, GraphQL, headless storefronts); then PHP/Magento.",
   "Front end": "Lead with front-end engineering: React / Next.js, JavaScript / TypeScript, HTML / CSS, responsive UI and performance; then Adobe Commerce/PHP back end.",
   "Full stack": "Balance both halves: React / Next.js front end and PHP / Adobe Commerce / MySQL / GraphQL back end, e-commerce end to end.",
 };

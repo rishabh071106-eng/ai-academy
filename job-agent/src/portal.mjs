@@ -50,8 +50,10 @@ export function makePortal(key, cfg) {
     if (c.pageIndex > 0 && !cfg.pagination) return []; // one results page unless the site paginates by URL
     if (blockedRound >= 2) throw new Error(`${site} is showing a bot check on every page — skipping it for now`);
     const loc = s.location ?? cfg.location ?? "";
-    let url = cfg.searchUrl
-      ? cfg.searchUrl.replace("{keywords}", encodeURIComponent(s.keywords)).replace("{location}", encodeURIComponent(loc)).replace("{keywords-slug}", s.keywords.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{location-slug}", loc.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{page}", String((c.pageIndex ?? 0) + 1))
+    // A search may carry its own URL (e.g. a country edition of the site); otherwise the site's searchUrl template.
+    const template = s.url || cfg.searchUrl;
+    let url = template
+      ? template.replace("{keywords}", encodeURIComponent(s.keywords)).replace("{location}", encodeURIComponent(loc)).replace("{keywords-slug}", s.keywords.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{location-slug}", loc.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace("{page}", String((c.pageIndex ?? 0) + 1))
       : home;
     const state = await open(page, url);
     if (state === "blocked") {

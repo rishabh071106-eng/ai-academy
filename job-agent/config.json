@@ -11,7 +11,6 @@
     "magento",
     "adobe commerce",
     "php",
-    "laravel",
     "react",
     "reactjs",
     "react.js",
@@ -24,10 +23,7 @@
     "jquery",
     "graphql",
     "mysql",
-    "node.js",
-    "nodejs",
     "wordpress",
-    "shopify",
     "woocommerce",
     "e-commerce",
     "ecommerce",
@@ -38,8 +34,7 @@
     "frontend",
     "front-end",
     "web developer",
-    "ui developer",
-    "mern"
+    "ui developer"
   ],
   "priorityTiers": [
     {
@@ -58,7 +53,6 @@
       "name": "PHP",
       "keywords": [
         "php",
-        "laravel",
         "symfony",
         "codeigniter",
         "yii",
@@ -83,20 +77,6 @@
       ]
     },
     {
-      "name": "Node",
-      "keywords": [
-        "node.js",
-        "nodejs",
-        "node js",
-        "node",
-        "express",
-        "express.js",
-        "nestjs",
-        "nest.js",
-        "mern"
-      ]
-    },
-    {
       "name": "Front end",
       "keywords": [
         "front end",
@@ -116,7 +96,6 @@
         "full stack",
         "fullstack",
         "full-stack",
-        "shopify",
         "e-commerce",
         "ecommerce",
         "graphql",
@@ -128,7 +107,6 @@
     "magento",
     "adobe commerce",
     "php",
-    "laravel",
     "react",
     "reactjs",
     "react.js",
@@ -141,10 +119,7 @@
     "jquery",
     "graphql",
     "mysql",
-    "node.js",
-    "nodejs",
     "wordpress",
-    "shopify",
     "woocommerce",
     "e-commerce",
     "ecommerce",
@@ -155,14 +130,12 @@
     "frontend",
     "front-end",
     "web developer",
-    "ui developer",
-    "mern"
+    "ui developer"
   ],
   "relevantKeywords": [
     "magento",
     "adobe commerce",
     "php",
-    "laravel",
     "react",
     "reactjs",
     "react.js",
@@ -175,10 +148,7 @@
     "jquery",
     "graphql",
     "mysql",
-    "node.js",
-    "nodejs",
     "wordpress",
-    "shopify",
     "woocommerce",
     "e-commerce",
     "ecommerce",
@@ -189,8 +159,7 @@
     "frontend",
     "front-end",
     "web developer",
-    "ui developer",
-    "mern"
+    "ui developer"
   ],
   "maxApplicationsPerRun": 1000,
   "maxJobsToScanPerSearch": 60,
@@ -222,6 +191,120 @@
           "remote": true
         },
         {
+          "keywords": "Magento Developer",
+          "location": "United Arab Emirates",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "United Arab Emirates",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Saudi Arabia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Saudi Arabia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Qatar",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Qatar",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Singapore",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Singapore",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Malaysia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Malaysia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Australia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Australia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "United Kingdom",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "United Kingdom",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Germany",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Germany",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Netherlands",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Netherlands",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Ireland",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Ireland",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Worldwide",
+          "geoId": 92000000,
+          "remote": true,
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Worldwide",
+          "geoId": 92000000,
+          "remote": true,
+          "everyRounds": 2
+        },
+        {
           "keywords": "PHP Developer",
           "location": "Bengaluru, Karnataka, India"
         },
@@ -231,16 +314,27 @@
           "remote": true
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
           "keywords": "Full Stack Developer PHP",
           "location": "Bengaluru, Karnataka, India"
         },
         {
           "keywords": "WordPress Developer",
           "location": "Bengaluru, Karnataka, India"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "United Arab Emirates",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Saudi Arabia",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Qatar",
+          "everyRounds": 2
         },
         {
           "keywords": "React Developer",
@@ -256,8 +350,11 @@
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "Node.js Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "React Developer",
+          "location": "Worldwide",
+          "geoId": 92000000,
+          "remote": true,
+          "everyRounds": 2
         },
         {
           "keywords": "Frontend Developer",
@@ -274,11 +371,6 @@
         {
           "keywords": "Full Stack Developer",
           "location": "Bengaluru, Karnataka, India"
-        },
-        {
-          "keywords": "Shopify Developer",
-          "location": "India",
-          "remote": true
         }
       ],
       "delaySeconds": [
@@ -314,10 +406,6 @@
           "location": "bangalore"
         },
         {
-          "keywords": "php laravel",
-          "location": "bangalore"
-        },
-        {
           "keywords": "full stack developer php",
           "location": "bangalore"
         },
@@ -338,10 +426,6 @@
           "location": "bangalore"
         },
         {
-          "keywords": "node js developer",
-          "location": "bangalore"
-        },
-        {
           "keywords": "frontend developer",
           "location": "bangalore"
         },
@@ -359,10 +443,6 @@
         },
         {
           "keywords": "full stack developer",
-          "location": "bangalore"
-        },
-        {
-          "keywords": "shopify developer",
           "location": "bangalore"
         },
         {
@@ -402,11 +482,67 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
+          "keywords": "Magento Developer",
+          "location": "UAE",
+          "url": "https://ae.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
         },
         {
-          "keywords": "Laravel Developer",
+          "keywords": "Adobe Commerce Developer",
+          "location": "UAE",
+          "url": "https://ae.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Singapore",
+          "url": "https://sg.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Singapore",
+          "url": "https://sg.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "UK",
+          "url": "https://uk.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "UK",
+          "url": "https://uk.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Germany",
+          "url": "https://de.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Germany",
+          "url": "https://de.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Australia",
+          "url": "https://au.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Australia",
+          "url": "https://au.indeed.com/jobs?q={keywords}&fromage=14",
+          "everyRounds": 2
+        },
+        {
+          "keywords": "PHP Developer",
           "location": "Bengaluru"
         },
         {
@@ -419,10 +555,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -443,10 +575,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -478,10 +606,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -491,10 +615,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -515,10 +635,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -550,10 +666,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -563,10 +675,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -587,10 +695,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -622,10 +726,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -635,10 +735,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -659,10 +755,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -694,10 +786,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -707,10 +795,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -731,10 +815,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -765,10 +845,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -778,10 +854,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -802,10 +874,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -837,10 +905,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -850,10 +914,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -874,10 +934,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -908,10 +964,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -921,10 +973,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -945,10 +993,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -980,10 +1024,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -993,10 +1033,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1017,10 +1053,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -1052,10 +1084,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1065,10 +1093,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1089,10 +1113,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -1124,10 +1144,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1137,10 +1153,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1161,10 +1173,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -1195,10 +1203,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1208,10 +1212,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1232,10 +1232,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ],
@@ -1269,10 +1265,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1282,10 +1274,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1306,10 +1294,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1341,10 +1325,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1354,10 +1334,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1378,10 +1354,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1412,10 +1384,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1425,10 +1393,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1449,10 +1413,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1500,10 +1460,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1513,10 +1469,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1537,10 +1489,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1571,10 +1519,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1584,10 +1528,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1608,10 +1548,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1659,10 +1595,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1672,10 +1604,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1696,10 +1624,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1730,10 +1654,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1743,10 +1663,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1767,10 +1683,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1801,10 +1713,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1814,10 +1722,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1838,10 +1742,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1873,10 +1773,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1886,10 +1782,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1910,10 +1802,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -1944,10 +1832,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -1957,10 +1841,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -1981,10 +1861,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -2014,10 +1890,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -2027,10 +1899,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -2051,10 +1919,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -2084,10 +1948,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Laravel Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
@@ -2097,10 +1957,6 @@
         },
         {
           "keywords": "Next.js Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Node.js Developer",
           "location": "Bengaluru"
         },
         {
@@ -2121,10 +1977,6 @@
         },
         {
           "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
       ]
@@ -2155,10 +2007,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2171,10 +2019,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2184,10 +2028,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2218,10 +2058,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2234,10 +2070,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2247,10 +2079,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2280,10 +2108,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2296,10 +2120,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2309,10 +2129,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2343,10 +2159,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2359,10 +2171,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2372,10 +2180,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2405,10 +2209,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2421,10 +2221,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2434,10 +2230,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2467,10 +2259,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2483,10 +2271,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2496,10 +2280,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2529,10 +2309,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2545,10 +2321,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2558,10 +2330,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2591,10 +2359,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2607,10 +2371,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2620,10 +2380,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2654,10 +2410,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2670,10 +2422,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2683,10 +2431,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2750,10 +2494,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2766,10 +2506,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2779,10 +2515,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2814,10 +2546,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2830,10 +2558,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2843,10 +2567,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -2909,10 +2629,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -2925,10 +2641,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -2938,10 +2650,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -3004,10 +2712,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -3020,10 +2724,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -3033,10 +2733,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -3066,10 +2762,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -3082,10 +2774,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -3095,10 +2783,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -3129,10 +2813,6 @@
           "location": ""
         },
         {
-          "keywords": "Laravel",
-          "location": ""
-        },
-        {
           "keywords": "WordPress",
           "location": ""
         },
@@ -3145,10 +2825,6 @@
           "location": ""
         },
         {
-          "keywords": "Node.js",
-          "location": ""
-        },
-        {
           "keywords": "Frontend",
           "location": ""
         },
@@ -3158,10 +2834,6 @@
         },
         {
           "keywords": "Full Stack",
-          "location": ""
-        },
-        {
-          "keywords": "Shopify",
           "location": ""
         }
       ]
@@ -3181,6 +2853,234 @@
         12
       ],
       "searches": []
+    },
+    "naukrigulf": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Naukrigulf",
+      "group": "Global & relocation",
+      "home": "https://www.naukrigulf.com/",
+      "searchUrl": "https://www.naukrigulf.com/{keywords-slug}-jobs",
+      "requiresLogin": true,
+      "notes": "Info Edge's Gulf board (UAE, Saudi, Qatar, Oman, Bahrain, Kuwait); employers there hire from India and sponsor visas.",
+      "needs": "phone OTP possible",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": ""
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": ""
+        },
+        {
+          "keywords": "React Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": ""
+        }
+      ]
+    },
+    "bayt": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Bayt",
+      "group": "Global & relocation",
+      "home": "https://www.bayt.com/en/international/jobs/",
+      "searchUrl": "https://www.bayt.com/en/international/jobs/{keywords-slug}-jobs/",
+      "requiresLogin": true,
+      "notes": "Largest Middle East job site; most roles open to candidates applying from India.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": ""
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": ""
+        },
+        {
+          "keywords": "React Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": ""
+        }
+      ]
+    },
+    "gulftalent": {
+      "enabled": true,
+      "type": "portal",
+      "label": "GulfTalent",
+      "group": "Global & relocation",
+      "home": "https://www.gulftalent.com/jobs",
+      "requiresLogin": true,
+      "notes": "Gulf professional jobs, recruiters search the CV database.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": ""
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": ""
+        },
+        {
+          "keywords": "React Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": ""
+        }
+      ]
+    },
+    "jobstreet": {
+      "enabled": true,
+      "type": "portal",
+      "label": "JobStreet (SG/MY)",
+      "group": "Global & relocation",
+      "home": "https://sg.jobstreet.com/",
+      "searchUrl": "https://sg.jobstreet.com/{keywords-slug}-jobs",
+      "requiresLogin": true,
+      "notes": "SEEK's Singapore and Malaysia boards; many employers sponsor passes for experienced engineers.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Magento Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": ""
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        },
+        {
+          "keywords": "React Developer",
+          "location": ""
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
+        }
+      ]
+    },
+    "arbeitnow": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Arbeitnow",
+      "group": "Global & relocation",
+      "home": "https://www.arbeitnow.com/",
+      "notes": "English-language European board with a visa-sponsorship filter (Germany, Netherlands, Austria…).",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Europe"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Europe"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Europe"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Europe"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Europe"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Europe"
+        }
+      ]
     }
   },
   "excludeTitleKeywords": [
@@ -3240,7 +3140,6 @@
     "NextJS": 4,
     "TypeScript": 4,
     "Redux": 4,
-    "Node.js": 4,
     "E-commerce": 9,
     "Full stack": 9,
     "Front end": 9,
@@ -3300,7 +3199,6 @@
     "TypeScript",
     "React",
     "Next.js",
-    "Node.js",
     "HTML5",
     "CSS3",
     "jQuery",

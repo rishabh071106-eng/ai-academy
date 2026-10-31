@@ -1,8 +1,10 @@
-# The 50 job sites the agent works on
+# The 55 job sites the agent works on
 
-Honest note first: no site can promise a job. What these fifty give her is reach (every place recruiters in her field look), a current profile everywhere a recruiter might search, and a steady stream of applications in Magento → PHP → React → Node → front end order. Whether an offer comes depends on the market and the interviews; the agent's job is to make sure nothing is missed.
+Honest note first: no site can promise a job. What these sites give her is reach (every place recruiters in her field look, in India and abroad), a current profile everywhere a recruiter might search, and a steady stream of applications in Magento → PHP → React → front end order. Whether an offer comes depends on the market and the interviews; the agent's job is to make sure nothing is missed.
 
 Every site below is a card on the dashboard. **▶ Start all** runs the job agents (six at a time; the rest queue and take turns), **↻ Update all profiles** brings her profile on every site in line with the resume (two sites at a time, so the codes they ask for come one by one; LinkedIn and Naukri are left untouched on purpose). The *Needs you* column says where she has to step in: a code sent to her phone, or a test/interview that only she can do. Email codes and links the agent reads from her Gmail itself.
+
+LinkedIn and Indeed also search abroad (UAE, Saudi Arabia, Qatar, Singapore, Malaysia, Australia, UK, Germany, Netherlands, Ireland, and worldwide remote) every second round, besides their Bengaluru searches.
 
 ## India (18)
 
@@ -78,9 +80,9 @@ Vetted networks where companies come to the profile. The agent registers her and
 | 45 | [Uplers](https://talent.uplers.com/) | India-based remote talent network for global companies. | Keeps the profile current (profile-only site) | assessment |
 | 46 | [Flexiple](https://flexiple.com/developers) | India-based network for remote full-stack roles. | Keeps the profile current (profile-only site) | vetting interview |
 
-## Global & relocation (4)
+## Global & relocation (9)
 
-Boards for roles abroad or remote-from-anywhere, several with visa/relocation support.
+Roles abroad she can apply to from India: the Gulf (employers sponsor visas as a matter of course), Singapore/Malaysia, Europe with visa sponsorship or relocation, and remote-from-anywhere. Posts that rule out candidates needing sponsorship are skipped automatically.
 
 | # | Site | What it is | What the agent does | Needs you |
 |---|---|---|---|---|
@@ -88,11 +90,16 @@ Boards for roles abroad or remote-from-anywhere, several with visa/relocation su
 | 48 | [Relocate.me](https://relocate.me/) | Jobs that come with relocation (Europe, Gulf, APAC). | Searches, applies, keeps the profile current | — |
 | 49 | [Landing.jobs](https://landing.jobs/jobs) | European tech jobs, many remote-from-anywhere. | Searches, applies, keeps the profile current | — |
 | 50 | [Honeypot](https://www.honeypot.io/) | Europe's reverse job board: companies apply to her profile. | Keeps the profile current (profile-only site) | profile review by Honeypot |
+| 51 | [Naukrigulf](https://www.naukrigulf.com/) | Info Edge's Gulf board (UAE, Saudi, Qatar, Oman, Bahrain, Kuwait); employers there hire from India and sponsor visas. | Searches, applies, keeps the profile current | phone OTP possible |
+| 52 | [Bayt](https://www.bayt.com/en/international/jobs/) | Largest Middle East job site; most roles open to candidates applying from India. | Searches, applies, keeps the profile current | — |
+| 53 | [GulfTalent](https://www.gulftalent.com/jobs) | Gulf professional jobs, recruiters search the CV database. | Searches, applies, keeps the profile current | — |
+| 54 | [JobStreet (SG/MY)](https://sg.jobstreet.com/) | SEEK's Singapore and Malaysia boards; many employers sponsor passes for experienced engineers. | Searches, applies, keeps the profile current | — |
+| 55 | [Arbeitnow](https://www.arbeitnow.com/) | English-language European board with a visa-sponsorship filter (Germany, Netherlands, Austria…). | Searches, applies, keeps the profile current | — |
 
-## How a day with fifty sites looks
+## How a day with 55 sites looks
 
 - `maxConcurrentAgents` (6) agents run at the same time, each in its own Chrome window. The other sites wait in a queue on the dashboard and start by themselves when a slot frees up.
-- A job agent keeps a slot for `rotateMinutes` (40), then pauses, goes to the back of the queue and continues later where it left off (the tracker remembers every job). With 41 job sites and 6 slots every site gets a turn roughly every 4–5 hours; a stronger Mac can run more (`maxConcurrentAgents: 10`).
+- A job agent keeps a slot for `rotateMinutes` (40), then pauses, goes to the back of the queue and continues later where it left off (the tracker remembers every job). With 46 job sites and 6 slots every site gets a turn roughly every 5 hours; a stronger Mac can run more (`maxConcurrentAgents: 10`).
 - Profile updates go through the same queue, `maxConcurrentProfileUpdates` (2) sites at a time. A site that asks for a phone code shows the question on its card and waits up to 30 minutes (`profileSync.helpMinutes`) for the code; email codes are read from Gmail without you.
 - The same job (title + company) is never applied to twice across sites within 30 days, so the aggregators do not create duplicates of the Naukri/LinkedIn applications.
 - Sites that show a bot check (Indeed, Glassdoor, SimplyHired at times) are skipped for that round and tried again next round.
