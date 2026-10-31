@@ -104,6 +104,12 @@ export function quickAnswer(field, profile) {
   if (/how did you (hear|find|learn)|source of (application|referral)/.test(l)) return field.options?.find((o) => /linkedin/i.test(o)) ?? field.options?.find((o) => /job board|website|online/i.test(o)) ?? (field.options?.length ? null : "LinkedIn");
   // Consent / acknowledgement checkboxes on application forms.
   if (field.type === "checkbox" && /agree|terms|consent|acknowledg|certify|privacy|confirm that|i understand/.test(l)) return "Yes";
+  // Date of birth (DATE_OF_BIRTH in .env, YYYY-MM-DD) in the format the field wants.
+  if (/date of birth|\bdob\b|birth ?date|birthday/.test(l) && a.dateOfBirth && field.type !== "select") {
+    const [y, m, d] = String(a.dateOfBirth).split("-");
+    if (!(y && m && d)) return null;
+    return field.type === "date" || /yyyy-mm-dd|iso/.test(l) ? `${y}-${m}-${d}` : /mm\/dd/.test(l) ? `${m}/${d}/${y}` : `${d}/${m}/${y}`;
+  }
   return null;
 }
 

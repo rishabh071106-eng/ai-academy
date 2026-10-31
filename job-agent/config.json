@@ -3267,7 +3267,10 @@
     "AI agents": 2,
     "Agentic AI": 2,
     "Vector databases": 2,
-    "Python": 2
+    "Python": 2,
+    "Knockout.js": 5,
+    "KnockoutJS": 5,
+    "Knockout": 5
   },
   "applyToAllMatching": true,
   "skipDuplicatesAcrossSites": true,
@@ -3300,6 +3303,7 @@
     "HTML5",
     "CSS3",
     "jQuery",
+    "Knockout.js",
     "Ajax",
     "Responsive design",
     "SSR/SSG",

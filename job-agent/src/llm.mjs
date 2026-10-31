@@ -137,7 +137,8 @@ export async function answerQuestions(profile, job, fields) {
   · Current / expected CTC, notice period, location → from her answers. Current location: Bengaluru.
   · Yes/No about having a skill she has, or a degree she has → Yes; about one she lacks → No.
 - Every answer must be consistent with her resume (the profile): same employers, titles, dates, education and contact details; never invent or shift anything.
-- Only answer exactly __ASK__ for personal identifiers or documents you cannot know: date of birth, PAN, Aadhaar, passport, ID numbers, bank details, references' names/contacts, or a value that starts with "TODO". Never invent those.
+- Date of birth: use answers.dateOfBirth (YYYY-MM-DD) when it is present, in the format the field asks for (DD/MM/YYYY by default, YYYY-MM-DD for date inputs, the day / month / year parts for separate fields); age = computed from it as of today.
+- Only answer exactly __ASK__ for personal identifiers or documents you cannot know: date of birth when it is not in the data, PAN, Aadhaar, passport, ID numbers, bank details, references' names/contacts, or a value that starts with "TODO". Never invent those.
 - Never claim skills, degrees or legal statuses the data does not support.`,
     content: `CANDIDATE DATA:
 ${JSON.stringify(profile, null, 2)}

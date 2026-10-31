@@ -44,7 +44,7 @@ You need Node.js 20+ and Google Chrome.
 ```bash
 cd job-agent
 npm install
-cp .env.example .env          # paste your GEMINI_API_KEY (and an ATS_PASSWORD for career sites)
+cp .env.example .env          # paste your GEMINI_API_KEY, an ATS_PASSWORD for career sites, and DATE_OF_BIRTH=YYYY-MM-DD for forms that ask for it
 ```
 
 1. **Profile.** `profile.json` holds the candidate's data. It is git-ignored, so it never leaves this machine. Either put the supplied `profile.json` in this folder, or generate one from a PDF with `npm run import-resume -- ~/Downloads/resume.pdf`.

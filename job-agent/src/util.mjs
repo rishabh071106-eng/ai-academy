@@ -47,6 +47,8 @@ export function loadProfile() {
     profile.skillYears = merged;
   }
   if (cfg.applicationAnswers) profile.applicationAnswers = { ...(profile.applicationAnswers ?? {}), ...cfg.applicationAnswers };
+  // Her date of birth stays out of the repo: DATE_OF_BIRTH=YYYY-MM-DD in .env (or applicationAnswers.dateOfBirth in profile.json).
+  if (process.env.DATE_OF_BIRTH?.trim()) profile.applicationAnswers = { ...(profile.applicationAnswers ?? {}), dateOfBirth: process.env.DATE_OF_BIRTH.trim() };
   return profile;
 }
 
