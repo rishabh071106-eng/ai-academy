@@ -37,6 +37,8 @@ const mode = args.mode ?? config.mode ?? "review";
 // task "jobs" (default) searches and applies; task "profile" only updates her profile on each site.
 const task = args.task ?? "jobs";
 const maxApply = Number(args.max ?? config.maxApplicationsPerRun ?? 15);
+// tailorResume: false (the default in config.json) sends her own resume file to every job, unchanged.
+const TAILOR = config.tailorResume !== false;
 // 0 = no limit: review every job the searches return (across result pages).
 const reviewLimit = Number(args.review ?? config.maxJobsToReview ?? 0);
 const keepGoing = args["keep-going"] !== undefined ? args["keep-going"] !== "false" : !!config.keepGoing;
@@ -93,7 +95,14 @@ const MAX_ATTEMPTS = Number(config.maxAttemptsPerJob ?? 3);
 const APPLY_ALL = config.applyToAllMatching === true;
 let standardResume = null;
 async function standardResumePdf() {
-  if (!standardResume) standardResume = baseResume?.path ?? (await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" }));
+  if (standardResume) return standardResume;
+  if (baseResume?.path) {
+    // Her file, unchanged, copied under data/ so the dashboard's Resume link can open it.
+    const copy = path.join(DATA_DIR, "resumes", "standard", path.basename(baseResume.path));
+    fs.mkdirSync(path.dirname(copy), { recursive: true });
+    if (!fs.existsSync(copy) || fs.statSync(copy).mtimeMs < baseResume.mtimeMs) fs.copyFileSync(baseResume.path, copy);
+    standardResume = copy;
+  } else standardResume = await buildResumePdf(profile, {}, { platform: "base", jobId: "profile", company: "base" });
   return standardResume;
 }
 // Per round: a few old jobs are retried, then every search runs — so new jobs get applied to
@@ -343,21 +352,21 @@ for (const [key, mod] of Object.entries(platforms)) {
         // A dry run already scored this job and tailored a resume: reuse them.
         if (existing?.status === "shortlisted" && existing.resumeFile && fs.existsSync(path.join(DATA_DIR, existing.resumeFile)) && job.applyType === "easy" && mode !== "dry-run") {
           stats.matched++;
-          await applyTo(mod, key, page, job, path.join(DATA_DIR, existing.resumeFile));
+          await applyTo(mod, key, page, job, TAILOR ? path.join(DATA_DIR, existing.resumeFile) : await standardResumePdf());
           continue;
         }
 
-        log("dim", APPLY_ALL ? "  writing the resume for this job…" : "  checking the job against her resume…");
+        log("dim", APPLY_ALL ? (TAILOR ? "  writing the resume for this job…" : "  reading the job (her resume goes as it is)…") : "  checking the job against her resume…");
         let ev;
         try {
-          ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name) });
+          ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name), tailor: TAILOR });
           if (!ev.descriptionComplete && !APPLY_ALL) {
             // Claude thinks the description was cut off: open the job again and re-read it once.
             log("dim", "  description looks cut off — opening the full job again");
             const again = { platform: key, ...(await mod.getJob(page, ref)) };
             if ((again.description ?? "").length > (job.description ?? "").length + 50) {
               Object.assign(job, { ...again, title: job.title || again.title, company: job.company || again.company });
-              ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name) });
+              ev = await evaluateAndTailor(profile, job, { tier: tier.name, focus: focusFor(tier.name), tailor: TAILOR });
             }
           }
         } catch (e) {
@@ -417,13 +426,13 @@ for (const [key, mod] of Object.entries(platforms)) {
         stats.matched++;
         let resumePath;
         try {
-          resumePath = ev.tailored ? await buildResumePdf(profile, ev.tailored, job) : await standardResumePdf();
+          resumePath = TAILOR && ev.tailored ? await buildResumePdf(profile, ev.tailored, job) : await standardResumePdf();
         } catch (e) {
           log("warn", `  couldn't build the tailored PDF (${String(e.message).split("\n")[0].slice(0, 80)}) — using her standard resume`);
           resumePath = await standardResumePdf();
         }
-        const resumeFile = path.relative(DATA_DIR, resumePath).split(path.sep).join("/");
-        log("ok", `  ${ev.matchScore != null ? `match ${ev.matchScore}% — ` : ""}resume ready: data/${resumeFile}`);
+        const resumeFile = resumePath.startsWith(DATA_DIR) ? path.relative(DATA_DIR, resumePath).split(path.sep).join("/") : "";
+        log("ok", `  ${ev.matchScore != null ? `match ${ev.matchScore}% — ` : ""}${TAILOR && ev.tailored ? `resume ready: data/${resumeFile}` : `resume: ${path.basename(resumePath)} (her standard resume, unchanged)`}`);
         currentRow = { key, jobId: job.jobId, title: job.title, company: job.company };
         process.send?.({ type: "job", title: job.title, company: job.company, url: job.url, matchScore: ev.matchScore });
         checkSkip();
@@ -538,7 +547,7 @@ async function applyTo(mod, key, page, job, resumePath, { external = false, cove
       // Back to the job page for the hiring-team message.
       if (!page.url().includes(new URL(job.url).hostname)) await page.goto(job.url, { waitUntil: "domcontentloaded" }).catch(() => {});
     } else {
-      result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} });
+      result = await mod.apply(page, job, { resumePath, profile, mode, cfg: config.platforms[key] ?? {} }); // Naukri uploads the file once per run when it is the same for every job
     }
   } catch (e) {
     if (isSkip(e)) throw e;

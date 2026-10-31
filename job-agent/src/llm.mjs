@@ -49,13 +49,25 @@ const EVAL_SCHEMA = obj({
 });
 
 /** Score a job against the profile and, if it fits, produce resume content and a hiring-team message for it. */
-export async function evaluateAndTailor(profile, job, { tier = "", focus = "" } = {}) {
+const TAILOR_RULES = `Tailored resume: it must stay VERY close to her own resume, so a recruiter who has seen both sees the same document, sharpened for this job:
+- Keep her headline unless the role is clearly front-end or full-stack JS, in which case lead with that (e.g. "Senior Full Stack Engineer · Next.js / React + Adobe Commerce"). Keep her tagline, reordering items if useful.
+- A JOB FOCUS line (below the job) says which part of her stack this job is about: lead the headline, the summary's first sentence, the bullet order and the skill-group order with that focus. Every other skill group and item still stays on the resume — she is applied as a full-stack engineer everywhere.
+- Summary: keep her summary; you may adjust the first sentence and reorder clauses to match the job. Same length (±15%).
+- Experience: every role, same company/role/client/dates. Keep her bullet wording; reorder bullets so the most relevant come first and change at most a few words per bullet to mirror the job's terms where truthful. Keep bold lead-ins like "Peelworks (…):". Don't drop roles or bullets from the two most recent roles.
+- Skill groups: same groups and items as hers, reordered by relevance.
+- Plain text only: no markdown (no asterisks, underscores or backticks), no bullet symbols, no line breaks inside a bullet or the summary.
+- It must fit exactly 2 A4 pages like hers: at most 6 bullets for each of the two most recent roles, at most 4 for older roles, summary under 90 words.`;
+// Without tailoring (config tailorResume: false) the AI only judges the job and writes the message.
+export const EVAL_SCHEMA_PLAIN = { ...EVAL_SCHEMA, properties: Object.fromEntries(Object.entries(EVAL_SCHEMA.properties).filter(([k]) => k !== "tailored")), ...(EVAL_SCHEMA.required ? { required: EVAL_SCHEMA.required.filter((k) => k !== "tailored") } : {}) };
+
+export async function evaluateAndTailor(profile, job, { tier = "", focus = "", tailor = true } = {}) {
   const { applicationAnswers = {}, ...resume } = profile;
   const contact = job.hiringContact?.name ? `${job.hiringContact.name}${job.hiringContact.title ? ` (${job.hiringContact.title})` : ""}` : "unknown";
   const result = await jsonCall({
     effort: "medium",
-    schema: EVAL_SCHEMA,
-    system: `You are a careful technical recruiter and resume writer. You decide whether a candidate should apply to a job, tailor their resume to it, and write a short message to the hiring team.
+    maxTokens: tailor ? 16000 : 6000,
+    schema: tailor ? EVAL_SCHEMA : EVAL_SCHEMA_PLAIN,
+    system: `You are a careful technical recruiter${tailor ? " and resume writer" : ""}. You decide whether a candidate should apply to a job${tailor ? ", tailor their resume to it," : ""} and write a short message to the hiring team.
 
 The candidate is a FULL-STACK engineer: back end (Adobe Commerce/Magento 2, PHP, MySQL, GraphQL, REST, RabbitMQ) AND front end (Next.js, React, TypeScript, JavaScript, HTML/CSS). Judge fit generously across both halves:
 - Any role whose stack includes Magento/Adobe Commerce, React, Next.js, PHP or general e-commerce web development is a fit, whether it is titled front-end, back-end, full-stack, e-commerce, platform or "software engineer".
@@ -68,14 +80,7 @@ The job text may be a raw copy of the whole web page (navigation, other job titl
 Scoring: 85+ = core stack match; 70-84 = solid fit with some gaps; 55-69 = adjacent but workable; below 55 = unrelated.
 
 ${HONESTY_RULES}
-Tailored resume: it must stay VERY close to her own resume, so a recruiter who has seen both sees the same document, sharpened for this job:
-- Keep her headline unless the role is clearly front-end or full-stack JS, in which case lead with that (e.g. "Senior Full Stack Engineer · Next.js / React + Adobe Commerce"). Keep her tagline, reordering items if useful.
-- A JOB FOCUS line (below the job) says which part of her stack this job is about: lead the headline, the summary's first sentence, the bullet order and the skill-group order with that focus. Every other skill group and item still stays on the resume — she is applied as a full-stack engineer everywhere.
-- Summary: keep her summary; you may adjust the first sentence and reorder clauses to match the job. Same length (±15%).
-- Experience: every role, same company/role/client/dates. Keep her bullet wording; reorder bullets so the most relevant come first and change at most a few words per bullet to mirror the job's terms where truthful. Keep bold lead-ins like "Peelworks (…):". Don't drop roles or bullets from the two most recent roles.
-- Skill groups: same groups and items as hers, reordered by relevance.
-- Plain text only: no markdown (no asterisks, underscores or backticks), no bullet symbols, no line breaks inside a bullet or the summary.
-- It must fit exactly 2 A4 pages like hers: at most 6 bullets for each of the two most recent roles, at most 4 for older roles, summary under 90 words.
+${tailor ? TAILOR_RULES : "No resume is written here: she sends the same resume to every job. Judge the job and write the hiring message only."}
 
 Hiring message — write it the way she would actually type it to a stranger on LinkedIn. It must read as genuine and human, not AI-written:
 - Open with "Hi <first name>," (or "Hi," if no contact name). Then get straight to the point; no pleasantries like "I hope this message finds you well".
@@ -90,7 +95,7 @@ Hiring message — write it the way she would actually type it to a stranger on 
 ${JSON.stringify(resume, null, 2)}
 
 Notice period: ${applicationAnswers.noticePeriod ?? applicationAnswers.noticePeriodDays ?? "not stated"}
-${focus ? `\nJOB FOCUS (${tier} role): ${focus}\n` : ""}
+${focus && tailor ? `\nJOB FOCUS (${tier} role): ${focus}\n` : ""}
 JOB:
 Title: ${job.title || "(not detected — read it from the text)"}
 Company: ${job.company || "(not detected — read it from the text)"}
@@ -99,7 +104,7 @@ Hiring contact: ${contact}
 Description:
 ${(job.description ?? "").slice(0, 15000)}`,
   });
-  return result;
+  return tailor ? result : { ...result, tailored: null };
 }
 
 const ANSWER_SCHEMA = obj({

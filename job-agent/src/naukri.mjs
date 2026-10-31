@@ -103,20 +103,24 @@ export async function uploadResume(page, pdfPath, returnTo) {
   }
 }
 
+let uploadedResume = null; // { path, mtimeMs } of the file already on her Naukri profile in this run
 export async function apply(page, job, { profile, mode, resumePath, cfg = {} }) {
   job.resumePath = resumePath;
   const btn = await firstVisible(page, ["#apply-button", "button[class*=apply-button]", "button:has-text('Apply')"], 5000);
   if (!btn) return { status: "needs_attention", note: "Apply button not found" };
   if (mode !== "auto") {
-    const which = cfg.uploadTailoredResume !== false && resumePath ? "with the resume tailored for this job" : "with the resume on your Naukri profile";
+    const which = cfg.uploadTailoredResume !== false && resumePath ? `with ${/standard/.test(resumePath) ? "her resume file" : "the resume tailored for this job"}` : "with the resume on your Naukri profile";
     if (!(await confirm(`Apply on Naukri to ${job.company} – ${job.title} ${which}?`))) return { status: "skipped", note: "You chose not to apply" };
   }
   let resumeNote = "profile resume";
-  if (cfg.uploadTailoredResume !== false && resumePath) {
-    log("dim", "   uploading tailored resume to your Naukri profile…");
+  const same = uploadedResume?.path === resumePath && uploadedResume.mtimeMs === fs.statSync(resumePath).mtimeMs; // already on her profile from an earlier job this run
+  if (same) resumeNote = "resume uploaded earlier this run";
+  if (cfg.uploadTailoredResume !== false && resumePath && !same) {
+    log("dim", `   uploading ${/standard/.test(resumePath) ? "her resume" : "the tailored resume"} to your Naukri profile…`);
     if (await uploadResume(page, resumePath, job.url)) {
-      resumeNote = "tailored resume";
+      resumeNote = /standard/.test(resumePath) ? "her resume" : "tailored resume";
       apply.uploaded = true;
+      uploadedResume = { path: resumePath, mtimeMs: fs.statSync(resumePath).mtimeMs };
     } else {
       log("warn", "   couldn't confirm the upload; applying with whatever resume is on the profile");
     }
