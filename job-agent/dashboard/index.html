@@ -19,7 +19,7 @@
   --accent-soft: #e6effb;
   --series-1: #2a78d6; /* LinkedIn */
   --series-2: #eb6834; /* Naukri */
-  --series-3: #1baf7a; /* Alignerr */
+  --series-3: #1baf7a;
   --seq-1: #86b6ef; --seq-2: #3987e5; --seq-3: #1c5cab;
   --good: #0f7b3f; --good-bg: #e3f4ea;
   --warn: #9a6200; --warn-bg: #fdf1d8;
@@ -179,6 +179,11 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
 .agent { padding: 16px 18px; margin-bottom: 16px; }
 .agents { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .agents .agent { margin-bottom: 0; }
+.agent-group { grid-column: 1 / -1; margin: 8px 0 -4px; font-size: 13px; font-weight: 600; color: var(--text-2); }
+.agent-group .n { opacity: .6; margin-left: 6px; font-weight: 500; }
+.agent.profile-only .agent-controls, .agent.profile-only .mode-hint, .agent.profile-only [data-el="btn"] { display: none; }
+.agent-note { margin-top: 6px; font-size: 12px; color: var(--muted); }
+.agents-line { color: var(--text-2); font-size: 12.5px; margin: -4px 0 10px; }
 .agent-title .pf { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
 .agents .seg button { padding: 6px 10px; font-size: 12.5px; }
 .agent .keep { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
@@ -255,6 +260,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     </div>
   </header>
 
+  <div class="agents-line" id="agentsLine"></div>
   <section class="agents" id="agents"></section>
 
   <div class="banner" id="banner"></div>
@@ -309,7 +315,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
     <label>Company<input name="company" required></label>
     <label>Job title<input name="title" required></label>
     <label>Link<input name="url" type="url" placeholder="https://"></label>
-    <label>Platform<select name="platform"><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="alignerr">Alignerr</option><option value="other">Company site / other</option></select></label>
+    <label>Platform<select name="platform"><option value="linkedin">LinkedIn</option><option value="naukri">Naukri</option><option value="other">Company site / other</option></select></label>
     <label>Status<select name="status"></select></label>
     <div class="dialog-actions"><button class="btn" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Add</button></div>
   </form>
@@ -328,7 +334,7 @@ const STATUS = {
   skipped:         { label: "Skipped",         fg: "var(--muted)",  bg: "var(--neutral-bg)" },
   withdrawn:       { label: "Withdrawn",       fg: "var(--muted)",  bg: "var(--neutral-bg)" },
 };
-let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, alignerr: { label: "Alignerr", color: "var(--series-3)" }, other: { label: "Other", color: "var(--muted)" } };
+let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, other: { label: "Other", color: "var(--muted)" } };
 const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.slice(1) : "Other", color: PLATFORM.other.color };
 // Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React → Node →
 // front end → full stack). The agent stores it on each job; older rows are classified here from the title.
@@ -637,7 +643,7 @@ fetch("/api/profile").then((r) => r.json()).then((p) => {
   const first = p.name.split(" ")[0];
   $("#heading").textContent = `${first}'s Job Hunt`;
   $("#initials").textContent = p.name.split(" ").map((w) => w[0]).slice(0, 2).join("");
-  if (p.headline) $("#subheading").textContent = `${p.headline} · LinkedIn, Naukri & Alignerr`;
+  if (p.headline) $("#subheading").textContent = `${p.headline} · 50 job sites`;
   if (p.sourceResume?.name) $("#subheading").textContent += ` · resume: ${p.sourceResume.name} (${new Date(p.sourceResume.mtimeMs).toLocaleDateString(undefined, { day: "numeric", month: "short" })})`;
   document.title = `${first}'s Job Hunt`;
 }).catch(() => {});
@@ -726,13 +732,17 @@ function buildAgents(list) {
   $("#legend").innerHTML = list.map((p) => `<span><i style="background:${p.color}"></i>${esc(p.label)}</span>`).join("");
   const sel = $("#platformSel");
   if (sel) sel.innerHTML = `<option value="">All platforms</option>${list.map((p) => `<option value="${p.key}">${esc(p.label)}</option>`).join("")}<option value="other">Other</option>`;
-  AG = Object.fromEntries(list.map((p) => [p.key, { label: p.label, color: p.color, mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, pending: null, logOpen: false }]));
+  const GROUP_ORDER = ["India", "Aggregators", "Remote boards", "Talent networks", "Global & relocation"];
+  const groupIdx = (g) => { const i = GROUP_ORDER.indexOf(g || ""); return i < 0 ? GROUP_ORDER.length : i; };
+  const ordered = [...list].sort((a, b) => groupIdx(a.group) - groupIdx(b.group));
+  AG = Object.fromEntries(ordered.map((p) => [p.key, { label: p.label, color: p.color, group: p.group || "", profileOnly: !!p.profileOnly, notes: p.notes || "", needs: p.needs || "", mode: "auto", max: 1000, review: 0, keepGoing: true, retry: true, since: 0, running: false, queued: false, pending: null, logOpen: false }]));
   try {
     const saved = JSON.parse(localStorage.getItem("ja-agents") || "{}");
     for (const k of Object.keys(AG)) Object.assign(AG[k], saved[k] ?? {});
   } catch {}
-  $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `
-  <div class="card agent" data-p="${k}">
+  let lastGroup = null;
+  $("#agents").innerHTML = Object.entries(AG).map(([k, a]) => `${a.group !== lastGroup && list.some((p) => p.group) ? `<h3 class="agent-group">${esc((lastGroup = a.group) || "Other sites")}<span class="n">${Object.values(AG).filter((x) => x.group === a.group).length} sites</span></h3>` : ""}
+  <div class="card agent${a.profileOnly ? " profile-only" : ""}" data-p="${k}">
     <div class="agent-top">
       <div class="agent-state">
         <span class="agent-dot" data-el="dot"></span>
@@ -740,6 +750,7 @@ function buildAgents(list) {
       </div>
       <div style="display:flex;gap:8px;align-items:center"><button class="btn" data-el="profileBtn" title="Bring her profile on this site in line with the resume (headline, experience, skills, education, resume file). Pauses for you only if the site asks for a code.">↻ Update profile</button><button class="btn go" data-el="btn">▶ Start</button></div>
     </div>
+    ${a.notes || a.needs || a.profileOnly ? `<div class="agent-note">${a.profileOnly ? "Profile-only site: companies find her profile here, there is no job list to search. " : ""}${esc(a.notes)}${a.needs ? ` <b>Needs you:</b> ${esc(a.needs)}.` : ""}</div>` : ""}
     <div class="agent-controls" style="margin-top:12px">
       <div class="seg" data-el="seg" role="group" aria-label="${esc(a.label)} mode">
         <button data-v="dry-run">Practice</button><button data-v="review">Ask before submit</button><button data-v="auto">Fully automatic</button>
@@ -791,7 +802,7 @@ function toggleLog(k, open = !AG[k].logOpen) {
   if (open) el(k, "log").scrollTop = 1e9;
 }
 async function updateProfile(k) {
-  if (AG[k].running) return alert(`${AG[k].label} is running. Stop it first, then update the profile.`);
+  if (AG[k].running || AG[k].queued) return alert(`${AG[k].label} is running or waiting in the queue. Stop it first, then update the profile.`);
   const btn = el(k, "profileBtn");
   btn.disabled = true;
   try {
@@ -807,7 +818,7 @@ async function updateProfile(k) {
 async function startStop(k) {
   const btn = el(k, "btn");
   btn.disabled = true;
-  const starting = !AG[k].running;
+  const starting = !AG[k].running && !AG[k].queued;
   try {
     const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing, retry: AG[k].retry !== false }) });
     const data = await r.json();
@@ -820,13 +831,15 @@ async function startStop(k) {
 }
 
 $("#startAllBtn").onclick = async () => {
-  for (const k of Object.keys(AG)) if (!AG[k].running) await startStop(k);
+  // Profile-only sites (talent networks) have nothing to search; ↻ Update all profiles covers them.
+  for (const k of Object.keys(AG)) if (!AG[k].running && !AG[k].queued && !AG[k].profileOnly) await startStop(k);
 };
 $("#profilesBtn").onclick = async () => {
-  for (const k of Object.keys(AG)) if (!AG[k].running) await updateProfile(k);
+  for (const k of Object.keys(AG)) if (!AG[k].running && !AG[k].queued) await updateProfile(k);
 };
 $("#stopAllBtn").onclick = async () => {
-  for (const k of Object.keys(AG)) if (AG[k].running) await startStop(k);
+  try { await fetch("/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: "all" }) }); } catch {}
+  pollAgent();
 };
 
 function lineClass(t, kind) {
@@ -844,8 +857,12 @@ async function pollAgent() {
   let anyRunning = false;
   try {
     const q = new URLSearchParams(Object.fromEntries(Object.entries(AG).map(([k, a]) => [k, a.since])));
-    const { platforms, tiers, profiles, runs } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
+    const { platforms, tiers, profiles, runs, maxConcurrent, rotateMinutes, queue } = await (await fetch(`/api/agent?${q}`, { cache: "no-store" })).json();
     if (!agentsBuilt && platforms?.length) buildAgents(platforms);
+    if (maxConcurrent) {
+      const n = Object.values(runs).filter((r) => r.running).length;
+      $("#agentsLine").textContent = `${platforms.length} sites · ${maxConcurrent} agents run at a time (${n} running${queue?.length ? `, ${queue.length} waiting in the queue` : ""})${rotateMinutes ? ` · each job agent gets ${rotateMinutes} min, then the next site takes over` : ""} · change maxConcurrentAgents in config.json for a stronger Mac`;
+    }
     if (!tiersLoaded && tiers?.length) { tiersLoaded = true; setTiers(tiers); renderTable(); }
     window.__profiles = profiles || {};
     let newLines = false;
@@ -853,6 +870,7 @@ async function pollAgent() {
       if (!AG[k]) continue;
       const wasRunning = AG[k].running;
       AG[k].running = s.running;
+      AG[k].queued = !!s.queued;
       anyRunning ||= s.running;
       if (s.log.length) {
         newLines = true;
@@ -884,17 +902,19 @@ function renderAgent(k, s) {
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
   const modeName = MODE_NAME[s.options?.mode] ?? "";
-  if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
+  if (s.queued) { el(k, "title").textContent = "in the queue"; el(k, "sub").textContent = `Waiting for a free slot (${s.queuePos ? `#${s.queuePos} in line` : "next"}) · starts by itself`; }
+  else if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
   else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · applied ${appliedSince(k, s.startedAt)}/${s.options?.max ?? "?"}${s.restarts ? ` · restarted ${s.restarts}×` : ""} · keep the agent's Chrome open`; }
   else if (s.endedAt && s.fatal) { el(k, "title").textContent = "stopped"; el(k, "sub").innerHTML = `<span style="color:var(--crit)">⚠ ${esc(s.fatal)}</span>`; }
   else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)` + profileLine(k); }
   else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start" + profileLine(k); }
-  btn.className = "btn " + (s.running ? "stop" : "go");
-  btn.textContent = s.running ? "■ Stop" : "▶ Start";
-  el(k, "profileBtn").disabled = s.running;
+  btn.className = "btn " + (s.running || s.queued ? "stop" : "go");
+  btn.textContent = s.queued ? "✕ Leave queue" : s.running ? "■ Stop" : "▶ Start";
+  el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
+  el(k, "profileBtn").disabled = s.running || !!s.queued;
   if (s.running && s.options?.task === "profile") el(k, "title").textContent = s.pending ? "profile · needs you" : "updating profile";
-  el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running));
-  el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = el(k, "retry").disabled = s.running;
+  el(k, "seg").querySelectorAll("button").forEach((b) => (b.disabled = s.running || !!s.queued));
+  el(k, "max").disabled = el(k, "review").disabled = el(k, "keep").disabled = el(k, "retry").disabled = s.running || !!s.queued;
   if (s.running && s.options?.mode && s.options.mode !== a.mode) { a.mode = s.options.mode; paintMode(k); }
 
   const key = s.pending ? s.pending.id : null;

@@ -159,6 +159,12 @@ try {
 for (const [key, mod] of Object.entries(platforms)) {
   const pcfg = config.platforms[key];
   if (!pcfg?.enabled || (args.platform && args.platform !== key)) continue;
+  // Talent networks (Toptal, Turing, Honeypot…) have no job list to search: companies find her
+  // profile there. Only the profile task applies to them.
+  if (pcfg.profileOnly && task !== "profile") {
+    log("info", `[${key}] ${pcfg.label || key} is a profile-only site (companies find her profile there): nothing to search. Use ↻ Update profile to keep it current.`);
+    continue;
+  }
   // A platform can widen what counts as relevant (e.g. Alignerr's "AI trainer – coding" roles).
   isRelevant = pcfg.relevantKeywords?.length ? ((re) => (t) => re.test(t) || isRelevantGlobal(t))(reFor(pcfg.relevantKeywords)) : isRelevantGlobal;
   const homeOf = { linkedin: "https://www.linkedin.com/jobs/", naukri: "https://www.naukri.com/mnjuser/homepage" };

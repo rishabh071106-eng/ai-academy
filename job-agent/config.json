@@ -284,7 +284,9 @@
       "delaySeconds": [
         20,
         40
-      ]
+      ],
+      "group": "India",
+      "notes": "Easy Apply + recruiter searches; profile untouched by the agent."
     },
     "naukri": {
       "enabled": true,
@@ -374,7 +376,10 @@
       "delaySeconds": [
         5,
         12
-      ]
+      ],
+      "group": "India",
+      "notes": "India's largest; recruiters search profiles daily; profile untouched by the agent.",
+      "needs": "phone OTP at sign-up"
     },
     "indeed": {
       "enabled": true,
@@ -444,7 +449,10 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Largest aggregator in India; many redirects to company sites.",
+      "needs": "bot check possible"
     },
     "foundit": {
       "enabled": true,
@@ -513,7 +521,10 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Monster India; recruiter database searches.",
+      "needs": "phone OTP at sign-up"
     },
     "shine": {
       "enabled": true,
@@ -582,7 +593,10 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "HT Media's board; recruiter database.",
+      "needs": "phone OTP at sign-up"
     },
     "timesjobs": {
       "enabled": true,
@@ -651,10 +665,13 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Times board; recruiter database.",
+      "needs": "phone OTP possible"
     },
     "glassdoor": {
-      "enabled": false,
+      "enabled": true,
       "type": "portal",
       "label": "Glassdoor",
       "home": "https://www.glassdoor.co.in/",
@@ -720,7 +737,10 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Jobs plus company research.",
+      "needs": "bot check possible"
     },
     "hirist": {
       "enabled": true,
@@ -788,7 +808,9 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Tech-only board (Info Edge)."
     },
     "instahyre": {
       "enabled": true,
@@ -858,7 +880,9 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Curated matching for 2+ yrs engineers; companies reach out."
     },
     "cutshort": {
       "enabled": true,
@@ -927,10 +951,12 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Tech/product matching platform."
     },
     "wellfound": {
-      "enabled": false,
+      "enabled": true,
       "type": "portal",
       "label": "Wellfound",
       "home": "https://wellfound.com/jobs",
@@ -997,10 +1023,13 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "Remote boards",
+      "notes": "Startup jobs (ex-AngelList); remote-friendly.",
+      "needs": "bot check possible"
     },
     "apna": {
-      "enabled": false,
+      "enabled": true,
       "type": "portal",
       "label": "Apna",
       "home": "https://apna.co/jobs",
@@ -1066,10 +1095,13 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "India",
+      "notes": "Fast-growing Indian board; some tech roles.",
+      "needs": "phone OTP at sign-up"
     },
     "adzuna": {
-      "enabled": false,
+      "enabled": true,
       "type": "portal",
       "label": "Adzuna",
       "home": "https://www.adzuna.in/",
@@ -1135,10 +1167,12 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
-      ]
+      ],
+      "group": "Aggregators",
+      "notes": "Aggregator; redirects to the source posting."
     },
     "jooble": {
-      "enabled": false,
+      "enabled": true,
       "type": "portal",
       "label": "Jooble",
       "home": "https://in.jooble.org/",
@@ -1204,7 +1238,1949 @@
           "keywords": "Shopify Developer",
           "location": "Bengaluru"
         }
+      ],
+      "group": "Aggregators",
+      "notes": "Aggregator; redirects to the source posting."
+    },
+    "iimjobs": {
+      "enabled": true,
+      "type": "portal",
+      "label": "IIMJobs",
+      "group": "India",
+      "home": "https://www.iimjobs.com/",
+      "requiresLogin": true,
+      "notes": "Info Edge's senior-roles board (IT roles included); recruiters search profiles.",
+      "needs": "phone OTP at sign-up",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
       ]
+    },
+    "hirect": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Hirect",
+      "group": "India",
+      "home": "https://www.hirect.in/",
+      "requiresLogin": true,
+      "notes": "Startup hiring with direct chat to founders/recruiters.",
+      "needs": "phone OTP at sign-up",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "techgig": {
+      "enabled": true,
+      "type": "portal",
+      "label": "TechGig",
+      "group": "India",
+      "home": "https://www.techgig.com/jobs",
+      "requiresLogin": true,
+      "notes": "Times Internet's tech-only board.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "bigshyft": {
+      "enabled": true,
+      "type": "portal",
+      "label": "BigShyft",
+      "group": "India",
+      "home": "https://www.bigshyft.com/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Info Edge's curated tech-talent platform: companies reach out to the profile.",
+      "needs": "phone OTP at sign-up",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "herkey": {
+      "enabled": true,
+      "type": "portal",
+      "label": "HerKey",
+      "group": "India",
+      "home": "https://www.herkey.com/jobs",
+      "requiresLogin": true,
+      "notes": "Women-in-tech platform (formerly JobsForHer) with diversity hiring drives from large companies.",
+      "needs": "phone OTP possible",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "geeksforgeeks": {
+      "enabled": true,
+      "type": "portal",
+      "label": "GeeksforGeeks Jobs",
+      "group": "India",
+      "home": "https://www.geeksforgeeks.org/jobs/",
+      "requiresLogin": true,
+      "notes": "GfG's job board; Google sign-in.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "tophire": {
+      "enabled": true,
+      "type": "portal",
+      "label": "TopHire",
+      "group": "India",
+      "home": "https://tophire.co/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Invite-only curated platform; the agent submits her profile to join, TopHire decides.",
+      "needs": "a short review by TopHire",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "talent": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Talent.com",
+      "group": "Aggregators",
+      "home": "https://in.talent.com/",
+      "searchUrl": "https://in.talent.com/jobs?k={keywords}&l={location}",
+      "notes": "Large aggregator; most jobs redirect to the company's own site.",
+      "needs": "bot check possible",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "careerjet": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Careerjet",
+      "group": "Aggregators",
+      "home": "https://www.careerjet.co.in/",
+      "searchUrl": "https://www.careerjet.co.in/jobs?s={keywords}&l={location}",
+      "notes": "Aggregator with wide coverage of Indian postings.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "jora": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Jora",
+      "group": "Aggregators",
+      "home": "https://in.jora.com/",
+      "searchUrl": "https://in.jora.com/j?q={keywords}&l={location}",
+      "notes": "SEEK's aggregator (India edition).",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "simplyhired": {
+      "enabled": true,
+      "type": "portal",
+      "label": "SimplyHired",
+      "group": "Aggregators",
+      "home": "https://www.simplyhired.co.in/",
+      "searchUrl": "https://www.simplyhired.co.in/search?q={keywords}&l={location}",
+      "notes": "Indeed-family aggregator.",
+      "needs": "bot check possible",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "jobrapido": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Jobrapido",
+      "group": "Aggregators",
+      "home": "https://in.jobrapido.com/",
+      "searchUrl": "https://in.jobrapido.com/?q={keywords}&l={location}",
+      "notes": "Aggregator; redirects to the source posting.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "whatjobs": {
+      "enabled": true,
+      "type": "portal",
+      "label": "WhatJobs",
+      "group": "Aggregators",
+      "home": "https://in.whatjobs.com/",
+      "notes": "Aggregator; redirects to the source posting.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "jobsora": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Jobsora",
+      "group": "Aggregators",
+      "home": "https://in.jobsora.com/",
+      "notes": "Aggregator; redirects to the source posting.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "PHP Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Laravel Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "WordPress Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Node.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Frontend Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Web Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "UI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "JavaScript Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Shopify Developer",
+          "location": "Bengaluru"
+        }
+      ]
+    },
+    "remoteok": {
+      "enabled": true,
+      "type": "portal",
+      "label": "RemoteOK",
+      "group": "Remote boards",
+      "home": "https://remoteok.com/",
+      "searchUrl": "https://remoteok.com/remote-{keywords-slug}-jobs",
+      "notes": "Biggest remote tech board; applications go to the company's site.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "weworkremotely": {
+      "enabled": true,
+      "type": "portal",
+      "label": "We Work Remotely",
+      "group": "Remote boards",
+      "home": "https://weworkremotely.com/",
+      "searchUrl": "https://weworkremotely.com/remote-jobs/search?term={keywords}",
+      "notes": "Large remote board; applications go to the company's site.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "remotive": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Remotive",
+      "group": "Remote boards",
+      "home": "https://remotive.com/remote-jobs/software-dev",
+      "notes": "Curated remote software jobs.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "himalayas": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Himalayas",
+      "group": "Remote boards",
+      "home": "https://himalayas.app/jobs",
+      "requiresLogin": true,
+      "notes": "Remote board with candidate profiles companies can find.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "workingnomads": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Working Nomads",
+      "group": "Remote boards",
+      "home": "https://www.workingnomads.com/jobs",
+      "notes": "Curated remote developer jobs.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "jobspresso": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Jobspresso",
+      "group": "Remote boards",
+      "home": "https://jobspresso.co/remote-work/",
+      "notes": "Curated remote jobs; resume can be posted for employers.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "justremote": {
+      "enabled": true,
+      "type": "portal",
+      "label": "JustRemote",
+      "group": "Remote boards",
+      "home": "https://justremote.co/remote-developer-jobs",
+      "notes": "Remote developer jobs, many open to India.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "dynamitejobs": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Dynamite Jobs",
+      "group": "Remote boards",
+      "home": "https://dynamitejobs.com/remote-jobs",
+      "notes": "Remote jobs at bootstrapped companies.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "workatastartup": {
+      "enabled": true,
+      "type": "portal",
+      "label": "YC Work at a Startup",
+      "group": "Remote boards",
+      "home": "https://www.workatastartup.com/jobs",
+      "requiresLogin": true,
+      "notes": "Y Combinator startups; one profile, apply to many.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "toptal": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Toptal",
+      "group": "Talent networks",
+      "home": "https://www.toptal.com/talent/apply",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Top-tier freelance/contract network; the agent fills the application, the screening interviews and tests need her.",
+      "needs": "screening interview + coding test",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "turing": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Turing",
+      "group": "Talent networks",
+      "home": "https://www.turing.com/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Remote developer network (reported to have scaled matching down in 2026; the agent still registers her).",
+      "needs": "online tests",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "arc": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Arc.dev",
+      "group": "Talent networks",
+      "home": "https://arc.dev/remote-jobs",
+      "requiresLogin": true,
+      "notes": "Vetted remote network with a public job board.",
+      "needs": "vetting interview",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "crossover": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Crossover",
+      "group": "Talent networks",
+      "home": "https://www.crossover.com/jobs",
+      "requiresLogin": true,
+      "notes": "Full-time remote roles with India-based pay bands; every role starts with online tests.",
+      "needs": "online tests",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "lemonio": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Lemon.io",
+      "group": "Talent networks",
+      "home": "https://lemon.io/for-developers/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Vetted developers for startups.",
+      "needs": "vetting interview",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "proxify": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Proxify",
+      "group": "Talent networks",
+      "home": "https://career.proxify.io/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "European remote network; strong on PHP/Laravel/Magento.",
+      "needs": "vetting interview + test",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "braintrust": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Braintrust",
+      "group": "Talent networks",
+      "home": "https://www.usebraintrust.com/jobs",
+      "requiresLogin": true,
+      "notes": "Talent-owned network with a public job board.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "uplers": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Uplers",
+      "group": "Talent networks",
+      "home": "https://talent.uplers.com/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "India-based remote talent network for global companies.",
+      "needs": "assessment",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "flexiple": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Flexiple",
+      "group": "Talent networks",
+      "home": "https://flexiple.com/developers",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "India-based network for remote full-stack roles.",
+      "needs": "vetting interview",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
+    },
+    "welcometothejungle": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Welcome to the Jungle",
+      "group": "Global & relocation",
+      "home": "https://www.welcometothejungle.com/en/jobs",
+      "searchUrl": "https://www.welcometothejungle.com/en/jobs?query={keywords}",
+      "notes": "Global board (Otta merged into it); remote and relocation roles.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "relocateme": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Relocate.me",
+      "group": "Global & relocation",
+      "home": "https://relocate.me/",
+      "notes": "Jobs that come with relocation (Europe, Gulf, APAC).",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "landingjobs": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Landing.jobs",
+      "group": "Global & relocation",
+      "home": "https://landing.jobs/jobs",
+      "searchUrl": "https://landing.jobs/jobs?q={keywords}",
+      "notes": "European tech jobs, many remote-from-anywhere.",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": [
+        {
+          "keywords": "Magento",
+          "location": ""
+        },
+        {
+          "keywords": "Adobe Commerce",
+          "location": ""
+        },
+        {
+          "keywords": "PHP",
+          "location": ""
+        },
+        {
+          "keywords": "Laravel",
+          "location": ""
+        },
+        {
+          "keywords": "WordPress",
+          "location": ""
+        },
+        {
+          "keywords": "React",
+          "location": ""
+        },
+        {
+          "keywords": "Next.js",
+          "location": ""
+        },
+        {
+          "keywords": "Node.js",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend",
+          "location": ""
+        },
+        {
+          "keywords": "JavaScript",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack",
+          "location": ""
+        },
+        {
+          "keywords": "Shopify",
+          "location": ""
+        }
+      ]
+    },
+    "honeypot": {
+      "enabled": true,
+      "type": "portal",
+      "label": "Honeypot",
+      "group": "Global & relocation",
+      "home": "https://www.honeypot.io/",
+      "requiresLogin": true,
+      "profileOnly": true,
+      "notes": "Europe's reverse job board: companies apply to her profile.",
+      "needs": "profile review by Honeypot",
+      "delaySeconds": [
+        5,
+        12
+      ],
+      "searches": []
     }
   },
   "excludeTitleKeywords": [
@@ -1356,5 +3332,7 @@
     "PrestaShop",
     "AI tools",
     "Generative AI"
-  ]
+  ],
+  "maxConcurrentAgents": 6,
+  "rotateMinutes": 40
 }

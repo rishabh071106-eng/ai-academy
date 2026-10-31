@@ -24,6 +24,9 @@ export async function connect() {
 
 const SLOTS = Object.keys(loadConfig().platforms ?? {}).filter((k) => loadConfig().platforms[k]?.enabled !== false);
 const SLOT = Object.fromEntries(SLOTS.map((k, i) => [k, i]));
+// The runner says which of the N concurrent slots this agent has (--slot=2 --slots=6), so the
+// windows of the agents running right now tile the screen, not one slot per configured site.
+const ARGV = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 
 /**
  * Opens a tab in a Chrome window of its own for one agent (each agent keeps the visible tab
@@ -31,7 +34,7 @@ const SLOT = Object.fromEntries(SLOTS.map((k, i) => [k, i]));
  * other's tab). Windows are tiled side by side: LinkedIn | Naukri | Alignerr.
  */
 export async function openAgentWindow(context, platform, startUrl = "") {
-  const slot = SLOT[platform] ?? 0;
+  const slot = ARGV.slot !== undefined && Number.isFinite(Number(ARGV.slot)) ? Number(ARGV.slot) : SLOT[platform] ?? 0;
   const tag = `${platform}-agent-${process.pid}`;
   const marker = `data:text/html,<title>${tag}</title><p style="font:16px system-ui;margin:24px">The ${platform} agent works in this window. Leave it open.</p>`;
   const anyPage = context.pages()[0] ?? (await context.newPage());
@@ -54,7 +57,7 @@ export async function openAgentWindow(context, platform, startUrl = "") {
     try {
       const { windowId } = await cdp.send("Browser.getWindowForTarget", { targetId });
       const { w, h } = await (page ?? anyPage).evaluate(() => ({ w: screen.availWidth, h: screen.availHeight }));
-      const n = Math.max(1, SLOTS.length);
+      const n = Math.max(1, Number(ARGV.slots) || SLOTS.length);
       const cols = Math.min(n, Math.max(1, Math.floor(w / 640)));
       const rows = Math.ceil(n / cols);
       const width = Math.floor(w / cols);
