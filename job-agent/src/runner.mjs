@@ -17,6 +17,10 @@ export const platformList = () => PLATFORMS.map((k, i) => ({ key: k, label: LABE
 // and take over as slots free up. Job agents that keep going give up their slot after
 // rotateMinutes (40) and rejoin the end of the queue, so every site gets its turn.
 export const MAX_CONCURRENT = Math.max(1, Number(process.env.JOB_AGENT_MAX_CONCURRENT || cfg0.maxConcurrentAgents || 6));
+// Profile updates ask for phone codes: only maxConcurrentProfileUpdates (2) run at once so the
+// questions come one or two at a time, not six.
+export const MAX_PROFILE = Math.max(1, Number(process.env.JOB_AGENT_MAX_PROFILE || cfg0.maxConcurrentProfileUpdates || 2));
+const profileCount = () => Object.values(runs).filter((r) => r.child && r.options?.task === "profile").length;
 const ROTATE_MS = process.env.JOB_AGENT_ROTATE_MS ? Number(process.env.JOB_AGENT_ROTATE_MS) : Math.max(0, Number(cfg0.rotateMinutes ?? 40)) * 60000;
 const AGENT_SCRIPT = process.env.JOB_AGENT_SCRIPT || path.join(ROOT, "src", "agent.mjs");
 const MAX_LOG = 600;
@@ -107,8 +111,8 @@ export function start({ platform, mode = "review", max = 15, review = 0, keepGoi
   if (task === "profile") keepGoing = false; // one pass, then the agent exits
   const options = { mode, max, review, keepGoing, retry, task };
   if (!restart) Object.assign(run, { log: [], restarts: 0, fatal: null, stopRequested: false });
-  if (!restart && runningCount() >= MAX_CONCURRENT) {
-    enqueue(run, options, `⏳ Waiting for a turn (${queue.length + 1} in the queue): ${MAX_CONCURRENT} agents run at a time${ROTATE_MS ? `, each job agent gets ${ROTATE_MS / 60000} min before the next site takes over` : ""}`);
+  if (!restart && (runningCount() >= MAX_CONCURRENT || (task === "profile" && profileCount() >= MAX_PROFILE))) {
+    enqueue(run, options, task === "profile" ? `⏳ Waiting for a turn (${queue.length + 1} in the queue): profiles are updated ${MAX_PROFILE} sites at a time so the codes they ask for come one by one` : `⏳ Waiting for a turn (${queue.length + 1} in the queue): ${MAX_CONCURRENT} agents run at a time${ROTATE_MS ? `, each job agent gets ${ROTATE_MS / 60000} min before the next site takes over` : ""}`);
     return status();
   }
   launch(platform, options, restart);
@@ -123,8 +127,10 @@ function enqueue(run, options, message) {
 
 /** Starts queued agents while there are free slots. */
 function pump() {
-  while (queue.length && runningCount() < MAX_CONCURRENT) {
-    const run = runs[queue.shift()];
+  for (let i = 0; i < queue.length && runningCount() < MAX_CONCURRENT; ) {
+    const run = runs[queue[i]];
+    if (run.options?.task === "profile" && profileCount() >= MAX_PROFILE) { i++; continue; } // its turn comes when a profile update finishes
+    queue.splice(i, 1);
     run.queued = false;
     if (run.stopRequested) continue;
     launch(run.platform, run.options, 0);

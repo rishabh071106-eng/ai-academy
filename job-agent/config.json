@@ -3334,5 +3334,6 @@
     "Generative AI"
   ],
   "maxConcurrentAgents": 6,
-  "rotateMinutes": 40
+  "rotateMinutes": 40,
+  "maxConcurrentProfileUpdates": 2
 }
