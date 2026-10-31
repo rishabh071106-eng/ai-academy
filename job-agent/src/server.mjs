@@ -1,6 +1,6 @@
 // Local dashboard: http://localhost:4321  (data stays on this machine)
 import fs from "node:fs";
-import { execSync, fork } from "node:child_process";
+import { execSync, fork, spawn } from "node:child_process";
 import http from "node:http";
 import path from "node:path";
 import { DATA_DIR, ROOT, log, readJson } from "./util.mjs";
@@ -130,5 +130,14 @@ server.on("error", (e) => {
   ours.forEach((pid) => { try { process.kill(Number(pid), "SIGTERM"); } catch {} });
   setTimeout(() => server.listen(PORT, "127.0.0.1"), 1500);
 });
-server.on("listening", () => log("ok", `Dashboard: http://localhost:${PORT}`));
+server.on("listening", () => {
+  const url = `http://localhost:${PORT}`;
+  log("ok", `Dashboard: ${url}  ← this web page is where the agents are started and watched`);
+  log("dim", "Keep this Terminal window open while the agents run (don't press Ctrl+Z or Ctrl+C here; use another tab for other commands).");
+  // Open the page in the default browser, so nobody has to find the address (NO_OPEN=1 to skip).
+  if (!process.env.NO_OPEN && !replaced) {
+    const cmd = process.platform === "darwin" ? "open" : process.platform === "win32" ? "start" : "xdg-open";
+    try { spawn(cmd, [url], { stdio: "ignore", detached: true, shell: process.platform === "win32" }).unref(); } catch {}
+  }
+});
 server.listen(PORT, "127.0.0.1");
