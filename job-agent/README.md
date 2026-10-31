@@ -57,7 +57,7 @@ cp .env.example .env          # paste your GEMINI_API_KEY, an ATS_PASSWORD for c
 
 ```bash
 npm run chrome        # if that Chrome window isn't already open
-npm run dashboard            # opens http://localhost:4321 in your browser; keep this window open     # then open http://localhost:4321
+npm run dashboard            # opens http://localhost:4321 in your browser; keep this window open
 ```
 
 Start and stop the agents **from the dashboard**. Every site in `config.json` has its own agent card and runs as a separate process, each in **its own Chrome window** (tiled across the screen; leave them open, they can sit behind other windows). **▶ Start all** / **■ Stop all** in the header start or stop all of them with the settings on their cards. Pick a mode (Practice / Ask before submit / Fully automatic) and a maximum, then press **▶ Start**. When the agent needs you (for example "Submit application to X?"), a yellow box with buttons appears at the top of the dashboard. **■ Stop** ends the run at any time. "Show live log" shows what it's doing.
