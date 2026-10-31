@@ -53,11 +53,11 @@ Studio → **Settings** → **Channel** → **Basic info**:
 
 ### 1.4 Upload defaults (saves time on every upload)
 Studio → **Settings** → **Upload defaults**:
-- **General** tab: Visibility **Private** (safer: nothing goes public by accident),
-  Category **Science & Technology**, License **Standard YouTube License**, Comments **On**
-  with **Hold potentially inappropriate comments for review**.
-- **Advanced settings** tab: **Video language** = the language spoken in your video,
-  **Title and description language** = the language you write them in.
+- **Basic info** tab: Visibility **Private** (safer: nothing goes public by accident).
+- **Advanced settings** tab: License **Standard YouTube License**, Category
+  **Science & Technology**, Comments **On** with **Hold potentially inappropriate comments
+  for review**, **Video language** = the language spoken in your video, **Title and
+  description language** = the language you write them in.
   If you see **Allow automatic dubbing**, turn it **on** (see Part 4.4).
 
 ---
@@ -77,8 +77,8 @@ Studio → **Settings** → **Upload defaults**:
 
 **Why 1440p or 4K matters for space videos in particular:** space videos are mostly dark
 gradients, and YouTube's compression turns dark gradients into ugly bands and blocks.
-YouTube gives better compression to uploads of 1440p and above. Exporting your 1080p
-project at 1440p makes it look noticeably cleaner on YouTube, even for viewers watching
+YouTube usually gives better compression to uploads of 1440p and above, so exporting
+your 1080p project at 1440p tends to look cleaner on YouTube, even for viewers watching
 at 1080p.
 
 **Name the file with its topic**, e.g. `what-happens-inside-a-black-hole.mp4`, not
@@ -115,7 +115,7 @@ at 1080p.
   - `A Journey to the Edge of the Universe`
   - `Why Nothing Escapes a Black Hole (Not Even Light)`
 - Check what people actually search: YouTube search box autocomplete, and Studio →
-  **Analytics** → **Research** tab.
+  **Analytics** → **Research** tab (if your Studio shows it).
 
 ### 2.5 The description (copy this template)
 
@@ -327,8 +327,8 @@ Shorts reach people who have never heard of you, then send them to the full vide
 1. Cut **2 to 4 clips** from your best moments: **vertical 1080×1920 (9:16)**,
    **15 to 50 seconds** (Shorts can be up to 3 minutes, but shorter loops better).
 2. The **first frame must already be the most interesting frame**. No build-up at all.
-3. Big on-screen text: a question at the start ("This star could swallow our Sun 1,700
-   times 😳"), the answer near the end.
+3. Big on-screen text: a question at the start ("What would you see falling into a black
+   hole? 😳"), the answer near the end.
 4. Make the end flow back into the start so it **loops**. Loops count as rewatches.
 5. **Music:** your own track, YouTube Audio Library, or a sound picked inside the YouTube
    app. **Shorts over 1 minute with a copyright claim get blocked worldwide**, so keep
@@ -352,7 +352,7 @@ Shorts reach people who have never heard of you, then send them to the full vide
 | First day | **Reply to every comment.** Heart the good ones. |
 | First day | Post in space communities (Reddit, Facebook groups, Discord). **Read each community's self-promotion rules first.** Share it as "I made this", with a still or a short clip, not just a bare link. |
 | Day 1–4 | Release your Shorts, one a day (Part 5). |
-| If available | Make a **Community post** (Studio → Create → Create post) with a striking frame and the link. |
+| If available | Make a **Community post** from the **Posts** tab on your channel, with a striking frame and the link. |
 
 ---
 
