@@ -47,6 +47,16 @@ export function loadProfile() {
     profile.skillYears = merged;
   }
   if (cfg.applicationAnswers) profile.applicationAnswers = { ...(profile.applicationAnswers ?? {}), ...cfg.applicationAnswers };
+  // Skills added since the resume PDF was made (config "extraSkills": { "Frontend": ["Knockout.js"] })
+  // go into the matching skill group (created if missing) and the flat skills list.
+  for (const [group, items] of Object.entries(cfg.extraSkills ?? {})) {
+    profile.skillGroups ??= [];
+    const g = profile.skillGroups.find((x) => x.name.toLowerCase() === group.toLowerCase()) ?? (profile.skillGroups.push({ name: group, items: [] }), profile.skillGroups.at(-1));
+    for (const it of items) {
+      if (!g.items.some((x) => x.toLowerCase() === it.toLowerCase())) g.items.splice(Math.max(0, g.items.findIndex((x) => /^html/i.test(x))), 0, it);
+      if (!(profile.skills ?? []).some((x) => x.toLowerCase() === it.toLowerCase())) (profile.skills ??= []).push(it);
+    }
+  }
   // Her date of birth stays out of the repo: DATE_OF_BIRTH=YYYY-MM-DD in .env (or applicationAnswers.dateOfBirth in profile.json).
   if (process.env.DATE_OF_BIRTH?.trim()) profile.applicationAnswers = { ...(profile.applicationAnswers ?? {}), dateOfBirth: process.env.DATE_OF_BIRTH.trim() };
   return profile;

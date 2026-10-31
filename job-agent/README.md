@@ -21,6 +21,8 @@ search ─► read job ─► Claude: match score + tailored resume ─► apply
 
 ## Her resume is the source of truth
 
+`npm run build-resume` rebuilds her standard resume PDF from the newest resume in Downloads plus any `extraSkills` in `config.json` (e.g. Knockout.js under Frontend) and saves it to Downloads as `<Name>-Resume_final.pdf`, so every agent uses it from the next round and the profile updates on the sites carry it too.
+
 At the start of every run the agent looks for the newest `~/Downloads/Aishwarya-Sharma-Resume*.pdf` (set `baseResume` in `config.json` to change this). If it's new or changed, Claude re-reads it into `profile.json`: summary, roles and bullets, grouped skills, "at a glance" numbers, project index and credentials. Her screening answers (notice period, CTC…) and contact details are kept. Run `npm run import-resume` to do it by hand.
 
 For every job the steps are: **read the job → create a resume for it → upload that resume → apply**.

@@ -3337,6 +3337,11 @@
     "AI tools",
     "Generative AI"
   ],
+  "extraSkills": {
+    "Frontend": [
+      "Knockout.js"
+    ]
+  },
   "maxConcurrentAgents": 6,
   "rotateMinutes": 40,
   "maxConcurrentProfileUpdates": 2
