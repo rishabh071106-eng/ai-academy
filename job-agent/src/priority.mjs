@@ -7,7 +7,7 @@ import { loadConfig } from "./util.mjs";
 
 export const DEFAULT_TIERS = [
   { name: "Magento", keywords: ["magento", "adobe commerce", "magento 2", "magento2", "hyva", "hyvä", "pwa studio"] },
-  { name: "PHP", keywords: ["php", "symfony", "codeigniter", "yii", "cakephp", "wordpress", "woocommerce", "drupal"] },
+  { name: "PHP", keywords: ["php", "symfony", "codeigniter", "yii", "cakephp", "drupal"] },
   { name: "React", keywords: ["react", "reactjs", "react.js", "react js", "next.js", "nextjs", "next js", "redux", "typescript"] },
   { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css", "jquery"] },
   { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce", "graphql", "mysql"] },

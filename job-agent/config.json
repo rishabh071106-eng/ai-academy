@@ -23,8 +23,6 @@
     "jquery",
     "graphql",
     "mysql",
-    "wordpress",
-    "woocommerce",
     "e-commerce",
     "ecommerce",
     "full stack",
@@ -57,8 +55,6 @@
         "codeigniter",
         "yii",
         "cakephp",
-        "wordpress",
-        "woocommerce",
         "drupal"
       ]
     },
@@ -119,8 +115,6 @@
     "jquery",
     "graphql",
     "mysql",
-    "wordpress",
-    "woocommerce",
     "e-commerce",
     "ecommerce",
     "full stack",
@@ -148,8 +142,6 @@
     "jquery",
     "graphql",
     "mysql",
-    "wordpress",
-    "woocommerce",
     "e-commerce",
     "ecommerce",
     "full stack",
@@ -318,10 +310,6 @@
           "location": "Bengaluru, Karnataka, India"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
           "keywords": "PHP Developer",
           "location": "United Arab Emirates",
           "everyRounds": 2
@@ -407,10 +395,6 @@
         },
         {
           "keywords": "full stack developer php",
-          "location": "bangalore"
-        },
-        {
-          "keywords": "wordpress developer",
           "location": "bangalore"
         },
         {
@@ -546,10 +530,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -603,10 +583,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -666,10 +642,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -723,10 +695,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -786,10 +754,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -842,10 +806,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -905,10 +865,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -961,10 +917,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1024,10 +976,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1081,10 +1029,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1144,10 +1088,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1200,10 +1140,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1265,10 +1201,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1325,10 +1257,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1381,10 +1309,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1460,10 +1384,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1516,10 +1436,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1595,10 +1511,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1654,10 +1566,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1710,10 +1618,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1773,10 +1677,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1829,10 +1729,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -1890,10 +1786,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "WordPress Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1945,10 +1837,6 @@
         },
         {
           "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "WordPress Developer",
           "location": "Bengaluru"
         },
         {
@@ -2007,10 +1895,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2058,10 +1942,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2105,10 +1985,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2159,10 +2035,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2206,10 +2078,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2259,10 +2127,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2306,10 +2170,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2359,10 +2219,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2407,10 +2263,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2494,10 +2346,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2543,10 +2391,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2629,10 +2473,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2712,10 +2552,6 @@
           "location": ""
         },
         {
-          "keywords": "WordPress",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2759,10 +2595,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {
@@ -2810,10 +2642,6 @@
         },
         {
           "keywords": "PHP",
-          "location": ""
-        },
-        {
-          "keywords": "WordPress",
           "location": ""
         },
         {

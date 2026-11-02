@@ -339,7 +339,7 @@ const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.sli
 // Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React →
 // front end → full stack). The agent stores it on each job; older rows are classified here from the title.
 let TIER_DEFS = [
-  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php", "wordpress", "woocommerce"] },
+  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php"] },
   { name: "React", keywords: ["react", "reactjs", "react.js", "next.js", "nextjs", "typescript"] },
   { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css"] },
   { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce"] },
