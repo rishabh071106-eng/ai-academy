@@ -294,7 +294,7 @@ dialog input, dialog select { border: 1px solid var(--border); border-radius: 9p
         <option value="">All stacks</option>
       </select>
       <select class="sel" id="sortSel" aria-label="Sort">
-        <option value="recent">Most recent</option><option value="priority">Magento → PHP → React</option><option value="score">Best match</option><option value="company">Company A–Z</option>
+        <option value="recent">Most recent</option><option value="priority">Magento → React → AI</option><option value="score">Best match</option><option value="company">Company A–Z</option>
       </select>
     </div>
     <div class="table-wrap">
@@ -336,13 +336,14 @@ const STATUS = {
 };
 let PLATFORM = { linkedin: { label: "LinkedIn", color: "var(--series-1)" }, naukri: { label: "Naukri", color: "var(--series-2)" }, other: { label: "Other", color: "var(--muted)" } };
 const platformOf = (k) => PLATFORM[k] ?? { label: k ? k[0].toUpperCase() + k.slice(1) : "Other", color: PLATFORM.other.color };
-// Which of her stacks a job is about, in the order the agent takes jobs (Magento → PHP → React →
-// front end → full stack). The agent stores it on each job; older rows are classified here from the title.
+// Which of her stacks a job is about, in the order the agent takes jobs (Magento → React → AI →
+// JavaScript → PostgreSQL). The agent stores it on each job; older rows are classified here from the title.
 let TIER_DEFS = [
-  { name: "Magento", keywords: ["magento", "adobe commerce"] }, { name: "PHP", keywords: ["php"] },
-  { name: "React", keywords: ["react", "reactjs", "react.js", "next.js", "nextjs", "typescript"] },
-  { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css"] },
-  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce"] },
+  { name: "Magento", keywords: ["magento", "adobe commerce", "magento 2", "magento2", "hyva", "hyv\u00e4"] },
+  { name: "React", keywords: ["react", "reactjs", "react.js", "react js", "next.js", "nextjs"] },
+  { name: "AI", keywords: ["generative ai", "genai", "gen ai", "llm", "llms", "ai-native"] },
+  { name: "JavaScript", keywords: ["javascript", "front end", "frontend", "front-end", "full stack", "fullstack"] },
+  { name: "PostgreSQL", keywords: ["postgresql", "postgres"] },
 ];
 let TIER_RES = [];
 const tierNames = () => [...TIER_DEFS.map((t) => t.name), "Other"];
@@ -815,12 +816,12 @@ async function updateProfile(k) {
     pollAgent();
   }
 }
-async function startStop(k) {
+async function startStop(k, all = false) {
   const btn = el(k, "btn");
   btn.disabled = true;
   const starting = !AG[k].running && !AG[k].queued;
   try {
-    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing, retry: AG[k].retry !== false }) });
+    const r = await fetch(starting ? "/api/agent/start" : "/api/agent/stop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ platform: k, mode: AG[k].mode, max: AG[k].max, review: AG[k].review, keepGoing: AG[k].keepGoing, retry: AG[k].retry !== false, all }) });
     const data = await r.json();
     if (!r.ok) alert(data.error || "Something went wrong");
     else if (starting) { AG[k].since = 0; el(k, "log").innerHTML = ""; toggleLog(k, true); }
@@ -832,7 +833,7 @@ async function startStop(k) {
 
 $("#startAllBtn").onclick = async () => {
   // Profile-only sites (talent networks) have nothing to search; ↻ Update all profiles covers them.
-  for (const k of Object.keys(AG)) if (!AG[k].running && !AG[k].queued && !AG[k].profileOnly) await startStop(k);
+  for (const k of Object.keys(AG)) if (!AG[k].running && !AG[k].queued && !AG[k].profileOnly) await startStop(k, true);
 };
 $("#profilesBtn").onclick = async () => {
   for (const k of Object.keys(AG)) if (!AG[k].running && !AG[k].queued) await updateProfile(k);
@@ -861,7 +862,8 @@ async function pollAgent() {
     if (!agentsBuilt && platforms?.length) buildAgents(platforms);
     if (maxConcurrent) {
       const n = Object.values(runs).filter((r) => r.running).length;
-      $("#agentsLine").textContent = `${platforms.length} sites · ${maxConcurrent} agents run at a time (${n} running${queue?.length ? `, ${queue.length} waiting in the queue` : ""})${rotateMinutes ? ` · each job agent gets ${rotateMinutes} min, then the next site takes over` : ""} · change maxConcurrentAgents in config.json for a stronger Mac`;
+      const paused = Object.values(runs).filter((r) => r.paused).length;
+      $("#agentsLine").textContent = `${platforms.length} sites · ${maxConcurrent} agents run at a time (${n} running${queue?.length ? `, ${queue.length} waiting in the queue` : ""}${paused ? `, ${paused} paused because nothing could be applied there` : ""})${rotateMinutes ? ` · each job agent gets ${rotateMinutes} min, then the next site takes over` : ""} · change maxConcurrentAgents in config.json for a stronger Mac`;
     }
     if (!tiersLoaded && tiers?.length) { tiersLoaded = true; setTiers(tiers); renderTable(); }
     window.__profiles = profiles || {};
@@ -902,12 +904,14 @@ function renderAgent(k, s) {
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");
   const mins = s.startedAt ? Math.max(0, Math.round(((s.running ? Date.now() : s.endedAt) - s.startedAt) / 60000)) : 0;
   const modeName = MODE_NAME[s.options?.mode] ?? "";
+  const stat = s.stats ? ` · so far: applied ${s.stats.applied} in ${Math.round(s.stats.minutes)} min, ${s.stats.seen} jobs looked at` : "";
   if (s.queued) { el(k, "title").textContent = "in the queue"; el(k, "sub").textContent = `Waiting for a free slot (${s.queuePos ? `#${s.queuePos} in line` : "next"}) · starts by itself`; }
+  else if (!s.running && s.paused) { el(k, "title").textContent = "paused"; el(k, "sub").innerHTML = `<span style="color:var(--warn)">⏸ ${esc(s.paused)}</span> · Start all skips it; press ▶ Start here to try again${esc(stat)}`; }
   else if (s.pending) { el(k, "title").textContent = "waiting for you"; el(k, "sub").textContent = `${modeName} · running ${mins} min`; }
   else if (s.running) { el(k, "title").textContent = "running"; el(k, "sub").textContent = `${modeName} · ${mins} min · applied ${appliedSince(k, s.startedAt)}/${s.options?.max ?? "?"}${s.restarts ? ` · restarted ${s.restarts}×` : ""} · keep the agent's Chrome open`; }
   else if (s.endedAt && s.fatal) { el(k, "title").textContent = "stopped"; el(k, "sub").innerHTML = `<span style="color:var(--crit)">⚠ ${esc(s.fatal)}</span>`; }
-  else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)` + profileLine(k); }
-  else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start" + profileLine(k); }
+  else if (s.endedAt) { el(k, "title").textContent = "idle"; el(k, "sub").textContent = `Last run finished ${ago(s.endedAt)} (${modeName}, ${mins} min)` + profileLine(k) + stat; }
+  else { el(k, "title").textContent = "idle"; el(k, "sub").textContent = "Choose a mode and press Start" + profileLine(k) + stat; }
   btn.className = "btn " + (s.running || s.queued ? "stop" : "go");
   btn.textContent = s.queued ? "✕ Leave queue" : s.running ? "■ Stop" : "▶ Start";
   el(k, "dot").className = "agent-dot" + (s.pending ? " wait" : s.running ? " run" : "");

@@ -1,5 +1,5 @@
-// Which jobs come first: Magento, then PHP, then React, then front end, then
-// full stack / e-commerce. A job's tier is the first tier (in this order) whose keyword
+// Which jobs come first: Magento, then React/Next.js/TypeScript, then AI-native work, then
+// JavaScript / front end / full stack / e-commerce, then PostgreSQL. A job's tier is the first tier (in this order) whose keyword
 // appears in its title; if no tier matches the title, the job's description/card text is
 // used the same way. Everything else is "Other" and comes last.
 // Override the tiers in config.json ("priorityTiers": [{ "name", "keywords": [] }, …]).
@@ -7,10 +7,10 @@ import { loadConfig } from "./util.mjs";
 
 export const DEFAULT_TIERS = [
   { name: "Magento", keywords: ["magento", "adobe commerce", "magento 2", "magento2", "hyva", "hyvä", "pwa studio"] },
-  { name: "PHP", keywords: ["php", "symfony", "codeigniter", "yii", "cakephp", "drupal"] },
-  { name: "React", keywords: ["react", "reactjs", "react.js", "react js", "next.js", "nextjs", "next js", "redux", "typescript"] },
-  { name: "Front end", keywords: ["front end", "frontend", "front-end", "ui developer", "web developer", "javascript", "html", "css", "jquery"] },
-  { name: "Full stack", keywords: ["full stack", "fullstack", "full-stack", "e-commerce", "ecommerce", "graphql", "mysql"] },
+  { name: "React", keywords: ["react", "reactjs", "react.js", "react js", "next.js", "nextjs", "next js", "typescript", "redux"] },
+  { name: "AI", keywords: ["generative ai", "genai", "gen ai", "llm", "llms", "ai-native", "ai native", "vibe coding", "vibe-coding", "ai engineer", "ai developer", "ai-assisted", "ai assisted", "agentic", "copilot", "cursor", "claude code", "ai full stack", "ai application"] },
+  { name: "JavaScript", keywords: ["javascript", "front end", "frontend", "front-end", "full stack", "fullstack", "full-stack", "e-commerce", "ecommerce", "graphql"] },
+  { name: "PostgreSQL", keywords: ["postgresql", "postgres"] },
 ];
 export const OTHER = "Other";
 
@@ -50,10 +50,10 @@ export function sortByTier(items, textOf, tiers = TIERS) {
 
 /** How the resume should lead for a job of this tier (all skill groups stay on it). */
 export const FOCUS = {
-  Magento: "Lead with Adobe Commerce / Magento 2: the Adobe Certified Expert credential, Magento 2 modules and customisations, PWA/Hyva/headless storefronts, performance, integrations. The React/Next.js and PHP groups follow right after.",
-  PHP: "Lead with PHP: present her Magento work as PHP 7/8 + MySQL back-end engineering (REST/GraphQL APIs, OOP, design patterns, performance); Magento/Adobe Commerce next, then front end.",
-  React: "Lead with React / Next.js / TypeScript front-end work (headless storefronts, component libraries, state management, performance); then Adobe Commerce/PHP back end.",
-  "Front end": "Lead with front-end engineering: React / Next.js, JavaScript / TypeScript, HTML / CSS, responsive UI and performance; then Adobe Commerce/PHP back end.",
-  "Full stack": "Balance both halves: React / Next.js front end and PHP / Adobe Commerce / MySQL / GraphQL back end, e-commerce end to end.",
+  Magento: "Lead with Adobe Commerce / Magento 2: the Adobe Certified Expert credential, Magento 2 modules and customisations, headless/PWA storefronts, performance, integrations; React/Next.js right after.",
+  React: "Lead with React / Next.js / TypeScript front-end work (headless storefronts on Adobe Commerce, typed components, SSR/SSG, performance); Adobe Commerce/PHP back end after.",
+  AI: "Lead with AI-native engineering: the AI-Native Software Engineering programme, AI-assisted development (Copilot/Cursor-style vibe coding) in her daily work, LLM/GenAI integrations; then her full-stack Adobe Commerce + React record.",
+  JavaScript: "Lead with JavaScript / TypeScript full-stack web engineering: React / Next.js front end, GraphQL/REST APIs, e-commerce; Adobe Commerce/PHP back end after.",
+  PostgreSQL: "Lead with data-heavy back-end work: MySQL/PostgreSQL schema design, GraphQL/REST APIs, performance; then React/Next.js and Adobe Commerce.",
 };
 export const focusFor = (name) => FOCUS[name] || "";

@@ -1,8 +1,8 @@
 # The 55 job sites the agent works on
 
-Honest note first: no site can promise a job. What these sites give her is reach (every place recruiters in her field look, in India and abroad), a current profile everywhere a recruiter might search, and a steady stream of applications in Magento → PHP → React → front end order. Whether an offer comes depends on the market and the interviews; the agent's job is to make sure nothing is missed.
+Honest note first: no site can promise a job. What these sites give her is reach (every place recruiters in her field look, in India and abroad), a current profile everywhere a recruiter might search, and a steady stream of applications in Magento → React → AI → JavaScript → PostgreSQL order. Whether an offer comes depends on the market and the interviews; the agent's job is to make sure nothing is missed.
 
-Every site below is a card on the dashboard. **▶ Start all** runs the job agents (six at a time; the rest queue and take turns), **↻ Update all profiles** brings her profile on every site in line with the resume (two sites at a time, so the codes they ask for come one by one; LinkedIn and Naukri are left untouched on purpose). The *Needs you* column says where she has to step in: a code sent to her phone, or a test/interview that only she can do. Email codes and links the agent reads from her Gmail itself.
+Every site below is a card on the dashboard. **▶ Start all** runs the job agents (eight at a time; the rest queue and take turns; sites where nothing could be applied are paused and skipped), **↻ Update all profiles** brings her profile on every site in line with the resume (two sites at a time, so the codes they ask for come one by one; LinkedIn and Naukri are left untouched on purpose). The *Needs you* column says where she has to step in: a code sent to her phone, or a test/interview that only she can do. Email codes and links the agent reads from her Gmail itself.
 
 LinkedIn and Indeed also search abroad (UAE, Saudi Arabia, Qatar, Singapore, Malaysia, Australia, UK, Germany, Netherlands, Ireland, and worldwide remote) every second round, besides their Bengaluru searches.
 
@@ -98,8 +98,8 @@ Roles abroad she can apply to from India: the Gulf (employers sponsor visas as a
 
 ## How a day with 55 sites looks
 
-- `maxConcurrentAgents` (6) agents run at the same time, each in its own Chrome window. The other sites wait in a queue on the dashboard and start by themselves when a slot frees up.
-- A job agent keeps a slot for `rotateMinutes` (40), then pauses, goes to the back of the queue and continues later where it left off (the tracker remembers every job). With 46 job sites and 6 slots every site gets a turn roughly every 5 hours; a stronger Mac can run more (`maxConcurrentAgents: 10`).
+- `maxConcurrentAgents` (8) agents run at the same time, each in its own Chrome window. The other sites wait in a queue on the dashboard and start by themselves when a slot frees up.
+- A job agent keeps a slot for `rotateMinutes` (40), then pauses, goes to the back of the queue and continues later where it left off (the tracker remembers every job). With 46 job sites and 8 slots every site gets a turn roughly every 4 hours; a stronger Mac can run more (`maxConcurrentAgents: 10`).
 - Profile updates go through the same queue, `maxConcurrentProfileUpdates` (2) sites at a time. A site that asks for a phone code shows the question on its card and waits up to 30 minutes (`profileSync.helpMinutes`) for the code; email codes are read from Gmail without you.
 - The same job (title + company) is never applied to twice across sites within 30 days, so the aggregators do not create duplicates of the Naukri/LinkedIn applications.
 - Sites that show a bot check (Indeed, Glassdoor, SimplyHired at times) are skipped for that round and tried again next round.

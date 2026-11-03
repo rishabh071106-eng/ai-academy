@@ -10,29 +10,34 @@
   "requiredKeywords": [
     "magento",
     "adobe commerce",
-    "php",
     "react",
     "reactjs",
     "react.js",
     "next.js",
     "nextjs",
-    "html",
-    "css",
-    "javascript",
     "typescript",
-    "jquery",
-    "graphql",
-    "mysql",
-    "e-commerce",
-    "ecommerce",
+    "javascript",
+    "postgresql",
+    "postgres",
+    "generative ai",
+    "genai",
+    "gen ai",
+    "llm",
+    "ai-native",
+    "ai native",
+    "vibe coding",
+    "ai engineer",
+    "ai developer",
+    "ai-assisted development",
     "full stack",
     "fullstack",
     "full-stack",
     "front end",
     "frontend",
     "front-end",
-    "web developer",
-    "ui developer"
+    "e-commerce",
+    "ecommerce",
+    "graphql"
   ],
   "priorityTiers": [
     {
@@ -48,17 +53,6 @@
       ]
     },
     {
-      "name": "PHP",
-      "keywords": [
-        "php",
-        "symfony",
-        "codeigniter",
-        "yii",
-        "cakephp",
-        "drupal"
-      ]
-    },
-    {
       "name": "React",
       "keywords": [
         "react",
@@ -68,90 +62,120 @@
         "next.js",
         "nextjs",
         "next js",
-        "redux",
-        "typescript"
+        "typescript",
+        "redux"
       ]
     },
     {
-      "name": "Front end",
+      "name": "AI",
       "keywords": [
+        "generative ai",
+        "genai",
+        "gen ai",
+        "llm",
+        "llms",
+        "ai-native",
+        "ai native",
+        "vibe coding",
+        "vibe-coding",
+        "ai engineer",
+        "ai developer",
+        "ai-assisted",
+        "ai assisted",
+        "agentic",
+        "copilot",
+        "cursor",
+        "claude code",
+        "ai full stack",
+        "ai application"
+      ]
+    },
+    {
+      "name": "JavaScript",
+      "keywords": [
+        "javascript",
         "front end",
         "frontend",
         "front-end",
-        "ui developer",
-        "web developer",
-        "javascript",
-        "html",
-        "css",
-        "jquery"
-      ]
-    },
-    {
-      "name": "Full stack",
-      "keywords": [
         "full stack",
         "fullstack",
         "full-stack",
         "e-commerce",
         "ecommerce",
-        "graphql",
-        "mysql"
+        "graphql"
+      ]
+    },
+    {
+      "name": "PostgreSQL",
+      "keywords": [
+        "postgresql",
+        "postgres"
       ]
     }
   ],
   "alwaysApplyKeywords": [
     "magento",
     "adobe commerce",
-    "php",
     "react",
     "reactjs",
     "react.js",
     "next.js",
     "nextjs",
-    "html",
-    "css",
-    "javascript",
     "typescript",
-    "jquery",
-    "graphql",
-    "mysql",
-    "e-commerce",
-    "ecommerce",
+    "javascript",
+    "postgresql",
+    "postgres",
+    "generative ai",
+    "genai",
+    "gen ai",
+    "llm",
+    "ai-native",
+    "ai native",
+    "vibe coding",
+    "ai engineer",
+    "ai developer",
+    "ai-assisted development",
     "full stack",
     "fullstack",
     "full-stack",
     "front end",
     "frontend",
     "front-end",
-    "web developer",
-    "ui developer"
+    "e-commerce",
+    "ecommerce",
+    "graphql"
   ],
   "relevantKeywords": [
     "magento",
     "adobe commerce",
-    "php",
     "react",
     "reactjs",
     "react.js",
     "next.js",
     "nextjs",
-    "html",
-    "css",
-    "javascript",
     "typescript",
-    "jquery",
-    "graphql",
-    "mysql",
-    "e-commerce",
-    "ecommerce",
+    "javascript",
+    "postgresql",
+    "postgres",
+    "generative ai",
+    "genai",
+    "gen ai",
+    "llm",
+    "ai-native",
+    "ai native",
+    "vibe coding",
+    "ai engineer",
+    "ai developer",
+    "ai-assisted development",
     "full stack",
     "fullstack",
     "full-stack",
     "front end",
     "frontend",
     "front-end",
-    "web developer",
-    "ui developer"
+    "e-commerce",
+    "ecommerce",
+    "graphql"
   ],
   "maxApplicationsPerRun": 1000,
   "maxJobsToScanPerSearch": 60,
@@ -171,16 +195,19 @@
       "searches": [
         {
           "keywords": "Magento Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "location": "Bengaluru"
         },
         {
           "keywords": "Adobe Commerce Developer",
-          "location": "India"
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Magento 2",
-          "location": "India",
-          "remote": true
+          "keywords": "Magento 2 Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Magento React Developer",
+          "location": "Bengaluru"
         },
         {
           "keywords": "Magento Developer",
@@ -294,48 +321,31 @@
           "location": "Worldwide",
           "geoId": 92000000,
           "remote": true,
-          "everyRounds": 2
-        },
-        {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
-          "keywords": "Senior PHP Developer",
-          "location": "India",
-          "remote": true
-        },
-        {
-          "keywords": "Full Stack Developer PHP",
-          "location": "Bengaluru, Karnataka, India"
-        },
-        {
-          "keywords": "PHP Developer",
-          "location": "United Arab Emirates",
-          "everyRounds": 2
-        },
-        {
-          "keywords": "PHP Developer",
-          "location": "Saudi Arabia",
-          "everyRounds": 2
-        },
-        {
-          "keywords": "PHP Developer",
-          "location": "Qatar",
           "everyRounds": 2
         },
         {
           "keywords": "React Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "React TypeScript Developer",
+          "location": "Bengaluru"
         },
         {
           "keywords": "Senior React Developer",
-          "location": "India",
-          "remote": true
+          "location": "Bengaluru"
         },
         {
-          "keywords": "React Next.js Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "Frontend Developer React",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer React",
+          "location": "Bengaluru"
         },
         {
           "keywords": "React Developer",
@@ -345,20 +355,38 @@
           "everyRounds": 2
         },
         {
-          "keywords": "Frontend Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "Next.js Developer",
+          "location": "Worldwide",
+          "geoId": 92000000,
+          "remote": true,
+          "everyRounds": 2
         },
         {
-          "keywords": "Web Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "AI Full Stack Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
-          "location": "Bengaluru, Karnataka, India"
+          "keywords": "AI Native Software Engineer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Vibe Coding Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "AI Full Stack Developer",
+          "location": "Worldwide",
+          "geoId": 92000000,
+          "remote": true,
+          "everyRounds": 2
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
+          "location": "Bengaluru"
         }
       ],
       "delaySeconds": [
@@ -375,63 +403,63 @@
       "searches": [
         {
           "keywords": "magento developer",
-          "location": "bangalore"
+          "location": "Bengaluru"
         },
         {
-          "keywords": "adobe commerce",
-          "location": "bangalore"
+          "keywords": "adobe commerce developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "magento 2",
-          "location": "remote"
+          "keywords": "magento 2 developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "php developer",
-          "location": "bangalore"
-        },
-        {
-          "keywords": "senior php developer",
-          "location": "bangalore"
-        },
-        {
-          "keywords": "full stack developer php",
-          "location": "bangalore"
+          "keywords": "magento react developer",
+          "location": "Bengaluru"
         },
         {
           "keywords": "react developer",
-          "location": "bangalore"
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "next.js developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "react typescript developer",
+          "location": "Bengaluru"
         },
         {
           "keywords": "senior react developer",
-          "location": "bangalore"
+          "location": "Bengaluru"
         },
         {
-          "keywords": "nextjs developer",
-          "location": "bangalore"
+          "keywords": "frontend developer react",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "frontend developer",
-          "location": "bangalore"
+          "keywords": "full stack developer react",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "web developer",
-          "location": "bangalore"
+          "keywords": "ai full stack developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "ui developer",
-          "location": "bangalore"
+          "keywords": "generative ai developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "javascript developer",
-          "location": "bangalore"
+          "keywords": "ai native software engineer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "full stack developer",
-          "location": "bangalore"
+          "keywords": "vibe coding developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "ecommerce developer",
-          "location": "bangalore"
+          "keywords": "full stack developer postgresql",
+          "location": "Bengaluru"
         }
       ],
       "uploadTailoredResume": true,
@@ -526,10 +554,6 @@
           "everyRounds": 2
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -538,23 +562,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -582,10 +610,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -594,23 +618,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -638,10 +666,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -650,23 +674,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -694,10 +722,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -706,23 +730,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -750,10 +778,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -762,23 +786,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -805,10 +833,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -817,23 +841,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -861,10 +889,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -873,23 +897,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -916,10 +944,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -928,23 +952,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -964,44 +992,36 @@
       ],
       "searches": [
         {
-          "keywords": "Magento Developer",
-          "location": "Bengaluru"
+          "keywords": "Magento",
+          "location": ""
         },
         {
-          "keywords": "Adobe Commerce Developer",
-          "location": "Bengaluru"
+          "keywords": "Adobe Commerce",
+          "location": ""
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
+          "keywords": "React",
+          "location": ""
         },
         {
-          "keywords": "React Developer",
-          "location": "Bengaluru"
+          "keywords": "Next.js",
+          "location": ""
         },
         {
-          "keywords": "Next.js Developer",
-          "location": "Bengaluru"
+          "keywords": "TypeScript",
+          "location": ""
         },
         {
-          "keywords": "Frontend Developer",
-          "location": "Bengaluru"
+          "keywords": "Generative AI",
+          "location": ""
         },
         {
-          "keywords": "Web Developer",
-          "location": "Bengaluru"
+          "keywords": "AI Engineer",
+          "location": ""
         },
         {
-          "keywords": "UI Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "JavaScript Developer",
-          "location": "Bengaluru"
-        },
-        {
-          "keywords": "Full Stack Developer",
-          "location": "Bengaluru"
+          "keywords": "PostgreSQL",
+          "location": ""
         }
       ],
       "group": "Remote boards",
@@ -1028,10 +1048,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1040,23 +1056,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -1084,10 +1104,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1096,23 +1112,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -1139,10 +1159,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1151,23 +1167,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ],
@@ -1197,10 +1217,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1209,23 +1225,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1253,10 +1273,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1265,23 +1281,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1308,10 +1328,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1320,23 +1336,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1380,10 +1400,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1392,23 +1408,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1435,10 +1455,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1447,23 +1463,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1507,10 +1527,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1519,23 +1535,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1562,10 +1582,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1574,23 +1590,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1617,10 +1637,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1629,23 +1645,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1673,10 +1693,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1685,23 +1701,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1728,10 +1748,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1740,23 +1756,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1782,10 +1802,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1794,23 +1810,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1836,10 +1856,6 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Bengaluru"
-        },
-        {
           "keywords": "React Developer",
           "location": "Bengaluru"
         },
@@ -1848,23 +1864,27 @@
           "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "React TypeScript Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Web Developer",
+          "keywords": "Frontend Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "UI Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript Developer",
+          "keywords": "AI Full Stack Developer",
           "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
           "location": "Bengaluru"
         }
       ]
@@ -1891,10 +1911,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -1903,15 +1919,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -1938,10 +1958,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -1950,15 +1966,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -1984,10 +2004,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -1996,15 +2012,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2031,10 +2051,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2043,15 +2059,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2077,10 +2097,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2089,15 +2105,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2123,10 +2143,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2135,15 +2151,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2169,10 +2189,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2181,15 +2197,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2215,10 +2235,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2227,15 +2243,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2262,10 +2282,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2274,15 +2290,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2334,36 +2354,44 @@
       ],
       "searches": [
         {
-          "keywords": "Magento",
-          "location": ""
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Adobe Commerce",
-          "location": ""
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "PHP",
-          "location": ""
+          "keywords": "React Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "React",
-          "location": ""
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Next.js",
-          "location": ""
+          "keywords": "React TypeScript Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend",
-          "location": ""
+          "keywords": "Frontend Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript",
-          "location": ""
+          "keywords": "Full Stack Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack",
-          "location": ""
+          "keywords": "AI Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
+          "location": "Bengaluru"
         }
       ]
     },
@@ -2382,36 +2410,44 @@
       ],
       "searches": [
         {
-          "keywords": "Magento",
-          "location": ""
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Adobe Commerce",
-          "location": ""
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "PHP",
-          "location": ""
+          "keywords": "React Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "React",
-          "location": ""
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Next.js",
-          "location": ""
+          "keywords": "React TypeScript Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend",
-          "location": ""
+          "keywords": "Frontend Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript",
-          "location": ""
+          "keywords": "Full Stack Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack",
-          "location": ""
+          "keywords": "AI Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
+          "location": "Bengaluru"
         }
       ]
     },
@@ -2461,36 +2497,44 @@
       ],
       "searches": [
         {
-          "keywords": "Magento",
-          "location": ""
+          "keywords": "Magento Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Adobe Commerce",
-          "location": ""
+          "keywords": "Adobe Commerce Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "PHP",
-          "location": ""
+          "keywords": "React Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "React",
-          "location": ""
+          "keywords": "Next.js Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Next.js",
-          "location": ""
+          "keywords": "React TypeScript Developer",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Frontend",
-          "location": ""
+          "keywords": "Frontend Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "JavaScript",
-          "location": ""
+          "keywords": "Full Stack Developer React",
+          "location": "Bengaluru"
         },
         {
-          "keywords": "Full Stack",
-          "location": ""
+          "keywords": "AI Full Stack Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Generative AI Developer",
+          "location": "Bengaluru"
+        },
+        {
+          "keywords": "Full Stack Developer PostgreSQL",
+          "location": "Bengaluru"
         }
       ]
     },
@@ -2548,10 +2592,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2560,15 +2600,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2594,10 +2638,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2606,15 +2646,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2641,10 +2685,6 @@
           "location": ""
         },
         {
-          "keywords": "PHP",
-          "location": ""
-        },
-        {
           "keywords": "React",
           "location": ""
         },
@@ -2653,15 +2693,19 @@
           "location": ""
         },
         {
-          "keywords": "Frontend",
+          "keywords": "TypeScript",
           "location": ""
         },
         {
-          "keywords": "JavaScript",
+          "keywords": "Generative AI",
           "location": ""
         },
         {
-          "keywords": "Full Stack",
+          "keywords": "AI Engineer",
+          "location": ""
+        },
+        {
+          "keywords": "PostgreSQL",
           "location": ""
         }
       ]
@@ -2706,19 +2750,19 @@
           "location": ""
         },
         {
-          "keywords": "PHP Developer",
-          "location": ""
-        },
-        {
           "keywords": "React Developer",
           "location": ""
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Next.js Developer",
           "location": ""
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer React",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer React",
           "location": ""
         }
       ]
@@ -2746,19 +2790,19 @@
           "location": ""
         },
         {
-          "keywords": "PHP Developer",
-          "location": ""
-        },
-        {
           "keywords": "React Developer",
           "location": ""
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Next.js Developer",
           "location": ""
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer React",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer React",
           "location": ""
         }
       ]
@@ -2785,19 +2829,19 @@
           "location": ""
         },
         {
-          "keywords": "PHP Developer",
-          "location": ""
-        },
-        {
           "keywords": "React Developer",
           "location": ""
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Next.js Developer",
           "location": ""
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer React",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer React",
           "location": ""
         }
       ]
@@ -2835,38 +2879,38 @@
           "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
         },
         {
-          "keywords": "PHP Developer",
-          "location": ""
-        },
-        {
-          "keywords": "PHP Developer",
-          "location": "Malaysia",
-          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
-        },
-        {
           "keywords": "React Developer",
           "location": ""
         },
         {
+          "keywords": "Next.js Developer",
+          "location": ""
+        },
+        {
+          "keywords": "Frontend Developer React",
+          "location": ""
+        },
+        {
+          "keywords": "Full Stack Developer React",
+          "location": ""
+        },
+        {
           "keywords": "React Developer",
           "location": "Malaysia",
           "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
         },
         {
-          "keywords": "Frontend Developer",
-          "location": ""
-        },
-        {
-          "keywords": "Frontend Developer",
+          "keywords": "Next.js Developer",
           "location": "Malaysia",
           "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
         },
         {
-          "keywords": "Full Stack Developer",
-          "location": ""
+          "keywords": "Frontend Developer React",
+          "location": "Malaysia",
+          "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Full Stack Developer React",
           "location": "Malaysia",
           "url": "https://my.jobstreet.com/{keywords-slug}-jobs"
         }
@@ -2893,19 +2937,19 @@
           "location": "Europe"
         },
         {
-          "keywords": "PHP Developer",
-          "location": "Europe"
-        },
-        {
           "keywords": "React Developer",
           "location": "Europe"
         },
         {
-          "keywords": "Frontend Developer",
+          "keywords": "Next.js Developer",
           "location": "Europe"
         },
         {
-          "keywords": "Full Stack Developer",
+          "keywords": "Frontend Developer React",
+          "location": "Europe"
+        },
+        {
+          "keywords": "Full Stack Developer React",
           "location": "Europe"
         }
       ]
@@ -3059,17 +3103,28 @@
     "Full stack development",
     "Front end development",
     "Backend development",
-    "WordPress",
     "PrestaShop",
     "AI tools",
-    "Generative AI"
+    "Generative AI",
+    "PostgreSQL",
+    "Vibe coding",
+    "AI-native software engineering",
+    "AI-assisted development",
+    "GitHub Copilot",
+    "Cursor"
   ],
   "extraSkills": {
     "Frontend": [
       "Knockout.js"
     ]
   },
-  "maxConcurrentAgents": 6,
+  "maxConcurrentAgents": 8,
   "rotateMinutes": 40,
-  "maxConcurrentProfileUpdates": 2
+  "maxConcurrentProfileUpdates": 2,
+  "autoPause": {
+    "enabled": true,
+    "minutes": 90,
+    "runs": 2,
+    "_note": "A site where nothing could be applied after `runs` runs totalling `minutes` is paused: Start all skips it until you press Start on its card."
+  }
 }

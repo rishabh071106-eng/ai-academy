@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { TIERS } from "./priority.mjs";
 import { profileUpdates } from "./profile-update.mjs";
+import * as tracker from "./tracker.mjs";
 import { loadConfig, ROOT } from "./util.mjs";
 
 const PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#8e5cd9", "#d6336c", "#0ca5b8", "#c27c0e", "#5c7cfa", "#2f9e44", "#e03131", "#f08c00", "#7048e8", "#1098ad", "#868e96", "#e64980", "#37b24d"];
@@ -23,6 +24,45 @@ export const MAX_PROFILE = Math.max(1, Number(process.env.JOB_AGENT_MAX_PROFILE 
 const profileCount = () => Object.values(runs).filter((r) => r.child && r.options?.task === "profile").length;
 const ROTATE_MS = process.env.JOB_AGENT_ROTATE_MS ? Number(process.env.JOB_AGENT_ROTATE_MS) : Math.max(0, Number(cfg0.rotateMinutes ?? 40)) * 60000;
 const AGENT_SCRIPT = process.env.JOB_AGENT_SCRIPT || path.join(ROOT, "src", "agent.mjs");
+// A site where nothing could be applied is paused: "Start all" skips it (its card says why) until
+// Start is pressed on the card itself. Judged from data/site-stats.json (per-run minutes, jobs seen,
+// applications made) and, before any stats exist, from the tracker's history for the site.
+const AUTO = { enabled: true, minutes: 90, runs: 2, minJobs: 20, ...(cfg0.autoPause ?? {}) };
+if (process.env.JOB_AGENT_AUTOPAUSE_MINUTES !== undefined) AUTO.minutes = Number(process.env.JOB_AGENT_AUTOPAUSE_MINUTES);
+if (process.env.JOB_AGENT_AUTOPAUSE_RUNS !== undefined) AUTO.runs = Number(process.env.JOB_AGENT_AUTOPAUSE_RUNS);
+const STATS_FILE = path.join(ROOT, "data", "site-stats.json");
+const APPLIED = new Set(["applied", "interview", "offer"]);
+const loadStats = () => { try { return JSON.parse(fs.readFileSync(STATS_FILE, "utf8")); } catch { return {}; } };
+const saveStats = (s) => { try { fs.mkdirSync(path.dirname(STATS_FILE), { recursive: true }); fs.writeFileSync(STATS_FILE, JSON.stringify(s, null, 2)); } catch {} };
+function counts(platform) {
+  try {
+    const rows = tracker.loadAll().filter((r) => r.platform === platform);
+    return { seen: rows.length, applied: rows.filter((r) => APPLIED.has(r.status)).length };
+  } catch { return { seen: 0, applied: 0 }; }
+}
+/** Adds a finished job run to the site's stats. */
+function recordRun(run) {
+  if (run.options?.task === "profile") return;
+  const st = loadStats();
+  const now = counts(run.platform);
+  const s = st[run.platform] ?? { runs: 0, minutes: 0, seen: 0, applied: 0 };
+  s.runs++;
+  s.minutes += (Date.now() - (run.startedAt || Date.now())) / 60000;
+  s.seen += Math.max(0, now.seen - (run.startCounts?.seen ?? now.seen));
+  s.applied += Math.max(0, now.applied - (run.startCounts?.applied ?? now.applied));
+  s.lastRunAt = new Date().toISOString();
+  st[run.platform] = s;
+  saveStats(st);
+}
+/** Why "Start all" skips this site, or "" when it is fine. */
+export function pausedReason(platform) {
+  if (AUTO.enabled === false || cfgPlatforms[platform]?.profileOnly) return "";
+  const s = loadStats()[platform];
+  if (s) return s.runs >= AUTO.runs && s.minutes >= AUTO.minutes && s.applied === 0 ? `nothing could be applied here in ${Math.round(s.minutes)} min over ${s.runs} run${s.runs === 1 ? "" : "s"}${s.seen ? ` (${s.seen} jobs looked at)` : ""}` : "";
+  const hist = counts(platform);
+  return hist.seen >= AUTO.minJobs && hist.applied === 0 ? `nothing could be applied in the ${hist.seen} jobs looked at here so far` : "";
+}
+const siteStats = (platform) => loadStats()[platform] ?? null;
 const MAX_LOG = 600;
 const runs = Object.fromEntries(PLATFORMS.map((p) => [p, { platform: p, running: false, queued: false, slot: null, startedAt: null, endedAt: null, exitCode: null, options: null, pending: null, log: [], seq: 0, child: null }]));
 const queue = []; // platform keys waiting for a slot, first in first out
@@ -85,8 +125,8 @@ function pipe(run, stream, kind) {
   });
 }
 const view = (run, since = 0) => {
-  const { child, log, stopRequested, rotating, ...rest } = run;
-  return { ...rest, queuePos: run.queued ? queue.indexOf(run.platform) + 1 : 0, log: log.filter((l) => l.n > since) };
+  const { child, log, stopRequested, rotating, startCounts, ...rest } = run;
+  return { ...rest, queuePos: run.queued ? queue.indexOf(run.platform) + 1 : 0, paused: !run.child && !run.queued ? pausedReason(run.platform) : "", stats: siteStats(run.platform), log: log.filter((l) => l.n > since) };
 };
 const get = (platform) => {
   const run = runs[platform];
@@ -99,10 +139,16 @@ export function status(since = {}) {
   return { platforms: platformList(), tiers: TIERS.map((t) => ({ name: t.name, keywords: t.keywords })), profiles: profileUpdates(), maxConcurrent: MAX_CONCURRENT, rotateMinutes: ROTATE_MS / 60000, queue: [...queue], runs: Object.fromEntries(PLATFORMS.map((p) => [p, view(runs[p], Number(since[p] || 0))])) };
 }
 
-export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true, task = "jobs" } = {}, restart = 0) {
+export function start({ platform, mode = "review", max = 15, review = 0, keepGoing = true, retry = true, task = "jobs", all = false } = {}, restart = 0) {
   const run = get(platform);
   if (run.child) throw new Error(`The ${platform} agent is already running`);
   if (run.queued) throw new Error(`The ${platform} agent is already waiting in the queue`);
+  // "Start all" leaves out the sites where nothing could be applied; Start on the card itself still works.
+  const why = all && task !== "profile" && !restart ? pausedReason(platform) : "";
+  if (why) {
+    push(run, `⏸ Left out by Start all: ${why}. Press ▶ Start on this card to give it another try.`, "sys");
+    return status();
+  }
   if (!["review", "auto", "dry-run"].includes(mode)) throw new Error("Unknown mode");
   max = Math.max(1, Math.min(2000, Number(max) || 1000));
   review = Math.max(0, Math.min(5000, Number(review) || 0));
@@ -157,6 +203,7 @@ rotateTimer.unref?.();
 function launch(platform, { mode, max, review, keepGoing, retry, task }, restart = 0) {
   const run = get(platform);
   const slot = freeSlot();
+  if (!restart) run.startCounts = counts(platform);
   const args = [`--platform=${platform}`, `--mode=${mode}`, `--max=${max}`, `--review=${review}`, `--keep-going=${keepGoing}`, `--retry=${retry}`, `--task=${task}`, `--slot=${slot}`, `--slots=${MAX_CONCURRENT}`];
   if (!restart) run.startedAt = Date.now();
   Object.assign(run, { running: true, queued: false, slot, endedAt: null, exitCode: null, options: { mode, max, review, keepGoing, retry, task }, pending: null, stopRequested: false, rotating: false });
@@ -191,6 +238,7 @@ function launch(platform, { mode, max, review, keepGoing, retry, task }, restart
     push(run, rotating ? "⟳ Paused for the next site" : signal ? "■ Agent stopped" : code === 3 ? "■ Agent stopped (see the line above)" : `■ Agent finished (exit code ${code})`, code === 3 ? "err" : "sys");
     run.fatal = code === 3 ? (run.log.filter((l) => /STOPPED:/.test(l.text)).at(-1)?.text.replace(/^.*STOPPED:\s*/, "") ?? "see the live log") : null;
     Object.assign(run, { running: false, endedAt: Date.now(), exitCode: code });
+    recordRun(run);
     if (rotating) enqueue(run, run.options, `⏳ Back in the queue (${queue.length + 1} waiting); it continues where it left off`);
     pump();
   });
