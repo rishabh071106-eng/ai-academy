@@ -64,12 +64,12 @@
     "immediate_joiner": true,
     "fit_score": 9,
     "fit_reason": "Head-of-Product leading a global PM org for a B2B network platform with explicit AI-native/agentic charter — maps to multi-agent AI + org leadership.",
-    "notes": "Freshest posting (~last week of July 2026); hiring/scaling the PM org is part of the role. Live-check 24 Aug: still on jobs.sap.com (req 1418522833), no closure evidence. 31 Aug check: still on jobs.sap.com with current JD. 8 Sep check: live on jobs.sap.com (posted 24 Jul). 14 Sep check: still live on jobs.sap.com. 21 Sep check: live on jobs.sap.com.",
+    "notes": "Live-check 11 Nov: req 1418522833 gone from jobs.sap.com index (only Head of Engineering variant remains) — likely closed.",
     "verified": true,
     "category": "bigtech",
     "id": 4,
-    "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "status": "likely_closed",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Confidential (UPI/payments platform, via iimjobs)",
@@ -120,7 +120,7 @@
     "category": "bigtech",
     "id": 7,
     "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Visa",
@@ -1280,7 +1280,7 @@
     "category": "fintech-india",
     "id": 86,
     "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "CredAble",
@@ -1411,12 +1411,12 @@
     "immediate_joiner": false,
     "fit_score": 10,
     "fit_reason": "Agentic commercial-lending platform (LLMs, cloud-native replacing legacy core) — near-exact mirror of the JPM digital loan booking + multi-agent AI mandate. Top-priority apply.",
-    "notes": "Live on NatWest India Product & Proposition page 6 Aug alongside sibling NDX reqs posted '1 day ago'; find the specific req on the filtered search page. Distinct from tracked R-00277563/64. Live-check 28 Sep: re-bumped again ~21h ago — still hiring.",
+    "notes": "Live-check 11 Nov: R-00276971 gone from NatWest index after months of re-bumps; only aggregator copies remain — likely closed.",
     "verified": true,
     "category": "workday-banks",
     "id": 94,
-    "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "status": "likely_closed",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "NatWest Group (NatWest Digital X)",
@@ -1529,12 +1529,12 @@
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "15–20 yrs mandate over corporate digital-banking channels, cash management and GenAI product investment at a core-banking software leader — squarely matches the core-banking modernization + GenAI record.",
-    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug. Reposted again ~12 Sep (Built In) — still hiring. Reposted again ~19 Sep — fifth re-bump, still hiring. Reposted again ~23 Sep — sixth re-bump, still hiring.",
+    "notes": "Reposted ~5 Aug (Built In job 7555852, also live on iimjobs id 1589987); marginally outside the 48h window but too strong a fit to skip. Reposted ~17 Aug (Built In) — still hiring as of 20 Aug. Reposted again ~12 Sep (Built In) — still hiring. Reposted again ~19 Sep — fifth re-bump, still hiring. Reposted again ~23 Sep — sixth re-bump, still hiring. Re-bump 8 Nov (7th+): now listed as Corporate Channels AND Cash Management on Built In 7555852 — req still circulating after 3+ months.",
     "verified": true,
     "category": "saas-ai",
     "id": 101,
-    "status": "live",
-    "last_checked": "2026-09-26"
+    "status": "likely_live",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Mastercard",
@@ -1585,8 +1585,8 @@
     "verified": true,
     "category": "fintech-india",
     "id": 104,
-    "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "status": "live",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Paytm",
@@ -1793,18 +1793,18 @@
     "title": "Senior Director — Product Management (ML Experience / GenAI Platform)",
     "location": "Bengaluru",
     "seniority": "Senior Director",
-    "apply_url": "https://www.capitalonecareers.com/job/bengaluru/senior-director-product-management/1732/91940333232",
+    "apply_url": "https://www.capitalonecareers.com/job/bengaluru/senior-director-product-management/1732/100802977520",
     "platform": "careers-site",
     "posted_date": "2026-08-19",
     "immediate_joiner": false,
     "fit_score": 9,
     "fit_reason": "Senior Director owning the MLX/GenAI platform product team at a top US bank's India GCC — a level up from the tracked Capital One Directors and squarely on the multi-agent AI + banking record.",
-    "notes": "Live-check 20 Oct: MLX Sr Director title re-bumped on The Muse/Built In \"yesterday\"; original careers ID not re-confirmed — verify on capitalonecareers.com.",
+    "notes": "Live-check 11 Nov: original req gone but role REPOSTED on capitalonecareers.com under new id 100802977520 (ML-powered platforms, 16+ yrs) — URL updated.",
     "verified": true,
     "category": "workday-banks",
     "id": 117,
     "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "BNY",
@@ -2135,10 +2135,10 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP owning data-platform product for Aladdin (BlackRock's core investment platform) — financial-data platform leadership with a listed comp band of ₹75L–1.2Cr that overlaps the ₹95L–1Cr target; Mumbai-based.",
-    "notes": "Live-check 5 Oct: still on careers.blackrock.com (req 86173845536) but req dates to Sep 2025 — aging; confirm with recruiter.",
+    "notes": "Live-check 11 Nov: still indexed on BlackRock careers but req dates to Sep 2025 with conflicting removed/reposted signals — confirm with recruiter before applying.",
     "verified": true,
-    "status": "live",
-    "last_checked": "2026-10-20",
+    "status": "unknown",
+    "last_checked": "2026-11-11",
     "category": "workday-banks",
     "id": 136
   },
@@ -2230,7 +2230,7 @@
     "category": "workday-banks",
     "id": 141,
     "status": "unknown",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Goldman Sachs",
@@ -2247,8 +2247,8 @@
     "verified": true,
     "category": "workday-banks",
     "id": 142,
-    "status": "live",
-    "last_checked": "2026-10-20"
+    "status": "likely_live",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Morgan Stanley",
@@ -2261,12 +2261,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "VP product owner for the AI@MS GenAI/agentic platform in Wealth Management — direct hit on multi-agent AI platform record at a global bank.",
-    "notes": "eFinancialCareers 'posted 2 days ago' on 5 Oct; a related 'VP — Product Management, Wealth Management' Mumbai posting also surfaced on LinkedIn 3-4 Oct (no direct req URL found); a May 2026 copy existed, so possibly a re-bump — confirm on morganstanley.eightfold.ai. Live-check 20 Oct: AI@MS Product Owner Platforms VP WM still indexed — likely live.",
+    "notes": "Live-check 11 Nov: Built In says removed 14 May 2026; the Oct eFinancialCareers re-bump traces to that dead req — likely closed.",
     "verified": false,
     "category": "workday-banks",
     "id": 143,
-    "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "status": "likely_closed",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Fidelity Investments",
@@ -2284,7 +2284,7 @@
     "category": "workday-banks",
     "id": 144,
     "status": "likely_live",
-    "last_checked": "2026-10-05"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Citi",
@@ -2297,12 +2297,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "SVP digital product group manager at a global bank — level jump (VP→SVP) with digital banking platform scope; Chennai seat.",
-    "notes": "Posted 14 Oct (req 261000690), confirmed on jobs.citi.com. Distinct from the stale Citi SVP AI PM entry.",
+    "notes": "Live-check 11 Nov: req 261000690 re-bumped on jobs.citi.com (posted 19 Oct) — actively hiring.",
     "verified": true,
     "category": "workday-banks",
     "id": 145,
     "status": "live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Visa",
@@ -2315,12 +2315,12 @@
     "immediate_joiner": false,
     "fit_score": 8,
     "fit_reason": "Director owning AI/ML fraud products in the Visa Protect suite — AI platform + payments-risk blend squarely in the wheelhouse.",
-    "notes": "foundit 'posted 3 days ago' ~17 Oct; not located on Visa's own ATS yet — find the req on corporate.visa.com before a long application.",
+    "notes": "Live-check 11 Nov: no Bengaluru Predictive Fraud Intelligence req found on Visa ATS; foundit listing may be a generic repackage — verify before applying.",
     "verified": false,
     "category": "workday-banks",
     "id": 146,
-    "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "status": "unknown",
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Zeta (Studio PayZapp)",
@@ -2338,7 +2338,7 @@
     "category": "fintech-india",
     "id": 147,
     "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "MobiKwik",
@@ -2356,7 +2356,7 @@
     "category": "fintech-india",
     "id": 148,
     "status": "likely_live",
-    "last_checked": "2026-10-20"
+    "last_checked": "2026-11-11"
   },
   {
     "company": "Interface AI",
@@ -2375,5 +2375,59 @@
     "id": 149,
     "status": "unknown",
     "last_checked": "2026-10-20"
+  },
+  {
+    "company": "Standard Chartered",
+    "title": "Director — Data Product Owner, FCSO Data & Reporting",
+    "location": "Chennai",
+    "seniority": "Director",
+    "apply_url": "https://www.careerjet.co.in/jobad/ine05e52ef1fd4c08ceb1066e81966e932",
+    "platform": "other",
+    "posted_date": "2026-11-09",
+    "immediate_joiner": false,
+    "fit_score": 7,
+    "fit_reason": "Director data-product ownership for financial-crime surveillance at a global bank — your AML programme record (zero-finding audit) and data-platform work apply; narrower than core lending/AI mandates.",
+    "notes": "Surfaced 11 Nov via aggregator 'listed 2 days ago'; find the req on scb.taleo/careers before applying.",
+    "verified": false,
+    "category": "workday-banks",
+    "id": 150,
+    "status": "likely_live",
+    "last_checked": "2026-11-11"
+  },
+  {
+    "company": "Candescent",
+    "title": "Product Director — Consumer (Digital Banking)",
+    "location": "Bengaluru (in-office)",
+    "seniority": "Director",
+    "apply_url": "https://builtin.com/job/product-director-consumer/8877833",
+    "platform": "other",
+    "posted_date": "2026-11-11",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Leads consumer digital-banking product strategy for banks and credit unions at the ex-NCR Voyix digital-banking vendor — squarely the digital-banking platform strength.",
+    "notes": "Built In 'reposted 7 hours ago' on 11 Nov — repost of an older req; confirm on candescent.com careers.",
+    "verified": false,
+    "category": "saas-ai",
+    "id": 151,
+    "status": "likely_live",
+    "last_checked": "2026-11-11"
+  },
+  {
+    "company": "Zeta",
+    "title": "Director of Product — Deposits",
+    "location": "Bengaluru (on-site)",
+    "seniority": "Director",
+    "apply_url": "https://jobs.lever.co/zeta/71360c8b-f41d-4a40-bc7a-e0c6a45341b3",
+    "platform": "lever",
+    "posted_date": "2026-11-07",
+    "immediate_joiner": false,
+    "fit_score": 8,
+    "fit_reason": "Digital savings/deposits product portfolio on Zeta's banking stack, reporting to the founder — core-banking product depth is the exact ask.",
+    "notes": "Re-bumped ~7 Nov (original req Sep 2025); live on Zeta's Lever board. Distinct from the Studio PayZapp Consumer req.",
+    "verified": false,
+    "category": "fintech-india",
+    "id": 152,
+    "status": "likely_live",
+    "last_checked": "2026-11-11"
   }
 ]
